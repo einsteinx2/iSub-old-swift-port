@@ -81,6 +81,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
         self.extraButtonsButton.y -= 5.;
         
         self.progressSlider.superview.y -= 2.;
+        
+        [self.progressSlider setThumbImage:[UIImage imageNamed:@"controller-slider-thumb.png"] forState:UIControlStateNormal];
     }
 	
     //DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
@@ -392,7 +394,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
     
     if (IS_IOS7())
     {
-        self.downloadProgress.height -= 14.;
+        self.downloadProgress.height -= 10.;
         [self.downloadProgress centerVertically];
     }
 	
@@ -408,7 +410,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(IS_TALL_SCREEN() ? 349 : 305, 60, 170, 30)];
 		self.artistLabel.backgroundColor = [UIColor clearColor];
 		self.artistLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		self.artistLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.artistLabel.font = ISMSBoldFont(22);
 		self.artistLabel.adjustsFontSizeToFitWidth = YES;
 		self.artistLabel.textAlignment = UITextAlignmentCenter;
 		[self.view addSubview:self.artistLabel];
@@ -417,7 +419,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(IS_TALL_SCREEN() ? 349 : 305, 90, 170, 30)];
 		self.titleLabel.backgroundColor = [UIColor clearColor];
 		self.titleLabel.textColor = [UIColor whiteColor];
-		self.titleLabel.font = [UIFont boldSystemFontOfSize:24];
+		self.titleLabel.font = ISMSBoldFont(24);
 		self.titleLabel.adjustsFontSizeToFitWidth = YES;
 		self.titleLabel.textAlignment = UITextAlignmentCenter;
 		[self.view addSubview:self.titleLabel];
@@ -426,7 +428,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(IS_TALL_SCREEN() ? 349 : 305, 120, 170, 30)];
 		self.albumLabel.backgroundColor = [UIColor clearColor];
 		self.albumLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		self.albumLabel.font = [UIFont systemFontOfSize:22];
+		self.albumLabel.font = ISMSRegularFont(22);
 		self.albumLabel.adjustsFontSizeToFitWidth = YES;
 		self.albumLabel.textAlignment = UITextAlignmentCenter;
 		[self.view addSubview:self.albumLabel];
@@ -692,7 +694,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.artistTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.artistTitleLabel.backgroundColor = [UIColor clearColor];
 		self.artistTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		self.artistTitleLabel.font = [UIFont boldSystemFontOfSize:artistSize];
+		self.artistTitleLabel.font = ISMSBoldFont(artistSize);
 		self.artistTitleLabel.textAlignment = UITextAlignmentCenter;
 		[titleView addSubview:self.artistTitleLabel];
 		
@@ -701,7 +703,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.songTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.songTitleLabel.backgroundColor = [UIColor clearColor];
 		self.songTitleLabel.textColor = [UIColor whiteColor];
-		self.songTitleLabel.font = [UIFont boldSystemFontOfSize:songSize];
+		self.songTitleLabel.font = ISMSBoldFont(songSize);
 		self.songTitleLabel.textAlignment = UITextAlignmentCenter;
 		[titleView addSubview:self.songTitleLabel];
 		
@@ -709,7 +711,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.albumTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		self.albumTitleLabel.backgroundColor = [UIColor clearColor];
 		self.albumTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
-		self.albumTitleLabel.font = [UIFont boldSystemFontOfSize:albumSize];
+		self.albumTitleLabel.font = ISMSBoldFont(albumSize);
 		self.albumTitleLabel.textAlignment = UITextAlignmentCenter;
 		[titleView addSubview:self.albumTitleLabel];
 				
@@ -843,12 +845,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (bookmarkCount > 0)
 	{
-		self.bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarkCount];
 		self.bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 	}
 	else
 	{
-		self.bookmarkCountLabel.text = @"";
 		self.bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
 	}
 	
@@ -888,6 +888,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		CGRect frame = self.volumeSlider.bounds;
 		frame.size.height = self.volumeSlider.bounds.size.height / 2;
 		self.jukeboxVolumeView = [[UISlider alloc] initWithFrame:frame];
+        [self.jukeboxVolumeView setThumbImage:[UIImage imageNamed:@"controller-slider-thumb.png"] forState:UIControlStateNormal];
 		[self.jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
 		self.jukeboxVolumeView.minimumValue = 0.0;
 		self.jukeboxVolumeView.maximumValue = 1.0;
@@ -903,13 +904,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		self.view.backgroundColor = [UIColor blackColor];
 		
-		//volumeSlider.backgroundColor = [UIColor greenColor];
 		CGRect newFrame = CGRectMake(10, 0, self.volumeSlider.width-20, self.volumeSlider.height);
-		//CGRect newFrame = CGRectMake(volumeSlider.x, volumeSlider.y-10, volumeSlider.width, 30);
 		self.volumeView = [[MPVolumeView alloc] initWithFrame:newFrame];
+        [self.volumeView setVolumeThumbImage:[UIImage imageNamed:@"controller-slider-thumb.png"] forState:UIControlStateNormal];
 		[self.volumeSlider addSubview:self.volumeView];
-		//[self.view addSubview:volumeView];
-		//[volumeView sizeToFit];
 	}
 	
 	[self initSongInfo];
@@ -1350,7 +1348,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.sliderMultipleLabel = [[UILabel alloc] initWithFrame:frame];
 		self.sliderMultipleLabel.textColor = [UIColor colorWithWhite:.8 alpha:1.0];
 		self.sliderMultipleLabel.alpha = 0.0;
-		self.sliderMultipleLabel.font = [UIFont boldSystemFontOfSize:13.5];
+		self.sliderMultipleLabel.font = ISMSBoldFont(13.5);
 		self.sliderMultipleLabel.shadowOffset = CGSizeMake(0, 2);
 		self.sliderMultipleLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
 		self.sliderMultipleLabel.textAlignment = UITextAlignmentCenter;
@@ -1542,7 +1540,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 	}];
 	
-	self.bookmarkCountLabel.text = [NSString stringWithFormat:@"%i", bookmarksCount];
 	self.bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
 }
 

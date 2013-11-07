@@ -236,7 +236,7 @@
 		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 3, 220, 17)];
 		self.artistLabel.backgroundColor = [UIColor clearColor];
 		self.artistLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		self.artistLabel.font = [UIFont boldSystemFontOfSize:17];
+		self.artistLabel.font = ISMSBoldFont(17);
 		self.artistLabel.minimumFontSize = 12;
 		self.artistLabel.adjustsFontSizeToFitWidth = YES;
 		self.artistLabel.textAlignment = UITextAlignmentCenter;
@@ -247,7 +247,7 @@
 		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 20, 220, 17)];
 		self.albumLabel.backgroundColor = [UIColor clearColor];
 		self.albumLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		self.albumLabel.font = [UIFont systemFontOfSize:17];
+		self.albumLabel.font = ISMSRegularFont(17);
 		self.albumLabel.minimumFontSize = 12;
 		self.albumLabel.adjustsFontSizeToFitWidth = YES;
 		self.albumLabel.textAlignment = UITextAlignmentCenter;
@@ -258,7 +258,7 @@
 		self.songLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 37, 220, 17)];
 		self.songLabel.backgroundColor = [UIColor clearColor];
 		self.songLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-		self.songLabel.font = [UIFont boldSystemFontOfSize:17];
+		self.songLabel.font = ISMSBoldFont(17);
 		self.songLabel.minimumFontSize = 12;
 		self.songLabel.adjustsFontSizeToFitWidth = YES;
 		self.songLabel.textAlignment = UITextAlignmentCenter;

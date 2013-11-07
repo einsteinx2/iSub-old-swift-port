@@ -27,7 +27,8 @@
 		numberLabel.backgroundColor = [UIColor clearColor];
 		numberLabel.textAlignment = UITextAlignmentCenter;
 		numberLabel.textColor = [UIColor whiteColor];
-		numberLabel.font = [UIFont boldSystemFontOfSize:24];
+        numberLabel.highlightedTextColor = [UIColor blackColor];
+		numberLabel.font = ISMSBoldFont(24);
 		numberLabel.adjustsFontSizeToFitWidth = YES;
 		numberLabel.minimumFontSize = 12;
 		[self.contentView addSubview:numberLabel];
@@ -43,16 +44,18 @@
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft; // default
 		songNameLabel.textColor = [UIColor whiteColor];
-		songNameLabel.font = [UIFont boldSystemFontOfSize:18];
+        songNameLabel.highlightedTextColor = [UIColor blackColor];
+		songNameLabel.font = ISMSSongFont;
 		[self.contentView addSubview:songNameLabel];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.frame = CGRectMake(45, 27, 235, 15);
 		artistNameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		artistNameLabel.backgroundColor = [UIColor clearColor];
+        artistNameLabel.highlightedTextColor = [UIColor blackColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
 		artistNameLabel.textColor = [UIColor whiteColor];
-		artistNameLabel.font = [UIFont systemFontOfSize:12];
+		artistNameLabel.font = ISMSRegularFont(12);
 		[self.contentView addSubview:artistNameLabel];
 		
 		durationLabel = [[UILabel alloc] init];
@@ -61,7 +64,8 @@
 		durationLabel.backgroundColor = [UIColor clearColor];
 		durationLabel.textAlignment = UITextAlignmentRight; // default
 		durationLabel.textColor = [UIColor whiteColor];
-		durationLabel.font = [UIFont systemFontOfSize:16];
+        durationLabel.highlightedTextColor = [UIColor blackColor];
+		durationLabel.font = ISMSRegularFont(16);
 		durationLabel.adjustsFontSizeToFitWidth = YES;
 		durationLabel.minimumFontSize = 12;
 		[self.contentView addSubview:durationLabel];

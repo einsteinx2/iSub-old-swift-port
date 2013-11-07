@@ -27,7 +27,7 @@
 		_textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		_textView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.8];
 		_textView.textColor = [UIColor whiteColor];
-		_textView.font = [UIFont systemFontOfSize:16.5];
+		_textView.font = ISMSRegularFont(16.5);
 		_textView.editable = NO;
         
 		/*ISMSSong *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
@@ -56,7 +56,7 @@
 		titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		titleLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.8];
 		titleLabel.textColor = [UIColor whiteColor];
-		titleLabel.font = [UIFont boldSystemFontOfSize:32];
+		titleLabel.font = ISMSBoldFont(32);
 		titleLabel.textAlignment = UITextAlignmentCenter;
 		titleLabel.text = @"Lyrics";
 		[self.view addSubview:titleLabel];

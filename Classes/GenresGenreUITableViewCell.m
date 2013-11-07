@@ -31,7 +31,7 @@
 		genreNameLabel = [[UILabel alloc] init];
 		genreNameLabel.backgroundColor = [UIColor clearColor];
 		genreNameLabel.textAlignment = UITextAlignmentLeft; // default
-		genreNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		genreNameLabel.font = ISMSBoldFont(20);
 		[genreNameScrollView addSubview:genreNameLabel];
 	}
 	

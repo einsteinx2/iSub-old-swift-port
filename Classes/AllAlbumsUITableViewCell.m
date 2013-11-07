@@ -36,13 +36,13 @@
 		albumNameLabel = [[UILabel alloc] init];
 		albumNameLabel.backgroundColor = [UIColor clearColor];
 		albumNameLabel.textAlignment = UITextAlignmentLeft; // default
-		albumNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		albumNameLabel.font = ISMSAlbumFont;
 		[albumNameScrollView addSubview:albumNameLabel];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
-		artistNameLabel.font = [UIFont systemFontOfSize:15];
+		artistNameLabel.font = ISMSRegularFont(15);
 		[albumNameScrollView addSubview:artistNameLabel];
 	}
 	

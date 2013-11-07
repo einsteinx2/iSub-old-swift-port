@@ -20,7 +20,7 @@
 	if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) 
 	{		
 		artistNameScrollView = [[UIScrollView alloc] init];
-		artistNameScrollView.frame = CGRectMake(5, 0, 320, 44);
+		artistNameScrollView.frame = CGRectMake(14, 0, 310, 44);
 		artistNameScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		artistNameScrollView.showsVerticalScrollIndicator = NO;
 		artistNameScrollView.showsHorizontalScrollIndicator = NO;
@@ -31,7 +31,7 @@
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
-		artistNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		artistNameLabel.font = ISMSArtistFont;
 		[artistNameScrollView addSubview:artistNameLabel];
 	}
 	

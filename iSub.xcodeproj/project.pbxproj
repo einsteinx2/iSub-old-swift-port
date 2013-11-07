@@ -810,6 +810,14 @@
 		537E9A5814F4CE44006CB0BC /* underPageBackgroundDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537E9A5414F4CE41006CB0BC /* underPageBackgroundDark@2x.png */; };
 		537E9A5914F4CE44006CB0BC /* underPageBackgroundDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537E9A5414F4CE41006CB0BC /* underPageBackgroundDark@2x.png */; };
 		537E9A5A14F4CE44006CB0BC /* underPageBackgroundDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537E9A5414F4CE41006CB0BC /* underPageBackgroundDark@2x.png */; };
+		537EF7B5182B2F2200968FE0 /* controller-slider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B3182B2F2200968FE0 /* controller-slider-thumb.png */; };
+		537EF7B6182B2F2200968FE0 /* controller-slider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B3182B2F2200968FE0 /* controller-slider-thumb.png */; };
+		537EF7B7182B2F2200968FE0 /* controller-slider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B3182B2F2200968FE0 /* controller-slider-thumb.png */; };
+		537EF7B8182B2F2200968FE0 /* controller-slider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B3182B2F2200968FE0 /* controller-slider-thumb.png */; };
+		537EF7B9182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B4182B2F2200968FE0 /* controller-slider-thumb@2x.png */; };
+		537EF7BA182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B4182B2F2200968FE0 /* controller-slider-thumb@2x.png */; };
+		537EF7BB182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B4182B2F2200968FE0 /* controller-slider-thumb@2x.png */; };
+		537EF7BC182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B4182B2F2200968FE0 /* controller-slider-thumb@2x.png */; };
 		537FCC5412F8F7F400F1D996 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 537FCC5312F8F7F400F1D996 /* iTunesArtwork */; };
 		538229F611C98091003F1E23 /* CacheAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 538229F411C98091003F1E23 /* CacheAlbumViewController.m */; };
 		538229F711C98091003F1E23 /* CacheAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 538229F511C98091003F1E23 /* CacheAlbumViewController.xib */; };
@@ -2127,6 +2135,8 @@
 		537E9A4814F4B84D006CB0BC /* controller-equalizer-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-equalizer-on@2x.png"; path = "Images/Player Icons/controller-equalizer-on@2x.png"; sourceTree = "<group>"; };
 		537E9A5314F4CE3F006CB0BC /* underPageBackgroundDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = underPageBackgroundDark.png; sourceTree = "<group>"; };
 		537E9A5414F4CE41006CB0BC /* underPageBackgroundDark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "underPageBackgroundDark@2x.png"; sourceTree = "<group>"; };
+		537EF7B3182B2F2200968FE0 /* controller-slider-thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-slider-thumb.png"; path = "Images/Player Icons/controller-slider-thumb.png"; sourceTree = "<group>"; };
+		537EF7B4182B2F2200968FE0 /* controller-slider-thumb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-slider-thumb@2x.png"; path = "Images/Player Icons/controller-slider-thumb@2x.png"; sourceTree = "<group>"; };
 		537FCC5312F8F7F400F1D996 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = "Images/App Icons/iTunesArtwork"; sourceTree = "<group>"; };
 		538229F311C98091003F1E23 /* CacheAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheAlbumViewController.h; sourceTree = "<group>"; };
 		538229F411C98091003F1E23 /* CacheAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CacheAlbumViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -3223,6 +3233,8 @@
 				53404FE811E9488A004AEC41 /* controller-shuffle-on@2x.png */,
 				536D616011442AA000DFCE56 /* controller-shuffle.png */,
 				53404FE911E9488A004AEC41 /* controller-shuffle@2x.png */,
+				537EF7B3182B2F2200968FE0 /* controller-slider-thumb.png */,
+				537EF7B4182B2F2200968FE0 /* controller-slider-thumb@2x.png */,
 			);
 			name = "Player Icons";
 			sourceTree = "<group>";
@@ -3665,6 +3677,7 @@
 				5388A42C1198AD840049BA9E /* selected.png in Resources */,
 				5388A42D1198AD840049BA9E /* unselected.png in Resources */,
 				53A2213611A8489900C1ACD4 /* cache-button.png in Resources */,
+				537EF7B5182B2F2200968FE0 /* controller-slider-thumb.png in Resources */,
 				53A2213711A8489900C1ACD4 /* queue-button.png in Resources */,
 				53B52BA611ADE0A6005776B5 /* GenresViewController.xib in Resources */,
 				530B417311B607A200743C09 /* CacheViewController.xib in Resources */,
@@ -3706,6 +3719,7 @@
 				530B960911E8ED33002EA08E /* settings-page@2x.png in Resources */,
 				53404FE111E9487C004AEC41 /* controller-next@2x.png in Resources */,
 				53404FEA11E9488A004AEC41 /* controller-pause@2x.png in Resources */,
+				537EF7B9182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */,
 				53404FEB11E9488A004AEC41 /* controller-play@2x.png in Resources */,
 				53404FEC11E9488A004AEC41 /* controller-previous@2x.png in Resources */,
 				53404FED11E9488A004AEC41 /* controller-repeat-all@2x.png in Resources */,
@@ -4026,6 +4040,7 @@
 				53159DA8156F69D0001B0268 /* home-tabbaricon.png in Resources */,
 				53159DA9156F69D0001B0268 /* home-tabbaricon@2x.png in Resources */,
 				533C659415ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */,
+				537EF7BC182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */,
 				53159DAC156F69D0001B0268 /* blackArrow.png in Resources */,
 				53159DAD156F69D0001B0268 /* blackArrow@2x.png in Resources */,
 				53159DAE156F69D0001B0268 /* blueArrow.png in Resources */,
@@ -4139,6 +4154,7 @@
 				53159E26156F69D0001B0268 /* eqView.png in Resources */,
 				53159E27156F69D0001B0268 /* eqView@2x.png in Resources */,
 				53159E28156F69D0001B0268 /* ModalAlbumArtViewController.xib in Resources */,
+				537EF7B8182B2F2200968FE0 /* controller-slider-thumb.png in Resources */,
 				53159E29156F69D0001B0268 /* controller-equalizer-ipad.png in Resources */,
 				53159E2A156F69D0001B0268 /* controller-next-ipad.png in Resources */,
 				53159E2B156F69D0001B0268 /* controller-pause-ipad.png in Resources */,
@@ -4212,6 +4228,7 @@
 				53BC26A2139AF0DD00A825F1 /* FoldersViewController.xib in Resources */,
 				533C65E515ABBA09003EAF29 /* AlbumViewController.xib in Resources */,
 				53BC26A4139AF0DD00A825F1 /* controller-next.png in Resources */,
+				537EF7B7182B2F2200968FE0 /* controller-slider-thumb.png in Resources */,
 				53BC26A5139AF0DD00A825F1 /* controller-pause.png in Resources */,
 				53BC26A6139AF0DD00A825F1 /* controller-play.png in Resources */,
 				53BC26A7139AF0DD00A825F1 /* controller-previous.png in Resources */,
@@ -4356,6 +4373,7 @@
 				53BC274C139AF0DD00A825F1 /* home-quick-frequent@2x.png in Resources */,
 				53BC274D139AF0DD00A825F1 /* home-quick-frequent.png in Resources */,
 				53BC274E139AF0DD00A825F1 /* home-quick-cancel@2x.png in Resources */,
+				537EF7BB182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */,
 				53BC274F139AF0DD00A825F1 /* home-quick-cancel.png in Resources */,
 				53BC2750139AF0DD00A825F1 /* home-quick-topbar@2x.png in Resources */,
 				53BC2751139AF0DD00A825F1 /* home-quick-topbar.png in Resources */,
@@ -4547,6 +4565,7 @@
 				53DCF42A13BFEAD3009160F9 /* selected.png in Resources */,
 				53DCF42B13BFEAD3009160F9 /* unselected.png in Resources */,
 				53DCF42C13BFEAD3009160F9 /* cache-button.png in Resources */,
+				537EF7B6182B2F2200968FE0 /* controller-slider-thumb.png in Resources */,
 				53DCF42D13BFEAD3009160F9 /* queue-button.png in Resources */,
 				53DCF42E13BFEAD3009160F9 /* GenresViewController.xib in Resources */,
 				53DCF42F13BFEAD3009160F9 /* CacheViewController.xib in Resources */,
@@ -4588,6 +4607,7 @@
 				53DCF45313BFEAD3009160F9 /* settings-page@2x.png in Resources */,
 				53DCF45413BFEAD3009160F9 /* controller-next@2x.png in Resources */,
 				53DCF45513BFEAD3009160F9 /* controller-pause@2x.png in Resources */,
+				537EF7BA182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */,
 				53DCF45613BFEAD3009160F9 /* controller-play@2x.png in Resources */,
 				53DCF45713BFEAD3009160F9 /* controller-previous@2x.png in Resources */,
 				53DCF45813BFEAD3009160F9 /* controller-repeat-all@2x.png in Resources */,

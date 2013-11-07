@@ -26,7 +26,7 @@
         self.backgroundView = [[UIView alloc] init];
         self.backgroundView.backgroundColor = [UIColor clearColor];
 				
-		self.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+		self.textLabel.font = ISMSBoldFont([UIFont systemFontSize]);
 		self.textLabel.shadowOffset = CGSizeMake(0, 2);
 		self.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
         self.textLabel.backgroundColor = [UIColor clearColor];

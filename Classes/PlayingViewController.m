@@ -253,7 +253,7 @@
 			UILabel *textLabel = [[UILabel alloc] init];
 			textLabel.backgroundColor = [UIColor clearColor];
 			textLabel.textColor = [UIColor whiteColor];
-			textLabel.font = [UIFont boldSystemFontOfSize:32];
+			textLabel.font = ISMSBoldFont(32);
 			textLabel.textAlignment = UITextAlignmentCenter;
 			textLabel.numberOfLines = 0;
 			[textLabel setText:@"Nothing Playing\non the\nServer"];

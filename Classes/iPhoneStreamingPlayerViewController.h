@@ -48,7 +48,6 @@
 @property (strong) IBOutlet UIButton *currentAlbumButton;
 @property (strong) IBOutlet UIButton *repeatButton;
 @property (strong) IBOutlet UIButton *bookmarkButton;
-@property (strong) IBOutlet UILabel *bookmarkCountLabel;
 @property (strong) IBOutlet UIButton *shuffleButton;
 @property (strong) IBOutlet OBSlider *progressSlider;
 @property (strong) IBOutlet UILabel *elapsedTimeLabel;

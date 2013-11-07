@@ -19,7 +19,6 @@
 @property (nonatomic, strong) UILabel *playlistCountLabel;
 @property (nonatomic, strong) UIButton *savePlaylistButton;
 @property (nonatomic, strong) UILabel *deleteSongsLabel;
-@property (nonatomic, strong) UILabel *spacerLabel;
 @property (nonatomic, strong) UILabel *editPlaylistLabel;
 @property (nonatomic, strong) UIButton *editPlaylistButton;
 @property (nonatomic) BOOL isPlaylistSaveEditShowing;

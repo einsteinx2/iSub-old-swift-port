@@ -24,7 +24,7 @@
 		userNameLabel.textAlignment = UITextAlignmentCenter; // default
 		userNameLabel.backgroundColor = [UIColor blackColor];
 		userNameLabel.alpha = .65;
-		userNameLabel.font = [UIFont boldSystemFontOfSize:10];
+		userNameLabel.font = ISMSBoldFont(10);
 		userNameLabel.textColor = [UIColor whiteColor];
 		[self.contentView addSubview:userNameLabel];
 		
@@ -33,7 +33,7 @@
 		messageLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		messageLabel.textAlignment = UITextAlignmentLeft; // default
 		messageLabel.backgroundColor = [UIColor clearColor];
-		messageLabel.font = [UIFont systemFontOfSize:20];
+		messageLabel.font = ISMSRegularFont(20);
 		messageLabel.lineBreakMode = UILineBreakModeWordWrap;
 		messageLabel.numberOfLines = 0;
 		[self.contentView addSubview:messageLabel];

@@ -27,8 +27,8 @@
 @implementation CacheViewController
 
 @synthesize listOfArtists, listOfArtistsSections, sectionInfo, cacheQueueCount, cacheSizeLabel;
-@synthesize headerView, headerView2, segmentedControl, songsCountLabel, deleteSongsLabel, deleteSongsButton, spacerLabel, editSongsLabel, editSongsButton, isSaveEditShowing;
-@synthesize playAllImage, playAllLabel, playAllButton, spacerLabel2, shuffleImage, shuffleLabel, shuffleButton;
+@synthesize headerView, headerView2, segmentedControl, songsCountLabel, deleteSongsLabel, deleteSongsButton, editSongsLabel, editSongsButton, isSaveEditShowing;
+@synthesize playAllImage, playAllLabel, playAllButton, shuffleImage, shuffleLabel, shuffleButton;
 @synthesize isNoSongsScreenShowing, noSongsScreen, jukeboxInputBlocker, showIndex;
 
 #pragma mark - Rotation handling
@@ -158,7 +158,7 @@
 		self.playAllLabel.backgroundColor = [UIColor clearColor];
 		self.playAllLabel.textColor = ISMSHeaderTextColor;
 		self.playAllLabel.textAlignment = UITextAlignmentCenter;
-		self.playAllLabel.font = [UIFont boldSystemFontOfSize:30];
+		self.playAllLabel.font = ISMSBoldFont(30);
 		self.playAllLabel.text = @"Play All";
 		[self.headerView2 addSubview:self.playAllLabel];
 		
@@ -167,14 +167,6 @@
 		self.playAllButton.frame = CGRectMake(0, 0, 160, 40);
 		[self.playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
 		[self.headerView2 addSubview:self.playAllButton];
-		
-		self.spacerLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
-		self.spacerLabel2.backgroundColor = [UIColor clearColor];
-		self.spacerLabel2.textColor = ISMSHeaderTextColor;
-		self.spacerLabel2.font = [UIFont systemFontOfSize:40];
-		self.spacerLabel2.text = @"|";
-		self.spacerLabel2.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-		[self.headerView2 addSubview:self.spacerLabel2];
 		
 		self.shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
 		self.shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -186,7 +178,7 @@
 		self.shuffleLabel.backgroundColor = [UIColor clearColor];
 		self.shuffleLabel.textColor = ISMSHeaderTextColor;
 		self.shuffleLabel.textAlignment = UITextAlignmentCenter;
-		self.shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
+		self.shuffleLabel.font = ISMSBoldFont(30);
 		self.shuffleLabel.text = @"Shuffle";
 		[self.headerView2 addSubview:self.shuffleLabel];
 		
@@ -667,8 +659,6 @@
 		self.songsCountLabel = nil;
 		[self.deleteSongsButton removeFromSuperview]; 
 		self.deleteSongsButton = nil;
-		[self.spacerLabel removeFromSuperview]; 
-		self.spacerLabel = nil;
 		[self.editSongsLabel removeFromSuperview]; 
 		self.editSongsLabel = nil;
 		[self.editSongsButton removeFromSuperview]; 
@@ -706,7 +696,7 @@
 		self.songsCountLabel.backgroundColor = [UIColor clearColor];
 		self.songsCountLabel.textColor = [UIColor whiteColor];
 		self.songsCountLabel.textAlignment = UITextAlignmentCenter;
-		self.songsCountLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.songsCountLabel.font = ISMSBoldFont(22);
 		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
 			NSUInteger cachedSongsCount = [databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"];
@@ -729,7 +719,7 @@
 		self.cacheSizeLabel.backgroundColor = [UIColor clearColor];
 		self.cacheSizeLabel.textColor = [UIColor whiteColor];
 		self.cacheSizeLabel.textAlignment = UITextAlignmentCenter;
-		self.cacheSizeLabel.font = [UIFont boldSystemFontOfSize:12];
+		self.cacheSizeLabel.font = ISMSBoldFont(12);
 		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
 			if (cacheS.cacheSize <= 0)
@@ -760,20 +750,12 @@
 		[self.deleteSongsButton addTarget:self action:@selector(deleteSongsAction:) forControlEvents:UIControlEventTouchUpInside];
 		[self.headerView addSubview:self.deleteSongsButton];
 		
-		self.spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(226, y - 2, 6, 50)];
-		self.spacerLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-		self.spacerLabel.backgroundColor = [UIColor clearColor];
-		self.spacerLabel.textColor = [UIColor whiteColor];
-		self.spacerLabel.font = [UIFont systemFontOfSize:40];
-		self.spacerLabel.text = @"|";
-		[self.headerView addSubview:self.spacerLabel];
-		
 		self.editSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, y, 86, 50)];
 		self.editSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		self.editSongsLabel.backgroundColor = [UIColor clearColor];
 		self.editSongsLabel.textColor = [UIColor whiteColor];
 		self.editSongsLabel.textAlignment = UITextAlignmentCenter;
-		self.editSongsLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.editSongsLabel.font = ISMSBoldFont(22);
 		self.editSongsLabel.text = @"Edit";
 		[self.headerView addSubview:self.editSongsLabel];
 		
@@ -788,7 +770,7 @@
 		self.deleteSongsLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
 		self.deleteSongsLabel.textColor = [UIColor whiteColor];
 		self.deleteSongsLabel.textAlignment = UITextAlignmentCenter;
-		self.deleteSongsLabel.font = [UIFont boldSystemFontOfSize:22];
+		self.deleteSongsLabel.font = ISMSBoldFont(22);
 		self.deleteSongsLabel.adjustsFontSizeToFitWidth = YES;
 		self.deleteSongsLabel.minimumFontSize = 12;
 		self.deleteSongsLabel.text = @"Delete # Songs";
@@ -813,7 +795,7 @@
 			self.playAllLabel.backgroundColor = [UIColor clearColor];
 			self.playAllLabel.textColor = ISMSHeaderTextColor;
 			self.playAllLabel.textAlignment = UITextAlignmentCenter;
-			self.playAllLabel.font = [UIFont boldSystemFontOfSize:30];
+			self.playAllLabel.font = ISMSBoldFont(30);
 			self.playAllLabel.text = @"Play All";
 			[self.headerView2 addSubview:self.playAllLabel];
 			
@@ -822,14 +804,6 @@
 			self.playAllButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 			[self.playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
 			[self.headerView2 addSubview:self.playAllButton];
-			
-			self.spacerLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
-			self.spacerLabel2.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-			self.spacerLabel2.backgroundColor = [UIColor clearColor];
-			self.spacerLabel2.textColor = ISMSHeaderTextColor;
-			self.spacerLabel2.font = [UIFont systemFontOfSize:40];
-			self.spacerLabel2.text = @"|";
-			[self.headerView2 addSubview:self.spacerLabel2];
 			
 			self.shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
 			self.shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -841,7 +815,7 @@
 			self.shuffleLabel.backgroundColor = [UIColor clearColor];
 			self.shuffleLabel.textColor = ISMSHeaderTextColor;
 			self.shuffleLabel.textAlignment = UITextAlignmentCenter;
-			self.shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
+			self.shuffleLabel.font = ISMSBoldFont(30);
 			self.shuffleLabel.text = @"Shuffle";
 			[self.headerView2 addSubview:self.shuffleLabel];
 			
@@ -883,7 +857,7 @@
 		UILabel *textLabel = [[UILabel alloc] init];
 		textLabel.backgroundColor = [UIColor clearColor];
 		textLabel.textColor = [UIColor whiteColor];
-		textLabel.font = [UIFont boldSystemFontOfSize:32];
+		textLabel.font = ISMSBoldFont(32);
 		textLabel.textAlignment = UITextAlignmentCenter;
 		textLabel.numberOfLines = 0;
 		if (settingsS.isCacheUnlocked)
@@ -907,7 +881,7 @@
 			UILabel *textLabel2 = [[UILabel alloc] init];
 			textLabel2.backgroundColor = [UIColor clearColor];
 			textLabel2.textColor = [UIColor whiteColor];
-			textLabel2.font = [UIFont boldSystemFontOfSize:14];
+			textLabel2.font = ISMSBoldFont(14);
 			textLabel2.textAlignment = UITextAlignmentCenter;
 			textLabel2.numberOfLines = 0;
 			textLabel2.text = @"Tap to purchase the ability to cache songs for better streaming performance and offline playback";

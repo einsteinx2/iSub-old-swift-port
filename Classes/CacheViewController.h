@@ -14,14 +14,12 @@
 @property (nonatomic, strong) UILabel *songsCountLabel;
 @property (nonatomic, strong) UIButton *deleteSongsButton;
 @property (nonatomic, strong) UILabel *deleteSongsLabel;
-@property (nonatomic, strong) UILabel *spacerLabel;
 @property (nonatomic, strong) UILabel *editSongsLabel;
 @property (nonatomic, strong) UIButton *editSongsButton;
 @property (nonatomic) BOOL isSaveEditShowing;
 @property (nonatomic, strong) UIImageView *playAllImage;
 @property (nonatomic, strong) UILabel *playAllLabel;
 @property (nonatomic, strong) UIButton *playAllButton;
-@property (nonatomic, strong) UILabel *spacerLabel2;
 @property (nonatomic, strong) UIImageView *shuffleImage;
 @property (nonatomic, strong) UILabel *shuffleLabel;
 @property (nonatomic, strong) UIButton *shuffleButton;

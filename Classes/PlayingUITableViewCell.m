@@ -31,7 +31,7 @@
 		userNameLabel.textAlignment = UITextAlignmentCenter; // default
 		userNameLabel.backgroundColor = [UIColor blackColor];
 		userNameLabel.alpha = .65;
-		userNameLabel.font = [UIFont boldSystemFontOfSize:10];
+		userNameLabel.font = ISMSBoldFont(10);
 		userNameLabel.textColor = [UIColor whiteColor];
 		[self.contentView addSubview:userNameLabel];
 		
@@ -48,13 +48,13 @@
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft; // default
-		songNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		songNameLabel.font = ISMSBoldFont(20);
 		[nameScrollView addSubview:songNameLabel];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
-		artistNameLabel.font = [UIFont systemFontOfSize:15];
+		artistNameLabel.font = ISMSRegularFont(15);
 		[nameScrollView addSubview:artistNameLabel];
 		
 		mySong = nil;

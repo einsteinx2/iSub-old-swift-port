@@ -14,9 +14,14 @@
 #define ISMSHeaderColor [UIColor colorWithRedInt:200 greenInt:200 blueInt:206 alpha:1]
 #define ISMSHeaderTextColor [UIColor colorWithRedInt:77 greenInt:77 blueInt:77 alpha:1]
 
+#define ISMSRegularFont(value) [UIFont fontWithName:@"HelveticaNeue" size:value]
+#define ISMSBoldFont(value) [UIFont fontWithName:@"HelveticaNeue-Bold" size:value]
+
+#define ISMSArtistFont ISMSRegularFont(17)
+#define ISMSAlbumFont ISMSRegularFont(17)
+#define ISMSSongFont ISMSRegularFont(17)
+
 #define ISMSiPadBackgroundColor [UIColor colorWithRedInt:200 greenInt:200 blueInt:206 alpha:1]
 #define ISMSiPadCornerRadius 5.
-
-#define ISMSiPhoneBackgroundColor 
 
 #endif

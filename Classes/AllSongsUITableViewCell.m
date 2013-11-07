@@ -39,13 +39,13 @@
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft; // default
-		songNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		songNameLabel.font = ISMSSongFont;
 		[songNameScrollView addSubview:songNameLabel];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
-		artistNameLabel.font = [UIFont systemFontOfSize:15];
+		artistNameLabel.font = ISMSRegularFont(15);
 		[songNameScrollView addSubview:artistNameLabel];
 	}
 	

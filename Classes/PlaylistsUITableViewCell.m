@@ -38,7 +38,7 @@
 		playlistNameLabel = [[UILabel alloc] init];
 		playlistNameLabel.backgroundColor = [UIColor clearColor];
 		playlistNameLabel.textAlignment = UITextAlignmentLeft; // default
-		playlistNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		playlistNameLabel.font = ISMSBoldFont(20);
 		[playlistNameScrollView addSubview:playlistNameLabel];
     }
     return self;

@@ -51,7 +51,7 @@
 		UILabel *textLabel = [[UILabel alloc] init];
 		textLabel.backgroundColor = [UIColor clearColor];
 		textLabel.textColor = [UIColor whiteColor];
-		textLabel.font = [UIFont boldSystemFontOfSize:32];
+		textLabel.font = ISMSBoldFont(32);
 		textLabel.textAlignment = UITextAlignmentCenter;
 		textLabel.numberOfLines = 0;
 		textLabel.text = @"Caching\nLocked";
@@ -61,7 +61,7 @@
 		UILabel *textLabel2 = [[UILabel alloc] init];
 		textLabel2.backgroundColor = [UIColor clearColor];
 		textLabel2.textColor = [UIColor whiteColor];
-		textLabel2.font = [UIFont boldSystemFontOfSize:14];
+		textLabel2.font = ISMSBoldFont(14);
 		textLabel2.textAlignment = UITextAlignmentCenter;
 		textLabel2.numberOfLines = 0;
 		textLabel2.text = @"Tap to purchase the ability to cache songs for better streaming performance and offline playback";

@@ -100,7 +100,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	playAllLabel.backgroundColor = [UIColor clearColor];
 	playAllLabel.textColor = ISMSHeaderTextColor;
 	playAllLabel.textAlignment = UITextAlignmentCenter;
-	playAllLabel.font = [UIFont boldSystemFontOfSize:30];
+	playAllLabel.font = ISMSBoldFont(30);
 	playAllLabel.text = @"Play All";
 	[headerView addSubview:playAllLabel];
 	
@@ -109,14 +109,6 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	playAllButton.frame = CGRectMake(0, 0, 160, 40);
 	[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
 	[headerView addSubview:playAllButton];
-	
-	UILabel *spacerLabel = [[UILabel alloc] initWithFrame:CGRectMake(158, -2, 6, 50)];
-	spacerLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-	spacerLabel.backgroundColor = [UIColor clearColor];
-	spacerLabel.textColor = ISMSHeaderTextColor;
-	spacerLabel.font = [UIFont systemFontOfSize:40];
-	spacerLabel.text = @"|";
-	[headerView addSubview:spacerLabel];
 	
 	UIImageView *shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
 	shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -128,7 +120,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	shuffleLabel.backgroundColor = [UIColor clearColor];
 	shuffleLabel.textColor = ISMSHeaderTextColor;
 	shuffleLabel.textAlignment = UITextAlignmentCenter;
-	shuffleLabel.font = [UIFont boldSystemFontOfSize:30];
+	shuffleLabel.font = ISMSBoldFont(30);
 	shuffleLabel.text = @"Shuffle";
 	[headerView addSubview:shuffleLabel];
 	

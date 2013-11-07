@@ -14,7 +14,6 @@
 @property (nonatomic, strong) UILabel *bookmarkCountLabel;
 @property (nonatomic, strong) UIButton *deleteBookmarksButton;
 @property (nonatomic, strong) UILabel *deleteBookmarksLabel;
-@property (nonatomic, strong) UILabel *spacerLabel;
 @property (nonatomic, strong) UILabel *editBookmarksLabel;
 @property (nonatomic, strong) UIButton *editBookmarksButton;
 @property (nonatomic, strong) NSArray *bookmarkIds;

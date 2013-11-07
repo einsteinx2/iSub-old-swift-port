@@ -190,7 +190,7 @@
 	self.countLabel.backgroundColor = [UIColor clearColor];
 	self.countLabel.textColor = ISMSHeaderTextColor;
 	self.countLabel.textAlignment = UITextAlignmentCenter;
-	self.countLabel.font = [UIFont boldSystemFontOfSize:30];
+	self.countLabel.font = ISMSBoldFont(30);
 	[self.headerView addSubview:self.countLabel];
 	
 	self.reloadTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 36, 320, 12)];
@@ -198,7 +198,7 @@
 	self.reloadTimeLabel.backgroundColor = [UIColor clearColor];
 	self.reloadTimeLabel.textColor = ISMSHeaderTextColor;
 	self.reloadTimeLabel.textAlignment = UITextAlignmentCenter;
-	self.reloadTimeLabel.font = [UIFont systemFontOfSize:11];
+	self.reloadTimeLabel.font = ISMSRegularFont(11);
 	[self.headerView addSubview:self.reloadTimeLabel];
 	
 	self.searchBar = [[UISearchBar  alloc] initWithFrame:CGRectMake(0, 86, 320, 40)];

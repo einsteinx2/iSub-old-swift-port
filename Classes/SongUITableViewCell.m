@@ -23,7 +23,7 @@
 		trackNumberLabel.frame = CGRectMake(0, 4, 30, 41);
 		trackNumberLabel.backgroundColor = [UIColor clearColor];
 		trackNumberLabel.textAlignment = UITextAlignmentCenter;
-		trackNumberLabel.font = [UIFont boldSystemFontOfSize:22];
+		trackNumberLabel.font = ISMSBoldFont(22);
 		trackNumberLabel.adjustsFontSizeToFitWidth = YES;
 		trackNumberLabel.minimumFontSize = 16;
 		[self.contentView addSubview:trackNumberLabel];
@@ -45,13 +45,13 @@
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft;
-		songNameLabel.font = [UIFont systemFontOfSize:20];
+		songNameLabel.font = ISMSSongFont;
 		[songNameScrollView addSubview:songNameLabel];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft;
-		artistNameLabel.font = [UIFont systemFontOfSize:13];
+		artistNameLabel.font = ISMSRegularFont(13);
 		artistNameLabel.textColor = [UIColor colorWithWhite:.4 alpha:1];
 		[songNameScrollView addSubview:artistNameLabel];
 		
@@ -60,7 +60,7 @@
 		songDurationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		songDurationLabel.backgroundColor = [UIColor clearColor];
 		songDurationLabel.textAlignment = UITextAlignmentRight;
-		songDurationLabel.font = [UIFont systemFontOfSize:16];
+		songDurationLabel.font = ISMSRegularFont(16);
 		songDurationLabel.adjustsFontSizeToFitWidth = YES;
 		songDurationLabel.minimumFontSize = 12;
 		songDurationLabel.textColor = [UIColor grayColor];

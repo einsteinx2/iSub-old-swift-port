@@ -91,7 +91,7 @@ static CGFloat kDDSocialDialogPadding = 10;
 		[closeButton_ setTitleColor:color forState:UIControlStateNormal];
 		[closeButton_ setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
 		[closeButton_ addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
-		closeButton_.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+		closeButton_.titleLabel.font = ISMSBoldFont(18);
 		closeButton_.showsTouchWhenHighlighted = YES;
 		closeButton_.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
 		[self addSubview:closeButton_];
@@ -102,7 +102,7 @@ static CGFloat kDDSocialDialogPadding = 10;
 		titleLabel_.backgroundColor = [UIColor clearColor];
 		titleLabel_.textColor = [UIColor whiteColor];
 		//titleLabel_.textColor = [UIColor blackColor];
-		titleLabel_.font = [UIFont boldSystemFontOfSize:titleLabelFontSize];
+		titleLabel_.font = ISMSBoldFont(titleLabelFontSize);
 		titleLabel_.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
 		[self addSubview:titleLabel_];
 		

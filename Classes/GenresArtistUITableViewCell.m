@@ -31,7 +31,7 @@
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
-		artistNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		artistNameLabel.font = ISMSArtistFont;
 		[artistNameScrollView addSubview:artistNameLabel];
 	}
 	

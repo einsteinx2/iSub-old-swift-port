@@ -29,7 +29,7 @@
     
     if (IS_IOS7())
     {
-        self.sectionIndexBackgroundColor = [UIColor clearColor];
+        self.sectionIndexBackgroundColor = [UIColor clearColor];        
     }
 }
 

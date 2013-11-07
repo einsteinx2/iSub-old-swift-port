@@ -111,7 +111,7 @@
 		[headerView addSubview:imageView];
 		
 		UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 11, self.view.width - 70, 48)];
-		textLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+		textLabel.font = ISMSBoldFont([UIFont labelFontSize]);
 		textLabel.textColor = [UIColor colorWithRed:(188.f/255.f) green:(188.f/255.f) blue:(188.f/255.f) alpha:1.f];
 		textLabel.shadowOffset = CGSizeMake(0, 2);
 		textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];

@@ -20,7 +20,7 @@
 		_playlistCountLabel = [[UILabel alloc] init];
 		_playlistCountLabel.backgroundColor = [UIColor clearColor];
 		_playlistCountLabel.textAlignment = UITextAlignmentLeft; // default
-		_playlistCountLabel.font = [UIFont systemFontOfSize:16];
+		_playlistCountLabel.font = ISMSRegularFont(16);
 		_playlistCountLabel.textColor = [UIColor colorWithWhite:.45 alpha:1];
 		[self.contentView addSubview:_playlistCountLabel];
 		
@@ -36,7 +36,7 @@
 		_playlistNameLabel = [[UILabel alloc] init];
 		_playlistNameLabel.backgroundColor = [UIColor clearColor];
 		_playlistNameLabel.textAlignment = UITextAlignmentLeft; // default
-		_playlistNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		_playlistNameLabel.font = ISMSBoldFont(20);
 		[_playlistNameScrollView addSubview:_playlistNameLabel];
     }
     return self;

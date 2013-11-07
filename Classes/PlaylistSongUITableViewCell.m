@@ -24,7 +24,7 @@
 		numberLabel = [[UILabel alloc] init];
 		numberLabel.backgroundColor = [UIColor clearColor];
 		numberLabel.textAlignment = UITextAlignmentCenter;
-		numberLabel.font = [UIFont boldSystemFontOfSize:30];
+		numberLabel.font = ISMSBoldFont(30);
 		numberLabel.adjustsFontSizeToFitWidth = YES;
 		numberLabel.minimumFontSize = 12;
 		[self.contentView addSubview:numberLabel];
@@ -41,13 +41,13 @@
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
 		songNameLabel.textAlignment = UITextAlignmentLeft; // default
-		songNameLabel.font = [UIFont boldSystemFontOfSize:20];
+		songNameLabel.font = ISMSSongFont;
 		[nameScrollView addSubview:songNameLabel];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
 		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
-		artistNameLabel.font = [UIFont systemFontOfSize:15];
+		artistNameLabel.font = ISMSRegularFont(15);
 		[nameScrollView addSubview:artistNameLabel];
 	}
 	
