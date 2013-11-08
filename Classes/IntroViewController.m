@@ -13,6 +13,11 @@
 @implementation IntroViewController
 @synthesize introVideo, testServer, ownServer, sunkenLogo;
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 - (BOOL)shouldAutorotate
 {
     return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];

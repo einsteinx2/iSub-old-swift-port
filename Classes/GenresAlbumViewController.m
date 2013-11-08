@@ -43,17 +43,12 @@
 	UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 	headerView.backgroundColor = ISMSHeaderColor;
 	
-	UIImageView *playAllImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play-all-note.png"]];
-	playAllImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-	playAllImage.frame = CGRectMake(10, 10, 19, 30);
-	[headerView addSubview:playAllImage];
-	
-	UILabel *playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 160, 50)];
+	UILabel *playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 160, 50)];
 	playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
 	playAllLabel.backgroundColor = [UIColor clearColor];
-	playAllLabel.textColor = ISMSHeaderTextColor;
+	playAllLabel.textColor = ISMSHeaderButtonColor;
 	playAllLabel.textAlignment = UITextAlignmentCenter;
-	playAllLabel.font = ISMSBoldFont(30);
+	playAllLabel.font = ISMSBoldFont(24);
 	playAllLabel.text = @"Play All";
 	[headerView addSubview:playAllLabel];
 	
@@ -62,18 +57,13 @@
 	playAllButton.frame = CGRectMake(0, 0, 160, 40);
 	[playAllButton addTarget:self action:@selector(playAllAction:) forControlEvents:UIControlEventTouchUpInside];
 	[headerView addSubview:playAllButton];
-	
-	UIImageView *shuffleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shuffle-small.png"]];
-	shuffleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-	shuffleImage.frame = CGRectMake(180, 12, 24, 26);
-	[headerView addSubview:shuffleImage];
-	
-	UILabel *shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(180, 0, 160, 50)];
+    
+	UILabel *shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(160, 0, 160, 50)];
 	shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 	shuffleLabel.backgroundColor = [UIColor clearColor];
-	shuffleLabel.textColor = ISMSHeaderTextColor;
+	shuffleLabel.textColor = ISMSHeaderButtonColor;
 	shuffleLabel.textAlignment = UITextAlignmentCenter;
-	shuffleLabel.font = ISMSBoldFont(30);
+	shuffleLabel.font = ISMSBoldFont(24);
 	shuffleLabel.text = @"Shuffle";
 	[headerView addSubview:shuffleLabel];
 	

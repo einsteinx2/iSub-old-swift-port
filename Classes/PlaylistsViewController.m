@@ -341,12 +341,12 @@
 		[self.headerView addSubview:self.playlistCountLabel];
 		
 		self.savePlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		self.savePlaylistButton.frame = CGRectMake(0, y, 230, 40);
+		self.savePlaylistButton.frame = CGRectMake(0, y, 232, 40);
 		self.savePlaylistButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		[self.savePlaylistButton addTarget:self action:@selector(savePlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
 		[self.headerView addSubview:self.savePlaylistButton];
 		
-		self.editPlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, y, 86, 50)];
+		self.editPlaylistLabel = [[UILabel alloc] initWithFrame:CGRectMake(232, y, 88, 50)];
 		self.editPlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		self.editPlaylistLabel.backgroundColor = [UIColor clearColor];
 		self.editPlaylistLabel.textColor = [UIColor whiteColor];
@@ -356,12 +356,12 @@
 		[self.headerView addSubview:self.editPlaylistLabel];
 		
 		self.editPlaylistButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		self.editPlaylistButton.frame = CGRectMake(234, y, 86, 40);
+		self.editPlaylistButton.frame = CGRectMake(232, y, 88, 40);
 		self.editPlaylistButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		[self.editPlaylistButton addTarget:self action:@selector(editPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
 		[self.headerView addSubview:self.editPlaylistButton];	
 		
-		self.deleteSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 227, 50)];
+		self.deleteSongsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, y, 232, 50)];
 		self.deleteSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.deleteSongsLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
 		self.deleteSongsLabel.textColor = [UIColor whiteColor];

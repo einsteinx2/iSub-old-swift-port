@@ -541,6 +541,14 @@
 		5332468C14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
 		5332468D14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
 		5332468E14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
+		5333F01B182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
+		5333F01C182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
+		5333F01D182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
+		5333F01E182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
+		5333F01F182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F01A182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png */; };
+		5333F020182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F01A182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png */; };
+		5333F021182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F01A182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png */; };
+		5333F022182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F01A182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png */; };
 		533A2D07113C61CA00B3A376 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		533A2D83113C963300B3A376 /* controller-next.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D7F113C963300B3A376 /* controller-next.png */; };
 		533A2D84113C963300B3A376 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
@@ -1949,6 +1957,8 @@
 		5332467D14D7BDFA008B35F6 /* controller-pause-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause-ipad.png"; path = "Images/Player Icons/controller-pause-ipad.png"; sourceTree = "<group>"; };
 		5332467E14D7BDFA008B35F6 /* controller-play-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play-ipad.png"; path = "Images/Player Icons/controller-play-ipad.png"; sourceTree = "<group>"; };
 		5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-previous-ipad.png"; path = "Images/Player Icons/controller-previous-ipad.png"; sourceTree = "<group>"; };
+		5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-volumeslider-thumb.png"; path = "Images/Player Icons/controller-volumeslider-thumb.png"; sourceTree = "<group>"; };
+		5333F01A182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-volumeslider-thumb@2x.png"; path = "Images/Player Icons/controller-volumeslider-thumb@2x.png"; sourceTree = "<group>"; };
 		533A2D05113C61C900B3A376 /* AsynchronousImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AsynchronousImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsynchronousImageView.m; sourceTree = "<group>"; };
 		533A2D7F113C963300B3A376 /* controller-next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-next.png"; path = "Images/Player Icons/controller-next.png"; sourceTree = "<group>"; };
@@ -3174,6 +3184,8 @@
 		53AAF1BE11DA913000447FF7 /* Player Icons */ = {
 			isa = PBXGroup;
 			children = (
+				5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */,
+				5333F01A182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png */,
 				537E9A3F14F4B5D1006CB0BC /* controller-speed-tab.png */,
 				537E9A4014F4B5D1006CB0BC /* controller-speed-tab@2x.png */,
 				537E9A4714F4B84D006CB0BC /* controller-equalizer-on.png */,
@@ -3729,6 +3741,8 @@
 				53404FF111E9488A004AEC41 /* controller-shuffle@2x.png in Resources */,
 				53404FFA11E94AA5004AEC41 /* controller-bookmark-on.png in Resources */,
 				53404FFB11E94AA5004AEC41 /* controller-bookmark-on@2x.png in Resources */,
+				5333F01F182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */,
+				5333F01B182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */,
 				53404FFC11E94AA5004AEC41 /* controller-bookmark.png in Resources */,
 				53404FFD11E94AA5004AEC41 /* controller-bookmark@2x.png in Resources */,
 				5379DC511219E48800F426CD /* ChatViewController.xib in Resources */,
@@ -3978,6 +3992,7 @@
 				53159D66156F69D0001B0268 /* unselected.png in Resources */,
 				53159D67156F69D0001B0268 /* cache-button.png in Resources */,
 				53159D68156F69D0001B0268 /* queue-button.png in Resources */,
+				5333F022182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */,
 				53159D69156F69D0001B0268 /* GenresViewController.xib in Resources */,
 				53159D6A156F69D0001B0268 /* CacheViewController.xib in Resources */,
 				53159D6B156F69D0001B0268 /* bookmarks-tabbaricon.png in Resources */,
@@ -4057,6 +4072,7 @@
 				53159DBD156F69D0001B0268 /* home-jukebox-off-ipad.png in Resources */,
 				53159DBE156F69D0001B0268 /* home-jukebox-off.png in Resources */,
 				53159DBF156F69D0001B0268 /* home-jukebox-off@2x.png in Resources */,
+				5333F01E182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */,
 				53159DC0156F69D0001B0268 /* home-jukebox-on-ipad.png in Resources */,
 				53159DC1156F69D0001B0268 /* home-jukebox-on.png in Resources */,
 				53159DC2156F69D0001B0268 /* home-jukebox-on@2x.png in Resources */,
@@ -4413,6 +4429,7 @@
 				53BC2779139AF0DD00A825F1 /* intro-arrow.png in Resources */,
 				53BC277A139AF0DD00A825F1 /* intro-arrow@2x.png in Resources */,
 				53BC277B139AF0DD00A825F1 /* intro-rowbackground-dark.png in Resources */,
+				5333F01D182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */,
 				53BC277C139AF0DD00A825F1 /* intro-rowbackground-dark@2x.png in Resources */,
 				53BC277D139AF0DD00A825F1 /* intro-icon-testserver.png in Resources */,
 				53BC277E139AF0DD00A825F1 /* intro-icon-testserver@2x.png in Resources */,
@@ -4502,6 +4519,7 @@
 				53493F0115FC69C90059492E /* chat-page.png in Resources */,
 				53493F0815FC6A0F0059492E /* twitter-signin.png in Resources */,
 				53493F0B15FC6A0F0059492E /* twitter-signin@2x.png in Resources */,
+				5333F021182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */,
 				53493F0E15FC6A0F0059492E /* twitter-signout.png in Resources */,
 				53493F1115FC6A0F0059492E /* twitter-signout@2x.png in Resources */,
 				53493F1615FC6A3A0059492E /* shuffle-small.png in Resources */,
@@ -4617,6 +4635,8 @@
 				53DCF45C13BFEAD3009160F9 /* controller-shuffle@2x.png in Resources */,
 				53DCF45D13BFEAD3009160F9 /* controller-bookmark-on.png in Resources */,
 				53DCF45E13BFEAD3009160F9 /* controller-bookmark-on@2x.png in Resources */,
+				5333F020182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */,
+				5333F01C182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */,
 				53DCF45F13BFEAD3009160F9 /* controller-bookmark.png in Resources */,
 				53DCF46013BFEAD3009160F9 /* controller-bookmark@2x.png in Resources */,
 				53DCF46813BFEAD3009160F9 /* ChatViewController.xib in Resources */,

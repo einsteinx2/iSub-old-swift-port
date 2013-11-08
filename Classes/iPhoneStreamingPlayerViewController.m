@@ -394,7 +394,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
     
     if (IS_IOS7())
     {
-        self.downloadProgress.height -= 10.;
+        self.downloadProgress.height -= 20.;
+        self.downloadProgress.y += 1.;
+        self.downloadProgress.layer.cornerRadius = 1.;
         [self.downloadProgress centerVertically];
     }
 	
@@ -906,7 +908,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		CGRect newFrame = CGRectMake(10, 0, self.volumeSlider.width-20, self.volumeSlider.height);
 		self.volumeView = [[MPVolumeView alloc] initWithFrame:newFrame];
-        [self.volumeView setVolumeThumbImage:[UIImage imageNamed:@"controller-slider-thumb.png"] forState:UIControlStateNormal];
+        [self.volumeView setVolumeThumbImage:[UIImage imageNamed:@"controller-volumeslider-thumb.png"] forState:UIControlStateNormal];
 		[self.volumeSlider addSubview:self.volumeView];
 	}
 	

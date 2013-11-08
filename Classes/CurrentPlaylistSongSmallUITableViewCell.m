@@ -34,6 +34,7 @@
 		[self.contentView addSubview:numberLabel];
 		
 		nowPlayingImageView = [[UIImageView alloc] initWithImage:self.nowPlayingImageWhite];
+        nowPlayingImageView.highlightedImage = self.nowPlayingImageBlack;
 		nowPlayingImageView.center = numberLabel.center;
 		nowPlayingImageView.hidden = YES;
 		[self.contentView addSubview:nowPlayingImageView];

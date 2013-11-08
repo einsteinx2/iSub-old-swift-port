@@ -124,7 +124,7 @@
 		self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 		self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 		
-		self.bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 230, 50)];
+		self.bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 232, 50)];
 		self.bookmarkCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.bookmarkCountLabel.backgroundColor = [UIColor clearColor];
 		self.bookmarkCountLabel.textColor = [UIColor whiteColor];
@@ -138,11 +138,11 @@
 		
 		self.deleteBookmarksButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		self.deleteBookmarksButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-		self.deleteBookmarksButton.frame = CGRectMake(0, 0, 230, 50);
+		self.deleteBookmarksButton.frame = CGRectMake(0, 0, 232, 50);
 		[self.deleteBookmarksButton addTarget:self action:@selector(deleteBookmarksAction:) forControlEvents:UIControlEventTouchUpInside];
 		[self.headerView addSubview:self.deleteBookmarksButton];
 		
-		self.editBookmarksLabel = [[UILabel alloc] initWithFrame:CGRectMake(234, 0, 86, 50)];
+		self.editBookmarksLabel = [[UILabel alloc] initWithFrame:CGRectMake(232, 0, 88, 50)];
 		self.editBookmarksLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		self.editBookmarksLabel.backgroundColor = [UIColor clearColor];
 		self.editBookmarksLabel.textColor = [UIColor whiteColor];
@@ -153,11 +153,11 @@
 		
 		self.editBookmarksButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		self.editBookmarksButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-		self.editBookmarksButton.frame = CGRectMake(234, 0, 86, 40);
+		self.editBookmarksButton.frame = CGRectMake(232, 0, 88, 40);
 		[self.editBookmarksButton addTarget:self action:@selector(editBookmarksAction:) forControlEvents:UIControlEventTouchUpInside];
 		[self.headerView addSubview:self.editBookmarksButton];	
 		
-		self.deleteBookmarksLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 227, 50)];
+		self.deleteBookmarksLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 232, 50)];
 		self.deleteBookmarksLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.deleteBookmarksLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
 		self.deleteBookmarksLabel.textColor = [UIColor whiteColor];
