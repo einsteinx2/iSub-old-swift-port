@@ -11,6 +11,8 @@
 		</dict>
 		<key>iSub Integration Tests.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>11</integer>
 		</dict>
@@ -26,6 +28,8 @@
 		</dict>
 		<key>iSub Unit Tests.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>14</integer>
 		</dict>

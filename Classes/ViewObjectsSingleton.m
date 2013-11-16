@@ -299,9 +299,6 @@
 	_jukeboxColor = [UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0];
 	
 	_isCellEnabled = YES;
-	_deleteButtonImage = [UIImage imageNamed:@"delete-button.png"];
-	_cacheButtonImage = [UIImage imageNamed:@"cache-button.png"];
-	_queueButtonImage = [UIImage imageNamed:@"queue-button.png"];
 	
 	[NSNotificationCenter addObserverOnMainThread:self selector:@selector(didReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(showAlbumLoadingScreenOnMainWindowNotification:) name:ISMSNotification_ShowAlbumLoadingScreenOnMainWindow object:nil];

@@ -78,10 +78,6 @@
 @property (strong) UIColor *windowColor;
 @property (strong) UIColor *jukeboxColor;
 
-@property (strong) UIImage *deleteButtonImage;
-@property (strong) UIImage *cacheButtonImage;
-@property (strong) UIImage *queueButtonImage;
-
 @property (copy) NSString *currentLoadingFolderId;
 
 @property BOOL isNoNetworkAlertShowing;

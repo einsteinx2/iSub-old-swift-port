@@ -95,7 +95,7 @@
 	
 	if (self.isOverlayShowing)
 	{
-		[self.overlayView.downloadButton setImage:[UIImage imageNamed:@"delete-button.png"] forState:UIControlStateNormal];
+        [self.overlayView.downloadButton setTitle:@"Delete" forState:UIControlStateNormal];
 		[self.overlayView.downloadButton addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
 	}
 }

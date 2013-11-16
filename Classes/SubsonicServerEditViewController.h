@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class ServerTypeViewController, ServerListViewController;
+@class ServerTypeViewController;
 
 @interface SubsonicServerEditViewController : UIViewController <ISMSLoaderDelegate>
 

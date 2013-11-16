@@ -7,7 +7,6 @@
 //
 
 #import "IntroViewController.h"
-#import "ServerListViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 @implementation IntroViewController

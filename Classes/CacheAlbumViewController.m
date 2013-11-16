@@ -95,7 +95,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	playAllLabel.backgroundColor = [UIColor clearColor];
 	playAllLabel.textColor = ISMSHeaderButtonColor;
 	playAllLabel.textAlignment = UITextAlignmentCenter;
-	playAllLabel.font = ISMSBoldFont(24);
+	playAllLabel.font = ISMSRegularFont(24);
 	playAllLabel.text = @"Play All";
 	[headerView addSubview:playAllLabel];
 	
@@ -110,7 +110,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	shuffleLabel.backgroundColor = [UIColor clearColor];
 	shuffleLabel.textColor = ISMSHeaderButtonColor;
 	shuffleLabel.textAlignment = UITextAlignmentCenter;
-	shuffleLabel.font = ISMSBoldFont(24);
+	shuffleLabel.font = ISMSRegularFont(24);
 	shuffleLabel.text = @"Shuffle";
 	[headerView addSubview:shuffleLabel];
 	

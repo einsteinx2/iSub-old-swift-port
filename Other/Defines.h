@@ -18,9 +18,9 @@
 #define ISMSRegularFont(value) [UIFont fontWithName:@"HelveticaNeue" size:value]
 #define ISMSBoldFont(value) [UIFont fontWithName:@"HelveticaNeue-Bold" size:value]
 
-#define ISMSArtistFont ISMSRegularFont(17)
-#define ISMSAlbumFont ISMSRegularFont(17)
-#define ISMSSongFont ISMSRegularFont(17)
+#define ISMSArtistFont ISMSRegularFont(16)
+#define ISMSAlbumFont ISMSRegularFont(16)
+#define ISMSSongFont ISMSRegularFont(16)
 
 #define ISMSiPadBackgroundColor [UIColor colorWithRedInt:200 greenInt:200 blueInt:206 alpha:1]
 #define ISMSiPadCornerRadius 5.

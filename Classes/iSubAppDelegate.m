@@ -1034,23 +1034,23 @@ LOG_LEVEL_ISUB_DEFAULT
 	}
 	else
 	{
-		ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-		serverListViewController.hidesBottomBarWhenPushed = YES;
+		self.serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+		self.serverListViewController.hidesBottomBarWhenPushed = YES;
 		
 		if (self.currentTabBarController.selectedIndex >= 4)
 		{
 			//[self.currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
-			[self.currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+			[self.currentTabBarController.moreNavigationController pushViewController:self.serverListViewController animated:YES];
 		}
 		else if (self.currentTabBarController.selectedIndex == NSNotFound)
 		{
 			//[self.currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
-			[self.currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
+			[self.currentTabBarController.moreNavigationController pushViewController:self.serverListViewController animated:YES];
 		}
 		else
 		{
 			//[(UINavigationController*)self.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
-			[(UINavigationController*)self.currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
+			[(UINavigationController*)self.currentTabBarController.selectedViewController pushViewController:self.serverListViewController animated:YES];
 		}
 	}
 }

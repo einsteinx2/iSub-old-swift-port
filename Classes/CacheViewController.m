@@ -153,7 +153,7 @@
 		self.playAllLabel.backgroundColor = [UIColor clearColor];
 		self.playAllLabel.textColor = ISMSHeaderButtonColor;
 		self.playAllLabel.textAlignment = UITextAlignmentCenter;
-		self.playAllLabel.font = ISMSBoldFont(24);
+		self.playAllLabel.font = ISMSRegularFont(24);
 		self.playAllLabel.text = @"Play All";
 		[self.headerView2 addSubview:self.playAllLabel];
 		
@@ -168,7 +168,7 @@
 		self.shuffleLabel.backgroundColor = [UIColor clearColor];
 		self.shuffleLabel.textColor = ISMSHeaderButtonColor;
 		self.shuffleLabel.textAlignment = UITextAlignmentCenter;
-		self.shuffleLabel.font = ISMSBoldFont(24);
+		self.shuffleLabel.font = ISMSRegularFont(24);
 		self.shuffleLabel.text = @"Shuffle";
 		[self.headerView2 addSubview:self.shuffleLabel];
 		
@@ -778,9 +778,9 @@
 			self.playAllLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 160, 50)];
 			self.playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 			self.playAllLabel.backgroundColor = [UIColor clearColor];
-			self.playAllLabel.textColor = ISMSHeaderTextColor;
+			self.playAllLabel.textColor = ISMSHeaderButtonColor;
 			self.playAllLabel.textAlignment = UITextAlignmentCenter;
-			self.playAllLabel.font = ISMSBoldFont(30);
+			self.playAllLabel.font = ISMSRegularFont(24);
 			self.playAllLabel.text = @"Play All";
 			[self.headerView2 addSubview:self.playAllLabel];
 			
@@ -793,9 +793,9 @@
 			self.shuffleLabel = [[UILabel alloc] initWithFrame:CGRectMake(160, 0, 160, 50)];
 			self.shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 			self.shuffleLabel.backgroundColor = [UIColor clearColor];
-			self.shuffleLabel.textColor = ISMSHeaderTextColor;
+			self.shuffleLabel.textColor = ISMSHeaderButtonColor;
 			self.shuffleLabel.textAlignment = UITextAlignmentCenter;
-			self.shuffleLabel.font = ISMSBoldFont(30);
+			self.shuffleLabel.font = ISMSRegularFont(24);
 			self.shuffleLabel.text = @"Shuffle";
 			[self.headerView2 addSubview:self.shuffleLabel];
 			

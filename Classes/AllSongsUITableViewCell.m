@@ -95,7 +95,7 @@
 		}
 		else
 		{
-			self.overlayView.downloadButton.alpha = .8;
+			self.overlayView.downloadButton.alpha = 1.;
 			[self.overlayView.downloadButton addTarget:self action:@selector(downloadAction) forControlEvents:UIControlEventTouchUpInside];
 			self.overlayView.downloadButton.enabled = YES;
 		}

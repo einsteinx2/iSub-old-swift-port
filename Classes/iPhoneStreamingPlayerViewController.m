@@ -115,6 +115,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
         }
     }
     
+    if (!IS_IOS7())
+    {
+        self.progressSlider.y += 2.;
+    }
+    
 	[self createDownloadProgressView];
 	[self createLandscapeViews];
 	
@@ -908,7 +913,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		CGRect newFrame = CGRectMake(10, 0, self.volumeSlider.width-20, self.volumeSlider.height);
 		self.volumeView = [[MPVolumeView alloc] initWithFrame:newFrame];
-        [self.volumeView setVolumeThumbImage:[UIImage imageNamed:@"controller-volumeslider-thumb.png"] forState:UIControlStateNormal];
+        if (IS_IOS7())
+            [self.volumeView setVolumeThumbImage:[UIImage imageNamed:@"controller-volumeslider-thumb.png"] forState:UIControlStateNormal];
 		[self.volumeSlider addSubview:self.volumeView];
 	}
 	

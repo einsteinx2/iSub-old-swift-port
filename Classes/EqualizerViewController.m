@@ -225,6 +225,12 @@
 	self.swipeDetectorRight.direction = UISwipeGestureRecognizerDirectionRight;
 	[self.equalizerView addGestureRecognizer:self.swipeDetectorRight];
 	
+    if (!IS_IOS7())
+    {
+        self.gainSlider.y += 4.;
+        self.presetLabel.superview.y -= 10.;
+    }
+    
 	[Flurry logEvent:@"Equalizer"];
 }
 
@@ -685,7 +691,7 @@
 	if(settingsS.isEqualizerOn)
 	{
 		[self.toggleButton setTitle:@"EQ is ON" forState:UIControlStateNormal];
-        self.toggleButton.backgroundColor = [UIColor colorWithWhite:1. alpha:.15];
+        self.toggleButton.backgroundColor = [UIColor colorWithWhite:1. alpha:.25];
 	}
 	else
 	{
@@ -744,7 +750,7 @@
         FXBlurView *blurView = [[FXBlurView alloc] initWithFrame:self.presetPicker.bounds];
         blurView.tintColor = [UIColor whiteColor];
         [blurView addSubview:self.presetPicker];
-        blurView.height += 32.;
+        blurView.height += IS_IOS7() ? 32. : 0.;
         blurView.y = self.view.height;
         
         [self.view addSubview:blurView];
