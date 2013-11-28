@@ -77,7 +77,8 @@
 	[super showOverlay];
 	if (self.isOverlayShowing)
 	{
-		[self.overlayView.downloadButton setImage:[UIImage imageNamed:@"delete-button.png"] forState:UIControlStateNormal];
+		[self.overlayView.downloadButton setTitle:@"Delete" forState:UIControlStateNormal];
+        self.overlayView.downloadButton.titleLabel.textColor = UIColor.redColor;
 		[self.overlayView.downloadButton addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
 	}
 }

@@ -281,20 +281,12 @@
 	_lightGreen = [UIColor colorWithRed:169/255.0 green:241/255.0 blue:108/255.0 alpha:1];
 	_darkGreen = [UIColor colorWithRed:103/255.0 green:227/255.0 blue:0/255.0 alpha:1];
 	
-	//_lightBlue = [[UIColor colorWithRed:100/255.0 green:168/255.0 blue:209/255.0 alpha:1] retain];
-	//_darkBlue = [[UIColor colorWithRed:9/255.0 green:105/255.0 blue:162/255.0 alpha:1] retain];
-	
 	_lightBlue = [UIColor colorWithRed:87/255.0 green:198/255.0 blue:255/255.0 alpha:1];
 	_darkBlue = [UIColor colorWithRed:28/255.0 green:163/255.0 blue:255/255.0 alpha:1];
 	
-	//_lightBlue = [[UIColor colorWithRed:14/255.0 green:148/255.0 blue:218/255.0 alpha:1] retain];
-	//_darkBlue = [[UIColor colorWithRed:54/255.0 green:142/255.0 blue:188/255.0 alpha:1] retain];
-	
 	_lightNormal = [UIColor whiteColor];
 	_darkNormal = ISMSHeaderColor;
-	
-	//_windowColor = [[UIColor colorWithRed:241.0/255.0 green:246.0/255.0 blue:253.0/255.0 alpha:1] retain];
-	//_windowColor = [[UIColor colorWithRed:206.0/255.0 green:211.0/255.0 blue:218.0/255.0 alpha:1] retain];
+
 	_windowColor = [UIColor colorWithWhite:.3 alpha:1];
 	_jukeboxColor = [UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0];
 	
