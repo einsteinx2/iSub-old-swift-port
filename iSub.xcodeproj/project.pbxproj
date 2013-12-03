@@ -753,6 +753,15 @@
 		5363B1CA1707CBDE0008696F /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B901661B96A005A73C6 /* libHockeySDK.a */; };
 		5363B1CF1707CBE50008696F /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B901661B96A005A73C6 /* libHockeySDK.a */; };
 		5363B1D01707CBEA0008696F /* libHockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536C9B901661B96A005A73C6 /* libHockeySDK.a */; };
+		53649DCD184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
+		53649DCE184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
+		53649DCF184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
+		53649DD2184DA99B00E600EC /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD0184DA99B00E600EC /* Icon-76.png */; };
+		53649DD3184DA99B00E600EC /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD0184DA99B00E600EC /* Icon-76.png */; };
+		53649DD4184DA99B00E600EC /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD0184DA99B00E600EC /* Icon-76.png */; };
+		53649DD5184DA99B00E600EC /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD1184DA99B00E600EC /* Icon-76@2x.png */; };
+		53649DD6184DA99B00E600EC /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD1184DA99B00E600EC /* Icon-76@2x.png */; };
+		53649DD7184DA99B00E600EC /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD1184DA99B00E600EC /* Icon-76@2x.png */; };
 		536585811478920D00FE57A5 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
 		536585821478920D00FE57A5 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
 		536585831478920D00FE57A5 /* EqualizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5365857F1478920B00FE57A5 /* EqualizerViewController.m */; };
@@ -2099,6 +2108,9 @@
 		53614AC7116432DA0088ABC0 /* ServerListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerListViewController.h; sourceTree = "<group>"; };
 		53614AC8116432DA0088ABC0 /* ServerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerListViewController.m; sourceTree = "<group>"; };
 		53614BD7116467420088ABC0 /* AllSongsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AllSongsViewController.xib; sourceTree = "<group>"; };
+		53649DCC184DA90600E600EC /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-120.png"; path = "Images/App Icons/Icon-120.png"; sourceTree = "<group>"; };
+		53649DD0184DA99B00E600EC /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Images/App Icons/Icon-76.png"; sourceTree = "<group>"; };
+		53649DD1184DA99B00E600EC /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Images/App Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
 		5365857E1478920B00FE57A5 /* EqualizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerViewController.h; sourceTree = "<group>"; };
 		5365857F1478920B00FE57A5 /* EqualizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerViewController.m; sourceTree = "<group>"; };
 		5365859114789AD800FE57A5 /* EqualizerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerView.h; sourceTree = "<group>"; };
@@ -2624,6 +2636,9 @@
 				53BC2869139AF17B00A825F1 /* Icon-72-Beta.png */,
 				53BC286A139AF17B00A825F1 /* Icon-Beta.png */,
 				53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */,
+				53649DCC184DA90600E600EC /* Icon-120.png */,
+				53649DD0184DA99B00E600EC /* Icon-76.png */,
+				53649DD1184DA99B00E600EC /* Icon-76@2x.png */,
 				53493F1A15FC6AA60059492E /* iSub-Info-Beta.plist */,
 				53493F1B15FC6AA60059492E /* iSub-Info-Lite.plist */,
 				53493F1C15FC6AA60059492E /* iSub-Info.plist */,
@@ -3663,6 +3678,7 @@
 				536D624411444E4600DFCE56 /* Icon.png in Resources */,
 				53AA300411461A04003E57E3 /* background.png in Resources */,
 				534E443F1155AD01000B4134 /* default-album-art-small.png in Resources */,
+				53649DD2184DA99B00E600EC /* Icon-76.png in Resources */,
 				5305C2061157F4F800BC78F0 /* Default.png in Resources */,
 				53F0CD8211589F0A00A665CD /* progress-label-background.png in Resources */,
 				539797FE1162D4D200F41D8B /* AllAlbumsViewController.xib in Resources */,
@@ -3702,6 +3718,7 @@
 				53523D9511CD61F7006AEA48 /* GenresArtistViewController.xib in Resources */,
 				5314C7B411D4157D000CA726 /* delete-button.png in Resources */,
 				533C65CE15ABB9D6003EAF29 /* SettingsTabViewController.xib in Resources */,
+				53649DCD184DA90600E600EC /* Icon-120.png in Resources */,
 				5398F27911DA627500007870 /* HelpTabViewController.xib in Resources */,
 				5398F2B611DA8B1000007870 /* iPhoneStreamingPlayerViewController.xib in Resources */,
 				53AAF18911DA8D7500447FF7 /* albums-tabbaricon@2x.png in Resources */,
@@ -3832,6 +3849,7 @@
 				53C6052912F1EFD4003C6895 /* intro-top@2x.png in Resources */,
 				533C65A615ABB9BD003EAF29 /* IntroViewController.xib in Resources */,
 				53C6053312F1F19F003C6895 /* intro-rowbackground.png in Resources */,
+				53649DD5184DA99B00E600EC /* Icon-76@2x.png in Resources */,
 				53C6053412F1F19F003C6895 /* intro-rowbackground@2x.png in Resources */,
 				53C6053B12F1F2F5003C6895 /* intro-arrow.png in Resources */,
 				53C6053C12F1F2F5003C6895 /* intro-arrow@2x.png in Resources */,
@@ -4384,6 +4402,7 @@
 				53BC2747139AF0DD00A825F1 /* home-quick-random@2x.png in Resources */,
 				53BC2748139AF0DD00A825F1 /* home-quick-recent@2x.png in Resources */,
 				53BC2749139AF0DD00A825F1 /* home-quick-recent.png in Resources */,
+				53649DD4184DA99B00E600EC /* Icon-76.png in Resources */,
 				53BC274A139AF0DD00A825F1 /* home-quick-newest@2x.png in Resources */,
 				53BC274B139AF0DD00A825F1 /* home-quick-newest.png in Resources */,
 				53BC274C139AF0DD00A825F1 /* home-quick-frequent@2x.png in Resources */,
@@ -4446,6 +4465,7 @@
 				53BC278C139AF0DD00A825F1 /* controller-bookmark-on-ipad.png in Resources */,
 				53BC278D139AF0DD00A825F1 /* controller-repeat-all-ipad.png in Resources */,
 				53BC278E139AF0DD00A825F1 /* controller-repeat-ipad.png in Resources */,
+				53649DCF184DA90600E600EC /* Icon-120.png in Resources */,
 				53BC278F139AF0DD00A825F1 /* controller-repeat-one-ipad.png in Resources */,
 				53BC2790139AF0DD00A825F1 /* controller-shuffle-ipad.png in Resources */,
 				53BC2791139AF0DD00A825F1 /* controller-shuffle-on-ipad.png in Resources */,
@@ -4527,6 +4547,7 @@
 				53493F3215FC6BD90059492E /* KeychainAccessGroups.plist in Resources */,
 				53493F3A15FC6C3B0059492E /* BassEffectDefaultPresets.plist in Resources */,
 				53493F4315FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
+				53649DD7184DA99B00E600EC /* Icon-76@2x.png in Resources */,
 				53493F4615FC6CAE0059492E /* MainWindow.xib in Resources */,
 				5349AD061613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABD16533E4800472DBF /* back-tabbaricon.png in Resources */,
@@ -4557,6 +4578,7 @@
 				53DCF40E13BFEAD3009160F9 /* Icon.png in Resources */,
 				53DCF40F13BFEAD3009160F9 /* background.png in Resources */,
 				53DCF41013BFEAD3009160F9 /* default-album-art-small.png in Resources */,
+				53649DD3184DA99B00E600EC /* Icon-76.png in Resources */,
 				53DCF41113BFEAD3009160F9 /* Default.png in Resources */,
 				53DCF41213BFEAD3009160F9 /* progress-label-background.png in Resources */,
 				53DCF41313BFEAD3009160F9 /* AllAlbumsViewController.xib in Resources */,
@@ -4596,6 +4618,7 @@
 				53DCF43613BFEAD3009160F9 /* GenresArtistViewController.xib in Resources */,
 				53DCF43713BFEAD3009160F9 /* delete-button.png in Resources */,
 				533C65CF15ABB9D6003EAF29 /* SettingsTabViewController.xib in Resources */,
+				53649DCE184DA90600E600EC /* Icon-120.png in Resources */,
 				53DCF43913BFEAD3009160F9 /* HelpTabViewController.xib in Resources */,
 				53DCF43A13BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.xib in Resources */,
 				53DCF43B13BFEAD3009160F9 /* albums-tabbaricon@2x.png in Resources */,
@@ -4726,6 +4749,7 @@
 				53DCF4D213BFEAD3009160F9 /* intro-top@2x.png in Resources */,
 				533C65A715ABB9BD003EAF29 /* IntroViewController.xib in Resources */,
 				53DCF4D413BFEAD3009160F9 /* intro-rowbackground.png in Resources */,
+				53649DD6184DA99B00E600EC /* Icon-76@2x.png in Resources */,
 				53DCF4D513BFEAD3009160F9 /* intro-rowbackground@2x.png in Resources */,
 				53DCF4D613BFEAD3009160F9 /* intro-arrow.png in Resources */,
 				53DCF4D713BFEAD3009160F9 /* intro-arrow@2x.png in Resources */,
