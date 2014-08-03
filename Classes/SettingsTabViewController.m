@@ -754,7 +754,7 @@
         {
             if (granted == YES)
             {
-                [EX2Dispatch runInMainThread:^
+                [EX2Dispatch runInMainThreadAsync:^
                  {
                      if ([[account accounts] count] == 1)
                      {

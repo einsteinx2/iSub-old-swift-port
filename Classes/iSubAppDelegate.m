@@ -1325,7 +1325,7 @@ LOG_LEVEL_ISUB_DEFAULT
 {
     if (!settingsS.isStopCheckingWaveboxRelease && !settingsS.isWaveBoxAlertShowing)
     {
-        [EX2Dispatch runInBackground:^
+        [EX2Dispatch runInBackgroundAsync:^
          {
              NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://isubapp.com/wavebox.json"]];
              if (data.length > 0)
@@ -1340,7 +1340,7 @@ LOG_LEVEL_ISUB_DEFAULT
                      if (!settingsS.isWaveBoxAlertShowing)
                      {
                          settingsS.isWaveBoxAlertShowing = YES;
-                         [EX2Dispatch runInMainThread:^
+                         [EX2Dispatch runInMainThreadAsync:^
                           {
                               UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"Not Now" otherButtonTitles:@"More Info", @"Install Now", nil];
                               alert.tag = 10;
