@@ -463,6 +463,8 @@ static CGFloat kDDSocialDialogPadding = 10;
 		case UIInterfaceOrientationLandscapeRight:
 			self.center = CGPointMake(screenSize.width - (ceil((screenSize.width - keyboardSize.height)/2)), self.center.y);
 			break;
+        default:
+            break;
 	}	
 	[UIView commitAnimations];
 	
