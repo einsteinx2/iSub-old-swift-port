@@ -19,7 +19,7 @@
 - (NSLayoutConstraint *)autolayoutHeightProportionalToWidth:(float)proportion constant:(float)constant;
 - (NSLayoutConstraint *)autolayoutPinEdge:(NSLayoutAttribute)edge toParentEdge:(NSLayoutAttribute)parentEdge constant:(float)constant;
 - (NSLayoutConstraint *)autolayoutPinToEdgeOfParent:(NSLayoutAttribute)edge constant:(float)constant;
-- (NSLayoutConstraint *)autolayoutPinEdge:(NSLayoutAttribute)edge toEdge:(NSLayoutAttribute)otherEdge ofSibling:(id)sibling constant:(float)constant;
+- (NSLayoutConstraint *)autolayoutPinEdge:(NSLayoutAttribute)edge toEdge:(NSLayoutAttribute)otherEdge ofSibling:(UIView *)sibling constant:(float)constant;
 - (NSLayoutConstraint *)autolayoutSetAttribute:(NSLayoutAttribute)attribute toConstant:(float)constant;
 
 - (void)removeAllConstraints;
