@@ -1691,6 +1691,18 @@
 		D036A8A719DCEE0900AF2404 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D036A8A619DCEE0900AF2404 /* Launch Screen.xib */; };
 		D036A8A819DCEE0900AF2404 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D036A8A619DCEE0900AF2404 /* Launch Screen.xib */; };
 		D036A8A919DCEE0900AF2404 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D036A8A619DCEE0900AF2404 /* Launch Screen.xib */; };
+		D0EA476219DE41510083CE05 /* ISMSPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476119DE41510083CE05 /* ISMSPlayerView.m */; };
+		D0EA476319DE41510083CE05 /* ISMSPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476119DE41510083CE05 /* ISMSPlayerView.m */; };
+		D0EA476419DE41510083CE05 /* ISMSPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476119DE41510083CE05 /* ISMSPlayerView.m */; };
+		D0EA476719DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476619DE41E30083CE05 /* ISMSPlayerViewController.m */; };
+		D0EA476819DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476619DE41E30083CE05 /* ISMSPlayerViewController.m */; };
+		D0EA476919DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476619DE41E30083CE05 /* ISMSPlayerViewController.m */; };
+		D0EA476C19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476B19DE449A0083CE05 /* UIView+AutoLayout.m */; };
+		D0EA476D19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476B19DE449A0083CE05 /* UIView+AutoLayout.m */; };
+		D0EA476E19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476B19DE449A0083CE05 /* UIView+AutoLayout.m */; };
+		D0F7918B19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */; };
+		D0F7918C19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */; };
+		D0F7918D19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2406,6 +2418,14 @@
 		53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button@2x.png"; path = "Images/Other/queue-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete-button@2x.png"; path = "Images/Other/delete-button@2x.png"; sourceTree = "<group>"; };
 		D036A8A619DCEE0900AF2404 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
+		D0EA476019DE41510083CE05 /* ISMSPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSPlayerView.h; sourceTree = "<group>"; };
+		D0EA476119DE41510083CE05 /* ISMSPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSPlayerView.m; sourceTree = "<group>"; };
+		D0EA476519DE41E30083CE05 /* ISMSPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSPlayerViewController.h; sourceTree = "<group>"; };
+		D0EA476619DE41E30083CE05 /* ISMSPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSPlayerViewController.m; sourceTree = "<group>"; };
+		D0EA476A19DE449A0083CE05 /* UIView+AutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AutoLayout.h"; sourceTree = "<group>"; };
+		D0EA476B19DE449A0083CE05 /* UIView+AutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AutoLayout.m"; sourceTree = "<group>"; };
+		D0F7918919DE4DFC008032A3 /* ISMSScrubberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSScrubberView.h; sourceTree = "<group>"; };
+		D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSScrubberView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2921,6 +2941,8 @@
 				5325910014EE22C400DF4BDB /* MBProgressHUD.m */,
 				5349F14D16E9458B00E56582 /* IDTwitterAccountChooserViewController.h */,
 				5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */,
+				D0EA476A19DE449A0083CE05 /* UIView+AutoLayout.h */,
+				D0EA476B19DE449A0083CE05 /* UIView+AutoLayout.m */,
 			);
 			name = "3rd Party UI Components";
 			path = ..;
@@ -3050,6 +3072,7 @@
 		539797F01162CE4B00F41D8B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D0EA475919DE412C0083CE05 /* New player */,
 				530AB2C512713F4B002981DB /* iPad */,
 				533A207B12887EA300539BAE /* Table Cells */,
 				53F4A070116FF44400BB8411 /* Player */,
@@ -3447,6 +3470,27 @@
 				53C7FD7F150F00C5008DA51C /* home-shuffle-ipad@2x.png */,
 			);
 			name = "Home tab";
+			sourceTree = "<group>";
+		};
+		D0EA475919DE412C0083CE05 /* New player */ = {
+			isa = PBXGroup;
+			children = (
+				D0F7919419DE4E04008032A3 /* Scrubber */,
+				D0EA476019DE41510083CE05 /* ISMSPlayerView.h */,
+				D0EA476119DE41510083CE05 /* ISMSPlayerView.m */,
+				D0EA476519DE41E30083CE05 /* ISMSPlayerViewController.h */,
+				D0EA476619DE41E30083CE05 /* ISMSPlayerViewController.m */,
+			);
+			name = "New player";
+			sourceTree = "<group>";
+		};
+		D0F7919419DE4E04008032A3 /* Scrubber */ = {
+			isa = PBXGroup;
+			children = (
+				D0F7918919DE4DFC008032A3 /* ISMSScrubberView.h */,
+				D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */,
+			);
+			name = Scrubber;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -4902,6 +4946,7 @@
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
 				534E43B71155659A000B4134 /* AlbumUITableViewCell.m in Sources */,
 				534E44711155B106000B4134 /* SongUITableViewCell.m in Sources */,
+				D0EA476C19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53BCC51B181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				539796E41162B68800F41D8B /* AllAlbumsViewController.m in Sources */,
 				539797FA1162D3F100F41D8B /* AllAlbumsUITableViewCell.m in Sources */,
@@ -4941,6 +4986,8 @@
 				53523D9411CD61F7006AEA48 /* GenresArtistViewController.m in Sources */,
 				535806EA11CD92DC00A09386 /* GenresSongUITableViewCell.m in Sources */,
 				5358083811CEB5F200A09386 /* CacheQueueSongUITableViewCell.m in Sources */,
+				D0F7918B19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */,
+				D0EA476219DE41510083CE05 /* ISMSPlayerView.m in Sources */,
 				53DF310711D3EE26007552A4 /* GenresGenreUITableViewCell.m in Sources */,
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
 				5398F27811DA627500007870 /* HelpTabViewController.m in Sources */,
@@ -4986,6 +5033,7 @@
 				537E9A3114F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53703BD51588390A00B1FB33 /* PMSServerEditViewControllerViewController.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
+				D0EA476719DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
 				536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F14F16E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
@@ -5113,6 +5161,7 @@
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
 				53BC27A8139AF0DD00A825F1 /* AlbumUITableViewCell.m in Sources */,
 				53BC27AA139AF0DD00A825F1 /* SongUITableViewCell.m in Sources */,
+				D0EA476E19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53BCC51D181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				53BC27AC139AF0DD00A825F1 /* AllAlbumsViewController.m in Sources */,
 				53BC27AD139AF0DD00A825F1 /* AllAlbumsUITableViewCell.m in Sources */,
@@ -5152,6 +5201,8 @@
 				53BC27DE139AF0DD00A825F1 /* GenresArtistViewController.m in Sources */,
 				53BC27DF139AF0DD00A825F1 /* GenresSongUITableViewCell.m in Sources */,
 				53BC27E0139AF0DD00A825F1 /* CacheQueueSongUITableViewCell.m in Sources */,
+				D0F7918D19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */,
+				D0EA476419DE41510083CE05 /* ISMSPlayerView.m in Sources */,
 				53BC27E1139AF0DD00A825F1 /* GenresGenreUITableViewCell.m in Sources */,
 				53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */,
 				53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */,
@@ -5197,6 +5248,7 @@
 				537E9A3314F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53703BD71588390A00B1FB33 /* PMSServerEditViewControllerViewController.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,
+				D0EA476919DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
 				536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F15116E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
@@ -5214,6 +5266,7 @@
 				53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */,
 				53DCF50913BFEAD3009160F9 /* AlbumUITableViewCell.m in Sources */,
 				53DCF50B13BFEAD3009160F9 /* SongUITableViewCell.m in Sources */,
+				D0EA476D19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53BCC51C181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				53DCF50D13BFEAD3009160F9 /* AllAlbumsViewController.m in Sources */,
 				53DCF50E13BFEAD3009160F9 /* AllAlbumsUITableViewCell.m in Sources */,
@@ -5253,6 +5306,8 @@
 				53DCF53F13BFEAD3009160F9 /* GenresArtistViewController.m in Sources */,
 				53DCF54013BFEAD3009160F9 /* GenresSongUITableViewCell.m in Sources */,
 				53DCF54113BFEAD3009160F9 /* CacheQueueSongUITableViewCell.m in Sources */,
+				D0F7918C19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */,
+				D0EA476319DE41510083CE05 /* ISMSPlayerView.m in Sources */,
 				53DCF54213BFEAD3009160F9 /* GenresGenreUITableViewCell.m in Sources */,
 				53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */,
 				53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */,
@@ -5298,6 +5353,7 @@
 				537E9A3214F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53703BD61588390A00B1FB33 /* PMSServerEditViewControllerViewController.m in Sources */,
 				53493F2815FC6AC40059492E /* main.m in Sources */,
+				D0EA476819DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
 				536C994E16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F15016E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
