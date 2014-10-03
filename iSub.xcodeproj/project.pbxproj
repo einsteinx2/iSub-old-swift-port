@@ -1688,6 +1688,9 @@
 		53FDEE6111E82A8700FE3ECD /* cache-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6011E82A8700FE3ECD /* cache-button@2x.png */; };
 		53FDEE6911E82CD700FE3ECD /* queue-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */; };
 		53FDEE6D11E82D7700FE3ECD /* delete-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */; };
+		D036A8A719DCEE0900AF2404 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D036A8A619DCEE0900AF2404 /* Launch Screen.xib */; };
+		D036A8A819DCEE0900AF2404 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D036A8A619DCEE0900AF2404 /* Launch Screen.xib */; };
+		D036A8A919DCEE0900AF2404 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D036A8A619DCEE0900AF2404 /* Launch Screen.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2402,6 +2405,7 @@
 		53FDEE6011E82A8700FE3ECD /* cache-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button@2x.png"; path = "Images/Other/cache-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button@2x.png"; path = "Images/Other/queue-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete-button@2x.png"; path = "Images/Other/delete-button@2x.png"; sourceTree = "<group>"; };
+		D036A8A619DCEE0900AF2404 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2644,6 +2648,7 @@
 				53493F1C15FC6AA60059492E /* iSub-Info.plist */,
 				53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */,
 				53F1412015FD550C004D00D5 /* buildnumber.xcconfig */,
+				D036A8A619DCEE0900AF2404 /* Launch Screen.xib */,
 				539797F41162CEB100F41D8B /* Images */,
 			);
 			name = Resources;
@@ -3904,6 +3909,7 @@
 				53DE598814F19BAF00206529 /* controller-extrabuttons-background.png in Resources */,
 				53DE598B14F19BAF00206529 /* controller-extrabuttons-background@2x.png in Resources */,
 				53DE599414F1A7B000206529 /* controller-back30.png in Resources */,
+				D036A8A719DCEE0900AF2404 /* Launch Screen.xib in Resources */,
 				53DE599714F1A7B000206529 /* controller-back30@2x.png in Resources */,
 				53DE599A14F1A7B000206529 /* controller-extras-on.png in Resources */,
 				53DE599D14F1A7B000206529 /* controller-extras-on@2x.png in Resources */,
@@ -4392,6 +4398,7 @@
 				53BC273C139AF0DD00A825F1 /* home-settings.png in Resources */,
 				53BC273D139AF0DD00A825F1 /* home-settings@2x.png in Resources */,
 				53BC273E139AF0DD00A825F1 /* home-shuffle-ipad.png in Resources */,
+				D036A8A919DCEE0900AF2404 /* Launch Screen.xib in Resources */,
 				53BC273F139AF0DD00A825F1 /* home-shuffle.png in Resources */,
 				53BC2740139AF0DD00A825F1 /* home-shuffle@2x.png in Resources */,
 				53BC2742139AF0DD00A825F1 /* controller-stop.png in Resources */,
@@ -4804,6 +4811,7 @@
 				53DE598914F19BAF00206529 /* controller-extrabuttons-background.png in Resources */,
 				53DE598C14F19BAF00206529 /* controller-extrabuttons-background@2x.png in Resources */,
 				53DE599514F1A7B000206529 /* controller-back30.png in Resources */,
+				D036A8A819DCEE0900AF2404 /* Launch Screen.xib in Resources */,
 				53DE599814F1A7B000206529 /* controller-back30@2x.png in Resources */,
 				53DE599B14F1A7B000206529 /* controller-extras-on.png in Resources */,
 				53DE599E14F1A7B000206529 /* controller-extras-on@2x.png in Resources */,

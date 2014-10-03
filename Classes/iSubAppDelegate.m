@@ -67,6 +67,9 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
+    // Set up the window
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
     // Make sure audio engine and cache singletons get loaded
 	[AudioEngine sharedInstance];
 	[CacheSingleton sharedInstance];
@@ -99,6 +102,8 @@ LOG_LEVEL_ISUB_DEFAULT
 	fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
 	fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
 	[DDLog addLogger:fileLogger];
+    
+    
 	
 	// Setup network reachability notifications
 	self.wifiReach = [EX2Reachability reachabilityForLocalWiFi];

@@ -10,8 +10,6 @@
 	<array/>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.einsteinx2.isubbeta</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Icon.png</string>
@@ -22,6 +20,8 @@
 		<string>Icon-76.png</string>
 		<string>Icon-76@2x.png</string>
 	</array>
+	<key>CFBundleIdentifier</key>
+	<string>com.einsteinx2.isubbeta</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -35,12 +35,12 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.einsteinx2.isubbeta</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>isubbeta</string>
 			</array>
-			<key>CFBundleURLName</key>
-			<string>com.einsteinx2.isubbeta</string>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
@@ -55,6 +55,8 @@
 	<array>
 		<string>audio</string>
 	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>Launch Screen</string>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiresPersistentWiFi</key>
