@@ -3558,6 +3558,17 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 0440;
 				ORGANIZATIONNAME = "Ben Baron";
+				TargetAttributes = {
+					1D6058900D05DD3D006BFB54 = {
+						DevelopmentTeam = 8YEY8R75NJ;
+					};
+					53BC269F139AF0DD00A825F1 = {
+						DevelopmentTeam = 8YEY8R75NJ;
+					};
+					53DCF3FC13BFEAD3009160F9 = {
+						DevelopmentTeam = 8YEY8R75NJ;
+					};
+				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "iSub" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -5564,8 +5575,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc. (8YEY8R75NJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Datastar Consulting Services, Inc. (8YEY8R75NJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -5585,8 +5596,8 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = iSub;
-				PROVISIONING_PROFILE = "E07254A4-E827-4C24-9428-99E7E41C1D46";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E07254A4-E827-4C24-9428-99E7E41C1D46";
+				PROVISIONING_PROFILE = "ab58f1fb-b624-4505-8426-473c254b3583";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ab58f1fb-b624-4505-8426-473c254b3583";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5651,8 +5662,8 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc. (8YEY8R75NJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Datastar Consulting Services, Inc. (8YEY8R75NJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -5674,7 +5685,7 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = iSub;
-				PROVISIONING_PROFILE = "A5DE2180-05A2-470B-89F2-6F0ED0C0D02A";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A5DE2180-05A2-470B-89F2-6F0ED0C0D02A";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -6046,8 +6057,8 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "iSub Beta";
-				PROVISIONING_PROFILE = "556D68C0-4481-4C0A-BD41-3F1FC030E1E0";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "556D68C0-4481-4C0A-BD41-3F1FC030E1E0";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -6103,8 +6114,8 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -6130,6 +6141,7 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "iSub Lite";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -6142,8 +6154,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc. (8YEY8R75NJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Datastar Consulting Services, Inc. (8YEY8R75NJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -6167,8 +6179,8 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "iSub Lite";
-				PROVISIONING_PROFILE = "38122EF3-F998-427D-9FE9-7D26AB3517E5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "38122EF3-F998-427D-9FE9-7D26AB3517E5";
+				PROVISIONING_PROFILE = "c07ae6c0-72aa-452a-b8f7-c8cd4a55d596";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c07ae6c0-72aa-452a-b8f7-c8cd4a55d596";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

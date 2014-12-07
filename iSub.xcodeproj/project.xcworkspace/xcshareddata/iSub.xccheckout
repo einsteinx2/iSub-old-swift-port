@@ -10,61 +10,61 @@
 	<string>iSub</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>53D2AA0E-5A77-49F5-8EC2-FC019F988DE3</key>
-		<string>ssh://github.com/einsteinx2/json-framework.git</string>
-		<key>54E4B763-0537-4BF6-BFEC-D53D0EA65D5D</key>
-		<string>ssh://github.com/einsteinx2/fmdb.git</string>
-		<key>6F95AFE8-1E82-443A-A108-2CA15BDD7F7B</key>
-		<string>ssh://bitbucket.org/einsteinx2/libsub.git</string>
-		<key>7787E2A9-B80A-4BD1-9562-FAD0D94914B9</key>
-		<string>ssh://github.com/einsteinx2/ZipKit.git</string>
-		<key>7D2F8279-0747-4DF1-8B7D-60CF68B2739D</key>
-		<string>ssh://github.com/einsteinx2/CocoaHTTPServer.git</string>
-		<key>B9BCC4FF-A952-44DC-BD18-AE3A2EAE5912</key>
-		<string>ssh://github.com/einsteinx2/EX2Kit.git</string>
-		<key>BD0E1B60-AF09-4796-BE83-DCB4B34CEF87</key>
-		<string>ssh://github.com/einsteinx2/TBXML.git</string>
-		<key>F571D5A6-3FF9-4FBF-A4A4-9C4041E9C3E7</key>
+		<key>04101981B66E318109934C9516F88D824BB96459</key>
+		<string>github.com:einsteinx2/fmdb.git</string>
+		<key>0CA27A43414FB33F98B16BE18013A983CABB105E</key>
 		<string>git://github.com/bitstadium/HockeySDK-iOS.git</string>
-		<key>FE81838A-6106-48E1-9D64-FE82F62DBB18</key>
-		<string>ssh://bitbucket.org/einsteinx2/isub-music-streamer.git</string>
+		<key>71CFC0DE1DEFC877B0C5B9F98B971EBA2921D608</key>
+		<string>github.com:einsteinx2/CocoaHTTPServer.git</string>
+		<key>8EDE57C2999432B02AF3774C49AC60A079783175</key>
+		<string>github.com:einsteinx2/EX2Kit.git</string>
+		<key>A7973AE81FD825536D76937743B598D9C1BC9353</key>
+		<string>github.com:einsteinx2/ZipKit.git</string>
+		<key>AA3724F8AD565DB2089C5757B6B76FDB09E52E51</key>
+		<string>github.com:einsteinx2/json-framework.git</string>
+		<key>C89CD2C0054CCA944685E223F174A6C59B00D5B5</key>
+		<string>github.com:einsteinx2/iSub.git</string>
+		<key>D33C95C0A843CCBB42C08B5806EBF028432E18CD</key>
+		<string>github.com:einsteinx2/TBXML.git</string>
+		<key>EDDBE35C55B96EE65EED71066DE634B275D9D12C</key>
+		<string>github.com:einsteinx2/libSub.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>iSub.xcodeproj/project.xcworkspace</string>
+	<string>iSub.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>53D2AA0E-5A77-49F5-8EC2-FC019F988DE3</key>
-		<string>../../Frameworks/libSub/Frameworks/SBJson</string>
-		<key>54E4B763-0537-4BF6-BFEC-D53D0EA65D5D</key>
-		<string>../../Frameworks/libSub/Frameworks/FMDB</string>
-		<key>6F95AFE8-1E82-443A-A108-2CA15BDD7F7B</key>
-		<string>../../Frameworks/libSub</string>
-		<key>7787E2A9-B80A-4BD1-9562-FAD0D94914B9</key>
-		<string>../../Frameworks/libSub/Frameworks/ZipKit</string>
-		<key>7D2F8279-0747-4DF1-8B7D-60CF68B2739D</key>
-		<string>../../Frameworks/libSub/Frameworks/CocoaHTTPServer</string>
-		<key>B9BCC4FF-A952-44DC-BD18-AE3A2EAE5912</key>
-		<string>../../Frameworks/libSub/Frameworks/EX2Kit</string>
-		<key>BD0E1B60-AF09-4796-BE83-DCB4B34CEF87</key>
-		<string>../../Frameworks/libSub/Frameworks/TBXML</string>
-		<key>F571D5A6-3FF9-4FBF-A4A4-9C4041E9C3E7</key>
-		<string>../../Frameworks/HockeySDK</string>
-		<key>FE81838A-6106-48E1-9D64-FE82F62DBB18</key>
+		<key>04101981B66E318109934C9516F88D824BB96459</key>
+		<string>../..Frameworks/libSub/Frameworks/FMDB</string>
+		<key>0CA27A43414FB33F98B16BE18013A983CABB105E</key>
+		<string>../..Frameworks/HockeySDK</string>
+		<key>71CFC0DE1DEFC877B0C5B9F98B971EBA2921D608</key>
+		<string>../..Frameworks/libSub/Frameworks/CocoaHTTPServer</string>
+		<key>8EDE57C2999432B02AF3774C49AC60A079783175</key>
+		<string>../..Frameworks/libSub/Frameworks/EX2Kit</string>
+		<key>A7973AE81FD825536D76937743B598D9C1BC9353</key>
+		<string>../..Frameworks/libSub/Frameworks/ZipKit</string>
+		<key>AA3724F8AD565DB2089C5757B6B76FDB09E52E51</key>
+		<string>../..Frameworks/libSub/Frameworks/SBJson</string>
+		<key>C89CD2C0054CCA944685E223F174A6C59B00D5B5</key>
 		<string>../..</string>
+		<key>D33C95C0A843CCBB42C08B5806EBF028432E18CD</key>
+		<string>../..Frameworks/libSub/Frameworks/TBXML</string>
+		<key>EDDBE35C55B96EE65EED71066DE634B275D9D12C</key>
+		<string>../..Frameworks/libSub</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://bitbucket.org/einsteinx2/isub-music-streamer.git</string>
+	<string>github.com:einsteinx2/iSub.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>FE81838A-6106-48E1-9D64-FE82F62DBB18</string>
+	<string>C89CD2C0054CCA944685E223F174A6C59B00D5B5</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>7D2F8279-0747-4DF1-8B7D-60CF68B2739D</string>
+			<string>71CFC0DE1DEFC877B0C5B9F98B971EBA2921D608</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CocoaHTTPServer</string>
 		</dict>
@@ -72,7 +72,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>B9BCC4FF-A952-44DC-BD18-AE3A2EAE5912</string>
+			<string>8EDE57C2999432B02AF3774C49AC60A079783175</string>
 			<key>IDESourceControlWCCName</key>
 			<string>EX2Kit</string>
 		</dict>
@@ -80,7 +80,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>54E4B763-0537-4BF6-BFEC-D53D0EA65D5D</string>
+			<string>04101981B66E318109934C9516F88D824BB96459</string>
 			<key>IDESourceControlWCCName</key>
 			<string>FMDB</string>
 		</dict>
@@ -88,7 +88,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>F571D5A6-3FF9-4FBF-A4A4-9C4041E9C3E7</string>
+			<string>0CA27A43414FB33F98B16BE18013A983CABB105E</string>
 			<key>IDESourceControlWCCName</key>
 			<string>HockeySDK</string>
 		</dict>
@@ -96,7 +96,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>FE81838A-6106-48E1-9D64-FE82F62DBB18</string>
+			<string>C89CD2C0054CCA944685E223F174A6C59B00D5B5</string>
 			<key>IDESourceControlWCCName</key>
 			<string>iSub</string>
 		</dict>
@@ -104,7 +104,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>6F95AFE8-1E82-443A-A108-2CA15BDD7F7B</string>
+			<string>EDDBE35C55B96EE65EED71066DE634B275D9D12C</string>
 			<key>IDESourceControlWCCName</key>
 			<string>libSub</string>
 		</dict>
@@ -112,7 +112,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>53D2AA0E-5A77-49F5-8EC2-FC019F988DE3</string>
+			<string>AA3724F8AD565DB2089C5757B6B76FDB09E52E51</string>
 			<key>IDESourceControlWCCName</key>
 			<string>SBJson</string>
 		</dict>
@@ -120,7 +120,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>BD0E1B60-AF09-4796-BE83-DCB4B34CEF87</string>
+			<string>D33C95C0A843CCBB42C08B5806EBF028432E18CD</string>
 			<key>IDESourceControlWCCName</key>
 			<string>TBXML</string>
 		</dict>
@@ -128,7 +128,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>7787E2A9-B80A-4BD1-9562-FAD0D94914B9</string>
+			<string>A7973AE81FD825536D76937743B598D9C1BC9353</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ZipKit</string>
 		</dict>
