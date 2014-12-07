@@ -114,25 +114,6 @@ static void SetupDrawBitmap()
 	CGColorSpaceRelease(colorSpace);
 }
 
-__attribute__((constructor))
-static void initialize_drawPalette() 
-{
-	@autoreleasepool 
-	{
-		SetupArrays();
-		SetupDrawEQPalette();
-		SetupDrawBitmap();
-	}
-}
-
-__attribute__((destructor))
-static void destroy_versionArrays() 
-{
-	CGContextRelease(specdc);
-	free(palette);
-	free(specbuf);
-}
-
 // Implement this to override the default layer class (which is [CALayer class]).
 // We do this so that our view will be backed by a layer that is capable of OpenGL ES rendering.
 + (Class) layerClass
@@ -142,6 +123,10 @@ static void destroy_versionArrays()
 
 - (id)setup
 {
+    SetupArrays();
+    SetupDrawEQPalette();
+    SetupDrawBitmap();
+    
 	self.userInteractionEnabled = YES;
 	
 	self.drawTimer = nil;
@@ -211,6 +196,29 @@ static void destroy_versionArrays()
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    CGContextRelease(specdc);
+    free(palette);
+    free(specbuf);
+    
+    [self.drawTimer invalidate];
+    
+    if (imageTexture)
+    {
+        glDeleteTextures(1, &imageTexture);
+        imageTexture = 0;
+    }
+    
+    if([EAGLContext currentContext] == context)
+    {
+        [EAGLContext setCurrentContext:nil];
+    }
+    
 }
 
 - (void)startEqDisplay
@@ -454,26 +462,6 @@ static void destroy_versionArrays()
 		glDeleteRenderbuffersOES(1, &depthRenderbuffer);
 		depthRenderbuffer = 0;
 	}
-}
-
-// Releases resources when they are not longer needed.
-- (void)dealloc
-{
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
-	[self.drawTimer invalidate]; 
-	
-	if (imageTexture)
-	{
-		glDeleteTextures(1, &imageTexture);
-		imageTexture = 0;
-	}
-	
-	if([EAGLContext currentContext] == context)
-	{
-		[EAGLContext setCurrentContext:nil];
-	}
-	
 }
 
 // Erases the screen
