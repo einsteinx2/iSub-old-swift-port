@@ -22,6 +22,8 @@
 #import "MenuViewController.h"
 #import "SearchXMLParser.h"
 
+#import "ISMSPlayerViewController.h"
+
 @implementation NewHomeViewController
 
 @synthesize receivedData, connection;
@@ -518,9 +520,10 @@
 
 - (IBAction)player
 {
-	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
+    ISMSPlayerViewController *player = [[ISMSPlayerViewController alloc] init];
+    [self.navigationController pushViewController:player animated:YES];
+//	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+//	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 }
 
 - (IBAction)support:(id)sender
