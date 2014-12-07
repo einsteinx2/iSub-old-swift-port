@@ -120,7 +120,7 @@
 
 	[self hideOverlay];
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"updateCurrentPlaylistCount"];
-	[(UITableView*)self.superview reloadData];
+	[self.tableView reloadData];
 }
 
 #pragma mark - Scrolling
