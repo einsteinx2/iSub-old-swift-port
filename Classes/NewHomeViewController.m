@@ -31,7 +31,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -505,25 +505,25 @@
 - (IBAction)settings
 {
 	[appDelegateS showSettings];
-	return;
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	if (IS_IPAD())
-	{
-		[appDelegateS.ipadRootViewController.menuViewController showSettings];
-	}
-	else
-	{
-		serverListViewController.hidesBottomBarWhenPushed = YES;
-		[self.navigationController pushViewController:serverListViewController animated:YES];
-	}
+
+//	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+//	if (IS_IPAD())
+//	{
+//		[appDelegateS.ipadRootViewController.menuViewController showSettings];
+//	}
+//	else
+//	{
+//		serverListViewController.hidesBottomBarWhenPushed = YES;
+//		[self.navigationController pushViewController:serverListViewController animated:YES];
+//	}
 }
 
 - (IBAction)player
 {
-    ISMSPlayerViewController *player = [[ISMSPlayerViewController alloc] init];
-    [self.navigationController pushViewController:player animated:YES];
-//	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-//	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+    //ISMSPlayerViewController *player = [[ISMSPlayerViewController alloc] init];
+    //[self.navigationController pushViewController:player animated:YES];
+	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
 }
 
 - (IBAction)support:(id)sender
@@ -849,7 +849,7 @@
 					//DLog(@"%@", searchViewController.listOfSongs);
 				}
 				
-				searchViewController.searchType = searchSegment.selectedSegmentIndex;
+				searchViewController.searchType = (ISMSSearchSongsSearchType)searchSegment.selectedSegmentIndex;
 				searchViewController.query = [NSString stringWithFormat:@"%@*", searchBar.text];
 			}
 			else

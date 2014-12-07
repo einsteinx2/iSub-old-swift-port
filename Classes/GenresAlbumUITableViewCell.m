@@ -81,12 +81,12 @@
 	if (settingsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
-		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];
+		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%li = ? AND genre = ? ORDER BY seg%li COLLATE NOCASE", (long)self.segment, (long)(self.segment + 1)];
 	}
 	else
 	{
 		dbQueue = databaseS.genresDbQueue;
-		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];
+		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%li = ? AND genre = ? ORDER BY seg%li COLLATE NOCASE", (long)self.segment, (long)(self.segment + 1)];
 	}
 	
 	NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:0];
@@ -136,12 +136,12 @@
 	if (settingsS.isOfflineMode)
 	{
 		dbQueue = databaseS.songCacheDbQueue;
-		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];
+		query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%li = ? AND genre = ? ORDER BY seg%li COLLATE NOCASE", (long)self.segment, (long)(self.segment + 1)];
 	}
 	else
 	{
 		dbQueue = databaseS.genresDbQueue;
-		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%i = ? AND genre = ? ORDER BY seg%i COLLATE NOCASE", self.segment, (self.segment + 1)];
+		query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%li = ? AND genre = ? ORDER BY seg%li COLLATE NOCASE", (long)self.segment, (long)(self.segment + 1)];
 	}
 	
 	NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:0];

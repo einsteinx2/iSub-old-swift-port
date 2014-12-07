@@ -414,7 +414,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 								if([tableView isKindOfClass:[UITableView class]])
 								{
 									NSIndexPath* selectedRow =  [(UITableView*)tableView indexPathForSelectedRow];
-									NSArray *indexPaths = [NSArray arrayWithObjects:selectedRow, nil];
+									NSArray *indexPaths = @[selectedRow];
 									[(UITableView*)tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:NO];
 								}
 							}
@@ -435,7 +435,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 				{
 					[UIView beginAnimations:nil context:NULL];
 					[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];
-					[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
+					[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
 					[UIView setAnimationBeginsFromCurrentState:YES];
 					[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width,viewAtRight.frame.size.height)];						
 					[UIView commitAnimations];						
@@ -454,7 +454,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 				else if (viewAtLeft.frame.origin.x > SLIDE_VIEWS_MINUS_X_POSITION)
 				{
 					[UIView setAnimationDuration:SLIDE_ANIMATION_DURATION];
-					[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
+                    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
 					[UIView setAnimationBeginsFromCurrentState:YES];
 					if ((viewAtLeft.frame.origin.x + viewAtLeft.frame.size.width > self.view.frame.size.width) && viewAtLeft.frame.origin.x < (self.view.frame.size.width - (viewAtLeft.frame.size.width)/2)) 
 					{
@@ -532,7 +532,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 								if([tableView isKindOfClass:[UITableView class]])
 								{
 									NSIndexPath* selectedRow =  [(UITableView*)tableView indexPathForSelectedRow];
-									NSArray *indexPaths = [NSArray arrayWithObjects:selectedRow, nil];
+									NSArray *indexPaths = @[selectedRow];
 									[(UITableView*)tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:NO];
 								}
 							}
@@ -798,7 +798,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 		}
 		
 		NSInteger viewControllerCount = [viewControllersStack count];
-		for (int i = viewControllerCount - 1; i >= indexOfViewController; i--)
+		for (int i = (int)(viewControllerCount - 1); i >= indexOfViewController; i--)
 		{
 			UIView *viewToRemove = [self slideViewAtIndex:i];
 			[viewToRemove removeFromSuperview];
@@ -843,7 +843,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	NSLog(@"  ");
 	for (UIView *subView in [slideViews subviews])
 	{
-		NSLog(@"subView.tag: %i", subView.tag);
+		NSLog(@"subView.tag: %li", (long)subView.tag);
 	}
 	NSLog(@"  ");
 	
@@ -852,7 +852,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	NSLog(@"  ");
 	for (UIView *subView in [slideViews subviews])
 	{
-		NSLog(@"subView.tag: %i", subView.tag);
+		NSLog(@"subView.tag: %li", (long)subView.tag);
 	}
 	NSLog(@"  ");
 	
@@ -873,8 +873,8 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 			viewAtRight2 = nil;
 			
 			[UIView beginAnimations:nil context:NULL];
-			[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:viewAtLeft cache:YES];	
-			[UIView setAnimationBeginsFromCurrentState:NO];	
+            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+			[UIView setAnimationBeginsFromCurrentState:NO];
 			[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 			[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 			[UIView commitAnimations];
@@ -887,8 +887,8 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 			{
 				UIView* tempRight2View =[[slideViews subviews] objectAtIndex:[[slideViews subviews] count]-1];
 				[UIView beginAnimations:@"ALIGN_TO_MINIMENU" context:NULL];
-				[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:viewAtLeft cache:YES];	
-				[UIView setAnimationBeginsFromCurrentState:NO];				
+                [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+				[UIView setAnimationBeginsFromCurrentState:NO];
 				[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 				[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 				[tempRight2View setFrame:CGRectMake(self.view.frame.size.width, tempRight2View.frame.origin.y, tempRight2View.frame.size.width, tempRight2View.frame.size.height)];
@@ -905,8 +905,8 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 				viewAtRight2 = nil;
 				
 				[UIView beginAnimations:nil context:NULL];
-				[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:viewAtLeft cache:YES];	
-				[UIView setAnimationBeginsFromCurrentState:NO];	
+                [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+				[UIView setAnimationBeginsFromCurrentState:NO];
 				[viewAtLeft setFrame:CGRectMake(SLIDE_VIEWS_MINUS_X_POSITION, viewAtLeft.frame.origin.y, viewAtLeft.frame.size.width, viewAtLeft.frame.size.height)];
 				[viewAtRight setFrame:CGRectMake(self.view.frame.size.width - viewAtRight.frame.size.width, viewAtRight.frame.origin.y, viewAtRight.frame.size.width, viewAtRight.frame.size.height)];
 				[UIView setAnimationDelegate:self];
@@ -943,7 +943,7 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.

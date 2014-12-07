@@ -39,7 +39,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -151,9 +151,9 @@
 - (void)updateCount
 {
 	if (self.dataModel.count == 1)
-		self.countLabel.text = [NSString stringWithFormat:@"%i Folder", self.dataModel.count];
+		self.countLabel.text = [NSString stringWithFormat:@"%lu Folder", (unsigned long)self.dataModel.count];
 	else
-		self.countLabel.text = [NSString stringWithFormat:@"%i Folders", self.dataModel.count];
+		self.countLabel.text = [NSString stringWithFormat:@"%lu Folders", (unsigned long)self.dataModel.count];
 	
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateStyle:NSDateFormatterMediumStyle];
@@ -217,7 +217,7 @@
 	}
 	else
 	{
-		self.dropdown.folders = [NSDictionary dictionaryWithObject:@"All Folders" forKey:[NSNumber numberWithInt:-1]];
+		self.dropdown.folders = [NSDictionary dictionaryWithObject:@"All Folders" forKey:@-1];
 	}
 	[self.dropdown selectFolderWithId:self.dataModel.selectedFolderId];
 	
@@ -256,7 +256,7 @@
 	
 	viewObjectsS.isArtistsLoading = YES;
 	
-	//allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:[NSArray arrayWithObjects:@"Processing Folders", @"", @"", @"", nil]  blockInput:YES mainWindow:NO];
+	//allArtistsLoadingScreen = [[LoadingScreen alloc] initOnView:self.view.superview withMessage:@[@"Processing Folders", @"", @"", @""]  blockInput:YES mainWindow:NO];
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
 	self.dataModel.selectedFolderId = folderId;
@@ -359,7 +359,7 @@
 		[self removeCount];
 	}
 		
-	[self folderDropdownSelectFolder:[NSNumber numberWithInteger:-1]];
+	[self folderDropdownSelectFolder:@-1];
 }
 
 - (void)updateFolders

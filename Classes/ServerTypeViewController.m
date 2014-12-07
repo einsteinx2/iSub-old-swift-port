@@ -16,7 +16,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -32,10 +32,9 @@
 	[super viewDidLoad];
 	
     // For release versions, there is no option for server type at the moment as Ubuntu One support has been removed
-    if (!IS_BETA())
-    {
-        [self buttonAction:self.subsonicButton];
-    }
+#if !IS_BETA()
+    [self buttonAction:self.subsonicButton];
+#endif
 }
 
 - (IBAction)buttonAction:(id)sender

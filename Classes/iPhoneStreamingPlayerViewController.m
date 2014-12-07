@@ -49,9 +49,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (NSString *)stringFromSeconds:(NSUInteger)seconds
 {
 	if (seconds < 60)
-		return [NSString stringWithFormat:@"%is", seconds];
+		return [NSString stringWithFormat:@"%lus", (unsigned long)seconds];
 	else
-		return [NSString stringWithFormat:@"%im", (seconds / 60)];
+		return [NSString stringWithFormat:@"%lum", (long)(seconds / 60)];
 }
 
 - (void)showStore
@@ -493,7 +493,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -933,10 +933,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)updateBarButtonImage
 {
-	if (UIGraphicsBeginImageContextWithOptions != NULL)
-		UIGraphicsBeginImageContextWithOptions(CGSizeMake(30.0, 30.0), NO, 0.0);
-	else
-		UIGraphicsBeginImageContext(CGSizeMake(30.0, 30.0));
+	UIGraphicsBeginImageContextWithOptions(CGSizeMake(30.0, 30.0), NO, 0.0);
 	//DLog(@"coverArtImageView.image: %@", coverArtImageView.image);
 	[self.coverArtImageView.image drawInRect:CGRectMake(0, 0,30.0, 30.0)];
 	UIImage *cover = UIGraphicsGetImageFromCurrentImageContext();
@@ -1083,7 +1080,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	if (audioEngineS.player.progress > 10.0)
 	{
 		if (settingsS.isJukeboxEnabled)
-			[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:playlistS.currentIndex]];
+			[jukeboxS jukeboxPlaySongAtPosition:@(playlistS.currentIndex)];
 		else
 			[musicS playSongAtPosition:playlistS.currentIndex];
 	}
@@ -1384,7 +1381,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.2];
-	[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
 	self.sliderMultipleLabel.alpha = 1.0;
 	[UIView commitAnimations];	
 }
@@ -1455,7 +1452,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.2];
-	[UIView setAnimationTransition:UIViewAnimationOptionCurveEaseInOut forView:nil cache:YES];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
 	self.sliderMultipleLabel.alpha = 0.0;
 	[UIView commitAnimations];	
 }
@@ -1539,9 +1536,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		NSString *dbName = settingsS.isOfflineMode ? @"%@/offlineCurrentPlaylist.db" : @"%@/%@currentPlaylist.db";
 		[db executeUpdate:@"ATTACH DATABASE ? AS ?", [NSString stringWithFormat:dbName, settingsS.databasePath, settingsS.urlString.md5], @"currentPlaylistDb"];
 		
-		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmark%i (%@)", bookmarkId, [ISMSSong standardSongColumnSchema]]];
+		[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmark%li (%@)", (long)bookmarkId, [ISMSSong standardSongColumnSchema]]];
 		
-		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmark%i SELECT * FROM currentPlaylistDb.%@", bookmarkId, table]]; 
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO bookmark%li SELECT * FROM currentPlaylistDb.%@", (long)bookmarkId, table]];
 		
 		bookmarksCount = [db intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE songId = ?", self.currentSong.songId];
 		
@@ -1620,7 +1617,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 				NSUInteger bookmarkId = [db intForQuery:@"SELECT bookmarkId FROM bookmarks WHERE name = ?", text];
 				
 				[db executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", text];
-				[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS bookmark%i", bookmarkId]];
+				[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS bookmark%lu", (unsigned long)bookmarkId]];
 			}];
 			
 			[self saveBookmark:text];
@@ -1679,7 +1676,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
         if (width > self.downloadProgress.width && (width - self.downloadProgress.width < downloadProgressWidth + downloadProgressBorder))
         {
-            [UIView animateWithDuration:1. delay:0. options:UIViewAnimationCurveLinear animations:^
+            [UIView animateWithDuration:1. delay:0. options:UIViewAnimationOptionCurveLinear animations:^
              {
                  self.downloadProgress.width = width;
              } completion:nil];
@@ -1765,7 +1762,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 - (void)updateFormatLabel
 {
 	if ([self.currentSong isEqualToSong:audioEngineS.player.currentStream.song] && audioEngineS.player.bitRate > 0)
-		self.formatLabel.text = [NSString stringWithFormat:@"%i kbps %@", audioEngineS.player.bitRate, [BassWrapper formatForChannel:audioEngineS.player.currentStream.stream]];
+		self.formatLabel.text = [NSString stringWithFormat:@"%li kbps %@", (long)audioEngineS.player.bitRate, [BassWrapper formatForChannel:audioEngineS.player.currentStream.stream]];
 	else if ([self.currentSong isEqualToSong:audioEngineS.player.currentStream.song])
 		self.formatLabel.text = [BassWrapper formatForChannel:audioEngineS.player.currentStream.stream];
 	else

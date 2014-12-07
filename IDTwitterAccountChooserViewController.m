@@ -84,72 +84,72 @@
 - (void)loadMetadataForCellsWithIndexPaths:(NSArray *)indexPaths {
     return;// This is broken on iOS 5 apparantly so fuck it
     
-	for(NSIndexPath *indexPath in indexPaths) {
-		ACAccount *account = [self.twitterAccounts objectAtIndex:indexPath.row];
-		NSString *username = [account username];
-		if(username == nil || ([imagesDictionary objectForKey:username] != nil && [realNamesDictionary objectForKey:username] != nil))
-			continue;
-		NSURL *url = [NSURL URLWithString:[kTwitterAPIRootURL stringByAppendingString:@"users/show.json"]];
-		NSDictionary *parameters = @{
-			@"screen_name": username
-		};
-		TWRequest *request = [[TWRequest alloc] initWithURL:url
-												 parameters:parameters
-											  requestMethod:TWRequestMethodGET];
-		[request setAccount:account];
-		[request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-			if(error != nil && responseData == nil) {
-				NSLog(@"TWRequest error: %@", [error localizedDescription]);
-				return;
-			}
-			error = nil;
-			NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
-			if(error != nil) {
-				NSLog(@"JSON deserialization error: %@", [error localizedDescription]);
-				return;
-			}
-			NSString *name = [responseDictionary objectForKey:@"name"];
-			if([realNamesDictionary objectForKey:username] == nil && name != nil) {
-				dispatch_async(dispatch_get_main_queue(), ^{
-					[realNamesDictionary setObject:name forKey:username];
-					[self.tableView reloadData];
-				});
-			}
-			NSString *profileImageURLString = [responseDictionary objectForKey:@"profile_image_url"];
-			if([imagesDictionary objectForKey:username] == nil && profileImageURLString != nil) {
-				NSString *filename = [[profileImageURLString componentsSeparatedByString:@"/"] lastObject];
-				NSString *extension = [filename pathExtension];
-				NSString *basename = [filename stringByDeletingPathExtension];
-				NSString *biggerFilename = [[basename stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger" options:(NSAnchoredSearch | NSBackwardsSearch) range:NSMakeRange(0, [basename length])] stringByAppendingPathExtension:extension];
-				NSString *biggerFilenameURLString = [profileImageURLString stringByReplacingOccurrencesOfString:filename
-																									 withString:biggerFilename
-																										options:(NSAnchoredSearch | NSBackwardsSearch)
-																										  range:NSMakeRange(0, [profileImageURLString length])];
-				NSURL *imageURL = [NSURL URLWithString:biggerFilenameURLString];
-				TWRequest *imageRequest = [[TWRequest alloc] initWithURL:imageURL
-															  parameters:nil
-														   requestMethod:TWRequestMethodGET];
-				[imageRequest setAccount:account];
-				[imageRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-					if(error != nil && responseData == nil) {
-						NSLog(@"TWRequest error: %@", [error localizedDescription]);
-						return;
-					}
-					UIImage *biggerImage = [UIImage imageWithData:responseData];
-					UIImage *image = [UIImage imageWithCGImage:[biggerImage CGImage]
-														 scale:2.0
-												   orientation:UIImageOrientationUp];
-					if([imagesDictionary objectForKey:username] == nil) {
-						dispatch_async(dispatch_get_main_queue(), ^{
-							[imagesDictionary setObject:image forKey:username];
-							[self.tableView reloadData];
-						});
-					}
-				}];
-				
-			}
-		}];
-	}
+//	for(NSIndexPath *indexPath in indexPaths) {
+//		ACAccount *account = [self.twitterAccounts objectAtIndex:indexPath.row];
+//		NSString *username = [account username];
+//		if(username == nil || ([imagesDictionary objectForKey:username] != nil && [realNamesDictionary objectForKey:username] != nil))
+//			continue;
+//		NSURL *url = [NSURL URLWithString:[kTwitterAPIRootURL stringByAppendingString:@"users/show.json"]];
+//		NSDictionary *parameters = @{
+//			@"screen_name": username
+//		};
+//		TWRequest *request = [[TWRequest alloc] initWithURL:url
+//												 parameters:parameters
+//											  requestMethod:TWRequestMethodGET];
+//		[request setAccount:account];
+//		[request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+//			if(error != nil && responseData == nil) {
+//				NSLog(@"TWRequest error: %@", [error localizedDescription]);
+//				return;
+//			}
+//			error = nil;
+//			NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
+//			if(error != nil) {
+//				NSLog(@"JSON deserialization error: %@", [error localizedDescription]);
+//				return;
+//			}
+//			NSString *name = [responseDictionary objectForKey:@"name"];
+//			if([realNamesDictionary objectForKey:username] == nil && name != nil) {
+//				dispatch_async(dispatch_get_main_queue(), ^{
+//					[realNamesDictionary setObject:name forKey:username];
+//					[self.tableView reloadData];
+//				});
+//			}
+//			NSString *profileImageURLString = [responseDictionary objectForKey:@"profile_image_url"];
+//			if([imagesDictionary objectForKey:username] == nil && profileImageURLString != nil) {
+//				NSString *filename = [[profileImageURLString componentsSeparatedByString:@"/"] lastObject];
+//				NSString *extension = [filename pathExtension];
+//				NSString *basename = [filename stringByDeletingPathExtension];
+//				NSString *biggerFilename = [[basename stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger" options:(NSAnchoredSearch | NSBackwardsSearch) range:NSMakeRange(0, [basename length])] stringByAppendingPathExtension:extension];
+//				NSString *biggerFilenameURLString = [profileImageURLString stringByReplacingOccurrencesOfString:filename
+//																									 withString:biggerFilename
+//																										options:(NSAnchoredSearch | NSBackwardsSearch)
+//																										  range:NSMakeRange(0, [profileImageURLString length])];
+//				NSURL *imageURL = [NSURL URLWithString:biggerFilenameURLString];
+//				TWRequest *imageRequest = [[TWRequest alloc] initWithURL:imageURL
+//															  parameters:nil
+//														   requestMethod:TWRequestMethodGET];
+//				[imageRequest setAccount:account];
+//				[imageRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+//					if(error != nil && responseData == nil) {
+//						NSLog(@"TWRequest error: %@", [error localizedDescription]);
+//						return;
+//					}
+//					UIImage *biggerImage = [UIImage imageWithData:responseData];
+//					UIImage *image = [UIImage imageWithCGImage:[biggerImage CGImage]
+//														 scale:2.0
+//												   orientation:UIImageOrientationUp];
+//					if([imagesDictionary objectForKey:username] == nil) {
+//						dispatch_async(dispatch_get_main_queue(), ^{
+//							[imagesDictionary setObject:image forKey:username];
+//							[self.tableView reloadData];
+//						});
+//					}
+//				}];
+//				
+//			}
+//		}];
+//	}
 }
 
 

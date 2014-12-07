@@ -52,9 +52,9 @@ static CGColorRef fillColorOn;
 - (NSString *)stringFromFrequency:(NSUInteger)frequency
 {
 	if (frequency < 1000)
-		return [NSString stringWithFormat:@"%i", frequency];
+		return [NSString stringWithFormat:@"%lu", (unsigned long)frequency];
 
-	return [NSString stringWithFormat:@"%ik", frequency/1000];
+	return [NSString stringWithFormat:@"%lik", (long)(frequency/1000)];
 }
 
 - (NSString *)stringFromGain:(CGFloat)gain

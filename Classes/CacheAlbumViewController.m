@@ -46,7 +46,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -177,12 +177,12 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	self.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 	self.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 	
-	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%i, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? ", segment+1];
+	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%lu, track FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? ", (long)(segment+1)];
 	for (int i = 2; i <= segment; i++)
 	{
 		[query appendFormat:@" AND seg%i = ? ", i];
 	}
-	[query appendFormat:@"GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
+	[query appendFormat:@"GROUP BY seg%lu ORDER BY seg%lu COLLATE NOCASE", (long)(segment+1), (long)(segment+1)];
 	
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
 	{
@@ -209,7 +209,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 				{
 					if (md5)
 					{
-                        NSArray *songEntry = @[md5, [NSNumber numberWithInteger:track], [NSNumber numberWithInteger:discNumber]];
+                        NSArray *songEntry = @[md5, @(track), @(discNumber)];
 						[self.listOfSongs addObject:songEntry];
 						
 						BOOL multipleSameTrackNumbers = NO;
@@ -543,12 +543,12 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			cacheAlbumViewController.listOfAlbums = [NSMutableArray arrayWithCapacity:1];
 			cacheAlbumViewController.listOfSongs = [NSMutableArray arrayWithCapacity:1];
 
-			NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%i, track, cachedSongs.discNumber FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? ", segment+1];
+			NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5, segs, seg%lu, track, cachedSongs.discNumber FROM cachedSongsLayout JOIN cachedSongs USING(md5) WHERE seg1 = ? ", (long)(segment+1)];
 			for (int i = 2; i <= segment; i++)
 			{
 				[query appendFormat:@" AND seg%i = ? ", i];
 			}
-			[query appendFormat:@"GROUP BY seg%i ORDER BY seg%i COLLATE NOCASE", segment+1, segment+1];
+			[query appendFormat:@"GROUP BY seg%lu ORDER BY seg%lu COLLATE NOCASE", (long)(segment+1), (long)(segment+1)];
 			//DLog(@"query: %@", query);
 
 			NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
@@ -573,7 +573,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 						{
 							if (md5 && seg)
 							{
-								NSArray *albumEntry = [NSArray arrayWithObjects:md5, seg, nil];
+								NSArray *albumEntry = @[md5, seg];
 								[cacheAlbumViewController.listOfAlbums addObject:albumEntry];
 							}
 						}
@@ -581,11 +581,11 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 						{
 							if (md5)
 							{
-                                NSMutableArray *songEntry = [NSMutableArray arrayWithObjects:md5, [NSNumber numberWithInteger:track], nil];
+                                NSMutableArray *songEntry = [NSMutableArray arrayWithObjects:md5, @(track), nil];
                                 
                                 if (discNumber != 0)
                                 {
-                                    [songEntry addObject:[NSNumber numberWithInteger:discNumber]];
+                                    [songEntry addObject:@(discNumber)];
                                 }
                                 
 								[cacheAlbumViewController.listOfSongs addObject:songEntry];

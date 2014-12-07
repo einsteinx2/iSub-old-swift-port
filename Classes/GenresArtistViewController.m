@@ -18,7 +18,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -186,7 +186,7 @@
 	}
 	
 	if (settingsS.isJukeboxEnabled)
-		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
+		[jukeboxS jukeboxPlaySongAtPosition:@0];
 	
 	// Hide loading screen
 	[viewObjectsS hideLoadingScreen];
@@ -255,7 +255,7 @@
 	[databaseS shufflePlaylist];
 	
 	if (settingsS.isJukeboxEnabled)
-		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
+		[jukeboxS jukeboxPlaySongAtPosition:@0];
 	
 	// Set the isShuffle flag
 	playlistS.isShuffle = YES;
@@ -356,7 +356,7 @@
 					if (segs > 2)
 					{
 						if (md5 && seg2)
-							[genresAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:md5, seg2, nil]];
+							[genresAlbumViewController.listOfAlbums addObject:@[md5, seg2]];
 					}
 					else
 					{

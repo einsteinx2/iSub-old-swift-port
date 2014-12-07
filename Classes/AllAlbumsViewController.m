@@ -28,7 +28,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -113,7 +113,7 @@
 	self.reloadTimeLabel.font = ISMSRegularFont(11);
 	[self.headerView addSubview:self.reloadTimeLabel];
 	
-	self.countLabel.text = [NSString stringWithFormat:@"%i Albums", self.dataModel.count];
+	self.countLabel.text = [NSString stringWithFormat:@"%lu Albums", (unsigned long)self.dataModel.count];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -226,7 +226,7 @@
 	{
 		if (buttonIndex == 1)
 		{
-			[self showLoadingScreen];//:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil]];
+			[self showLoadingScreen];//:@[@"Processing Artist:", @"", @"Processing Album:", @""];
 			
 			[self.allSongsDataModel restartLoad];
 			self.tableView.tableHeaderView = nil;
@@ -234,7 +234,7 @@
 		}
 		else if (buttonIndex == 2)
 		{
-			[self showLoadingScreen];//:[NSArray arrayWithObjects:@"Processing Album:", @"", @"Processing Song:", @"", nil]];
+			[self showLoadingScreen];//:@[@"Processing Album:", @"", @"Processing Song:", @""]];
 			
 			[self.allSongsDataModel startLoad];
 			self.tableView.tableHeaderView = nil;
@@ -618,7 +618,7 @@
 
 - (void)showLoadingScreen
 {
-	self.loadingScreen = [[LoadingScreen alloc] initOnView:self.view withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil] blockInput:YES mainWindow:NO];
+	self.loadingScreen = [[LoadingScreen alloc] initOnView:self.view withMessage:@[@"Processing Artist:", @"", @"Processing Album:", @""] blockInput:YES mainWindow:NO];
 	self.tableView.scrollEnabled = NO;
 	self.tableView.allowsSelection = NO;
 	self.navigationItem.leftBarButtonItem = nil;

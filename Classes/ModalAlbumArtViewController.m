@@ -77,9 +77,9 @@
 	artistLabel.text = myAlbum.artistName;
 	albumLabel.text = myAlbum.title;
 	durationLabel.text = [NSString formatTime:albumLength];
-	trackCountLabel.text = [NSString stringWithFormat:@"%i Tracks", numberOfTracks];
+	trackCountLabel.text = [NSString stringWithFormat:@"%lu Tracks", (unsigned long)numberOfTracks];
 	if (numberOfTracks == 1)
-		trackCountLabel.text = [NSString stringWithFormat:@"%i Track", numberOfTracks];
+		trackCountLabel.text = [NSString stringWithFormat:@"%lu Track", (unsigned long)numberOfTracks];
 	
 	albumArt.coverArtId = self.myAlbum.coverArtId;
 	
@@ -101,7 +101,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

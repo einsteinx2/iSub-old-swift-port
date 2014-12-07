@@ -27,7 +27,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -141,7 +141,7 @@
 	self.offset += 20;
     NSDictionary *parameters = nil;
     NSString *action = nil;
-	NSString *offsetString = [NSString stringWithFormat:@"%i", offset];
+	NSString *offsetString = [NSString stringWithFormat:@"%lu", (unsigned long)offset];
 	if (settingsS.isNewSearchAPI)
 	{
         action = @"search2";

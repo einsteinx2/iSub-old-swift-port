@@ -17,6 +17,9 @@
 	return [[CellOverlay alloc] initWithTableCell:cell];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+
 - (id)initWithTableCell:(UITableViewCell*)cell
 {
 	CGRect newFrame = cell.frame;
@@ -83,6 +86,7 @@
 	return self;
 }
 
+#pragma clang diagnostic pop
 
 - (void)enableButtons
 {

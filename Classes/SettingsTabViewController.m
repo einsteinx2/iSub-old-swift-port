@@ -23,7 +23,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -810,7 +810,7 @@
 - (IBAction)updateScrobblePercentLabel
 {
 	NSUInteger percentInt = self.scrobblePercentSlider.value * 100;
-	self.scrobblePercentLabel.text = [NSString stringWithFormat:@"%i", percentInt];
+	self.scrobblePercentLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)percentInt];
 }
 
 - (IBAction)updateScrobblePercentSetting;

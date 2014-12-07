@@ -228,11 +228,11 @@
             continueAfterRunningActions = "No"
             isPathRelative = "1"
             filePath = "Classes/iSubAppDelegate.m"
-            timestampString = "379134759.390516"
+            timestampString = "439676234.149227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
             landmarkName = "-applicationDidFinishLaunching:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1069,8 +1069,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "93"
             endingLineNumber = "93"
-            landmarkName = "@implementation AlbumViewController"
-            landmarkType = "3">
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1086,8 +1086,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "93"
             endingLineNumber = "93"
-            landmarkName = "@implementation AlbumViewController"
-            landmarkType = "3">
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1103,8 +1103,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "93"
             endingLineNumber = "93"
-            landmarkName = "@implementation AlbumViewController"
-            landmarkType = "3">
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1120,8 +1120,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "93"
             endingLineNumber = "93"
-            landmarkName = "@implementation AlbumViewController"
-            landmarkType = "3">
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1794,8 +1794,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "93"
             endingLineNumber = "93"
-            landmarkName = "@implementation AlbumViewController"
-            landmarkType = "3">
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5227,8 +5227,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "93"
             endingLineNumber = "93"
-            landmarkName = "@implementation AlbumViewController"
-            landmarkType = "3">
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5243,8 +5243,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "93"
             endingLineNumber = "93"
-            landmarkName = "@implementation AlbumViewController"
-            landmarkType = "3">
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5286,11 +5286,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/iSubAppDelegate.m"
-            timestampString = "379134759.390516"
+            timestampString = "439676234.149227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
             landmarkName = "-applicationDidFinishLaunching:"
             landmarkType = "5">
          </BreakpointContent>
@@ -5618,11 +5618,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/iSubAppDelegate.m"
-            timestampString = "379134759.390516"
+            timestampString = "439676234.149227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
             landmarkName = "-applicationDidFinishLaunching:"
             landmarkType = "5">
          </BreakpointContent>
@@ -5666,11 +5666,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/iPhoneStreamingPlayerViewController.m"
-            timestampString = "406261728.904303"
+            timestampString = "439676234.149227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1758"
-            endingLineNumber = "1758"
+            startingLineNumber = "1755"
+            endingLineNumber = "1755"
             landmarkName = "-updateSlider"
             landmarkType = "5">
          </BreakpointContent>
@@ -5740,11 +5740,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/iSubAppDelegate.m"
-            timestampString = "406007107.984094"
+            timestampString = "439676234.149227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "346"
-            endingLineNumber = "346"
+            startingLineNumber = "345"
+            endingLineNumber = "345"
             landmarkName = "-application:openURL:sourceApplication:annotation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -5756,11 +5756,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/iSubAppDelegate.m"
-            timestampString = "403061954.546613"
+            timestampString = "439676234.149227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
             landmarkName = "-applicationDidFinishLaunching:"
             landmarkType = "5">
          </BreakpointContent>
@@ -5772,12 +5772,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/iSubAppDelegate.m"
-            timestampString = "406007107.984094"
+            timestampString = "439676234.149227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "367"
-            endingLineNumber = "367"
-            landmarkName = "-cancelLoad"
+            startingLineNumber = "366"
+            endingLineNumber = "366"
+            landmarkName = "-backToReferringApp"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6025,8 +6025,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "34"
             endingLineNumber = "34"
-            landmarkName = "@implementation NewHomeViewController"
-            landmarkType = "3">
+            landmarkName = "-shouldAutorotate"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -6226,11 +6226,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/iSubAppDelegate.m"
-            timestampString = "406007107.984094"
+            timestampString = "439676234.149227"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
             landmarkName = "-applicationDidFinishLaunching:"
             landmarkType = "5">
          </BreakpointContent>

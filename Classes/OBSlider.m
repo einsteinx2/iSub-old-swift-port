@@ -181,23 +181,13 @@
 // Used in -initWithFrame: and -initWithCoder:
 - (NSArray *) defaultScrubbingSpeeds
 {
-    return [NSArray arrayWithObjects:
-            [NSNumber numberWithFloat:1.0f],
-            [NSNumber numberWithFloat:0.5f],
-            [NSNumber numberWithFloat:0.25f],
-            [NSNumber numberWithFloat:0.1f],
-            nil];
+    return @[ @(1.0f), @(0.5f), @(0.25f), @(0.1f) ];
 }
 
 
 - (NSArray *) defaultScrubbingSpeedChangePositions
 {
-    return [NSArray arrayWithObjects:
-            [NSNumber numberWithFloat:0.0f],
-            [NSNumber numberWithFloat:50.0f],
-            [NSNumber numberWithFloat:100.0f],
-            [NSNumber numberWithFloat:150.0f],
-            nil];
+    return @[ @(0.0f), @(50.0f), @(100.0f), @(150.0f) ];
 }
 
 @end

@@ -226,7 +226,7 @@
 	if (self.currentPlaylistCount == 1)
 		self.playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 	else 
-		self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", self.currentPlaylistCount];
+		self.playlistCountLabel.text = [NSString stringWithFormat:@"%lu songs", (unsigned long)self.currentPlaylistCount];
 }
 
 - (void)editPlaylistAction:(id)sender
@@ -287,7 +287,7 @@
 	}
 	else
 	{
-		self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjectsS.multiDeleteList count]];
+		self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
 	}
 	
 	self.savePlaylistLabel.hidden = YES;
@@ -316,7 +316,7 @@
 	}
 	else 
 	{
-		self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjectsS.multiDeleteList count]];
+		self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
 	}
 }
 
@@ -410,7 +410,7 @@
 		if (songCount == 1)
 			self.playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 		else
-			self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", songCount];
+			self.playlistCountLabel.text = [NSString stringWithFormat:@"%lu songs", (unsigned long)songCount];
 		
 		if (!settingsS.isJukeboxEnabled)
 			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistOrderChanged];
@@ -621,7 +621,7 @@
 	
 	cell.deleteToggleImage.hidden = !self.tableView.editing;
 	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
-	if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
+	if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 	{
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
@@ -651,7 +651,7 @@
 	{
 		cell.numberLabel.hidden = NO;
 		cell.nowPlayingImageView.hidden = YES;
-		cell.numberLabel.text = [NSString stringWithFormat:@"%i", (indexPath.row + 1)];
+		cell.numberLabel.text = [NSString stringWithFormat:@"%li", (long)(indexPath.row + 1)];
 	}
 	
 	cell.songNameLabel.text = aSong.title;
@@ -707,20 +707,20 @@
 		 
 		 if (fromRow < toRow)
 		 {
-			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID < ?", table], [NSNumber numberWithInt:fromRow]];
-			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ? AND ROWID <= ?", table], [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
-			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID = ?", table], [NSNumber numberWithInt:fromRow]];
-			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ?", table], [NSNumber numberWithInt:toRow]];
+			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID < ?", table], @(fromRow)];
+			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ? AND ROWID <= ?", table], @(fromRow), @(toRow)];
+			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID = ?", table], @(fromRow)];
+			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ?", table], @(toRow)];
 			 
 			 [db executeUpdate:[NSString stringWithFormat:@"DROP TABLE %@", table]];
 			 [db executeUpdate:[NSString stringWithFormat:@"ALTER TABLE moveTemp RENAME TO %@", table]];
 		 }
 		 else
 		 {
-			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID < ?", table], [NSNumber numberWithInt:toRow]];
-			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID = ?", table], [NSNumber numberWithInt:fromRow]];
-			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID >= ? AND ROWID < ?", table], [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
-			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ?", table], [NSNumber numberWithInt:fromRow]];
+			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID < ?", table], @(toRow)];
+			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID = ?", table], @(fromRow)];
+			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID >= ? AND ROWID < ?", table], @(toRow), @(fromRow)];
+			 [db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ?", table], @(fromRow)];
 			 
 			 [db executeUpdate:[NSString stringWithFormat:@"DROP TABLE %@", table]];
 			 [db executeUpdate:[NSString stringWithFormat:@"ALTER TABLE moveTemp RENAME TO %@", table]];
@@ -745,12 +745,12 @@
 				{
 					if ([position intValue] == fromIndexPath.row)
 					{
-						[tempMultiDeleteList addObject:[NSNumber numberWithInt:toIndexPath.row]];
+						[tempMultiDeleteList addObject:@(toIndexPath.row)];
 					}
 					else 
 					{
 						newPosition = [position intValue] + 1;
-						[tempMultiDeleteList addObject:[NSNumber numberWithInt:newPosition]];
+						[tempMultiDeleteList addObject:@(newPosition)];
 					}
 				}
 				else
@@ -764,12 +764,12 @@
 				{
 					if ([position intValue] == fromIndexPath.row)
 					{
-						[tempMultiDeleteList addObject:[NSNumber numberWithInt:toIndexPath.row]];
+						[tempMultiDeleteList addObject:@(toIndexPath.row)];
 					}
 					else 
 					{
 						newPosition = [position intValue] - 1;
-						[tempMultiDeleteList addObject:[NSNumber numberWithInt:newPosition]];
+						[tempMultiDeleteList addObject:@(newPosition)];
 					}
 				}
 				else
@@ -854,8 +854,8 @@
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	NSString *message = @"";
-	message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %i: %@", 
-			   [error code], 
+	message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %li: %@", 
+			   (long)[error code],
 			   [error localizedDescription]];
 	
 	// Inform the user that the connection failed.

@@ -34,7 +34,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -230,9 +230,9 @@
 		albumInfoAlbumLabel.text = myAlbum.title;
 		
 		albumInfoDurationLabel.text = [NSString formatTime:dataModel.folderLength];
-		albumInfoTrackCountLabel.text = [NSString stringWithFormat:@"%i Tracks", dataModel.songsCount];
+		albumInfoTrackCountLabel.text = [NSString stringWithFormat:@"%lu Tracks", (unsigned long)dataModel.songsCount];
 		if (dataModel.songsCount == 1)
-			albumInfoTrackCountLabel.text = [NSString stringWithFormat:@"%i Track", dataModel.songsCount];
+			albumInfoTrackCountLabel.text = [NSString stringWithFormat:@"%lu Track", (unsigned long)dataModel.songsCount];
 		
 		// Create reflection
 		[self createReflection];
@@ -443,7 +443,7 @@
 - (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
 {
     // Inform the user that the connection failed.
-	NSString *message = [NSString stringWithFormat:@"There was an error loading the album.\n\nError %i: %@", [error code], [error localizedDescription]];
+	NSString *message = [NSString stringWithFormat:@"There was an error loading the album.\n\nError %li: %@", (long)[error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	

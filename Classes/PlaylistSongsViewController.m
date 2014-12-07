@@ -29,7 +29,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -262,14 +262,14 @@
 	NSString *message = @"";
 	if (viewObjectsS.isLocalPlaylist)
 	{
-		message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %i: %@", 
-											 [error code], 
+		message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %li: %@", 
+											 (long)[error code],
 											 [error localizedDescription]];
 	}
 	else
 	{
-		message = [NSString stringWithFormat:@"There was an error loading the playlist.\n\nError %i: %@", 
-				   [error code], 
+		message = [NSString stringWithFormat:@"There was an error loading the playlist.\n\nError %li: %@",
+				   (long)[error code],
 				   [error localizedDescription]];
 	}
 	
@@ -434,7 +434,7 @@ static NSString *kName_Error = @"error";
         cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
     }
 	
-	[cell.numberLabel setText:[NSString stringWithFormat:@"%i", (indexPath.row + 1)]];
+	[cell.numberLabel setText:[NSString stringWithFormat:@"%li", (long)(indexPath.row + 1)]];
 	[cell.songNameLabel setText:aSong.title];
 	if (aSong.album)
 		[cell.artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];

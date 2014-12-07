@@ -30,7 +30,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -316,7 +316,7 @@
 {
 	// Automatically set the height based on the height of the message text
 	ISMSChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndexSafe:indexPath.row];
-	CGSize expectedLabelSize = [aChatMessage.message sizeWithFont:ISMSRegularFont(20) constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap];
+	CGSize expectedLabelSize = [aChatMessage.message sizeWithFont:ISMSRegularFont(20) constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
 	if (expectedLabelSize.height < 40)
 		expectedLabelSize.height = 40;
 	return (expectedLabelSize.height + 20);

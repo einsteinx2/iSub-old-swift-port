@@ -55,8 +55,6 @@
 	<array>
 		<string>audio</string>
 	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>Launch Screen</string>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiresPersistentWiFi</key>

@@ -52,8 +52,8 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 	self.sortedFolders = [NSMutableArray arrayWithCapacity:[folders count]];
 	for (NSNumber *key in [folders allKeys])
 	{
-		NSArray *keyValuePair = [NSArray arrayWithObjects:key, [folders objectForKey:key], nil];
-		if ([key isEqualToNumber:[NSNumber numberWithInt:-1]])
+		NSArray *keyValuePair = @[key, [folders objectForKey:key]];
+		if ([key isEqualToNumber:@-1])
 		{
 			allFoldersKeyPair = [NSArray arrayWithArray:keyValuePair];
 		}
@@ -101,7 +101,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -152,7 +152,7 @@ NSInteger folderSort1(id keyVal1, id keyVal2, void *context)
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSInteger folderId = [[tableView cellForRowAtIndexPath:indexPath] tag];
-	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:folderId] forKey:@"folderId"];
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@(folderId) forKey:@"folderId"];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"performServerShuffle" userInfo:userInfo];
 	

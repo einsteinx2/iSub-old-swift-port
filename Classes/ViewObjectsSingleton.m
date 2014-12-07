@@ -159,11 +159,11 @@
 
 - (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed
 {
-    int count = tabBarController.viewControllers.count;
+    NSUInteger count = tabBarController.viewControllers.count;
     NSMutableArray *savedTabsOrderArray = [[NSMutableArray alloc] initWithCapacity:count];
     for (int i = 0; i < count; i ++)
 	{
-        [savedTabsOrderArray addObject:[NSNumber numberWithInt:[[[tabBarController.viewControllers objectAtIndexSafe:i] tabBarItem] tag]]];
+        [savedTabsOrderArray addObject:@([[[tabBarController.viewControllers objectAtIndexSafe:i] tabBarItem] tag])];
     }
     [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithArray:savedTabsOrderArray] forKey:@"mainTabBarTabsOrder"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
@@ -202,7 +202,7 @@
 		savedTabsOrderArray = tabs;
 	}
 	
-	int count = appDelegateS.mainTabBarController.viewControllers.count;
+	NSUInteger count = appDelegateS.mainTabBarController.viewControllers.count;
 	//DLog(@"savedTabsOrderArray: %@", savedTabsOrderArray);
 	if (savedTabsOrderArray.count == count) 
 	{
@@ -211,8 +211,8 @@
 		NSMutableDictionary *tabsOrderDictionary = [[NSMutableDictionary alloc] initWithCapacity:count];
 		for (int i = 0; i < count; i ++) 
 		{
-			NSNumber *tag = [[NSNumber alloc] initWithInt:[[[appDelegateS.mainTabBarController.viewControllers objectAtIndexSafe:i] tabBarItem] tag]];
-			[tabsOrderDictionary setObject:[NSNumber numberWithInt:i] forKey:[tag stringValue]];
+			NSNumber *tag = @([[[appDelegateS.mainTabBarController.viewControllers objectAtIndexSafe:i] tabBarItem] tag]);
+			[tabsOrderDictionary setObject:@(i) forKey:[tag stringValue]];
 			
 			if (!needsReordering && ![(NSNumber *)[savedTabsOrderArray objectAtIndexSafe:i] isEqualToNumber:tag]) 
 			{

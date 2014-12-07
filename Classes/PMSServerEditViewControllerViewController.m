@@ -21,7 +21,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -206,7 +206,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	if (error.code == ISMSErrorCode_IncorrectCredentials)
 		message = @"Either your username or password is incorrect. Please try again";
 	else
-		message = [NSString stringWithFormat:@"Either the WaveBox URL is incorrect, the WaveBox server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %i:\n%@", [error code], [error localizedDescription]];
+		message = [NSString stringWithFormat:@"Either the WaveBox URL is incorrect, the WaveBox server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %li:\n%@", (long)[error code], [error localizedDescription]];
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 }

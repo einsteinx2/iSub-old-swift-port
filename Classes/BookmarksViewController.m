@@ -18,7 +18,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -133,7 +133,7 @@
 		if (bookmarksCount == 1)
 			self.bookmarkCountLabel.text = [NSString stringWithFormat:@"1 Bookmark"];
 		else 
-			self.bookmarkCountLabel.text = [NSString stringWithFormat:@"%i Bookmarks", bookmarksCount];
+			self.bookmarkCountLabel.text = [NSString stringWithFormat:@"%lu Bookmarks", (unsigned long)bookmarksCount];
 		[self.headerView addSubview:self.bookmarkCountLabel];
 		
 		self.deleteBookmarksButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -216,7 +216,7 @@
 	}
 	else
 	{
-		self.deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjectsS.multiDeleteList count]];
+		self.deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %lu Bookmarks", (unsigned long)[viewObjectsS.multiDeleteList count]];
 	}
 	
 	self.bookmarkCountLabel.hidden = YES;
@@ -244,7 +244,7 @@
 	}
 	else 
 	{
-		self.deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %i Bookmarks", [viewObjectsS.multiDeleteList count]];
+		self.deleteBookmarksLabel.text = [NSString stringWithFormat:@"Remove %lu Bookmarks", (unsigned long)[viewObjectsS.multiDeleteList count]];
 	}
 }
 
@@ -490,7 +490,7 @@
 	
 	cell.deleteToggleImage.hidden = !self.tableView.editing;
 	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
-	if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
+	if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 	{
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}
@@ -562,7 +562,7 @@
 	}];
 		
 	// See if there's a playlist table for this bookmark
-	if ([databaseS.bookmarksDbQueue tableExists:[NSString stringWithFormat:@"bookmark%i", bookmarkId]])
+	if ([databaseS.bookmarksDbQueue tableExists:[NSString stringWithFormat:@"bookmark%lu", (unsigned long)bookmarkId]])
 	{		
 		// Save the playlist
 		NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
@@ -575,7 +575,7 @@
 		{
 			[db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
 			
-			[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylistDb.%@ SELECT * FROM bookmark%i", table, bookmarkId]]; 
+			[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO currentPlaylistDb.%@ SELECT * FROM bookmark%lu", table, (unsigned long)bookmarkId]];
 			
 			[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 		}];

@@ -24,7 +24,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -178,7 +178,7 @@
 	
 	[self.equalizerView startEqDisplay];
 	
-	NSArray *detents = [NSArray arrayWithObjects:[NSNumber numberWithFloat:1.], [NSNumber numberWithFloat:2.], [NSNumber numberWithFloat:3.], nil];
+	NSArray *detents = @[ @1.0f, @2.0f, @3.0f ];
 	self.gainSlider.snapDistance = .13;
 	self.gainSlider.detents = detents;
 	self.gainSlider.value = settingsS.gainMultiplier;
@@ -484,7 +484,7 @@
 - (void)promptToSaveCustomPreset
 {
 	NSUInteger count = [self.effectDAO.userPresets count];
-	if ([self.effectDAO.userPresets objectForKey:[[NSNumber numberWithInt:BassEffectTempCustomPresetId] stringValue]])
+	if ([self.effectDAO.userPresets objectForKey:[@(BassEffectTempCustomPresetId) stringValue]])
 		count--;
 	
 	if (count > 0)

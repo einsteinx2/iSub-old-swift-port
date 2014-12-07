@@ -111,13 +111,13 @@
 {
 	if (self.isDelete)
 	{
-		[viewObjectsS.multiDeleteList removeObject:[NSNumber numberWithInt:indexPath.row]];
+		[viewObjectsS.multiDeleteList removeObject:@(indexPath.row)];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"hideDeleteButton"];
 		self.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
 	}
 	else
 	{
-		[viewObjectsS.multiDeleteList addObject:[NSNumber numberWithInt:indexPath.row]];
+		[viewObjectsS.multiDeleteList addObject:@(indexPath.row)];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"showDeleteButton"];
 		self.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 	}

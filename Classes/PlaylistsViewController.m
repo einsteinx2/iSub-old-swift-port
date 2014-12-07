@@ -34,7 +34,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -113,9 +113,9 @@
 	self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	
 	if (settingsS.isOfflineMode)
-		self.segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Current", @"Offline Playlists", nil]];
+		self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Current", @"Offline Playlists"]];
 	else
-		self.segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Current", @"Local", @"Server", nil]];
+		self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Current", @"Local", @"Server"]];
 	
 	self.segmentedControl.frame = CGRectMake(5, 5, 310, 36);
 	self.segmentedControl.selectedSegmentIndex = 0;
@@ -248,7 +248,7 @@
 		if (self.currentPlaylistCount == 1)
 			self.playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 		else 
-			self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", self.currentPlaylistCount];
+			self.playlistCountLabel.text = [NSString stringWithFormat:@"%lu songs", (unsigned long)self.currentPlaylistCount];
 	}
 }
 
@@ -311,7 +311,7 @@
 			if (localPlaylistsCount == 1)
 				self.savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				self.savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", localPlaylistsCount];
+				self.savePlaylistLabel.text = [NSString stringWithFormat:@"%lu playlists", (unsigned long)localPlaylistsCount];
 		}
 		else if (self.segmentedControl.selectedSegmentIndex == 2)
 		{
@@ -320,7 +320,7 @@
 			if (serverPlaylistsCount == 1)
 				self.savePlaylistLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				self.savePlaylistLabel.text = [NSString stringWithFormat:@"%i playlists", serverPlaylistsCount];
+				self.savePlaylistLabel.text = [NSString stringWithFormat:@"%lu playlists", (unsigned long)serverPlaylistsCount];
 			
 		}
 		[self.headerView addSubview:self.savePlaylistLabel];
@@ -336,7 +336,7 @@
 			if (self.currentPlaylistCount == 1)
 				self.playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 			else 
-				self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", self.currentPlaylistCount];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"%lu songs", (unsigned long)self.currentPlaylistCount];
 		}
 		[self.headerView addSubview:self.playlistCountLabel];
 		
@@ -389,7 +389,7 @@
 			if (self.currentPlaylistCount == 1)
 				self.playlistCountLabel.text = [NSString stringWithFormat:@"1 song"];
 			else 
-				self.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", self.currentPlaylistCount];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"%lu songs", (unsigned long)self.currentPlaylistCount];
 		}
 		else if (self.segmentedControl.selectedSegmentIndex == 1)
 		{
@@ -397,7 +397,7 @@
 			if (localPlaylistsCount == 1)
 				self.playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				self.playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", localPlaylistsCount];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"%lu playlists", (unsigned long)localPlaylistsCount];
 		}
 		else if (self.segmentedControl.selectedSegmentIndex == 2)
 		{
@@ -405,7 +405,7 @@
 			if (serverPlaylistsCount == 1)
 				self.playlistCountLabel.text = [NSString stringWithFormat:@"1 playlist"];
 			else 
-				self.playlistCountLabel.text = [NSString stringWithFormat:@"%i playlists", serverPlaylistsCount];
+				self.playlistCountLabel.text = [NSString stringWithFormat:@"%lu playlists", (unsigned long)serverPlaylistsCount];
 			
 		}
 	}
@@ -694,7 +694,7 @@
 		}
 		else
 		{
-			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
 		}
 	}
 	else if (self.segmentedControl.selectedSegmentIndex == 1 ||
@@ -710,7 +710,7 @@
 		}
 		else
 		{
-			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Playlists", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Playlists", (unsigned long)[viewObjectsS.multiDeleteList count]];
 		}
 	}
 	
@@ -742,7 +742,7 @@
 		}
 		else 
 		{
-			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Songs", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
 		}
 	}
 	else if (self.segmentedControl.selectedSegmentIndex == 1 ||
@@ -767,7 +767,7 @@
 		}
 		else 
 		{
-			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %i Playlists", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Playlists", (unsigned long)[viewObjectsS.multiDeleteList count]];
 		}
 	}
 }
@@ -868,7 +868,7 @@
 				@autoreleasepool 
 				{
 					NSInteger rowId = [index integerValue] + 1;
-					NSString *md5 = [db stringForQuery:[NSString stringWithFormat:@"SELECT md5 FROM localPlaylists WHERE ROWID = %i", rowId]];
+					NSString *md5 = [db stringForQuery:[NSString stringWithFormat:@"SELECT md5 FROM localPlaylists WHERE ROWID = %li", (long)rowId]];
 					[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE playlist%@", md5]];
 					[db executeUpdate:@"DELETE FROM localPlaylists WHERE md5 = ?", md5];
 				}
@@ -939,7 +939,7 @@
 				// Select all the rows
 				for (int i = 0; i < self.currentPlaylistCount; i++)
 				{
-					[viewObjectsS.multiDeleteList addObject:[NSNumber numberWithInt:i]];
+					[viewObjectsS.multiDeleteList addObject:@(i)];
 				}
 				[self.tableView reloadData];
 				[self showDeleteButton];
@@ -962,7 +962,7 @@
 				NSUInteger count = [databaseS.localPlaylistsDbQueue intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
 				for (int i = 0; i < count; i++)
 				{
-					[viewObjectsS.multiDeleteList addObject:[NSNumber numberWithInt:i]];
+					[viewObjectsS.multiDeleteList addObject:@(i)];
 				}
 				[self.tableView reloadData];
 				[self showDeleteButton];
@@ -985,7 +985,7 @@
 				NSUInteger count = [self.serverPlaylistsDataModel.serverPlaylists count];
 				for (int i = 0; i < count; i++)
 				{
-					[viewObjectsS.multiDeleteList addObject:[NSNumber numberWithInt:i]];
+					[viewObjectsS.multiDeleteList addObject:@(i)];
 				}
 				[self.tableView reloadData];
 				[self showDeleteButton];
@@ -1243,14 +1243,14 @@
 	NSString *message = @"";
 	if (self.segmentedControl.selectedSegmentIndex == 0)
 	{
-		message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %i: %@", 
-				   [error code], 
+		message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %li: %@", 
+				   (long)[error code],
 				   [error localizedDescription]];
 	}
 	else
 	{
-		message = [NSString stringWithFormat:@"There was an error loading the playlists.\n\nError %i: %@", 
-				   [error code], 
+		message = [NSString stringWithFormat:@"There was an error loading the playlists.\n\nError %li: %@",
+				   (long)[error code],
 				   [error localizedDescription]];
 	}
 	
@@ -1436,20 +1436,20 @@ static NSString *kName_Error = @"error";
 			
 			if (fromRow < toRow)
 			{
-				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID < ?", table], [NSNumber numberWithInt:fromRow]];
-				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ? AND ROWID <= ?", table], [NSNumber numberWithInt:fromRow], [NSNumber numberWithInt:toRow]];
-				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID = ?", table], [NSNumber numberWithInt:fromRow]];
-				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ?", table], [NSNumber numberWithInt:toRow]];
+				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID < ?", table], @(fromRow)];
+				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ? AND ROWID <= ?", table], @(fromRow), @(toRow)];
+				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID = ?", table], @(fromRow)];
+				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ?", table], @(toRow)];
 				
 				[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE %@", table]];
 				[db executeUpdate:[NSString stringWithFormat:@"ALTER TABLE moveTemp RENAME TO %@", table]];
 			}
 			else
 			{
-				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID < ?", table], [NSNumber numberWithInt:toRow]];
-				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID = ?", table], [NSNumber numberWithInt:fromRow]];
-				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID >= ? AND ROWID < ?", table], [NSNumber numberWithInt:toRow], [NSNumber numberWithInt:fromRow]];
-				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ?", table], [NSNumber numberWithInt:fromRow]];
+				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID < ?", table], @(toRow)];
+				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID = ?", table], @(fromRow)];
+				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID >= ? AND ROWID < ?", table], @(toRow), @(fromRow)];
+				[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO moveTemp SELECT * FROM %@ WHERE ROWID > ?", table], @(fromRow)];
 				
 				[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE %@", table]];
 				[db executeUpdate:[NSString stringWithFormat:@"ALTER TABLE moveTemp RENAME TO %@", table]];
@@ -1474,12 +1474,12 @@ static NSString *kName_Error = @"error";
 					{
 						if ([position intValue] == fromIndexPath.row)
 						{
-							[tempMultiDeleteList addObject:[NSNumber numberWithInt:toIndexPath.row]];
+							[tempMultiDeleteList addObject:@(toIndexPath.row)];
 						}
 						else 
 						{
 							newPosition = [position intValue] + 1;
-							[tempMultiDeleteList addObject:[NSNumber numberWithInt:newPosition]];
+							[tempMultiDeleteList addObject:@(newPosition)];
 						}
 					}
 					else
@@ -1493,12 +1493,12 @@ static NSString *kName_Error = @"error";
 					{
 						if ([position intValue] == fromIndexPath.row)
 						{
-							[tempMultiDeleteList addObject:[NSNumber numberWithInt:toIndexPath.row]];
+							[tempMultiDeleteList addObject:@(toIndexPath.row)];
 						}
 						else 
 						{
 							newPosition = [position intValue] - 1;
-							[tempMultiDeleteList addObject:[NSNumber numberWithInt:newPosition]];
+							[tempMultiDeleteList addObject:@(newPosition)];
 						}
 					}
 					else
@@ -1567,7 +1567,7 @@ static NSString *kName_Error = @"error";
 		
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
-		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
+		if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 		{
 			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 		}
@@ -1585,7 +1585,7 @@ static NSString *kName_Error = @"error";
 		{
 			cell.nowPlayingImageView.hidden = YES;
 			cell.numberLabel.hidden = NO;
-			cell.numberLabel.text = [NSString stringWithFormat:@"%i", (indexPath.row + 1)];
+			cell.numberLabel.text = [NSString stringWithFormat:@"%li", (long)(indexPath.row + 1)];
 		}
 		
 		cell.songNameLabel.text = aSong.title;
@@ -1620,14 +1620,14 @@ static NSString *kName_Error = @"error";
 		// Set up the cell...
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
-		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
+		if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 		{
 			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 		}
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-		cell.playlistNameLabel.text = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
-		cell.md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+		cell.playlistNameLabel.text = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
+		cell.md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
 		cell.playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", cell.md5]];
 		if (cell.playlistCount == 1)
 		{
@@ -1635,7 +1635,7 @@ static NSString *kName_Error = @"error";
 		}
 		else
 		{
-			cell.playlistCountLabel.text = [NSString stringWithFormat:@"%i songs", cell.playlistCount];
+			cell.playlistCountLabel.text = [NSString stringWithFormat:@"%li songs", (long)cell.playlistCount];
 		}
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -1655,7 +1655,7 @@ static NSString *kName_Error = @"error";
 		
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
 		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
-		if ([viewObjectsS.multiDeleteList containsObject:[NSNumber numberWithInt:indexPath.row]])
+		if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 		{
 			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
 		}
@@ -1689,7 +1689,7 @@ static NSString *kName_Error = @"error";
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
-			playlistSongsViewController.md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+			playlistSongsViewController.md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
 			[self pushViewControllerCustom:playlistSongsViewController];
 		}
 		else if (segmentedControl.selectedSegmentIndex == 2)

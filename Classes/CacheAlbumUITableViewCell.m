@@ -146,12 +146,12 @@
 	
 	NSUInteger segment = [newSegments count];
 	
-	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE segs = %i ", segment+1];
+	NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE segs = %lu ", (long)(segment+1)];
 	for (int i = 1; i <= segment; i++)
 	{
 		[query appendFormat:@" AND seg%i = ? ", i];
 	}
-	[query appendFormat:@"ORDER BY seg%i COLLATE NOCASE", segment+1];
+	[query appendFormat:@"ORDER BY seg%lu COLLATE NOCASE", (long)segment+1];
 	
 	NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:20];
 	[databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)

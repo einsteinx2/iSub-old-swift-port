@@ -35,7 +35,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -121,7 +121,7 @@
 	
 	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
 	self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
-	self.segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Cached", @"Downloading", nil]];
+	self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Cached", @"Downloading"]];
 	[self.segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
 	
 	self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
@@ -449,7 +449,7 @@
 	}
 	
 	if (settingsS.isJukeboxEnabled)
-		[jukeboxS jukeboxPlaySongAtPosition:[NSNumber numberWithInt:0]];
+		[jukeboxS jukeboxPlaySongAtPosition:@(0)];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
@@ -548,7 +548,7 @@
 				if (cachedSongsCount == 1)
 					self.songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
 				else
-					self.songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", cachedSongsCount];
+					self.songsCountLabel.text = [NSString stringWithFormat:@"%lu Songs", (unsigned long)cachedSongsCount];
 			}
 			else if (settingsS.isOfflineMode == NO)
 			{
@@ -594,7 +594,7 @@
 				if (self.cacheQueueCount == 1)
 					self.songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
 				else 
-					self.songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", self.cacheQueueCount];
+					self.songsCountLabel.text = [NSString stringWithFormat:@"%lu Songs", (unsigned long)self.cacheQueueCount];
 			}
 			else
 			{
@@ -693,14 +693,14 @@
 			if ([databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM cachedSongs WHERE finished = 'YES' AND md5 != ''"] == 1)
 				self.songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
 			else 
-				self.songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", cachedSongsCount];
+				self.songsCountLabel.text = [NSString stringWithFormat:@"%lu Songs", (unsigned long)cachedSongsCount];
 		}
 		else if (self.segmentedControl.selectedSegmentIndex == 1)
 		{
 			if (self.cacheQueueCount == 1)
 				self.songsCountLabel.text = [NSString stringWithFormat:@"1 Song"];
 			else 
-				self.songsCountLabel.text = [NSString stringWithFormat:@"%i Songs", self.cacheQueueCount];
+				self.songsCountLabel.text = [NSString stringWithFormat:@"%lu Songs", (unsigned long)self.cacheQueueCount];
 		}
 		[self.headerView addSubview:self.songsCountLabel];
 		
@@ -903,9 +903,9 @@
 	else
 	{
 		if (self.segmentedControl.selectedSegmentIndex == 0)
-			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Folders", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Folders", (unsigned long)[viewObjectsS.multiDeleteList count]];
 		else
-			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Songs", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
 	}
 	
 	self.songsCountLabel.hidden = YES;
@@ -939,9 +939,9 @@
 	else 
 	{
 		if (self.segmentedControl.selectedSegmentIndex == 0)
-			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Folders", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Folders", (unsigned long)[viewObjectsS.multiDeleteList count]];
 		else
-			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %i Songs", [viewObjectsS.multiDeleteList count]];
+			self.deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
 	}
 }
 
@@ -1331,7 +1331,7 @@
 		
 		[databaseS.cacheQueueDbQueue inDatabase:^(FMDatabase *db)
 		{
-			FMResultSet *result = [db executeQuery:@"SELECT * FROM cacheQueue JOIN cacheQueueList USING(md5) WHERE cacheQueueList.ROWID = ?", [NSNumber numberWithInt:(indexPath.row + 1)]];
+			FMResultSet *result = [db executeQuery:@"SELECT * FROM cacheQueue JOIN cacheQueueList USING(md5) WHERE cacheQueueList.ROWID = ?", @(indexPath.row + 1)];
 			aSong = [ISMSSong songFromDbResult:result];
 			cached = [NSDate dateWithTimeIntervalSince1970:[result doubleForColumn:@"cachedDate"]];
 			cell.md5 = [result stringForColumn:@"md5"];
@@ -1446,13 +1446,13 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 						if (numOfSegments > 2)
 						{
 							if (md5 && seg2)
-								[cacheAlbumViewController.listOfAlbums addObject:[NSArray arrayWithObjects:md5, seg2, nil]];
+								[cacheAlbumViewController.listOfAlbums addObject:@[md5, seg2]];
 						}
 						else
 						{
 							if (md5)
 							{
-								[cacheAlbumViewController.listOfSongs addObject:[NSArray arrayWithObjects:md5, [NSNumber numberWithInt:[result intForColumn:@"track"]], nil]];
+								[cacheAlbumViewController.listOfSongs addObject:@[md5, @([result intForColumn:@"track"])]];
 								
 								/*// Sort by track number -- iOS 4.0+ only
 								 [cacheAlbumViewController.listOfSongs sortUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
@@ -1490,7 +1490,7 @@ NSInteger trackSort1(id obj1, id obj2, void *context)
 					
 					if (!cacheAlbumViewController.segments)
 					{
-						NSArray *segments = [NSArray arrayWithObjects:name, nil];
+						NSArray *segments = @[name];
 						cacheAlbumViewController.segments = segments;				
 					}
 				}

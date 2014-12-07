@@ -22,7 +22,7 @@
     self = [super initWithFrame:frame];
     if (self) 
 	{
-		_selectedFolderId = [NSNumber numberWithInt:-1];
+		_selectedFolderId = @-1;
 		_folders = [SUSRootFoldersDAO folderDropdownFolders];
 		_labels = [[NSMutableArray alloc] init];
 		_isOpen = NO;
@@ -76,7 +76,7 @@
 
 /*- (void)serverSwitched
 {
-	[self selectFolderWithId:[NSNumber numberWithInteger:-1]];
+	[self selectFolderWithId:@-1];
 }
 
 - (void)dealloc
@@ -115,7 +115,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	{
 		if ([key intValue] != -1)
 		{
-			NSArray *keyValuePair = [NSArray arrayWithObjects:key, [_folders objectForKey:key], nil];
+			NSArray *keyValuePair = @[ key, _folders[key] ];
 			[sortedValues addObject:keyValuePair];
 		}
 	}
@@ -131,7 +131,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	[sortedValues sortUsingFunction:folderSort2 context:NULL];
 	
 	// Add All Folders again
-	NSArray *keyValuePair = [NSArray arrayWithObjects:@"-1", @"All Folders", nil];
+	NSArray *keyValuePair = @[@"-1", @"All Folders"];
 	[sortedValues insertObject:keyValuePair atIndex:0];
 	
 	//DLog(@"keys: %@", [folders allKeys]);
@@ -259,7 +259,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 	
 	//DLog(@"Folder selected: %@ -- %i", label.text, label.tag);
 	
-	self.selectedFolderId = [NSNumber numberWithInt:label.tag];
+	self.selectedFolderId = @(label.tag);
 	self.selectedFolderLabel.text = [self.folders objectForKey:self.selectedFolderId];
     self.dropdownButton.accessibilityLabel = self.selectedFolderLabel.text;
 	//[self toggleDropdown:nil];

@@ -38,7 +38,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
@@ -92,12 +92,11 @@ LOG_LEVEL_ISUB_DEFAULT
         self.window.size = CGSizeMake(screenSize.width / screenScale, screenSize.height / screenScale);
     }*/
 	
-	if (!IS_ADHOC() && !IS_RELEASE())
-	{
-		// Don't turn on console logging for adhoc or release builds
-		[DDLog addLogger:[DDTTYLogger sharedInstance]];
-		[[DDTTYLogger sharedInstance] setColorsEnabled:YES];
-	}
+#if !IS_ADHOC() && !IS_RELEASE()
+    // Don't turn on console logging for adhoc or release builds
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    [[DDTTYLogger sharedInstance] setColorsEnabled:YES];
+#endif
 	DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
 	fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
 	fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
@@ -499,27 +498,21 @@ LOG_LEVEL_ISUB_DEFAULT
 - (void)loadFlurryAnalytics
 {
 	BOOL isSessionStarted = NO;
-	if (IS_RELEASE())
-	{
-		if (IS_LITE())
-		{
-			// Lite version key
-			[Flurry startSession:@"MQV1D5WQYUTCDAD6PFLU"];
-			isSessionStarted = YES;
-		}
-		else
-		{
-			// Full version key
-			[Flurry startSession:@"3KK4KKD2PSEU5APF7PNX"];
-			isSessionStarted = YES;
-		}
-	}
-	else if (IS_BETA())
-	{
-		// Beta version key
-		[Flurry startSession:@"KNN9DUXQEENZUG4Q12UA"];
-		isSessionStarted = YES;
-	}
+#if IS_RELEASE()
+    #if IS_LITE()
+        // Lite version key
+        [Flurry startSession:@"MQV1D5WQYUTCDAD6PFLU"];
+        isSessionStarted = YES;
+    #else
+        // Full version key
+        [Flurry startSession:@"3KK4KKD2PSEU5APF7PNX"];
+        isSessionStarted = YES;
+    #endif
+#elseif IS_BETA()
+    // Beta version key
+    [Flurry startSession:@"KNN9DUXQEENZUG4Q12UA"];
+    isSessionStarted = YES;
+#endif
 	
 	if (isSessionStarted)
 	{
@@ -542,20 +535,18 @@ LOG_LEVEL_ISUB_DEFAULT
     BITHockeyManager *hockeyManager = [BITHockeyManager sharedHockeyManager];
     
 	// HockyApp Kits
-	if (IS_BETA() && IS_ADHOC() && !IS_LITE())
-	{
-        [hockeyManager configureWithBetaIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af" liveIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af" delegate:self];
-        hockeyManager.updateManager.alwaysShowUpdateReminder = NO;
+#if IS_BETA() && IS_ADHOC() && !IS_LITE()
+    [hockeyManager configureWithBetaIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af" liveIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af" delegate:self];
+    hockeyManager.updateManager.alwaysShowUpdateReminder = NO;
+    [hockeyManager startManager];
+#elseif IS_RELEASE()
+    #if IS_LITE()
+        [hockeyManager configureWithBetaIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" liveIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" delegate:self];
+    #else
+        [hockeyManager configureWithBetaIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb" liveIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb" delegate:self];
+    #endif
         [hockeyManager startManager];
-	}
-	else if (IS_RELEASE())
-	{
-		if (IS_LITE())
-            [hockeyManager configureWithBetaIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" liveIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" delegate:self];
-		else
-            [hockeyManager configureWithBetaIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb" liveIdentifier:@"7c9cb46dad4165c9d3919390b651f6bb" delegate:self];
-        [hockeyManager startManager];
-	}
+#endif
     hockeyManager.crashManager.crashManagerStatus = BITCrashManagerStatusAutoSend;
     hockeyManager.crashManager.delegate = self;
 	
@@ -678,25 +669,24 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)loadInAppPurchaseStore
 {
-	if (IS_LITE())
-	{
-		[MKStoreManager sharedManager];
-		[MKStoreManager setDelegate:self];
-		
-		if (IS_DEBUG())
-		{
-			// Reset features
-			[SFHFKeychainUtils storeUsername:kFeaturePlaylistsId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-			[SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-            [SFHFKeychainUtils storeUsername:kFeatureVideoId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-			[SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-			
-            //DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
-            //DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
-            //DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
-            //DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
-		}
-	}
+#if IS_LITE()
+    [MKStoreManager sharedManager];
+    [MKStoreManager setDelegate:self];
+    
+    if (IS_DEBUG())
+    {
+        // Reset features
+        [SFHFKeychainUtils storeUsername:kFeaturePlaylistsId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+        [SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+        [SFHFKeychainUtils storeUsername:kFeatureVideoId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+        [SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
+        
+        //DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
+        //DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
+        //DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
+        //DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
+    }
+#endif
 }
 
 - (void)startRedirectingLogToFile
@@ -1175,22 +1165,19 @@ LOG_LEVEL_ISUB_DEFAULT
 				{
 					MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
 					[mailer setMailComposeDelegate:self];
-					[mailer setToRecipients:[NSArray arrayWithObject:@"support@isubapp.com"]];
+					[mailer setToRecipients:@[@"support@isubapp.com"]];
 					
 					if ([[[BITHockeyManager sharedHockeyManager] crashManager] didCrashInLastSession])
 					{
 						// Set version label
 						NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 						NSString *formattedVersion = nil;
-						if (IS_RELEASE())
-						{
-							formattedVersion = version;
-						}
-						else 
-						{
+                        #if IS_RELEASE()
+                            formattedVersion = version;
+                        #else
 							NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 							formattedVersion = [NSString stringWithFormat:@"%@ build %@", build, version];
-						}
+                        #endif
 						
 						NSString *subject = [NSString stringWithFormat:@"I had a crash in iSub %@ :(", formattedVersion];
 						[mailer setSubject:subject];

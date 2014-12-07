@@ -29,7 +29,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -177,7 +177,7 @@
 	self.reloadTimeLabel.font = ISMSRegularFont(11);
 	[self.headerView addSubview:self.reloadTimeLabel];
 	
-	self.countLabel.text = [NSString stringWithFormat:@"%i Songs", self.dataModel.count];
+	self.countLabel.text = [NSString stringWithFormat:@"%lu Songs", (unsigned long)self.dataModel.count];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -289,7 +289,7 @@
 
 - (void)showLoadingScreen
 {
-	self.loadingScreen = [[LoadingScreen alloc] initOnView:self.view withMessage:[NSArray arrayWithObjects:@"Processing Artist:", @"", @"Processing Album:", @"", nil] blockInput:YES mainWindow:NO];
+	self.loadingScreen = [[LoadingScreen alloc] initOnView:self.view withMessage:@[@"Processing Artist:", @"", @"Processing Album:", @""] blockInput:YES mainWindow:NO];
 	self.tableView.scrollEnabled = NO;
 	self.tableView.allowsSelection = NO;
 	self.navigationItem.leftBarButtonItem = nil;

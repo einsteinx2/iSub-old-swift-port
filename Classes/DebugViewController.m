@@ -174,7 +174,7 @@
 	if (cachedSongs == 1)
 		self.songsCachedLabel.text = @"1 song";
 	else
-		self.songsCachedLabel.text = [NSString stringWithFormat:@"%i songs", cachedSongs];
+		self.songsCachedLabel.text = [NSString stringWithFormat:@"%lu songs", (unsigned long)cachedSongs];
 	
 	// Set the cache setting labels
 	if (settingsS.cachingType == ISMSCachingType_minSpace)

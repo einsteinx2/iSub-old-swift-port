@@ -110,7 +110,7 @@ static void SetupDrawBitmap()
 {
 	// create the bitmap
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	specdc = CGBitmapContextCreate(specbuf, specWidth, specHeight, 8, specWidth * 4, colorSpace, kCGImageAlphaNoneSkipLast);
+	specdc = CGBitmapContextCreate(specbuf, specWidth, specHeight, 8, specWidth * 4, colorSpace, (CGBitmapInfo)kCGImageAlphaNoneSkipLast);
 	CGColorSpaceRelease(colorSpace);
 }
 
@@ -155,7 +155,7 @@ static void destroy_versionArrays()
 	eaglLayer.opaque = YES;
 	// In this application, we want to retain the EAGLDrawable contents after a call to presentRenderbuffer.
 	eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-									[NSNumber numberWithBool:YES], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+									@YES, kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
 	
 	context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
 	
@@ -230,7 +230,7 @@ static void destroy_versionArrays()
 {
 	// create the bitmap
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	specdc = CGBitmapContextCreate(specbuf, specWidth, specHeight, 8, specWidth * 4, colorSpace, kCGImageAlphaNoneSkipLast);
+	specdc = CGBitmapContextCreate(specbuf, specWidth, specHeight, 8, specWidth * 4, colorSpace, (CGBitmapInfo)kCGImageAlphaNoneSkipLast);
 	CGColorSpaceRelease(colorSpace);
 }
 
@@ -241,10 +241,10 @@ static void destroy_versionArrays()
 	
 	[audioEngineS.visualizer readAudioData];
 	
+    int x = 0, y = 0, y1 = 0;
+
 	switch(self.visualType)
 	{
-		int x, y, y1;
-		
 		case ISMSBassVisualType_none:
 		case ISMSBassVisualType_maxValue:
 			break;

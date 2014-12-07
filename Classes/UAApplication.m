@@ -88,7 +88,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event 
 {
-	DDLogVerbose(@"[UAApplication] remoteControlReceivedWithEvent type: %i  subtype: %i  timestamp: %f", event.type, event.subtype, event.timestamp);
+	DDLogVerbose(@"[UAApplication] remoteControlReceivedWithEvent type: %li  subtype: %li  timestamp: %f", (long)event.type, (long)event.subtype, event.timestamp);
 	switch(event.subtype) 
 	{
 		case UIEventSubtypeRemoteControlPlay:

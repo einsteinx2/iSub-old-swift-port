@@ -73,7 +73,7 @@
         
         [self.topToolbarView autolayoutPinEdge:NSLayoutAttributeLeft toParentEdge:NSLayoutAttributeLeft constant:0];
         [self.topToolbarView autolayoutPinEdge:NSLayoutAttributeRight toParentEdge:NSLayoutAttributeRight constant:0];
-        [self.topToolbarView autolayoutPinEdge:NSLayoutAttributeTop toEdge:NSLayoutAttributeBottom ofSibling:self.viewController.topLayoutGuide constant:0];
+        //[self.topToolbarView autolayoutPinEdge:NSLayoutAttributeTop toEdge:NSLayoutAttributeBottom ofSibling:self.viewController.topLayoutGuide constant:0];
         [self.topToolbarView autolayoutSetAttribute:NSLayoutAttributeHeight toConstant:70];
     }
     

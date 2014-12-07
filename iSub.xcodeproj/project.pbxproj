@@ -1688,9 +1688,6 @@
 		53FDEE6111E82A8700FE3ECD /* cache-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6011E82A8700FE3ECD /* cache-button@2x.png */; };
 		53FDEE6911E82CD700FE3ECD /* queue-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */; };
 		53FDEE6D11E82D7700FE3ECD /* delete-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */; };
-		D036A8A719DCEE0900AF2404 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D036A8A619DCEE0900AF2404 /* Launch Screen.xib */; };
-		D036A8A819DCEE0900AF2404 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D036A8A619DCEE0900AF2404 /* Launch Screen.xib */; };
-		D036A8A919DCEE0900AF2404 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D036A8A619DCEE0900AF2404 /* Launch Screen.xib */; };
 		D0EA476219DE41510083CE05 /* ISMSPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476119DE41510083CE05 /* ISMSPlayerView.m */; };
 		D0EA476319DE41510083CE05 /* ISMSPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476119DE41510083CE05 /* ISMSPlayerView.m */; };
 		D0EA476419DE41510083CE05 /* ISMSPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EA476119DE41510083CE05 /* ISMSPlayerView.m */; };
@@ -2417,7 +2414,6 @@
 		53FDEE6011E82A8700FE3ECD /* cache-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button@2x.png"; path = "Images/Other/cache-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button@2x.png"; path = "Images/Other/queue-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete-button@2x.png"; path = "Images/Other/delete-button@2x.png"; sourceTree = "<group>"; };
-		D036A8A619DCEE0900AF2404 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		D0EA476019DE41510083CE05 /* ISMSPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSPlayerView.h; sourceTree = "<group>"; };
 		D0EA476119DE41510083CE05 /* ISMSPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSPlayerView.m; sourceTree = "<group>"; };
 		D0EA476519DE41E30083CE05 /* ISMSPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSPlayerViewController.h; sourceTree = "<group>"; };
@@ -2668,7 +2664,6 @@
 				53493F1C15FC6AA60059492E /* iSub-Info.plist */,
 				53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */,
 				53F1412015FD550C004D00D5 /* buildnumber.xcconfig */,
-				D036A8A619DCEE0900AF2404 /* Launch Screen.xib */,
 				539797F41162CEB100F41D8B /* Images */,
 			);
 			name = Resources;
@@ -3605,7 +3600,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Ben Baron";
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
@@ -3964,7 +3959,6 @@
 				53DE598814F19BAF00206529 /* controller-extrabuttons-background.png in Resources */,
 				53DE598B14F19BAF00206529 /* controller-extrabuttons-background@2x.png in Resources */,
 				53DE599414F1A7B000206529 /* controller-back30.png in Resources */,
-				D036A8A719DCEE0900AF2404 /* Launch Screen.xib in Resources */,
 				53DE599714F1A7B000206529 /* controller-back30@2x.png in Resources */,
 				53DE599A14F1A7B000206529 /* controller-extras-on.png in Resources */,
 				53DE599D14F1A7B000206529 /* controller-extras-on@2x.png in Resources */,
@@ -4453,7 +4447,6 @@
 				53BC273C139AF0DD00A825F1 /* home-settings.png in Resources */,
 				53BC273D139AF0DD00A825F1 /* home-settings@2x.png in Resources */,
 				53BC273E139AF0DD00A825F1 /* home-shuffle-ipad.png in Resources */,
-				D036A8A919DCEE0900AF2404 /* Launch Screen.xib in Resources */,
 				53BC273F139AF0DD00A825F1 /* home-shuffle.png in Resources */,
 				53BC2740139AF0DD00A825F1 /* home-shuffle@2x.png in Resources */,
 				53BC2742139AF0DD00A825F1 /* controller-stop.png in Resources */,
@@ -4866,7 +4859,6 @@
 				53DE598914F19BAF00206529 /* controller-extrabuttons-background.png in Resources */,
 				53DE598C14F19BAF00206529 /* controller-extrabuttons-background@2x.png in Resources */,
 				53DE599514F1A7B000206529 /* controller-back30.png in Resources */,
-				D036A8A819DCEE0900AF2404 /* Launch Screen.xib in Resources */,
 				53DE599814F1A7B000206529 /* controller-back30@2x.png in Resources */,
 				53DE599B14F1A7B000206529 /* controller-extras-on.png in Resources */,
 				53DE599E14F1A7B000206529 /* controller-extras-on@2x.png in Resources */,
@@ -5600,7 +5592,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ANALYZER_OBJC_UNUSED_IVARS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -5639,7 +5630,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ANALYZER_OBJC_UNUSED_IVARS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -5676,10 +5666,18 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphonesimulator*]" = i386;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Vendor\"",
@@ -5694,7 +5692,11 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
@@ -5727,7 +5729,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ANALYZER_OBJC_UNUSED_IVARS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -5767,7 +5768,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -5808,7 +5808,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Datastar Consulting Services, Inc.";
@@ -5849,7 +5848,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -5888,7 +5886,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -5931,7 +5928,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Datastar Consulting Services, Inc.";
@@ -5974,7 +5970,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -6015,7 +6010,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -6057,7 +6051,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
@@ -6100,7 +6093,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Datastar Consulting Services, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Datastar Consulting Services, Inc.";
@@ -6140,7 +6132,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -6181,7 +6172,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -6222,7 +6212,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -6261,10 +6250,18 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphonesimulator*]" = i386;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Baron (T2FQV5U2DH)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Benjamin Baron (T2FQV5U2DH)";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Vendor\"",
@@ -6278,7 +6275,11 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
@@ -6292,7 +6293,7 @@
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",
 				);
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -6311,9 +6312,17 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphonesimulator*]" = i386;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Vendor\"",
@@ -6327,7 +6336,11 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,

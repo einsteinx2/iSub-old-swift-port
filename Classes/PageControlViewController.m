@@ -225,7 +225,7 @@
 
 - (IBAction)changePage:(id)sender 
 {
-    int page = self.pageControl.currentPage;
+    int page = (int)self.pageControl.currentPage;
 	
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
     [self loadScrollViewWithPage:page - 1];

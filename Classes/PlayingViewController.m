@@ -27,7 +27,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -221,7 +221,7 @@
 - (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
 {
     // Inform the user that the connection failed.
-	NSString *message = [NSString stringWithFormat:@"There was an error loading the now playing list.\n\nError %i: %@", [error code], [error localizedDescription]];
+	NSString *message = [NSString stringWithFormat:@"There was an error loading the now playing list.\n\nError %li: %@", (long)[error code], [error localizedDescription]];
 	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	

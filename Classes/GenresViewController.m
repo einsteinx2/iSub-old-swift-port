@@ -21,7 +21,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:[UIDevice currentDevice].orientation];
+    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
@@ -192,11 +192,11 @@
 	
 	if (settingsS.isOfflineMode)
 	{
-		cell.genreNameLabel.text = [databaseS.songCacheDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+		cell.genreNameLabel.text = [databaseS.songCacheDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", @(indexPath.row + 1)];
 	}
 	else
 	{
-		cell.genreNameLabel.text = [databaseS.genresDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+		cell.genreNameLabel.text = [databaseS.genresDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", @(indexPath.row + 1)];
 	}
 	
     return cell;
@@ -216,12 +216,12 @@
 		GenresArtistViewController *artistViewController = [[GenresArtistViewController alloc] initWithNibName:@"GenresArtistViewController" bundle:nil];
 		if (settingsS.isOfflineMode) 
 		{
-			NSString *title = [databaseS.songCacheDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+			NSString *title = [databaseS.songCacheDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", @(indexPath.row + 1)];
 			artistViewController.title = [NSString stringWithString:title ? title : @""];
 		}
 		else
 		{
-			NSString *title = [databaseS.genresDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", [NSNumber numberWithInt:indexPath.row + 1]];
+			NSString *title = [databaseS.genresDbQueue stringForQuery:@"SELECT genre FROM genres WHERE ROWID = ?", @(indexPath.row + 1)];
 			artistViewController.title = [NSString stringWithString:title ? title : @""];
 		}
 		artistViewController.listOfArtists = [NSMutableArray arrayWithCapacity:1];
