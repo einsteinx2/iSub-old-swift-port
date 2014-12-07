@@ -548,7 +548,6 @@ LOG_LEVEL_ISUB_DEFAULT
         [hockeyManager startManager];
 #endif
     hockeyManager.crashManager.crashManagerStatus = BITCrashManagerStatusAutoSend;
-    hockeyManager.crashManager.delegate = self;
 	
     if (hockeyManager.crashManager.didCrashInLastSession)
 	{
