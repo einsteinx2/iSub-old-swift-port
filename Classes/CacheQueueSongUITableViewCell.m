@@ -88,6 +88,9 @@
 
 - (void)toggleDelete
 {
+    if (!self.md5)
+        return;
+    
 	if (self.isDelete)
 	{
 		[viewObjectsS.multiDeleteList removeObject:self.md5];
