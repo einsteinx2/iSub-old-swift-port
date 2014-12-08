@@ -80,9 +80,9 @@
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 
-	[self.tableView addHeaderShadow];
+	if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
 		
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 

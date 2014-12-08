@@ -124,7 +124,7 @@
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 	
 	[self createDataModel];
 

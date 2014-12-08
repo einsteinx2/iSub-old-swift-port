@@ -67,9 +67,9 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	}
 	
 	// Add the table fade
-	[self.tableView addHeaderShadow];
+	if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
 		
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 

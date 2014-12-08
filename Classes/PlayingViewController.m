@@ -63,7 +63,7 @@
 	self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
 	[self.tableView addSubview:self.refreshHeaderView];
 		
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
 }

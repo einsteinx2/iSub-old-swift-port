@@ -78,7 +78,7 @@
 		
 		if (!IS_IPAD())
 		{
-			[self.tableView addHeaderShadow];
+			if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
 		}
 	}
 	else
@@ -100,7 +100,7 @@
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 	
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 -(void)loadData

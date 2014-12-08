@@ -135,7 +135,7 @@
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 	
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 	
 	self.connectionQueue = [[EX2SimpleConnectionQueue alloc] init];
 	self.connectionQueue.delegate = self;

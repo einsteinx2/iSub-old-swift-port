@@ -91,7 +91,7 @@
 			[self.tableView setContentOffset:CGPointMake(0, 50) animated:NO];
 	}
 	
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 	
 	if ([self.dataModel isRootFolderIdCached])
 		[self addCount];
@@ -448,7 +448,7 @@
 	[self.searchOverlay removeFromSuperview];
 	self.searchOverlay = nil;
 	
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 - (void) searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 

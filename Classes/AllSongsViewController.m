@@ -77,7 +77,7 @@
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 	
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 - (void)addURLRefBackButton
@@ -421,7 +421,7 @@
 	[self.searchOverlay removeFromSuperview];
 	self.searchOverlay = nil;
 	
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar 

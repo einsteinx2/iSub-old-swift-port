@@ -181,8 +181,8 @@
 	
 	self.tableView.tableHeaderView = self.headerView;
 	
-	[self.tableView addHeaderShadow];
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 	
 	if (settingsS.isOfflineMode)
 	{

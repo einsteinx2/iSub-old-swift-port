@@ -103,7 +103,7 @@
 	
 	albumInfoArtView.delegate = self;
 	
-	[self.tableView addFooterShadow];
+	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 		
 	// Add the pull to refresh view
 	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
@@ -174,9 +174,6 @@
 	[self.dataModel cancelLoad];
 	[self dataSourceDidFinishLoadingNewData];
 	[viewObjectsS hideLoadingScreen];
-	
-	if (self.dataModel.songsCount == 0 && self.dataModel.albumsCount == 0)
-		[self.tableView removeFooterShadow];
 }
 
 - (void)createReflection
@@ -195,7 +192,6 @@
 	if (dataModel.songsCount == 0 && dataModel.albumsCount == 0)
 	{
 		self.tableView.tableHeaderView = nil;
-		[self.tableView removeFooterShadow];
 	}
 	else if (dataModel.songsCount > 0)
 	{
@@ -237,12 +233,12 @@
 		// Create reflection
 		[self createReflection];
 		
-		[self.tableView addFooterShadow];
+		if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 	}
 	else
 	{
 		self.tableView.tableHeaderView = playAllShuffleAllView;
-		[self.tableView addFooterShadow];
+		if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 	}
 	
 	self.sectionInfo = dataModel.sectionInfo;

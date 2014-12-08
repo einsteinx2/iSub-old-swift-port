@@ -87,8 +87,8 @@
 	}
 	else
 	{
-		[self.tableView addHeaderShadow];
-		[self.tableView addFooterShadow];
+		if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
+		if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 	}
 }
 
@@ -127,7 +127,7 @@
 		self.tableView.scrollEnabled = YES;
 		self.navigationItem.rightBarButtonItem = self.editButtonItem;
 		
-		[self.tableView addFooterShadow];
+		if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 		
 		[self.tableView reloadData];
 	}
@@ -141,7 +141,7 @@
 		self.settingsTabViewController = [[SettingsTabViewController alloc] initWithNibName:@"SettingsTabViewController" bundle:nil];
 		self.settingsTabViewController.parentController = self;
 		self.tableView.tableFooterView = settingsTabViewController.view;
-		[self.tableView addFooterShadow];
+		if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 		[self.tableView reloadData];
 	}
 	else if (segmentedControl.selectedSegmentIndex == 2)
@@ -155,7 +155,7 @@
 		self.helpTabViewController.view.frame = self.view.bounds;
         self.helpTabViewController.view.height -= 40.;
 		self.tableView.tableFooterView = self.helpTabViewController.view;
-		[self.tableView addFooterShadow];
+		if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 		[self.tableView reloadData];
 	}
 }
