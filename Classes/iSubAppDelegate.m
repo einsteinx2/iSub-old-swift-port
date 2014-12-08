@@ -508,7 +508,7 @@ LOG_LEVEL_ISUB_DEFAULT
         [Flurry startSession:@"3KK4KKD2PSEU5APF7PNX"];
         isSessionStarted = YES;
     #endif
-#elseif IS_BETA()
+#elif IS_BETA()
     // Beta version key
     [Flurry startSession:@"KNN9DUXQEENZUG4Q12UA"];
     isSessionStarted = YES;
@@ -539,7 +539,7 @@ LOG_LEVEL_ISUB_DEFAULT
     [hockeyManager configureWithBetaIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af" liveIdentifier:@"ada15ac4ffe3befbc66f0a00ef3d96af" delegate:self];
     hockeyManager.updateManager.alwaysShowUpdateReminder = NO;
     [hockeyManager startManager];
-#elseif IS_RELEASE()
+#elif IS_RELEASE()
     #if IS_LITE()
         [hockeyManager configureWithBetaIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" liveIdentifier:@"36cd77b2ee78707009f0a9eb9bbdbec7" delegate:self];
     #else
@@ -557,6 +557,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	}
 }
 
+/*
 #ifdef ADHOC
 - (NSString *)userNameForCrashManager:(BITCrashManager *)crashManager
 {
@@ -575,6 +576,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	return nil;
 }
+*/
 
 - (NSString *)latestLogFileName
 {
