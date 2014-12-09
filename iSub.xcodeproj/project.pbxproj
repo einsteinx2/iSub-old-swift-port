@@ -6081,8 +6081,8 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "iSub Beta";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "19fdf59d-a861-490d-9d3d-f4aba01e5d5f";
+				PROVISIONING_PROFILE = "a416b716-c446-485f-aeb6-eb361c0401d4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a416b716-c446-485f-aeb6-eb361c0401d4";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
