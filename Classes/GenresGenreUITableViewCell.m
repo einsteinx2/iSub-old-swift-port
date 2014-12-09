@@ -30,7 +30,7 @@
 		
 		genreNameLabel = [[UILabel alloc] init];
 		genreNameLabel.backgroundColor = [UIColor clearColor];
-		genreNameLabel.textAlignment = UITextAlignmentLeft; // default
+		genreNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		genreNameLabel.font = ISMSBoldFont(20);
 		[genreNameScrollView addSubview:genreNameLabel];
 	}
@@ -45,7 +45,10 @@
 		
 	// Automatically set the width based on the width of the text
 	self.genreNameLabel.frame = CGRectMake(0, 0, 270, 44);
-	CGSize expectedLabelSize = [genreNameLabel.text sizeWithFont:self.genreNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:self.genreNameLabel.lineBreakMode]; 
+    CGSize expectedLabelSize = [self.genreNameLabel.text boundingRectWithSize:CGSizeMake(1000,44)
+                                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                                   attributes:@{NSFontAttributeName:self.genreNameLabel.font}
+                                                                      context:nil].size;
 	CGRect newFrame = self.genreNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	self.genreNameLabel.frame = newFrame;

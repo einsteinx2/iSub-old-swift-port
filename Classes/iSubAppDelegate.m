@@ -38,14 +38,10 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
-{
-	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	return YES;
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
+    return YES;
 }
 
 #pragma mark -
@@ -182,7 +178,7 @@ LOG_LEVEL_ISUB_DEFAULT
 		{
 			self.introController = [[IntroViewController alloc] init];
 			self.introController.modalPresentationStyle = UIModalPresentationFormSheet;
-			[self.ipadRootViewController presentModalViewController:self.introController animated:NO];
+			[self.ipadRootViewController presentViewController:self.introController animated:NO completion:nil];
 		}
 	}
 	else
@@ -232,7 +228,7 @@ LOG_LEVEL_ISUB_DEFAULT
 		if (self.showIntro)
 		{
 			self.introController = [[IntroViewController alloc] init];
-			[self.currentTabBarController presentModalViewController:self.introController animated:NO];
+			[self.currentTabBarController presentViewController:self.introController animated:NO completion:nil];
 		}
 	}
     
@@ -1202,9 +1198,9 @@ LOG_LEVEL_ISUB_DEFAULT
                     }
 					
 					if (IS_IPAD())
-						[self.ipadRootViewController presentModalViewController:mailer animated:YES];
+						[self.ipadRootViewController presentViewController:mailer animated:YES completion:nil];
 					else
-						[self.currentTabBarController presentModalViewController:mailer animated:YES];
+						[self.currentTabBarController presentViewController:mailer animated:YES completion:nil];
 					
 				}
 				else
@@ -1243,9 +1239,9 @@ LOG_LEVEL_ISUB_DEFAULT
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
 {   
 	if (IS_IPAD())
-		[self.ipadRootViewController dismissModalViewControllerAnimated:YES];
+		[self.ipadRootViewController dismissViewControllerAnimated:YES completion:nil];
 	else
-		[self.currentTabBarController dismissModalViewControllerAnimated:YES];
+		[self.currentTabBarController dismissViewControllerAnimated:YES completion:nil];
 }
 
 

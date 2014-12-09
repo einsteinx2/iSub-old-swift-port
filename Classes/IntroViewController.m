@@ -19,14 +19,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -65,7 +60,7 @@
 
 - (void)dismissFast
 {
-	[self dismissModalViewControllerAnimated:NO];
+	[self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (IBAction)buttonPress:(id)sender
@@ -99,11 +94,11 @@
 	}
 	else if (sender == self.testServer)
 	{
-		[self dismissModalViewControllerAnimated:YES];
+		[self dismissViewControllerAnimated:YES completion:nil];
 	}
 	else if (sender == self.ownServer)
 	{
-		[self dismissModalViewControllerAnimated:NO];
+		[self dismissViewControllerAnimated:NO completion:nil];
 		
 		// Hack to get this working on iOS 4, can't call it directly because it doesn't detect the selected tab correctly
 		//[appDelegateS performSelector:@selector(showSettings) withObject:nil afterDelay:1.0];

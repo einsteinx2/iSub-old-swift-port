@@ -34,14 +34,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -119,7 +114,6 @@
 	
 	self.segmentedControl.frame = CGRectMake(5, 5, 310, 36);
 	self.segmentedControl.selectedSegmentIndex = 0;
-	self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
 	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     if (IS_IOS7())
         self.segmentedControl.tintColor = ISMSHeaderColor;
@@ -298,7 +292,7 @@
 		self.savePlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.savePlaylistLabel.backgroundColor = [UIColor clearColor];
 		self.savePlaylistLabel.textColor = [UIColor whiteColor];
-		self.savePlaylistLabel.textAlignment = UITextAlignmentCenter;
+		self.savePlaylistLabel.textAlignment = NSTextAlignmentCenter;
 		self.savePlaylistLabel.font = ISMSBoldFont(22);
 		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
@@ -329,7 +323,7 @@
 		self.playlistCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.playlistCountLabel.backgroundColor = [UIColor clearColor];
 		self.playlistCountLabel.textColor = [UIColor whiteColor];
-		self.playlistCountLabel.textAlignment = UITextAlignmentCenter;
+		self.playlistCountLabel.textAlignment = NSTextAlignmentCenter;
 		self.playlistCountLabel.font = ISMSBoldFont(12);
 		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
@@ -350,7 +344,7 @@
 		self.editPlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		self.editPlaylistLabel.backgroundColor = [UIColor clearColor];
 		self.editPlaylistLabel.textColor = [UIColor whiteColor];
-		self.editPlaylistLabel.textAlignment = UITextAlignmentCenter;
+		self.editPlaylistLabel.textAlignment = NSTextAlignmentCenter;
 		self.editPlaylistLabel.font = ISMSBoldFont(22);
 		self.editPlaylistLabel.text = @"Edit";
 		[self.headerView addSubview:self.editPlaylistLabel];
@@ -365,10 +359,10 @@
 		self.deleteSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.deleteSongsLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
 		self.deleteSongsLabel.textColor = [UIColor whiteColor];
-		self.deleteSongsLabel.textAlignment = UITextAlignmentCenter;
+		self.deleteSongsLabel.textAlignment = NSTextAlignmentCenter;
 		self.deleteSongsLabel.font = ISMSBoldFont(22);
 		self.deleteSongsLabel.adjustsFontSizeToFitWidth = YES;
-		self.deleteSongsLabel.minimumFontSize = 12;
+		self.deleteSongsLabel.minimumScaleFactor = 12.0 / self.deleteSongsLabel.font.pointSize;
 		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
 			self.deleteSongsLabel.text = @"Remove # Songs";
@@ -438,7 +432,7 @@
 	textLabel.backgroundColor = [UIColor clearColor];
 	textLabel.textColor = [UIColor whiteColor];
 	textLabel.font = ISMSBoldFont(30);
-	textLabel.textAlignment = UITextAlignmentCenter;
+	textLabel.textAlignment = NSTextAlignmentCenter;
 	textLabel.numberOfLines = 0;
 	if (settingsS.isPlaylistUnlocked)
 	{
@@ -464,7 +458,7 @@
 	textLabel2.backgroundColor = [UIColor clearColor];
 	textLabel2.textColor = [UIColor whiteColor];
 	textLabel2.font = ISMSBoldFont(14);
-	textLabel2.textAlignment = UITextAlignmentCenter;
+	textLabel2.textAlignment = NSTextAlignmentCenter;
 	textLabel2.numberOfLines = 0;
 	if (settingsS.isPlaylistUnlocked)
 	{

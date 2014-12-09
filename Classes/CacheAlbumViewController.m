@@ -46,14 +46,9 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -94,7 +89,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 	playAllLabel.backgroundColor = [UIColor clearColor];
 	playAllLabel.textColor = ISMSHeaderButtonColor;
-	playAllLabel.textAlignment = UITextAlignmentCenter;
+	playAllLabel.textAlignment = NSTextAlignmentCenter;
 	playAllLabel.font = ISMSRegularFont(24);
 	playAllLabel.text = @"Play All";
 	[headerView addSubview:playAllLabel];
@@ -109,7 +104,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 	shuffleLabel.backgroundColor = [UIColor clearColor];
 	shuffleLabel.textColor = ISMSHeaderButtonColor;
-	shuffleLabel.textAlignment = UITextAlignmentCenter;
+	shuffleLabel.textAlignment = NSTextAlignmentCenter;
 	shuffleLabel.font = ISMSRegularFont(24);
 	shuffleLabel.text = @"Shuffle";
 	[headerView addSubview:shuffleLabel];

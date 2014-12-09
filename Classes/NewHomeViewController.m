@@ -31,14 +31,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -235,35 +230,35 @@
 		
 		[self.coverArtBorder addSubview:self.coverArtView];
 		
-		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 3, 220, 17)];
+		self.artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 3, 220, 20)];
 		self.artistLabel.backgroundColor = [UIColor clearColor];
 		self.artistLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
 		self.artistLabel.font = ISMSBoldFont(17);
-		self.artistLabel.minimumFontSize = 12;
+		self.artistLabel.minimumScaleFactor = 12.0 / self.artistLabel.font.pointSize;
 		self.artistLabel.adjustsFontSizeToFitWidth = YES;
-		self.artistLabel.textAlignment = UITextAlignmentCenter;
+		self.artistLabel.textAlignment = NSTextAlignmentCenter;
 		self.artistLabel.shadowOffset = CGSizeMake(0, 2);
 		self.artistLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
 		[self.coverArtBorder addSubview:self.artistLabel];
 		
-		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 20, 220, 17)];
+		self.albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 20, 220, 20)];
 		self.albumLabel.backgroundColor = [UIColor clearColor];
 		self.albumLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
 		self.albumLabel.font = ISMSRegularFont(17);
-		self.albumLabel.minimumFontSize = 12;
+		self.albumLabel.minimumScaleFactor = 12.0 / self.albumLabel.font.pointSize;
 		self.albumLabel.adjustsFontSizeToFitWidth = YES;
-		self.albumLabel.textAlignment = UITextAlignmentCenter;
+		self.albumLabel.textAlignment = NSTextAlignmentCenter;
 		self.albumLabel.shadowOffset = CGSizeMake(0, 2);
 		self.albumLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
 		[self.coverArtBorder addSubview:self.albumLabel];
 		
-		self.songLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 37, 220, 17)];
+		self.songLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 37, 220, 20)];
 		self.songLabel.backgroundColor = [UIColor clearColor];
 		self.songLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
 		self.songLabel.font = ISMSBoldFont(17);
-		self.songLabel.minimumFontSize = 12;
+		self.songLabel.minimumScaleFactor = 12.0 / self.songLabel.font.pointSize;
 		self.songLabel.adjustsFontSizeToFitWidth = YES;
-		self.songLabel.textAlignment = UITextAlignmentCenter;
+		self.songLabel.textAlignment = NSTextAlignmentCenter;
 		self.songLabel.shadowOffset = CGSizeMake(0, 2);
 		self.songLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
 		[self.coverArtBorder addSubview:self.songLabel];
@@ -425,9 +420,9 @@
 		quickAlbums.modalPresentationStyle = UIModalPresentationFormSheet;
 	
 	if (IS_IPAD())
-		[appDelegateS.ipadRootViewController presentModalViewController:quickAlbums animated:YES];
+		[appDelegateS.ipadRootViewController presentViewController:quickAlbums animated:YES completion:nil];
 	else
-		[self presentModalViewController:quickAlbums animated:YES];
+		[self presentViewController:quickAlbums animated:YES completion:nil];
 	
 }
 
@@ -520,10 +515,9 @@
 
 - (IBAction)player
 {
-    //ISMSPlayerViewController *player = [[ISMSPlayerViewController alloc] init];
-    //[self.navigationController pushViewController:player animated:YES];
 	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
 	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:streamingPlayerViewController animated:YES];
 }
 
 - (IBAction)support:(id)sender

@@ -35,13 +35,13 @@
 		
 		albumNameLabel = [[UILabel alloc] init];
 		albumNameLabel.backgroundColor = [UIColor clearColor];
-		albumNameLabel.textAlignment = UITextAlignmentLeft; // default
+		albumNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		albumNameLabel.font = ISMSAlbumFont;
 		[albumNameScrollView addSubview:albumNameLabel];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
-		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
+		artistNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		artistNameLabel.font = ISMSRegularFont(15);
 		[albumNameScrollView addSubview:artistNameLabel];
 	}
@@ -57,13 +57,19 @@
 	
 	// Automatically set the width based on the width of the text
 	self.albumNameLabel.frame = CGRectMake(0, 0, 230, 35);
-	CGSize expectedLabelSize = [self.albumNameLabel.text sizeWithFont:self.albumNameLabel.font constrainedToSize:CGSizeMake(1000,35) lineBreakMode:self.albumNameLabel.lineBreakMode]; 
+    CGSize expectedLabelSize = [self.albumNameLabel.text boundingRectWithSize:CGSizeMake(1000,35)
+                                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                                   attributes:@{NSFontAttributeName:self.albumNameLabel.font}
+                                                                      context:nil].size;
 	CGRect frame = self.albumNameLabel.frame;
 	frame.size.width = expectedLabelSize.width;
 	self.albumNameLabel.frame = frame;
 	
 	self.artistNameLabel.frame = CGRectMake(0, 35, 230, 20);
-	expectedLabelSize = [self.artistNameLabel.text sizeWithFont:self.artistNameLabel.font constrainedToSize:CGSizeMake(1000,35) lineBreakMode:self.artistNameLabel.lineBreakMode]; 
+    expectedLabelSize = [self.artistNameLabel.text boundingRectWithSize:CGSizeMake(1000,20)
+                                                                options:NSStringDrawingUsesLineFragmentOrigin
+                                                             attributes:@{NSFontAttributeName:self.artistNameLabel.font}
+                                                                context:nil].size;
 	frame = self.artistNameLabel.frame;
 	frame.size.width = expectedLabelSize.width;
 	self.artistNameLabel.frame = frame;

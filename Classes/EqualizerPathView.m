@@ -70,13 +70,8 @@ static CGColorRef fillColorOn;
 }
 
 - (void)drawTextLabelAtPoint:(CGPoint)point withString:(NSString *)string
-{	
-	CGContextRef context = UIGraphicsGetCurrentContext();
-	CGContextShowTextAtPoint(context, 
-							 point.x, 
-							 point.y, 
-							 [string cStringUsingEncoding:NSMacOSRomanStringEncoding], 
-							 [string lengthOfBytesUsingEncoding:NSMacOSRomanStringEncoding]);
+{
+    [string drawAtPoint:point withAttributes:@{ NSFontAttributeName : [UIFont fontWithName:@"Arial" size:10.0f] }];
 }
 
 - (void)drawTicksAndLabels
@@ -85,7 +80,6 @@ static CGColorRef fillColorOn;
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGContextSetBlendMode(context, kCGBlendModeNormal);
 	CGContextSetTextMatrix(context, CGAffineTransformMake(1.0,0.0, 0.0, -1.0, 0.0, 0.0));
-	CGContextSelectFont(context, "Arial", 10.0f, kCGEncodingMacRoman);
 	CGContextSetTextDrawingMode(context, kCGTextFill);
 	
 	// Set drawing properties

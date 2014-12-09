@@ -70,7 +70,7 @@
 		self.savePlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.savePlaylistLabel.backgroundColor = [UIColor clearColor];
 		self.savePlaylistLabel.textColor = [UIColor whiteColor];
-		self.savePlaylistLabel.textAlignment = UITextAlignmentCenter;
+		self.savePlaylistLabel.textAlignment = NSTextAlignmentCenter;
 		self.savePlaylistLabel.font = ISMSBoldFont(22);
 		self.savePlaylistLabel.text = @"Save Playlist";
 		[self.headerView addSubview:self.savePlaylistLabel];
@@ -79,7 +79,7 @@
 		self.playlistCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.playlistCountLabel.backgroundColor = [UIColor clearColor];
 		self.playlistCountLabel.textColor = [UIColor whiteColor];
-		self.playlistCountLabel.textAlignment = UITextAlignmentCenter;
+		self.playlistCountLabel.textAlignment = NSTextAlignmentCenter;
 		self.playlistCountLabel.font = ISMSBoldFont(12);
 		[self.headerView addSubview:self.playlistCountLabel];
 		
@@ -93,7 +93,7 @@
 		self.editPlaylistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		self.editPlaylistLabel.backgroundColor = [UIColor clearColor];
 		self.editPlaylistLabel.textColor = [UIColor whiteColor];
-		self.editPlaylistLabel.textAlignment = UITextAlignmentCenter;
+		self.editPlaylistLabel.textAlignment = NSTextAlignmentCenter;
 		self.editPlaylistLabel.font = ISMSBoldFont(22);
 		self.editPlaylistLabel.text = @"Edit";
 		[self.headerView addSubview:self.editPlaylistLabel];
@@ -108,10 +108,10 @@
 		self.deleteSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.deleteSongsLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
 		self.deleteSongsLabel.textColor = [UIColor whiteColor];
-		self.deleteSongsLabel.textAlignment = UITextAlignmentCenter;
+		self.deleteSongsLabel.textAlignment = NSTextAlignmentCenter;
 		self.deleteSongsLabel.font = ISMSBoldFont(22);
 		self.deleteSongsLabel.adjustsFontSizeToFitWidth = YES;
-		self.deleteSongsLabel.minimumFontSize = 12;
+		self.deleteSongsLabel.minimumScaleFactor = 12.0 / self.deleteSongsLabel.font.pointSize;
 		self.deleteSongsLabel.text = @"Remove # Songs";
 		self.deleteSongsLabel.hidden = YES;
 		[self.headerView addSubview:self.deleteSongsLabel];
@@ -133,7 +133,7 @@
 		textLabel.backgroundColor = [UIColor clearColor];
 		textLabel.textColor = [UIColor whiteColor];
 		textLabel.font = ISMSBoldFont(30);
-		textLabel.textAlignment = UITextAlignmentCenter;
+		textLabel.textAlignment = NSTextAlignmentCenter;
 		textLabel.numberOfLines = 0;
 		textLabel.text = @"Playlists\nLocked";
 		textLabel.frame = CGRectMake(20, 0, 200, 100);
@@ -143,7 +143,7 @@
 		textLabel2.backgroundColor = [UIColor clearColor];
 		textLabel2.textColor = [UIColor whiteColor];
 		textLabel2.font = ISMSBoldFont(14);
-		textLabel2.textAlignment = UITextAlignmentCenter;
+		textLabel2.textAlignment = NSTextAlignmentCenter;
 		textLabel2.numberOfLines = 0;
 		textLabel2.text = @"Tap to purchase the ability to view, create, and manage playlists";
 		textLabel2.frame = CGRectMake(20, 100, 200, 60);

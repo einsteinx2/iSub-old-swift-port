@@ -28,7 +28,7 @@
 		userNameLabel = [[UILabel alloc] init];
 		userNameLabel.frame = CGRectMake(0, 0, 320, 20);
 		userNameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		userNameLabel.textAlignment = UITextAlignmentCenter; // default
+		userNameLabel.textAlignment = NSTextAlignmentCenter; // default
 		userNameLabel.backgroundColor = [UIColor blackColor];
 		userNameLabel.alpha = .65;
 		userNameLabel.font = ISMSBoldFont(10);
@@ -47,13 +47,13 @@
 		
 		songNameLabel = [[UILabel alloc] init];
 		songNameLabel.backgroundColor = [UIColor clearColor];
-		songNameLabel.textAlignment = UITextAlignmentLeft; // default
+		songNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		songNameLabel.font = ISMSBoldFont(20);
 		[nameScrollView addSubview:songNameLabel];
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
-		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
+		artistNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		artistNameLabel.font = ISMSRegularFont(15);
 		[nameScrollView addSubview:artistNameLabel];
 		
@@ -77,13 +77,19 @@
 	
 	// Automatically set the width based on the width of the text
 	self.songNameLabel.frame = CGRectMake(0, 0, 245, 35);
-	CGSize expectedLabelSize = [self.songNameLabel.text sizeWithFont:self.songNameLabel.font constrainedToSize:CGSizeMake(1000,35) lineBreakMode:self.songNameLabel.lineBreakMode]; 
+    CGSize expectedLabelSize = [self.songNameLabel.text boundingRectWithSize:CGSizeMake(1000,35)
+                                                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                                                  attributes:@{NSFontAttributeName:self.songNameLabel.font}
+                                                                     context:nil].size;
 	CGRect newFrame = self.songNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	self.songNameLabel.frame = newFrame;
 	
 	self.artistNameLabel.frame = CGRectMake(0, 35, 245, 20);
-	expectedLabelSize = [self.artistNameLabel.text sizeWithFont:self.artistNameLabel.font constrainedToSize:CGSizeMake(1000,20) lineBreakMode:self.artistNameLabel.lineBreakMode]; 
+    expectedLabelSize = [self.artistNameLabel.text boundingRectWithSize:CGSizeMake(1000,20)
+                                                                options:NSStringDrawingUsesLineFragmentOrigin
+                                                             attributes:@{NSFontAttributeName:self.artistNameLabel.font}
+                                                                context:nil].size;
 	newFrame = self.artistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	self.artistNameLabel.frame = newFrame;

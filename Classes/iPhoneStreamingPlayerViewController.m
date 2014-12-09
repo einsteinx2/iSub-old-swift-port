@@ -419,7 +419,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.artistLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.artistLabel.font = ISMSBoldFont(22);
 		self.artistLabel.adjustsFontSizeToFitWidth = YES;
-		self.artistLabel.textAlignment = UITextAlignmentCenter;
+		self.artistLabel.textAlignment = NSTextAlignmentCenter;
 		[self.view addSubview:self.artistLabel];
 		[self.view sendSubviewToBack:self.artistLabel];
 		
@@ -428,7 +428,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.titleLabel.textColor = [UIColor whiteColor];
 		self.titleLabel.font = ISMSBoldFont(24);
 		self.titleLabel.adjustsFontSizeToFitWidth = YES;
-		self.titleLabel.textAlignment = UITextAlignmentCenter;
+		self.titleLabel.textAlignment = NSTextAlignmentCenter;
 		[self.view addSubview:self.titleLabel];
 		[self.view sendSubviewToBack:self.titleLabel];
 		
@@ -437,7 +437,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.albumLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.albumLabel.font = ISMSRegularFont(22);
 		self.albumLabel.adjustsFontSizeToFitWidth = YES;
-		self.albumLabel.textAlignment = UITextAlignmentCenter;
+		self.albumLabel.textAlignment = NSTextAlignmentCenter;
 		[self.view addSubview:self.albumLabel];
 		[self.view sendSubviewToBack:self.albumLabel];
 		
@@ -493,14 +493,9 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -702,7 +697,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.artistTitleLabel.backgroundColor = [UIColor clearColor];
 		self.artistTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.artistTitleLabel.font = ISMSBoldFont(artistSize);
-		self.artistTitleLabel.textAlignment = UITextAlignmentCenter;
+		self.artistTitleLabel.textAlignment = NSTextAlignmentCenter;
 		[titleView addSubview:self.artistTitleLabel];
 		
 		self.songTitleLabel = [[UILabel alloc] initWithFrame:songFrame];
@@ -711,7 +706,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.songTitleLabel.backgroundColor = [UIColor clearColor];
 		self.songTitleLabel.textColor = [UIColor whiteColor];
 		self.songTitleLabel.font = ISMSBoldFont(songSize);
-		self.songTitleLabel.textAlignment = UITextAlignmentCenter;
+		self.songTitleLabel.textAlignment = NSTextAlignmentCenter;
 		[titleView addSubview:self.songTitleLabel];
 		
 		self.albumTitleLabel = [[UILabel alloc] initWithFrame:albumFrame];
@@ -719,7 +714,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.albumTitleLabel.backgroundColor = [UIColor clearColor];
 		self.albumTitleLabel.textColor = [UIColor colorWithWhite:.7 alpha:1.];
 		self.albumTitleLabel.font = ISMSBoldFont(albumSize);
-		self.albumTitleLabel.textAlignment = UITextAlignmentCenter;
+		self.albumTitleLabel.textAlignment = NSTextAlignmentCenter;
 		[titleView addSubview:self.albumTitleLabel];
 				
 		self.artistTitleLabel.text = self.currentSong.artist;
@@ -1356,7 +1351,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.sliderMultipleLabel.font = ISMSBoldFont(13.5);
 		self.sliderMultipleLabel.shadowOffset = CGSizeMake(0, 2);
 		self.sliderMultipleLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.25];
-		self.sliderMultipleLabel.textAlignment = UITextAlignmentCenter;
+		self.sliderMultipleLabel.textAlignment = NSTextAlignmentCenter;
 		
 		// Create the label background
 		CGFloat cornerRadius = 4.;

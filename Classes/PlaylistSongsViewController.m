@@ -29,14 +29,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -62,7 +57,7 @@
 			sendLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 			sendLabel.backgroundColor = [UIColor clearColor];
 			sendLabel.textColor = ISMSHeaderTextColor;
-			sendLabel.textAlignment = UITextAlignmentCenter;
+			sendLabel.textAlignment = NSTextAlignmentCenter;
 			sendLabel.font = ISMSBoldFont(30);
 			sendLabel.text = @"Save to Server";
 			[headerView addSubview:sendLabel];

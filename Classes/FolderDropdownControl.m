@@ -44,7 +44,7 @@
 		_selectedFolderLabel.userInteractionEnabled = YES;
 		_selectedFolderLabel.backgroundColor = [UIColor clearColor];
 		_selectedFolderLabel.textColor = _borderColor;
-		_selectedFolderLabel.textAlignment = UITextAlignmentCenter;
+		_selectedFolderLabel.textAlignment = NSTextAlignmentCenter;
 		_selectedFolderLabel.font = ISMSBoldFont(20);
 		_selectedFolderLabel.text = @"All Folders";
 		[self addSubview:_selectedFolderLabel];
@@ -155,7 +155,7 @@ NSInteger folderSort2(id keyVal1, id keyVal2, void *context)
 		else
 			folderLabel.backgroundColor = self.darkColor;
 		folderLabel.textColor = self.textColor;
-		folderLabel.textAlignment = UITextAlignmentCenter;
+		folderLabel.textAlignment = NSTextAlignmentCenter;
 		folderLabel.font = ISMSBoldFont(20);
 		folderLabel.text = folder;
 		folderLabel.tag = tag;

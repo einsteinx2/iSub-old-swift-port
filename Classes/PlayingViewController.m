@@ -27,14 +27,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -254,7 +249,7 @@
 			textLabel.backgroundColor = [UIColor clearColor];
 			textLabel.textColor = [UIColor whiteColor];
 			textLabel.font = ISMSBoldFont(30);
-			textLabel.textAlignment = UITextAlignmentCenter;
+			textLabel.textAlignment = NSTextAlignmentCenter;
 			textLabel.numberOfLines = 0;
 			[textLabel setText:@"Nothing Playing\non the\nServer"];
 			textLabel.frame = CGRectMake(15, 15, 210, 150);

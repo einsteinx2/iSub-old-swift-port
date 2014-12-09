@@ -21,7 +21,7 @@
 		userNameLabel = [[UILabel alloc] init];
 		userNameLabel.frame = CGRectMake(0, 0, 320, 20);
 		userNameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		userNameLabel.textAlignment = UITextAlignmentCenter; // default
+		userNameLabel.textAlignment = NSTextAlignmentCenter; // default
 		userNameLabel.backgroundColor = [UIColor blackColor];
 		userNameLabel.alpha = .65;
 		userNameLabel.font = ISMSBoldFont(10);
@@ -31,10 +31,10 @@
 		messageLabel = [[UILabel alloc] init];
 		messageLabel.frame = CGRectMake(5, 20, 310, 55);
 		messageLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		messageLabel.textAlignment = UITextAlignmentLeft; // default
+		messageLabel.textAlignment = NSTextAlignmentLeft; // default
 		messageLabel.backgroundColor = [UIColor clearColor];
 		messageLabel.font = ISMSRegularFont(20);
-		messageLabel.lineBreakMode = UILineBreakModeWordWrap;
+		messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
 		messageLabel.numberOfLines = 0;
 		[self.contentView addSubview:messageLabel];
 	}
@@ -48,7 +48,10 @@
     [super layoutSubviews];
 		
 	// Automatically set the height based on the height of the message text
-	CGSize expectedLabelSize = [self.messageLabel.text sizeWithFont:self.messageLabel.font constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:self.messageLabel.lineBreakMode];
+    CGSize expectedLabelSize = [self.messageLabel.text boundingRectWithSize:CGSizeMake(310,CGFLOAT_MAX)
+                                                                    options:NSStringDrawingUsesLineFragmentOrigin
+                                                                 attributes:@{NSFontAttributeName:self.messageLabel.font}
+                                                                    context:nil].size;
 	if (expectedLabelSize.height < 40)
 		expectedLabelSize.height = 40;
 	CGRect newFrame = self.messageLabel.frame;

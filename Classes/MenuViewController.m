@@ -48,7 +48,7 @@
 		
 		// Create the background color
 		UIView *background = [[UIView alloc] initWithFrame:self.view.frame];
-		background.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+		background.backgroundColor = [UIColor darkGrayColor];
 		UIView *shade = [[UIView alloc] initWithFrame:self.view.frame];
 		shade.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
 		[background addSubview:shade];
@@ -159,15 +159,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
-{
-	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
-    // Override to allow orientations other than the default portrait orientation.
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 

@@ -34,14 +34,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -257,9 +252,9 @@
 													   numberOfTracks:dataModel.songsCount 
 														  albumLength:dataModel.folderLength];
 		if (IS_IPAD())
-			[appDelegateS.ipadRootViewController presentModalViewController:largeArt animated:YES];
+			[appDelegateS.ipadRootViewController presentViewController:largeArt animated:YES completion:nil];
 		else
-			[self presentModalViewController:largeArt animated:YES];
+			[self presentViewController:largeArt animated:YES completion:nil];
 	}
 }
 

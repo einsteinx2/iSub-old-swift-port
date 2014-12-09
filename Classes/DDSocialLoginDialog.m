@@ -183,7 +183,7 @@
 			[cell.contentView addSubview:self.passwordField];
 		}		
 	} else {
-		cell.textLabel.textAlignment = UITextAlignmentCenter;
+		cell.textLabel.textAlignment = NSTextAlignmentCenter;
 		cell.textLabel.text = NSLocalizedString(@"Sign In", nil);
 	}
     

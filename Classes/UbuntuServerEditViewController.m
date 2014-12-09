@@ -18,15 +18,11 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
+
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -63,9 +59,9 @@
 	viewObjectsS.serverToEdit = nil;
 	
 	if (self.parentController)
-		[self.parentController dismissModalViewControllerAnimated:YES];
+		[self.parentController dismissViewControllerAnimated:YES completion:nil];
 	
-	[self dismissModalViewControllerAnimated:YES];
+	[self dismissViewControllerAnimated:YES completion:nil];
 	
 	if (![[NSUserDefaults standardUserDefaults] objectForKey:@"servers"])
 	{
@@ -128,9 +124,9 @@
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 			
 			if (self.parentController)
-				[self.parentController dismissModalViewControllerAnimated:YES];
+				[self.parentController dismissViewControllerAnimated:YES completion:nil];
 			
-			[self dismissModalViewControllerAnimated:YES];
+			[self dismissViewControllerAnimated:YES completion:nil];
 			
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer"];
 		}
@@ -151,10 +147,10 @@
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
 			[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 			
-			[self dismissModalViewControllerAnimated:YES];
+			[self dismissViewControllerAnimated:YES completion:nil];
 			
 			if (self.parentController)
-				[self.parentController dismissModalViewControllerAnimated:YES];
+				[self.parentController dismissViewControllerAnimated:YES completion:nil];
 
 			if (IS_IPAD())
 				[appDelegateS.ipadRootViewController.menuViewController showHome];

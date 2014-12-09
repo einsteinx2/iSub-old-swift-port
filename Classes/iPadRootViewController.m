@@ -103,8 +103,7 @@
 	
 	[self.rootView addSubview:self.leftMenuView];
 	[self.rootView addSubview:self.rightSlideView];
-	self.view.backgroundColor = [[UIColor scrollViewTexturedBackgroundColor] colorWithAlphaComponent:0.7];
-	//self.view.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+	self.view.backgroundColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.7];
 	[self.view addSubview:rootView];
     
     // On iOS 7, don't let the status bar text cover the content
@@ -117,15 +116,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	if (settingsS.isRotationLockEnabled && interfaceOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
-    // Overriden to allow any orientation.
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 

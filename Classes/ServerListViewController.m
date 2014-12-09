@@ -24,14 +24,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -70,7 +65,6 @@
 	self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Servers", @"Settings", @"Help"]];
 	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
-	self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
 	self.segmentedControl.frame = CGRectMake(5, 2, 310, 36);
     if (IS_IOS7())
         self.segmentedControl.tintColor = ISMSHeaderColor;
@@ -186,9 +180,9 @@
 		serverTypeViewController.modalPresentationStyle = UIModalPresentationFormSheet;
     
 	if (IS_IPAD())
-		[appDelegateS.ipadRootViewController presentModalViewController:serverTypeViewController animated:YES];
+		[appDelegateS.ipadRootViewController presentViewController:serverTypeViewController animated:YES completion:nil];
 	else
-		[self presentModalViewController:serverTypeViewController animated:YES];
+		[self presentViewController:serverTypeViewController animated:YES completion:nil];
     
     
 }
@@ -212,21 +206,21 @@
 		UbuntuServerEditViewController *ubuntuServerEditViewController = [[UbuntuServerEditViewController alloc] initWithNibName:@"UbuntuServerEditViewController" bundle:nil];
 		if ([ubuntuServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 			ubuntuServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-		[self presentModalViewController:ubuntuServerEditViewController animated:YES];
+		[self presentViewController:ubuntuServerEditViewController animated:YES completion:nil];
 	}
 	else if ([viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC])
 	{
 		SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithNibName:@"SubsonicServerEditViewController" bundle:nil];
 		if ([subsonicServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 			subsonicServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-		[self presentModalViewController:subsonicServerEditViewController animated:YES];
+		[self presentViewController:subsonicServerEditViewController animated:YES completion:nil];
 	}
     else if ([viewObjectsS.serverToEdit.type isEqualToString:WAVEBOX])
     {
         PMSServerEditViewControllerViewController *pmsServerEditViewController = [[PMSServerEditViewControllerViewController alloc] initWithNibName:@"PMSServerEditViewControllerViewController" bundle:nil];
 		if ([pmsServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
 			pmsServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-		[self presentModalViewController:pmsServerEditViewController animated:YES];
+		[self presentViewController:pmsServerEditViewController animated:YES completion:nil];
     }
 }
 
@@ -355,7 +349,7 @@
 	UILabel *serverNameLabel = [[UILabel alloc] init];
 	serverNameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	serverNameLabel.backgroundColor = [UIColor clearColor];
-	serverNameLabel.textAlignment = UITextAlignmentLeft; // default
+	serverNameLabel.textAlignment = NSTextAlignmentLeft; // default
 	serverNameLabel.font = ISMSBoldFont(20);
 	[serverNameLabel setText:aServer.url];
 	[cell.contentView addSubview:serverNameLabel];
@@ -363,7 +357,7 @@
 	UILabel *detailsLabel = [[UILabel alloc] init];
 	detailsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	detailsLabel.backgroundColor = [UIColor clearColor];
-	detailsLabel.textAlignment = UITextAlignmentLeft; // default
+	detailsLabel.textAlignment = NSTextAlignmentLeft; // default
 	detailsLabel.font = ISMSRegularFont(15);
 	[detailsLabel setText:[NSString stringWithFormat:@"username: %@", aServer.username]];
 	[cell.contentView addSubview:detailsLabel];

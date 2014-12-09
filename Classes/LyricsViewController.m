@@ -57,7 +57,7 @@
 		titleLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.8];
 		titleLabel.textColor = [UIColor whiteColor];
 		titleLabel.font = ISMSBoldFont(30);
-		titleLabel.textAlignment = UITextAlignmentCenter;
+		titleLabel.textAlignment = NSTextAlignmentCenter;
 		titleLabel.text = @"Lyrics";
 		[self.view addSubview:titleLabel];
     }

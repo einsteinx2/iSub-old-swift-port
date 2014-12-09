@@ -29,14 +29,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -158,7 +153,7 @@
 	self.countLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.countLabel.backgroundColor = [UIColor clearColor];
 	self.countLabel.textColor = [UIColor blackColor];
-	self.countLabel.textAlignment = UITextAlignmentCenter;
+	self.countLabel.textAlignment = NSTextAlignmentCenter;
 	self.countLabel.font = ISMSBoldFont(30);
 	[self.headerView addSubview:self.countLabel];
 
@@ -173,7 +168,7 @@
 	self.reloadTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.reloadTimeLabel.backgroundColor = [UIColor clearColor];
 	self.reloadTimeLabel.textColor = [UIColor colorWithRed:176.0/255.0 green:181.0/255.0 blue:188.0/255.0 alpha:1];
-	self.reloadTimeLabel.textAlignment = UITextAlignmentCenter;
+	self.reloadTimeLabel.textAlignment = NSTextAlignmentCenter;
 	self.reloadTimeLabel.font = ISMSRegularFont(11);
 	[self.headerView addSubview:self.reloadTimeLabel];
 	

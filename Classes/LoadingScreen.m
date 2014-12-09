@@ -146,7 +146,7 @@
 	loadingLabel.backgroundColor = [UIColor clearColor];
 	loadingLabel.textColor = [UIColor whiteColor];
 	loadingLabel.font = ISMSBoldFont(30);
-	loadingLabel.textAlignment = UITextAlignmentCenter;
+	loadingLabel.textAlignment = NSTextAlignmentCenter;
 	[loadingLabel setText:@"Loading"];
 	loadingLabel.frame = CGRectMake(10, 15, 220, 50);
 	[loadingScreenRectangle addSubview:loadingLabel];
@@ -158,7 +158,7 @@
 	//loadingMessage.font = ISMSRegularFont(20);
 	loadingMessage.font = ISMSRegularFont(18);
 	loadingMessage.numberOfLines = 0;
-	loadingMessage.textAlignment = UITextAlignmentCenter;
+	loadingMessage.textAlignment = NSTextAlignmentCenter;
 	loadingMessage.adjustsFontSizeToFitWidth = YES;
 	loadingMessage.minimumFontSize = 12;
 	if (message)

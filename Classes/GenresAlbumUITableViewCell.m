@@ -35,7 +35,7 @@
 		
 		albumNameLabel = [[UILabel alloc] init];
 		albumNameLabel.backgroundColor = [UIColor clearColor];
-		albumNameLabel.textAlignment = UITextAlignmentLeft; // default
+		albumNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		albumNameLabel.font = ISMSAlbumFont;
 		[albumNameScrollView addSubview:albumNameLabel];
 	}
@@ -49,7 +49,10 @@
 	
 	// Automatically set the width based on the width of the text
 	self.albumNameLabel.frame = CGRectMake(0, 0, 230, 60);
-	CGSize expectedLabelSize = [self.albumNameLabel.text sizeWithFont:self.albumNameLabel.font constrainedToSize:CGSizeMake(1000,60) lineBreakMode:self.albumNameLabel.lineBreakMode]; 
+    CGSize expectedLabelSize = [self.albumNameLabel.text boundingRectWithSize:CGSizeMake(1000,60)
+                                                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                                                  attributes:@{NSFontAttributeName:self.albumNameLabel.font}
+                                                                     context:nil].size;
 	CGRect newFrame = albumNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	self.albumNameLabel.frame = newFrame;

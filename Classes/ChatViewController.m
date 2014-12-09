@@ -30,14 +30,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -188,7 +183,7 @@
 		textLabel.backgroundColor = [UIColor clearColor];
 		textLabel.textColor = [UIColor whiteColor];
 		textLabel.font = ISMSBoldFont(30);
-		textLabel.textAlignment = UITextAlignmentCenter;
+		textLabel.textAlignment = NSTextAlignmentCenter;
 		textLabel.numberOfLines = 0;
 		[textLabel setText:@"No Chat Messages\non the\nServer"];
 		textLabel.frame = CGRectMake(15, 15, 210, 150);
@@ -316,7 +311,10 @@
 {
 	// Automatically set the height based on the height of the message text
 	ISMSChatMessage *aChatMessage = [dataModel.chatMessages objectAtIndexSafe:indexPath.row];
-	CGSize expectedLabelSize = [aChatMessage.message sizeWithFont:ISMSRegularFont(20) constrainedToSize:CGSizeMake(310,CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize expectedLabelSize = [aChatMessage.message boundingRectWithSize:CGSizeMake(310,CGFLOAT_MAX)
+                                                                  options:NSStringDrawingUsesLineFragmentOrigin
+                                                               attributes:@{NSFontAttributeName:ISMSRegularFont(20)}
+                                                                  context:nil].size;
 	if (expectedLabelSize.height < 40)
 		expectedLabelSize.height = 40;
 	return (expectedLabelSize.height + 20);

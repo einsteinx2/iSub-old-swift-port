@@ -35,14 +35,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -124,7 +119,6 @@
 	self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Cached", @"Downloading"]];
 	[self.segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
 	
-	self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
 	self.segmentedControl.frame = CGRectMake(5, 5, 310, 36);
 	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     if (IS_IOS7())
@@ -152,7 +146,7 @@
 		self.playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth;
 		self.playAllLabel.backgroundColor = [UIColor clearColor];
 		self.playAllLabel.textColor = ISMSHeaderButtonColor;
-		self.playAllLabel.textAlignment = UITextAlignmentCenter;
+		self.playAllLabel.textAlignment = NSTextAlignmentCenter;
 		self.playAllLabel.font = ISMSRegularFont(24);
 		self.playAllLabel.text = @"Play All";
 		[self.headerView2 addSubview:self.playAllLabel];
@@ -167,7 +161,7 @@
 		self.shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 		self.shuffleLabel.backgroundColor = [UIColor clearColor];
 		self.shuffleLabel.textColor = ISMSHeaderButtonColor;
-		self.shuffleLabel.textAlignment = UITextAlignmentCenter;
+		self.shuffleLabel.textAlignment = NSTextAlignmentCenter;
 		self.shuffleLabel.font = ISMSRegularFont(24);
 		self.shuffleLabel.text = @"Shuffle";
 		[self.headerView2 addSubview:self.shuffleLabel];
@@ -685,7 +679,7 @@
 		self.songsCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.songsCountLabel.backgroundColor = [UIColor clearColor];
 		self.songsCountLabel.textColor = [UIColor whiteColor];
-		self.songsCountLabel.textAlignment = UITextAlignmentCenter;
+		self.songsCountLabel.textAlignment = NSTextAlignmentCenter;
 		self.songsCountLabel.font = ISMSBoldFont(22);
 		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
@@ -708,7 +702,7 @@
 		self.cacheSizeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.cacheSizeLabel.backgroundColor = [UIColor clearColor];
 		self.cacheSizeLabel.textColor = [UIColor whiteColor];
-		self.cacheSizeLabel.textAlignment = UITextAlignmentCenter;
+		self.cacheSizeLabel.textAlignment = NSTextAlignmentCenter;
 		self.cacheSizeLabel.font = ISMSBoldFont(12);
 		if (self.segmentedControl.selectedSegmentIndex == 0)
 		{
@@ -744,7 +738,7 @@
 		self.editSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		self.editSongsLabel.backgroundColor = [UIColor clearColor];
 		self.editSongsLabel.textColor = [UIColor whiteColor];
-		self.editSongsLabel.textAlignment = UITextAlignmentCenter;
+		self.editSongsLabel.textAlignment = NSTextAlignmentCenter;
 		self.editSongsLabel.font = ISMSBoldFont(22);
 		self.editSongsLabel.text = @"Edit";
 		[self.headerView addSubview:self.editSongsLabel];
@@ -759,10 +753,10 @@
 		self.deleteSongsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.deleteSongsLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
 		self.deleteSongsLabel.textColor = [UIColor whiteColor];
-		self.deleteSongsLabel.textAlignment = UITextAlignmentCenter;
+		self.deleteSongsLabel.textAlignment = NSTextAlignmentCenter;
 		self.deleteSongsLabel.font = ISMSBoldFont(22);
 		self.deleteSongsLabel.adjustsFontSizeToFitWidth = YES;
-		self.deleteSongsLabel.minimumFontSize = 12;
+		self.deleteSongsLabel.minimumScaleFactor = 12.0 / self.deleteSongsLabel.font.pointSize;
 		self.deleteSongsLabel.text = @"Delete # Songs";
 		self.deleteSongsLabel.hidden = YES;
 		[self.headerView addSubview:self.deleteSongsLabel];
@@ -779,7 +773,7 @@
 			self.playAllLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 			self.playAllLabel.backgroundColor = [UIColor clearColor];
 			self.playAllLabel.textColor = ISMSHeaderButtonColor;
-			self.playAllLabel.textAlignment = UITextAlignmentCenter;
+			self.playAllLabel.textAlignment = NSTextAlignmentCenter;
 			self.playAllLabel.font = ISMSRegularFont(24);
 			self.playAllLabel.text = @"Play All";
 			[self.headerView2 addSubview:self.playAllLabel];
@@ -794,7 +788,7 @@
 			self.shuffleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
 			self.shuffleLabel.backgroundColor = [UIColor clearColor];
 			self.shuffleLabel.textColor = ISMSHeaderButtonColor;
-			self.shuffleLabel.textAlignment = UITextAlignmentCenter;
+			self.shuffleLabel.textAlignment = NSTextAlignmentCenter;
 			self.shuffleLabel.font = ISMSRegularFont(24);
 			self.shuffleLabel.text = @"Shuffle";
 			[self.headerView2 addSubview:self.shuffleLabel];
@@ -838,7 +832,7 @@
 		textLabel.backgroundColor = [UIColor clearColor];
 		textLabel.textColor = [UIColor whiteColor];
 		textLabel.font = ISMSBoldFont(30);
-		textLabel.textAlignment = UITextAlignmentCenter;
+		textLabel.textAlignment = NSTextAlignmentCenter;
 		textLabel.numberOfLines = 0;
 		if (settingsS.isCacheUnlocked)
 		{
@@ -862,7 +856,7 @@
 			textLabel2.backgroundColor = [UIColor clearColor];
 			textLabel2.textColor = [UIColor whiteColor];
 			textLabel2.font = ISMSBoldFont(14);
-			textLabel2.textAlignment = UITextAlignmentCenter;
+			textLabel2.textAlignment = NSTextAlignmentCenter;
 			textLabel2.numberOfLines = 0;
 			textLabel2.text = @"Tap to purchase the ability to cache songs for better streaming performance and offline playback";
 			textLabel2.frame = CGRectMake(20, 90, 200, 70);

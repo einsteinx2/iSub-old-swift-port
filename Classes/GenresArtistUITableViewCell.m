@@ -30,7 +30,7 @@
 		
 		artistNameLabel = [[UILabel alloc] init];
 		artistNameLabel.backgroundColor = [UIColor clearColor];
-		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
+		artistNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		artistNameLabel.font = ISMSArtistFont;
 		[artistNameScrollView addSubview:artistNameLabel];
 	}
@@ -47,7 +47,10 @@
 	
 	// Automatically set the width based on the width of the text
 	self.artistNameLabel.frame = CGRectMake(0, 0, 250, 44);
-	CGSize expectedLabelSize = [self.artistNameLabel.text sizeWithFont:self.artistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:self.artistNameLabel.lineBreakMode]; 
+    CGSize expectedLabelSize = [self.artistNameLabel.text boundingRectWithSize:CGSizeMake(1000,44)
+                                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                                   attributes:@{NSFontAttributeName:self.artistNameLabel.font}
+                                                                      context:nil].size;
 	CGRect newFrame = self.artistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	self.artistNameLabel.frame = newFrame;

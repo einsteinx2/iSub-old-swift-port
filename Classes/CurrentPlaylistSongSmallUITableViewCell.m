@@ -25,12 +25,12 @@
 		numberLabel = [[UILabel alloc] init];
 		numberLabel.frame = CGRectMake(2, 0, 40, 45);
 		numberLabel.backgroundColor = [UIColor clearColor];
-		numberLabel.textAlignment = UITextAlignmentCenter;
+		numberLabel.textAlignment = NSTextAlignmentCenter;
 		numberLabel.textColor = [UIColor whiteColor];
         numberLabel.highlightedTextColor = [UIColor blackColor];
 		numberLabel.font = ISMSBoldFont(24);
 		numberLabel.adjustsFontSizeToFitWidth = YES;
-		numberLabel.minimumFontSize = 12;
+		numberLabel.minimumScaleFactor = 12.0 / numberLabel.font.pointSize;
 		[self.contentView addSubview:numberLabel];
 		
 		nowPlayingImageView = [[UIImageView alloc] initWithImage:self.nowPlayingImageWhite];
@@ -43,7 +43,7 @@
 		songNameLabel.frame = CGRectMake(45, 0, 235, 30);
 		songNameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		songNameLabel.backgroundColor = [UIColor clearColor];
-		songNameLabel.textAlignment = UITextAlignmentLeft; // default
+		songNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		songNameLabel.textColor = [UIColor whiteColor];
         songNameLabel.highlightedTextColor = [UIColor blackColor];
 		songNameLabel.font = ISMSSongFont;
@@ -54,7 +54,7 @@
 		artistNameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		artistNameLabel.backgroundColor = [UIColor clearColor];
         artistNameLabel.highlightedTextColor = [UIColor blackColor];
-		artistNameLabel.textAlignment = UITextAlignmentLeft; // default
+		artistNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		artistNameLabel.textColor = [UIColor whiteColor];
 		artistNameLabel.font = ISMSRegularFont(12);
 		[self.contentView addSubview:artistNameLabel];
@@ -63,12 +63,12 @@
 		durationLabel.frame = CGRectMake(270, 0, 45, 41);
 		durationLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		durationLabel.backgroundColor = [UIColor clearColor];
-		durationLabel.textAlignment = UITextAlignmentRight; // default
+		durationLabel.textAlignment = NSTextAlignmentRight; // default
 		durationLabel.textColor = [UIColor whiteColor];
         durationLabel.highlightedTextColor = [UIColor blackColor];
 		durationLabel.font = ISMSRegularFont(16);
 		durationLabel.adjustsFontSizeToFitWidth = YES;
-		durationLabel.minimumFontSize = 12;
+		durationLabel.minimumScaleFactor = 12.0 / durationLabel.font.pointSize;
 		[self.contentView addSubview:durationLabel];
 	}
 	

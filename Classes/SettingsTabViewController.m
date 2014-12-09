@@ -23,14 +23,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -750,7 +745,7 @@
     }
     else
     {
-        [account requestAccessToAccountsWithType:accountType withCompletionHandler:^(BOOL granted, NSError *error)
+        [account requestAccessToAccountsWithType:accountType options:nil completion:^(BOOL granted, NSError *error)
         {
             if (granted == YES)
             {
@@ -774,7 +769,7 @@
                                   [self reloadTwitterUIElements];
                               }
                           }];
-                         [self.parentController.navigationController presentModalViewController:chooser animated:YES];
+                         [self.parentController.navigationController presentViewController:chooser animated:YES completion:nil];
                      }
                      else
                      {

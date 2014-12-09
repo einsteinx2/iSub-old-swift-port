@@ -37,7 +37,7 @@
 		
 		playlistNameLabel = [[UILabel alloc] init];
 		playlistNameLabel.backgroundColor = [UIColor clearColor];
-		playlistNameLabel.textAlignment = UITextAlignmentLeft; // default
+		playlistNameLabel.textAlignment = NSTextAlignmentLeft; // default
 		playlistNameLabel.font = ISMSBoldFont(20);
 		[playlistNameScrollView addSubview:playlistNameLabel];
     }
@@ -53,7 +53,10 @@
 	
 	// Automatically set the width based on the width of the text
 	self.playlistNameLabel.frame = CGRectMake(0, 0, 290, 44);
-	CGSize expectedLabelSize = [self.playlistNameLabel.text sizeWithFont:self.playlistNameLabel.font constrainedToSize:CGSizeMake(1000,44) lineBreakMode:self.playlistNameLabel.lineBreakMode]; 
+    CGSize expectedLabelSize = [self.playlistNameLabel.text boundingRectWithSize:CGSizeMake(1000,44)
+                                                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                                                      attributes:@{NSFontAttributeName:self.playlistNameLabel.font}
+                                                                         context:nil].size;
 	CGRect newFrame = self.playlistNameLabel.frame;
 	newFrame.size.width = expectedLabelSize.width;
 	self.playlistNameLabel.frame = newFrame;

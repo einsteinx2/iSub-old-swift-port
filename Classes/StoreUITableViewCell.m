@@ -26,7 +26,7 @@
 		_titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		_titleLabel.font = ISMSBoldFont(20);
 		_titleLabel.textColor = [UIColor blackColor];
-		_titleLabel.textAlignment = UITextAlignmentLeft;
+		_titleLabel.textAlignment = NSTextAlignmentLeft;
 		[self.contentView addSubview:_titleLabel];
 		
 		_descLabel = [[UILabel alloc] init];
@@ -34,7 +34,7 @@
 		_descLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		_descLabel.font = ISMSRegularFont(14);
 		_descLabel.textColor = [UIColor grayColor];
-		_descLabel.textAlignment = UITextAlignmentLeft;
+		_descLabel.textAlignment = NSTextAlignmentLeft;
 		_descLabel.numberOfLines = 0;
 		[self.contentView addSubview:_descLabel];
 		
@@ -43,7 +43,7 @@
 		_priceLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		_priceLabel.font = ISMSBoldFont(20);
 		_priceLabel.textColor = [UIColor redColor];
-		_priceLabel.textAlignment = UITextAlignmentRight;
+		_priceLabel.textAlignment = NSTextAlignmentRight;
 		_priceLabel.adjustsFontSizeToFitWidth = YES;
 		[self.contentView addSubview:_priceLabel];
 	}

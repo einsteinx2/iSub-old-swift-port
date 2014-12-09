@@ -18,14 +18,9 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)inOrientation 
-{
-	if (settingsS.isRotationLockEnabled && inOrientation != UIInterfaceOrientationPortrait)
-		return NO;
-	
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
     return YES;
 }
 
@@ -104,7 +99,7 @@
 		textLabel.backgroundColor = [UIColor clearColor];
 		textLabel.textColor = [UIColor whiteColor];
 		textLabel.font = ISMSBoldFont(30);
-		textLabel.textAlignment = UITextAlignmentCenter;
+		textLabel.textAlignment = NSTextAlignmentCenter;
 		textLabel.numberOfLines = 0;
 		if (settingsS.isOfflineMode) {
 			[textLabel setText:@"No Offline\nBookmarks"];
@@ -128,7 +123,7 @@
 		self.bookmarkCountLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.bookmarkCountLabel.backgroundColor = [UIColor clearColor];
 		self.bookmarkCountLabel.textColor = [UIColor whiteColor];
-		self.bookmarkCountLabel.textAlignment = UITextAlignmentCenter;
+		self.bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
 		self.bookmarkCountLabel.font = ISMSBoldFont(22);
 		if (bookmarksCount == 1)
 			self.bookmarkCountLabel.text = [NSString stringWithFormat:@"1 Bookmark"];
@@ -146,7 +141,7 @@
 		self.editBookmarksLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
 		self.editBookmarksLabel.backgroundColor = [UIColor clearColor];
 		self.editBookmarksLabel.textColor = [UIColor whiteColor];
-		self.editBookmarksLabel.textAlignment = UITextAlignmentCenter;
+		self.editBookmarksLabel.textAlignment = NSTextAlignmentCenter;
 		self.editBookmarksLabel.font = ISMSBoldFont(22);
 		self.editBookmarksLabel.text = @"Edit";
 		[self.headerView addSubview:self.editBookmarksLabel];
@@ -161,10 +156,10 @@
 		self.deleteBookmarksLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
 		self.deleteBookmarksLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:.5];
 		self.deleteBookmarksLabel.textColor = [UIColor whiteColor];
-		self.deleteBookmarksLabel.textAlignment = UITextAlignmentCenter;
+		self.deleteBookmarksLabel.textAlignment = NSTextAlignmentCenter;
 		self.deleteBookmarksLabel.font = ISMSBoldFont(22);
 		self.deleteBookmarksLabel.adjustsFontSizeToFitWidth = YES;
-		self.deleteBookmarksLabel.minimumFontSize = 12;
+		self.deleteBookmarksLabel.minimumScaleFactor = 12.0 / self.deleteBookmarksLabel.font.pointSize;
 		self.deleteBookmarksLabel.text = @"Remove # Bookmarks";
 		self.deleteBookmarksLabel.hidden = YES;
 		[self.headerView addSubview:self.deleteBookmarksLabel];
