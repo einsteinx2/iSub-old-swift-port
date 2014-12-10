@@ -225,7 +225,10 @@
 }
 
 - (void)switchServer:(NSNotification*)notification 
-{	
+{
+    // Save the url string first because the other settings in the if block below are saved using the url
+    settingsS.urlString = viewObjectsS.serverToEdit.url;
+
 	if (notification.userInfo)
 	{
 		self.theNewRedirectionUrl = [notification.userInfo objectForKey:@"theNewRedirectUrl"];
@@ -243,7 +246,6 @@
 	
 	// Update the variables
 	settingsS.serverType = viewObjectsS.serverToEdit.type;
-	settingsS.urlString = viewObjectsS.serverToEdit.url;
 	settingsS.username = viewObjectsS.serverToEdit.username;
 	settingsS.password = viewObjectsS.serverToEdit.password;
     settingsS.uuid = viewObjectsS.serverToEdit.uuid;
