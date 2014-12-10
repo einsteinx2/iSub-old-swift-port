@@ -24,11 +24,23 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "ServerListViewController.h"
 
-#define kCellText @"CellText"
-#define kCellImage @"CellImage"
+@interface MenuTableItem : NSObject
+@property (nonatomic, strong) UIImage *image;
+@property (nonatomic, copy) NSString *text;
++ (instancetype)itemWithImageName:(NSString *)imageName text:(NSString *)text;
+@end
+
+@implementation MenuTableItem
++ (instancetype)itemWithImageName:(NSString *)imageName text:(NSString *)text
+{
+    MenuTableItem *item = [[MenuTableItem alloc] init];
+    item.image = [UIImage imageNamed:imageName];
+    item.text = text;
+    return item;
+}
+@end
 
 @implementation MenuViewController
-@synthesize tableView, cellContents, isFirstLoad, lastSelectedRow, playerHolder, playerController, playerNavController;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -44,49 +56,60 @@
 {
     if (self = [super init])
 	{
-		[self.view setFrame:frame];
+        UIView *view = self.view;
+        
+		[view setFrame:frame];
 		
 		// Create the background color
-		UIView *background = [[UIView alloc] initWithFrame:self.view.frame];
+		UIView *background = [[UIView alloc] initWithFrame:view.frame];
 		background.backgroundColor = [UIColor darkGrayColor];
-		UIView *shade = [[UIView alloc] initWithFrame:self.view.frame];
+		UIView *shade = [[UIView alloc] initWithFrame:view.frame];
 		shade.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
 		[background addSubview:shade];
-		[self.view addSubview:background];
+		[view addSubview:background];
         
-        playerHolder = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 440)];
-        playerHolder.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        playerHolder.bottom = self.view.bottom;
-        [self.view addSubview:playerHolder];
-		
-		playerController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-		playerNavController = [[CustomUINavigationController alloc] initWithRootViewController:playerController];
-		playerNavController.view.frame = CGRectMake(0, 0, 320, 440);
-        if (IS_IOS7())
-            playerNavController.navigationBar.barTintColor = [UIColor blackColor];
-        else
-            playerNavController.navigationBar.tintColor = [UIColor blackColor];
-        [self.playerHolder addSubview:playerNavController.view];
-		
-		// Create the menu
-		[self loadCellContents];
-		tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? 565. : 585.) style:UITableViewStylePlain];
-		tableView.delegate = self;
-		tableView.dataSource = self;
-		tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-		tableView.backgroundColor = [UIColor clearColor];
-		tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-		
-		// Create the header and footer
-		UIView *headerView = [self createHeaderView:NO];
-		UIView *footerView = [self createFooterView];
-		self.tableView.tableHeaderView = headerView;
-		self.tableView.tableFooterView = footerView;
+        // Create the menu
+        [self loadCellContents];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, view.width, 300) style:UITableViewStylePlain];
+        _tableView.translatesAutoresizingMaskIntoConstraints = NO;
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.tableHeaderView = [self createHeaderView:NO];
+        _tableView.tableFooterView = [self createFooterView];
+        [view addSubview:_tableView];
+        
+        // Create the player holder
+        _playerHolder = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 440)];
+        _playerHolder.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.view addSubview:_playerHolder];
+        
+        // Create the player
+		_playerController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+		_playerNavController = [[CustomUINavigationController alloc] initWithRootViewController:_playerController];
+        _playerNavController.view.frame = _playerHolder.frame;
+        _playerNavController.view.translatesAutoresizingMaskIntoConstraints = YES;
+        _playerNavController.view.autoresizingMask = UIViewAutoresizingNone;
+        _playerNavController.navigationBar.barTintColor = [UIColor blackColor];
+        [_playerHolder addSubview:_playerNavController.view];
 				
-		isFirstLoad = YES;
-		lastSelectedRow = NSIntegerMax;
-	
-		[self.view addSubview:tableView];
+		_isFirstLoad = YES;
+		_lastSelectedRow = NSIntegerMax;
+        
+        NSDictionary *views = NSDictionaryOfVariableBindings(_tableView, _playerHolder);
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_tableView][_playerHolder(440.0)]|"
+                                                                     options:0
+                                                                     metrics:nil
+                                                                       views:views]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[_tableView]|"
+                                                                     options:0
+                                                                     metrics:nil
+                                                                       views:views]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[_playerHolder]|"
+                                                                     options:0
+                                                                     metrics:nil
+                                                                       views:views]];
 	}
     return self;
 }
@@ -120,18 +143,16 @@
 		[headerView addSubview:textLabel];
 	}
 	
-	UIView* bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 1)];//69, self.view.width, 1)];
+	UIView* bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 1)];
 	bottomLine.backgroundColor = [UIColor colorWithWhite:0. alpha:0.25];
 	[headerView addSubview:bottomLine];
 	
-	//self.tableView.tableHeaderView = headerView;
-	//[headerView release];
 	return headerView;
 }
 
 - (UIView *)createFooterView
 {
-	UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 1)];//80)];
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 1)];
 	
 	UIView* topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 1)];
 	topLine.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.25];
@@ -142,17 +163,16 @@
 	watermark.image = [UIImage imageNamed:@"intro-sunkenlogo.png"];
 	[footerView addSubview:watermark];
 	
-	//self.tableView.tableFooterView = footerView;
-	//[footerView release];
 	return footerView;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-	if (self.isFirstLoad)
+    
+	if (_isFirstLoad)
 	{
-		self.isFirstLoad = NO;
+		_isFirstLoad = NO;
 		[self showHome];
 	}
 }
@@ -167,59 +187,60 @@
 
 - (void)loadCellContents
 {
-	self.tableView.scrollEnabled = NO;
+	_tableView.scrollEnabled = NO;
 	
-	self.cellContents = [NSMutableArray arrayWithCapacity:10];
+	_cellContents = [NSMutableArray arrayWithCapacity:10];
 	
     if (appDelegateS.referringAppUrl)
     {
-        [self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"back-tabbaricon.png"], kCellImage, @"Back", kCellText, nil]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"back-tabbaricon.png" text:@"Back"]];
     }
     
 	if (settingsS.isOfflineMode)
 	{
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"settings-tabbaricon.png"], kCellImage, @"Settings", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"folders-tabbaricon.png"], kCellImage, @"Folders", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"genres-tabbaricon.png"], kCellImage, @"Genres", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"playlists-tabbaricon.png"], kCellImage, @"Playlists", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"bookmarks-tabbaricon.png"], kCellImage, @"Bookmarks", kCellText, nil]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"settings-tabbaricon.png"    text:@"Settings"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"folders-tabbaricon.png"     text:@"Folders"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"genres-tabbaricon.png"      text:@"Genres"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"playlists-tabbaricon.png"   text:@"Playlists"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"bookmarks-tabbaricon.png"   text:@"Bookmarks"]];
 	}
 	else
 	{
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"settings-tabbaricon.png"], kCellImage, @"Settings", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"home-tabbaricon.png"], kCellImage, @"Home", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"folders-tabbaricon.png"], kCellImage, @"Folders", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"playlists-tabbaricon.png"], kCellImage, @"Playlists", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"playing-tabbaricon.png"], kCellImage, @"Now Playing", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"bookmarks-tabbaricon.png"], kCellImage, @"Bookmarks", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"cache-tabbaricon.png"], kCellImage, @"Cache", kCellText, nil]];
-		[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"chat-tabbaricon.png"], kCellImage, @"Chat", kCellText, nil]];
-		
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"settings-tabbaricon.png"    text:@"Settings"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"home-tabbaricon.png"        text:@"Home"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"folders-tabbaricon.png"     text:@"Folders"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"playlists-tabbaricon.png"   text:@"Playlists"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"playing-tabbaricon.png"     text:@"Playing"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"bookmarks-tabbaricon.png"   text:@"Bookmarks"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"cache-tabbaricon.png"       text:@"Cache"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"chat-tabbaricon.png"        text:@"Chat"]];
+
 		if (settingsS.isSongsTabEnabled)
 		{
-			self.tableView.scrollEnabled = YES;
-			[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"genres-tabbaricon.png"], kCellImage, @"Genres", kCellText, nil]];
-			[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"albums-tabbaricon.png"], kCellImage, @"Albums", kCellText, nil]];
-			[self.cellContents addObject:[NSDictionary dictionaryWithObjectsAndKeys:[UIImage imageNamed:@"songs-tabbaricon.png"], kCellImage, @"Songs", kCellText, nil]];
+			_tableView.scrollEnabled = YES;
+            [_cellContents addObject:[MenuTableItem itemWithImageName:@"genres-tabbaricon.png"   text:@"Genres"]];
+            [_cellContents addObject:[MenuTableItem itemWithImageName:@"albums-tabbaricon.png"   text:@"Albums"]];
+            [_cellContents addObject:[MenuTableItem itemWithImageName:@"songs-tabbaricon.png"    text:@"Songs"]];
 		}
 	}
 	
-	[self.tableView reloadData];    
+	[_tableView reloadData];
 }
 
 - (void)showSettings
 {
-	[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-	[self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+	[_tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+	[self tableView:_tableView didSelectRowAtIndexPath:indexPath];
 }
 
 - (void)showHome
 {
-	//[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-	//[self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-	
-	[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-	[self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+    
+    [_tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+	[self tableView:_tableView didSelectRowAtIndexPath:indexPath];
 }
 
 #pragma mark - Table view data source
@@ -231,20 +252,21 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-    return self.cellContents.count;
+    return _cellContents.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
     static NSString *cellIdentifier = @"MenuTableViewCell";
-	MenuTableViewCell *cell = (MenuTableViewCell*)[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	MenuTableViewCell *cell = (MenuTableViewCell*)[_tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) 
 	{
         cell = [[MenuTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-	
-	cell.textLabel.text = [[self.cellContents objectAtIndex:indexPath.row] objectForKey:kCellText];
-	cell.imageView.image = [[self.cellContents objectAtIndex:indexPath.row] objectForKey:kCellImage];
+    
+    MenuTableItem *item = _cellContents[indexPath.row];
+    cell.textLabel.text = item.text;
+	cell.imageView.image = item.image;
 	cell.glowView.hidden = YES;
 	cell.imageView.alpha = 0.6;
 
@@ -264,8 +286,10 @@
         if (indexPath.row == 0)
         {
             // Fix the cell highlighting
-            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.lastSelectedRow inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [_tableView deselectRowAtIndexPath:indexPath animated:NO];
+            [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:_lastSelectedRow inSection:0]
+                                    animated:NO
+                              scrollPosition:UITableViewScrollPositionNone];
             
             // Go back to the other app
             [[UIApplication sharedApplication] openURL:appDelegateS.referringAppUrl];
@@ -275,13 +299,15 @@
 	
 	// Set the tabel cell glow
 	//
-	for (MenuTableViewCell *cell in self.tableView.visibleCells)
+	for (MenuTableViewCell *cell in _tableView.visibleCells)
 	{
 		cell.glowView.hidden = YES;
 		cell.imageView.alpha = 0.6;
 	}
-	[[(MenuTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath] glowView] setHidden:NO];
-	[self.tableView cellForRowAtIndexPath:indexPath].imageView.alpha = 1.0;
+    
+    MenuTableViewCell *selectedCell = (MenuTableViewCell *)[_tableView cellForRowAtIndexPath:indexPath];
+	[selectedCell glowView].hidden = NO;
+	selectedCell.imageView.alpha = 1.0;
 		
 	[self performSelector:@selector(showControllerForIndexPath:) withObject:indexPath afterDelay:0.05];
 }
@@ -345,9 +371,13 @@
 	controller.view.width = ISMSiPadViewWidth;
 	controller.view.layer.cornerRadius = ISMSiPadCornerRadius;
 	controller.view.layer.masksToBounds = YES;
-	[[iSubAppDelegate sharedInstance].ipadRootViewController.stackScrollViewController addViewInSlider:controller invokeByController:self isStackStartView:YES];
+    
+    StackScrollViewController *stackScrollViewController = [iSubAppDelegate sharedInstance].ipadRootViewController.stackScrollViewController;
+	[stackScrollViewController addViewInSlider:controller
+                            invokeByController:self
+                              isStackStartView:YES];
 	
-	self.lastSelectedRow = indexPath.row;
+    _lastSelectedRow = indexPath.row;
 }
 
 #pragma mark - Memory management

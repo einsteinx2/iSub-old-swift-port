@@ -11,13 +11,13 @@
 @class iPhoneStreamingPlayerViewController;
 @interface MenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> 
 
-@property (strong) UITableView *tableView;
-@property (strong) UIView *playerHolder;
-@property (strong) UINavigationController *playerNavController;
-@property (strong) iPhoneStreamingPlayerViewController *playerController;
-@property (strong) NSMutableArray *cellContents;
-@property BOOL isFirstLoad;
-@property NSUInteger lastSelectedRow;
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UIView *playerHolder;
+@property (strong, nonatomic) UINavigationController *playerNavController;
+@property (strong, nonatomic) iPhoneStreamingPlayerViewController *playerController;
+@property (strong, nonatomic) NSMutableArray *cellContents;
+@property (nonatomic) BOOL isFirstLoad;
+@property (nonatomic) NSUInteger lastSelectedRow;
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)loadCellContents;
