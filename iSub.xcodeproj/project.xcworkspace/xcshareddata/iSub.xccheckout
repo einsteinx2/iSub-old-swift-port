@@ -112,6 +112,14 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9EB8DA420176E66DD13DE995CAB7884E375CF83A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>oauthconsumer</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>AA3724F8AD565DB2089C5757B6B76FDB09E52E51</string>
 			<key>IDESourceControlWCCName</key>
 			<string>SBJson</string>
