@@ -106,14 +106,6 @@
 		
 	self.tableView.separatorColor = [UIColor clearColor];
 	
-	if (settingsS.isOfflineMode)
-	{
-		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] 
-																				  style:UIBarButtonItemStyleBordered 
-																				 target:self 
-																				 action:@selector(settingsAction:)];
-	}
-	
 	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
 	self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
 	self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Cached", @"Downloading"]];
@@ -194,16 +186,6 @@
 	
 	if (IS_IPAD())
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
-}
-
-- (void)addURLRefBackButton
-{
-    if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
-    {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -252,9 +234,7 @@
 		colorView.backgroundColor = [UIColor blackColor];
 		colorView.alpha = 0.5;
 		[self.jukeboxInputBlocker addSubview:colorView];
-	}
-    
-    [self addURLRefBackButton];
+	}    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -354,13 +334,6 @@
 	StoreViewController *store = [[StoreViewController alloc] init];
 	//DLog(@"store: %@", store);
 	[self pushViewControllerCustom:store];
-}
-
-- (void)settingsAction:(id)sender 
-{
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
 }
 
 - (void)playAllAction:(id)sender

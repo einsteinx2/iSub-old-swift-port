@@ -17,6 +17,7 @@
 
 #pragma mark - Actions -
 
+- (void)settingsAction:(id)sender;
 - (void)nowPlayingAction:(id)sender;
 
 @end

@@ -44,7 +44,6 @@
 	self.tableView.separatorColor = [UIColor clearColor];
 	
 	self.title = @"Now Playing";
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	
 	self.dataModel = [[SUSNowPlayingDAO alloc] initWithDelegate:self];
 	
@@ -59,24 +58,12 @@
 	[self.tableView addSubview:self.refreshHeaderView];
 		
 	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
-}
-
-- (void)addURLRefBackButton
-{
-    if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
-    {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
-    
-    [self addURLRefBackButton];
-	
+    	
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
 	[self.dataModel startLoad];
@@ -104,18 +91,6 @@
 {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-}
-
-
-#pragma mark - Button Handling
-
-- (void) settingsAction:(id)sender 
-{
-	ServerListViewController *serverVC = [[ServerListViewController alloc] 
-										  initWithNibName:@"ServerListViewController" 
-												   bundle:nil];
-	serverVC.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverVC animated:YES];
 }
 
 

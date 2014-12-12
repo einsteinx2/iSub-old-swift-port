@@ -100,9 +100,6 @@
 	
     self.title = @"Playlists";
 	
-	if (settingsS.isOfflineMode)
-		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)];
-	
 	// Setup segmented control in the header view
 	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
 	self.headerView.backgroundColor = [UIColor colorWithWhite:.3 alpha:1];
@@ -133,24 +130,12 @@
 	
 	self.connectionQueue = [[EX2SimpleConnectionQueue alloc] init];
 	self.connectionQueue.delegate = self;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
-}
-
-- (void)addURLRefBackButton
-{
-    if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
-    {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
-		
-    [self addURLRefBackButton];
-	
+			
 	if (settingsS.isPlaylistUnlocked)
 	{
 		// Reload the data in case it changed
@@ -192,16 +177,6 @@
 {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-}
-
-
-#pragma mark - Button Handling
-
-- (void) settingsAction:(id)sender 
-{
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
 }
 
 

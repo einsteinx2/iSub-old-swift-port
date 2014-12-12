@@ -160,13 +160,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void) settingsAction:(id)sender 
-{
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
-}
-
 - (void)uploadPlaylistAction:(id)sender
 {	
 	NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(self.title), @"name", nil];

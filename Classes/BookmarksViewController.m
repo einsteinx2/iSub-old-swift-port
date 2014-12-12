@@ -43,33 +43,18 @@
 	
 	self.title = @"Bookmarks";
 	
-	if (settingsS.isOfflineMode)
-		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)];
-	
 	if (IS_IPAD())
 	{
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
 	
 	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
-}
-
-- (void)addURLRefBackButton
-{
-    if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
-    {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [self addURLRefBackButton];
-	
 	self.tableView.tableHeaderView = nil;
 	
 	if (self.isNoBookmarksScreenShowing == YES)
@@ -433,14 +418,6 @@
 {
 	return UITableViewCellEditingStyleNone;
 	//return UITableViewCellEditingStyleDelete;
-}
-
-
-- (void)settingsAction:(id)sender 
-{
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
 }
 
 

@@ -8,6 +8,7 @@
 
 #import "CustomUITableViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
+#import "ServerListViewController.h"
 
 @implementation CustomUITableViewController
 
@@ -19,6 +20,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxEnabled object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxDisabled object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupLeftBarButton) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -35,6 +37,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_JukeboxEnabled object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_JukeboxDisabled object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 #pragma mark - UI -
@@ -51,7 +54,31 @@
 
 - (void)setupLeftBarButton
 {
+    BOOL isRootViewController = self.navigationController.viewControllers[0] == self;
+    BOOL isInsideMoreTab = appDelegateS.mainTabBarController.selectedIndex == 4;
     
+    UIBarButtonItem *leftBarButtonItem = nil;
+    
+    if (isRootViewController)
+    {
+        if (settingsS.isOfflineMode)
+        {
+            leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"]
+                                                                 style:UIBarButtonItemStyleBordered
+                                                                target:self
+                                                                action:@selector(settingsAction:)];
+        }
+        else if (appDelegateS.referringAppUrl && !isInsideMoreTab)
+        {
+            // Add a back button to return to the reffering app if there is one and we're the root controller
+            leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                 style:UIBarButtonItemStyleBordered
+                                                                target:appDelegateS
+                                                                action:@selector(backToReferringApp)];
+        }
+    }
+    
+    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
 }
 
 - (void)setupRightBarButton
@@ -70,6 +97,13 @@
 }
 
 #pragma mark - Actions -
+
+- (void)settingsAction:(id)sender
+{
+    ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+    serverListViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:serverListViewController animated:YES];
+}
 
 - (void)nowPlayingAction:(id)sender
 {

@@ -49,7 +49,6 @@
     [super viewDidLoad];
 	
 	self.title = @"Songs";
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 
 	// Set defaults
 	self.isSearching = NO;
@@ -60,7 +59,6 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createDataModel) name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
 	
 	// Add the pull to refresh view
 	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
@@ -75,14 +73,6 @@
 	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
-- (void)addURLRefBackButton
-{
-    if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
-    {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
-    }
-}
-
 - (void)viewWillAppear:(BOOL)animated 
 {
 	[super viewWillAppear:animated];
@@ -93,9 +83,7 @@
 		[self showLoadingScreen];
 	}
 	else
-	{
-        [self addURLRefBackButton];
-		
+	{		
 		// Check if the data has been loaded
 		if (self.dataModel.isDataLoaded)
 		{
@@ -317,13 +305,6 @@
 	}
 }
 
-- (void)settingsAction:(id)sender 
-{
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
-}
-
 #pragma mark - UIAlertView delegate
 
 - (void)alertView:(CustomUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -472,7 +453,6 @@
 	self.isSearching = NO;
 	self.letUserSelectRow = YES;
 	self.navigationItem.leftBarButtonItem = nil;
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
 	self.tableView.scrollEnabled = YES;
 	
 	[self hideSearchOverlay];

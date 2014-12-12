@@ -37,12 +37,6 @@
 	
 	self.title = @"Genres";
 	
-	if (settingsS.isOfflineMode)
-		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)];
-	
-	//Set defaults
-	//letUserSelectRow = YES;
-	
 	if (IS_IPAD())
 	{
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
@@ -51,8 +45,6 @@
 	if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
 		
 	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addURLRefBackButton) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 
@@ -87,20 +79,10 @@
 	}
 }
 
-- (void)addURLRefBackButton
-{
-    if (appDelegateS.referringAppUrl && appDelegateS.mainTabBarController.selectedIndex != 4)
-    {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:appDelegateS action:@selector(backToReferringApp)];
-    }
-}
-
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
-    
-    [self addURLRefBackButton];
-	
+    	
 	if (settingsS.isOfflineMode)
 	{
 		if ([databaseS.songCacheDbQueue intForQuery:@"SELECT COUNT(*) FROM genres"] == 0)
@@ -127,14 +109,6 @@
 		[self.noGenresScreen removeFromSuperview];
 		self.isNoGenresScreenShowing = NO;
 	}
-}
-
-
-- (void) settingsAction:(id)sender 
-{
-	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-	serverListViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:serverListViewController animated:YES];
 }
 
 
