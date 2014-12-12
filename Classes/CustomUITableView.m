@@ -27,10 +27,7 @@
 	lastDeleteToggle = [NSDate date];
     self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     
-    if (IS_IOS7())
-    {
-        self.sectionIndexBackgroundColor = [UIColor clearColor];        
-    }
+    self.sectionIndexBackgroundColor = [UIColor clearColor];
 }
 
 - (id)initWithFrame:(CGRect)frame

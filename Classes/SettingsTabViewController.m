@@ -202,15 +202,11 @@
     self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex = settingsS.maxVideoBitrateWifi;
     
     // Fix switch positions for iOS 7
-    if (IS_IOS7())
+    for (UISwitch *sw in self.switches)
     {
-        for (UISwitch *sw in self.switches)
-        {
-            sw.x += 5.;
-        }
-        
-        self.autoDeleteCacheSwitch.x -= 10.;
+        sw.x += 5.;
     }
+    self.autoDeleteCacheSwitch.x -= 10.;
 }
 
 - (void)reloadTwitterUIElements

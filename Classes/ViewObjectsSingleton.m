@@ -249,16 +249,7 @@
 
 - (UIView *)createCellBackground:(NSUInteger)row
 {
-    if (IS_IOS7())
-    {
-        return [[UIView alloc] init];
-    }
-    else
-    {
-        UIView *backgroundView = [[UIView alloc] init];
-        backgroundView.backgroundColor = self.lightNormal;
-        return backgroundView;
-    }
+    return [[UIView alloc] init];
 }
 
 #pragma mark - Memory management

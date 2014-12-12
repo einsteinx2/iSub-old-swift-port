@@ -66,10 +66,7 @@
 	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.segmentedControl addTarget:self action:@selector(segmentAction:) forControlEvents:UIControlEventValueChanged];
 	self.segmentedControl.frame = CGRectMake(5, 2, 310, 36);
-    if (IS_IOS7())
-        self.segmentedControl.tintColor = ISMSHeaderColor;
-	else
-        self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
+    self.segmentedControl.tintColor = ISMSHeaderColor;
 	self.segmentedControl.selectedSegmentIndex = 0;
 	[self.headerView addSubview:self.segmentedControl];
 	

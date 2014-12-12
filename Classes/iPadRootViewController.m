@@ -106,12 +106,9 @@
 	self.view.backgroundColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.7];
 	[self.view addSubview:rootView];
     
-    // On iOS 7, don't let the status bar text cover the content
-    if (IS_IOS7())
-    {
-        self.rootView.height -= 20.;
-        self.rootView.y += 20.;
-    }
+    // Don't let the status bar text cover the content
+    self.rootView.height -= 20.;
+    self.rootView.y += 20.;
 }
 
 - (BOOL)shouldAutorotate

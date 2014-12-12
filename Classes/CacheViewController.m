@@ -113,10 +113,7 @@
 	
 	self.segmentedControl.frame = CGRectMake(5, 5, 310, 36);
 	self.segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    if (IS_IOS7())
-        self.segmentedControl.tintColor = ISMSHeaderColor;
-	else
-        self.segmentedControl.tintColor = [UIColor colorWithWhite:.57 alpha:1];
+    self.segmentedControl.tintColor = ISMSHeaderColor;
 	self.segmentedControl.selectedSegmentIndex = 0;
 	if (settingsS.isOfflineMode) 
 	{
