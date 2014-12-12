@@ -10,9 +10,11 @@
 #import "ChatUITableViewCell.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "EGORefreshTableHeaderView.h"
 
-@interface ChatViewController (Private)
+@interface ChatViewController ()
+{
+    BOOL _reloading;
+}
 - (void)dataSourceDidFinishLoadingNewData;
 @end
 
@@ -20,11 +22,10 @@
 @implementation ChatViewController
 
 @synthesize noChatMessagesScreen, chatMessages, lastCheck;
-@synthesize isReloading;
 @synthesize dataModel;
 @synthesize isNoChatMessagesScreenShowing;
 @synthesize headerView, textInput, chatMessageOverlay, dismissButton;
-@synthesize receivedData, refreshHeaderView;
+@synthesize receivedData;
 
 #pragma mark - Rotation
 
@@ -105,11 +106,6 @@
 	[self.headerView addSubview:sendButton];
 	
 	self.tableView.tableHeaderView = self.headerView;
-
-	// Add the pull to refresh view
-	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
-	[self.tableView addSubview:self.refreshHeaderView];
 	
 	if (IS_IPAD())
 	{
@@ -344,46 +340,26 @@
 
 #pragma mark - Pull to refresh methods
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{	
-	if (scrollView.isDragging) 
-	{
-		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.isReloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
-		} 
-		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.isReloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
-		}
-	}
+- (BOOL)shouldSetupRefreshControl
+{
+    return YES;
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+- (void)didPullToRefresh
 {
-	if (scrollView.contentOffset.y <= - 65.0f && !self.isReloading) 
+	if (!_reloading)
 	{
-		self.isReloading = YES;
+		_reloading = YES;
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 		[self loadData];
-		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-		[UIView commitAnimations];
 	}
 }
 
 - (void)dataSourceDidFinishLoadingNewData
 {
-	self.isReloading = NO;
+	_reloading = NO;
 	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-	[UIView commitAnimations];
-	
-	[self.refreshHeaderView setState:EGOOPullRefreshNormal];
+    [self.refreshControl endRefreshing];
 }
 
 - (void)dealloc 

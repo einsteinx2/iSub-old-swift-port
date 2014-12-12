@@ -11,13 +11,15 @@
 #import "AlbumUITableViewCell.h"
 #import "SongUITableViewCell.h"
 #import "AllSongsUITableViewCell.h"
-#import "EGORefreshTableHeaderView.h"
 #import "ModalAlbumArtViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iPadRootViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 
-@interface AlbumViewController (Private)
+@interface AlbumViewController ()
+{
+    BOOL _reloading;
+}
 - (void)dataSourceDidFinishLoadingNewData;
 - (void)addHeaderAndIndex;
 @end
@@ -29,8 +31,6 @@
 @synthesize dataModel;
 @synthesize playAllShuffleAllView;
 @synthesize albumInfoView, albumInfoArtHolderView, albumInfoArtView, albumInfoAlbumLabel, albumInfoArtistLabel, albumInfoDurationLabel, albumInfoLabelHolderView, albumInfoTrackCountLabel, albumInfoArtReflection;
-
-@synthesize isReloading, refreshHeaderView;
 
 - (BOOL)shouldAutorotate
 {
@@ -96,12 +96,6 @@
 	albumInfoArtView.delegate = self;
 	
 	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
-		
-	// Add the pull to refresh view
-	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
-	[self.tableView addSubview:self.refreshHeaderView];
-	
     
 	if (IS_IPAD())
 	{
@@ -151,6 +145,28 @@
 }
 
 #pragma mark Loading
+
+- (BOOL)shouldSetupRefreshControl
+{
+    return YES;
+}
+
+- (void)didPullToRefresh
+{
+    if (!_reloading)
+    {
+        _reloading = YES;
+        [viewObjectsS showAlbumLoadingScreen:self.view sender:self];
+        [self.dataModel startLoad];
+    }
+}
+
+- (void)dataSourceDidFinishLoadingNewData
+{
+    _reloading = NO;
+    
+    [self.refreshControl endRefreshing];
+}
 
 - (void)cancelLoad
 {
@@ -435,50 +451,6 @@
 	[self addHeaderAndIndex];
 	
 	[self dataSourceDidFinishLoadingNewData];
-}
-
-#pragma mark - Pull to refresh methods
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{	
-	if (scrollView.isDragging) 
-	{
-		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.isReloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
-		} 
-		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.isReloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
-		}
-	}
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-	if (scrollView.contentOffset.y <= - 65.0f && !self.isReloading) 
-	{
-		self.isReloading = YES;
-		[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
-		[self.dataModel startLoad];
-		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-		[UIView commitAnimations];
-	}
-}
-
-- (void)dataSourceDidFinishLoadingNewData
-{
-	self.isReloading = NO;
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-	[UIView commitAnimations];
-	
-	[refreshHeaderView setState:EGOOPullRefreshNormal];
 }
 
 @end

@@ -44,7 +44,6 @@
 @property (strong) NSMutableArray *listOfPlaylistSongs;
 @property (copy) NSString *localPlaylist;
 @property (strong) NSMutableArray *listOfLocalPlaylists;
-@property BOOL isLocalPlaylist;
 
 // Settings page objects
 //

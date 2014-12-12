@@ -10,7 +10,6 @@
 #import "PlayingUITableViewCell.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "EGORefreshTableHeaderView.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 @interface PlayingViewController (Private)
@@ -20,7 +19,7 @@
 @implementation PlayingViewController
 
 @synthesize nothingPlayingScreen, dataModel;
-@synthesize reloading, refreshHeaderView;
+@synthesize reloading;
 @synthesize isNothingPlayingScreenShowing, receivedData;
 
 #pragma mark - Rotation Handling
@@ -51,11 +50,6 @@
 	{
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
 	}
-	
-	// Add the pull to refresh view
-	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
-	[self.tableView addSubview:self.refreshHeaderView];
 		
 	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
@@ -225,33 +219,18 @@
 
 #pragma mark - Pull to refresh methods
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{	
-	if (scrollView.isDragging) 
-	{
-		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.reloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
-		} 
-		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.reloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
-		}
-	}
+- (BOOL)shouldSetupRefreshControl
+{
+    return YES;
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+- (void)didPullToRefresh
 {
-	if (scrollView.contentOffset.y <= - 65.0f && !self.reloading) 
+	if (!self.reloading)
 	{
 		self.reloading = YES;
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
 		[self.dataModel startLoad];
-		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-		[UIView commitAnimations];
 	}
 }
 
@@ -259,12 +238,7 @@
 {
 	self.reloading = NO;
 	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-	[UIView commitAnimations];
-	
-	[self.refreshHeaderView setState:EGOOPullRefreshNormal];
+    [self.refreshControl endRefreshing];
 }
 
 @end

@@ -7,7 +7,7 @@
 //
 
 
-@class ISMSSong, ISMSAlbum, SUSAllSongsDAO, LoadingScreen, EGORefreshTableHeaderView;
+@class ISMSSong, ISMSAlbum, SUSAllSongsDAO, LoadingScreen;
 
 @interface AllSongsViewController : CustomUITableViewController <UISearchBarDelegate, ISMSLoaderDelegate> 
 
@@ -22,8 +22,6 @@
 @property NSInteger numberOfRows;
 @property BOOL isSearching;
 @property BOOL isProcessingArtists;
-@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
-@property BOOL isReloading;
 @property (strong) UIView *searchOverlay;
 @property (strong) UIButton *dismissButton;
 @property (strong) SUSAllSongsDAO *dataModel;

@@ -21,6 +21,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxEnabled object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxDisabled object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupLeftBarButton) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [self setupRefreshControl];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -51,6 +53,8 @@
 {
     [self updateBackgroundColor];
 }
+
+#pragma mark Navigation Items
 
 - (void)setupLeftBarButton
 {
@@ -94,6 +98,34 @@
     }
     
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+}
+
+#pragma mark Pull to Refresh
+
+- (BOOL)shouldSetupRefreshControl
+{
+    return NO;
+}
+
+- (void)setupRefreshControl
+{
+    if ([self shouldSetupRefreshControl] && !self.refreshControl)
+    {
+        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+        UIColor *tintColor = [UIColor whiteColor];
+        refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull down to reload..."
+                                                                         attributes:@{NSForegroundColorAttributeName:tintColor}];
+        refreshControl.tintColor = tintColor;
+        [refreshControl addTarget:self
+                           action:@selector(didPullToRefresh)
+                 forControlEvents:UIControlEventValueChanged];
+        self.refreshControl = refreshControl;
+    }
+}
+
+- (void)didPullToRefresh
+{
+    NSAssert(NO, @"didPullToRefresh must be overridden");
 }
 
 #pragma mark - Actions -

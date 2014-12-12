@@ -6,12 +6,10 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class ISMSArtist, ISMSAlbum, EGORefreshTableHeaderView, SUSSubFolderDAO, AsynchronousImageView;
+@class ISMSArtist, ISMSAlbum, SUSSubFolderDAO, AsynchronousImageView;
 
 @interface AlbumViewController : CustomUITableViewController <ISMSLoaderDelegate, AsynchronousImageViewDelegate>
 
-@property (nonatomic, strong) EGORefreshTableHeaderView *refreshHeaderView;
-@property (nonatomic) BOOL isReloading;
 @property (nonatomic, copy) NSString *myId;
 @property (nonatomic, strong) ISMSArtist *myArtist;
 @property (nonatomic, strong) ISMSAlbum *myAlbum;

@@ -13,19 +13,21 @@
 #import "AllSongsUITableViewCell.h"
 #import "FoldersViewController.h"
 #import "CustomUITableView.h"
-#import "EGORefreshTableHeaderView.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "LoadingScreen.h"
 
-@interface AllSongsViewController (Private)
+@interface AllSongsViewController ()
+{
+    BOOL _reloading;
+}
 - (void)hideLoadingScreen;
 @end
 
 @implementation AllSongsViewController
 
 @synthesize headerView, sectionInfo, dataModel, loadingScreen;
-@synthesize reloadImage, reloadLabel, refreshHeaderView, reloadButton, reloadTimeLabel, countLabel;
-@synthesize letUserSelectRow, searchBar, numberOfRows, url, isSearching, isProcessingArtists, isReloading, searchOverlay, dismissButton;
+@synthesize reloadImage, reloadLabel, reloadButton, reloadTimeLabel, countLabel;
+@synthesize letUserSelectRow, searchBar, numberOfRows, url, isSearching, isProcessingArtists, searchOverlay, dismissButton;
 
 - (BOOL)shouldAutorotate
 {
@@ -59,11 +61,6 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createDataModel) name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];
-	
-	// Add the pull to refresh view
-	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
-	[self.tableView addSubview:self.refreshHeaderView];
 	
 	if (IS_IPAD())
 	{
@@ -649,48 +646,27 @@
 	}
 }
 
-#pragma mark -
-#pragma mark Pull to refresh methods
+#pragma mark - Pull to refresh methods
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{	
-	if (scrollView.isDragging) 
-	{
-		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.isReloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
-		} 
-		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.isReloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
-		}
-	}
+- (BOOL)shouldSetupRefreshControl
+{
+    return YES;
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+- (void)didPullToRefresh
 {
-	if (scrollView.contentOffset.y <= - 65.0f && !self.isReloading) 
+	if (!_reloading)
 	{
-		self.isReloading = YES;
+		_reloading = YES;
 		[self reloadAction:nil];
-		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-		[UIView commitAnimations];
 	}
 }
 
 - (void)dataSourceDidFinishLoadingNewData
 {
-	self.isReloading = NO;
+	_reloading = NO;
 	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-	[UIView commitAnimations];
-	
-	[refreshHeaderView setState:EGOOPullRefreshNormal];
+    [self.refreshControl endRefreshing];
 }
 
 @end

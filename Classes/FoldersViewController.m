@@ -11,17 +11,17 @@
 #import "ServerListViewController.h"
 #import "AlbumViewController.h"
 #import "ArtistUITableViewCell.h"
-#import "EGORefreshTableHeaderView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FolderDropdownControl.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
-@interface FoldersViewController (Private)
-
+@interface FoldersViewController ()
+{
+    BOOL _reloading;
+}
 - (void)dataSourceDidFinishLoadingNewData;
 - (void)addCount;
 - (void)loadData:(NSNumber *)folderId;
-
 @end
 
 @implementation FoldersViewController
@@ -29,7 +29,6 @@
 @synthesize searchBar, headerView;
 @synthesize isSearching;
 @synthesize dropdown;
-@synthesize isReloading, refreshHeaderView;
 @synthesize dataModel;
 @synthesize countLabel, reloadTimeLabel, blockerButton;
 @synthesize searchOverlay, dismissButton;
@@ -68,12 +67,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverSwitched) name:ISMSNotification_ServerSwitched object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFolders) name:ISMSNotification_ServerCheckPassed object:nil];
-		
-	// Add the pull to refresh view
-	self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-	self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
-	[self.tableView addSubview:self.refreshHeaderView];
-	
+    	
 	if (IS_IPAD())
 	{
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
@@ -124,6 +118,26 @@
 }
 
 #pragma mark - Loading
+
+- (BOOL)shouldSetupRefreshControl
+{
+    return YES;
+}
+
+- (void)didPullToRefresh
+{
+    if (!_reloading)
+    {
+        _reloading = YES;
+        [self loadData:[settingsS rootFoldersSelectedFolderId]];
+    }
+}
+
+- (void)dataSourceDidFinishLoadingNewData
+{
+    _reloading = NO;
+    [self.refreshControl endRefreshing];
+}
 
 - (void)updateCount
 {
@@ -654,53 +668,6 @@
 	{
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 	}
-}
-
-#pragma mark -
-#pragma mark Pull to refresh methods
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{	
-	if (scrollView.isDragging) 
-	{
-		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.isReloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
-		} 
-		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.isReloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
-		}
-	}
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-	if (scrollView.contentOffset.y <= - 65.0f && !self.isReloading) 
-	{
-		self.isReloading = YES;
-		[self loadData:[settingsS rootFoldersSelectedFolderId]];
-        if ([settingsS.serverType isEqualToString:SUBSONIC] || [settingsS.serverType isEqualToString:UBUNTU_ONE])
-        {
-            [self.refreshHeaderView setState:EGOOPullRefreshLoading];
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:0.2];
-            self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-            [UIView commitAnimations];
-        }
-	}
-}
-
-- (void)dataSourceDidFinishLoadingNewData
-{
-	self.isReloading = NO;
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-	[UIView commitAnimations];
-	
-	[self.refreshHeaderView setState:EGOOPullRefreshNormal];
 }
 
 @end

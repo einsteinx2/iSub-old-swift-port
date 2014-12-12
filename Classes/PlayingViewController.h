@@ -6,7 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class SUSNowPlayingDAO, EGORefreshTableHeaderView;
+@class SUSNowPlayingDAO;
 
 @interface PlayingViewController : CustomUITableViewController <ISMSLoaderDelegate>
 
@@ -14,7 +14,6 @@
 @property (nonatomic, strong) UIImageView *nothingPlayingScreen;
 @property (nonatomic, strong) NSMutableData *receivedData;
 @property (nonatomic, strong) SUSNowPlayingDAO *dataModel;
-@property (nonatomic, strong) EGORefreshTableHeaderView *refreshHeaderView;
 @property (nonatomic) BOOL reloading;
 
 - (void)cancelLoad;

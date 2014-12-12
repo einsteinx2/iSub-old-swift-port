@@ -7,11 +7,11 @@
 //
 
 
-@class EGORefreshTableHeaderView, SUSServerPlaylist;
+@class SUSServerPlaylist;
 
 @interface PlaylistSongsViewController : CustomUITableViewController
 
-@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
+@property (nonatomic, getter=isLocalPlaylist) BOOL localPlaylist;
 @property(nonatomic) BOOL reloading;
 @property (copy) NSString *md5;
 @property NSUInteger playlistCount;

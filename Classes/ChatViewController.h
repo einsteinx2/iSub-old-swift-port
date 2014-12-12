@@ -7,7 +7,7 @@
 //
 
 
-@class CustomUITextView, EGORefreshTableHeaderView, SUSChatDAO;
+@class CustomUITextView, SUSChatDAO;
 
 @interface ChatViewController : CustomUITableViewController <UITextViewDelegate, ISMSLoaderDelegate> 
 
@@ -19,8 +19,6 @@
 @property (strong) UIImageView *noChatMessagesScreen;
 @property (strong) NSMutableArray *chatMessages;
 @property (strong) NSMutableData *receivedData;
-@property (strong) EGORefreshTableHeaderView *refreshHeaderView;
-@property BOOL isReloading;
 @property NSInteger lastCheck;
 @property (strong) SUSChatDAO *dataModel;
 

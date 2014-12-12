@@ -16,7 +16,7 @@
 #import "StoreViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
-@interface PlaylistsViewController (Private)
+@interface PlaylistsViewController ()
 
 - (void)addNoPlaylistsScreen;
 
@@ -175,7 +175,6 @@
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 }
-
 
 #pragma mark -
 
@@ -465,9 +464,7 @@
 - (void)segmentAction:(id)sender
 {
 	if (segmentedControl.selectedSegmentIndex == 0)
-	{
-		viewObjectsS.isLocalPlaylist = YES;
-		
+	{		
 		// Get the current playlist count
 		self.currentPlaylistCount = [playlistS count];
 
@@ -517,8 +514,6 @@
 	}
 	else if(self.segmentedControl.selectedSegmentIndex == 1)
 	{
-		viewObjectsS.isLocalPlaylist = YES;
-		
 		// Clear the edit stuff if they switch tabs in the middle of editing
 		[self removeEditControls];
 		
@@ -547,8 +542,6 @@
 	}
 	else if(self.segmentedControl.selectedSegmentIndex == 2)
 	{
-		viewObjectsS.isLocalPlaylist = NO;
-		
 		// Clear the edit stuff if they switch tabs in the middle of editing
 		[self removeEditControls];
 		
@@ -1642,6 +1635,7 @@ static NSString *kName_Error = @"error";
 		else if (segmentedControl.selectedSegmentIndex == 1)
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
+            playlistSongsViewController.localPlaylist = YES;
 			playlistSongsViewController.md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
 			[self pushViewControllerCustom:playlistSongsViewController];
 		}

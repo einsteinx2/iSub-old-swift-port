@@ -203,14 +203,6 @@
 		53159DA6156F69D0001B0268 /* comment-write@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB800A121B9CA200BEE7E8 /* comment-write@2x.png */; };
 		53159DA8156F69D0001B0268 /* home-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4EC126FD20300CDB511 /* home-tabbaricon.png */; };
 		53159DA9156F69D0001B0268 /* home-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4ED126FD20300CDB511 /* home-tabbaricon@2x.png */; };
-		53159DAC156F69D0001B0268 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7A127D012300B745B4 /* blackArrow.png */; };
-		53159DAD156F69D0001B0268 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7B127D012300B745B4 /* blackArrow@2x.png */; };
-		53159DAE156F69D0001B0268 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7C127D012300B745B4 /* blueArrow.png */; };
-		53159DAF156F69D0001B0268 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7D127D012300B745B4 /* blueArrow@2x.png */; };
-		53159DB0156F69D0001B0268 /* grayArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7E127D012300B745B4 /* grayArrow.png */; };
-		53159DB1156F69D0001B0268 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7F127D012300B745B4 /* grayArrow@2x.png */; };
-		53159DB2156F69D0001B0268 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B80127D012300B745B4 /* whiteArrow.png */; };
-		53159DB3156F69D0001B0268 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B81127D012300B745B4 /* whiteArrow@2x.png */; };
 		53159DB8156F69D0001B0268 /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
 		53159DBB156F69D0001B0268 /* home-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC621297949A007BDC0E /* home-background.png */; };
 		53159DBC156F69D0001B0268 /* home-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC631297949A007BDC0E /* home-background@2x.png */; };
@@ -413,7 +405,6 @@
 		53159EA8156F69D0001B0268 /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
 		53159EAA156F69D0001B0268 /* SearchSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */; };
 		53159EAB156F69D0001B0268 /* SearchSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B71279FB6B00CAB0E0 /* SearchSongUITableViewCell.m */; };
-		53159EAC156F69D0001B0268 /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */; };
 		53159EAE156F69D0001B0268 /* NewHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA49411285BD7A0010B380 /* NewHomeViewController.m */; };
 		53159EAF156F69D0001B0268 /* QuickAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA497B1285D5B10010B380 /* QuickAlbumsViewController.m */; };
 		53159EB0156F69D0001B0268 /* CellOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FCC128E38E7005D2D65 /* CellOverlay.m */; };
@@ -491,15 +482,6 @@
 		5325910114EE22C700DF4BDB /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5325910014EE22C400DF4BDB /* MBProgressHUD.m */; };
 		5325910214EE22C700DF4BDB /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5325910014EE22C400DF4BDB /* MBProgressHUD.m */; };
 		5325910314EE22C700DF4BDB /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5325910014EE22C400DF4BDB /* MBProgressHUD.m */; };
-		53260B83127D012300B745B4 /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */; };
-		53260B84127D012300B745B4 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7A127D012300B745B4 /* blackArrow.png */; };
-		53260B85127D012300B745B4 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7B127D012300B745B4 /* blackArrow@2x.png */; };
-		53260B86127D012300B745B4 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7C127D012300B745B4 /* blueArrow.png */; };
-		53260B87127D012300B745B4 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7D127D012300B745B4 /* blueArrow@2x.png */; };
-		53260B88127D012300B745B4 /* grayArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7E127D012300B745B4 /* grayArrow.png */; };
-		53260B89127D012300B745B4 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7F127D012300B745B4 /* grayArrow@2x.png */; };
-		53260B8A127D012300B745B4 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B80127D012300B745B4 /* whiteArrow.png */; };
-		53260B8B127D012300B745B4 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B81127D012300B745B4 /* whiteArrow@2x.png */; };
 		5327A5D314DA1E4400DEE1B6 /* controller-extras.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D114DA1E4400DEE1B6 /* controller-extras.png */; };
 		5327A5D414DA1E4400DEE1B6 /* controller-extras.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D114DA1E4400DEE1B6 /* controller-extras.png */; };
 		5327A5D514DA1E4400DEE1B6 /* controller-extras.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D114DA1E4400DEE1B6 /* controller-extras.png */; };
@@ -1056,14 +1038,6 @@
 		53BC2711139AF0DD00A825F1 /* comment-write@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB800A121B9CA200BEE7E8 /* comment-write@2x.png */; };
 		53BC2713139AF0DD00A825F1 /* home-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4EC126FD20300CDB511 /* home-tabbaricon.png */; };
 		53BC2714139AF0DD00A825F1 /* home-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4ED126FD20300CDB511 /* home-tabbaricon@2x.png */; };
-		53BC2719139AF0DD00A825F1 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7A127D012300B745B4 /* blackArrow.png */; };
-		53BC271A139AF0DD00A825F1 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7B127D012300B745B4 /* blackArrow@2x.png */; };
-		53BC271B139AF0DD00A825F1 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7C127D012300B745B4 /* blueArrow.png */; };
-		53BC271C139AF0DD00A825F1 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7D127D012300B745B4 /* blueArrow@2x.png */; };
-		53BC271D139AF0DD00A825F1 /* grayArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7E127D012300B745B4 /* grayArrow.png */; };
-		53BC271E139AF0DD00A825F1 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7F127D012300B745B4 /* grayArrow@2x.png */; };
-		53BC271F139AF0DD00A825F1 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B80127D012300B745B4 /* whiteArrow.png */; };
-		53BC2720139AF0DD00A825F1 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B81127D012300B745B4 /* whiteArrow@2x.png */; };
 		53BC2726139AF0DD00A825F1 /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
 		53BC272A139AF0DD00A825F1 /* home-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC621297949A007BDC0E /* home-background.png */; };
 		53BC272B139AF0DD00A825F1 /* home-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC631297949A007BDC0E /* home-background@2x.png */; };
@@ -1207,7 +1181,6 @@
 		53BC2803139AF0DD00A825F1 /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
 		53BC280A139AF0DD00A825F1 /* SearchSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */; };
 		53BC280B139AF0DD00A825F1 /* SearchSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B71279FB6B00CAB0E0 /* SearchSongUITableViewCell.m */; };
-		53BC280D139AF0DD00A825F1 /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */; };
 		53BC280F139AF0DD00A825F1 /* NewHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA49411285BD7A0010B380 /* NewHomeViewController.m */; };
 		53BC2810139AF0DD00A825F1 /* QuickAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA497B1285D5B10010B380 /* QuickAlbumsViewController.m */; };
 		53BC2814139AF0DD00A825F1 /* CellOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FCC128E38E7005D2D65 /* CellOverlay.m */; };
@@ -1437,14 +1410,6 @@
 		53DCF46E13BFEAD3009160F9 /* comment-write@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB800A121B9CA200BEE7E8 /* comment-write@2x.png */; };
 		53DCF47013BFEAD3009160F9 /* home-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4EC126FD20300CDB511 /* home-tabbaricon.png */; };
 		53DCF47113BFEAD3009160F9 /* home-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4ED126FD20300CDB511 /* home-tabbaricon@2x.png */; };
-		53DCF47613BFEAD3009160F9 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7A127D012300B745B4 /* blackArrow.png */; };
-		53DCF47713BFEAD3009160F9 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7B127D012300B745B4 /* blackArrow@2x.png */; };
-		53DCF47813BFEAD3009160F9 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7C127D012300B745B4 /* blueArrow.png */; };
-		53DCF47913BFEAD3009160F9 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7D127D012300B745B4 /* blueArrow@2x.png */; };
-		53DCF47A13BFEAD3009160F9 /* grayArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7E127D012300B745B4 /* grayArrow.png */; };
-		53DCF47B13BFEAD3009160F9 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B7F127D012300B745B4 /* grayArrow@2x.png */; };
-		53DCF47C13BFEAD3009160F9 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B80127D012300B745B4 /* whiteArrow.png */; };
-		53DCF47D13BFEAD3009160F9 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53260B81127D012300B745B4 /* whiteArrow@2x.png */; };
 		53DCF48313BFEAD3009160F9 /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
 		53DCF48713BFEAD3009160F9 /* home-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC621297949A007BDC0E /* home-background.png */; };
 		53DCF48813BFEAD3009160F9 /* home-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC631297949A007BDC0E /* home-background@2x.png */; };
@@ -1591,7 +1556,6 @@
 		53DCF56413BFEAD3009160F9 /* HomeAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531F166D126FA2E600F524BD /* HomeAlbumViewController.m */; };
 		53DCF56B13BFEAD3009160F9 /* SearchSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B21279FAEF00CAB0E0 /* SearchSongsViewController.m */; };
 		53DCF56C13BFEAD3009160F9 /* SearchSongUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B9D0B71279FB6B00CAB0E0 /* SearchSongUITableViewCell.m */; };
-		53DCF56E13BFEAD3009160F9 /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */; };
 		53DCF57013BFEAD3009160F9 /* NewHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA49411285BD7A0010B380 /* NewHomeViewController.m */; };
 		53DCF57113BFEAD3009160F9 /* QuickAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BA497B1285D5B10010B380 /* QuickAlbumsViewController.m */; };
 		53DCF57513BFEAD3009160F9 /* CellOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A77FCC128E38E7005D2D65 /* CellOverlay.m */; };
@@ -1959,16 +1923,6 @@
 		5324C6C513345D75004E6C79 /* OBSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OBSlider.m; path = Classes/OBSlider.m; sourceTree = "<group>"; };
 		532590FF14EE22C100DF4BDB /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = Classes/MBProgressHUD.h; sourceTree = "<group>"; };
 		5325910014EE22C400DF4BDB /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = Classes/MBProgressHUD.m; sourceTree = "<group>"; };
-		53260B77127D012300B745B4 /* EGORefreshTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EGORefreshTableHeaderView.h; path = Classes/View/EGORefreshTableHeaderView.h; sourceTree = "<group>"; };
-		53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EGORefreshTableHeaderView.m; path = Classes/View/EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
-		53260B7A127D012300B745B4 /* blackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackArrow.png; sourceTree = "<group>"; };
-		53260B7B127D012300B745B4 /* blackArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackArrow@2x.png"; sourceTree = "<group>"; };
-		53260B7C127D012300B745B4 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
-		53260B7D127D012300B745B4 /* blueArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueArrow@2x.png"; sourceTree = "<group>"; };
-		53260B7E127D012300B745B4 /* grayArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grayArrow.png; sourceTree = "<group>"; };
-		53260B7F127D012300B745B4 /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
-		53260B80127D012300B745B4 /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
-		53260B81127D012300B745B4 /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
 		5327A5D114DA1E4400DEE1B6 /* controller-extras.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras.png"; path = "Images/Player Icons/controller-extras.png"; sourceTree = "<group>"; };
 		5327A5D214DA1E4400DEE1B6 /* controller-extras@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras@2x.png"; path = "Images/Player Icons/controller-extras@2x.png"; sourceTree = "<group>"; };
 		5327A5D914DA221100DEE1B6 /* controller-extras-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras-ipad.png"; path = "Images/Player Icons/controller-extras-ipad.png"; sourceTree = "<group>"; };
@@ -2788,32 +2742,6 @@
 			name = "GHUnit Tests";
 			sourceTree = "<group>";
 		};
-		53260B71127D012300B745B4 /* EGOTableViewPullRefresh */ = {
-			isa = PBXGroup;
-			children = (
-				53260B77127D012300B745B4 /* EGORefreshTableHeaderView.h */,
-				53260B78127D012300B745B4 /* EGORefreshTableHeaderView.m */,
-				53260B79127D012300B745B4 /* Resources */,
-			);
-			name = EGOTableViewPullRefresh;
-			path = Classes/EGOTableViewPullRefresh;
-			sourceTree = "<group>";
-		};
-		53260B79127D012300B745B4 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				53260B7A127D012300B745B4 /* blackArrow.png */,
-				53260B7B127D012300B745B4 /* blackArrow@2x.png */,
-				53260B7C127D012300B745B4 /* blueArrow.png */,
-				53260B7D127D012300B745B4 /* blueArrow@2x.png */,
-				53260B7E127D012300B745B4 /* grayArrow.png */,
-				53260B7F127D012300B745B4 /* grayArrow@2x.png */,
-				53260B80127D012300B745B4 /* whiteArrow.png */,
-				53260B81127D012300B745B4 /* whiteArrow@2x.png */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		532E6FD311AB31CF000A0E3B /* Settings view */ = {
 			isa = PBXGroup;
 			children = (
@@ -2951,7 +2879,6 @@
 			isa = PBXGroup;
 			children = (
 				535B724F134CEE0A003E0E1C /* DDSocialDialog */,
-				53260B71127D012300B745B4 /* EGOTableViewPullRefresh */,
 				535696501810DA8700997C7B /* FXBlurView */,
 				5324C6C413345D75004E6C79 /* OBSlider.h */,
 				5324C6C513345D75004E6C79 /* OBSlider.m */,
@@ -3859,14 +3786,6 @@
 				5314B4EE126FD20300CDB511 /* home-tabbaricon.png in Resources */,
 				5314B4EF126FD20300CDB511 /* home-tabbaricon@2x.png in Resources */,
 				533C659115ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */,
-				53260B84127D012300B745B4 /* blackArrow.png in Resources */,
-				53260B85127D012300B745B4 /* blackArrow@2x.png in Resources */,
-				53260B86127D012300B745B4 /* blueArrow.png in Resources */,
-				53260B87127D012300B745B4 /* blueArrow@2x.png in Resources */,
-				53260B88127D012300B745B4 /* grayArrow.png in Resources */,
-				53260B89127D012300B745B4 /* grayArrow@2x.png in Resources */,
-				53260B8A127D012300B745B4 /* whiteArrow.png in Resources */,
-				53260B8B127D012300B745B4 /* whiteArrow@2x.png in Resources */,
 				533C658315ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */,
 				53F8C80B129728F9007BDC0E /* home-background-ipad.png in Resources */,
 				533C657C15ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */,
@@ -4160,14 +4079,6 @@
 				53159DA9156F69D0001B0268 /* home-tabbaricon@2x.png in Resources */,
 				533C659415ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */,
 				537EF7BC182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */,
-				53159DAC156F69D0001B0268 /* blackArrow.png in Resources */,
-				53159DAD156F69D0001B0268 /* blackArrow@2x.png in Resources */,
-				53159DAE156F69D0001B0268 /* blueArrow.png in Resources */,
-				53159DAF156F69D0001B0268 /* blueArrow@2x.png in Resources */,
-				53159DB0156F69D0001B0268 /* grayArrow.png in Resources */,
-				53159DB1156F69D0001B0268 /* grayArrow@2x.png in Resources */,
-				53159DB2156F69D0001B0268 /* whiteArrow.png in Resources */,
-				53159DB3156F69D0001B0268 /* whiteArrow@2x.png in Resources */,
 				533C658615ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */,
 				53159DB8156F69D0001B0268 /* home-background-ipad.png in Resources */,
 				533C657F15ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */,
@@ -4452,14 +4363,6 @@
 				53BC2713139AF0DD00A825F1 /* home-tabbaricon.png in Resources */,
 				53BC2714139AF0DD00A825F1 /* home-tabbaricon@2x.png in Resources */,
 				533C659315ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */,
-				53BC2719139AF0DD00A825F1 /* blackArrow.png in Resources */,
-				53BC271A139AF0DD00A825F1 /* blackArrow@2x.png in Resources */,
-				53BC271B139AF0DD00A825F1 /* blueArrow.png in Resources */,
-				53BC271C139AF0DD00A825F1 /* blueArrow@2x.png in Resources */,
-				53BC271D139AF0DD00A825F1 /* grayArrow.png in Resources */,
-				53BC271E139AF0DD00A825F1 /* grayArrow@2x.png in Resources */,
-				53BC271F139AF0DD00A825F1 /* whiteArrow.png in Resources */,
-				53BC2720139AF0DD00A825F1 /* whiteArrow@2x.png in Resources */,
 				533C658515ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */,
 				53BC2726139AF0DD00A825F1 /* home-background-ipad.png in Resources */,
 				533C657E15ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */,
@@ -4759,14 +4662,6 @@
 				53DCF47013BFEAD3009160F9 /* home-tabbaricon.png in Resources */,
 				53DCF47113BFEAD3009160F9 /* home-tabbaricon@2x.png in Resources */,
 				533C659215ABB9AD003EAF29 /* SearchSongsViewController.xib in Resources */,
-				53DCF47613BFEAD3009160F9 /* blackArrow.png in Resources */,
-				53DCF47713BFEAD3009160F9 /* blackArrow@2x.png in Resources */,
-				53DCF47813BFEAD3009160F9 /* blueArrow.png in Resources */,
-				53DCF47913BFEAD3009160F9 /* blueArrow@2x.png in Resources */,
-				53DCF47A13BFEAD3009160F9 /* grayArrow.png in Resources */,
-				53DCF47B13BFEAD3009160F9 /* grayArrow@2x.png in Resources */,
-				53DCF47C13BFEAD3009160F9 /* whiteArrow.png in Resources */,
-				53DCF47D13BFEAD3009160F9 /* whiteArrow@2x.png in Resources */,
 				533C658415ABB9A2003EAF29 /* QuickAlbumsViewController.xib in Resources */,
 				53DCF48313BFEAD3009160F9 /* home-background-ipad.png in Resources */,
 				533C657D15ABB975003EAF29 /* NewHomeViewController-iPad.xib in Resources */,
@@ -5032,7 +4927,6 @@
 				531F166E126FA2E600F524BD /* HomeAlbumViewController.m in Sources */,
 				53B9D0B41279FAEF00CAB0E0 /* SearchSongsViewController.m in Sources */,
 				53B9D0B81279FB6B00CAB0E0 /* SearchSongUITableViewCell.m in Sources */,
-				53260B83127D012300B745B4 /* EGORefreshTableHeaderView.m in Sources */,
 				53BA49431285BD7A0010B380 /* NewHomeViewController.m in Sources */,
 				53BA497D1285D5B10010B380 /* QuickAlbumsViewController.m in Sources */,
 				53A77FCD128E38E7005D2D65 /* CellOverlay.m in Sources */,
@@ -5133,7 +5027,6 @@
 				53159EA8156F69D0001B0268 /* HomeAlbumViewController.m in Sources */,
 				53159EAA156F69D0001B0268 /* SearchSongsViewController.m in Sources */,
 				53159EAB156F69D0001B0268 /* SearchSongUITableViewCell.m in Sources */,
-				53159EAC156F69D0001B0268 /* EGORefreshTableHeaderView.m in Sources */,
 				53159EAE156F69D0001B0268 /* NewHomeViewController.m in Sources */,
 				53159EAF156F69D0001B0268 /* QuickAlbumsViewController.m in Sources */,
 				53159EB0156F69D0001B0268 /* CellOverlay.m in Sources */,
@@ -5247,7 +5140,6 @@
 				53BC2803139AF0DD00A825F1 /* HomeAlbumViewController.m in Sources */,
 				53BC280A139AF0DD00A825F1 /* SearchSongsViewController.m in Sources */,
 				53BC280B139AF0DD00A825F1 /* SearchSongUITableViewCell.m in Sources */,
-				53BC280D139AF0DD00A825F1 /* EGORefreshTableHeaderView.m in Sources */,
 				53BC280F139AF0DD00A825F1 /* NewHomeViewController.m in Sources */,
 				53BC2810139AF0DD00A825F1 /* QuickAlbumsViewController.m in Sources */,
 				53BC2814139AF0DD00A825F1 /* CellOverlay.m in Sources */,
@@ -5352,7 +5244,6 @@
 				53DCF56413BFEAD3009160F9 /* HomeAlbumViewController.m in Sources */,
 				53DCF56B13BFEAD3009160F9 /* SearchSongsViewController.m in Sources */,
 				53DCF56C13BFEAD3009160F9 /* SearchSongUITableViewCell.m in Sources */,
-				53DCF56E13BFEAD3009160F9 /* EGORefreshTableHeaderView.m in Sources */,
 				53DCF57013BFEAD3009160F9 /* NewHomeViewController.m in Sources */,
 				53DCF57113BFEAD3009160F9 /* QuickAlbumsViewController.m in Sources */,
 				53DCF57513BFEAD3009160F9 /* CellOverlay.m in Sources */,
@@ -5691,7 +5582,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				"ARCHS[sdk=iphonesimulator*]" = i386;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -6237,7 +6127,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				"ARCHS[sdk=iphonesimulator*]" = i386;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -6300,7 +6189,6 @@
 			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				"ARCHS[sdk=iphonesimulator*]" = i386;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;

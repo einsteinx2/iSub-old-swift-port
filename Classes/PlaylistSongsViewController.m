@@ -10,7 +10,6 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "PlaylistSongUITableViewCell.h"
-#import "EGORefreshTableHeaderView.h"
 
 #import "UIViewController+PushViewControllerCustom.h"
 
@@ -24,7 +23,7 @@
 @implementation PlaylistSongsViewController
 
 @synthesize md5, serverPlaylist;
-@synthesize reloading, refreshHeaderView;
+@synthesize reloading;
 @synthesize connection, receivedData, playlistCount; 
 
 - (BOOL)shouldAutorotate
@@ -39,7 +38,7 @@
 {
     [super viewDidLoad];
 
-    if (viewObjectsS.isLocalPlaylist)
+    if (_localPlaylist)
 	{
 		self.title = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE md5 = ?", self.md5];
 		
@@ -81,11 +80,6 @@
         self.title = self.serverPlaylist.playlistName;
 		playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
 		[self.tableView reloadData];
-		
-		// Add the pull to refresh view
-		self.refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, 320.0f, self.tableView.bounds.size.height)];
-		self.refreshHeaderView.backgroundColor = [UIColor whiteColor];
-		[self.tableView addSubview:refreshHeaderView];
 	}
 	
 
@@ -129,7 +123,7 @@
 	self.tableView.scrollEnabled = YES;
 	[viewObjectsS hideLoadingScreen];
 	
-	if (!viewObjectsS.isLocalPlaylist)
+	if (!_localPlaylist)
 	{
 		[self dataSourceDidFinishLoadingNewData];
 	}
@@ -139,7 +133,7 @@
 {
     [super viewWillAppear:animated];
 	
-	if (viewObjectsS.isLocalPlaylist)
+	if (_localPlaylist)
 	{
 		self.playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", self.md5]];
 		[self.tableView reloadData];
@@ -231,7 +225,7 @@
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
 	NSString *message = @"";
-	if (viewObjectsS.isLocalPlaylist)
+	if (_localPlaylist)
 	{
 		message = [NSString stringWithFormat:@"There was an error saving the playlist to the server.\n\nError %li: %@", 
 											 (long)[error code],
@@ -260,7 +254,7 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {	
     DLog(@"%@", [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
-	if (!viewObjectsS.isLocalPlaylist)
+	if (!_localPlaylist)
 	{
         // Parse the data
         //
@@ -381,7 +375,7 @@ static NSString *kName_Error = @"error";
 	
 	// Set up the cell...
 	ISMSSong *aSong;
-	if (viewObjectsS.isLocalPlaylist)
+	if (_localPlaylist)
 	{
 		aSong = [ISMSSong songFromDbRow:indexPath.row inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
 		//DLog(@"aSong: %@", aSong);
@@ -430,28 +424,10 @@ static NSString *kName_Error = @"error";
 	
 	playlistS.isShuffle = NO;
 	
-	/*for (int i = 0; i < self.playlistCount; i++)
-	{
-		@autoreleasepool
-		{
-			ISMSSong *aSong;
-			if (viewObjectsS.isLocalPlaylist)
-			{
-				aSong = [ISMSSong songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", self.md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
-			}
-			else
-			{
-				aSong = [ISMSSong songFromServerPlaylistId:self.md5 row:i];
-			}
-			
-			[aSong addToCurrentPlaylistDbQueue];
-		}
-	}*/
-	
 	// Need to do this for speed
 	NSString *databaseName = settingsS.isOfflineMode ? @"offlineCurrentPlaylist.db" : [NSString stringWithFormat:@"%@currentPlaylist.db", [settingsS.urlString md5]];
 	NSString *currTableName = settingsS.isJukeboxEnabled ? @"jukeboxCurrentPlaylist" : @"currentPlaylist";
-	NSString *playTableName = [NSString stringWithFormat:@"%@%@", viewObjectsS.isLocalPlaylist ? @"playlist" : @"splaylist", self.md5];
+	NSString *playTableName = [NSString stringWithFormat:@"%@%@", _localPlaylist ? @"playlist" : @"splaylist", self.md5];
 	[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 	 {
 		 [db executeUpdate:@"ATTACH DATABASE ? AS ?", [databaseS.databaseFolderPath stringByAppendingPathComponent:databaseName], @"currentPlaylistDb"];
@@ -488,37 +464,19 @@ static NSString *kName_Error = @"error";
 	}
 }
 
-#pragma mark -
-#pragma mark Pull to refresh methods
+#pragma mark - Pull to refresh methods
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{	
-	if (scrollView.isDragging && !viewObjectsS.isLocalPlaylist) 
-	{
-		if (self.refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !self.reloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshNormal];
-		} 
-		else if (self.refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !self.reloading) 
-		{
-			[self.refreshHeaderView setState:EGOOPullRefreshPulling];
-		}
-	}
+- (BOOL)shouldSetupRefreshControl
+{
+    return !_localPlaylist;
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+- (void)didPullToRefresh
 {
-	
-	if (scrollView.contentOffset.y <= - 65.0f && !self.reloading && !viewObjectsS.isLocalPlaylist) 
+	if (!self.reloading)
 	{
 		self.reloading = YES;
-		//[self reloadAction:nil];
 		[self loadData];
-		[self.refreshHeaderView setState:EGOOPullRefreshLoading];
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		self.tableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-		[UIView commitAnimations];
 	}
 }
 
@@ -526,15 +484,8 @@ static NSString *kName_Error = @"error";
 {
 	self.reloading = NO;
 	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[self.tableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-	[UIView commitAnimations];
-	
-	[self.refreshHeaderView setState:EGOOPullRefreshNormal];
+    [self.refreshControl endRefreshing];
 }
-
-
 
 @end
 
