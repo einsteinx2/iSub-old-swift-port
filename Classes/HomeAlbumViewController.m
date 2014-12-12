@@ -40,17 +40,6 @@
 {	
 	[super viewDidLoad];
 	
-	//self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(settingsAction:)] autorelease];
-
-	if(musicS.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
-	
 	if (IS_IPAD())
 	{
 		self.view.backgroundColor = ISMSiPadBackgroundColor;
@@ -68,12 +57,6 @@
 	[self.navigationController pushViewController:serverListViewController animated:YES];
 }
 
-- (IBAction)nowPlayingAction:(id)sender
-{
-	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-}
 
 - (void)didReceiveMemoryWarning 
 {

@@ -77,17 +77,6 @@
     
     [self addURLRefBackButton];
 	
-    self.navigationItem.rightBarButtonItem = nil;
-	if(musicS.showPlayerIcon)
-	{
-		UIImage *playingImage = [UIImage imageNamed:@"now-playing.png"];
-		UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithImage:playingImage
-																	   style:UIBarButtonItemStyleBordered 
-																	  target:self 
-																	  action:@selector(nowPlayingAction:)];
-		self.navigationItem.rightBarButtonItem = buttonItem;
-	}
-	
 	[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
 	
 	[self.dataModel startLoad];
@@ -127,16 +116,6 @@
 												   bundle:nil];
 	serverVC.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverVC animated:YES];
-}
-
-
-- (IBAction)nowPlayingAction:(id)sender
-{
-	iPhoneStreamingPlayerViewController *playerVC = [[iPhoneStreamingPlayerViewController alloc]
-													 initWithNibName:@"iPhoneStreamingPlayerViewController"
-															  bundle:nil];
-	playerVC.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:playerVC animated:YES];
 }
 
 

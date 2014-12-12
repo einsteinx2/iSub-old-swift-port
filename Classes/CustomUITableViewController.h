@@ -10,4 +10,13 @@
 
 @interface CustomUITableViewController : UITableViewController
 
+#pragma mark - UI -
+
+- (void)setupLeftBarButton;
+- (void)setupRightBarButton;
+
+#pragma mark - Actions -
+
+- (void)nowPlayingAction:(id)sender;
+
 @end

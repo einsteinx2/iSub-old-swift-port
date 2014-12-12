@@ -81,29 +81,6 @@
 }
 
 
--(void)viewWillAppear:(BOOL)animated 
-{
-	[super viewWillAppear:animated];
-	
-	if(musicS.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
-}
-
-
-- (IBAction)nowPlayingAction:(id)sender
-{
-	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
-}
-
-
 - (void)didReceiveMemoryWarning 
 {
 	// Releases the view if it doesn't have a superview.

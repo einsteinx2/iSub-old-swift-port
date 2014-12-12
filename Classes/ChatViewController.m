@@ -140,12 +140,6 @@
 	
     [self addURLRefBackButton];
     
-    self.navigationItem.rightBarButtonItem = nil;
-	if(musicS.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
-	}
-		
 	[self loadData];
 	
 	[Flurry logEvent:@"ChatTab"];
@@ -211,13 +205,6 @@
 	ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
 	serverListViewController.hidesBottomBarWhenPushed = YES;
 	[self.navigationController pushViewController:serverListViewController animated:YES];
-}
-
-- (IBAction)nowPlayingAction:(id)sender
-{
-	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
 }
 
 #pragma mark - ISMSLoader delegate
@@ -294,15 +281,8 @@
 - (void) doneSearching_Clicked:(id)sender 
 {	
 	[self.textInput resignFirstResponder];
-	
-	if(musicS.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
+    
+    [self setupRightBarButton];
 }
 
 #pragma mark - Table view delegate
@@ -376,14 +356,7 @@
 	{
 		[self.textInput resignFirstResponder];
 
-		if(musicS.showPlayerIcon)
-		{
-			self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
-		}
-		else
-		{
-			self.navigationItem.rightBarButtonItem = nil;
-		}
+        [self setupRightBarButton];
 		
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Sending"];
 		[self.dataModel sendChatMessage:self.textInput.text];

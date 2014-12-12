@@ -123,15 +123,6 @@
 {	
 	[super viewWillAppear:animated];
 	
-	if(musicS.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
-	
 	[self.tableView reloadData];
 		
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
@@ -266,13 +257,6 @@
 - (IBAction)shuffleAction:(id)sender
 {
 	[databaseS shuffleAllSongs:myId artist:myArtist];
-}
-
-- (IBAction)nowPlayingAction:(id)sender
-{
-	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
 }
 
 #pragma mark Table view methods

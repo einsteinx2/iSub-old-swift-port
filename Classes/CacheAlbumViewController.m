@@ -71,16 +71,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 -(void)viewWillAppear:(BOOL)animated 
 {
 	[super viewWillAppear:animated];
-		
-	if(musicS.showPlayerIcon)
-	{
-		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(nowPlayingAction:)];
-	}
-	else
-	{
-		self.navigationItem.rightBarButtonItem = nil;
-	}
-		
+    
 	// Add the play all button + shuffle button
 	UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 	headerView.backgroundColor = ISMSHeaderColor;
@@ -364,14 +355,6 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 	
 	[self playAllPlaySong];
-}
-
-
-- (IBAction)nowPlayingAction:(id)sender
-{
-	iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-	streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-	[self.navigationController pushViewController:streamingPlayerViewController animated:YES];
 }
 
 
