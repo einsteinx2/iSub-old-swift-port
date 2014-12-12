@@ -33,14 +33,6 @@
 
 #pragma mark - Rotation handling
 
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	if (!IS_IPAD() && isNoSongsScreenShowing)
@@ -165,7 +157,6 @@
 	self.tableView.tableHeaderView = self.headerView;
 	
 	if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 	
 	if (settingsS.isOfflineMode)
 	{
@@ -180,9 +171,6 @@
 		
 		//[self registerForNotifications];
 	}
-	
-	if (IS_IPAD())
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
 }
 
 - (void)viewWillAppear:(BOOL)animated 

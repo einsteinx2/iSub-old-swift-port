@@ -32,14 +32,6 @@
 
 #pragma mark - Rotation
 
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	if (!IS_IPAD() && isNoPlaylistsScreenShowing)
@@ -117,14 +109,7 @@
 	[self.headerView addSubview:self.segmentedControl];
 	
 	self.tableView.tableHeaderView = self.headerView;
-	
-	if (IS_IPAD())
-	{
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	}
-	
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
-	
+		
 	self.connectionQueue = [[EX2SimpleConnectionQueue alloc] init];
 	self.connectionQueue.delegate = self;
 }

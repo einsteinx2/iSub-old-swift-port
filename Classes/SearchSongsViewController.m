@@ -25,14 +25,6 @@
 #pragma mark -
 #pragma mark View lifecycle
 
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 - (id)initWithNibName:(NSString *)n bundle:(NSBundle *)b;
 {
     if ((self = [super initWithNibName:n bundle:b]))
@@ -48,13 +40,7 @@
 {
     [super viewDidLoad];
 	
-	if (IS_IPAD())
-	{
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	}
-	
 	if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 		
 - (void)viewWillDisappear:(BOOL)animated

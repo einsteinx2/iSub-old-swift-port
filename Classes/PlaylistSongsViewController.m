@@ -26,14 +26,6 @@
 @synthesize reloading;
 @synthesize connection, receivedData, playlistCount; 
 
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -80,16 +72,7 @@
         self.title = self.serverPlaylist.playlistName;
 		playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", md5]];
 		[self.tableView reloadData];
-	}
-	
-
-	
-	if (IS_IPAD())
-	{
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	}
-	
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
+	}	
 }
 
 -(void)loadData

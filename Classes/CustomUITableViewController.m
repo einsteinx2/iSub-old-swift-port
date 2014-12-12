@@ -12,6 +12,16 @@
 
 @implementation CustomUITableViewController
 
+#pragma mark - Rotation -
+
+- (BOOL)shouldAutorotate
+{
+    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+        return NO;
+    
+    return YES;
+}
+
 #pragma mark - Lifecycle -
 
 - (void)viewDidLoad
@@ -23,6 +33,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupLeftBarButton) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self setupRefreshControl];
+    
+    if (IS_IPAD())
+    {
+        self.view.backgroundColor = ISMSiPadBackgroundColor;
+    }
+    
+    // Keep the table rows from showing past the bottom
+    if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -70,7 +88,7 @@
             leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"]
                                                                  style:UIBarButtonItemStyleBordered
                                                                 target:self
-                                                                action:@selector(settingsAction:)];
+                                                                action:@selector(a_settings:)];
         }
         else if (appDelegateS.referringAppUrl && !isInsideMoreTab)
         {
@@ -94,7 +112,7 @@
         rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"]
                                                               style:UIBarButtonItemStyleBordered
                                                              target:self
-                                                             action:@selector(nowPlayingAction:)];
+                                                             action:@selector(a_nowPlaying:)];
     }
     
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
@@ -130,14 +148,14 @@
 
 #pragma mark - Actions -
 
-- (void)settingsAction:(id)sender
+- (void)a_settings:(id)sender
 {
     ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
     serverListViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:serverListViewController animated:YES];
 }
 
-- (void)nowPlayingAction:(id)sender
+- (void)a_nowPlaying:(id)sender
 {
     iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
     streamingPlayerViewController.hidesBottomBarWhenPushed = YES;

@@ -13,14 +13,6 @@
 @implementation SearchAllViewController
 @synthesize cellNames, listOfArtists, listOfAlbums, listOfSongs, query;
 
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
@@ -52,13 +44,7 @@
 		[cellNames addObject:@"Songs"];
 	}
 	
-	if (IS_IPAD())
-	{
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	}
-	
 	if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 #pragma mark - Table view data source

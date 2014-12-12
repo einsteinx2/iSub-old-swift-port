@@ -32,14 +32,6 @@
 @synthesize playAllShuffleAllView;
 @synthesize albumInfoView, albumInfoArtHolderView, albumInfoArtView, albumInfoAlbumLabel, albumInfoArtistLabel, albumInfoDurationLabel, albumInfoLabelHolderView, albumInfoTrackCountLabel, albumInfoArtReflection;
 
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 #pragma mark Lifecycle
 
 - (AlbumViewController *)initWithArtist:(ISMSArtist *)anArtist orAlbum:(ISMSAlbum *)anAlbum
@@ -94,14 +86,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 	
 	albumInfoArtView.delegate = self;
-	
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
-    
-	if (IS_IPAD())
-	{
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	}
-	
+	    
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createReflection) name:@"createReflection"  object:nil];
 }
 

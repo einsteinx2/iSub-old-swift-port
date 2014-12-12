@@ -31,7 +31,6 @@
 @property (strong) LoadingScreen *loadingScreen;
 
 - (void)addCount;
-- (void)doneSearching_Clicked:(id)sender;
 - (void)dataSourceDidFinishLoadingNewData;
 - (void)showLoadingScreen;
 - (void)hideLoadingScreen;

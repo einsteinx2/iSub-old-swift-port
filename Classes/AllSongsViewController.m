@@ -29,14 +29,6 @@
 @synthesize reloadImage, reloadLabel, reloadButton, reloadTimeLabel, countLabel;
 @synthesize letUserSelectRow, searchBar, numberOfRows, url, isSearching, isProcessingArtists, searchOverlay, dismissButton;
 
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 #pragma mark - View Controller Lifecycle
 
 - (void)createDataModel
@@ -60,14 +52,7 @@
 	[self createDataModel];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(createDataModel) name:ISMSNotification_ServerSwitched object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];
-	
-	if (IS_IPAD())
-	{
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	}
-	
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadingFinishedNotification) name:ISMSNotification_AllSongsLoadingFinished object:nil];	
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -345,7 +330,7 @@
 	
 	self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	self.dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[self.dismissButton addTarget:self action:@selector(doneSearching_Clicked:) forControlEvents:UIControlEventTouchUpInside];
+	[self.dismissButton addTarget:self action:@selector(a_doneSearching:) forControlEvents:UIControlEventTouchUpInside];
 	self.dismissButton.frame = self.view.bounds;
 	self.dismissButton.enabled = NO;
 	[self.searchOverlay addSubview:self.dismissButton];
@@ -402,7 +387,7 @@
 	[self.tableView reloadData];
 	
 	//Add the done button.
-	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)];
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(a_doneSearching:)];
 }
 
 - (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText
@@ -439,7 +424,7 @@
 	[self.searchBar resignFirstResponder];
 }
 
-- (void) doneSearching_Clicked:(id)sender 
+- (void) a_doneSearching:(id)sender
 {
 	self.tableView.tableHeaderView = nil;
 	[self addCount];

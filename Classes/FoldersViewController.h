@@ -1,5 +1,5 @@
 //
-//  RootViewController.h
+//  FoldersViewController.h
 //  iSub
 //
 //  Created by Ben Baron on 2/27/10.
@@ -8,24 +8,7 @@
 
 #import "FolderDropdownDelegate.h"
 
-@class ISMSArtist, FolderDropdownControl, SUSRootFoldersDAO;
-
-@interface FoldersViewController : CustomUITableViewController <UISearchBarDelegate, ISMSLoaderDelegate, FolderDropdownDelegate>
-
-@property (nonatomic) BOOL letUserSelectRow;
-@property (nonatomic) BOOL isSearching;
-@property (nonatomic) BOOL isCountShowing;
-@property (nonatomic, strong) UIView *headerView;
-@property (nonatomic, strong) UISearchBar *searchBar;
-@property (nonatomic, strong) UILabel *countLabel;
-@property (nonatomic, strong) UILabel *reloadTimeLabel;
-@property (nonatomic, strong) UIButton *blockerButton;
-@property (nonatomic, strong) UIView *searchOverlay;
-@property (nonatomic, strong) UIButton *dismissButton;
-@property (nonatomic, strong) FolderDropdownControl *dropdown;
-@property (nonatomic, strong) SUSRootFoldersDAO *dataModel;
-
-- (void)doneSearching_Clicked:(id)sender;
+@interface FoldersViewController : CustomUITableViewController
 
 // Loader Delegate Methods
 - (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error;

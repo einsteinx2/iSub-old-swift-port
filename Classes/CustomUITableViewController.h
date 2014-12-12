@@ -23,7 +23,7 @@
 
 #pragma mark - Actions -
 
-- (void)settingsAction:(id)sender;
-- (void)nowPlayingAction:(id)sender;
+- (void)a_settings:(id)sender;
+- (void)a_nowPlaying:(id)sender;
 
 @end

@@ -22,16 +22,6 @@
 @synthesize reloading;
 @synthesize isNothingPlayingScreenShowing, receivedData;
 
-#pragma mark - Rotation Handling
-
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 #pragma mark Lifecycle
 
 - (void)viewDidLoad
@@ -44,14 +34,7 @@
 	
 	self.title = @"Now Playing";
 	
-	self.dataModel = [[SUSNowPlayingDAO alloc] initWithDelegate:self];
-	
-	if (IS_IPAD())
-	{
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	}
-		
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
+	self.dataModel = [[SUSNowPlayingDAO alloc] initWithDelegate:self];		
 }
 
 - (void)viewWillAppear:(BOOL)animated 

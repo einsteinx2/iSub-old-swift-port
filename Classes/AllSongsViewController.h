@@ -30,7 +30,6 @@
 @property (strong) LoadingScreen *loadingScreen;
 
 - (void)addCount;
-- (void)doneSearching_Clicked:(id)sender;
 - (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error;
 - (void)loadingFinished:(ISMSLoader*)theLoader;
 - (void)dataSourceDidFinishLoadingNewData;

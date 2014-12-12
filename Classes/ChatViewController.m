@@ -29,14 +29,6 @@
 
 #pragma mark - Rotation
 
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 	if (!IS_IPAD() && self.isNoChatMessagesScreenShowing)
@@ -106,14 +98,7 @@
 	[self.headerView addSubview:sendButton];
 	
 	self.tableView.tableHeaderView = self.headerView;
-	
-	if (IS_IPAD())
-	{
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	}
-
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
-	
+    	
 	[self createDataModel];
 }
 
@@ -220,7 +205,7 @@
 	
 	self.dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	self.dismissButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[self.dismissButton addTarget:self action:@selector(doneSearching_Clicked:) forControlEvents:UIControlEventTouchUpInside];
+	[self.dismissButton addTarget:self action:@selector(a_doneSearching:) forControlEvents:UIControlEventTouchUpInside];
 	self.dismissButton.frame = self.view.bounds;
 	self.dismissButton.enabled = NO;
 	[self.chatMessageOverlay addSubview:self.dismissButton];
@@ -235,7 +220,7 @@
 	
 	
 	//Add the done button.
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSearching_Clicked:)];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(a_doneSearching:)];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView
@@ -250,7 +235,7 @@
 }
 
 
-- (void) doneSearching_Clicked:(id)sender 
+- (void) a_doneSearching:(id)sender
 {	
 	[self.textInput resignFirstResponder];
     

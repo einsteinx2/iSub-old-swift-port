@@ -22,14 +22,6 @@
 @synthesize theNewRedirectionUrl, settingsTabViewController, helpTabViewController;
 @synthesize isEditing, headerView, segmentedControl;
 
-- (BOOL)shouldAutorotate
-{
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
-    return YES;
-}
-
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -72,14 +64,9 @@
 	
 	self.tableView.tableHeaderView = self.headerView;
 	
-	if (IS_IPAD())
-	{
-		self.view.backgroundColor = ISMSiPadBackgroundColor;
-	}
-	else
+	if (!IS_IPAD())
 	{
 		if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];
-		if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 	}
 }
 
