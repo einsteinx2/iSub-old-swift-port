@@ -35,7 +35,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="quickAlbums" destination="-1" eventType="touchUpInside" id="35"/>
+                        <action selector="a_quickAlbums:" destination="-1" eventType="touchUpInside" id="hdC-eG-ZAW"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="24">
@@ -50,7 +50,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="jukebox" destination="-1" eventType="touchUpInside" id="37"/>
+                        <action selector="a_jukebox:" destination="-1" eventType="touchUpInside" id="UrS-HV-put"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="25">
@@ -65,7 +65,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="serverShuffle" destination="-1" eventType="touchUpInside" id="36"/>
+                        <action selector="a_serverShuffle:" destination="-1" eventType="touchUpInside" id="kiM-aj-ws1"/>
                     </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="QUICK ALBUMS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" id="27">

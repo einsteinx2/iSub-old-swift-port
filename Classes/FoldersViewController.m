@@ -371,12 +371,10 @@
 	[_searchOverlay addSubview:_dismissButton];
 	
 	// Animate the search overlay on screen
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-	_searchOverlay.alpha = 1;
-	_dismissButton.enabled = YES;
-	[UIView commitAnimations];
+    [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        _searchOverlay.alpha = 1;
+        _dismissButton.enabled = YES;
+    } completion:nil];
 }
 
 - (void)hideSearchOverlay
@@ -384,23 +382,15 @@
 	if (_searchOverlay)
 	{
 		// Animate the search overlay off screen
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:.3];
-		[UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(removeSearchOverlay)];
-		_searchOverlay.alpha = 0;
-		_dismissButton.enabled = NO;
-		[UIView commitAnimations];
+        [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            _searchOverlay.alpha = 0;
+            _dismissButton.enabled = NO;
+        } completion:^(BOOL finished) {
+            [_searchOverlay removeFromSuperview];
+            _searchOverlay = nil;
+            if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
+        }];
 	}
-}
-
-- (void)removeSearchOverlay
-{
-	[_searchOverlay removeFromSuperview];
-	_searchOverlay = nil;
-	
-	if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar

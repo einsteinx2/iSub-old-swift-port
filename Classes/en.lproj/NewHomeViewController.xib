@@ -51,7 +51,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="quickAlbums" destination="-1" eventType="touchUpInside" id="11"/>
+                        <action selector="a_quickAlbums:" destination="-1" eventType="touchUpInside" id="Zpi-gf-Ua2"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7">
@@ -67,7 +67,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="settings" destination="-1" eventType="touchUpInside" id="12"/>
+                        <action selector="a_settings:" destination="-1" eventType="touchUpInside" id="x3H-S9-mHP"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9">
@@ -83,7 +83,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="jukebox" destination="-1" eventType="touchUpInside" id="14"/>
+                        <action selector="a_jukebox:" destination="-1" eventType="touchUpInside" id="0KT-ab-xWQ"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5">
@@ -99,7 +99,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="serverShuffle" destination="-1" eventType="touchUpInside" id="15"/>
+                        <action selector="a_serverShuffle:" destination="-1" eventType="touchUpInside" id="RgO-5m-2eQ"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6">
@@ -115,7 +115,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="chat" destination="-1" eventType="touchUpInside" id="34"/>
+                        <action selector="a_chat:" destination="-1" eventType="touchUpInside" id="fBf-4u-ZG5"/>
                     </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="QUICK" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" id="19">
