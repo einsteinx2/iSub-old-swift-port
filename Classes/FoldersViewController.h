@@ -10,12 +10,4 @@
 
 @interface FoldersViewController : CustomUITableViewController
 
-// Loader Delegate Methods
-- (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error;
-- (void)loadingFinished:(ISMSLoader*)theLoader;
-
-// FolderDropdown Delegate Methods
-- (void)folderDropdownMoveViewsY:(float)y;
-- (void)folderDropdownSelectFolder:(NSNumber *)folderId;
-
 @end

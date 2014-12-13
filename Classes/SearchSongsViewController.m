@@ -12,7 +12,7 @@
 #import "ServerListViewController.h"
 #import "ArtistUITableViewCell.h"
 #import "AlbumUITableViewCell.h"
-#import "AlbumViewController.h"
+#import "FolderViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "SearchXMLParser.h"
 
@@ -277,7 +277,7 @@
 		if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfArtists.count)
 		{
 			ISMSArtist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
-			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
+			FolderViewController *albumView = [[FolderViewController alloc] initWithArtist:anArtist orAlbum:nil];
 			
 			[self pushViewControllerCustom:albumView];
 			//[self.navigationController pushViewController:albumView animated:YES];
@@ -290,7 +290,7 @@
 		if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfAlbums.count)
 		{
 			ISMSAlbum *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
-			AlbumViewController *albumView = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
+			FolderViewController *albumView = [[FolderViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 			
 			[self pushViewControllerCustom:albumView];
 			//[self.navigationController pushViewController:albumView animated:YES];

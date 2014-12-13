@@ -9,7 +9,7 @@
 #import "AllAlbumsViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "AlbumViewController.h"
+#import "FolderViewController.h"
 #import "AllAlbumsUITableViewCell.h"
 #import "AllSongsUITableViewCell.h"
 #import "FoldersViewController.h"
@@ -481,7 +481,7 @@
 			anAlbum = [self.dataModel albumForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		
-		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:nil orAlbum:anAlbum];
+		FolderViewController* albumViewController = [[FolderViewController alloc] initWithArtist:nil orAlbum:anAlbum];
 		[self pushViewControllerCustom:albumViewController];
 	}
 	else

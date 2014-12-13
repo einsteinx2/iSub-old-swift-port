@@ -353,7 +353,7 @@
 		53159E5B156F69D0001B0268 /* playing-cell-icon-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8C15167CBA0081A83A /* playing-cell-icon-white@2x.png */; };
 		53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
 		53159E67156F69D0001B0268 /* FoldersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* FoldersViewController.m */; };
-		53159E6A156F69D0001B0268 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
+		53159E6A156F69D0001B0268 /* FolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* FolderViewController.m */; };
 		53159E6D156F69D0001B0268 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
 		53159E6E156F69D0001B0268 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
@@ -605,10 +605,10 @@
 		533C65DD15ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E215ABB9F5003EAF29 /* EqualizerViewController.xib */; };
 		533C65DE15ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E215ABB9F5003EAF29 /* EqualizerViewController.xib */; };
 		533C65DF15ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E215ABB9F5003EAF29 /* EqualizerViewController.xib */; };
-		533C65E315ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
-		533C65E415ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
-		533C65E515ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
-		533C65E615ABBA09003EAF29 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* AlbumViewController.xib */; };
+		533C65E315ABBA09003EAF29 /* FolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* FolderViewController.xib */; };
+		533C65E415ABBA09003EAF29 /* FolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* FolderViewController.xib */; };
+		533C65E515ABBA09003EAF29 /* FolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* FolderViewController.xib */; };
+		533C65E615ABBA09003EAF29 /* FolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65E915ABBA09003EAF29 /* FolderViewController.xib */; };
 		53404FE111E9487C004AEC41 /* controller-next@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE011E9487C004AEC41 /* controller-next@2x.png */; };
 		53404FEA11E9488A004AEC41 /* controller-pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE211E9488A004AEC41 /* controller-pause@2x.png */; };
 		53404FEB11E9488A004AEC41 /* controller-play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FE311E9488A004AEC41 /* controller-play@2x.png */; };
@@ -1129,7 +1129,7 @@
 		53BC2796139AF0DD00A825F1 /* PlaylistSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536AB8101353DCF700DABD83 /* PlaylistSongsViewController.xib */; };
 		53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
 		53BC279D139AF0DD00A825F1 /* FoldersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* FoldersViewController.m */; };
-		53BC27A1139AF0DD00A825F1 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
+		53BC27A1139AF0DD00A825F1 /* FolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* FolderViewController.m */; };
 		53BC27A4139AF0DD00A825F1 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
 		53BC27A5139AF0DD00A825F1 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
@@ -1504,7 +1504,7 @@
 		53DCF4FA13BFEAD3009160F9 /* Icon@2x-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */; };
 		53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
 		53DCF4FE13BFEAD3009160F9 /* FoldersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* FoldersViewController.m */; };
-		53DCF50213BFEAD3009160F9 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
+		53DCF50213BFEAD3009160F9 /* FolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* FolderViewController.m */; };
 		53DCF50513BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
 		53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
@@ -1621,7 +1621,7 @@
 		53EB4AA71405FE2F00CBA075 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EB4AA51405FE1B00CBA075 /* libz.dylib */; };
 		53EB4AA81405FE3200CBA075 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EB4AA51405FE1B00CBA075 /* libz.dylib */; };
 		53F0CD8211589F0A00A665CD /* progress-label-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F0CD8111589F0A00A665CD /* progress-label-background.png */; };
-		53F2D3EE113A338500107D63 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* AlbumViewController.m */; };
+		53F2D3EE113A338500107D63 /* FolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* FolderViewController.m */; };
 		53F4A074116FF48400BB8411 /* DebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A072116FF48400BB8411 /* DebugViewController.m */; };
 		53F4A07D116FF7EE00BB8411 /* CurrentPlaylistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A07B116FF7EE00BB8411 /* CurrentPlaylistViewController.m */; };
 		53F4A07E116FF7EE00BB8411 /* CurrentPlaylistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F4A07C116FF7EE00BB8411 /* CurrentPlaylistViewController.xib */; };
@@ -1971,7 +1971,7 @@
 		533C65D315ABB9D6003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SettingsTabViewController.xib; sourceTree = "<group>"; };
 		533C65DA15ABB9F0003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DebugViewController.xib; sourceTree = "<group>"; };
 		533C65E115ABB9F5003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/EqualizerViewController.xib; sourceTree = "<group>"; };
-		533C65E815ABBA09003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AlbumViewController.xib; sourceTree = "<group>"; };
+		533C65E815ABBA09003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FolderViewController.xib; sourceTree = "<group>"; };
 		533F651C160533F4000098E1 /* Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Defines.h; path = Other/Defines.h; sourceTree = "<group>"; };
 		533F65201605429E000098E1 /* ISMSCustomUIObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSCustomUIObjects.h; sourceTree = "<group>"; };
 		53404FE011E9487C004AEC41 /* controller-next@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-next@2x.png"; path = "Images/Player Icons/controller-next@2x.png"; sourceTree = "<group>"; };
@@ -2341,8 +2341,8 @@
 		53EB4AA51405FE1B00CBA075 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		53F0CD8111589F0A00A665CD /* progress-label-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "progress-label-background.png"; path = "Images/Other/progress-label-background.png"; sourceTree = "<group>"; };
 		53F1412015FD550C004D00D5 /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = buildnumber.xcconfig; path = Other/buildnumber.xcconfig; sourceTree = "<group>"; };
-		53F2D3EB113A338500107D63 /* AlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumViewController.h; sourceTree = "<group>"; };
-		53F2D3EC113A338500107D63 /* AlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AlbumViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		53F2D3EB113A338500107D63 /* FolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderViewController.h; sourceTree = "<group>"; };
+		53F2D3EC113A338500107D63 /* FolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FolderViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		53F4A071116FF48400BB8411 /* DebugViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugViewController.h; sourceTree = "<group>"; };
 		53F4A072116FF48400BB8411 /* DebugViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugViewController.m; sourceTree = "<group>"; };
 		53F4A07A116FF7EE00BB8411 /* CurrentPlaylistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentPlaylistViewController.h; sourceTree = "<group>"; };
@@ -2927,9 +2927,9 @@
 				53E82A951406D47F0051D44B /* FolderDropdownDelegate.h */,
 				53ADBBBE13352DB40098FAE6 /* FolderDropdownControl.h */,
 				53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */,
-				53F2D3EB113A338500107D63 /* AlbumViewController.h */,
-				53F2D3EC113A338500107D63 /* AlbumViewController.m */,
-				533C65E915ABBA09003EAF29 /* AlbumViewController.xib */,
+				53F2D3EB113A338500107D63 /* FolderViewController.h */,
+				53F2D3EC113A338500107D63 /* FolderViewController.m */,
+				533C65E915ABBA09003EAF29 /* FolderViewController.xib */,
 				53C22CCD128EE81C00FFBA67 /* ModalAlbumArtViewController.h */,
 				53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.m */,
 				532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */,
@@ -3675,7 +3675,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28F335F11007B36200424DE2 /* FoldersViewController.xib in Resources */,
-				533C65E315ABBA09003EAF29 /* AlbumViewController.xib in Resources */,
+				533C65E315ABBA09003EAF29 /* FolderViewController.xib in Resources */,
 				533A2D83113C963300B3A376 /* controller-next.png in Resources */,
 				533A2D84113C963300B3A376 /* controller-pause.png in Resources */,
 				533A2D85113C963300B3A376 /* controller-play.png in Resources */,
@@ -3972,7 +3972,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				53159D3C156F69D0001B0268 /* FoldersViewController.xib in Resources */,
-				533C65E615ABBA09003EAF29 /* AlbumViewController.xib in Resources */,
+				533C65E615ABBA09003EAF29 /* FolderViewController.xib in Resources */,
 				53159D3E156F69D0001B0268 /* controller-next.png in Resources */,
 				53159D3F156F69D0001B0268 /* controller-pause.png in Resources */,
 				53159D40156F69D0001B0268 /* controller-play.png in Resources */,
@@ -4257,7 +4257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				53BC26A2139AF0DD00A825F1 /* FoldersViewController.xib in Resources */,
-				533C65E515ABBA09003EAF29 /* AlbumViewController.xib in Resources */,
+				533C65E515ABBA09003EAF29 /* FolderViewController.xib in Resources */,
 				53BC26A4139AF0DD00A825F1 /* controller-next.png in Resources */,
 				537EF7B7182B2F2200968FE0 /* controller-slider-thumb.png in Resources */,
 				53BC26A5139AF0DD00A825F1 /* controller-pause.png in Resources */,
@@ -4551,7 +4551,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				53DCF3FF13BFEAD3009160F9 /* FoldersViewController.xib in Resources */,
-				533C65E415ABBA09003EAF29 /* AlbumViewController.xib in Resources */,
+				533C65E415ABBA09003EAF29 /* FolderViewController.xib in Resources */,
 				53DCF40113BFEAD3009160F9 /* controller-next.png in Resources */,
 				53DCF40213BFEAD3009160F9 /* controller-pause.png in Resources */,
 				53DCF40313BFEAD3009160F9 /* controller-play.png in Resources */,
@@ -4869,7 +4869,7 @@
 			files = (
 				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
 				28C286E10D94DF7D0034E888 /* FoldersViewController.m in Sources */,
-				53F2D3EE113A338500107D63 /* AlbumViewController.m in Sources */,
+				53F2D3EE113A338500107D63 /* FolderViewController.m in Sources */,
 				53F675AF113B048600822059 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				533A2D07113C61CA00B3A376 /* AsynchronousImageView.m in Sources */,
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
@@ -4973,7 +4973,7 @@
 			files = (
 				53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */,
 				53159E67156F69D0001B0268 /* FoldersViewController.m in Sources */,
-				53159E6A156F69D0001B0268 /* AlbumViewController.m in Sources */,
+				53159E6A156F69D0001B0268 /* FolderViewController.m in Sources */,
 				53159E6D156F69D0001B0268 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53159E6E156F69D0001B0268 /* AsynchronousImageView.m in Sources */,
 				53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */,
@@ -5082,7 +5082,7 @@
 			files = (
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
 				53BC279D139AF0DD00A825F1 /* FoldersViewController.m in Sources */,
-				53BC27A1139AF0DD00A825F1 /* AlbumViewController.m in Sources */,
+				53BC27A1139AF0DD00A825F1 /* FolderViewController.m in Sources */,
 				53BC27A4139AF0DD00A825F1 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53BC27A5139AF0DD00A825F1 /* AsynchronousImageView.m in Sources */,
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
@@ -5186,7 +5186,7 @@
 			files = (
 				53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */,
 				53DCF4FE13BFEAD3009160F9 /* FoldersViewController.m in Sources */,
-				53DCF50213BFEAD3009160F9 /* AlbumViewController.m in Sources */,
+				53DCF50213BFEAD3009160F9 /* FolderViewController.m in Sources */,
 				53DCF50513BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */,
 				53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */,
@@ -5498,12 +5498,12 @@
 			name = EqualizerViewController.xib;
 			sourceTree = "<group>";
 		};
-		533C65E915ABBA09003EAF29 /* AlbumViewController.xib */ = {
+		533C65E915ABBA09003EAF29 /* FolderViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				533C65E815ABBA09003EAF29 /* en */,
 			);
-			name = AlbumViewController.xib;
+			name = FolderViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

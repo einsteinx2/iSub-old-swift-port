@@ -9,7 +9,7 @@
 #import "FoldersViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "AlbumViewController.h"
+#import "FolderViewController.h"
 #import "ArtistUITableViewCell.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FolderDropdownControl.h"
@@ -614,7 +614,7 @@
 				anArtist = [_dataModel artistForPosition:(sectionStartIndex + indexPath.row)];
 			}
 		}
-		AlbumViewController* albumViewController = [[AlbumViewController alloc] initWithArtist:anArtist orAlbum:nil];
+		FolderViewController* albumViewController = [[FolderViewController alloc] initWithArtist:anArtist orAlbum:nil];
 		[self pushViewControllerCustom:albumViewController];
 	}
 	else
