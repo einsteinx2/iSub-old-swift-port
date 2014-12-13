@@ -6,19 +6,12 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-
 @class SUSServerPlaylist;
 
 @interface PlaylistSongsViewController : CustomUITableViewController
 
+@property (nonatomic, copy) NSString *md5;
+@property (nonatomic, strong) SUSServerPlaylist *serverPlaylist;
 @property (nonatomic, getter=isLocalPlaylist) BOOL localPlaylist;
-@property(nonatomic) BOOL reloading;
-@property (copy) NSString *md5;
-@property NSUInteger playlistCount;
-@property (copy) SUSServerPlaylist *serverPlaylist;
-@property (strong) NSMutableData *receivedData;
-@property (strong) NSURLConnection *connection;
-
-- (void)parseData;
 
 @end
