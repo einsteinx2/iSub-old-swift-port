@@ -906,8 +906,8 @@
 	{
 		if (!self.tableView.editing)
 		{
-			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
-			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:ISMSNotification_ShowDeleteButton object: nil];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:ISMSNotification_HideDeleteButton object: nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:YES animated:YES];
 			self.editSongsLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
@@ -918,8 +918,8 @@
 		}
 		else 
 		{
-			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
-			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
+			[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ShowDeleteButton object:nil];
+			[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_HideDeleteButton object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:NO animated:YES];
 			[self hideDeleteButton];
@@ -934,8 +934,8 @@
 	{
 		if (!self.tableView.editing)
 		{
-			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
-			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:ISMSNotification_ShowDeleteButton object: nil];
+			[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:ISMSNotification_HideDeleteButton object: nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:YES animated:YES];
 			self.editSongsLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
@@ -946,8 +946,8 @@
 		}
 		else 
 		{
-			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
-			[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
+			[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ShowDeleteButton object:nil];
+			[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_HideDeleteButton object:nil];
 			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:NO animated:YES];
 			[self hideDeleteButton];

@@ -214,8 +214,8 @@
 	if (self.tableView.editing == NO)
 	{
 		[self.tableView reloadData];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:@"showDeleteButton" object: nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:@"hideDeleteButton" object: nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:ISMSNotification_ShowDeleteButton object: nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:ISMSNotification_HideDeleteButton object: nil];
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 		[self.tableView setEditing:YES animated:YES];
@@ -227,8 +227,8 @@
 	}
 	else 
 	{
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"showDeleteButton" object:nil];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"hideDeleteButton" object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ShowDeleteButton object:nil];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_HideDeleteButton object:nil];
 		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 		[self hideDeleteButton];
