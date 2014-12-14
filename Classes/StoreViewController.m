@@ -9,9 +9,17 @@
 #import "StoreViewController.h"
 #import "StoreUITableViewCell.h"
 
+@interface StoreViewController()
+{
+    MKStoreManager *_storeManager;
+    NSArray *_storeItems;
+    NSTimer *_checkProductsTimer;
+}
+@end
+
 @implementation StoreViewController
 
-#pragma mark - View lifecycle
+#pragma mark - Rotation -
 
 - (BOOL)shouldAutorotate
 {
@@ -26,77 +34,98 @@
 	[self.tableView reloadData];
 }
 
+#pragma mark - Lifecycle -
+
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
 
-	self.storeManager = [MKStoreManager sharedManager];
+	_storeManager = [MKStoreManager sharedManager];
 
-	self.storeItems = [[NSArray alloc] initWithArray:self.storeManager.purchasableObjects];
+	_storeItems = _storeManager.purchasableObjects;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:ISMSNotification_StorePurchaseComplete object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_storePurchaseComplete:)
+                                                 name:ISMSNotification_StorePurchaseComplete
+                                               object:nil];
 	
-	if (self.storeItems.count == 0)
+	if (_storeItems.count == 0)
 	{
 		[viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
-		self.checkProductsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(checkProducts) userInfo:nil repeats:YES];
-		[self checkProducts];
+		_checkProductsTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                               target:self
+                                                             selector:@selector(a_checkProducts:)
+                                                             userInfo:nil
+                                                               repeats:YES];
+        [self a_checkProducts:nil];
 	}
 	else
 	{
-		[self organizeList];
+		[self _organizeList];
 		[self.tableView reloadData];
 	}
 }
 
-
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc. that aren't in use.
 }
 
 - (void)dealloc 
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self.tableView];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:ISMSNotification_StorePurchaseComplete
+                                                  object:nil];
 }
 
-#pragma mark - Store
+#pragma mark - Notifications -
+
+- (void)_storePurchaseComplete:(NSNotification *)notification
+{
+    [self.tableView reloadData];
+}
+
+#pragma mark - Actions -
+
+- (void)a_checkProducts:(id)sender
+{
+    _storeItems = _storeManager.purchasableObjects;
+    
+    if (_storeItems.count > 0)
+    {
+        [_checkProductsTimer invalidate];
+        _checkProductsTimer = nil;
+        
+        [viewObjectsS hideLoadingScreen];
+        
+        [self _organizeList];
+        
+        [self.tableView reloadData];
+    }
+}
+
+#pragma mark - Loading -
 
 - (void)cancelLoad
 {
-	[self.checkProductsTimer invalidate]; self.checkProductsTimer = nil;
+	[_checkProductsTimer invalidate];
+    _checkProductsTimer = nil;
+    
 	[viewObjectsS hideLoadingScreen];
 }
 
-- (void)checkProducts
+- (void)_organizeList
 {
-	self.storeItems = [[NSArray alloc] initWithArray:self.storeManager.purchasableObjects];
-	
-	if (self.storeItems.count > 0)
-	{
-		[self.checkProductsTimer invalidate]; 
-		self.checkProductsTimer = nil;
-		
-		[viewObjectsS hideLoadingScreen];
-		
-		[self organizeList];
-		
-		[self.tableView reloadData];
-	}
-}
-
-- (void)organizeList
-{
+    // Place purchased products at the the end of the list
 	NSMutableArray *sorted = [[NSMutableArray alloc] init];
-	NSMutableArray *temp = [[NSMutableArray alloc] init];
+	NSMutableArray *purchased = [[NSMutableArray alloc] init];
 	
-	for (SKProduct *product in self.storeItems)
+	for (SKProduct *product in _storeItems)
 	{
 		if ([MKStoreManager isFeaturePurchased:[product productIdentifier]])
 		{
-			[temp addObject:product];
+			[purchased addObject:product];
 		}
 		else
 		{
@@ -104,35 +133,28 @@
 		}
 	}
 	
-	[sorted addObjectsFromArray:temp];
+	[sorted addObjectsFromArray:purchased];
 	
-	self.storeItems = [[NSArray alloc] initWithArray:sorted];
+	_storeItems = sorted;
 }
 
 #pragma mark - Table view data source
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if (indexPath.row == 0)
-		return 75.0;
-	return 150.0;
+    return indexPath.row == 0 ? 75.0 : 150.0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {
-    // Return the number of sections.
     return 1;
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return self.storeItems.count + 1;
+    return _storeItems.count + 1;
 }
 
-
-// Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellIdentifier = @"NoReuse";
@@ -147,7 +169,7 @@
 	{
 		NSUInteger adjustedRow = indexPath.row - 1;
 		cell = [[StoreUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-		((StoreUITableViewCell *)cell).myProduct = [self.storeItems objectAtIndexSafe:adjustedRow];
+		((StoreUITableViewCell *)cell).myProduct = [_storeItems objectAtIndexSafe:adjustedRow];
 	}
 	return cell;
 }
@@ -156,14 +178,17 @@
 {
 	if (indexPath.row == 0)
 	{
-		[self.storeManager restorePreviousTransactions];
+		[_storeManager restorePreviousTransactions];
 	}
 	else
 	{
 		NSUInteger adjustedRow = indexPath.row - 1;
-		if (![MKStoreManager isFeaturePurchased:[[self.storeItems objectAtIndexSafe:adjustedRow] productIdentifier]])
+        SKProduct *product = [_storeItems objectAtIndexSafe:adjustedRow];
+        NSString *identifier = [product productIdentifier];
+        
+		if (![MKStoreManager isFeaturePurchased:identifier])
 		{
-			[self.storeManager buyFeature:[[self.storeItems objectAtIndexSafe:adjustedRow] productIdentifier]];
+			[_storeManager buyFeature:identifier];
 			
 			[self.navigationController popToRootViewControllerAnimated:YES];
 		}

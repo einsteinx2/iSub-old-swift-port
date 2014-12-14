@@ -8,14 +8,6 @@
 
 #import "MKStoreManager.h"
 
-@interface StoreViewController : UITableViewController
-
-@property (strong) MKStoreManager *storeManager;
-@property (strong) NSArray *storeItems;
-@property (strong) NSTimer *checkProductsTimer;
-
-- (void)checkProducts;
-- (void)organizeList;
-- (void)cancelLoad;
+@interface StoreViewController : CustomUITableViewController
 
 @end
