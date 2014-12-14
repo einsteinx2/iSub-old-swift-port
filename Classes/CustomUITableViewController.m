@@ -28,8 +28,8 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxEnabled object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxDisabled object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_jukeboxToggled:) name:ISMSNotification_JukeboxEnabled object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_jukeboxToggled:) name:ISMSNotification_JukeboxDisabled object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupLeftBarButton) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self setupRefreshControl];
@@ -39,18 +39,22 @@
         self.view.backgroundColor = ISMSiPadBackgroundColor;
     }
     
+    UITableView *tableView = self.tableView;
+    tableView.tableHeaderView = [self setupHeaderView];
     // Keep the table rows from showing past the bottom
-    if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
+    if (!tableView.tableFooterView) tableView.tableFooterView = [[UIView alloc] init];
+    [self customizeTableView:tableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [self updateBackgroundColor];
+    [self _updateBackgroundColor];
     
-    [self setupLeftBarButton];
-    [self setupRightBarButton];
+    UINavigationItem *navigationItem = self.navigationController.navigationItem;
+    navigationItem.leftBarButtonItem = [self setupLeftBarButton];
+    navigationItem.rightBarButtonItem = [self setupRightBarButton];
 }
 
 - (void)dealloc
@@ -60,21 +64,36 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-#pragma mark - UI -
+#pragma mark - Private -
 
-- (void)updateBackgroundColor
+- (void)_updateBackgroundColor
 {
     self.view.backgroundColor = settingsS.isJukeboxEnabled ? viewObjectsS.jukeboxColor : viewObjectsS.windowColor;
 }
 
-- (void)jukeboxToggled
+#pragma mark Notifications
+
+- (void)_jukeboxToggled:(NSNotification *)notification
 {
-    [self updateBackgroundColor];
+    [self _updateBackgroundColor];
 }
 
-#pragma mark Navigation Items
+#pragma mark - UI -
 
-- (void)setupLeftBarButton
+#pragma mark Initial Setup
+
+- (UIView *)setupHeaderView
+{
+    // Override to provide a custom header
+    return nil;
+}
+
+- (void)customizeTableView:(UITableView *)tableView
+{
+    
+}
+
+- (UIBarButtonItem *)setupLeftBarButton
 {
     BOOL isRootViewController = self.navigationController.viewControllers[0] == self;
     BOOL isInsideMoreTab = appDelegateS.mainTabBarController.selectedIndex == 4;
@@ -100,10 +119,10 @@
         }
     }
     
-    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+    return leftBarButtonItem;
 }
 
-- (void)setupRightBarButton
+- (UIBarButtonItem *)setupRightBarButton
 {
     UIBarButtonItem *rightBarButtonItem = nil;
     
@@ -115,7 +134,7 @@
                                                              action:@selector(a_nowPlaying:)];
     }
     
-    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+    return rightBarButtonItem;
 }
 
 #pragma mark Pull to Refresh
