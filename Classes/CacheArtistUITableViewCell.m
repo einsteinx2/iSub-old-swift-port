@@ -125,7 +125,7 @@
 	[cacheS findCacheSize];
 	
 	// Reload the cached songs table
-	[NSNotificationCenter postNotificationToMainThreadWithName:@"cachedSongDeleted"];
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CachedSongDeleted];
 	
 	if (!cacheQueueManagerS.isQueueDownloading)
 		[cacheQueueManagerS startDownloadQueue];

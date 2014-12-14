@@ -117,7 +117,7 @@
 	self.overlayView.downloadButton.enabled = NO;
 	
 	// Reload the cached songs table
-	[NSNotificationCenter postNotificationToMainThreadWithName:@"cachedSongDeleted"];
+	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CachedSongDeleted];
 	
 	[self hideOverlay];
 }

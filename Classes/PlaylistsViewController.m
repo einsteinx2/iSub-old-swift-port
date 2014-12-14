@@ -159,13 +159,23 @@
 
 - (void)_registerForNotifications
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_bassInitialized:) name:ISMSNotification_BassInitialized object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_bassFreed:) name:ISMSNotification_BassFreed object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentPlaylistIndexChanged:) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentPlaylistShuffleToggled:) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentPlaylistSongsQueued:) name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_storePurchaseComplete:) name:ISMSNotification_StorePurchaseComplete object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_jukeboxSongInfo:) name:ISMSNotification_JukeboxSongInfo object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_bassInitialized:)
+                                                 name:ISMSNotification_BassInitialized object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_bassFreed:)
+                                                 name:ISMSNotification_BassFreed object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentPlaylistIndexChanged:)
+                                                 name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentPlaylistShuffleToggled:)
+                                                 name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_currentPlaylistSongsQueued:)
+                                                 name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_storePurchaseComplete:)
+                                                 name:ISMSNotification_StorePurchaseComplete object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_jukeboxSongInfo:)
+                                                 name:ISMSNotification_JukeboxSongInfo object:nil];
 }
 
 - (void)_unregisterForNotifications
@@ -181,8 +191,11 @@
 
 - (void)_registerForDeleteButtonNotifications
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_showDeleteButton:) name:ISMSNotification_ShowDeleteButton object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_hideDeleteButton:) name:ISMSNotification_HideDeleteButton object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_showDeleteButton:)
+                                                 name:ISMSNotification_ShowDeleteButton object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_hideDeleteButton:)
+                                                 name:ISMSNotification_HideDeleteButton object:nil];
 }
 
 - (void)_unregisterForDeleteButtonNotifications

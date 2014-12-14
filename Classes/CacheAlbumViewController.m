@@ -18,7 +18,7 @@
 
 @synthesize listOfAlbums, listOfSongs, sectionInfo, segments;
 
-NSInteger trackSort2(id obj1, id obj2, void *context)
+static NSInteger trackSort(id obj1, id obj2, void *context)
 {
 	NSUInteger track1TrackNum = [(NSNumber*)[(NSArray*)obj1 objectAtIndexSafe:1] intValue];
 	NSUInteger track2TrackNum = [(NSNumber*)[(NSArray*)obj2 objectAtIndexSafe:1] intValue];
@@ -131,13 +131,13 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 	}	
 	
 	// Set notification receiver for when cached songs are deleted to reload the table
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cachedSongDeleted) name:@"cachedSongDeleted" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cachedSongDeleted) name:ISMSNotification_CachedSongDeleted object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"cachedSongDeleted" object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CachedSongDeleted object:nil];
 }
 
 
@@ -201,7 +201,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 						
 						// Sort by track number
 						if (!multipleSameTrackNumbers)
-							[self.listOfSongs sortUsingFunction:trackSort2 context:NULL];
+							[self.listOfSongs sortUsingFunction:trackSort context:NULL];
 					}
 				}
 			}
@@ -576,7 +576,7 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 								
 								// Sort by track number
 								if (!multipleSameTrackNumbers)
-									[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort2 context:NULL];
+									[cacheAlbumViewController.listOfSongs sortUsingFunction:trackSort context:NULL];
 							}
 						}
 					}

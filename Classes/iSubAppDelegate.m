@@ -103,12 +103,14 @@ LOG_LEVEL_ISUB_DEFAULT
 	// Setup network reachability notifications
 	self.wifiReach = [EX2Reachability reachabilityForLocalWiFi];
 	[self.wifiReach startNotifier];
-	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:)
+                                                 name:EX2ReachabilityNotification_ReachabilityChanged object:nil];
 	[self.wifiReach currentReachabilityStatus];
 	
 	// Check battery state and register for notifications
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:) name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:)
+                                                 name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];	
 	
 	// Handle offline mode
