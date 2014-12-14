@@ -107,7 +107,7 @@
     UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
     sendButton.frame = CGRectMake(252, 11, 60, 60);
     sendButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-    [sendButton addTarget:self action:@selector(sendButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    [sendButton addTarget:self action:@selector(a_sendButton:) forControlEvents:UIControlEventTouchUpInside];
     [sendButton setImage:[UIImage imageNamed:@"comment-write"] forState:UIControlStateNormal];
     [sendButton setImage:[UIImage imageNamed:@"comment-write-pressed"] forState:UIControlStateHighlighted];
     [headerView addSubview:sendButton];
@@ -171,6 +171,44 @@
 			}
 		}
 	}
+}
+
+- (NSString *)_formatDate:(NSInteger)unixtime
+{
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:unixtime];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateStyle = kCFDateFormatterShortStyle;
+    formatter.timeStyle = kCFDateFormatterShortStyle;
+    formatter.locale = [NSLocale currentLocale];
+    NSString *formattedDate = [formatter stringFromDate:date];
+    
+    return formattedDate;
+}
+
+#pragma mark - Actions -
+
+- (void)a_sendButton:(id)sender
+{
+    if ([_textInput.text length] != 0)
+    {
+        [_textInput resignFirstResponder];
+        
+        [self setupRightBarButton];
+        
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Sending"];
+        [_dataModel sendChatMessage:_textInput.text];
+        
+        _textInput.text = @"";
+        [_textInput resignFirstResponder];
+    }
+}
+
+- (void)a_doneSearching:(id)sender
+{
+    [_textInput resignFirstResponder];
+    
+    self.navigationItem.rightBarButtonItem = [self setupRightBarButton];
 }
 
 #pragma mark - Loading -
@@ -261,14 +299,6 @@
     } completion:nil];
 }
 
-
-- (void)a_doneSearching:(id)sender
-{	
-	[_textInput resignFirstResponder];
-    
-    self.navigationItem.rightBarButtonItem = [self setupRightBarButton];
-}
-
 #pragma mark - Table View Delegate -
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
@@ -294,19 +324,6 @@
     return [_dataModel.chatMessages count];
 }
 
-- (NSString *)formatDate:(NSInteger)unixtime
-{
-	NSDate *date = [NSDate dateWithTimeIntervalSince1970:unixtime];
-	
-	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	formatter.dateStyle = kCFDateFormatterShortStyle;
-	formatter.timeStyle = kCFDateFormatterShortStyle;
-	formatter.locale = [NSLocale currentLocale];
-	NSString *formattedDate = [formatter stringFromDate:date];
-	
-	return formattedDate;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	static NSString *cellIdentifier = @"ChatCell";
@@ -318,28 +335,12 @@
 	}
 
 	ISMSChatMessage *aChatMessage = [_dataModel.chatMessages objectAtIndexSafe:indexPath.row];
-	cell.userNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aChatMessage.user, [self formatDate:aChatMessage.timestamp]];
+	cell.userNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aChatMessage.user, [self _formatDate:aChatMessage.timestamp]];
 	cell.messageLabel.text = aChatMessage.message;
 	
 	cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 	
     return cell;
-}
-
-- (void)sendButtonAction
-{
-	if ([_textInput.text length] != 0)
-	{
-		[_textInput resignFirstResponder];
-
-        [self setupRightBarButton];
-		
-		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Sending"];
-		[_dataModel sendChatMessage:_textInput.text];
-		
-		_textInput.text = @"";
-		[_textInput resignFirstResponder];
-	}
 }
 
 @end
