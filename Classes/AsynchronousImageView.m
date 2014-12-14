@@ -101,7 +101,7 @@ LOG_LEVEL_ISUB_DEBUG
 	}
 	else 
 	{
-		self.image = [UIImage imageNamed:@"default-album-art.png"];
+		self.image = [UIImage imageNamed:@"default-album-art"];
 	}*/
 }
 

@@ -56,7 +56,7 @@
 		self.noBookmarksScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
 		self.noBookmarksScreen.frame = CGRectMake(40, 100, 240, 180);
 		self.noBookmarksScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-		self.noBookmarksScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		self.noBookmarksScreen.image = [UIImage imageNamed:@"loading-screen-image"];
 		self.noBookmarksScreen.alpha = .80;
 		
 		UILabel *textLabel = [[UILabel alloc] init];
@@ -432,10 +432,10 @@
 	cell.indexPath = indexPath;
 	
 	cell.deleteToggleImage.hidden = !self.tableView.editing;
-	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
 	if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 	{
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
 	}
 	
     // Set up the cell...

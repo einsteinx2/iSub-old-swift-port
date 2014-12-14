@@ -104,7 +104,7 @@
     {
         if (settingsS.isOfflineMode)
         {
-            leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"]
+            leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear"]
                                                                  style:UIBarButtonItemStyleBordered
                                                                 target:self
                                                                 action:@selector(a_settings:)];
@@ -128,7 +128,7 @@
     
     if(musicS.showPlayerIcon)
     {
-        rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"]
+        rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing"]
                                                               style:UIBarButtonItemStyleBordered
                                                              target:self
                                                              action:@selector(a_nowPlaying:)];

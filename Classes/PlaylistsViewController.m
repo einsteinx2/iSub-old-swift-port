@@ -430,7 +430,7 @@
 	_noPlaylistsScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
 	_noPlaylistsScreen.frame = CGRectMake(40, 100, 240, 180);
 	_noPlaylistsScreen.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
-	_noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+	_noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image"];
 	_noPlaylistsScreen.alpha = .80;
 	_noPlaylistsScreen.userInteractionEnabled = YES;
 	
@@ -1527,10 +1527,10 @@ static NSString *kName_Error = @"error";
 		cell.indexPath = indexPath;
 		
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
 		if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
 		}
 		
 		ISMSSong *aSong = [playlistS songForIndex:indexPath.row];
@@ -1580,10 +1580,10 @@ static NSString *kName_Error = @"error";
 		
 		// Set up the cell...
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
 		if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
 		}
 		cell.contentView.backgroundColor = [UIColor clearColor];
 		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
@@ -1615,10 +1615,10 @@ static NSString *kName_Error = @"error";
         cell.serverPlaylist = [_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
 		
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
 		if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
 		}
 		
 		cell.contentView.backgroundColor = [UIColor clearColor];

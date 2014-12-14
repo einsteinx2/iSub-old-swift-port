@@ -24,7 +24,7 @@
 		isSearching = NO;
 		isDelete = NO;
 		
-		deleteToggleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"unselected.png"]];
+		deleteToggleImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"unselected"]];
 		[self addSubview:deleteToggleImage];
 		deleteToggleImage.hidden = YES;
     }
@@ -113,13 +113,13 @@
 	{
 		[viewObjectsS.multiDeleteList removeObject:@(indexPath.row)];
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_HideDeleteButton];
-		self.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
 	}
 	else
 	{
 		[viewObjectsS.multiDeleteList addObject:@(indexPath.row)];
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowDeleteButton];
-		self.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
 	}
 	
 	self.isDelete = !self.isDelete;
@@ -127,12 +127,12 @@
 
 - (UIImage *)nowPlayingImageBlack
 {
-	return [UIImage imageNamed:@"playing-cell-icon.png"];
+	return [UIImage imageNamed:@"playing-cell-icon"];
 }
 
 - (UIImage *)nowPlayingImageWhite
 {
-	return [UIImage imageNamed:@"playing-cell-icon-white.png"];
+	return [UIImage imageNamed:@"playing-cell-icon-white"];
 }
 
 @end

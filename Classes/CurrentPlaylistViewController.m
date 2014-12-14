@@ -127,7 +127,7 @@
 		UIImageView *noPlaylistsScreen = [[UIImageView alloc] init];
 		noPlaylistsScreen.userInteractionEnabled = YES;
 		noPlaylistsScreen.frame = CGRectMake(40, 80, 240, 180);
-		noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		noPlaylistsScreen.image = [UIImage imageNamed:@"loading-screen-image"];
 		
 		UILabel *textLabel = [[UILabel alloc] init];
 		textLabel.backgroundColor = [UIColor clearColor];
@@ -620,10 +620,10 @@
     cell.indexPath = indexPath;
 	
 	cell.deleteToggleImage.hidden = !self.tableView.editing;
-	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
 	if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
 	{
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
 	}
 	
 	ISMSSong *aSong;

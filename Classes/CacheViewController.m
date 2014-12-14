@@ -769,7 +769,7 @@
 		self.noSongsScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
 		self.noSongsScreen.frame = CGRectMake(40, 100, 240, 180);
 		self.noSongsScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-		self.noSongsScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		self.noSongsScreen.image = [UIImage imageNamed:@"loading-screen-image"];
 		self.noSongsScreen.alpha = .80;
 		self.noSongsScreen.userInteractionEnabled = YES;
 		
@@ -1239,10 +1239,10 @@
 		NSString *name = [[listOfArtistsSections objectAtIndexSafe:indexPath.section] objectAtIndexSafe:indexPath.row];
 		
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
 		if ([viewObjectsS.multiDeleteList containsObject:name])
 		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
 		}
 		
 		if (self.showIndex)
@@ -1278,10 +1278,10 @@
 		}];
 		
 		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
 		if ([viewObjectsS.multiDeleteList containsObject:cell.md5])
 		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
 		}
 		
 		cell.coverArtView.coverArtId = aSong.coverArtId;

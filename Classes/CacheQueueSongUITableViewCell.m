@@ -101,13 +101,13 @@
 	{
 		[viewObjectsS.multiDeleteList removeObject:self.md5];
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_HideDeleteButton];
-		self.deleteToggleImage.image = [UIImage imageNamed:@"unselected.png"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
 	}
 	else
 	{
 		[viewObjectsS.multiDeleteList addObject:self.md5];
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowDeleteButton];
-		self.deleteToggleImage.image = [UIImage imageNamed:@"selected.png"];
+		self.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
 	}
 	
 	self.isDelete = !self.isDelete;

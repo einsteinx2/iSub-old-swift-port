@@ -80,12 +80,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
     
     self.progressSlider.superview.y -= 2.;
     
-    [self.progressSlider setThumbImage:[UIImage imageNamed:@"controller-slider-thumb.png"] forState:UIControlStateNormal];
+    [self.progressSlider setThumbImage:[UIImage imageNamed:@"controller-slider-thumb"] forState:UIControlStateNormal];
 	
     //DLog(@"coverArtImageView class: %@", NSStringFromClass(coverArtImageView.class));
 	
-	self.extraButtonsButtonOffImage = [UIImage imageNamed:@"controller-extras.png"];
-	self.extraButtonsButtonOnImage = [UIImage imageNamed:@"controller-extras-on.png"];
+	self.extraButtonsButtonOffImage = [UIImage imageNamed:@"controller-extras"];
+	self.extraButtonsButtonOnImage = [UIImage imageNamed:@"controller-extras-on"];
 	
 	// Set default values
 	self.pageControlViewController = nil;
@@ -116,10 +116,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[self createLandscapeViews];
 	
 	// Setup the navigation controller buttons
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)];
 	if (!IS_IPAD())
     {
-		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)];
+		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"] style:UIBarButtonItemStyleBordered target:self action:@selector(backAction:)];
     }
     
 	// Initialize the song info
@@ -255,7 +255,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[self setPlayButtonImage];
 	}
 	
-	NSString *imageName = settingsS.isEqualizerOn ? @"controller-equalizer-on.png" : @"controller-equalizer.png";
+	NSString *imageName = settingsS.isEqualizerOn ? @"controller-equalizer-on" : @"controller-equalizer";
 	[self.eqButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
 	
 	[self quickSecondsSetLabels];
@@ -648,18 +648,18 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 
 - (void)setPlayButtonImage
 {		
-	[self.playButton setImage:[UIImage imageNamed:@"controller-play.png"] forState:0];
+	[self.playButton setImage:[UIImage imageNamed:@"controller-play"] forState:0];
 }
 
 
 - (void)setPauseButtonImage
 {
-	[self.playButton setImage:[UIImage imageNamed:@"controller-pause.png"] forState:0];
+	[self.playButton setImage:[UIImage imageNamed:@"controller-pause"] forState:0];
 }
 
 - (void)setStopButtonImage
 {
-	[self.playButton setImage:[UIImage imageNamed:@"controller-stop.png"] forState:0];
+	[self.playButton setImage:[UIImage imageNamed:@"controller-stop"] forState:0];
 }
  
 - (void)createSongTitle
@@ -801,18 +801,18 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
         self.remainingTimeLabel.alpha = 0.5;
 	}
 	
-	[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
+	[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat"] forState:0];
 	self.repeatButton.enabled = NO;
 	if (!settingsS.isJukeboxEnabled)
 	{
 		self.repeatButton.enabled = YES;
 		if(playlistS.repeatMode == 1)
 		{
-			[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
+			[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one"] forState:0];
 		}
 		else if(playlistS.repeatMode == 2)
 		{
-			[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
+			[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all"] forState:0];
 		}
 	}
 	
@@ -836,11 +836,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	
 	if (bookmarkCount > 0)
 	{
-		self.bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+		self.bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on"];
 	}
 	else
 	{
-		self.bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark.png"];
+		self.bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark"];
 	}
 	
 	self.trackLabel.text = [self.currentSong.track intValue] != 0 ? [NSString stringWithFormat:@"Track %i", [self.currentSong.track intValue]] : @"";
@@ -879,7 +879,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		CGRect frame = self.volumeSlider.bounds;
 		frame.size.height = self.volumeSlider.bounds.size.height / 2;
 		self.jukeboxVolumeView = [[UISlider alloc] initWithFrame:frame];
-        [self.jukeboxVolumeView setThumbImage:[UIImage imageNamed:@"controller-slider-thumb.png"] forState:UIControlStateNormal];
+        [self.jukeboxVolumeView setThumbImage:[UIImage imageNamed:@"controller-slider-thumb"] forState:UIControlStateNormal];
 		[self.jukeboxVolumeView addTarget:self action:@selector(jukeboxVolumeChanged:) forControlEvents:UIControlEventValueChanged];
 		self.jukeboxVolumeView.minimumValue = 0.0;
 		self.jukeboxVolumeView.maximumValue = 1.0;
@@ -897,7 +897,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		
 		CGRect newFrame = CGRectMake(10, 0, self.volumeSlider.width-20, self.volumeSlider.height);
 		self.volumeView = [[MPVolumeView alloc] initWithFrame:newFrame];
-        [self.volumeView setVolumeThumbImage:[UIImage imageNamed:@"controller-volumeslider-thumb.png"] forState:UIControlStateNormal];
+        [self.volumeView setVolumeThumbImage:[UIImage imageNamed:@"controller-volumeslider-thumb"] forState:UIControlStateNormal];
 		[self.volumeSlider addSubview:self.volumeView];
 	}
 	
@@ -982,7 +982,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	{
 		self.songInfoToggleButton.userInteractionEnabled = YES;
 		
-		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)];
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"player-overlay"] style:UIBarButtonItemStyleBordered target:self action:@selector(songInfoToggle:)];
 		
 		// Flip the album art horizontally
 		self.coverArtHolderView.transform = CGAffineTransformMakeScale(1, 1);
@@ -1468,17 +1468,17 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {	
 	if(playlistS.repeatMode == 0)
 	{
-		[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one.png"] forState:0];
+		[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat-one"] forState:0];
 		playlistS.repeatMode = 1;
 	}
 	else if(playlistS.repeatMode == 1)
 	{
-		[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all.png"] forState:0];
+		[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat-all"] forState:0];
 		playlistS.repeatMode = 2;
 	}
 	else if(playlistS.repeatMode == 2)
 	{
-		[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat.png"] forState:0];
+		[self.repeatButton setImage:[UIImage imageNamed:@"controller-repeat"] forState:0];
 		playlistS.repeatMode = 0;
 	}
 }
@@ -1528,7 +1528,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[db executeUpdate:@"DETACH DATABASE currentPlaylistDb"];
 	}];
 	
-	self.bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on.png"];
+	self.bookmarkButton.imageView.image = [UIImage imageNamed:@"controller-bookmark-on"];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -1620,11 +1620,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {	
 	if (playlistS.isShuffle)
 	{
-		[self.shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on.png"] forState:0];
+		[self.shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle-on"] forState:0];
 	}
 	else
 	{
-		[self.shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle.png"] forState:0];
+		[self.shuffleButton setImage:[UIImage imageNamed:@"controller-shuffle"] forState:0];
 	}
 	
 	[viewObjectsS hideLoadingScreen];

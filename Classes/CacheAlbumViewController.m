@@ -434,13 +434,13 @@ NSInteger trackSort2(id obj1, id obj2, void *context)
 			else 
 			{	
 				// If it's not, display the default image
-				cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
+				cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small"];
 			}
 		}
 		else
 		{
 			// If there's no cover art at all, display the default image
-			cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small.png"];
+			cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small"];
 		}
 		
 		[cell.albumNameLabel setText:name];

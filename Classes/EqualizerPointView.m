@@ -27,7 +27,7 @@
 		position.y = point.y / parentSize.height;
 		handle = 0;
 		
-		self.image = [UIImage imageNamed:@"eqView.png"];
+		self.image = [UIImage imageNamed:@"eqView"];
 		
 		self.userInteractionEnabled = YES;
 		
@@ -61,7 +61,7 @@
         position.x = [self percentXFromFrequency:value.parameters.fCenter];
 		position.y = [self percentYFromGain:value.parameters.fGain];
 		
-		self.image = [UIImage imageNamed:@"eqView.png"];
+		self.image = [UIImage imageNamed:@"eqView"];
 		
 		self.userInteractionEnabled = YES;
 		

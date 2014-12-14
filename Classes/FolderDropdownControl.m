@@ -56,7 +56,7 @@
 		_arrowImage = [[CALayer alloc] init];
 		_arrowImage.frame = CGRectMake(0, 0, 18, 18);
 		_arrowImage.contentsGravity = kCAGravityResizeAspect;
-		_arrowImage.contents = (id)[UIImage imageNamed:@"folder-dropdown-arrow.png"].CGImage;
+		_arrowImage.contents = (id)[UIImage imageNamed:@"folder-dropdown-arrow"].CGImage;
 		[[arrowImageView layer] addSublayer:_arrowImage];
 		
 		_dropdownButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 220, 30)];

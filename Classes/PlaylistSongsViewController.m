@@ -40,7 +40,7 @@
 			UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
 			headerView.backgroundColor = viewObjectsS.darkNormal;
 			
-			UIImageView *sendImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upload-playlist.png"]];
+			UIImageView *sendImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upload-playlist"]];
 			sendImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 			sendImage.frame = CGRectMake(23, 11, 24, 24);
 			[headerView addSubview:sendImage];

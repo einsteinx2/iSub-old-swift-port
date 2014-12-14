@@ -166,7 +166,7 @@
 		else
 			self.twitterEnabledSwitch.on = NO;
 		
-		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout.png"];
+		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout"];
 		
 		self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [account username]];
 	}
@@ -175,7 +175,7 @@
 		self.twitterEnabledSwitch.on = NO;
 		self.twitterEnabledSwitch.enabled = NO;
 		
-		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin.png"];
+		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin"];
 		
 		self.twitterStatusLabel.text = @"Signed out";
 	}
@@ -220,7 +220,7 @@
         else
             self.twitterEnabledSwitch.on = NO;
         
-        [self.twitterSigninButton setImage:[UIImage imageNamed:@"twitter-signout.png"] forState:UIControlStateNormal];
+        [self.twitterSigninButton setImage:[UIImage imageNamed:@"twitter-signout"] forState:UIControlStateNormal];
         
         self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [acct username]];
     };
@@ -230,7 +230,7 @@
         self.twitterEnabledSwitch.on = NO;
 		self.twitterEnabledSwitch.enabled = NO;
 		
-        [self.twitterSigninButton setImage:[UIImage imageNamed:@"twitter-signin.png"] forState:UIControlStateNormal];
+        [self.twitterSigninButton setImage:[UIImage imageNamed:@"twitter-signin"] forState:UIControlStateNormal];
                 
 		self.twitterStatusLabel.text = @"Signed out";
     };

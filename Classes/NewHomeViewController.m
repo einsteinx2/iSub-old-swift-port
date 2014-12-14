@@ -343,7 +343,7 @@
     self.navigationItem.rightBarButtonItem = nil;
 	if(musicS.showPlayerIcon)
 	{
-		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing.png"]
+		self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing"]
                                                                                   style:UIBarButtonItemStyleBordered
                                                                                  target:self
                                                                                  action:@selector(a_nowPlaying:)];
@@ -522,11 +522,11 @@
     NSString *imageName = nil;
     if (settingsS.isJukeboxEnabled)
     {
-        imageName = IS_IPAD() ? @"home-jukebox-on-ipad.png" : @"home-jukebox-on.png";
+        imageName = IS_IPAD() ? @"home-jukebox-on-ipad" : @"home-jukebox-on";
     }
     else
     {
-        imageName = IS_IPAD() ? @"home-jukebox-off-ipad.png" : @"home-jukebox-off.png";
+        imageName = IS_IPAD() ? @"home-jukebox-off-ipad" : @"home-jukebox-off";
     }
     [_jukeboxButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
 }
@@ -571,7 +571,7 @@
 	}
 	else
 	{
-		_coverArtView.image = [UIImage imageNamed:@"default-album-art.png"];
+		_coverArtView.image = [UIImage imageNamed:@"default-album-art"];
 		_artistLabel.text = @"Use the Folders tab to find music";
 		_albumLabel.text = @"";
 		_songLabel.text = @"";

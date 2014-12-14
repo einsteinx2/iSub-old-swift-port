@@ -46,7 +46,7 @@
 		UIImageView *noCacheScreen = [[UIImageView alloc] init];
 		noCacheScreen.userInteractionEnabled = YES;
 		noCacheScreen.frame = CGRectMake(40, 80, 240, 180);
-		noCacheScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		noCacheScreen.image = [UIImage imageNamed:@"loading-screen-image"];
 		
 		UILabel *textLabel = [[UILabel alloc] init];
 		textLabel.backgroundColor = [UIColor clearColor];

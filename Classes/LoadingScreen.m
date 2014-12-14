@@ -25,7 +25,7 @@
 		self.loadingScreenRectangle.frame = CGRectMake(40, 96, 240, 180);
 		//self.loadingScreenRectangle.center = CGPointMake(superView.bounds.size.width / 2, superView.bounds.size.height / 2);
 		
-		self.loadingScreenRectangle.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		self.loadingScreenRectangle.image = [UIImage imageNamed:@"loading-screen-image"];
 		self.loadingScreenRectangle.alpha = .80;
 		[self.view addSubview:self.loadingScreenRectangle];
 		[self.view sendSubviewToBack:self.loadingScreenRectangle];
@@ -139,7 +139,7 @@
 		loadingScreenRectangle.frame = CGRectMake(40, 140, 240, 180);
 	else
 		loadingScreenRectangle.frame = CGRectMake(40, 100, 240, 180);
-	loadingScreenRectangle.image = [UIImage imageNamed:@"loading-screen-image.png"];
+	loadingScreenRectangle.image = [UIImage imageNamed:@"loading-screen-image"];
 	loadingScreenRectangle.alpha = .80;
 	
 	loadingLabel = [[UILabel alloc] init];

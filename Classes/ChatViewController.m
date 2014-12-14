@@ -108,8 +108,8 @@
     sendButton.frame = CGRectMake(252, 11, 60, 60);
     sendButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [sendButton addTarget:self action:@selector(sendButtonAction) forControlEvents:UIControlEventTouchUpInside];
-    [sendButton setImage:[UIImage imageNamed:@"comment-write.png"] forState:UIControlStateNormal];
-    [sendButton setImage:[UIImage imageNamed:@"comment-write-pressed.png"] forState:UIControlStateHighlighted];
+    [sendButton setImage:[UIImage imageNamed:@"comment-write"] forState:UIControlStateNormal];
+    [sendButton setImage:[UIImage imageNamed:@"comment-write-pressed"] forState:UIControlStateHighlighted];
     [headerView addSubview:sendButton];
     
     return headerView;
@@ -146,7 +146,7 @@
 		_noChatMessagesScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
 		_noChatMessagesScreen.frame = CGRectMake(40, 100, 240, 180);
 		_noChatMessagesScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-		_noChatMessagesScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		_noChatMessagesScreen.image = [UIImage imageNamed:@"loading-screen-image"];
 		_noChatMessagesScreen.alpha = .80;
 		
 		UILabel *textLabel = [[UILabel alloc] init];

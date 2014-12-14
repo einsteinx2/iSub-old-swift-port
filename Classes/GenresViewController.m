@@ -42,7 +42,7 @@
 		self.noGenresScreen.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
 		self.noGenresScreen.frame = CGRectMake(40, 100, 240, 180);
 		self.noGenresScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);
-		self.noGenresScreen.image = [UIImage imageNamed:@"loading-screen-image.png"];
+		self.noGenresScreen.image = [UIImage imageNamed:@"loading-screen-image"];
 		self.noGenresScreen.alpha = .80;
 		
 		UILabel *textLabel = [[UILabel alloc] init];

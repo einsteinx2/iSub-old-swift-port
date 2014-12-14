@@ -42,7 +42,7 @@
 		[self.textLabel.superview addSubview:bottomLine];
 		
 		glowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 43)];
-		glowView.image = [UIImage imageNamed:@"glow.png"];
+		glowView.image = [UIImage imageNamed:@"glow"];
 		glowView.hidden = YES;
 		glowView.alpha = 0.3;
 		[self addSubview:glowView];

@@ -350,9 +350,9 @@
 	
 	UIImage *typeImage = nil;
 	if ([aServer.type isEqualToString:SUBSONIC])
-		typeImage = [UIImage imageNamed:@"server-subsonic.png"];
+		typeImage = [UIImage imageNamed:@"server-subsonic"];
 	else if ([aServer.type isEqualToString:UBUNTU_ONE])
-		typeImage = [UIImage imageNamed:@"server-ubuntu.png"];
+		typeImage = [UIImage imageNamed:@"server-ubuntu"];
 
 	UIImageView *serverType = [[UIImageView alloc] initWithImage:typeImage];
 	serverType.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
@@ -363,7 +363,7 @@
 	   [settingsS.password isEqualToString:aServer.password])
 	{
 		UIImageView *currentServerMarker = [[UIImageView alloc] init];
-		currentServerMarker.image = [UIImage imageNamed:@"current-server.png"];
+		currentServerMarker.image = [UIImage imageNamed:@"current-server"];
 		[cell.contentView addSubview:currentServerMarker];
 		
 		currentServerMarker.frame = CGRectMake(3, 12, 26, 26);

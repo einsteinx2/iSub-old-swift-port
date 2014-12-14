@@ -194,7 +194,7 @@ LOG_LEVEL_ISUB_DEFAULT
 		UIViewController *vc = (UIViewController *)[Crittercism sharedInstance].crittercismViewController;
 		self.supportNavigationController = [[UINavigationController alloc] initWithRootViewController:vc];
 		supportNavigationController.tabBarItem.tag = 9;
-		supportNavigationController.tabBarItem.image = [UIImage imageNamed:@"support-tabbaricon.png"];
+		supportNavigationController.tabBarItem.image = [UIImage imageNamed:@"support-tabbaricon"];
 		supportNavigationController.tabBarItem.title = @"Support";
 		NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:mainTabBarController.viewControllers];
 		[viewControllers addObject:supportNavigationController];

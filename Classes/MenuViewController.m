@@ -130,7 +130,7 @@
 		imageView.layer.shadowOpacity = 0.5f;
 		imageView.layer.shadowRadius = 3.0f;
 		imageView.layer.shouldRasterize = YES;
-		imageView.image = [UIImage imageNamed:@"default-album-art.png"];
+		imageView.image = [UIImage imageNamed:@"default-album-art"];
 		[headerView addSubview:imageView];
 		
 		UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 11, self.view.width - 70, 48)];
@@ -160,7 +160,7 @@
 	
 	UIImageView *watermark = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, self.view.width, 175)];
 	watermark.contentMode = UIViewContentModeCenter;
-	watermark.image = [UIImage imageNamed:@"intro-sunkenlogo.png"];
+	watermark.image = [UIImage imageNamed:@"intro-sunkenlogo"];
 	[footerView addSubview:watermark];
 	
 	return footerView;
@@ -193,34 +193,34 @@
 	
     if (appDelegateS.referringAppUrl)
     {
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"back-tabbaricon.png" text:@"Back"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"back-tabbaricon" text:@"Back"]];
     }
     
 	if (settingsS.isOfflineMode)
 	{
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"settings-tabbaricon.png"    text:@"Settings"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"folders-tabbaricon.png"     text:@"Folders"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"genres-tabbaricon.png"      text:@"Genres"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"playlists-tabbaricon.png"   text:@"Playlists"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"bookmarks-tabbaricon.png"   text:@"Bookmarks"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"settings-tabbaricon"    text:@"Settings"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"folders-tabbaricon"     text:@"Folders"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"genres-tabbaricon"      text:@"Genres"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"playlists-tabbaricon"   text:@"Playlists"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"bookmarks-tabbaricon"   text:@"Bookmarks"]];
 	}
 	else
 	{
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"settings-tabbaricon.png"    text:@"Settings"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"home-tabbaricon.png"        text:@"Home"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"folders-tabbaricon.png"     text:@"Folders"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"playlists-tabbaricon.png"   text:@"Playlists"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"playing-tabbaricon.png"     text:@"Playing"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"bookmarks-tabbaricon.png"   text:@"Bookmarks"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"cache-tabbaricon.png"       text:@"Cache"]];
-        [_cellContents addObject:[MenuTableItem itemWithImageName:@"chat-tabbaricon.png"        text:@"Chat"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"settings-tabbaricon"    text:@"Settings"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"home-tabbaricon"        text:@"Home"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"folders-tabbaricon"     text:@"Folders"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"playlists-tabbaricon"   text:@"Playlists"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"playing-tabbaricon"     text:@"Playing"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"bookmarks-tabbaricon"   text:@"Bookmarks"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"cache-tabbaricon"       text:@"Cache"]];
+        [_cellContents addObject:[MenuTableItem itemWithImageName:@"chat-tabbaricon"        text:@"Chat"]];
 
 		if (settingsS.isSongsTabEnabled)
 		{
 			_tableView.scrollEnabled = YES;
-            [_cellContents addObject:[MenuTableItem itemWithImageName:@"genres-tabbaricon.png"   text:@"Genres"]];
-            [_cellContents addObject:[MenuTableItem itemWithImageName:@"albums-tabbaricon.png"   text:@"Albums"]];
-            [_cellContents addObject:[MenuTableItem itemWithImageName:@"songs-tabbaricon.png"    text:@"Songs"]];
+            [_cellContents addObject:[MenuTableItem itemWithImageName:@"genres-tabbaricon"   text:@"Genres"]];
+            [_cellContents addObject:[MenuTableItem itemWithImageName:@"albums-tabbaricon"   text:@"Albums"]];
+            [_cellContents addObject:[MenuTableItem itemWithImageName:@"songs-tabbaricon"    text:@"Songs"]];
 		}
 	}
 	
