@@ -10,12 +10,12 @@
 #import "SubsonicServerEditViewController.h"
 #import "SettingsTabViewController.h"
 #import "HelpTabViewController.h"
-#import "FoldersViewController.h"
 #import "ServerTypeViewController.h"
 #import "UbuntuServerEditViewController.h"
 #import "PMSServerEditViewControllerViewController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import "iSub-Swift.h"
 
 @implementation ServerListViewController
 
@@ -283,10 +283,7 @@
 			}
 			else
 			{
-				for (UIView *subview in appDelegateS.window.subviews)
-				{
-					[subview removeFromSuperview];
-				}
+                appDelegateS.window.rootViewController = appDelegateS.mainTabBarController;
 				[viewObjectsS orderMainTabBarController];
 			}
 		}

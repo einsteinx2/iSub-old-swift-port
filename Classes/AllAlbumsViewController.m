@@ -10,14 +10,11 @@
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "FolderViewController.h"
-#import "AllAlbumsUITableViewCell.h"
-#import "AllSongsUITableViewCell.h"
-#import "FoldersViewController.h"
-#import "CustomUITableView.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "LoadingScreen.h"
+#import "iSub-Swift.h"
 
-@interface AllAlbumsViewController()
+@interface AllAlbumsViewController() <CustomUITableViewCellDelegate>
 {
     BOOL _reloading;
 }
@@ -431,10 +428,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	static NSString *cellIdentifier = @"AllAlbumsCell";
-	AllAlbumsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[AllAlbumsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.delegate = self;
 	}
 	cell.accessoryType = UITableViewCellAccessoryNone;
 		
@@ -449,15 +447,14 @@
 		anAlbum = [self.dataModel albumForPosition:(sectionStartIndex + indexPath.row + 1)];
 	}
 	
-	cell.myId = anAlbum.albumId;
-	cell.myArtist = [ISMSArtist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
+	cell.associatedObject = anAlbum;
 	
-	cell.coverArtView.coverArtId = anAlbum.coverArtId;
+	cell.coverArtId = anAlbum.coverArtId;
 	
 	cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
-		
-	[cell.albumNameLabel setText:anAlbum.title];
-	[cell.artistNameLabel setText:anAlbum.artistName];
+    
+    cell.title = anAlbum.title;
+    cell.subTitle = anAlbum.artistName;
 	
 	return cell;
 }
@@ -626,6 +623,36 @@
 	_reloading = NO;
 	
     [self.refreshControl endRefreshing];
+}
+
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSAlbum class]])
+    {
+        ISMSAlbum *album = associatedObject;
+        ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
+        
+        [databaseS downloadAllSongs:album.albumId artist:artist];
+    }
+    
+    [cell.overlayView disableDownloadButton];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSAlbum class]])
+    {
+        ISMSAlbum *album = associatedObject;
+        ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
+        
+        [databaseS queueAllSongs:album.albumId artist:artist];
+    }
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 }
 
 

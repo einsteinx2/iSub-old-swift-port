@@ -10,13 +10,11 @@
 #import "AllSongsViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "AllSongsUITableViewCell.h"
-#import "FoldersViewController.h"
-#import "CustomUITableView.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "LoadingScreen.h"
+#import "iSub-Swift.h"
 
-@interface AllSongsViewController ()
+@interface AllSongsViewController() <CustomUITableViewCellDelegate>
 {
     BOOL _reloading;
 }
@@ -538,10 +536,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	static NSString *cellIdentifier = @"AllSongsCell";
-	AllSongsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[AllSongsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.delegate = self;
 	}
 	cell.indexPath = indexPath;
 	
@@ -556,10 +555,10 @@
 		aSong = [self.dataModel songForPosition:(sectionStartIndex + indexPath.row + 1)];
 	}
 	
-	cell.md5 = [aSong.path md5];
-	cell.isSearching = self.isSearching;
+	cell.associatedObject = aSong;
+	cell.searching = self.isSearching;
 	
-	cell.coverArtView.coverArtId = aSong.coverArtId;
+	cell.coverArtId = aSong.coverArtId;
     
     if (aSong.isFullyCached)
     {
@@ -571,12 +570,9 @@
         cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
     }
 	
-	[cell.songNameLabel setText:aSong.title];
-	if (aSong.album)
-		[cell.artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
-	else
-		[cell.artistNameLabel setText:aSong.artist];
-	
+    cell.title = aSong.title;
+    cell.subTitle = aSong.album ? [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album] : aSong.artist;
+    
 	return cell;
 }
 
@@ -652,6 +648,30 @@
 	_reloading = NO;
 	
     [self.refreshControl endRefreshing];
+}
+
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCacheQueueDbQueue];
+    }
+    
+    [cell.overlayView disableDownloadButton];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCurrentPlaylistDbQueue];
+    }
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 }
 
 @end

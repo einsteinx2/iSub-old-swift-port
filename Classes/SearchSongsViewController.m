@@ -6,15 +6,19 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "iSub-Swift.h"
 #import "SearchSongsViewController.h"
-#import "SearchSongUITableViewCell.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "ArtistUITableViewCell.h"
-#import "AlbumUITableViewCell.h"
 #import "FolderViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "SearchXMLParser.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "NSMutableURLRequest+PMS.h"
+
+@interface SearchSongsViewController() <CustomUITableViewCellDelegate>
+
+@end
 
 @implementation SearchSongsViewController
 
@@ -187,16 +191,16 @@
 		if (indexPath.row < self.listOfArtists.count)
 		{
 			static NSString *cellIdentifier = @"ArtistCell";
-			ArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 			if (!cell)
 			{
-				cell = [[ArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+				cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+                cell.delegate = self;
 			}
 						
 			ISMSArtist *anArtist = [self.listOfArtists objectAtIndexSafe:indexPath.row];
-			cell.myArtist = anArtist;
-			
-			[cell.artistNameLabel setText:anArtist.name];
+			cell.associatedObject = anArtist;
+            cell.title = anArtist.name;
 			cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 			
 			return cell;
@@ -211,22 +215,20 @@
 		if (indexPath.row < self.listOfAlbums.count)
 		{
 			static NSString *cellIdentifier = @"AlbumCell";
-			AlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 			if (!cell)
 			{
-				cell = [[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+				cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+                cell.delegate = self;
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			}
 						
 			ISMSAlbum *anAlbum = [self.listOfAlbums objectAtIndexSafe:indexPath.row];
-			cell.myId = anAlbum.albumId;
-			cell.myArtist = [ISMSArtist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
-			cell.isIndexShowing = NO;
+            cell.associatedObject = anAlbum;
+			cell.indexShowing = NO;
 			
-			cell.coverArtView.coverArtId = anAlbum.coverArtId;
-			
-			[cell.albumNameLabel setText:anAlbum.title];
-			
+			cell.coverArtId = anAlbum.coverArtId;
+            cell.title = anAlbum.title;			
 			
 			// Setup cell backgrond color
 			cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
@@ -243,14 +245,32 @@
 		if (indexPath.row < self.listOfSongs.count)
 		{
 			static NSString *cellIdentifier = @"SearchSongCell";
-			SearchSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 			if (!cell)
 			{
-				cell = [[SearchSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+				cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+                cell.delegate = self;
 			}
 			
-			cell.row = indexPath.row;
-			cell.mySong = [self.listOfSongs objectAtIndexSafe:indexPath.row];
+			ISMSSong *song = [self.listOfSongs objectAtIndexSafe:indexPath.row];
+            
+            cell.associatedObject = song;
+            
+            cell.title = song.title;
+            cell.subTitle = song.album ? [NSString stringWithFormat:@"%@ - %@", song.artist, song.album] : song.artist;
+            
+            cell.coverArtId = song.coverArtId;
+            
+            if (song.isFullyCached)
+            {
+                cell.backgroundView = [[UIView alloc] init];
+                cell.backgroundView.backgroundColor = [viewObjectsS currentLightColor];
+            }
+            else
+            {
+                cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+            }
+            
 			return cell;
 		}
 		else if (indexPath.row == self.listOfSongs.count)
@@ -462,7 +482,52 @@
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
+#pragma mark - CustomUITableViewCell Delegate -
 
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSArtist class]])
+    {
+        ISMSArtist *artist = associatedObject;
+        [databaseS downloadAllSongs:artist.artistId artist:artist];
+    }
+    else if ([associatedObject isKindOfClass:[ISMSAlbum class]])
+    {
+        ISMSAlbum *album = associatedObject;
+        ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
+        
+        [databaseS downloadAllSongs:album.albumId artist:artist];
+    }
+    else if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCacheQueueDbQueue];
+    }
+    
+    [cell.overlayView disableDownloadButton];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSArtist class]])
+    {
+        ISMSArtist *artist = associatedObject;
+        [databaseS queueAllSongs:artist.artistId artist:artist];
+    }
+    else if ([associatedObject isKindOfClass:[ISMSAlbum class]])
+    {
+        ISMSAlbum *album = associatedObject;
+        ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
+        
+        [databaseS queueAllSongs:album.albumId artist:artist];
+    }
+    else if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCurrentPlaylistDbQueue];
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    }
+}
 
 @end
 

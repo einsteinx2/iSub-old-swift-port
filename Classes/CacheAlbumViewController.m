@@ -8,11 +8,13 @@
 
 #import "CacheAlbumViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "CacheAlbumUITableViewCell.h"
-#import "CacheSongUITableViewCell.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
+#import "iSub-Swift.h"
+
+@interface CacheAlbumViewController() <CustomUITableViewCellDelegate>
+@end
 
 @implementation CacheAlbumViewController
 
@@ -403,47 +405,20 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 	// Set up the cell...
 	if (indexPath.row < self.listOfAlbums.count)
 	{
-		//NSUInteger segment = [segments count];
-		//NSString *seg1 = [segments objectAtIndexSafe:0];
-		
 		static NSString *cellIdentifier = @"CacheAlbumCell";
-		CacheAlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CacheAlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.alwaysShowCoverArt = YES;
+            cell.delegate = self;
 		}
-		
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		//cell.segment = segment;
-		//cell.seg1 = seg1;
-		cell.segments = [NSArray arrayWithArray:self.segments];
-		//DLog(@"segments: %@", cell.segments);
 		
 		NSString *md5 = [[self.listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
-		NSString *coverArtId = [databaseS.songCacheDbQueue stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
-		NSString *name = [[self.listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
-		
-		if (coverArtId)
-		{
-			NSString *test = [databaseS.coverArtCacheDb60Queue stringForQuery:@"SELECT id FROM coverArtCache WHERE id = ?", [coverArtId md5]];
-			if (test)
-			{
-				// If the image is already in the cache database, load it
-				cell.coverArtView.image = [UIImage imageWithData:[databaseS.coverArtCacheDb60Queue dataForQuery:@"SELECT data FROM coverArtCache WHERE id = ?", [coverArtId md5]]];
-			}
-			else 
-			{	
-				// If it's not, display the default image
-				cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small"];
-			}
-		}
-		else
-		{
-			// If there's no cover art at all, display the default image
-			cell.coverArtView.image = [UIImage imageNamed:@"default-album-art-small"];
-		}
-		
-		[cell.albumNameLabel setText:name];
+		cell.coverArtId = [databaseS.songCacheDbQueue stringForQuery:@"SELECT coverArtId FROM cachedSongs WHERE md5 = ?", md5];
+		cell.title = [[self.listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
+        
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
         
 		return cell;
@@ -451,39 +426,30 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 	else
 	{
 		static NSString *cellIdentifier = @"CacheSongCell";
-		CacheSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CacheSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.delegate = self;
+            cell.showDeleteButton = YES;
 		}
 		
 		NSUInteger a = indexPath.row - self.listOfAlbums.count;
-		cell.md5 = [[self.listOfSongs objectAtIndexSafe:a] objectAtIndexSafe:0];
+		NSString *md5 = [[self.listOfSongs objectAtIndexSafe:a] objectAtIndexSafe:0];
 		
-		ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:cell.md5];
-		
-		if (aSong.track)
-		{
-			cell.trackNumberLabel.text = [NSString stringWithFormat:@"%i", [aSong.track intValue]];
-		}
-		else
-		{	
-			cell.trackNumberLabel.text = @"";
-		}
+		ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:md5];
+        
+        cell.associatedObject = aSong;
+        
+        cell.trackNumber = aSong.track;
 			
-		cell.songNameLabel.text = aSong.title;
+		cell.title = aSong.title;
 		
-		if (aSong.artist)
-			cell.artistNameLabel.text = aSong.artist;
-		else
-			cell.artistNameLabel.text = @"";		
-		
-		if (aSong.duration)
-			cell.songDurationLabel.text = [NSString formatTime:[aSong.duration floatValue]];
-		else
-			cell.songDurationLabel.text = @"";
-		
+        cell.subTitle = aSong.artist ? aSong.artist : @"";
+        
+        cell.duration = aSong.duration;
+        
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];	
 		
 		return cell;
@@ -618,6 +584,139 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 	{
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 	}
+}
+
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+}
+
+- (void)tableCellDeleteButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject removeFromCachedSongsTableDbQueue];
+        
+        [cacheS findCacheSize];
+        
+        // Reload the cached songs table
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CachedSongDeleted];
+    }
+    else if ([associatedObject isKindOfClass:[ISMSAlbum class]])
+    {
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+        [self performSelector:@selector(deleteAllSongs:) withObject:cell afterDelay:0.05];
+    }
+    
+    [cell.overlayView disableDownloadButton];
+}
+
+- (void)deleteAllSongs:(CustomUITableViewCell *)cell
+{
+    NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
+    [newSegments addObject:cell.title];
+    
+    NSUInteger segment = [newSegments count];
+    
+    NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? "];
+    for (int i = 2; i <= segment; i++)
+    {
+        [query appendFormat:@" AND seg%i = ? ", i];
+    }
+    
+    DLog(@"query: %@, parameter: %@", query, newSegments);
+    NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:0];
+    [databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
+     {
+         FMResultSet *result = [db executeQuery:query withArgumentsInArray:newSegments];
+         while ([result next])
+         {
+             @autoreleasepool
+             {
+                 NSString *md5 = [result stringForColumnIndex:0];
+                 if (md5) [songMd5s addObject:md5];
+             }
+         }
+         [result close];
+     }];
+    
+    DLog(@"songMd5s: %@", songMd5s);
+    for (NSString *md5 in songMd5s)
+    {
+        @autoreleasepool
+        {
+            [ISMSSong removeSongFromCacheDbQueueByMD5:md5];
+        }
+    }
+    
+    [cacheS findCacheSize];
+    
+    // Reload the cached songs table
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CachedSongDeleted];
+    
+    if (!cacheQueueManagerS.isQueueDownloading)
+        [cacheQueueManagerS startDownloadQueue];
+    
+    // Hide the loading screen
+    [viewObjectsS hideLoadingScreen];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCurrentPlaylistDbQueue];
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    }
+    else if ([associatedObject isKindOfClass:[ISMSAlbum class]])
+    {
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+        [self performSelector:@selector(queueAllSongs:) withObject:cell afterDelay:0.05];
+    }
+}
+
+- (void)queueAllSongs:(CustomUITableViewCell *)cell
+{
+    NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
+    [newSegments addObject:cell.title];
+    
+    NSUInteger segment = [newSegments count];
+    
+    NSMutableString *query = [NSMutableString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE segs = %lu ", (long)(segment+1)];
+    for (int i = 1; i <= segment; i++)
+    {
+        [query appendFormat:@" AND seg%i = ? ", i];
+    }
+    [query appendFormat:@"ORDER BY seg%lu COLLATE NOCASE", (long)segment+1];
+    
+    NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:20];
+    [databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
+     {
+         FMResultSet *result = [db executeQuery:query withArgumentsInArray:newSegments];
+         while ([result next])
+         {
+             NSString *md5 = [result stringForColumnIndex:0];
+             if (md5) [songMd5s addObject:md5];
+         }
+         [result close];
+     }];
+    
+    for (NSString *md5 in songMd5s)
+    {
+        @autoreleasepool
+        {
+            ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:md5];
+            [aSong addToCurrentPlaylistDbQueue];
+        }
+    }
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    
+    // Hide the loading screen
+    [viewObjectsS hideLoadingScreen];
 }
 
 

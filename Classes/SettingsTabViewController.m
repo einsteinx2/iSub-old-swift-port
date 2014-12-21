@@ -7,7 +7,6 @@
 //
 
 #import "SettingsTabViewController.h"
-#import "FoldersViewController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
@@ -16,6 +15,7 @@
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
 #import "IDTwitterAccountChooserViewController.h"
+#import "iSub-Swift.h"
 
 @implementation SettingsTabViewController
 

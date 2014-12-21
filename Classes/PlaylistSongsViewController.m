@@ -9,10 +9,12 @@
 #import "PlaylistSongsViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "PlaylistSongUITableViewCell.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "NSMutableURLRequest+PMS.h"
+#import "iSub-Swift.h"
 
-@interface PlaylistSongsViewController()
+@interface PlaylistSongsViewController() <CustomUITableViewCellDelegate>
 {
     BOOL _reloading;
     NSUInteger _playlistCount;
@@ -381,10 +383,12 @@ static NSString *kName_Error = @"error";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellIdentifier = @"PlaylistSongCell";
-	PlaylistSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[PlaylistSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.alwaysShowCoverArt = YES;
+        cell.delegate = self;
 	}
 	
 	cell.indexPath = indexPath;
@@ -399,9 +403,9 @@ static NSString *kName_Error = @"error";
 	{
 		aSong = [ISMSSong songFromServerPlaylistId:_md5 row:indexPath.row];
 	}
-	cell.mySong = aSong;
+	cell.associatedObject = aSong;
 	
-	cell.coverArtView.coverArtId = aSong.coverArtId;
+	cell.coverArtId = aSong.coverArtId;
 	
     if (aSong.isFullyCached)
     {
@@ -412,13 +416,10 @@ static NSString *kName_Error = @"error";
     {
         cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
     }
-	
-	[cell.numberLabel setText:[NSString stringWithFormat:@"%li", (long)(indexPath.row + 1)]];
-	[cell.songNameLabel setText:aSong.title];
-	if (aSong.album)
-		[cell.artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
-	else
-		[cell.artistNameLabel setText:aSong.artist];
+    
+	//[cell.numberLabel setText:[NSString stringWithFormat:@"%li", (long)(indexPath.row + 1)]];
+    cell.title = aSong.title;
+    cell.subTitle = aSong.album ? [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album] : aSong.artist;
 	
 	return cell;
 }
@@ -475,6 +476,24 @@ static NSString *kName_Error = @"error";
     ISMSSong *playedSong = [musicS playSongAtPosition:indexPath.row];
     if (!playedSong.isVideo)
         [self showPlayer];
+}
+
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    ISMSSong *song = cell.associatedObject;
+    [song addToCacheQueueDbQueue];
+    
+    [[cell overlayView] disableDownloadButton];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    ISMSSong *song = cell.associatedObject;
+    [song addToCurrentPlaylistDbQueue];
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 }
 
 @end

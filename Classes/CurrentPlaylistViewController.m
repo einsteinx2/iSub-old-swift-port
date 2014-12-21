@@ -7,8 +7,12 @@
 //
 
 #import "CurrentPlaylistViewController.h"
-#import "CurrentPlaylistSongSmallUITableViewCell.h"
-#import "StoreViewController.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "NSMutableURLRequest+PMS.h"
+#import "iSub-Swift.h"
+
+@interface CurrentPlaylistViewController() <CustomUITableViewCellDelegate>
+@end
 
 @implementation CurrentPlaylistViewController
 
@@ -29,6 +33,11 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jukeboxSongInfo) name:ISMSNotification_JukeboxSongInfo object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentPlaylistCount) name:@"updateCurrentPlaylistCount" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songsQueued) name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackToggled) name:ISMSNotification_SongPlaybackPaused object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackToggled) name:ISMSNotification_SongPlaybackStarted object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackToggled) name:ISMSNotification_SongPlaybackEnded object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackToggled) name:ISMSNotification_SongPlaybackFailed object:nil];
 }
 
 - (void)unregisterForNotifications
@@ -41,6 +50,11 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_StorePurchaseComplete object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_CurrentPlaylistSongsQueued object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_JukeboxSongInfo object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackPaused object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackStarted object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackEnded object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_SongPlaybackFailed object:nil];
 }
 
 - (void)viewDidLoad 
@@ -219,6 +233,17 @@
 	[self.tableView reloadData];
 }
 
+- (void)playbackToggled
+{
+    NSIndexPath *indexPath = nil;
+    if (audioEngineS.player.isPlaying)
+    {
+        indexPath = [NSIndexPath indexPathForRow:playlistS.currentIndex inSection:0];
+    }
+    
+    [self markCellAsPlayingAtIndexPath:indexPath];
+}
+
 - (void)updateCurrentPlaylistCount
 {
 	self.currentPlaylistCount = [playlistS count];
@@ -241,13 +266,13 @@
 		self.editPlaylistLabel.text = @"Done";
 		[self showDeleteButton];
 		
-		// Hide the duration labels and shorten the song and artist labels
-		for (CurrentPlaylistSongSmallUITableViewCell *cell in [self.tableView visibleCells])
-		{
-			cell.durationLabel.hidden = YES;
-		}
+//		// Hide the duration labels and shorten the song and artist labels
+//		for (CurrentPlaylistSongSmallUITableViewCell *cell in [self.tableView visibleCells])
+//		{
+//			cell.durationLabel.hidden = YES;
+//		}
 		
-		[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showDeleteToggle) userInfo:nil repeats:NO];
+		[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showDeleteToggles) userInfo:nil repeats:NO];
 	}
 	else 
 	{
@@ -317,15 +342,6 @@
 	else 
 	{
 		self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
-	}
-}
-
-- (void) showDeleteToggle
-{
-	// Show the delete toggle for already visible cells
-	for (id cell in self.tableView.visibleCells) 
-	{
-		[[cell deleteToggleImage] setHidden:NO];
 	}
 }
 
@@ -580,7 +596,13 @@
 	[self.tableView reloadData];
 	if (playlistS.currentIndex >= 0 && playlistS.currentIndex < self.currentPlaylistCount)
 	{
-		[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:playlistS.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:playlistS.currentIndex inSection:0];
+		[self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionMiddle];
+        
+        if ([self isCellPlayingAtRow:indexPath.row])
+        {
+            [self markCellAsPlayingAtIndexPath:indexPath];
+        }
 	}
 }
 
@@ -607,24 +629,27 @@
 }
 
 
+- (BOOL)isCellPlayingAtRow:(NSUInteger)row
+{
+    BOOL isCellPlayingAtRow = (row == playlistS.currentIndex && (audioEngineS.player.isPlaying || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)));
+    return isCellPlayingAtRow;
+}
+
+
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
 	static NSString *cellIdentifier = @"CurrentPlaylistSongSmallCell";
-    CurrentPlaylistSongSmallUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) 
 	{
-        cell = [[CurrentPlaylistSongSmallUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.delegate = self;
     }
 	
     cell.indexPath = indexPath;
 	
-	cell.deleteToggleImage.hidden = !self.tableView.editing;
-	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
-	if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
-	{
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
-	}
+    cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:@(indexPath.row)];
 	
 	ISMSSong *aSong;
 	if (settingsS.isJukeboxEnabled)
@@ -641,33 +666,25 @@
 		else
 			aSong = [ISMSSong songFromDbRow:indexPath.row inTable:@"currentPlaylist" inDatabaseQueue:databaseS.currentPlaylistDbQueue];
 	}
+    
+    cell.associatedObject = aSong;
 	
-	if (indexPath.row == playlistS.currentIndex && (audioEngineS.player.isStarted || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)))
-	{
-		cell.numberLabel.hidden = YES;
-		cell.nowPlayingImageView.hidden = NO;
-	}
-	else
-	{
-		cell.numberLabel.hidden = NO;
-		cell.nowPlayingImageView.hidden = YES;
-		cell.numberLabel.text = [NSString stringWithFormat:@"%li", (long)(indexPath.row + 1)];
-	}
+    NSLog(@"audioEngineS.player.isPlaying: %u", audioEngineS.player.isPlaying);
+    BOOL playing = [self isCellPlayingAtRow:indexPath.row];
+    cell.playing = playing;
 	
-	cell.songNameLabel.text = aSong.title;
+	cell.title = aSong.title;
+    cell.subTitle = aSong.album ? [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album] : aSong.artist;
 
-	if (aSong.album)
-		cell.artistNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album];
-	else
-		cell.artistNameLabel.text = aSong.artist;
-
-	cell.durationLabel.text = [NSString formatTime:[aSong.duration floatValue]];	
+    cell.duration = aSong.duration;
+    
+    cell.trackNumber = @(indexPath.row + 1);
 	
-	// Hide the duration labels if editing
-	if (self.tableView.editing)
-	{
-		cell.durationLabel.hidden = YES;
-	}
+//	// Hide the duration labels if editing
+//	if (self.tableView.editing)
+//	{
+//		cell.durationLabel.hidden = YES;
+//	}
 	
     return cell;
 }
@@ -924,6 +941,28 @@ static NSString *kName_Error = @"error";
 	[viewObjectsS hideLoadingScreen];
 }
 
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCacheQueueDbQueue];
+    }
+
+    [cell.overlayView disableDownloadButton];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCurrentPlaylistDbQueue];
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    }
+}
 
 @end
 

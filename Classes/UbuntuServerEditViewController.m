@@ -7,10 +7,10 @@
 //
 
 #import "UbuntuServerEditViewController.h"
-#import "FoldersViewController.h"
 #import "iPadRootViewController.h"
 #import "ServerTypeViewController.h"
 #import "MenuViewController.h"
+#import "iSub-Swift.h"
 
 #define URL @"https://one.ubuntu.com/music"
 

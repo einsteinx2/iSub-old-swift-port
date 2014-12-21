@@ -83,7 +83,7 @@
 
 @property BOOL isLoadingScreenShowing;
 
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
 
 - (void)orderMainTabBarController;
 

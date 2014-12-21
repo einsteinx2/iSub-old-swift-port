@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="14A379a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6724" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1280" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6711"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UIApplication">
@@ -18,7 +18,6 @@
                 <outlet property="artistsNavigationController" destination="27" id="46"/>
                 <outlet property="bookmarksNavigationController" destination="86" id="150"/>
                 <outlet property="cacheNavigationController" destination="100" id="153"/>
-                <outlet property="chatNavigationController" destination="156" id="173"/>
                 <outlet property="genresNavigationController" destination="93" id="152"/>
                 <outlet property="mainTabBarController" destination="21" id="147"/>
                 <outlet property="offlineTabBarController" destination="105" id="113"/>
@@ -31,7 +30,7 @@
         <window opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" resizesToFullScreen="NO" id="2">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask"/>
-            <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
         </window>
         <tabBarController id="21" customClass="CustomUITabBarController">
@@ -68,7 +67,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <viewControllers>
-                        <viewController nibName="FoldersViewController" id="29" customClass="FoldersViewController">
+                        <viewController nibName="FoldersViewController" id="29" customClass="FoldersViewController" customModule="iSub">
                             <extendedEdge key="edgesForExtendedLayout"/>
                             <toolbarItems/>
                             <navigationItem key="navigationItem" title="Item" id="30"/>
@@ -184,26 +183,32 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController id="156" customClass="CustomUINavigationController">
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" tag="8" title="Chat" image="chat-tabbaricon.png" id="157"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" barStyle="black" id="160">
+                <navigationController id="shN-gm-e18" userLabel="Chat">
+                    <tabBarItem key="tabBarItem" title="Chat" image="chat-tabbaricon.png" id="zrX-JQ-a2s"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="DoW-sV-Lt4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <viewControllers>
-                        <viewController nibName="ChatViewController" id="158" customClass="ChatViewController">
-                            <extendedEdge key="edgesForExtendedLayout"/>
-                            <toolbarItems/>
-                            <navigationItem key="navigationItem" title="Item" id="159"/>
-                        </viewController>
+                        <tableViewController id="7Bm-9J-HuH" customClass="ChatViewController" customModule="iSub" customModuleProvider="target">
+                            <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="CRL-QQ-QIQ">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="7Bm-9J-HuH" id="6ah-eq-Ir4"/>
+                                    <outlet property="delegate" destination="7Bm-9J-HuH" id="25B-qB-rWv"/>
+                                </connections>
+                            </tableView>
+                            <navigationItem key="navigationItem" title="Root View Controller" id="CMr-4R-H7L"/>
+                        </tableViewController>
                     </viewControllers>
                 </navigationController>
             </viewControllers>
             <connections>
                 <outlet property="delegate" destination="3" id="40"/>
             </connections>
+            <point key="canvasLocation" x="133" y="-11"/>
         </tabBarController>
         <tabBarController id="105" customClass="CustomUITabBarController">
             <extendedEdge key="edgesForExtendedLayout"/>

@@ -6,13 +6,13 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "iSub-Swift.h"
 #import "PlayingViewController.h"
-#import "PlayingUITableViewCell.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
-@interface PlayingViewController (Private)
+@interface PlayingViewController() <CustomUITableViewCellDelegate>
 - (void)dataSourceDidFinishLoadingNewData;
 @end
 
@@ -30,7 +30,7 @@
 	
 	self.isNothingPlayingScreenShowing = NO;
 	
-	self.tableView.separatorColor = [UIColor clearColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	
 	self.title = @"Now Playing";
 	
@@ -70,6 +70,12 @@
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark - CustomUITableViewController Overrides -
+
+- (void)customizeTableView:(UITableView *)tableView
+{
+    tableView.rowHeight = 70.0;
+}
 
 #pragma mark - Table View Delegate
 
@@ -78,57 +84,52 @@
     return 1;
 }
 
-
-// Customize the number of rows in the table view.
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.dataModel.count;
 }
 
-
-// Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString *cellIdentifier = @"PlayingCell";
-	PlayingUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-	if (!cell)
-	{
-		cell = [[PlayingUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-	}
-	
-	ISMSSong *aSong = [self.dataModel songForIndex:indexPath.row];
-	cell.mySong = aSong;
-	
-	// Set the cover art
-	cell.coverArtView.coverArtId = aSong.coverArtId;
-	
-	// Create the background view
-	cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
-	
-	// Set the title label
-	NSString *playTime = [self.dataModel playTimeForIndex:indexPath.row];
-	NSString *username = [self.dataModel usernameForIndex:indexPath.row];
-	NSString *playerName = [self.dataModel playerNameForIndex:indexPath.row];
-	
-	if (playerName)
-	{
-		NSString *text = [NSString stringWithFormat:@"%@ @ %@ - %@", username, playerName, playTime];
-		[cell.userNameLabel setText:text];
-	}
-	else
-	{
-		NSString *text = [NSString stringWithFormat:@"%@ - %@", username, playTime];
-		[cell.userNameLabel setText:text];
-	}
-
-	// Set the song name label
-	cell.songNameLabel.text = aSong.title;
-	if (aSong.album)
-		cell.artistNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album];
-	else
-		cell.artistNameLabel.text = aSong.artist;
-	
+    static NSString *cellIdentifier = @"PlayingCell";
+    CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell)
+    {
+        cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.delegate = self;
+    }
+    
+    NSUInteger index = (indexPath.row - 1) / 2;
+    ISMSSong *aSong = [self.dataModel songForIndex:index];
+    
+    cell.associatedObject = aSong;
+    
+    // Set the cover art
+    cell.coverArtId = aSong.coverArtId;
+    
+    // Create the background view
+    cell.backgroundView = [viewObjectsS createCellBackground:index];
+    
+    // Set the header titles
+    NSString *playTime = [self.dataModel playTimeForIndex:indexPath.row];
+    NSString *username = [self.dataModel usernameForIndex:indexPath.row];
+    NSString *playerName = [self.dataModel playerNameForIndex:indexPath.row];
+    
+    NSString *headerTitle = nil;
+    if (playerName)
+    {
+        headerTitle = [NSString stringWithFormat:@"%@ @ %@ - %@", username, playerName, playTime];
+    }
+    else
+    {
+        headerTitle = [NSString stringWithFormat:@"%@ - %@", username, playTime];
+    }
+    cell.headerTitle = headerTitle;
+    
+    cell.title = aSong.title;
+    cell.subTitle = aSong.album ? [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album] : aSong.artist;
+    
     return cell;
 }
 
@@ -222,6 +223,30 @@
 	self.reloading = NO;
 	
     [self.refreshControl endRefreshing];
+}
+
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCacheQueueDbQueue];
+    }
+    
+    [cell.overlayView disableDownloadButton];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCurrentPlaylistDbQueue];
+    }
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
 }
 
 @end

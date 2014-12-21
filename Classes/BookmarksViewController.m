@@ -7,10 +7,10 @@
 //
 
 #import "BookmarksViewController.h"
-#import "BookmarkUITableViewCell.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "iSub-Swift.h"
 
 @implementation BookmarksViewController
 
@@ -24,11 +24,8 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
-	//DLog(@"Cache viewDidLoad");
-	
+		
 	viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-	//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
 	self.isNoBookmarksScreenShowing = NO;
 	
 	self.tableView.separatorColor = [UIColor clearColor];
@@ -223,7 +220,7 @@
 		self.editBookmarksLabel.text = @"Done";
 		[self showDeleteButton];
 		
-		[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showDeleteToggle) userInfo:nil repeats:NO];
+		[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showDeleteToggles) userInfo:nil repeats:NO];
 	}
 	else 
 	{
@@ -241,17 +238,6 @@
 		[self viewWillAppear:NO];
 	}
 }
-
-
-- (void)showDeleteToggle
-{
-	// Show the delete toggle for already visible cells
-	for (id cell in self.tableView.visibleCells) 
-	{
-		[[cell deleteToggleImage] setHidden:NO];
-	}
-}
-
 
 - (void)deleteBookmarksAction:(id)sender
 {
@@ -402,7 +388,6 @@
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	return UITableViewCellEditingStyleNone;
-	//return UITableViewCellEditingStyleDelete;
 }
 
 
@@ -424,19 +409,16 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	static NSString *cellIdentifier = @"BookmarkCell";
-	BookmarkUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[BookmarkUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.overlayDisabled = YES;
 	}
 	cell.indexPath = indexPath;
 	
-	cell.deleteToggleImage.hidden = !self.tableView.editing;
-	cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
-	if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
-	{
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
-	}
+    cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:@(indexPath.row)];
 	
     // Set up the cell...
 	__block ISMSSong *aSong;
@@ -451,18 +433,12 @@
 		[result close];
 	}];
 		
-	cell.coverArtView.coverArtId = aSong.coverArtId;
+	cell.coverArtId = aSong.coverArtId;
     
-    cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+    cell.headerTitle = [NSString stringWithFormat:@"%@ - %@", name, [NSString formatTime:(float)position]];
 	
-	[cell.bookmarkNameLabel setText:[NSString stringWithFormat:@"%@ - %@", name, [NSString formatTime:(float)position]]];
-	
-	[cell.songNameLabel setText:aSong.title];
-	if (aSong.album)
-		[cell.artistNameLabel setText:[NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album]];
-	else
-		[cell.artistNameLabel setText:aSong.artist];
-	cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.title = aSong.title;
+    cell.subTitle = aSong.album ? [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album] : aSong.artist;
 	
     return cell;
 }

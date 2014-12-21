@@ -7,12 +7,11 @@
 //
 
 #import "NewHomeViewController.h"
+#import "iSub-Swift.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "QuickAlbumsViewController.h"
-#import "ChatViewController.h"
 #import "SearchSongsViewController.h"
-#import "StoreViewController.h"
 #import "ShuffleFolderPickerViewController.h"
 #import "FolderPickerDialog.h"
 #import "SearchAllViewController.h"
@@ -22,6 +21,8 @@
 #import "MenuViewController.h"
 #import "SearchXMLParser.h"
 #import "ISMSPlayerViewController.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "NSMutableURLRequest+PMS.h"
 
 @interface NewHomeViewController()
 {
@@ -457,7 +458,7 @@
 
 - (IBAction)a_chat:(id)sender
 {
-    ChatViewController *chat = [[ChatViewController alloc] initWithNibName:@"ChatViewController" bundle:nil];
+    ChatViewController *chat = [[ChatViewController alloc] init];
     [self.navigationController pushViewController:chat animated:YES];
 }
 

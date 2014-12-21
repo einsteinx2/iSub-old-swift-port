@@ -6,18 +6,16 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "iSub-Swift.h"
 #import "CacheViewController.h"
 #import "CacheAlbumViewController.h"
-#import "CacheQueueSongUITableViewCell.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "CacheArtistUITableViewCell.h"
-#import "StoreViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
 // TODO: Finish cleanup
 
-@interface CacheViewController()
+@interface CacheViewController() <CustomUITableViewCellDelegate>
 {
     UIView *_headerView2;
     UISegmentedControl *_segmentedControl;
@@ -364,8 +362,8 @@
 
 - (void)a_showStore:(id)sender
 {
-	StoreViewController *store = [[StoreViewController alloc] init];
-	[self pushViewControllerCustom:store];
+//	StoreViewController *store = [[StoreViewController alloc] init];
+//	[self pushViewControllerCustom:store];
 }
 
 - (void)a_playAll:(id)sender
@@ -394,7 +392,7 @@
 			_editSongsLabel.text = @"Done";
 			[self _showDeleteButton];
 			
-			[self performSelector:@selector(_showDeleteToggle) withObject:nil afterDelay:0.3];
+            [self showDeleteToggles];
 		}
 		else 
 		{
@@ -408,6 +406,8 @@
 			
 			// Reload the table
 			[self.tableView reloadData];
+            
+            [self hideDeleteToggles];
 		}
 	}
 	else if (_segmentedControl.selectedSegmentIndex == 1)
@@ -422,7 +422,7 @@
 			_editSongsLabel.text = @"Done";
 			[self _showDeleteButton];
 			
-			[self performSelector:@selector(_showDeleteToggle) withObject:nil afterDelay:0.3];
+			[self performSelector:@selector(showDeleteToggles) withObject:nil afterDelay:0.3];
 		}
 		else 
 		{
@@ -833,21 +833,6 @@
     }
 }
 
-- (void)_showDeleteToggle
-{
-    // Show the delete toggle for already visible cells
-    for (id cell in self.tableView.visibleCells)
-    {
-        if ([cell respondsToSelector:@selector(deleteToggleImage)])
-        {
-            if ([[cell deleteToggleImage] respondsToSelector:@selector(setHidden:)])
-            {
-                [[cell deleteToggleImage] setHidden:NO];
-            }
-        }
-    }
-}
-
 #pragma mark Other
 
 - (void)_loadPlayAllPlaylist:(NSNumber *)shouldShuffle
@@ -1080,6 +1065,7 @@
         @autoreleasepool
         {
             [ISMSSong removeSongFromCacheDbQueueByMD5:md5];
+            NSLog(@"removing song: %@", md5);
         }
     }
     
@@ -1215,25 +1201,24 @@
 	if (_segmentedControl.selectedSegmentIndex == 0)
 	{
 		static NSString *cellIdentifier = @"CacheArtistCell";
-		CacheArtistUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CacheArtistUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                     reuseIdentifier:cellIdentifier];
+            cell.delegate = self;
+            cell.showDeleteButton = YES;
 		}
-
+        cell.indexPath = indexPath;
+        
 		NSString *name = [[_listOfArtistsSections objectAtIndexSafe:indexPath.section] objectAtIndexSafe:indexPath.row];
 		
-		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
-		if ([viewObjectsS.multiDeleteList containsObject:name])
-		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
-		}
-		
+        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:name];
+        
 		if (_showIndex)
-			cell.isIndexShowing = YES;
+			cell.indexShowing = YES;
 		
-		cell.artistNameLabel.text = name;
+        cell.title = name;
 		
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		
@@ -1242,10 +1227,13 @@
 	else
 	{
 		static NSString *cellIdentifier = @"CacheQueueCell";
-		CacheQueueSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CacheQueueSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                     reuseIdentifier:cellIdentifier];
+            cell.delegate = self;
+            cell.showDeleteButton = YES;
 		}
 		cell.indexPath = indexPath;
 
@@ -1257,46 +1245,40 @@
 			FMResultSet *result = [db executeQuery:@"SELECT * FROM cacheQueue JOIN cacheQueueList USING(md5) WHERE cacheQueueList.ROWID = ?", @(indexPath.row + 1)];
 			aSong = [ISMSSong songFromDbResult:result];
 			cached = [NSDate dateWithTimeIntervalSince1970:[result doubleForColumn:@"cachedDate"]];
-			cell.md5 = [result stringForColumn:@"md5"];
+			//cell.md5 = [result stringForColumn:@"md5"];
 			[result close];
 		}];
 		
-		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
-		if ([viewObjectsS.multiDeleteList containsObject:cell.md5])
-		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
-		}
+        cell.associatedObject = aSong;
+        
+        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:aSong.path.md5];
+
+		cell.coverArtId = aSong.coverArtId;
 		
-		cell.coverArtView.coverArtId = aSong.coverArtId;
-		
-		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
-		
+        NSString *headerTitle = nil;
 		if (indexPath.row == 0)
 		{
 			if ([aSong isEqualToSong:cacheQueueManagerS.currentQueuedSong] && cacheQueueManagerS.isQueueDownloading)
 			{
-				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:cacheQueueManagerS.currentQueuedSong.localFileSize]];
+				headerTitle = [NSString stringWithFormat:@"Added %@ - Progress: %@", [NSString relativeTime:cached], [NSString formatFileSize:cacheQueueManagerS.currentQueuedSong.localFileSize]];
 			}
 			else if (appDelegateS.isWifi || settingsS.isManualCachingOnWWANEnabled)
 			{
-				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: Waiting...", [NSString relativeTime:cached]];
+				headerTitle = [NSString stringWithFormat:@"Added %@ - Progress: Waiting...", [NSString relativeTime:cached]];
 			}
 			else
 			{
-				cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: Need Wifi", [NSString relativeTime:cached]];
+				headerTitle = [NSString stringWithFormat:@"Added %@ - Progress: Need Wifi", [NSString relativeTime:cached]];
 			}
 		}
 		else
 		{
-			cell.cacheInfoLabel.text = [NSString stringWithFormat:@"Added %@ - Progress: Waiting...", [NSString relativeTime:cached]];
+			headerTitle = [NSString stringWithFormat:@"Added %@ - Progress: Waiting...", [NSString relativeTime:cached]];
 		}
+        cell.headerTitle = headerTitle;
 		
-		cell.songNameLabel.text = aSong.title;
-		if (aSong.album)
-			cell.artistNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album];
-		else
-			cell.artistNameLabel.text = aSong.artist;
+        cell.title = aSong.title;
+        cell.subTitle = aSong.album ? [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album] : aSong.artist;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		
 		return cell;
@@ -1405,6 +1387,139 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 			[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 		}
 	}
+}
+
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    
+}
+
+- (void)tableCellDeleteButtonPressed:(CustomUITableViewCell *)cell
+{
+    if (_segmentedControl.selectedSegmentIndex == 0)
+    {
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Deleting"];
+        [self performSelector:@selector(deleteAllSongsForArtistName:) withObject:cell.title afterDelay:0.05];
+    }
+    else if (_segmentedControl.selectedSegmentIndex == 1)
+    {
+        [(ISMSSong *)cell.associatedObject removeFromCacheQueueDbQueue];
+    }
+    
+    [cell.overlayView disableDownloadButton];
+}
+
+- (void)deleteAllSongsForArtistName:(NSString *)name
+{
+    NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:50];
+    [databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
+     {
+         FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ", name];
+         while ([result next])
+         {
+             @autoreleasepool
+             {
+                 NSString *md5 = [result stringForColumnIndex:0];
+                 if (md5) [songMd5s addObject:md5];
+             }
+         }
+         [result close];
+     }];
+    
+    for (NSString *md5 in songMd5s)
+    {
+        @autoreleasepool
+        {
+            [ISMSSong removeSongFromCacheDbQueueByMD5:md5];
+        }
+    }
+    
+    [cacheS findCacheSize];
+    
+    // Reload the cached songs table
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CachedSongDeleted];
+    
+    if (!cacheQueueManagerS.isQueueDownloading)
+        [cacheQueueManagerS startDownloadQueue];
+    
+    // Hide the loading screen	
+    [viewObjectsS hideLoadingScreen];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    if (_segmentedControl.selectedSegmentIndex == 0)
+    {
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+        [self performSelector:@selector(queueAllSongsForArtistName:) withObject:cell.title afterDelay:0.05];
+    }
+    else if (_segmentedControl.selectedSegmentIndex == 1)
+    {
+        [(ISMSSong *)cell.associatedObject addToCurrentPlaylistDbQueue];
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    }
+}
+
+- (void)queueAllSongsForArtistName:(NSString *)name
+{
+    NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:50];
+    [databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
+     {
+         FMResultSet *result = [db executeQuery:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? ORDER BY seg2 COLLATE NOCASE", name];
+         while ([result next])
+         {
+             @autoreleasepool
+             {
+                 NSString *md5 = [result stringForColumnIndex:0];
+                 if (md5) [songMd5s addObject:md5];
+             }
+         }
+         [result close];
+     }];
+    
+    for (NSString *md5 in songMd5s)
+    {
+        @autoreleasepool
+        {
+            ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:md5];
+            [aSong addToCurrentPlaylistDbQueue];
+        }
+    }
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    
+    [viewObjectsS hideLoadingScreen];
+}
+
+- (void)tableCellDeleteToggled:(CustomUITableViewCell *)cell markedForDelete:(BOOL)markedForDelete
+{
+    if (_segmentedControl.selectedSegmentIndex == 0)
+    {
+        NSObject *object = cell.title;
+        if (markedForDelete)
+        {
+            if (object) [viewObjectsS.multiDeleteList addObject:object];
+        }
+        else
+        {
+            if (object) [viewObjectsS.multiDeleteList removeObject:object];
+        }
+    }
+    else
+    {
+        ISMSSong *song = cell.associatedObject;
+        NSString *object = song.path.md5;
+        if (markedForDelete)
+        {
+            if (object) [viewObjectsS.multiDeleteList addObject:object];
+        }
+        else
+        {
+            if (object) [viewObjectsS.multiDeleteList removeObject:object];
+        }
+    }
 }
 
 @end

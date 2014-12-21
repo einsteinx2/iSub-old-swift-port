@@ -7,11 +7,11 @@
 //
 
 #import "MenuViewController.h"
+#import "iSub-Swift.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "MenuTableViewCell.h"
 #import "NewHomeViewController.h"
-#import "FoldersViewController.h"
 #import "AllAlbumsViewController.h"
 #import "AllSongsViewController.h"
 #import "PlaylistsViewController.h"
@@ -19,7 +19,6 @@
 #import "BookmarksViewController.h"
 #import "GenresViewController.h"
 #import "CacheViewController.h"
-#import "ChatViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "ServerListViewController.h"
@@ -359,7 +358,7 @@
 			case 4: controller = [[PlayingViewController alloc] initWithNibName:@"PlayingViewController" bundle:nil]; break;
 			case 5: controller = [[BookmarksViewController alloc] initWithNibName:@"BookmarksViewController" bundle:nil]; break;
 			case 6: controller = [[CacheViewController alloc] initWithNibName:@"CacheViewController" bundle:nil]; break;
-			case 7: controller = [[ChatViewController alloc] initWithNibName:@"ChatViewController" bundle:nil]; break;
+			case 7: controller = [[ChatViewController alloc] init]; break;
 			
 			case 8: controller = [[GenresViewController alloc] initWithNibName:@"GenresViewController" bundle:nil]; break;
 			case 9: controller = [[AllAlbumsViewController alloc] initWithNibName:@"AllAlbumsViewController" bundle:nil]; break;

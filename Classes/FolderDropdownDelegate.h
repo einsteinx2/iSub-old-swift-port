@@ -10,7 +10,7 @@
 @protocol FolderDropdownDelegate <NSObject>
 
 @required
-- (void)folderDropdownMoveViewsY:(float)y;
+- (void)folderDropdownMoveViewsY:(CGFloat)y;
 - (void)folderDropdownViewsFinishedMoving;
 - (void)folderDropdownSelectFolder:(NSNumber *)folderId;
 

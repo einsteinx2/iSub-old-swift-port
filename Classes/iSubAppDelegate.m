@@ -8,7 +8,6 @@
 
 #import "iSubAppDelegate.h"
 #import "ServerListViewController.h"
-#import "FoldersViewController.h"
 #import <CoreFoundation/CoreFoundation.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
 #include <netinet/in.h> 
@@ -22,12 +21,23 @@
 #import "ISMSUpdateChecker.h"
 #import "MKStoreManager.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import "StoreViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "HTTPServer.h"
 #import "HLSProxyConnection.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "NSMutableURLRequest+PMS.h"
+#import "ISMSLoaderDelegate.h"
+#import "EX2Reachability.h"
+#import "HockeySDK.h"
+#import "iSub-Swift.h"
+
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 LOG_LEVEL_ISUB_DEFAULT
+
+@interface iSubAppDelegate() <MFMailComposeViewControllerDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate, ISMSLoaderDelegate>
+@end
 
 @implementation iSubAppDelegate
 
@@ -921,8 +931,8 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	if (IS_IPAD())
 		[self.ipadRootViewController.menuViewController toggleOfflineMode];
-	else
-		[self.offlineTabBarController.view removeFromSuperview];
+	//else
+	//	[self.offlineTabBarController.view removeFromSuperview];
 	
 	[databaseS closeAllDatabases];
 	[databaseS setupDatabases];
@@ -1521,15 +1531,15 @@ LOG_LEVEL_ISUB_DEFAULT
     }
     else
 	{
-		StoreViewController *store = [[StoreViewController alloc] init];
-        if (IS_IPAD())
-        {
-            [store pushViewControllerCustom:store];
-        }
-        else
-        {
-            [self.currentTabBarController.selectedViewController pushViewControllerCustom:store];
-        }
+//		StoreViewController *store = [[StoreViewController alloc] init];
+//        if (IS_IPAD())
+//        {
+//            [store pushViewControllerCustom:store];
+//        }
+//        else
+//        {
+//            [self.currentTabBarController.selectedViewController pushViewControllerCustom:store];
+//        }
 	}
 }
 

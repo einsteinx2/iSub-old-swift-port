@@ -8,15 +8,12 @@
 
 #import "FolderViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "AlbumUITableViewCell.h"
-#import "SongUITableViewCell.h"
-#import "AllSongsUITableViewCell.h"
-#import "ModalAlbumArtViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iPadRootViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "iSub-Swift.h"
 
-@interface FolderViewController() <ISMSLoaderDelegate, AsynchronousImageViewDelegate>
+@interface FolderViewController() <ISMSLoaderDelegate, AsynchronousImageViewDelegate, CustomUITableViewCellDelegate>
 {
     NSString *_folderId;
     ISMSArtist *_artist;
@@ -306,23 +303,24 @@
 	if (indexPath.row < _dataModel.albumsCount)
 	{
 		static NSString *cellIdentifier = @"AlbumCell";
-		AlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[AlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.alwaysShowCoverArt = YES;
+            cell.alwaysShowSubtitle = YES;
+            cell.delegate = self;
 		}
 		
         ISMSAlbum *anAlbum = [_dataModel albumForTableViewRow:indexPath.row];
         
-        cell.myId = anAlbum.albumId;
-		cell.myArtist = [ISMSArtist artistWithName:anAlbum.artistName andArtistId:anAlbum.artistId];
-		if (_sectionInfo)
-			cell.isIndexShowing = YES;
-		
-		cell.coverArtView.coverArtId = anAlbum.coverArtId;
-		
-		[cell.albumNameLabel setText:anAlbum.title];
+        if (_sectionInfo)
+            cell.indexShowing = YES;
+
+        cell.associatedObject = anAlbum;
+        cell.coverArtId = anAlbum.coverArtId;
+        cell.title = anAlbum.title;
         
 		// Setup cell backgrond color
         cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
@@ -332,45 +330,24 @@
 	else
 	{
 		static NSString *cellIdentifier = @"SongCell";
-		SongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[SongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.alwaysShowSubtitle = YES;
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.delegate = self;
 		}
-		cell.indexPath = indexPath;
         
         ISMSSong *aSong = [_dataModel songForTableViewRow:indexPath.row];
-        
-		cell.mySong = aSong;
-		
-		if (aSong.isCurrentPlayingSong)
-		{
-			cell.nowPlayingImageView.hidden = NO;
-			cell.trackNumberLabel.hidden = YES;
-		}
-		else 
-		{
-			cell.nowPlayingImageView.hidden = YES;
-			cell.trackNumberLabel.hidden = NO;
-			
-			if ( [aSong.track intValue] != 0 )
-				cell.trackNumberLabel.text = [NSString stringWithFormat:@"%i", [aSong.track intValue]];
-			else
-				cell.trackNumberLabel.text = @"";
-		}
-		
-		cell.songNameLabel.text = aSong.title;
-		
-		if ( aSong.artist)
-			cell.artistNameLabel.text = aSong.artist;
-		else
-			cell.artistNameLabel.text = @"";		
-		
-		if ( aSong.duration )
-			cell.songDurationLabel.text = [NSString formatTime:[aSong.duration floatValue]];
-		else
-			cell.songDurationLabel.text = @"";
+
+		cell.indexPath = indexPath;
+		cell.associatedObject = aSong;
+        cell.trackNumber = aSong.track;
+        cell.title = aSong.title;
+        cell.subTitle = aSong.artist ? aSong.artist : @"";
+        cell.duration = aSong.duration;
+        cell.playing = aSong.isCurrentPlayingSong;
 		
         if (aSong.isFullyCached)
         {
@@ -447,6 +424,43 @@
 	[self addHeaderAndIndex];
 	
 	[self dataSourceDidFinishLoadingNewData];
+}
+
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCacheQueueDbQueue];
+    }
+    else if ([associatedObject isKindOfClass:[ISMSAlbum class]])
+    {
+        ISMSAlbum *album = associatedObject;
+        ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
+        
+        [databaseS downloadAllSongs:album.albumId artist:artist];
+    }
+ 
+    [cell.overlayView disableDownloadButton];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCurrentPlaylistDbQueue];
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    }
+    else if ([associatedObject isKindOfClass:[ISMSAlbum class]])
+    {
+        ISMSAlbum *album = associatedObject;
+        ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
+        
+        [databaseS queueAllSongs:album.albumId artist:artist];
+    }
 }
 
 @end

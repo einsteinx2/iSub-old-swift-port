@@ -9,6 +9,7 @@
 #import "CustomUITableViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
+#import "iSub-Swift.h"
 
 @implementation CustomUITableViewController
 
@@ -39,6 +40,11 @@
         self.view.backgroundColor = ISMSiPadBackgroundColor;
     }
     
+    if (!self.tableView)
+    {
+        self.tableView = [[UITableView alloc] init];
+    }
+    
     UITableView *tableView = self.tableView;
     tableView.tableHeaderView = [self setupHeaderView];
     // Keep the table rows from showing past the bottom
@@ -52,7 +58,7 @@
     
     [self _updateBackgroundColor];
     
-    UINavigationItem *navigationItem = self.navigationController.navigationItem;
+    UINavigationItem *navigationItem = self.navigationItem;
     navigationItem.leftBarButtonItem = [self setupLeftBarButton];
     navigationItem.rightBarButtonItem = [self setupRightBarButton];
 }
@@ -124,8 +130,22 @@
 
 - (UIBarButtonItem *)setupRightBarButton
 {
-    UIBarButtonItem *rightBarButtonItem = nil;
+//    UIBarButtonItem *rightBarButtonItem = nil;
+//    
+//    if(musicS.showPlayerIcon)
+//    {
+//        rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing"]
+//                                                              style:UIBarButtonItemStyleBordered
+//                                                             target:self
+//                                                             action:@selector(a_nowPlaying:)];
+//    }
+
     
+    
+    
+//    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(a_nowPlaying:)];
+    
+    UIBarButtonItem *rightBarButtonItem = nil;
     if(musicS.showPlayerIcon)
     {
         rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing"]
@@ -163,6 +183,56 @@
 - (void)didPullToRefresh
 {
     NSAssert(NO, @"didPullToRefresh must be overridden");
+}
+
+#pragma mark Other
+
+- (void)showDeleteToggles
+{
+    // Show the delete toggle for already visible cells
+    [UIView animateWithDuration:.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        for (UITableViewCell *cell in self.tableView.visibleCells)
+        {
+            if ([cell respondsToSelector:@selector(showDeleteCheckbox)])
+            {
+                [(id)cell showDeleteCheckbox];
+            }
+        }
+    } completion:nil];
+}
+
+- (void)hideDeleteToggles
+{
+    // Hide the delete toggle for already visible cells
+    //[UIView animateWithDuration:.1 animations:^{
+        for (UITableViewCell *cell in self.tableView.visibleCells)
+        {
+            if ([cell respondsToSelector:@selector(hideDeleteCheckbox)])
+            {
+                [(id)cell hideDeleteCheckbox];
+            }
+        }
+    //}];
+}
+
+- (void)markCellAsPlayingAtIndexPath:(NSIndexPath *)indexPath
+{
+    for (UITableViewCell *cell in self.tableView.visibleCells)
+    {
+        if ([cell isKindOfClass:[CustomUITableViewCell class]])
+        {
+            [(CustomUITableViewCell *)cell setPlaying:NO];
+        }
+    }
+    
+    if (indexPath)
+    {
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if ([cell isKindOfClass:[CustomUITableViewCell class]])
+        {
+            [(CustomUITableViewCell *)cell setPlaying:YES];
+        }
+    }
 }
 
 #pragma mark - Actions -

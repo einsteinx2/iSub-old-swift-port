@@ -16,7 +16,6 @@
 #import "ViewObjectsSingleton.h"
 #import "AsynchronousImageView.h"
 #import "AsynchronousImageViewDelegate.h"
-#import "CustomUIAlertView.h"
 #import "CustomUITextView.h"
 #import "CustomUITableViewController.h"
 #import "CustomUINavigationController.h"

@@ -8,10 +8,11 @@
 
 #import "GenresAlbumViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "GenresAlbumUITableViewCell.h"
-#import "GenresSongUITableViewCell.h"
-#import "AllSongsUITableViewCell.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "iSub-Swift.h"
+
+@interface GenresAlbumViewController() < CustomUITableViewCellDelegate>
+@end
 
 @implementation GenresAlbumViewController
 
@@ -20,11 +21,6 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
-	
-	//DLog(@"segment %i", segment);
-	//DLog(@"listOfAlbums: %@", listOfAlbums);
-	//DLog(@"listOfSongs: %@", listOfSongs);
 	
 	// Add the play all button + shuffle button
 	UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
@@ -268,15 +264,15 @@
 	if (indexPath.row < [listOfAlbums count])
 	{
 		static NSString *cellIdentifier = @"GenresAlbumCell";
-		GenresAlbumUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[GenresAlbumUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.delegate = self;
 		}
-		cell.segment = self.segment;
-		cell.seg1 = self.seg1;
-		cell.genre = genre;
+        
+        cell.associatedObject = @"album";
 		
 		NSString *md5 = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:0];
 		NSString *coverArtId;
@@ -287,10 +283,9 @@
 			coverArtId = [databaseS.genresDbQueue stringForQuery:@"SELECT coverArtId FROM genresSongs WHERE md5 = ?", md5];
 		}
 		NSString *name = [[listOfAlbums objectAtIndexSafe:indexPath.row] objectAtIndexSafe:1];
-		cell.albumNameLabel.text = name;
-	//DLog(@"name: %@", name);
+		cell.title = name;
 		
-		cell.coverArtView.coverArtId = coverArtId;
+		cell.coverArtId = coverArtId;
 		
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		
@@ -299,38 +294,26 @@
 	else
 	{
 		static NSString *cellIdentifier = @"GenresSongCell";
-		GenresSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[GenresSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.delegate = self;
 		}
 		
 		NSUInteger a = indexPath.row - [listOfAlbums count];
-		cell.md5 = [listOfSongs objectAtIndexSafe:a];
+		NSString *md5 = [listOfSongs objectAtIndexSafe:a];
 		
-		ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:cell.md5];
+		ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:md5];
 		
-		if (aSong.track)
-		{
-			cell.trackNumberLabel.text = [NSString stringWithFormat:@"%i", [aSong.track intValue]];
-		}
-		else
-		{	
-			cell.trackNumberLabel.text = @"";
-		}
+        cell.trackNumber = aSong.track;
 			
-		cell.songNameLabel.text = aSong.title;
+		cell.title = aSong.title;
 		
-		if (aSong.artist)
-			cell.artistNameLabel.text = aSong.artist;
-		else
-			cell.artistNameLabel.text = @"";		
-		
-		if (aSong.duration)
-			cell.songDurationLabel.text = [NSString formatTime:[aSong.duration floatValue]];
-		else
-			cell.songDurationLabel.text = @"";
+        cell.subTitle = aSong.artist ? aSong.artist : @"";
+        
+        cell.duration = aSong.duration;
 		
 		if (settingsS.isOfflineMode)
 		{
@@ -469,6 +452,127 @@
 	}
 }
 
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCacheQueueDbQueue];
+    }
+    else if ([associatedObject isEqual:@"album"])
+    {
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+        [self performSelector:@selector(downloadAllSongs:) withObject:cell afterDelay:0.05];
+    }
+    
+    [cell.overlayView disableDownloadButton];
+}
+
+- (void)downloadAllSongs:(CustomUITableViewCell *)cell
+{
+    FMDatabaseQueue *dbQueue;
+    NSString *query;
+    
+    if (settingsS.isOfflineMode)
+    {
+        dbQueue = databaseS.songCacheDbQueue;
+        query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%li = ? AND genre = ? ORDER BY seg%li COLLATE NOCASE", (long)self.segment, (long)(self.segment + 1)];
+    }
+    else
+    {
+        dbQueue = databaseS.genresDbQueue;
+        query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%li = ? AND genre = ? ORDER BY seg%li COLLATE NOCASE", (long)self.segment, (long)(self.segment + 1)];
+    }
+    
+    NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:0];
+    [dbQueue inDatabase:^(FMDatabase *db)
+     {
+         FMResultSet *result = [db executeQuery:query, self.seg1, cell.title, self.genre];
+         while ([result next])
+         {
+             @autoreleasepool
+             {
+                 NSString *md5 = [result stringForColumnIndex:0];
+                 if (md5) [songMd5s addObject:md5];
+             }
+         }
+         [result close];
+     }];
+    
+    for (NSString *md5 in songMd5s)
+    {
+        @autoreleasepool
+        {
+            ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:md5];
+            [aSong addToCacheQueueDbQueue];
+        }
+    }
+    
+    // Hide the loading screen
+    [viewObjectsS hideLoadingScreen];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCurrentPlaylistDbQueue];
+        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    }
+    else if ([associatedObject isEqual:@"album"])
+    {
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+        [self performSelector:@selector(queueAllSongs:) withObject:cell afterDelay:0.05];
+    }
+}
+
+- (void)queueAllSongs:(CustomUITableViewCell *)cell
+{
+    FMDatabaseQueue *dbQueue;
+    NSString *query;
+    
+    if (settingsS.isOfflineMode)
+    {
+        dbQueue = databaseS.songCacheDbQueue;
+        query = [NSString stringWithFormat:@"SELECT md5 FROM cachedSongsLayout WHERE seg1 = ? AND seg%li = ? AND genre = ? ORDER BY seg%li COLLATE NOCASE", (long)self.segment, (long)(self.segment + 1)];
+    }
+    else
+    {
+        dbQueue = databaseS.genresDbQueue;
+        query = [NSString stringWithFormat:@"SELECT md5 FROM genresLayout WHERE seg1 = ? AND seg%li = ? AND genre = ? ORDER BY seg%li COLLATE NOCASE", (long)self.segment, (long)(self.segment + 1)];
+    }
+    
+    NSMutableArray *songMd5s = [NSMutableArray arrayWithCapacity:0];
+    [dbQueue inDatabase:^(FMDatabase *db)
+     {
+         FMResultSet *result = [db executeQuery:query, self.seg1, cell.title, self.genre];
+         while ([result next])
+         {
+             @autoreleasepool
+             {
+                 NSString *md5 = [result stringForColumnIndex:0];
+                 if (md5) [songMd5s addObject:md5];
+             }
+         }
+         [result close];
+     }];
+    
+    for (NSString *md5 in songMd5s)
+    {
+        @autoreleasepool
+        {
+            ISMSSong *aSong = [ISMSSong songFromGenreDbQueue:md5];
+            [aSong addToCurrentPlaylistDbQueue];
+        }
+    }
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    
+    [viewObjectsS hideLoadingScreen];
+}
 
 @end
 

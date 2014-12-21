@@ -9,18 +9,14 @@
 #ifndef iSub_iSubAppDelegate_h
 #define iSub_iSubAppDelegate_h
 
-#import <MessageUI/MessageUI.h>
-#import <MessageUI/MFMailComposeViewController.h>
-
-#import "ISMSLoaderDelegate.h"
-#import "EX2Reachability.h"
-#import "HockeySDK.h"
-
 #define appDelegateS [iSubAppDelegate sharedInstance]
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController;
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface iSubAppDelegate : NSObject <UIApplicationDelegate, MFMailComposeViewControllerDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate, ISMSLoaderDelegate>
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability;
+
+@interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 
 @property (strong) HTTPServer *hlsProxyServer;
 

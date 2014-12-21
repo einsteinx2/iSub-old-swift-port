@@ -6,17 +6,16 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "iSub-Swift.h"
 #import "PlaylistsViewController.h"
 #import "ServerListViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "PlaylistsUITableViewCell.h"
-#import "CurrentPlaylistSongUITableViewCell.h"
-#import "LocalPlaylistsUITableViewCell.h"
 #import "PlaylistSongsViewController.h"
-#import "StoreViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
+#import "NSMutableURLRequest+SUS.h"
+#import "NSMutableURLRequest+PMS.h"
 
-@interface PlaylistsViewController() <EX2SimpleConnectionQueueDelegate, ISMSLoaderDelegate>
+@interface PlaylistsViewController() <EX2SimpleConnectionQueueDelegate, ISMSLoaderDelegate, CustomUITableViewCellDelegate>
 {
     SUSServerPlaylistsDAO *_serverPlaylistsDataModel;
     
@@ -40,6 +39,10 @@
     BOOL _savePlaylistLocal;
     
     NSUInteger _currentPlaylistCount;
+    
+    SUSURLConnection *_cellConnection;
+    
+    void (^_cellSuccessBlock)(NSData *data, NSDictionary *userInfo);
 }
 @end
 
@@ -517,8 +520,8 @@
 
 - (void)_showStore
 {
-	StoreViewController *store = [[StoreViewController alloc] init];
-	[self pushViewControllerCustom:store];
+//	StoreViewController *store = [[StoreViewController alloc] init];
+//	[self pushViewControllerCustom:store];
 }
 
 - (void)_showDeleteButton
@@ -610,15 +613,6 @@
         {
             _deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Playlists", (unsigned long)[viewObjectsS.multiDeleteList count]];
         }
-    }
-}
-
-- (void)_showDeleteToggle
-{
-    // Show the delete toggle for already visible cells
-    for (CustomUITableViewCell *cell in self.tableView.visibleCells)
-    {
-        [[cell deleteToggleImage] setHidden:NO];
     }
 }
 
@@ -797,7 +791,7 @@
 			_editPlaylistLabel.text = @"Done";
 			[self _showDeleteButton];
 			
-			[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(_showDeleteToggle) userInfo:nil repeats:NO];
+			[self showDeleteToggles];
 		}
 		else 
 		{
@@ -814,6 +808,7 @@
 			{
 				[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:playlistS.currentIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 			}
+            [self hideDeleteToggles];
 		}
 	}
 	else if (_segmentedControl.selectedSegmentIndex == 1 ||
@@ -829,7 +824,7 @@
 			_editPlaylistLabel.text = @"Done";
 			[self _showDeleteButton];
 			
-			[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(_showDeleteToggle) userInfo:nil repeats:NO];
+			[self showDeleteToggles];
 		}
 		else 
 		{
@@ -842,6 +837,8 @@
 			
 			// Reload the table to correct the numbers
 			[self.tableView reloadData];
+            
+            [self hideDeleteToggles];
 		}
 	}
 }
@@ -1532,42 +1529,37 @@ static NSString *kName_Error = @"error";
 	if (_segmentedControl.selectedSegmentIndex == 0)
 	{
 		static NSString *cellIdentifier = @"CurrentPlaylistSongCell";
-		CurrentPlaylistSongUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CurrentPlaylistSongUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.delegate = self;
+            cell.alwaysShowCoverArt = YES;
+            cell.alwaysShowSubtitle = YES;
 		}
 		cell.indexPath = indexPath;
 		
-		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
-		if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
-		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
-		}
+        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:@(indexPath.row)];
 		
 		ISMSSong *aSong = [playlistS songForIndex:indexPath.row];
 		
-		cell.coverArtView.coverArtId = aSong.coverArtId;
+        cell.associatedObject = aSong;
+		cell.coverArtId = aSong.coverArtId;
 		
 		if (indexPath.row == playlistS.currentIndex && (audioEngineS.player.isStarted || (settingsS.isJukeboxEnabled && jukeboxS.jukeboxIsPlaying)))
 		{
-			cell.nowPlayingImageView.hidden = NO;
-			cell.numberLabel.hidden = YES;
+			cell.playing = YES;
+			//cell.numberLabel.hidden = YES;
 		}
 		else 
 		{
-			cell.nowPlayingImageView.hidden = YES;
-			cell.numberLabel.hidden = NO;
-			cell.numberLabel.text = [NSString stringWithFormat:@"%li", (long)(indexPath.row + 1)];
+			cell.playing = NO;
+			//cell.numberLabel.hidden = NO;
+			//cell.numberLabel.text = [NSString stringWithFormat:@"%li", (long)(indexPath.row + 1)];
 		}
 		
-		cell.songNameLabel.text = aSong.title;
-		
-		if (aSong.album)
-			cell.artistNameLabel.text = [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album];
-		else
-			cell.artistNameLabel.text = aSong.artist;
+		cell.title = aSong.title;
+        cell.subTitle = aSong.album ? [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album] : aSong.artist;
 		
         if (aSong.isFullyCached)
         {
@@ -1584,33 +1576,25 @@ static NSString *kName_Error = @"error";
 	else if (_segmentedControl.selectedSegmentIndex == 1)
 	{
 		static NSString *cellIdentifier = @"LocalPlaylistsCell";
-		LocalPlaylistsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[LocalPlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.delegate = self;
 		}
 		cell.indexPath = indexPath;
+        
+        NSString *md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
+        cell.associatedObject = md5;
 		
-		// Set up the cell...
-		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
-		if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
-		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
-		}
-		cell.contentView.backgroundColor = [UIColor clearColor];
-		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-		cell.playlistNameLabel.text = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
-		cell.md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
-		cell.playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", cell.md5]];
-		if (cell.playlistCount == 1)
-		{
-			cell.playlistCountLabel.text = @"1 song";
-		}
-		else
-		{
-			cell.playlistCountLabel.text = [NSString stringWithFormat:@"%li songs", (long)cell.playlistCount];
-		}
+        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:@(indexPath.row)];
+        
+        cell.title = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
+        
+        NSUInteger count = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
+
+        cell.subTitle = count == 1 ? @"1 song" : [NSString stringWithFormat:@"%li songs", (long)count];
+
 		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
@@ -1619,29 +1603,90 @@ static NSString *kName_Error = @"error";
 	else if (_segmentedControl.selectedSegmentIndex == 2)
 	{
 		static NSString *cellIdentifier = @"PlaylistsCell";
-		PlaylistsUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[PlaylistsUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.delegate = self;
 		}
 		cell.indexPath = indexPath;
-        cell.serverPlaylist = [_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
+        SUSServerPlaylist *playlist = [_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
+        cell.associatedObject = playlist;
 		
-		cell.deleteToggleImage.hidden = !self.tableView.editing;
-		cell.deleteToggleImage.image = [UIImage imageNamed:@"unselected"];
-		if ([viewObjectsS.multiDeleteList containsObject:@(indexPath.row)])
-		{
-			cell.deleteToggleImage.image = [UIImage imageNamed:@"selected"];
-		}
+        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:@(indexPath.row)];
 		
-		cell.contentView.backgroundColor = [UIColor clearColor];
-		cell.playlistNameLabel.backgroundColor = [UIColor clearColor];
-        SUSServerPlaylist *playlist = [_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];        
-        cell.playlistNameLabel.text = playlist.playlistName;
-		cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];		
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.title = playlist.playlistName;
+        
+        if (!_cellSuccessBlock)
+        {
+            __weak __block PlaylistsViewController *weakSelf = nil;
+            _cellSuccessBlock = ^(NSData *data, NSDictionary *userInfo) {
+                SUSServerPlaylist *serverPlaylist = userInfo[@"serverPlaylist"];
+                BOOL isDownload = [userInfo[@"isDownload"] boolValue];
+                
+                // Parse the data
+                //
+                NSError *error;
+                TBXML *tbxml = [[TBXML alloc] initWithXMLData:data error:&error];
+                if (!error)
+                {
+                    TBXMLElement *root = tbxml.rootXMLElement;
+                    
+                    TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
+                    if (error)
+                    {
+                        // TODO: handle error
+                    }
+                    else
+                    {
+                        TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
+                        if (playlist)
+                        {
+                            NSString *md5 = [serverPlaylist.playlistName md5];
+                            [databaseS removeServerPlaylistTable:md5];
+                            [databaseS createServerPlaylistTable:md5];
+                            
+                            TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
+                            while (entry != nil)
+                            {
+                                @autoreleasepool {
+                                    
+                                    ISMSSong *aSong = [[ISMSSong alloc] initWithTBXMLElement:entry];
+                                    [aSong insertIntoServerPlaylistWithPlaylistId:md5];
+                                    if (isDownload)
+                                    {
+                                        [aSong addToCacheQueueDbQueue];
+                                    }
+                                    else
+                                    {
+                                        [aSong addToCurrentPlaylistDbQueue];
+                                    }
+                                    
+                                    // Get the next message
+                                    entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Hide the loading screen
+                [viewObjectsS hideLoadingScreen];
+                
+                if (!isDownload)
+                    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+                
+                if (weakSelf)
+                {
+                    __strong PlaylistsViewController *strongSelf = weakSelf;
+                    strongSelf->_cellConnection = nil;
+                }
+            };
+        }
 		
-		return cell;		
+		return cell;
 	}
 	
 	return nil;
@@ -1680,6 +1725,118 @@ static NSString *kName_Error = @"error";
 	{
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 	}
+}
+
+#pragma mark - CustomUITableViewCell Delegate -
+
+- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCacheQueueDbQueue];
+    }
+    else if ([associatedObject isKindOfClass:[NSString class]])
+    {
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+        [self performSelector:@selector(downloadAllSongsForLocalPlaylistMd5:) withObject:associatedObject afterDelay:0.05];
+        
+        [cell.overlayView disableDownloadButton];
+    }
+    else if ([associatedObject isKindOfClass:[SUSServerPlaylist class]])
+    {
+        [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
+        
+        SUSServerPlaylist *serverPlaylist = (SUSServerPlaylist *)cell.associatedObject;
+        NSDictionary *parameters = @{ @"id": n2N(serverPlaylist.playlistId) };
+        NSDictionary *userInfo = @{ @"serverPlaylist": serverPlaylist, @"isDownload": @YES };
+        
+        _cellConnection = [[SUSURLConnection alloc] initWithAction:@"getPlaylist"
+                                                        parameters:parameters
+                                                          userInfo:userInfo
+                                                           success:_cellSuccessBlock
+                                                           failure:^(NSError *error) {
+                                                               // TODO: Prompt the user
+                                                               [viewObjectsS hideLoadingScreen];
+                                                               _cellConnection = nil;
+                                                           }];
+        
+        [cell.overlayView disableDownloadButton];
+    }
+}
+
+- (void)downloadAllSongsForLocalPlaylistMd5:(NSString *)md5
+{
+    int count = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
+    for (int i = 0; i < count; i++)
+    {
+        ISMSSong *song = [ISMSSong songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
+        [song addToCacheQueueDbQueue];
+    }
+    
+    // Hide the loading screen
+    [viewObjectsS hideLoadingScreen];
+}
+
+- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+{
+    id associatedObject = cell.associatedObject;
+    if ([associatedObject isKindOfClass:[ISMSSong class]])
+    {
+        [(ISMSSong *)cell.associatedObject addToCurrentPlaylistDbQueue];
+    }
+    else if ([associatedObject isKindOfClass:[NSString class]])
+    {
+        [viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
+        [self performSelector:@selector(queueAllSongsForLocalPlaylistMd5:) withObject:associatedObject afterDelay:0.05];
+    }
+    else if ([associatedObject isKindOfClass:[SUSServerPlaylist class]])
+    {
+        [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
+        
+        SUSServerPlaylist *serverPlaylist = (SUSServerPlaylist *)cell.associatedObject;
+        NSDictionary *parameters = @{ @"id": n2N(serverPlaylist.playlistId) };
+        NSDictionary *userInfo = @{ @"serverPlaylist": serverPlaylist, @"isDownload": @NO };
+        
+        _cellConnection = [[SUSURLConnection alloc] initWithAction:@"getPlaylist"
+                                                        parameters:parameters
+                                                          userInfo:userInfo
+                                                           success:_cellSuccessBlock
+                                                           failure:^(NSError *error) {
+            // TODO: Prompt the user
+            [viewObjectsS hideLoadingScreen];
+            _cellConnection = nil;
+        }];
+    }
+}
+
+- (void)queueAllSongsForLocalPlaylistMd5:(NSString *)md5
+{
+    int count = [databaseS.localPlaylistsDbQueue intForQuery:[NSString stringWithFormat:@"SELECT COUNT(*) FROM playlist%@", md5]];
+    for (int i = 0; i < count; i++)
+    {
+        @autoreleasepool
+        {
+            ISMSSong *song = [ISMSSong songFromDbRow:i inTable:[NSString stringWithFormat:@"playlist%@", md5] inDatabaseQueue:databaseS.localPlaylistsDbQueue];
+            [song addToCurrentPlaylistDbQueue];
+        }
+    }
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];
+    
+    [viewObjectsS hideLoadingScreen];
+}
+
+- (void)tableCellDeleteToggled:(CustomUITableViewCell *)cell markedForDelete:(BOOL)markedForDelete
+{
+    NSObject *object = @(cell.indexPath.row);
+    if (markedForDelete)
+    {
+        [viewObjectsS.multiDeleteList addObject:object];
+    }
+    else
+    {
+        [viewObjectsS.multiDeleteList removeObject:object];
+    }
 }
 
 @end

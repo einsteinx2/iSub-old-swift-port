@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 Ben Baron. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 @interface CustomUITableViewController : UITableViewController
 
 #pragma mark - UI -
@@ -22,6 +20,12 @@
 - (BOOL)shouldSetupRefreshControl; // Override and return YES to use pull to refresh, otherwise implemented automatically
 - (void)setupRefreshControl;
 - (void)didPullToRefresh; // Override to perform an action after user pulls to refresh
+
+#pragma mark Other
+
+- (void)showDeleteToggles;
+- (void)hideDeleteToggles;
+- (void)markCellAsPlayingAtIndexPath:(NSIndexPath *)indexPath;
 
 #pragma mark - Actions -
 
