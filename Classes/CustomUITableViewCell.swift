@@ -320,7 +320,7 @@ public class CustomUITableViewCell : UITableViewCell {
         if let title = self.title? {
             self._titleLabel.hidden = false
             
-            let height = self.subTitle == nil ? scrollViewHeight : scrollViewHeight * 0.70
+            let height = self.subTitle == nil ? scrollViewHeight : scrollViewHeight * 0.60
             let expectedLabelSize: CGSize = self._titleLabel.text!.boundingRectWithSize(CGSizeMake(1000, height), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self._titleLabel.font], context: nil).size
             
             self._titleLabel.frame = CGRectMake(0, 0, expectedLabelSize.width, height)
@@ -329,7 +329,7 @@ public class CustomUITableViewCell : UITableViewCell {
         if self.alwaysShowSubtitle || self.subTitle != nil {
             self._subTitleLabel.hidden = false
             
-            let y = scrollViewHeight * 0.6
+            let y = scrollViewHeight * 0.57
             let height = scrollViewHeight * 0.33
             let text = self._subTitleLabel.text == nil ? "" : self._subTitleLabel.text!
             let expectedLabelSize = text.boundingRectWithSize(CGSizeMake(1000, height), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self._subTitleLabel.font], context: nil).size

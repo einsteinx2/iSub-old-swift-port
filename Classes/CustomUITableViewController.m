@@ -46,6 +46,7 @@
     }
     
     UITableView *tableView = self.tableView;
+    tableView.separatorInset = UIEdgeInsetsZero;
     tableView.tableHeaderView = [self setupHeaderView];
     // Keep the table rows from showing past the bottom
     if (!tableView.tableFooterView) tableView.tableFooterView = [[UIView alloc] init];
@@ -248,7 +249,26 @@
 {
     iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
     streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:streamingPlayerViewController animated:YES];
+}
+
+#pragma mark - Table View Delegate -
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Remove seperator inset
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    // Prevent the cell from inheriting the Table View's margin settings
+    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+        [cell setPreservesSuperviewLayoutMargins:NO];
+    }
+    
+    // Explictly set your cell's layout margins
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 @end

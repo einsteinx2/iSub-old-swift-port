@@ -37,6 +37,11 @@
 	if (!self.tableView.tableHeaderView) self.tableView.tableHeaderView = [[UIView alloc] init];	
 }
 
+- (void)customizeTableView:(UITableView *)tableView
+{
+    tableView.rowHeight = 50.0;
+}
+
 - (void)didReceiveMemoryWarning 
 {
 	// Releases the view if it doesn't have a superview.

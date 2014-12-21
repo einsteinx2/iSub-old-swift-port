@@ -251,9 +251,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	if (indexPath.row < [listOfAlbums count])
-		return 60.0;
-	else
 		return 50.0;
+	else
+		return 44.0;
 }
 
 
