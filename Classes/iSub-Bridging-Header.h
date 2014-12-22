@@ -20,7 +20,6 @@
 #import "AsynchronousImageView.h"
 #import "AsynchronousImageViewDelegate.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "FolderDropdownControl.h"
 #import "SUSRootFoldersDAO.h"
 #import "FolderViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"

@@ -243,7 +243,7 @@ extension ChatViewController : UITextViewDelegate {
         _chatMessageOverlay.addSubview(_dismissButton)
     
         // Animate the segmented control on screen
-        UIView.animateWithDuration(0.5, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: { () -> Void in
+        UIView.animateWithDuration(0.5, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: {
             self._chatMessageOverlay.alpha = 1
             self._dismissButton.enabled = true
         }, completion: nil)
@@ -253,7 +253,7 @@ extension ChatViewController : UITextViewDelegate {
         }
     
     public func textViewDidEndEditing(textView: UITextView) {
-        UIView.animateWithDuration(0.3, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: { () -> Void in
+        UIView.animateWithDuration(0.3, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: {
             self._chatMessageOverlay.alpha = 0
             self._dismissButton.enabled = false
         }, completion: nil)

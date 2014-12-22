@@ -396,7 +396,6 @@
 		53159EC3156F69D0001B0268 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C6052C12F1F01E003C6895 /* IntroViewController.m */; };
 		53159EC4156F69D0001B0268 /* CustomUIAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */; };
 		53159EC5156F69D0001B0268 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
-		53159EC6156F69D0001B0268 /* FolderDropdownControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */; };
 		53159ED3156F69D0001B0268 /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		53159ED4156F69D0001B0268 /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
 		53159ED5156F69D0001B0268 /* FolderPickerDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */; };
@@ -828,6 +827,9 @@
 		53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE29147DF14300E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
+		53A308091A47FDEB00769C51 /* FolderDropdownControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A308081A47FDEB00769C51 /* FolderDropdownControl.swift */; };
+		53A3080A1A47FDEB00769C51 /* FolderDropdownControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A308081A47FDEB00769C51 /* FolderDropdownControl.swift */; };
+		53A3080B1A47FDEB00769C51 /* FolderDropdownControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A308081A47FDEB00769C51 /* FolderDropdownControl.swift */; };
 		53A64E23161E2E6400FCBBAF /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A64E22161E2E6400FCBBAF /* CrashReporter.framework */; };
 		53AA300411461A04003E57E3 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AA300311461A04003E57E3 /* background.png */; };
 		53AAB77A12B98699007EA08B /* StoreUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */; };
@@ -856,7 +858,6 @@
 		53ABE54411665B6B00197877 /* PlaylistsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE54211665B6B00197877 /* PlaylistsViewController.xib */; };
 		53ADBBBC133525BD0098FAE6 /* folder-dropdown-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBA133525BD0098FAE6 /* folder-dropdown-arrow.png */; };
 		53ADBBBD133525BD0098FAE6 /* folder-dropdown-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */; };
-		53ADBBC013352DB40098FAE6 /* FolderDropdownControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */; };
 		53B20D1D12C27AAA00A90DD9 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20D1C12C27AAA00A90DD9 /* Default@2x.png */; };
 		53B20DCE12C2945400A90DD9 /* home-quick-random.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DCD12C2945400A90DD9 /* home-quick-random.png */; };
 		53B20DD212C2957A00A90DD9 /* home-quick-random@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53B20DD112C2957A00A90DD9 /* home-quick-random@2x.png */; };
@@ -1126,7 +1127,6 @@
 		53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C6052C12F1F01E003C6895 /* IntroViewController.m */; };
 		53BC282B139AF0DD00A825F1 /* CustomUIAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */; };
 		53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
-		53BC282D139AF0DD00A825F1 /* FolderDropdownControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */; };
 		53BC283A139AF0DD00A825F1 /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		53BC283B139AF0DD00A825F1 /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
 		53BC283C139AF0DD00A825F1 /* FolderPickerDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */; };
@@ -1474,7 +1474,6 @@
 		53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C6052C12F1F01E003C6895 /* IntroViewController.m */; };
 		53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */; };
 		53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
-		53DCF58E13BFEAD3009160F9 /* FolderDropdownControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */; };
 		53DCF59B13BFEAD3009160F9 /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		53DCF59C13BFEAD3009160F9 /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
 		53DCF59D13BFEAD3009160F9 /* FolderPickerDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7269134CFB0A003E0E1C /* FolderPickerDialog.m */; };
@@ -2055,6 +2054,7 @@
 		53A2BE22147DF09800E44822 /* EqualizerPointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerPointView.h; sourceTree = "<group>"; };
 		53A2BE23147DF09800E44822 /* EqualizerPointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerPointView.m; sourceTree = "<group>"; };
 		53A2BE27147DF13600E44822 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		53A308081A47FDEB00769C51 /* FolderDropdownControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderDropdownControl.swift; sourceTree = "<group>"; };
 		53A64E22161E2E6400FCBBAF /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CrashReporter.framework; path = Frameworks/HockeySDK/Vendor/CrashReporter.framework; sourceTree = "<group>"; };
 		53AA300311461A04003E57E3 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Images/Other/background.png; sourceTree = "<group>"; };
 		53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreUITableViewCell.swift; sourceTree = "<group>"; };
@@ -2086,8 +2086,6 @@
 		53ABE54511665B8500197877 /* PlaylistSongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistSongsViewController.h; sourceTree = "<group>"; };
 		53ADBBBA133525BD0098FAE6 /* folder-dropdown-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder-dropdown-arrow.png"; path = "Images/Other/folder-dropdown-arrow.png"; sourceTree = "<group>"; };
 		53ADBBBB133525BD0098FAE6 /* folder-dropdown-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder-dropdown-arrow@2x.png"; path = "Images/Other/folder-dropdown-arrow@2x.png"; sourceTree = "<group>"; };
-		53ADBBBE13352DB40098FAE6 /* FolderDropdownControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderDropdownControl.h; sourceTree = "<group>"; };
-		53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderDropdownControl.m; sourceTree = "<group>"; };
 		53B20D1C12C27AAA00A90DD9 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Images/Other/Default@2x.png"; sourceTree = "<group>"; };
 		53B20DCD12C2945400A90DD9 /* home-quick-random.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-quick-random.png"; path = "Images/Home Screen/home-quick-random.png"; sourceTree = "<group>"; };
 		53B20DD112C2957A00A90DD9 /* home-quick-random@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-quick-random@2x.png"; path = "Images/Home Screen/home-quick-random@2x.png"; sourceTree = "<group>"; };
@@ -2197,7 +2195,6 @@
 		53DE599214F1A7B000206529 /* controller-forw30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30.png"; path = "Images/Player Icons/controller-forw30.png"; sourceTree = "<group>"; };
 		53DE599314F1A7B000206529 /* controller-forw30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30@2x.png"; path = "Images/Player Icons/controller-forw30@2x.png"; sourceTree = "<group>"; };
 		53E1DC1B1A468136005F1007 /* FoldersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoldersViewController.swift; sourceTree = "<group>"; };
-		53E82A951406D47F0051D44B /* FolderDropdownDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderDropdownDelegate.h; sourceTree = "<group>"; };
 		53EB4AA51405FE1B00CBA075 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		53F0CD8111589F0A00A665CD /* progress-label-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "progress-label-background.png"; path = "Images/Other/progress-label-background.png"; sourceTree = "<group>"; };
 		53F1412015FD550C004D00D5 /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = buildnumber.xcconfig; path = Other/buildnumber.xcconfig; sourceTree = "<group>"; };
@@ -2739,9 +2736,7 @@
 			children = (
 				53E1DC1B1A468136005F1007 /* FoldersViewController.swift */,
 				28F335F01007B36200424DE2 /* FoldersViewController.xib */,
-				53E82A951406D47F0051D44B /* FolderDropdownDelegate.h */,
-				53ADBBBE13352DB40098FAE6 /* FolderDropdownControl.h */,
-				53ADBBBF13352DB40098FAE6 /* FolderDropdownControl.m */,
+				53A308081A47FDEB00769C51 /* FolderDropdownControl.swift */,
 				53F2D3EB113A338500107D63 /* FolderViewController.h */,
 				53F2D3EC113A338500107D63 /* FolderViewController.m */,
 				533C65E915ABBA09003EAF29 /* FolderViewController.xib */,
@@ -4696,6 +4691,7 @@
 				530388A9116571920043292D /* AllSongsViewController.m in Sources */,
 				53ABE3631165C83900197877 /* PlayingViewController.m in Sources */,
 				53ABE54311665B6B00197877 /* PlaylistsViewController.m in Sources */,
+				53A308091A47FDEB00769C51 /* FolderDropdownControl.swift in Sources */,
 				53D8ACB3116C47E600E5C9CB /* PageControlViewController.m in Sources */,
 				53F4A074116FF48400BB8411 /* DebugViewController.m in Sources */,
 				53F4A07D116FF7EE00BB8411 /* CurrentPlaylistViewController.m in Sources */,
@@ -4732,7 +4728,6 @@
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
 				532D9B43131AE19700FD8CA7 /* CustomUIAlertView.swift in Sources */,
 				5324C6C613345D75004E6C79 /* OBSlider.m in Sources */,
-				53ADBBC013352DB40098FAE6 /* FolderDropdownControl.m in Sources */,
 				535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */,
 				535B7255134CEE1E003E0E1C /* DDSocialLoginDialog.m in Sources */,
 				535B726A134CFB0E003E0E1C /* FolderPickerDialog.m in Sources */,
@@ -4813,7 +4808,6 @@
 				5331C5901A3EA63A00458859 /* ChatViewController.swift in Sources */,
 				53159EC4156F69D0001B0268 /* CustomUIAlertView.swift in Sources */,
 				53159EC5156F69D0001B0268 /* OBSlider.m in Sources */,
-				53159EC6156F69D0001B0268 /* FolderDropdownControl.m in Sources */,
 				53159ED3156F69D0001B0268 /* DDSocialDialog.m in Sources */,
 				53159ED4156F69D0001B0268 /* DDSocialLoginDialog.m in Sources */,
 				53159ED5156F69D0001B0268 /* FolderPickerDialog.m in Sources */,
@@ -4867,6 +4861,7 @@
 				53BC27B0139AF0DD00A825F1 /* AllSongsViewController.m in Sources */,
 				53BC27B3139AF0DD00A825F1 /* PlayingViewController.m in Sources */,
 				53BC27B6139AF0DD00A825F1 /* PlaylistsViewController.m in Sources */,
+				53A3080B1A47FDEB00769C51 /* FolderDropdownControl.swift in Sources */,
 				53BC27B9139AF0DD00A825F1 /* PageControlViewController.m in Sources */,
 				53BC27BA139AF0DD00A825F1 /* DebugViewController.m in Sources */,
 				53BC27BB139AF0DD00A825F1 /* CurrentPlaylistViewController.m in Sources */,
@@ -4903,7 +4898,6 @@
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
 				53BC282B139AF0DD00A825F1 /* CustomUIAlertView.swift in Sources */,
 				53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */,
-				53BC282D139AF0DD00A825F1 /* FolderDropdownControl.m in Sources */,
 				53BC283A139AF0DD00A825F1 /* DDSocialDialog.m in Sources */,
 				53BC283B139AF0DD00A825F1 /* DDSocialLoginDialog.m in Sources */,
 				53BC283C139AF0DD00A825F1 /* FolderPickerDialog.m in Sources */,
@@ -4952,6 +4946,7 @@
 				53DCF51113BFEAD3009160F9 /* AllSongsViewController.m in Sources */,
 				53DCF51413BFEAD3009160F9 /* PlayingViewController.m in Sources */,
 				53DCF51713BFEAD3009160F9 /* PlaylistsViewController.m in Sources */,
+				53A3080A1A47FDEB00769C51 /* FolderDropdownControl.swift in Sources */,
 				53DCF51A13BFEAD3009160F9 /* PageControlViewController.m in Sources */,
 				53DCF51B13BFEAD3009160F9 /* DebugViewController.m in Sources */,
 				53DCF51C13BFEAD3009160F9 /* CurrentPlaylistViewController.m in Sources */,
@@ -4988,7 +4983,6 @@
 				53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */,
 				53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.swift in Sources */,
 				53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */,
-				53DCF58E13BFEAD3009160F9 /* FolderDropdownControl.m in Sources */,
 				53DCF59B13BFEAD3009160F9 /* DDSocialDialog.m in Sources */,
 				53DCF59C13BFEAD3009160F9 /* DDSocialLoginDialog.m in Sources */,
 				53DCF59D13BFEAD3009160F9 /* FolderPickerDialog.m in Sources */,

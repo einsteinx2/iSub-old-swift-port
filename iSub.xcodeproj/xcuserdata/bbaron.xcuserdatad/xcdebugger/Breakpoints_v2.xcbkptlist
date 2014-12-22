@@ -220,11 +220,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/FoldersViewController.swift"
-            timestampString = "440921965.305147"
+            timestampString = "440932097.499998"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "didPullToRefresh()"
             landmarkType = "5">
          </BreakpointContent>

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class FoldersViewController: CustomUITableViewController, UISearchBarDelegate, ISMSLoaderDelegate, FolderDropdownDelegate, CustomUITableViewCellDelegate {
+public class FoldersViewController: CustomUITableViewController, UISearchBarDelegate, ISMSLoaderDelegate, FolderDropdownControlDelegateSwift, CustomUITableViewCellDelegate {
     
     private lazy var _appDelegate = iSubAppDelegate.sharedInstance()
     private let _settings = SavedSettings.sharedInstance()
@@ -32,7 +32,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     private let _blockerButton: UIButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
     private let _searchOverlay: UIView = UIView()
     private let _dismissButton: UIButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
-    private let _dropdown: FolderDropdownControl = FolderDropdownControl()
+    private let _dropdown: FolderDropdownControlSwift = FolderDropdownControlSwift(frame: CGRectZero)
     
     private lazy var _reloadTimeFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -67,9 +67,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         // Hide the folder selector when there is only one folder
         if !IS_IPAD()
         {
-            let count = _dropdown.folders == nil ? 0 : _dropdown.folders.count
-            
-            let y: CGFloat = count <= 2 ? 86.0 : 50.0
+            let y: CGFloat = _dropdown.folders?.count <= 2 ? 86.0 : 50.0
             let contentOffset = CGPointMake(0, y)
             
             self.tableView.setContentOffset(contentOffset, animated: false)
@@ -180,7 +178,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         } else {
             _dropdown.folders = NSDictionary(object: "All Folders", forKey: -1)
         }
-        _dropdown.selectFolderWithId(_dataModel.selectedFolderId)
+        _dropdown.selectFolderWithId(Int(_dataModel.selectedFolderId))
         
         _headerView.addSubview(_dropdown)
         
@@ -256,7 +254,6 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     
     // MARK: - Folder Dropdown Delegate -
     
-    // TODO: Make this not necessary
     public func folderDropdownMoveViewsY(y: CGFloat) {
         
         self.tableView.tableHeaderView!.height += y;
@@ -270,7 +267,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         
     }
     
-    public func folderDropdownSelectFolder(folderId: NSNumber!) {
+    public func folderDropdownSelectFolder(folderId: Int) {
         _dropdown.selectFolderWithId(folderId)
         
         // Save the default
@@ -508,7 +505,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         }
         
         if (index == 0) {
-            let y: CGFloat  = _dropdown.folders == nil || _dropdown.folders.count == 2 ? 86.0 : 50.0
+            let y: CGFloat  = _dropdown.folders == nil || _dropdown.folders?.count == 2 ? 86.0 : 50.0
             self.tableView.setContentOffset(CGPointMake(0, y), animated:false)
             
             return -1;
