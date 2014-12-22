@@ -39,13 +39,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSaveButton) name:@"showSaveButton" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchServer:) name:@"switchServer" object:nil];
 	
-	//viewObjectsS.tempServerList = [[NSMutableArray arrayWithArray:viewObjectsS.serverList] retain];
-	//DLog(@"tempServerList: %@", viewObjectsS.tempServerList);
-	
 	self.title = @"Servers";
-	if(self != [[self.navigationController viewControllers] objectAtIndexSafe:0])
-		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)];
-	self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
 	if (settingsS.serverList == nil || [settingsS.serverList count] == 0)
 		[self addAction:nil];
@@ -70,12 +64,19 @@
 	}
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if(self != [[self.navigationController viewControllers] objectAtIndexSafe:0])
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)];
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
 
 - (void)reloadTable
 {
 	[self.tableView reloadData];
 }
-
 
 - (void)showSaveButton
 {
@@ -88,7 +89,6 @@
 		
 	}
 }
-
 
 - (void)segmentAction:(id)sender
 {
@@ -138,7 +138,6 @@
 	}
 }
 
-
 - (void)setEditing:(BOOL)editing animated:(BOOL)animate
 {
     [super setEditing:editing animated:animate];
@@ -167,15 +166,12 @@
 		[appDelegateS.ipadRootViewController presentViewController:serverTypeViewController animated:YES completion:nil];
 	else
 		[self presentViewController:serverTypeViewController animated:YES completion:nil];
-    
-    
 }
 
 - (void)saveAction:(id)sender
 {
 	[self.navigationController popToRootViewControllerAnimated:YES];
 }
-
 
 - (void)didReceiveMemoryWarning 
 {
@@ -236,8 +232,6 @@
     settingsS.lastQueryId = viewObjectsS.serverToEdit.lastQueryId;
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
     
-//DLog(@" settingsS.urlString: %@   settingsS.redirectUrlString: %@", settingsS.urlString, settingsS.redirectUrlString);
-		
 	if (self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())
 	{
 		[self.navigationController.view removeFromSuperview];
@@ -258,7 +252,6 @@
 		//DLog(@"detected all songs loading");
 			settingsS.isCancelLoading = YES;
 		}
-		
 		
 		while (settingsS.isCancelLoading)
 		{
@@ -309,9 +302,7 @@
     return 1;
 }
 
-
-// Customize the number of rows in the table view.
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	if (self.segmentedControl.selectedSegmentIndex == 0)
 		return settingsS.serverList.count;
@@ -319,9 +310,7 @@
 		return 0;
 }
 
-
-// Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellIdentifier = @"ServerListCell";
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
@@ -379,14 +368,12 @@
 	return cell;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	if (!indexPath)
 		return;
 	
 	viewObjectsS.serverToEdit = [settingsS.serverList objectAtIndexSafe:indexPath.row];
-    //DLog(@"viewObjectsS.serverToEdit.url: %@", viewObjectsS.serverToEdit.url);
 
 	if (self.isEditing)
 	{
@@ -413,7 +400,6 @@
 	}
 }
 
-// Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
     return YES;
@@ -435,9 +421,7 @@
 	[self.tableView reloadData];
 }
 
-
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) 
 	{
