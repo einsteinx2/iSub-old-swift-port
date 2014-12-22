@@ -5362,6 +5362,7 @@
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
 					"\"$(SRCROOT)/Frameworks/libSub/Sub\"",
 					"\"$(SRCROOT)/Frameworks/libSub/Frameworks\"/**",
+					"\"$(SDK_DIR)\"/usr/include/libxml2",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -5944,6 +5945,7 @@
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
 					"\"$(SRCROOT)/Frameworks/libSub/Sub\"",
 					"\"$(SRCROOT)/Frameworks/libSub/Frameworks\"/**",
+					"\"$(SDK_DIR)\"/usr/include/libxml2",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -6007,6 +6009,7 @@
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
 					"\"$(SRCROOT)/Frameworks/libSub/Sub\"",
 					"\"$(SRCROOT)/Frameworks/libSub/Frameworks\"/**",
+					"\"$(SDK_DIR)\"/usr/include/libxml2",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (

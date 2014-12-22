@@ -1280,23 +1280,25 @@ static NSString *kName_Error = @"error";
 }
 
 - (void)_parseData
-{	
-	// Parse the data
-	//
-	NSError *error;
-    TBXML *tbxml = [[TBXML alloc] initWithXMLData:_receivedData error:&error];
-	if (!error)
-	{
-		TBXMLElement *root = tbxml.rootXMLElement;
-		
-		TBXMLElement *error = [TBXML childElementNamed:kName_Error parentElement:root];
-		if (error)
-		{
-			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
-			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
-			[self _subsonicErrorCode:code message:message];
-		}
-	}
+{
+    // Parse the data
+    //
+    RXMLElement *root = [[RXMLElement alloc] initFromXMLData:_receivedData];
+    if (![root isValid])
+    {
+        NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
+        [self _subsonicErrorCode:nil message:error.description];
+    }
+    else
+    {
+        RXMLElement *error = [root child:@"error"];
+        if ([error isValid])
+        {
+            NSString *code = [error attribute:@"code"];
+            NSString *message = [error attribute:@"message"];
+            [self _subsonicErrorCode:code message:message];
+        }
+    }
 	
 	[viewObjectsS hideLoadingScreen];
 }
@@ -1620,54 +1622,50 @@ static NSString *kName_Error = @"error";
         
         if (!_cellSuccessBlock)
         {
-            __weak __block PlaylistsViewController *weakSelf = nil;
+            __weak PlaylistsViewController *weakSelf = self;
+            NSData *receivedData = _receivedData;
             _cellSuccessBlock = ^(NSData *data, NSDictionary *userInfo) {
                 SUSServerPlaylist *serverPlaylist = userInfo[@"serverPlaylist"];
                 BOOL isDownload = [userInfo[@"isDownload"] boolValue];
                 
                 // Parse the data
                 //
-                NSError *error;
-                TBXML *tbxml = [[TBXML alloc] initWithXMLData:data error:&error];
-                if (!error)
+                RXMLElement *root = [[RXMLElement alloc] initFromXMLData:receivedData];
+                if (![root isValid])
                 {
-                    TBXMLElement *root = tbxml.rootXMLElement;
-                    
-                    TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
-                    if (error)
+                    //NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
+                    // TODO: handle this error
+                }
+                else
+                {
+                    RXMLElement *error = [root child:@"error"];
+                    if ([error isValid])
                     {
-                        // TODO: handle error
+                        //NSString *code = [error attribute:@"code"];
+                        //NSString *message = [error attribute:@"message"];
+                        // TODO: handle this error
                     }
                     else
                     {
-                        TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
-                        if (playlist)
+                        // TODO: Handle !isValid case
+                        if ([[root child:@"playlist"] isValid])
                         {
                             NSString *md5 = [serverPlaylist.playlistName md5];
                             [databaseS removeServerPlaylistTable:md5];
                             [databaseS createServerPlaylistTable:md5];
                             
-                            TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
-                            while (entry != nil)
-                            {
-                                @autoreleasepool {
-                                    
-                                    ISMSSong *aSong = [[ISMSSong alloc] initWithTBXMLElement:entry];
-                                    [aSong insertIntoServerPlaylistWithPlaylistId:md5];
-                                    if (isDownload)
-                                    {
-                                        [aSong addToCacheQueueDbQueue];
-                                    }
-                                    else
-                                    {
-                                        [aSong addToCurrentPlaylistDbQueue];
-                                    }
-                                    
-                                    // Get the next message
-                                    entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
-                                    
+                            [root iterate:@"playlist.entry" usingBlock:^(RXMLElement *e) {
+                                ISMSSong *aSong = [[ISMSSong alloc] initWithRXMLElement:e];
+                                [aSong insertIntoServerPlaylistWithPlaylistId:md5];
+                                if (isDownload)
+                                {
+                                    [aSong addToCacheQueueDbQueue];
                                 }
-                            }
+                                else
+                                {
+                                    [aSong addToCurrentPlaylistDbQueue];
+                                }
+                            }];
                         }
                     }
                 }

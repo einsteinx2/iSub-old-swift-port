@@ -918,24 +918,26 @@ static NSString *kName_Error = @"error";
 }
 
 - (void)parseData
-{	
-	// Parse the data
-	//
-	NSError *error;
-    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
-	if (!error)
-	{
-		TBXMLElement *root = tbxml.rootXMLElement;
-
-		TBXMLElement *error = [TBXML childElementNamed:kName_Error parentElement:root];
-		if (error)
-		{
-			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
-			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
-			[self subsonicErrorCode:code message:message];
-		}
-	}
-	
+{
+    // Parse the data
+    //
+    RXMLElement *root = [[RXMLElement alloc] initFromXMLData:self.receivedData];
+    if (![root isValid])
+    {
+        NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
+        [self subsonicErrorCode:nil message:error.description];
+    }
+    else
+    {
+        RXMLElement *error = [root child:@"error"];
+        if ([error isValid])
+        {
+            NSString *code = [error attribute:@"code"];
+            NSString *message = [error attribute:@"message"];
+            [self subsonicErrorCode:code message:message];
+        }
+    }
+    
 	self.receivedData = nil;
 	
 	[viewObjectsS hideLoadingScreen];
