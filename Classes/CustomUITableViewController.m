@@ -46,7 +46,6 @@
     }
     
     UITableView *tableView = self.tableView;
-    tableView.separatorInset = UIEdgeInsetsZero;
     tableView.tableHeaderView = [self setupHeaderView];
     // Keep the table rows from showing past the bottom
     if (!tableView.tableFooterView) tableView.tableFooterView = [[UIView alloc] init];
