@@ -40,7 +40,7 @@
 		<key>0CA27A43414FB33F98B16BE18013A983CABB105E</key>
 		<string>../..Frameworks/HockeySDK</string>
 		<key>4862FA1173344F6A396F21D7284E96917CD5DAD4</key>
-		<string>../../Frameworks/libSub/Frameworks/RaptureXML/</string>
+		<string>../../Frameworks/libSub/Frameworks/RaptureXML</string>
 		<key>71CFC0DE1DEFC877B0C5B9F98B971EBA2921D608</key>
 		<string>../..Frameworks/libSub/Frameworks/CocoaHTTPServer</string>
 		<key>8EDE57C2999432B02AF3774C49AC60A079783175</key>

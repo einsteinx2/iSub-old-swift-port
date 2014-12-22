@@ -11,6 +11,13 @@
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 
+#define kBadUrlTag 1
+#define kBadUserTag 2
+#define kBadPassTag 3
+
+@interface SubsonicServerEditViewController() <UIAlertViewDelegate>
+@end
+
 @implementation SubsonicServerEditViewController
 
 #pragma mark - Rotation
@@ -128,18 +135,24 @@
 	if (![self checkUrl:self.urlField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The URL must be in the format: http://mywebsite.com:port/folder\n\nBoth the :port and /folder are optional" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        alert.delegate = self;
+        alert.tag = kBadUrlTag;
 		[alert show];
 	}
 	
 	if (![self checkUsername:self.usernameField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        alert.delegate = self;
+        alert.tag = kBadUserTag;
 		[alert show];
 	}
 	
 	if (![self checkPassword:self.passwordField.text])
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        alert.delegate = self;
+        alert.tag = kBadPassTag;
 		[alert show];
 	}
 	
@@ -187,11 +200,20 @@
 	[viewObjectsS hideLoadingScreen];
 	
 	NSString *message = @"";
-	if (error.code == ISMSErrorCode_IncorrectCredentials)
+    NSInteger tag = 0;
+    if (error.code == ISMSErrorCode_IncorrectCredentials)
+    {
 		message = @"Either your username or password is incorrect. Please try again";
+        tag = kBadUserTag;
+    }
 	else
+    {
 		message = [NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %li:\n%@", (long)[error code], [error localizedDescription]];
+        tag = kBadUrlTag;
+    }
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    alert.delegate = self;
+    alert.tag = tag;
 	[alert show];
 }	
 	
@@ -289,7 +311,7 @@
 	
 }
 
-#pragma mark - UITextField delegate
+#pragma mark - UITextField Delegate -
 
 // This dismisses the keyboard when the "done" button is pressed
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -297,6 +319,20 @@
 	[self.urlField resignFirstResponder];
 	[self.usernameField resignFirstResponder];
 	[self.passwordField resignFirstResponder];
+    
+    if (textField == self.urlField)
+    {
+        [self.usernameField becomeFirstResponder];
+    }
+    else if (textField == self.usernameField)
+    {
+        [self.passwordField becomeFirstResponder];
+    }
+    else if (textField == self.passwordField)
+    {
+        [self saveButtonPressed:nil];
+    }
+    
 	return YES;
 }
 
@@ -307,6 +343,25 @@
 	[self.usernameField resignFirstResponder];
 	[self.passwordField resignFirstResponder];
 	[super touchesBegan:touches withEvent:event];
+}
+
+#pragma mark - UIAlertView Delegate -
+
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    UITextField *textField = nil;
+    switch (alertView.tag)
+    {
+        case kBadUrlTag: textField = self.urlField; break;
+        case kBadUserTag: textField = self.usernameField; break;
+        case kBadPassTag: textField = self.passwordField; break;
+        default: break;
+    }
+    
+    [textField becomeFirstResponder];
+    
+    UITextRange *range = [textField textRangeFromPosition:textField.beginningOfDocument toPosition:textField.endOfDocument];
+    [textField setSelectedTextRange:range];
 }
 
 @end
