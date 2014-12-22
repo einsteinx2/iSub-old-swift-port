@@ -130,21 +130,6 @@
 
 - (UIBarButtonItem *)setupRightBarButton
 {
-//    UIBarButtonItem *rightBarButtonItem = nil;
-//    
-//    if(musicS.showPlayerIcon)
-//    {
-//        rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing"]
-//                                                              style:UIBarButtonItemStyleBordered
-//                                                             target:self
-//                                                             action:@selector(a_nowPlaying:)];
-//    }
-
-    
-    
-    
-//    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(a_nowPlaying:)];
-    
     UIBarButtonItem *rightBarButtonItem = nil;
     if(musicS.showPlayerIcon)
     {
@@ -248,6 +233,7 @@
 {
     iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
     streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:streamingPlayerViewController animated:YES];
 }
 
 #pragma mark - Table View Delegate -
