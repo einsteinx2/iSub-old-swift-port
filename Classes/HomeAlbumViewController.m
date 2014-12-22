@@ -111,6 +111,7 @@
 		if (!cell)
 		{
 			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.alwaysShowCoverArt = YES;
             cell.delegate = self;
 		}
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
