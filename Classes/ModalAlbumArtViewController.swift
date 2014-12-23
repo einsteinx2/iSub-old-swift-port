@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class ModalAlbumArtViewController: CustomUITableViewController, AsynchronousImageViewDelegate {
+public class ModalAlbumArtViewController: UIViewController, AsynchronousImageViewDelegate {
     
     private let _settings = SavedSettings.sharedInstance()
     
@@ -58,7 +58,7 @@ public class ModalAlbumArtViewController: CustomUITableViewController, Asynchron
     // MARK: - Life Cycle -
     
     public override init() {
-        super.init()
+        super.init(nibName: "ModalAlbumArtViewController", bundle: nil)
         self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
     }
     
@@ -67,18 +67,13 @@ public class ModalAlbumArtViewController: CustomUITableViewController, Asynchron
         _numberOfTracks = numberOfTracks
         _albumLength = albumLength
         
-        super.init()
+        super.init(nibName: "ModalAlbumArtViewController", bundle: nil)
         
         self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
-    }
-    
-    public override init(style: UITableViewStyle) {
-        super.init(style: style)
         self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
     }
 
