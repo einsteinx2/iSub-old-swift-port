@@ -38,7 +38,7 @@
 
 - (void)customizeTableView:(UITableView *)tableView
 {
-    tableView.rowHeight = 50.0;
+    tableView.rowHeight = ISMSNormalize(ISMSAlbumCellHeight);
 }
 
 - (void)didReceiveMemoryWarning 

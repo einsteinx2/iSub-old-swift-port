@@ -104,7 +104,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     
     override public func customizeTableView(tableView: UITableView!) {
         tableView.registerClass(CustomUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifier)
-        tableView.rowHeight = 44.0;
+        tableView.rowHeight = ISMSNormalize(ISMSArtistCellHeight);
     }
     
     deinit {

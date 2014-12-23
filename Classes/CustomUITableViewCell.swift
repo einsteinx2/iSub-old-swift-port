@@ -106,7 +106,6 @@ public class CustomUITableViewCell : UITableViewCell {
             if self.trackNumber != nil {
                 self._trackNumberLabel.hidden = self.playing
             }
-            println("playing: \(self.playing)  trackNumber: \(self._trackNumberLabel.text)  hidden: \(self._trackNumberLabel.hidden)")
         }
     }
     

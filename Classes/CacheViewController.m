@@ -1176,7 +1176,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return _segmentedControl.selectedSegmentIndex == 0 ? 44.0 : 80.0;
+    return ISMSNormalize(_segmentedControl.selectedSegmentIndex == 0 ? ISMSSongCellHeight : (ISMSAlbumCellHeight + 20.0));
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 

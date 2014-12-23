@@ -9,9 +9,8 @@
 
 int main(int argc, char *argv[]) 
 {
-    
     @autoreleasepool {
-        int retVal = UIApplicationMain(argc, argv, @"UAApplication", nil);
+        int retVal = UIApplicationMain(argc, argv, @"UAApplication", @"iSubAppDelegate");
         return retVal;
     }
 }

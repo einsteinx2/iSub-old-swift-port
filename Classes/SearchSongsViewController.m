@@ -82,14 +82,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if (self.searchType == ISMSSearchSongsSearchType_Artists)
-	{
-		return 44.0;
-	}
-	else 
-	{
-		return 60.0;
-	}
+    return ISMSNormalize(self.searchType == ISMSSearchSongsSearchType_Artists ? 44.0 : 60.0);
 }
 
 - (void)loadMoreResults

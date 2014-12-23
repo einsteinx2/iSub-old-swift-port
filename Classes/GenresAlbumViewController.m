@@ -250,10 +250,7 @@
 // Customize the height of individual rows to make the album rows taller to accomidate the album art.
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if (indexPath.row < [listOfAlbums count])
-		return 50.0;
-	else
-		return 44.0;
+    return ISMSNormalize(indexPath.row < [listOfAlbums count] ? ISMSAlbumCellHeight : ISMSSongCellHeight);
 }
 
 

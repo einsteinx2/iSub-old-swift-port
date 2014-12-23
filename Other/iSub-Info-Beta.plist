@@ -10,16 +10,6 @@
 	<array/>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleIconFiles</key>
-	<array>
-		<string>Icon.png</string>
-		<string>Icon@2x.png</string>
-		<string>Icon-72.png</string>
-		<string>Icon-72@2x.png</string>
-		<string>Icon-120.png</string>
-		<string>Icon-76.png</string>
-		<string>Icon-76@2x.png</string>
-	</array>
 	<key>CFBundleIdentifier</key>
 	<string>com.einsteinx2.isubbeta</string>
 	<key>CFBundleInfoDictionaryVersion</key>

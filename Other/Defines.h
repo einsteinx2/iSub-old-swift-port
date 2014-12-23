@@ -25,4 +25,17 @@
 #define ISMSiPadBackgroundColor [UIColor colorWithRedInt:200 greenInt:200 blueInt:206 alpha:1]
 #define ISMSiPadCornerRadius 5.
 
+#define ISMSBaseWidth 320.0
+NS_INLINE CGFloat ISMSNormalize(CGFloat value)
+{
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat percent = (screenWidth - ISMSBaseWidth) / screenWidth;
+    CGFloat normalizedValue = value * (1 + percent);
+    return normalizedValue;
+}
+
+#define ISMSSongCellHeight 44.0
+#define ISMSAlbumCellHeight 50.0
+#define ISMSArtistCellHeight 44.0
+
 #endif

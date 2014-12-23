@@ -395,7 +395,7 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 // Customize the height of individual rows to make the album rows taller to accomidate the album art.
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	return indexPath.row < self.listOfAlbums.count ? 50.0 : 44.0;
+    return ISMSNormalize(indexPath.row < self.listOfAlbums.count ? ISMSAlbumCellHeight : ISMSSongCellHeight);
 }
 
 

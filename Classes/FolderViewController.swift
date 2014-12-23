@@ -327,7 +327,8 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     }
     
     public override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return indexPath.row < _dataModel.albumsCount ? 50.0 : 44.0
+        let height = indexPath.row < _dataModel.albumsCount ? ISMSAlbumCellHeight : ISMSSongCellHeight
+        return ISMSNormalize(height)
     }
     
     public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
