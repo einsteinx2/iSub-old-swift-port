@@ -26,6 +26,11 @@
 	self.HUD = nil;
 }
 
+static NSString * const kViewKey = @"view";
+static NSString * const kMessageKey = @"message";
+static NSString * const kSenderKey = @"sender";
+static NSTimeInterval const kDelay = .5;
+
 - (void)showLoadingScreenOnMainWindowNotification:(NSNotification *)notification
 {
     [self showLoadingScreenOnMainWindowWithMessage:notification.userInfo[@"message"]];
@@ -38,19 +43,28 @@
 
 - (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message
 {
-	if (self.isLoadingScreenShowing)
+    if (self.isLoadingScreenShowing)
     {
         self.HUD.labelText = message ? message : self.HUD.labelText;
-		return;
+        return;
     }
-	
-	self.isLoadingScreenShowing = YES;
-	
-	self.HUD = [[MBProgressHUD alloc] initWithView:view];
-	[appDelegateS.window addSubview:self.HUD];
-	self.HUD.delegate = self;
-	self.HUD.labelText = message ? message : @"Loading";
-	[self.HUD show:YES];
+    
+    NSDictionary *options = @{ kViewKey: view, kMessageKey: message };
+    [self performSelector:@selector(_showLoadingScreenWithOptions:) withObject:options afterDelay:kDelay];
+}
+
+- (void)_showLoadingScreenWithOptions:(NSDictionary *)options
+{
+    UIView *view = options[kViewKey];
+    NSString *message = options[kMessageKey];
+    
+    self.isLoadingScreenShowing = YES;
+    
+    self.HUD = [[MBProgressHUD alloc] initWithView:view];
+    [appDelegateS.window addSubview:self.HUD];
+    self.HUD.delegate = self;
+    self.HUD.labelText = message ? message : @"Loading";
+    [self.HUD show:YES];
 }
 
 - (void)showAlbumLoadingScreenOnMainWindowNotification:(NSNotification *)notification
@@ -67,28 +81,40 @@
 {	
 	if (self.isLoadingScreenShowing)
 		return;
-	
-	self.isLoadingScreenShowing = YES;
-	
-	self.HUD = [[MBProgressHUD alloc] initWithView:appDelegateS.window];
-	self.HUD.userInteractionEnabled = YES;
-	
-	// TODO: verify on iPad
-	UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-	cancelButton.bounds = CGRectMake(0, 0, 1024, 1024);
-	cancelButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[cancelButton addTarget:sender action:@selector(cancelLoad) forControlEvents:UIControlEventTouchUpInside];
-	[self.HUD addSubview:cancelButton];
-	
-	[appDelegateS.window addSubview:self.HUD];
-	self.HUD.delegate = self;
-	self.HUD.labelText = @"Loading";
-	self.HUD.detailsLabelText = @"tap to cancel";
-	[self.HUD show:YES];
+    
+    NSDictionary *options = @{ kViewKey: view, kSenderKey: sender };
+    [self performSelector:@selector(_showAlbumLoadingScreenWithOptions:) withObject:options afterDelay:kDelay];
+}
+
+- (void)_showAlbumLoadingScreenWithOptions:(NSDictionary *)options
+{
+    //UIView *view = options[kViewKey];
+    id sender = options[kSenderKey];
+    
+    self.isLoadingScreenShowing = YES;
+    
+    // TODO: See why was always using window here
+    self.HUD = [[MBProgressHUD alloc] initWithView:appDelegateS.window];
+    self.HUD.userInteractionEnabled = YES;
+    
+    // TODO: verify on iPad
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelButton.bounds = CGRectMake(0, 0, 1024, 1024);
+    cancelButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [cancelButton addTarget:sender action:@selector(cancelLoad) forControlEvents:UIControlEventTouchUpInside];
+    [self.HUD addSubview:cancelButton];
+    
+    [appDelegateS.window addSubview:self.HUD];
+    self.HUD.delegate = self;
+    self.HUD.labelText = @"Loading";
+    self.HUD.detailsLabelText = @"tap to cancel";
+    [self.HUD show:YES];
 }
 	
 - (void)hideLoadingScreen
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
 	if (!self.isLoadingScreenShowing)
 		return;
 	
