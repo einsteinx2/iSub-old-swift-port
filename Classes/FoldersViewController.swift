@@ -43,6 +43,18 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     
     // MARK: - Lifecycle -
     
+    public override init() {
+        super.init()
+    }
+    
+    public override init(style: UITableViewStyle) {
+        super.init(style: style)
+    }
+    
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
     public required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -54,7 +66,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         _createDataModel()
         
         self.title = "Folders"
@@ -534,8 +546,10 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
                 }
             }
             
-            let albumViewController = FolderViewController(artist: anArtist, orAlbum: nil)
-            self.pushViewControllerCustom(albumViewController)
+            if let artist = anArtist? {
+                let albumViewController = FolderViewController(artist: artist)
+                self.pushViewControllerCustom(albumViewController)
+            }
         }
         else
         {

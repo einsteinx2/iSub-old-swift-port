@@ -11,7 +11,6 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
-		28F335F11007B36200424DE2 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* FoldersViewController.xib */; };
 		5301583A15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
 		5301583B15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
 		5301583C15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
@@ -111,7 +110,6 @@
 		5314B4EE126FD20300CDB511 /* home-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4EC126FD20300CDB511 /* home-tabbaricon.png */; };
 		5314B4EF126FD20300CDB511 /* home-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314B4ED126FD20300CDB511 /* home-tabbaricon@2x.png */; };
 		5314C7B411D4157D000CA726 /* delete-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314C7B311D4157D000CA726 /* delete-button.png */; };
-		53159D3C156F69D0001B0268 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* FoldersViewController.xib */; };
 		53159D3E156F69D0001B0268 /* controller-next.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D7F113C963300B3A376 /* controller-next.png */; };
 		53159D3F156F69D0001B0268 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
 		53159D40156F69D0001B0268 /* controller-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D81113C963300B3A376 /* controller-play.png */; };
@@ -357,7 +355,6 @@
 		53159E5A156F69D0001B0268 /* playing-cell-icon-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8B15167CBA0081A83A /* playing-cell-icon-white.png */; };
 		53159E5B156F69D0001B0268 /* playing-cell-icon-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8C15167CBA0081A83A /* playing-cell-icon-white@2x.png */; };
 		53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
-		53159E6A156F69D0001B0268 /* FolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* FolderViewController.m */; };
 		53159E6D156F69D0001B0268 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
 		53159E6E156F69D0001B0268 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
@@ -680,6 +677,12 @@
 		5353B83D134D8019005C589E /* upload-playlist@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83B134D8019005C589E /* upload-playlist@2x.png */; };
 		53544D8A1187DED400B63DB9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
 		5354914B11B03FC900928E0F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
+		5355C8101A4915E200CBB225 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5355C80F1A4915E200CBB225 /* FoldersViewController.xib */; };
+		5355C8111A4915E200CBB225 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5355C80F1A4915E200CBB225 /* FoldersViewController.xib */; };
+		5355C8121A4915E200CBB225 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5355C80F1A4915E200CBB225 /* FoldersViewController.xib */; };
+		5355C81B1A491E3800CBB225 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5355C81A1A491E3800CBB225 /* ChatViewController.xib */; };
+		5355C81C1A491E3800CBB225 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5355C81A1A491E3800CBB225 /* ChatViewController.xib */; };
+		5355C81D1A491E3800CBB225 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5355C81A1A491E3800CBB225 /* ChatViewController.xib */; };
 		535696531810DA8700997C7B /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 535696521810DA8700997C7B /* FXBlurView.m */; };
 		535696541810DA8700997C7B /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 535696521810DA8700997C7B /* FXBlurView.m */; };
 		535696551810DA8700997C7B /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 535696521810DA8700997C7B /* FXBlurView.m */; };
@@ -812,6 +815,9 @@
 		5388A42D1198AD840049BA9E /* unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42B1198AD840049BA9E /* unselected.png */; };
 		538C01B012C3DCC40061545B /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
 		538C01B112C3DCC40061545B /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
+		5396AD141A48DBCC00881307 /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5396AD131A48DBCC00881307 /* FolderViewController.swift */; };
+		5396AD151A48DBCC00881307 /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5396AD131A48DBCC00881307 /* FolderViewController.swift */; };
+		5396AD161A48DBCC00881307 /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5396AD131A48DBCC00881307 /* FolderViewController.swift */; };
 		539796E41162B68800F41D8B /* AllAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 539796E31162B68800F41D8B /* AllAlbumsViewController.m */; };
 		539797FE1162D4D200F41D8B /* AllAlbumsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 539797FD1162D4D200F41D8B /* AllAlbumsViewController.xib */; };
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
@@ -901,7 +907,6 @@
 		53BB7FB6121B97BA00BEE7E8 /* chat-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB7FB4121B97BA00BEE7E8 /* chat-tabbaricon@2x.png */; };
 		53BB800B121B9CA200BEE7E8 /* comment-write-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB8009121B9CA200BEE7E8 /* comment-write-pressed@2x.png */; };
 		53BB800C121B9CA200BEE7E8 /* comment-write@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BB800A121B9CA200BEE7E8 /* comment-write@2x.png */; };
-		53BC26A2139AF0DD00A825F1 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* FoldersViewController.xib */; };
 		53BC26A4139AF0DD00A825F1 /* controller-next.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D7F113C963300B3A376 /* controller-next.png */; };
 		53BC26A5139AF0DD00A825F1 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
 		53BC26A6139AF0DD00A825F1 /* controller-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D81113C963300B3A376 /* controller-play.png */; };
@@ -1088,7 +1093,6 @@
 		53BC2794139AF0DD00A825F1 /* upload-playlist@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83B134D8019005C589E /* upload-playlist@2x.png */; };
 		53BC2796139AF0DD00A825F1 /* PlaylistSongsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536AB8101353DCF700DABD83 /* PlaylistSongsViewController.xib */; };
 		53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
-		53BC27A1139AF0DD00A825F1 /* FolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* FolderViewController.m */; };
 		53BC27A4139AF0DD00A825F1 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
 		53BC27A5139AF0DD00A825F1 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
@@ -1245,7 +1249,6 @@
 		53D9D25A16DEF87B002F55F7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24916DEF843002F55F7 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53D9D25B16DEF87B002F55F7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24716DEF83E002F55F7 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53D9D25C16DEF87B002F55F7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24516DEF839002F55F7 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		53DCF3FF13BFEAD3009160F9 /* FoldersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* FoldersViewController.xib */; };
 		53DCF40113BFEAD3009160F9 /* controller-next.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D7F113C963300B3A376 /* controller-next.png */; };
 		53DCF40213BFEAD3009160F9 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
 		53DCF40313BFEAD3009160F9 /* controller-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D81113C963300B3A376 /* controller-play.png */; };
@@ -1435,7 +1438,6 @@
 		53DCF4F913BFEAD3009160F9 /* Icon-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286A139AF17B00A825F1 /* Icon-Beta.png */; };
 		53DCF4FA13BFEAD3009160F9 /* Icon@2x-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */; };
 		53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
-		53DCF50213BFEAD3009160F9 /* FolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* FolderViewController.m */; };
 		53DCF50513BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F675AE113B048600822059 /* iPhoneStreamingPlayerViewController.m */; };
 		53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
@@ -1529,7 +1531,6 @@
 		53EB4AA71405FE2F00CBA075 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EB4AA51405FE1B00CBA075 /* libz.dylib */; };
 		53EB4AA81405FE3200CBA075 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EB4AA51405FE1B00CBA075 /* libz.dylib */; };
 		53F0CD8211589F0A00A665CD /* progress-label-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F0CD8111589F0A00A665CD /* progress-label-background.png */; };
-		53F2D3EE113A338500107D63 /* FolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F2D3EC113A338500107D63 /* FolderViewController.m */; };
 		53F4A074116FF48400BB8411 /* DebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A072116FF48400BB8411 /* DebugViewController.m */; };
 		53F4A07D116FF7EE00BB8411 /* CurrentPlaylistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A07B116FF7EE00BB8411 /* CurrentPlaylistViewController.m */; };
 		53F4A07E116FF7EE00BB8411 /* CurrentPlaylistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F4A07C116FF7EE00BB8411 /* CurrentPlaylistViewController.xib */; };
@@ -1768,7 +1769,6 @@
 		1D6058910D05DD3D006BFB54 /* iSub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		28F335F01007B36200424DE2 /* FoldersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FoldersViewController.xib; sourceTree = "<group>"; };
 		5301583815081B0A00B54CEF /* settings-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-tabbaricon.png"; path = "Images/Tab Bar Icons/settings-tabbaricon.png"; sourceTree = "<group>"; };
 		5301583915081B0A00B54CEF /* settings-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/settings-tabbaricon@2x.png"; sourceTree = "<group>"; };
 		53030314116ADF8B00B0AF5D /* reload-table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reload-table.png"; path = "Images/Other/reload-table.png"; sourceTree = "<group>"; };
@@ -1941,6 +1941,8 @@
 		5353B83B134D8019005C589E /* upload-playlist@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "upload-playlist@2x.png"; path = "Images/Other/upload-playlist@2x.png"; sourceTree = "<group>"; };
 		53544D891187DED400B63DB9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5354914A11B03FC900928E0F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		5355C80F1A4915E200CBB225 /* FoldersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FoldersViewController.xib; sourceTree = "<group>"; };
+		5355C81A1A491E3800CBB225 /* ChatViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatViewController.xib; sourceTree = "<group>"; };
 		535696511810DA8700997C7B /* FXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXBlurView.h; sourceTree = "<group>"; };
 		535696521810DA8700997C7B /* FXBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXBlurView.m; sourceTree = "<group>"; };
 		535A8899113F62DD00979783 /* default-album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art.png"; path = "Images/Other/default-album-art.png"; sourceTree = "<group>"; };
@@ -2039,6 +2041,7 @@
 		5388A42B1198AD840049BA9E /* unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unselected.png; path = Images/Other/unselected.png; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
 		538C01AF12C3DCC40061545B /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Images/Other/back@2x.png"; sourceTree = "<group>"; };
+		5396AD131A48DBCC00881307 /* FolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderViewController.swift; sourceTree = "<group>"; };
 		539796E21162B68800F41D8B /* AllAlbumsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllAlbumsViewController.h; sourceTree = "<group>"; };
 		539796E31162B68800F41D8B /* AllAlbumsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AllAlbumsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		539797FD1162D4D200F41D8B /* AllAlbumsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AllAlbumsViewController.xib; sourceTree = "<group>"; };
@@ -2198,8 +2201,6 @@
 		53EB4AA51405FE1B00CBA075 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		53F0CD8111589F0A00A665CD /* progress-label-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "progress-label-background.png"; path = "Images/Other/progress-label-background.png"; sourceTree = "<group>"; };
 		53F1412015FD550C004D00D5 /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = buildnumber.xcconfig; path = Other/buildnumber.xcconfig; sourceTree = "<group>"; };
-		53F2D3EB113A338500107D63 /* FolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderViewController.h; sourceTree = "<group>"; };
-		53F2D3EC113A338500107D63 /* FolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FolderViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		53F4A071116FF48400BB8411 /* DebugViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugViewController.h; sourceTree = "<group>"; };
 		53F4A072116FF48400BB8411 /* DebugViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugViewController.m; sourceTree = "<group>"; };
 		53F4A07A116FF7EE00BB8411 /* CurrentPlaylistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentPlaylistViewController.h; sourceTree = "<group>"; };
@@ -2735,10 +2736,9 @@
 			isa = PBXGroup;
 			children = (
 				53E1DC1B1A468136005F1007 /* FoldersViewController.swift */,
-				28F335F01007B36200424DE2 /* FoldersViewController.xib */,
+				5355C80F1A4915E200CBB225 /* FoldersViewController.xib */,
 				53A308081A47FDEB00769C51 /* FolderDropdownControl.swift */,
-				53F2D3EB113A338500107D63 /* FolderViewController.h */,
-				53F2D3EC113A338500107D63 /* FolderViewController.m */,
+				5396AD131A48DBCC00881307 /* FolderViewController.swift */,
 				533C65E915ABBA09003EAF29 /* FolderViewController.xib */,
 				53C22CCE128EE81C00FFBA67 /* ModalAlbumArtViewController.swift */,
 				532B552614D641C500B8AA67 /* ModalAlbumArtViewController.xib */,
@@ -2780,6 +2780,7 @@
 			isa = PBXGroup;
 			children = (
 				5331C58C1A3EA63A00458859 /* ChatViewController.swift */,
+				5355C81A1A491E3800CBB225 /* ChatViewController.xib */,
 			);
 			name = "Chat Tab";
 			sourceTree = "<group>";
@@ -3480,7 +3481,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28F335F11007B36200424DE2 /* FoldersViewController.xib in Resources */,
 				533C65E315ABBA09003EAF29 /* FolderViewController.xib in Resources */,
 				533A2D83113C963300B3A376 /* controller-next.png in Resources */,
 				533A2D84113C963300B3A376 /* controller-pause.png in Resources */,
@@ -3665,6 +3665,7 @@
 				53C6053F12F1F493003C6895 /* intro-rowbackground-dark.png in Resources */,
 				53C6054012F1F493003C6895 /* intro-rowbackground-dark@2x.png in Resources */,
 				53C6054512F1F755003C6895 /* intro-icon-testserver.png in Resources */,
+				5355C8101A4915E200CBB225 /* FoldersViewController.xib in Resources */,
 				53C6054612F1F755003C6895 /* intro-icon-testserver@2x.png in Resources */,
 				53C6054712F1F755003C6895 /* intro-icon-video.png in Resources */,
 				53C6054812F1F755003C6895 /* intro-icon-video@2x.png in Resources */,
@@ -3709,6 +3710,7 @@
 				5327A5E714DA553B00DEE1B6 /* controller-album.png in Resources */,
 				5327A5EA14DA553B00DEE1B6 /* controller-album@2x.png in Resources */,
 				53C4406814E87F5000A7DC41 /* support-tabbaricon.png in Resources */,
+				5355C81B1A491E3800CBB225 /* ChatViewController.xib in Resources */,
 				53C4406B14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */,
 				53DE598814F19BAF00206529 /* controller-extrabuttons-background.png in Resources */,
 				53DE598B14F19BAF00206529 /* controller-extrabuttons-background@2x.png in Resources */,
@@ -3775,7 +3777,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53159D3C156F69D0001B0268 /* FoldersViewController.xib in Resources */,
 				533C65E615ABBA09003EAF29 /* FolderViewController.xib in Resources */,
 				53159D3E156F69D0001B0268 /* controller-next.png in Resources */,
 				53159D3F156F69D0001B0268 /* controller-pause.png in Resources */,
@@ -4058,7 +4059,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53BC26A2139AF0DD00A825F1 /* FoldersViewController.xib in Resources */,
 				533C65E515ABBA09003EAF29 /* FolderViewController.xib in Resources */,
 				53BC26A4139AF0DD00A825F1 /* controller-next.png in Resources */,
 				537EF7B7182B2F2200968FE0 /* controller-slider-thumb.png in Resources */,
@@ -4264,6 +4264,7 @@
 				533C659A15ABB9B0003EAF29 /* ShuffleFolderPickerViewController.xib in Resources */,
 				53BC2796139AF0DD00A825F1 /* PlaylistSongsViewController.xib in Resources */,
 				533C65DE15ABB9F5003EAF29 /* EqualizerViewController.xib in Resources */,
+				5355C8121A4915E200CBB225 /* FoldersViewController.xib in Resources */,
 				5306238E14D4BB7E00D320A8 /* controller-equalizer.png in Resources */,
 				5306239114D4BB7E00D320A8 /* controller-equalizer@2x.png in Resources */,
 				5306239614D4BCAD00D320A8 /* eqView.png in Resources */,
@@ -4338,6 +4339,7 @@
 				53493F4315FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
 				53649DD7184DA99B00E600EC /* Icon-76@2x.png in Resources */,
 				53493F4615FC6CAE0059492E /* MainWindow.xib in Resources */,
+				5355C81D1A491E3800CBB225 /* ChatViewController.xib in Resources */,
 				5349AD061613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABD16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65AC116533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
@@ -4350,7 +4352,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53DCF3FF13BFEAD3009160F9 /* FoldersViewController.xib in Resources */,
 				533C65E415ABBA09003EAF29 /* FolderViewController.xib in Resources */,
 				53DCF40113BFEAD3009160F9 /* controller-next.png in Resources */,
 				53DCF40213BFEAD3009160F9 /* controller-pause.png in Resources */,
@@ -4535,6 +4536,7 @@
 				53DCF4D813BFEAD3009160F9 /* intro-rowbackground-dark.png in Resources */,
 				53DCF4D913BFEAD3009160F9 /* intro-rowbackground-dark@2x.png in Resources */,
 				53DCF4DA13BFEAD3009160F9 /* intro-icon-testserver.png in Resources */,
+				5355C8111A4915E200CBB225 /* FoldersViewController.xib in Resources */,
 				53DCF4DB13BFEAD3009160F9 /* intro-icon-testserver@2x.png in Resources */,
 				53DCF4DC13BFEAD3009160F9 /* intro-icon-video.png in Resources */,
 				53DCF4DD13BFEAD3009160F9 /* intro-icon-video@2x.png in Resources */,
@@ -4579,6 +4581,7 @@
 				5327A5E814DA553B00DEE1B6 /* controller-album.png in Resources */,
 				5327A5EB14DA553B00DEE1B6 /* controller-album@2x.png in Resources */,
 				53C4406914E87F5000A7DC41 /* support-tabbaricon.png in Resources */,
+				5355C81C1A491E3800CBB225 /* ChatViewController.xib in Resources */,
 				53C4406C14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */,
 				53DE598914F19BAF00206529 /* controller-extrabuttons-background.png in Resources */,
 				53DE598C14F19BAF00206529 /* controller-extrabuttons-background@2x.png in Resources */,
@@ -4679,7 +4682,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
-				53F2D3EE113A338500107D63 /* FolderViewController.m in Sources */,
 				53F675AF113B048600822059 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				533A2D07113C61CA00B3A376 /* AsynchronousImageView.m in Sources */,
 				53F74C511A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
@@ -4689,6 +4691,7 @@
 				539796E41162B68800F41D8B /* AllAlbumsViewController.m in Sources */,
 				53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */,
 				530388A9116571920043292D /* AllSongsViewController.m in Sources */,
+				5396AD141A48DBCC00881307 /* FolderViewController.swift in Sources */,
 				53ABE3631165C83900197877 /* PlayingViewController.m in Sources */,
 				53ABE54311665B6B00197877 /* PlaylistsViewController.m in Sources */,
 				53A308091A47FDEB00769C51 /* FolderDropdownControl.swift in Sources */,
@@ -4764,7 +4767,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */,
-				53159E6A156F69D0001B0268 /* FolderViewController.m in Sources */,
 				53159E6D156F69D0001B0268 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53159E6E156F69D0001B0268 /* AsynchronousImageView.m in Sources */,
 				53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */,
@@ -4849,7 +4851,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
-				53BC27A1139AF0DD00A825F1 /* FolderViewController.m in Sources */,
 				53BC27A4139AF0DD00A825F1 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53BC27A5139AF0DD00A825F1 /* AsynchronousImageView.m in Sources */,
 				53F74C531A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
@@ -4859,6 +4860,7 @@
 				53BC27AC139AF0DD00A825F1 /* AllAlbumsViewController.m in Sources */,
 				53BC27AE139AF0DD00A825F1 /* ServerListViewController.m in Sources */,
 				53BC27B0139AF0DD00A825F1 /* AllSongsViewController.m in Sources */,
+				5396AD161A48DBCC00881307 /* FolderViewController.swift in Sources */,
 				53BC27B3139AF0DD00A825F1 /* PlayingViewController.m in Sources */,
 				53BC27B6139AF0DD00A825F1 /* PlaylistsViewController.m in Sources */,
 				53A3080B1A47FDEB00769C51 /* FolderDropdownControl.swift in Sources */,
@@ -4934,7 +4936,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */,
-				53DCF50213BFEAD3009160F9 /* FolderViewController.m in Sources */,
 				53DCF50513BFEAD3009160F9 /* iPhoneStreamingPlayerViewController.m in Sources */,
 				53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */,
 				53F74C521A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
@@ -4944,6 +4945,7 @@
 				53DCF50D13BFEAD3009160F9 /* AllAlbumsViewController.m in Sources */,
 				53DCF50F13BFEAD3009160F9 /* ServerListViewController.m in Sources */,
 				53DCF51113BFEAD3009160F9 /* AllSongsViewController.m in Sources */,
+				5396AD151A48DBCC00881307 /* FolderViewController.swift in Sources */,
 				53DCF51413BFEAD3009160F9 /* PlayingViewController.m in Sources */,
 				53DCF51713BFEAD3009160F9 /* PlaylistsViewController.m in Sources */,
 				53A3080A1A47FDEB00769C51 /* FolderDropdownControl.swift in Sources */,

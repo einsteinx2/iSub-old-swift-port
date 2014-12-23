@@ -36,6 +36,7 @@
 				<string key="NSFrame">{{0, 20}, {320, 247}}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
+				<reference key="NSNextKeyView"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MSAwAA</bytes>
@@ -117,7 +118,7 @@
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
 				<string key="-1.CustomClassModule">iSub</string>
-				<string key="-1.CustomClassName">FoldersViewController</string>
+				<string key="-1.CustomClassName">ChatViewController</string>
 				<string key="-1.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -135,6 +136,15 @@
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<object class="IBPartialClassDescription">
+					<string key="className">ChatViewController</string>
+					<bool key="requiresClassNameFormatting">YES</bool>
+					<string key="superclassName">CustomUITableViewController</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">../Classes/ChatViewController.swift</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">CustomUITableView</string>
 					<bool key="requiresClassNameFormatting">YES</bool>
 					<string key="superclassName">UITableView</string>
@@ -149,15 +159,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">../Classes/CustomUITableViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">FoldersViewController</string>
-					<bool key="requiresClassNameFormatting">YES</bool>
-					<string key="superclassName">CustomUITableViewController</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../Classes/FoldersViewController.swift</string>
 					</object>
 				</object>
 			</array>

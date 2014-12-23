@@ -8,7 +8,6 @@
 
 #import "HomeAlbumViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
-#import "FolderViewController.h"
 #import "ServerListViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iSub-Swift.h"
@@ -170,7 +169,7 @@
 	if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfAlbums.count)
 	{
 		ISMSAlbum *anAlbum = [self.listOfAlbums objectAtIndexSafe:indexPath.row];
-		FolderViewController *albumViewController = [[FolderViewController alloc] initWithArtist:nil orAlbum:anAlbum];
+		FolderViewController *albumViewController = [[FolderViewController alloc] initWithAlbum:anAlbum];
 		[self pushViewControllerCustom:albumViewController];
 		//[self.navigationController pushViewController:albumViewController animated:YES];
 	}

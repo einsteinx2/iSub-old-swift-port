@@ -21,7 +21,7 @@
 #import "AsynchronousImageViewDelegate.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "SUSRootFoldersDAO.h"
-#import "FolderViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "UIView+Tools.h"
 #import "NSString+Time.h"
+#import "iPadRootViewController.h"

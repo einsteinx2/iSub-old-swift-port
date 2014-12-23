@@ -174,9 +174,18 @@ public class CustomUITableViewCell : UITableViewCell {
         self.contentView.addSubview(self._durationLabel)
     }
     
+    public override init() {
+        super.init()
+        _commonInit()
+    }
+    
     public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _commonInit()
+    }
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
     }
 
     public required init(coder aDecoder: NSCoder) {

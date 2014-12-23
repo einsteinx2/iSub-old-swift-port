@@ -10,7 +10,6 @@
 #import "SearchSongsViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "FolderViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "SearchXMLParser.h"
 #import "NSMutableURLRequest+SUS.h"
@@ -297,10 +296,9 @@
 		if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfArtists.count)
 		{
 			ISMSArtist *anArtist = [listOfArtists objectAtIndexSafe:indexPath.row];
-			FolderViewController *albumView = [[FolderViewController alloc] initWithArtist:anArtist orAlbum:nil];
+			FolderViewController *albumView = [[FolderViewController alloc] initWithArtist:anArtist];
 			
 			[self pushViewControllerCustom:albumView];
-			//[self.navigationController pushViewController:albumView animated:YES];
 			
 			return;
 		}
@@ -310,10 +308,9 @@
 		if (viewObjectsS.isCellEnabled && indexPath.row != self.listOfAlbums.count)
 		{
 			ISMSAlbum *anAlbum = [listOfAlbums objectAtIndexSafe:indexPath.row];
-			FolderViewController *albumView = [[FolderViewController alloc] initWithArtist:nil orAlbum:anAlbum];
+			FolderViewController *albumView = [[FolderViewController alloc] initWithAlbum:anAlbum];
 			
 			[self pushViewControllerCustom:albumView];
-			//[self.navigationController pushViewController:albumView animated:YES];
 			
 			return;
 		}
@@ -418,16 +415,12 @@
 }	
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{	
-	//DLog(@"%@", [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding]);
-	
+{
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:receivedData];
 	SearchXMLParser *parser = [[SearchXMLParser alloc] initXMLParser];
 	[xmlParser setDelegate:parser];
 	[xmlParser parse];
-	
-	//DLog(@"parser.listOfSongs:\n%@", parser.listOfSongs);
-	
+		
 	if (searchType == ISMSSearchSongsSearchType_Artists)
 	{
 		if ([parser.listOfArtists count] == 0)
@@ -468,18 +461,6 @@
 	
 	self.receivedData = nil;
 	self.connection = nil;
-}
-
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning 
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - CustomUITableViewCell Delegate -

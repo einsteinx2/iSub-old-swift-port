@@ -29,6 +29,9 @@
 {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_jukeboxToggled:) name:ISMSNotification_JukeboxEnabled object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_jukeboxToggled:) name:ISMSNotification_JukeboxDisabled object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupLeftBarButton) name:UIApplicationDidBecomeActiveNotification object:nil];

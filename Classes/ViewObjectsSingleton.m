@@ -247,7 +247,7 @@
 	appDelegateS.mainTabBarController.moreNavigationController.delegate = self;
 }
 
-- (UIView *)createCellBackground:(NSUInteger)row
+- (UIView *)createCellBackground:(NSInteger)row
 {
     return [[UIView alloc] init];
 }

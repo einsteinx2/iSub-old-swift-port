@@ -31,9 +31,9 @@ public class CustomUITableView: UITableView {
         self.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         self.sectionIndexBackgroundColor = UIColor.clearColor()
     }
-
-    public required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    
+    public override init() {
+        super.init()
         self._setup()
     }
     
@@ -44,6 +44,11 @@ public class CustomUITableView: UITableView {
     
     public override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame: frame, style: style)
+        self._setup()
+    }
+    
+    public required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         self._setup()
     }
     

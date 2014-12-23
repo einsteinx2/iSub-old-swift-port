@@ -301,7 +301,7 @@ extension ChatViewController : UITableViewDelegate, UITableViewDataSource {
         cell.userNameLabel.text = "\(chatMessage.user) - \(self._formatDate(chatMessage.timestamp))"
         cell.messageLabel.text = chatMessage.message
         
-        cell.backgroundView = _viewObjects.createCellBackground(UInt(indexPath.row))
+        cell.backgroundView = _viewObjects.createCellBackground(indexPath.row)
         
         return cell
     }

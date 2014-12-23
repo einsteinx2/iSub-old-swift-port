@@ -97,7 +97,7 @@
 
 - (void)enableCells;
 
-- (UIView *)createCellBackground:(NSUInteger)row;
+- (UIView *)createCellBackground:(NSInteger)row;
 
 @end
 

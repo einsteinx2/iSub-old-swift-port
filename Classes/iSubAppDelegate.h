@@ -18,6 +18,8 @@
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 
+@property (strong) iPadRootViewController *ipadRootViewController;
+
 @property (strong) HTTPServer *hlsProxyServer;
 
 @property (strong) ISMSStatusLoader *statusLoader;
@@ -45,8 +47,6 @@
 @property (strong) UINavigationController *supportNavigationController;
 
 @property (strong) ServerListViewController *serverListViewController;
-
-@property (strong) iPadRootViewController *ipadRootViewController;
 
 // Network connectivity objects and variables
 //

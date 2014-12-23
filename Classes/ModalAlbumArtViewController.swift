@@ -57,6 +57,11 @@ public class ModalAlbumArtViewController: CustomUITableViewController, Asynchron
     
     // MARK: - Life Cycle -
     
+    public override init() {
+        super.init()
+        self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
+    }
+    
     public init(album: ISMSAlbum, numberOfTracks: Int, albumLength: Int) {
         myAlbum = album
         _numberOfTracks = numberOfTracks
@@ -66,9 +71,20 @@ public class ModalAlbumArtViewController: CustomUITableViewController, Asynchron
         
         self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
     }
+    
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
+    }
+    
+    public override init(style: UITableViewStyle) {
+        super.init(style: style)
+        self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
+    }
 
     public required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
     }
     
     public override func viewDidLoad() {

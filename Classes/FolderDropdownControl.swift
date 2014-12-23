@@ -43,9 +43,7 @@ public class FolderDropdownControlSwift: UIView {
     private let _lightColor: UIColor = UIColor.whiteColor()
     private let _darkColor: UIColor = UIColor.whiteColor()
     
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    private func _commonInit() {
         self.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         self.userInteractionEnabled = true
         self.backgroundColor = UIColor.clearColor()
@@ -82,9 +80,20 @@ public class FolderDropdownControlSwift: UIView {
         
         updateFolders()
     }
+    
+    public override init() {
+        super.init()
+        _commonInit()
+    }
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        _commonInit()
+    }
 
     public required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        _commonInit()
     }
   
     private func _setFolders(namesAndIds: NSDictionary?) {

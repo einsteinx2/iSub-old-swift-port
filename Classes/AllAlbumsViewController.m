@@ -9,7 +9,6 @@
 #import "AllAlbumsViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
-#import "FolderViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "LoadingScreen.h"
 #import "iSub-Swift.h"
@@ -478,7 +477,7 @@
 			anAlbum = [self.dataModel albumForPosition:(sectionStartIndex + indexPath.row + 1)];
 		}
 		
-		FolderViewController* albumViewController = [[FolderViewController alloc] initWithArtist:nil orAlbum:anAlbum];
+		FolderViewController* albumViewController = [[FolderViewController alloc] initWithAlbum:anAlbum];
 		[self pushViewControllerCustom:albumViewController];
 	}
 	else

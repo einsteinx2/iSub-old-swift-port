@@ -77,6 +77,11 @@ public class CellOverlay : UIView {
         }
     }
     
+    public override init() {
+        super.init()
+        _commonInit()
+    }
+    
     public init(tableCell: UITableViewCell) {
         if let tableCellDelegate = tableCell as? CellOverlayDelegate {
             self.delegate = tableCellDelegate
