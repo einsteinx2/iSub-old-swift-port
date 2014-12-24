@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NewHomeViewController">
             <connections>
                 <outlet property="chatLabel" destination="23" id="39"/>
+                <outlet property="coverArtBorder" destination="PPj-lk-wuh" id="8UG-qC-15Y"/>
                 <outlet property="jukeboxButton" destination="9" id="17"/>
                 <outlet property="jukeboxLabel" destination="21" id="37"/>
                 <outlet property="quickLabel" destination="19" id="35"/>
@@ -34,13 +35,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="home-background.png" id="18">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="home-background.png" translatesAutoresizingMaskIntoConstraints="NO" id="18">
+                    <rect key="frame" x="0.0" y="44" width="320" height="436"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4">
-                    <rect key="frame" x="18" y="45" width="85" height="85"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4">
+                    <rect key="frame" x="18" y="43" width="85" height="85"/>
                     <accessibility key="accessibilityConfiguration" label="Quick Albums"/>
                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
                     <state key="normal" image="home-quick.png">
@@ -54,9 +53,8 @@
                         <action selector="a_quickAlbums:" destination="-1" eventType="touchUpInside" id="Zpi-gf-Ua2"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7">
-                    <rect key="frame" x="18" y="367" width="85" height="85"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7">
+                    <rect key="frame" x="18" y="345" width="85" height="85"/>
                     <accessibility key="accessibilityConfiguration" label="Settings"/>
                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
                     <state key="normal" image="home-settings.png">
@@ -70,9 +68,8 @@
                         <action selector="a_settings:" destination="-1" eventType="touchUpInside" id="x3H-S9-mHP"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9">
-                    <rect key="frame" x="220" y="45" width="85" height="85"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9">
+                    <rect key="frame" x="220" y="43" width="85" height="85"/>
                     <accessibility key="accessibilityConfiguration" label="Jukebox Toggle"/>
                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
                     <state key="normal" image="home-jukebox-off.png">
@@ -86,9 +83,8 @@
                         <action selector="a_jukebox:" destination="-1" eventType="touchUpInside" id="0KT-ab-xWQ"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5">
-                    <rect key="frame" x="117" y="45" width="85" height="85"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5">
+                    <rect key="frame" x="117" y="43" width="85" height="85"/>
                     <accessibility key="accessibilityConfiguration" label="Server Shuffle"/>
                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
                     <state key="normal" image="home-shuffle.png">
@@ -102,9 +98,8 @@
                         <action selector="a_serverShuffle:" destination="-1" eventType="touchUpInside" id="RgO-5m-2eQ"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6">
-                    <rect key="frame" x="223" y="367" width="85" height="85"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6">
+                    <rect key="frame" x="223" y="345" width="85" height="85"/>
                     <accessibility key="accessibilityConfiguration" label="Chat"/>
                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
                     <state key="normal" image="home-chat.png">
@@ -118,9 +113,8 @@
                         <action selector="a_chat:" destination="-1" eventType="touchUpInside" id="fBf-4u-ZG5"/>
                     </connections>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="QUICK" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" id="19">
-                    <rect key="frame" x="16" y="120" width="80" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" misplaced="YES" text="QUICK" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19">
+                    <rect key="frame" x="16" y="115" width="80" height="50"/>
                     <accessibility key="accessibilityConfiguration">
                         <bool key="isElement" value="NO"/>
                     </accessibility>
@@ -129,9 +123,8 @@
                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <size key="shadowOffset" width="0.0" height="2"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="SHUFFLE" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" id="20">
-                    <rect key="frame" x="121" y="120" width="80" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" misplaced="YES" text="SHUFFLE" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="20">
+                    <rect key="frame" x="121" y="115" width="80" height="50"/>
                     <accessibility key="accessibilityConfiguration">
                         <bool key="isElement" value="NO"/>
                     </accessibility>
@@ -140,9 +133,8 @@
                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <size key="shadowOffset" width="0.0" height="2"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="JUKEBOX" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" id="21">
-                    <rect key="frame" x="218" y="120" width="85" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" misplaced="YES" text="JUKEBOX" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="21">
+                    <rect key="frame" x="218" y="115" width="85" height="50"/>
                     <accessibility key="accessibilityConfiguration">
                         <bool key="isElement" value="NO"/>
                     </accessibility>
@@ -151,9 +143,8 @@
                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <size key="shadowOffset" width="0.0" height="2"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="SETTINGS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" id="22">
-                    <rect key="frame" x="17" y="447" width="86" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="SETTINGS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="22">
+                    <rect key="frame" x="17" y="419" width="86" height="50"/>
                     <accessibility key="accessibilityConfiguration">
                         <bool key="isElement" value="NO"/>
                     </accessibility>
@@ -162,9 +153,8 @@
                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <size key="shadowOffset" width="0.0" height="2"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="CHAT" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" id="23">
-                    <rect key="frame" x="227" y="447" width="80" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="CHAT" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23">
+                    <rect key="frame" x="227" y="419" width="80" height="50"/>
                     <accessibility key="accessibilityConfiguration">
                         <bool key="isElement" value="NO"/>
                     </accessibility>
@@ -173,23 +163,20 @@
                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <size key="shadowOffset" width="0.0" height="2"/>
                 </label>
-                <searchBar contentMode="redraw" placeholder="Server Search" id="26">
+                <searchBar contentMode="redraw" ambiguous="YES" placeholder="Server Search" translatesAutoresizingMaskIntoConstraints="NO" id="26">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" white="0.5656934307" alpha="1" colorSpace="calibratedWhite"/>
                     <textInputTraits key="textInputTraits"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="29"/>
                     </connections>
                 </searchBar>
-                <view contentMode="scaleToFill" id="32">
+                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="32">
                     <rect key="frame" x="0.0" y="44" width="320" height="38"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.50980395079999996" green="0.50980395079999996" blue="0.50980395079999996" alpha="1" colorSpace="deviceRGB"/>
                 </view>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="27">
-                    <rect key="frame" x="10" y="48" width="300" height="30"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="27">
+                    <rect key="frame" x="10" y="48" width="300" height="29"/>
                     <segments>
                         <segment title="Artists"/>
                         <segment title="Albums"/>
@@ -198,10 +185,57 @@
                     </segments>
                     <color key="tintColor" white="0.57299270069999997" alpha="1" colorSpace="calibratedWhite"/>
                 </segmentedControl>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PPj-lk-wuh" userLabel="Cover Art Border">
+                    <rect key="frame" x="16" y="232" width="290" height="60"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="290" id="MNB-9E-byg"/>
+                        <constraint firstAttribute="height" constant="60" id="oG0-xY-gF6"/>
+                    </constraints>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+            <constraints>
+                <constraint firstItem="23" firstAttribute="centerX" secondItem="6" secondAttribute="centerX" id="1UV-iu-Edu"/>
+                <constraint firstItem="21" firstAttribute="centerY" secondItem="20" secondAttribute="centerY" id="2W6-gq-ted"/>
+                <constraint firstItem="7" firstAttribute="centerX" secondItem="4" secondAttribute="centerX" id="9JA-Cb-xet"/>
+                <constraint firstAttribute="trailing" secondItem="23" secondAttribute="trailing" id="FRF-Fb-M0I"/>
+                <constraint firstItem="32" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Hha-bC-kx4"/>
+                <constraint firstAttribute="trailing" secondItem="18" secondAttribute="trailing" id="KnV-Ty-8l7"/>
+                <constraint firstAttribute="centerY" secondItem="18" secondAttribute="centerY" id="Kul-e8-wUY"/>
+                <constraint firstAttribute="trailing" secondItem="21" secondAttribute="trailing" constant="17" id="MAi-Pg-24b"/>
+                <constraint firstItem="18" firstAttribute="top" secondItem="1" secondAttribute="top" constant="44" id="P7n-Qk-4Gq"/>
+                <constraint firstItem="18" firstAttribute="centerY" secondItem="PPj-lk-wuh" secondAttribute="centerY" id="PjA-8Q-8VM"/>
+                <constraint firstItem="7" firstAttribute="centerX" secondItem="22" secondAttribute="centerX" id="RCo-3x-9Zl"/>
+                <constraint firstItem="5" firstAttribute="centerX" secondItem="18" secondAttribute="centerX" id="VDI-Iy-rq2"/>
+                <constraint firstItem="18" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Vfe-f3-bt9"/>
+                <constraint firstAttribute="trailing" secondItem="9" secondAttribute="trailing" constant="15" id="W48-0p-yc8"/>
+                <constraint firstItem="26" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Zb1-hG-K5j"/>
+                <constraint firstAttribute="trailing" secondItem="32" secondAttribute="trailing" id="auy-2B-Cgq"/>
+                <constraint firstItem="PPj-lk-wuh" firstAttribute="centerX" secondItem="18" secondAttribute="centerX" id="bL7-Ce-bfT"/>
+                <constraint firstAttribute="bottom" secondItem="7" secondAttribute="bottom" constant="20" id="cP2-Iu-3if"/>
+                <constraint firstItem="5" firstAttribute="centerX" secondItem="20" secondAttribute="centerX" id="cuD-EO-HrM"/>
+                <constraint firstItem="23" firstAttribute="centerX" secondItem="21" secondAttribute="centerX" id="elN-81-ozC"/>
+                <constraint firstItem="32" firstAttribute="centerX" secondItem="27" secondAttribute="centerX" id="fDc-RY-uH3"/>
+                <constraint firstAttribute="bottom" secondItem="23" secondAttribute="bottom" constant="1" id="gFp-5v-3Ak"/>
+                <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="18" id="hIp-IU-Xy6"/>
+                <constraint firstItem="7" firstAttribute="centerX" secondItem="19" secondAttribute="centerX" id="haS-aQ-xkZ"/>
+                <constraint firstAttribute="trailing" secondItem="6" secondAttribute="trailing" constant="12" id="hhl-Rg-dgw"/>
+                <constraint firstItem="21" firstAttribute="centerY" secondItem="19" secondAttribute="centerY" id="hjF-ht-fQM"/>
+                <constraint firstAttribute="bottom" secondItem="6" secondAttribute="bottom" constant="20" id="k8F-6J-2bA"/>
+                <constraint firstItem="23" firstAttribute="centerX" secondItem="9" secondAttribute="centerX" id="lAV-lD-zMt"/>
+                <constraint firstItem="23" firstAttribute="centerY" secondItem="22" secondAttribute="centerY" id="tgY-Fr-y85"/>
+                <constraint firstAttribute="bottom" secondItem="18" secondAttribute="bottom" id="uCV-C5-EWH"/>
+                <constraint firstAttribute="trailing" secondItem="26" secondAttribute="trailing" id="wPZ-Wj-N7X"/>
+                <constraint firstAttribute="bottom" secondItem="22" secondAttribute="bottom" constant="1" id="xTH-qF-73z"/>
+            </constraints>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" translucent="NO" prompted="NO"/>
+            <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-3" y="290"/>
         </view>
     </objects>
     <resources>

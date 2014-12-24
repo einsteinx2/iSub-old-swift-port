@@ -37,6 +37,7 @@
     NSURLConnection *_connection;
     NSMutableData *_receivedData;
 }
+@property (nonatomic, strong) IBOutlet UIButton *coverArtBorder;
 @property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) IBOutlet UISegmentedControl *searchSegment;
 @property (nonatomic, strong) IBOutlet UIView *searchSegmentBackground;
@@ -90,54 +91,12 @@
                 _albumLabel.alpha = 1.0;
                 _songLabel.alpha = 1.0;
             } completion:nil];
-            
-            if (IS_TALL_SCREEN())
-            {
-                [UIView animateWithDuration:duration animations:^{
-                     for (UIView *aView in _topRow)
-                     {
-                         aView.y = 75.;
-                     }
-                     
-                     for (UIView *aView in _topRowLabels)
-                     {
-                         aView.y = 145.;
-                     }
-                     
-                     _coverArtBorder.y = 217.;
-                     
-                     for (UIView *aView in _bottomRow)
-                     {
-                         aView.y = 115;
-                     }
-                     
-                     for (UIView *aView in _bottomRowLabels)
-                     {
-                         aView.y = 160;
-                     }
-                 }];
-            }
 		}
 	}
 	else if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation) && !rotationDisabled)
 	{
 		if (!IS_IPAD())
 		{
-            if (IS_TALL_SCREEN())
-            {
-                for (UIView *aView in _topRow)
-                {
-                    aView.y -= 30;
-                }
-                
-                _coverArtBorder.y -= 40;
-                
-                for (UIView *aView in _bottomRow)
-                {
-                    aView.y += 40;
-                }
-            }
-            
 			// Animate the segmented control off screen
             [UIView animateWithDuration:.3 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
                 _quickLabel.alpha = 0.0;
@@ -155,62 +114,6 @@
             } completion:nil];
 		}
 	}
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    // Since the values in viewWillRotate would have to be rounded, we need to fix them here
-    if (IS_TALL_SCREEN())
-    {
-        if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation))
-        {
-            for (UIView *aView in _topRow)
-            {
-                aView.y = 75.;
-            }
-            
-            for (UIView *aView in _topRowLabels)
-            {
-                aView.y = 145.;
-            }
-            
-            _coverArtBorder.y = 217.;
-            
-            for (UIView *aView in _bottomRow)
-            {
-                aView.y = 313.;
-            }
-            
-            for (UIView *aView in _bottomRowLabels)
-            {
-                aView.y = 381;
-            }
-        }
-        else
-        {
-            for (UIView *aView in _topRow)
-            {
-                aView.y = 45.;
-            }
-            
-            for (UIView *aView in _topRowLabels)
-            {
-                aView.y = 115.;
-            }
-            
-            _coverArtBorder.y = 177.;
-            
-            for (UIView *aView in _bottomRow)
-            {
-                aView.y = 127.;
-            }
-            
-            for (UIView *aView in _bottomRowLabels)
-            {
-                aView.y = 159.;
-            }
-        }
-    }    
 }
 
 #pragma mark - Lifecycle -
@@ -234,22 +137,21 @@
 
 	if (!IS_IPAD())
 	{
-		_coverArtBorder = [UIButton buttonWithType:UIButtonTypeCustom];
-		_coverArtBorder.frame = CGRectMake(15, 177, 290, 60);
 		_coverArtBorder.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
 		_coverArtBorder.layer.borderWidth = 2.0f;
 		[_coverArtBorder addTarget:self action:@selector(showPlayer) forControlEvents:UIControlEventTouchUpInside];
 		[self.view addSubview:_coverArtBorder];
 		
 		_coverArtView = [[AsynchronousImageView alloc] init];
+        _coverArtView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
 		_coverArtView.isLarge = NO;
 		_coverArtView.frame = CGRectMake(0, 0, 60, 60);
 		_coverArtView.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
 		_coverArtView.layer.borderWidth = 2.0f;
-		
 		[_coverArtBorder addSubview:_coverArtView];
 		
 		_artistLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 3, 220, 20)];
+        _artistLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		_artistLabel.backgroundColor = [UIColor clearColor];
 		_artistLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
 		_artistLabel.font = ISMSBoldFont(17);
@@ -261,6 +163,7 @@
 		[_coverArtBorder addSubview:_artistLabel];
 		
 		_albumLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 20, 220, 20)];
+        _albumLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		_albumLabel.backgroundColor = [UIColor clearColor];
 		_albumLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
 		_albumLabel.font = ISMSRegularFont(17);
@@ -272,6 +175,7 @@
 		[_coverArtBorder addSubview:_albumLabel];
 		
 		_songLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 37, 220, 20)];
+        _songLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		_songLabel.backgroundColor = [UIColor clearColor];
 		_songLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
 		_songLabel.font = ISMSBoldFont(17);
@@ -584,18 +488,12 @@
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar
 {
 	// Create search overlay
-	_searchOverlay = [[UIView alloc] init];
-    CGRect frame;
-	if (settingsS.isNewSearchAPI)
-	{
-        IS_IPAD() ? CGRectMake(0, 86, 1024, 1024) : CGRectMake(0, 82, 480, 480);
-	}
-	else
-	{
-        IS_IPAD() ? CGRectMake(0, 44, 1024, 1024) : CGRectMake(0, 44, 480, 480);
-	}
-    _searchOverlay.frame = frame;
-	
+    CGRect frame = self.view.bounds;
+    CGFloat heightDelta = _searchBar.height + _searchSegmentBackground.height;
+    frame.origin.y += heightDelta;
+    frame.size.height -= heightDelta;
+    
+	_searchOverlay = [[UIView alloc] initWithFrame:frame];
 	_searchOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_searchOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:.80];
 	_searchOverlay.alpha = 0.0;
