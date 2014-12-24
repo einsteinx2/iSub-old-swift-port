@@ -492,14 +492,12 @@
     [self _updateCacheSizeLabel];
     [self _updateQueueDownloadProgress];
     
-    [self performSelector:@selector(_updateCacheSizeLabel) withObject:nil afterDelay:2.0];
-    [self performSelector:@selector(_updateQueueDownloadProgress) withObject:nil afterDelay:1.];
+    [self performSelector:@selector(_startUpdatingProgress) withObject:nil afterDelay:1.5];
 }
 
 - (void)_stopUpdatingProgress
 {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(_updateCacheSizeLabel) object:nil];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(_updateQueueDownloadProgress) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(_startUpdatingProgress) object:nil];
 }
 
 - (void)_updateCacheSizeLabel
