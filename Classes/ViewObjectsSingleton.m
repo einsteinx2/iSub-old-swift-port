@@ -49,14 +49,14 @@ static NSTimeInterval const kDelay = .5;
         return;
     }
     
-    NSDictionary *options = @{ kViewKey: view, kMessageKey: message };
+    NSDictionary *options = @{ kViewKey: view, kMessageKey: n2N(message) };
     [self performSelector:@selector(_showLoadingScreenWithOptions:) withObject:options afterDelay:kDelay];
 }
 
 - (void)_showLoadingScreenWithOptions:(NSDictionary *)options
 {
     UIView *view = options[kViewKey];
-    NSString *message = options[kMessageKey];
+    NSString *message = N2n(options[kMessageKey]);
     
     self.isLoadingScreenShowing = YES;
     
