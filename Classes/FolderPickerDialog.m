@@ -339,16 +339,18 @@ static CGFloat kDDSocialDialogPadding = 10;
 
 - (CGAffineTransform)transformForOrientation {
 	
-	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-	if (orientation == UIInterfaceOrientationLandscapeLeft) {
-		return CGAffineTransformMakeRotation(M_PI*1.5);
-	} else if (orientation == UIInterfaceOrientationLandscapeRight) {
-		return CGAffineTransformMakeRotation(M_PI/2);
-	} else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-		return CGAffineTransformMakeRotation(-M_PI);
-	} else {
-		return CGAffineTransformIdentity;
-	}
+    if (SYSTEM_VERSION_LESS_THAN(@"8")) {
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        if (orientation == UIInterfaceOrientationLandscapeLeft) {
+            return CGAffineTransformMakeRotation(M_PI*1.5);
+        } else if (orientation == UIInterfaceOrientationLandscapeRight) {
+            return CGAffineTransformMakeRotation(M_PI/2);
+        } else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+            return CGAffineTransformMakeRotation(-M_PI);
+        }
+    }
+	
+    return CGAffineTransformIdentity;
 }
 
 - (void)sizeToFitOrientation:(BOOL)transform {
@@ -389,29 +391,37 @@ static CGFloat kDDSocialDialogPadding = 10;
 
 - (void)deviceOrientationDidChange:(void*)object {
 	
-	UIDeviceOrientation orientation = (UIDeviceOrientation)[UIApplication sharedApplication].statusBarOrientation;
-	
-	if ([self shouldRotateToOrientation:orientation]) {
-		if (!showingKeyboard_) {
-			if (UIInterfaceOrientationIsLandscape(orientation)) {
-				folderPicker_.view.frame = CGRectMake(kDDSocialDialogBorderWidth + 1,
-												kDDSocialDialogBorderWidth + titleLabel_.frame.size.height,
-												self.frame.size.width - (kDDSocialDialogBorderWidth+1)*2,
-												self.frame.size.height - (titleLabel_.frame.size.height + 1 + kDDSocialDialogBorderWidth*2));
-			} else {
-				folderPicker_.view.frame = CGRectMake(kDDSocialDialogBorderWidth + 1,
-												kDDSocialDialogBorderWidth + titleLabel_.frame.size.height,
-												self.frame.size.height - (kDDSocialDialogBorderWidth+1)*2,
-												self.frame.size.width - (titleLabel_.frame.size.height + 1 + kDDSocialDialogBorderWidth*2));
-			}
-		} 
-		
-		CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:duration];
-		[self sizeToFitOrientation:YES];
-		[UIView commitAnimations];		
-	}	
+    if (SYSTEM_VERSION_LESS_THAN(@"8")) {
+        UIDeviceOrientation orientation = (UIDeviceOrientation)[UIApplication sharedApplication].statusBarOrientation;
+        
+        if ([self shouldRotateToOrientation:orientation]) {
+            if (!showingKeyboard_) {
+                if (UIInterfaceOrientationIsLandscape(orientation)) {
+                    folderPicker_.view.frame = CGRectMake(kDDSocialDialogBorderWidth + 1,
+                                                          kDDSocialDialogBorderWidth + titleLabel_.frame.size.height,
+                                                          self.frame.size.width - (kDDSocialDialogBorderWidth+1)*2,
+                                                          self.frame.size.height - (titleLabel_.frame.size.height + 1 + kDDSocialDialogBorderWidth*2));
+                } else {
+                    folderPicker_.view.frame = CGRectMake(kDDSocialDialogBorderWidth + 1,
+                                                          kDDSocialDialogBorderWidth + titleLabel_.frame.size.height,
+                                                          self.frame.size.height - (kDDSocialDialogBorderWidth+1)*2,
+                                                          self.frame.size.width - (titleLabel_.frame.size.height + 1 + kDDSocialDialogBorderWidth*2));
+                }
+            } 
+            
+            CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:duration];
+            [self sizeToFitOrientation:YES];
+            [UIView commitAnimations];		
+        }
+    } else {
+        CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:duration];
+        [self sizeToFitOrientation:YES];
+        [UIView commitAnimations];
+    }
 }
 
 - (void)keyboardDidShow:(NSNotification*)notification {
