@@ -68,17 +68,7 @@
 	
 	viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		
-	if (settingsS.isOfflineMode)
-	{
-		self.title = @"Artists";
-	}
-	else 
-	{
-		self.title = @"Cache";
-		
-		// Setup the update timer
-		[self _updateQueueDownloadProgress];
-	}
+    self.title = settingsS.isOfflineMode ? @"Artists" : @"Cache";
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -89,7 +79,10 @@
 	
 	[self _reloadTable];
 	
-    [self _startUpdatingProgress];
+    if (!settingsS.isOfflineMode)
+    {
+        [self _startUpdatingProgress];
+    }
 	
 	[Flurry logEvent:@"CacheTab"];
 	
