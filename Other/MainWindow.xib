@@ -34,14 +34,14 @@
         <tabBarController id="21" customClass="CustomUITabBarController">
             <extendedEdge key="edgesForExtendedLayout"/>
             <nil key="simulatedBottomBarMetrics"/>
-            <tabBar key="tabBar" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" selectedItem="94" id="22">
+            <tabBar key="tabBar" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" selectedItem="zrX-JQ-a2s" id="22">
                 <rect key="frame" x="0.0" y="431" width="320" height="49"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </tabBar>
             <viewControllers>
                 <navigationController id="8cu-EA-jMc" userLabel="Home">
-                    <tabBarItem key="tabBarItem" title="Home" image="home-tabbaricon.png" id="dFD-yT-0rg"/>
+                    <tabBarItem key="tabBarItem" tag="9" title="Home" image="home-tabbaricon.png" id="dFD-yT-0rg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Yyt-rC-yM2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -176,7 +176,7 @@
                     </viewControllers>
                 </navigationController>
                 <navigationController id="shN-gm-e18" userLabel="Chat" customClass="CustomUINavigationController">
-                    <tabBarItem key="tabBarItem" title="Chat" image="chat-tabbaricon.png" id="zrX-JQ-a2s"/>
+                    <tabBarItem key="tabBarItem" tag="8" title="Chat" image="chat-tabbaricon.png" id="zrX-JQ-a2s"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="DoW-sV-Lt4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
