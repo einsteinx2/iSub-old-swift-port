@@ -28,6 +28,9 @@
 #define ISMSBaseWidth 320.0
 NS_INLINE CGFloat ISMSNormalize(CGFloat value)
 {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+        return value;
+    
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat percent = (screenWidth - ISMSBaseWidth) / screenWidth;
     CGFloat normalizedValue = value * (1 + percent);

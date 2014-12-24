@@ -26,6 +26,10 @@ func ISMSBoldFont(size: CGFloat) -> UIFont
 
 private let BaseWidth : CGFloat = 320
 func ISMSNormalize(value: CGFloat, multiplier: CGFloat = 1, maxDelta: CGFloat = 1024) -> CGFloat {
+    if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
+        return value
+    }
+    
     let screenWidth = UIScreen.mainScreen().bounds.size.width
     let percent = (screenWidth - BaseWidth)/screenWidth
     let normalizedValue = value * (1 + percent) * multiplier
