@@ -15,7 +15,6 @@
             <connections>
                 <outlet property="allAlbumsNavigationController" destination="35" id="47"/>
                 <outlet property="allSongsNavigationController" destination="53" id="148"/>
-                <outlet property="bookmarksNavigationController" destination="86" id="150"/>
                 <outlet property="cacheNavigationController" destination="100" id="153"/>
                 <outlet property="genresNavigationController" destination="93" id="152"/>
                 <outlet property="mainTabBarController" destination="21" id="147"/>
@@ -34,7 +33,7 @@
         <tabBarController id="21" customClass="CustomUITabBarController">
             <extendedEdge key="edgesForExtendedLayout"/>
             <nil key="simulatedBottomBarMetrics"/>
-            <tabBar key="tabBar" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" selectedItem="zrX-JQ-a2s" id="22">
+            <tabBar key="tabBar" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="22">
                 <rect key="frame" x="0.0" y="431" width="320" height="49"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -130,17 +129,17 @@
                         </viewController>
                     </viewControllers>
                 </navigationController>
-                <navigationController title="Bookmarks" id="86" customClass="CustomUINavigationController">
+                <navigationController title="Bookmarks" id="1bg-dh-UJg">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" tag="4" title="Bookmarks" image="bookmarks-tabbaricon.png" id="90"/>
-                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" barStyle="black" id="88">
+                    <tabBarItem key="tabBarItem" tag="4" title="Bookmarks" image="bookmarks-tabbaricon.png" id="n8s-Lt-kId"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fif-me-ENg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <viewControllers>
-                        <viewController nibName="BookmarksViewController" id="87" customClass="BookmarksViewController">
-                            <extendedEdge key="edgesForExtendedLayout"/>
-                            <navigationItem key="navigationItem" title="Root View Controller" id="89"/>
-                        </viewController>
+                        <tableViewController nibName="BookmarksViewController" id="I1Q-fK-0vE" customClass="BookmarksViewController" customModule="iSub" customModuleProvider="target">
+                            <navigationItem key="navigationItem" title="Root View Controller" id="uBh-rN-hKH"/>
+                        </tableViewController>
                     </viewControllers>
                 </navigationController>
                 <navigationController id="64" customClass="CustomUINavigationController">

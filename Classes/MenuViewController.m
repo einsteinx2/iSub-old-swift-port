@@ -16,7 +16,6 @@
 #import "AllSongsViewController.h"
 #import "PlaylistsViewController.h"
 #import "PlayingViewController.h"
-#import "BookmarksViewController.h"
 #import "GenresViewController.h"
 #import "CacheViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
