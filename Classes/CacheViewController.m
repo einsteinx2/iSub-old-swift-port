@@ -42,6 +42,8 @@
     BOOL _showIndex;
 
     NSUInteger _cacheQueueCount;
+    
+    NSMutableArray *_multiDeleteList;
 }
 @end
 
@@ -66,7 +68,7 @@
 {
 	[super viewDidLoad];
 	
-	viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+	_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		
     self.title = settingsS.isOfflineMode ? @"Artists" : @"Cache";
 }
@@ -379,7 +381,7 @@
 		{
             [self _registerForDeleteButtonNotifications];
 
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:YES animated:YES];
 			_editSongsLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 			_editSongsLabel.text = @"Done";
@@ -391,7 +393,7 @@
 		{
             [self _unregisterForDeleteButtonNotifications];
             
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:NO animated:YES];
 			[self _hideDeleteButton];
 			_editSongsLabel.backgroundColor = [UIColor clearColor];
@@ -409,19 +411,19 @@
 		{
             [self _registerForDeleteButtonNotifications];
 
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:YES animated:YES];
 			_editSongsLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 			_editSongsLabel.text = @"Done";
 			[self _showDeleteButton];
 			
-			[self performSelector:@selector(showDeleteToggles) withObject:nil afterDelay:0.3];
+			[self showDeleteToggles];
 		}
 		else 
 		{
             [self _unregisterForDeleteButtonNotifications];
             
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:NO animated:YES];
 			[self _hideDeleteButton];
 			_editSongsLabel.backgroundColor = [UIColor clearColor];
@@ -446,7 +448,7 @@
 				{
 					for (NSString *folderName in section)
 					{
-						[viewObjectsS.multiDeleteList addObject:folderName];
+						[_multiDeleteList addObject:folderName];
 					}
 				}
 			}
@@ -461,7 +463,7 @@
 						@autoreleasepool 
 						{
 							NSString *md5 = [result stringForColumnIndex:0];
-							if (md5) [viewObjectsS.multiDeleteList addObject:md5];
+							if (md5) [_multiDeleteList addObject:md5];
 						}
 					}
 				}];
@@ -769,11 +771,11 @@
 
 - (void)_showDeleteButton
 {
-    if ([viewObjectsS.multiDeleteList count] == 0)
+    if ([_multiDeleteList count] == 0)
     {
         _deleteSongsLabel.text = @"Select All";
     }
-    else if ([viewObjectsS.multiDeleteList count] == 1)
+    else if ([_multiDeleteList count] == 1)
     {
         if (_segmentedControl.selectedSegmentIndex == 0)
             _deleteSongsLabel.text = @"Delete 1 Folder  ";
@@ -783,9 +785,9 @@
     else
     {
         if (_segmentedControl.selectedSegmentIndex == 0)
-            _deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Folders", (unsigned long)[viewObjectsS.multiDeleteList count]];
+            _deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Folders", (unsigned long)[_multiDeleteList count]];
         else
-            _deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
+            _deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Songs", (unsigned long)[_multiDeleteList count]];
     }
     
     _songsCountLabel.hidden = YES;
@@ -803,11 +805,11 @@
         return;
     }
     
-    if ([viewObjectsS.multiDeleteList count] == 0)
+    if ([_multiDeleteList count] == 0)
     {
         _deleteSongsLabel.text = @"Select All";
     }
-    else if ([viewObjectsS.multiDeleteList count] == 1)
+    else if ([_multiDeleteList count] == 1)
     {
         
         if (_segmentedControl.selectedSegmentIndex == 0)
@@ -818,9 +820,9 @@
     else
     {
         if (_segmentedControl.selectedSegmentIndex == 0)
-            _deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Folders", (unsigned long)[viewObjectsS.multiDeleteList count]];
+            _deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Folders", (unsigned long)[_multiDeleteList count]];
         else
-            _deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
+            _deleteSongsLabel.text = [NSString stringWithFormat:@"Delete %lu Songs", (unsigned long)[_multiDeleteList count]];
     }
 }
 
@@ -989,12 +991,12 @@
              
              if (self.tableView.editing)
              {
-                 NSArray *multiDeleteList = [NSArray arrayWithArray:viewObjectsS.multiDeleteList];
+                 NSArray *multiDeleteList = [NSArray arrayWithArray:_multiDeleteList];
                  for (NSString *md5 in multiDeleteList)
                  {
                      NSString *dbMd5 = [db stringForQuery:@"SELECT md5 FROM cacheQueueList WHERE md5 = ?", md5];
                      if (!dbMd5)
-                         [viewObjectsS.multiDeleteList removeObject:md5];
+                         [_multiDeleteList removeObject:md5];
                  }
              }
          }];
@@ -1033,7 +1035,7 @@
     [self _unregisterForNotifications];
     
     NSMutableArray *songMd5s = [[NSMutableArray alloc] initWithCapacity:0];
-    for (NSString *folderName in viewObjectsS.multiDeleteList)
+    for (NSString *folderName in _multiDeleteList)
     {
         [databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
          {
@@ -1077,10 +1079,10 @@
     [self _unregisterForNotifications];
     
     // Sort the multiDeleteList to make sure it's accending
-    [viewObjectsS.multiDeleteList sortUsingSelector:@selector(compare:)];
+    [_multiDeleteList sortUsingSelector:@selector(compare:)];
     
     // Delete each song from the database
-    for (NSString *md5 in viewObjectsS.multiDeleteList)
+    for (NSString *md5 in _multiDeleteList)
     {
         if (cacheQueueManagerS.isQueueDownloading)
         {
@@ -1167,7 +1169,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return ISMSNormalize(_segmentedControl.selectedSegmentIndex == 0 ? ISMSSongCellHeight : (ISMSAlbumCellHeight + 20.0));
+    return ISMSNormalize(_segmentedControl.selectedSegmentIndex == 0 ? ISMSSongCellHeight : (ISMSAlbumCellHeight + ISMSCellHeaderHeight));
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
@@ -1204,7 +1206,7 @@
         
 		NSString *name = [[_listOfArtistsSections objectAtIndexSafe:indexPath.section] objectAtIndexSafe:indexPath.row];
 		
-        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:name];
+        cell.markedForDelete = [_multiDeleteList containsObject:name];
         
 		if (_showIndex)
 			cell.indexShowing = YES;
@@ -1242,7 +1244,7 @@
 		
         cell.associatedObject = aSong;
         
-        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:aSong.path.md5];
+        cell.markedForDelete = [_multiDeleteList containsObject:aSong.path.md5];
 
 		cell.coverArtId = aSong.coverArtId;
 		
@@ -1491,11 +1493,11 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
         NSObject *object = cell.title;
         if (markedForDelete)
         {
-            if (object) [viewObjectsS.multiDeleteList addObject:object];
+            if (object) [_multiDeleteList addObject:object];
         }
         else
         {
-            if (object) [viewObjectsS.multiDeleteList removeObject:object];
+            if (object) [_multiDeleteList removeObject:object];
         }
     }
     else
@@ -1504,11 +1506,11 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
         NSString *object = song.path.md5;
         if (markedForDelete)
         {
-            if (object) [viewObjectsS.multiDeleteList addObject:object];
+            if (object) [_multiDeleteList addObject:object];
         }
         else
         {
-            if (object) [viewObjectsS.multiDeleteList removeObject:object];
+            if (object) [_multiDeleteList removeObject:object];
         }
     }
 }

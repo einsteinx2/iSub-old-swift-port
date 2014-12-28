@@ -12,6 +12,9 @@
 #import "iSub-Swift.h"
 
 @interface CurrentPlaylistViewController() <CustomUITableViewCellDelegate>
+{
+    NSMutableArray *_multiDeleteList;
+}
 @end
 
 @implementation CurrentPlaylistViewController
@@ -68,8 +71,8 @@
 	{
 		[self registerForNotifications];
 		
-		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
-		//viewObjectsS.multiDeleteList = nil; viewObjectsS.multiDeleteList = [[NSMutableArray alloc] init];
+		_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		//_multiDeleteList = nil; _multiDeleteList = [[NSMutableArray alloc] init];
 		
 		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 		//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectRow) name:ISMSNotification_CurrentPlaylistShuffleToggled object:nil];
@@ -201,7 +204,7 @@
 	if (self.tableView.editing)
 	{
 		// Clear the edit stuff if they switch tabs in the middle of editing
-		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		self.tableView.editing = NO;
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ShowDeleteButton object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_HideDeleteButton object:nil];
@@ -260,7 +263,7 @@
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(showDeleteButton) name:ISMSNotification_ShowDeleteButton object: nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(hideDeleteButton) name:ISMSNotification_HideDeleteButton object: nil];
-		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		[self.tableView setEditing:YES animated:YES];
 		self.editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 		self.editPlaylistLabel.text = @"Done";
@@ -278,7 +281,7 @@
 	{
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_ShowDeleteButton object:nil];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_HideDeleteButton object:nil];
-		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		[self.tableView setEditing:NO animated:YES];
 		[self hideDeleteButton];
 		self.editPlaylistLabel.backgroundColor = [UIColor clearColor];
@@ -302,17 +305,17 @@
 
 - (void) showDeleteButton
 {
-	if ([viewObjectsS.multiDeleteList count] == 0)
+	if ([_multiDeleteList count] == 0)
 	{
 		self.deleteSongsLabel.text = @"Clear Playlist";
 	}
-	else if ([viewObjectsS.multiDeleteList count] == 1)
+	else if ([_multiDeleteList count] == 1)
 	{
 		self.deleteSongsLabel.text = @"Remove 1 Song  ";
 	}
 	else
 	{
-		self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
+		self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[_multiDeleteList count]];
 	}
 	
 	self.savePlaylistLabel.hidden = YES;
@@ -322,7 +325,7 @@
 
 - (void) hideDeleteButton
 {
-	if ([viewObjectsS.multiDeleteList count] == 0)
+	if ([_multiDeleteList count] == 0)
 	{
 		if (!self.tableView.editing)
 		{
@@ -335,13 +338,13 @@
 			self.deleteSongsLabel.text = @"Clear Playlist";
 		}
 	}
-	else if ([viewObjectsS.multiDeleteList count] == 1)
+	else if ([_multiDeleteList count] == 1)
 	{
 		self.deleteSongsLabel.text = @"Remove 1 Song  ";
 	}
 	else 
 	{
-		self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
+		self.deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[_multiDeleteList count]];
 	}
 }
 
@@ -394,14 +397,14 @@
 			// Delete action
 			//
 			
-			[playlistS deleteSongs:viewObjectsS.multiDeleteList];
+			[playlistS deleteSongs:_multiDeleteList];
 			
 			[self updateCurrentPlaylistCount];
 			[self.tableView reloadData];
 						
 			/*// Create indexPaths from multiDeleteList and delete the rows in the table view
 			NSMutableArray *indexes = [[NSMutableArray alloc] init];
-			for (NSNumber *index in viewObjectsS.multiDeleteList)
+			for (NSNumber *index in _multiDeleteList)
 			{
 				@autoreleasepool 
 				{
@@ -649,7 +652,7 @@
 	
     cell.indexPath = indexPath;
 	
-    cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:@(indexPath.row)];
+    cell.markedForDelete = [_multiDeleteList containsObject:@(indexPath.row)];
 	
 	ISMSSong *aSong;
 	if (settingsS.isJukeboxEnabled)
@@ -750,11 +753,11 @@
 	}
 		
 	// Fix the multiDeleteList to reflect the new row positions
-	if ([viewObjectsS.multiDeleteList count] > 0)
+	if ([_multiDeleteList count] > 0)
 	{
 		NSMutableArray *tempMultiDeleteList = [[NSMutableArray alloc] init];
 		int newPosition;
-		for (NSNumber *position in viewObjectsS.multiDeleteList)
+		for (NSNumber *position in _multiDeleteList)
 		{
 			if (fromIndexPath.row > toIndexPath.row)
 			{
@@ -795,7 +798,7 @@
 				}
 			}
 		}
-		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
+		_multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
 	}
 	
 	// Correct the value of currentPlaylistPosition

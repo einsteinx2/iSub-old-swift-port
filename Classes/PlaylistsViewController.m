@@ -40,6 +40,8 @@
     
     NSUInteger _currentPlaylistCount;
     
+    NSMutableArray *_multiDeleteList;
+    
     SUSURLConnection *_cellConnection;
     
     void (^_cellSuccessBlock)(NSData *data, NSDictionary *userInfo);
@@ -82,7 +84,7 @@
 	
 	_receivedData = nil;
 	
-	viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+	_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 	
     self.title = @"Playlists";
 	
@@ -139,7 +141,7 @@
 	if (self.tableView.editing)
 	{
 		// Clear the edit stuff if they switch tabs in the middle of editing
-		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		self.tableView.editing = NO;
         [self _unregisterForDeleteButtonNotifications];
 	}
@@ -277,7 +279,7 @@
 	// Clear the edit stuff if they switch tabs in the middle of editing
 	if (self.tableView.editing)
 	{
-		viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+		_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 		self.tableView.editing = NO;
         [self _unregisterForDeleteButtonNotifications];
 	}
@@ -528,33 +530,33 @@
 {
     if (_segmentedControl.selectedSegmentIndex == 0)
     {
-        if ([viewObjectsS.multiDeleteList count] == 0)
+        if ([_multiDeleteList count] == 0)
         {
             _deleteSongsLabel.text = @"Select All";
         }
-        else if ([viewObjectsS.multiDeleteList count] == 1)
+        else if ([_multiDeleteList count] == 1)
         {
             _deleteSongsLabel.text = @"Remove 1 Song  ";
         }
         else
         {
-            _deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
+            _deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[_multiDeleteList count]];
         }
     }
     else if (_segmentedControl.selectedSegmentIndex == 1 ||
              _segmentedControl.selectedSegmentIndex == 2)
     {
-        if ([viewObjectsS.multiDeleteList count] == 0)
+        if ([_multiDeleteList count] == 0)
         {
             _deleteSongsLabel.text = @"Select All";
         }
-        else if ([viewObjectsS.multiDeleteList count] == 1)
+        else if ([_multiDeleteList count] == 1)
         {
             _deleteSongsLabel.text = @"Remove 1 Playlist";
         }
         else
         {
-            _deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Playlists", (unsigned long)[viewObjectsS.multiDeleteList count]];
+            _deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Playlists", (unsigned long)[_multiDeleteList count]];
         }
     }
     
@@ -567,7 +569,7 @@
 {
     if (_segmentedControl.selectedSegmentIndex == 0)
     {
-        if ([viewObjectsS.multiDeleteList count] == 0)
+        if ([_multiDeleteList count] == 0)
         {
             if (!self.tableView.editing)
             {
@@ -580,19 +582,19 @@
                 _deleteSongsLabel.text = @"Clear Playlist";
             }
         }
-        else if ([viewObjectsS.multiDeleteList count] == 1)
+        else if ([_multiDeleteList count] == 1)
         {
             _deleteSongsLabel.text = @"Remove 1 Song  ";
         }
         else
         {
-            _deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[viewObjectsS.multiDeleteList count]];
+            _deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Songs", (unsigned long)[_multiDeleteList count]];
         }
     }
     else if (_segmentedControl.selectedSegmentIndex == 1 ||
              _segmentedControl.selectedSegmentIndex == 2)
     {
-        if ([viewObjectsS.multiDeleteList count] == 0)
+        if ([_multiDeleteList count] == 0)
         {
             if (!self.tableView.editing)
             {
@@ -605,13 +607,13 @@
                 _deleteSongsLabel.text = @"Clear Playlists";
             }
         }
-        else if ([viewObjectsS.multiDeleteList count] == 1)
+        else if ([_multiDeleteList count] == 1)
         {
             _deleteSongsLabel.text = @"Remove 1 Playlist";
         }
         else 
         {
-            _deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Playlists", (unsigned long)[viewObjectsS.multiDeleteList count]];
+            _deleteSongsLabel.text = [NSString stringWithFormat:@"Remove %lu Playlists", (unsigned long)[_multiDeleteList count]];
         }
     }
 }
@@ -785,7 +787,7 @@
 		{
 			[self.tableView reloadData];
             [self _registerForDeleteButtonNotifications];
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:YES animated:YES];
 			_editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 			_editPlaylistLabel.text = @"Done";
@@ -796,7 +798,7 @@
 		else 
 		{
             [self _unregisterForDeleteButtonNotifications];
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:NO animated:YES];
 			[self _hideDeleteButton];
 			_editPlaylistLabel.backgroundColor = [UIColor clearColor];
@@ -818,7 +820,7 @@
 		{
 			[self.tableView reloadData];
             [self _registerForDeleteButtonNotifications];
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:YES animated:YES];
 			_editPlaylistLabel.backgroundColor = [UIColor colorWithRed:0.008 green:.46 blue:.933 alpha:1];
 			_editPlaylistLabel.text = @"Done";
@@ -829,7 +831,7 @@
 		else 
 		{
             [self _unregisterForDeleteButtonNotifications];
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithCapacity:1];
+			_multiDeleteList = [NSMutableArray arrayWithCapacity:1];
 			[self.tableView setEditing:NO animated:YES];
 			[self _hideDeleteButton];
 			_editPlaylistLabel.backgroundColor = [UIColor clearColor];
@@ -849,7 +851,7 @@
 	
 	if (_segmentedControl.selectedSegmentIndex == 0)
 	{
-		[playlistS deleteSongs:viewObjectsS.multiDeleteList];
+		[playlistS deleteSongs:_multiDeleteList];
 		[self _updateCurrentPlaylistCount];
 		
 		[self.tableView reloadData];
@@ -860,13 +862,13 @@
 	else if (_segmentedControl.selectedSegmentIndex == 1)
 	{
 		// Sort the multiDeleteList to make sure it's accending
-		[viewObjectsS.multiDeleteList sortUsingSelector:@selector(compare:)];
+		[_multiDeleteList sortUsingSelector:@selector(compare:)];
 		
 		[databaseS.localPlaylistsDbQueue inDatabase:^(FMDatabase *db)
 		{
 			[db executeUpdate:@"DROP TABLE localPlaylistsTemp"];
 			[db executeUpdate:@"CREATE TABLE localPlaylistsTemp(playlist TEXT, md5 TEXT)"];
-			for (NSNumber *index in [viewObjectsS.multiDeleteList reverseObjectEnumerator])
+			for (NSNumber *index in [_multiDeleteList reverseObjectEnumerator])
 			{
 				@autoreleasepool 
 				{
@@ -920,12 +922,12 @@
 		}
 		else 
 		{
-			if ([viewObjectsS.multiDeleteList count] == 0)
+			if ([_multiDeleteList count] == 0)
 			{
 				// Select all the rows
 				for (int i = 0; i < _currentPlaylistCount; i++)
 				{
-					[viewObjectsS.multiDeleteList addObject:@(i)];
+					[_multiDeleteList addObject:@(i)];
 				}
 				[self.tableView reloadData];
 				[self _showDeleteButton];
@@ -942,13 +944,13 @@
 	{
 		if (_deleteSongsLabel.hidden == NO)
 		{
-			if ([viewObjectsS.multiDeleteList count] == 0)
+			if ([_multiDeleteList count] == 0)
 			{
 				// Select all the rows
 				NSUInteger count = [databaseS.localPlaylistsDbQueue intForQuery:@"SELECT COUNT(*) FROM localPlaylists"];
 				for (int i = 0; i < count; i++)
 				{
-					[viewObjectsS.multiDeleteList addObject:@(i)];
+					[_multiDeleteList addObject:@(i)];
 				}
 				[self.tableView reloadData];
 				[self _showDeleteButton];
@@ -965,13 +967,13 @@
 	{
 		if (_deleteSongsLabel.hidden == NO)
 		{
-			if ([viewObjectsS.multiDeleteList count] == 0)
+			if ([_multiDeleteList count] == 0)
 			{
 				// Select all the rows
 				NSUInteger count = [_serverPlaylistsDataModel.serverPlaylists count];
 				for (int i = 0; i < count; i++)
 				{
-					[viewObjectsS.multiDeleteList addObject:@(i)];
+					[_multiDeleteList addObject:@(i)];
 				}
 				[self.tableView reloadData];
 				[self _showDeleteButton];
@@ -981,7 +983,7 @@
 				self.tableView.scrollEnabled = NO;
 				[viewObjectsS showAlbumLoadingScreen:self.view sender:self];
 				
-				for (NSNumber *index in viewObjectsS.multiDeleteList)
+				for (NSNumber *index in _multiDeleteList)
 				{
                     NSString *playlistId = [[_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:[index intValue]] playlistId];
                     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(playlistId) forKey:@"id"];
@@ -1435,11 +1437,11 @@ static NSString *kName_Error = @"error";
 		}
 				
 		// Fix the multiDeleteList to reflect the new row positions
-		if ([viewObjectsS.multiDeleteList count] > 0)
+		if ([_multiDeleteList count] > 0)
 		{
 			NSMutableArray *tempMultiDeleteList = [[NSMutableArray alloc] init];
 			int newPosition;
-			for (NSNumber *position in viewObjectsS.multiDeleteList)
+			for (NSNumber *position in _multiDeleteList)
 			{
 				if (fromIndexPath.row > toIndexPath.row)
 				{
@@ -1480,7 +1482,7 @@ static NSString *kName_Error = @"error";
 					}
 				}
 			}
-			viewObjectsS.multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
+			_multiDeleteList = [NSMutableArray arrayWithArray:tempMultiDeleteList];
 		}
 		
 		// Correct the value of currentPlaylistPosition
@@ -1541,7 +1543,7 @@ static NSString *kName_Error = @"error";
 		}
 		cell.indexPath = indexPath;
 		
-        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:@(indexPath.row)];
+        cell.markedForDelete = [_multiDeleteList containsObject:@(indexPath.row)];
 		
 		ISMSSong *aSong = [playlistS songForIndex:indexPath.row];
 		
@@ -1589,7 +1591,7 @@ static NSString *kName_Error = @"error";
         NSString *md5 = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT md5 FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
         cell.associatedObject = md5;
 		
-        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:@(indexPath.row)];
+        cell.markedForDelete = [_multiDeleteList containsObject:@(indexPath.row)];
         
         cell.title = [databaseS.localPlaylistsDbQueue stringForQuery:@"SELECT playlist FROM localPlaylists WHERE ROWID = ?", @(indexPath.row + 1)];
         
@@ -1616,7 +1618,7 @@ static NSString *kName_Error = @"error";
         SUSServerPlaylist *playlist = [_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
         cell.associatedObject = playlist;
 		
-        cell.markedForDelete = [viewObjectsS.multiDeleteList containsObject:@(indexPath.row)];
+        cell.markedForDelete = [_multiDeleteList containsObject:@(indexPath.row)];
 		
         cell.title = playlist.playlistName;
         
@@ -1829,11 +1831,11 @@ static NSString *kName_Error = @"error";
     NSObject *object = @(cell.indexPath.row);
     if (markedForDelete)
     {
-        [viewObjectsS.multiDeleteList addObject:object];
+        [_multiDeleteList addObject:object];
     }
     else
     {
-        [viewObjectsS.multiDeleteList removeObject:object];
+        [_multiDeleteList removeObject:object];
     }
 }
 
