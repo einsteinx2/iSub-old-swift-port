@@ -36,6 +36,10 @@ func ISMSNormalize(value: CGFloat, multiplier: CGFloat = 1, maxDelta: CGFloat = 
     return min(normalizedValue, value + maxDelta) //capped by a max value if needed
 }
 
+func BytesForSecondsAtBitrate(seconds: Int, bitrate: Int) -> Int {
+    return (bitrate / 8) * 1024 * seconds
+}
+
 let ISMSJukeboxTimeout = 60.0
 
 let ISMSHeaderColor = UIColor(red: 200.0/255.0, green: 200.0/255.0, blue: 206.0/255.0, alpha: 1.0)
@@ -52,3 +56,4 @@ let ISMSiPadCornerRadius = 5.0
 let ISMSSongCellHeight: CGFloat = 44.0
 let ISMSAlbumCellHeight: CGFloat = 50.0
 let ISMSArtistCellHeight: CGFloat = 44.0
+let ISMSCellHeaderHeight: CGFloat = 20.0

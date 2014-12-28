@@ -74,7 +74,7 @@
 
 - (void)customizeTableView:(UITableView *)tableView
 {
-    tableView.rowHeight = ISMSNormalize(ISMSAlbumCellHeight + 20.0);
+    tableView.rowHeight = ISMSNormalize(ISMSAlbumCellHeight + ISMSCellHeaderHeight);
 }
 
 #pragma mark - Table View Delegate

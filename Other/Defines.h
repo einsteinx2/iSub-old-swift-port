@@ -40,5 +40,6 @@ NS_INLINE CGFloat ISMSNormalize(CGFloat value)
 #define ISMSSongCellHeight 44.0
 #define ISMSAlbumCellHeight 50.0
 #define ISMSArtistCellHeight 44.0
+#define ISMSCellHeaderHeight 20.0
 
 #endif
