@@ -377,7 +377,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
         cell.headerTitle = "\(name!) - \(NSString.formatTime(position!))"
         
         cell.title = song!.title
-        cell.subTitle = song!.album == nil ? song!.artist : "\(song!.artist) - \(song!.album)"
+        cell.subTitle = song!.albumName == nil ? song!.artistName : "\(song!.artistName) - \(song!.albumName)"
         
         return cell
     }

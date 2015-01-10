@@ -1563,7 +1563,7 @@ static NSString *kName_Error = @"error";
 		}
 		
 		cell.title = aSong.title;
-        cell.subTitle = aSong.album ? [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album] : aSong.artist;
+        cell.subTitle = aSong.albumName ? [NSString stringWithFormat:@"%@ - %@", aSong.artistName, aSong.albumName] : aSong.artistName;
 		
         if (aSong.isFullyCached)
         {

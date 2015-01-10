@@ -13,7 +13,7 @@
 
 #import "MBProgressHUD.h"
 
-@class FoldersViewController, ISMSArtist, LoadingScreen, ISMSAlbum, FolderViewController, ISMSServer;
+@class FoldersViewController, ISMSArtist, LoadingScreen, ISMSAlbum, ISMSServer;
 
 @interface ViewObjectsSingleton : NSObject <UITabBarControllerDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate>
 

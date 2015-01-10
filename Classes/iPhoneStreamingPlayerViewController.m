@@ -704,8 +704,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		self.albumTitleLabel.textAlignment = NSTextAlignmentCenter;
 		[titleView addSubview:self.albumTitleLabel];
 				
-		self.artistTitleLabel.text = self.currentSong.artist;
-		self.albumTitleLabel.text = self.currentSong.album;
+		self.artistTitleLabel.text = self.currentSong.artistName;
+		self.albumTitleLabel.text = self.currentSong.albumName;
 		self.songTitleLabel.text = self.currentSong.title;
 		
 		self.navigationItem.titleView = titleView;		
@@ -724,8 +724,8 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 {
 	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) || IS_IPAD())
 	{		
-		self.artistTitleLabel.text = self.currentSong.artist;
-		self.albumTitleLabel.text = self.currentSong.album;
+		self.artistTitleLabel.text = self.currentSong.artistName;
+		self.albumTitleLabel.text = self.currentSong.albumName;
 		self.songTitleLabel.text = self.currentSong.title;
 	}
 }
@@ -761,12 +761,12 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 		[self updateBarButtonImage];
 	}
 	
-	self.artistLabel.text = self.currentSong.artist;
-	self.albumLabel.text = self.currentSong.album;
+	self.artistLabel.text = self.currentSong.artistName;
+	self.albumLabel.text = self.currentSong.albumName;
 	self.titleLabel.text = self.currentSong.title;
 	
-	self.largeOverlayArtist.text = self.currentSong.artist;
-	self.largeOverlayAlbum.text = self.currentSong.album;
+	self.largeOverlayArtist.text = self.currentSong.artistName;
+	self.largeOverlayAlbum.text = self.currentSong.albumName;
 	self.largeOverlaySong.text = self.currentSong.title;
 	
 	if (settingsS.isJukeboxEnabled)
@@ -1498,10 +1498,10 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 	[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
 	{
         //NSString *query = [NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]];
-		//[db executeUpdate:query, @(playlistS.currentIndex), self.bookmarkNameTextField.text, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), self.currentSong.discNumber, @(self.bookmarkBytePosition)];
+		//[db executeUpdate:query, @(playlistS.currentIndex), self.bookmarkNameTextField.text, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artistName, self.currentSong.albumName, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), self.currentSong.discNumber, @(self.bookmarkBytePosition)];
 		
         NSString *query = [NSString stringWithFormat:@"INSERT INTO bookmarks (playlistIndex, name, position, %@, bytes) VALUES (?, ?, ?, %@, ?)", [ISMSSong standardSongColumnNames], [ISMSSong standardSongColumnQMarks]];
-		[db executeUpdate:query, @(playlistS.currentIndex), name, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artist, self.currentSong.album, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), self.currentSong.discNumber, @(self.bookmarkBytePosition)];
+		[db executeUpdate:query, @(playlistS.currentIndex), name, @(self.bookmarkPosition), self.currentSong.title, self.currentSong.songId, self.currentSong.artistName, self.currentSong.albumName, self.currentSong.genre, self.currentSong.coverArtId, self.currentSong.path, self.currentSong.suffix, self.currentSong.transcodedSuffix, self.currentSong.duration, self.currentSong.bitRate, self.currentSong.track, self.currentSong.year, self.currentSong.size, self.currentSong.parentId, @(self.currentSong.isVideo), self.currentSong.discNumber, @(self.bookmarkBytePosition)];
         
         
         //@"title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size, parentId, isVideo, discNumber";

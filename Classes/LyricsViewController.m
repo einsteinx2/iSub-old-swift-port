@@ -31,7 +31,7 @@
 		_textView.editable = NO;
         
 		/*ISMSSong *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-        NSString *lyrics = [dataModel lyricsForArtist:currentSong.artist andTitle:currentSong.title];
+        NSString *lyrics = [dataModel lyricsForArtist:currentSong.artistName andTitle:currentSong.title];
                 
 		if (lyrics)
 		{
@@ -45,7 +45,7 @@
 			}
 			else
 			{
-				[dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
+				[dataModel loadLyricsForArtist:currentSong.artistName andTitle:currentSong.title];
 				textView.text = @"\n\nLoading Lyrics...";
 			}
 		}*/
@@ -103,7 +103,7 @@
 - (void)updateLyricsLabel
 {	
 	ISMSSong *currentSong = playlistS.currentSong;
-	NSString *lyrics = [self.dataModel loadLyricsForArtist:currentSong.artist andTitle:currentSong.title];
+	NSString *lyrics = [self.dataModel loadLyricsForArtist:currentSong.artistName andTitle:currentSong.title];
 	//DLog(@"lyrics = %@", lyrics);
 	if (!lyrics)
 		lyrics = @"\n\nNo lyrics found";
@@ -121,7 +121,7 @@
 - (void)loadingFinished:(ISMSLoader*)theLoader
 {
 	ISMSSong *currentSong = [SUSCurrentPlaylistDAO dataModel].currentSong;
-    textView.text = [dataModel lyricsForArtist:currentSong.artist andTitle:currentSong.title];
+    textView.text = [dataModel lyricsForArtist:currentSong.artistName andTitle:currentSong.title];
 }*/
 
 @end

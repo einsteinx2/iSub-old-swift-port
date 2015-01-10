@@ -19,9 +19,11 @@ public class FolderDropdownControlSwift: UIView {
     
     public weak var delegate: FolderDropdownControlDelegateSwift?
     
-    public var folders: NSDictionary? = SUSRootFoldersDAO.folderDropdownFolders() {
+    public var folders: [ISMSMediaFolder]? {
         didSet {
-            _setFolders(folders)
+            if let folders = folders {
+                _didSetFolders(folders)
+            }
         }
     }
     
@@ -77,8 +79,6 @@ public class FolderDropdownControlSwift: UIView {
         _dropdownButton.accessibilityLabel = _selectedFolderLabel.text
         _dropdownButton.accessibilityHint = "Switches folders"
         self.addSubview(_dropdownButton)
-        
-        updateFolders()
     }
     
     public override init() {
@@ -96,39 +96,21 @@ public class FolderDropdownControlSwift: UIView {
         _commonInit()
     }
   
-    private func _setFolders(namesAndIds: NSDictionary?) {
+    private func _didSetFolders(mediaFolders: [ISMSMediaFolder]) {
         // Remove old labels
         for label in _labels {
             label.removeFromSuperview()
         }
         _labels.removeAll()
         
-        let count = self.folders == nil ? 0 : self.folders!.count
-        _sizeIncrease = Float(count) * 30.0
-        
-        var sortedValues: [(id: Int, name: String)] = []
-        for key in self.folders?.allKeys as [Int] {
-            if key != -1 {
-                sortedValues.append(id: key, name: self.folders?[key] as String)
-            }
-        }
-        
-        // Sort by folder name
-        sortedValues.sort {
-            let folder1 = $0.name
-            let folder2 = $1.name
-            return folder1.caseInsensitiveCompare(folder2) == NSComparisonResult.OrderedDescending
-        }
-        
-        // Add All Folders again
-        sortedValues.insert((-1, "All Folders"), atIndex: 0)
+        _sizeIncrease = Float(mediaFolders.count) * 30.0
         
         // Process the names and create the labels/buttons
         var i: CGFloat = 0
-        for folder in sortedValues {
+        for mediaFolder in mediaFolders {
             
-            let name = folder.name
-            let tag = folder.id
+            let name = mediaFolder.name
+            let tag = mediaFolder.mediaFolderId
             let labelFrame = CGRectMake(0, (i + 1.0) * 30.0, self.frame.size.width, 30)
             let buttonFrame = CGRectMake(0, 0, labelFrame.size.width, labelFrame.size.height)
             
@@ -144,7 +126,7 @@ public class FolderDropdownControlSwift: UIView {
             folderLabel.textAlignment = NSTextAlignment.Center
             folderLabel.font = ISMSBoldFont(20)
             folderLabel.text = name
-            folderLabel.tag = tag
+            folderLabel.tag = tag.integerValue
             folderLabel.isAccessibilityElement = false
             self.addSubview(folderLabel)
             _labels.append(folderLabel)
@@ -229,8 +211,7 @@ public class FolderDropdownControlSwift: UIView {
     {
         if let label = sender.superview as? UILabel {
             _selectedFolderId = label.tag
-            _selectedFolderLabel.text = self.folders?[_selectedFolderId] as? String
-            _dropdownButton.accessibilityLabel = _selectedFolderLabel.text;
+            self.selectFolderWithId(_selectedFolderId)
             self.closeDropdownFast()
             
             // Call the delegate method
@@ -240,26 +221,13 @@ public class FolderDropdownControlSwift: UIView {
     
     public func selectFolderWithId(folderId: Int) {
         _selectedFolderId = folderId
-        _selectedFolderLabel.text = self.folders?[_selectedFolderId] as? String
-        _dropdownButton.accessibilityLabel = _selectedFolderLabel.text
-    }
-    
-    public func updateFolders() {
-        let loader: ISMSDropdownFolderLoader = ISMSDropdownFolderLoader.loaderWithCallbackBlock({ (success: Bool, error: NSError!, loader: ISMSLoader!) -> Void in
-            let loader = loader as ISMSDropdownFolderLoader
-            if success {
-                self.folders = loader.updatedfolders
-                SUSRootFoldersDAO.setFolderDropdownFolders(self.folders)
-            }
-            else
-            {
-                // failed.  how to report this to the user?
-            }
-        }) as ISMSDropdownFolderLoader;
         
-        loader.startLoad()
-        
-        // Save the default
-        SUSRootFoldersDAO.setFolderDropdownFolders(self.folders)
+        if let folders = folders {
+            let folder = filter(folders) { e in e.mediaFolderId == folderId }
+            if folder.count > 0 {
+                _selectedFolderLabel.text = folder[0].name
+                _dropdownButton.accessibilityLabel = _selectedFolderLabel.text
+            }
+        }
     }
 }

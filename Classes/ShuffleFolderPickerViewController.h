@@ -12,7 +12,7 @@
 
 @interface ShuffleFolderPickerViewController : CustomUITableViewController 
 
-@property (strong) NSMutableArray *sortedFolders;
+@property (strong) NSArray *mediaFolders;
 @property (weak) FolderPickerDialog *myDialog;
 
 @end

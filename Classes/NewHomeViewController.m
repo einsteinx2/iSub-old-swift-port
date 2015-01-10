@@ -340,16 +340,16 @@
 
 - (IBAction)a_serverShuffle:(id)sender
 {
-    NSDictionary *folders = [SUSRootFoldersDAO folderDropdownFolders];
+    NSArray *mediaFolders = [ISMSMediaFolder allMediaFolders];
     
-    if (folders == nil || [folders count] == 2)
+    if ([mediaFolders count] <= 1)
     {
         [self _performServerShuffle:nil];
     }
     else
     {
         float height = 65.0f;
-        height += (float)[folders count] * 44.0f;
+        height += (float)([mediaFolders count] + 1) * 44.0f;
         
         if (height > 300.0f)
             height = 300.0f;
@@ -459,14 +459,14 @@
 		_albumLabel.text = @"";
 		_songLabel.text = @"";
 		
-		if (currentSong.artist)
+		if (currentSong.artistName)
 		{
-			_artistLabel.text = [currentSong.artist copy];
+			_artistLabel.text = [currentSong.artistName copy];
 		}
 		
-		if (currentSong.album)
+		if (currentSong.albumName)
 		{
-			_albumLabel.text = [currentSong.album copy];
+			_albumLabel.text = [currentSong.albumName copy];
 		}
 		
 		if (currentSong.title)

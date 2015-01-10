@@ -20,7 +20,10 @@ public class ModalAlbumArtViewController: UIViewController, AsynchronousImageVie
     @IBOutlet public var albumLabel: UILabel?
     @IBOutlet public var durationLabel: UILabel?
     @IBOutlet public var trackCountLabel: UILabel?
-    public var myAlbum: ISMSAlbum?
+    
+    private var _title: String?
+    private var _subtitle: String?
+    private var _coverArtId: String?
     private var _numberOfTracks: Int?
     private var _albumLength: Int?
     
@@ -62,8 +65,10 @@ public class ModalAlbumArtViewController: UIViewController, AsynchronousImageVie
         self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
     }
     
-    public init(album: ISMSAlbum, numberOfTracks: Int, albumLength: Int) {
-        myAlbum = album
+    public init(title: String?, subtitle: String?, coverArtId: String?, numberOfTracks: Int, albumLength: Int) {
+        _title = title
+        _subtitle = subtitle
+        _coverArtId = coverArtId
         _numberOfTracks = numberOfTracks
         _albumLength = albumLength
         
@@ -96,15 +101,15 @@ public class ModalAlbumArtViewController: UIViewController, AsynchronousImageVie
         albumArt!.isLarge = true
         albumArt!.delegate = self
         
-        artistLabel!.text = myAlbum?.artistName
-        albumLabel!.text = myAlbum?.title
+        artistLabel!.text = _title
+        albumLabel!.text = _subtitle
         durationLabel!.text = NSString.formatTime(Double(_albumLength!))
         trackCountLabel!.text = "\(_numberOfTracks) Tracks"
         if _numberOfTracks == 1 {
             trackCountLabel!.text = "\(_numberOfTracks) Track"
         }
         
-        albumArt!.coverArtId = myAlbum!.coverArtId;
+        albumArt!.coverArtId = _coverArtId;
     
         albumArtReflection!.image = albumArt!.reflectedImageWithHeight(albumArtReflection!.height)
     

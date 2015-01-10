@@ -416,7 +416,7 @@ static NSString *kName_Error = @"error";
     
 	//[cell.numberLabel setText:[NSString stringWithFormat:@"%li", (long)(indexPath.row + 1)]];
     cell.title = aSong.title;
-    cell.subTitle = aSong.album ? [NSString stringWithFormat:@"%@ - %@", aSong.artist, aSong.album] : aSong.artist;
+    cell.subTitle = aSong.albumName ? [NSString stringWithFormat:@"%@ - %@", aSong.artistName, aSong.albumName] : aSong.artistName;
 	
 	return cell;
 }

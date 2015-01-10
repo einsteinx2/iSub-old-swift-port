@@ -249,7 +249,7 @@
             cell.associatedObject = song;
             
             cell.title = song.title;
-            cell.subTitle = song.album ? [NSString stringWithFormat:@"%@ - %@", song.artist, song.album] : song.artist;
+            cell.subTitle = song.albumName ? [NSString stringWithFormat:@"%@ - %@", song.artistName, song.albumName] : song.artistName;
             
             cell.coverArtId = song.coverArtId;
             

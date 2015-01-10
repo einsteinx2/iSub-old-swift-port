@@ -446,7 +446,7 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 			
 		cell.title = aSong.title;
 		
-        cell.subTitle = aSong.artist ? aSong.artist : @"";
+        cell.subTitle = aSong.artistName ? aSong.artistName : @"";
         
         cell.duration = aSong.duration;
         
