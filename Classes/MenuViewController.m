@@ -12,8 +12,6 @@
 #import "StackScrollViewController.h"
 #import "MenuTableViewCell.h"
 #import "NewHomeViewController.h"
-#import "AllAlbumsViewController.h"
-#import "AllSongsViewController.h"
 #import "PlaylistsViewController.h"
 #import "PlayingViewController.h"
 #import "GenresViewController.h"
@@ -360,8 +358,6 @@
 			case 7: controller = [[ChatViewController alloc] initWithNibName:@"ChatViewController" bundle:nil]; break;
 			
 			case 8: controller = [[GenresViewController alloc] initWithNibName:@"GenresViewController" bundle:nil]; break;
-			case 9: controller = [[AllAlbumsViewController alloc] initWithNibName:@"AllAlbumsViewController" bundle:nil]; break;
-			case 10: controller = [[AllSongsViewController alloc] initWithNibName:@"AllSongsViewController" bundle:nil]; break;
 			default: controller = nil;
 		}
 	}

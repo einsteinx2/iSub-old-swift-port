@@ -42,12 +42,12 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
         
         if let artist = artist? {
             isArtist = true
-            _folderId = artist.artistId
+            _folderId = artist.artistId.stringValue
             _artist = artist
             _album = nil
             
         } else if let album = album? {
-            _folderId = album.albumId
+            _folderId = album.albumId.stringValue
             _artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
             _album = album
             
@@ -60,7 +60,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
         
         super.init(nibName: "FolderViewController", bundle: nil)
         
-        self.title = isArtist ? _artist!.name : _album!.title
+        self.title = isArtist ? _artist!.name : _album!.name
         
         _dataModel.delegate = self
         if (_dataModel.hasLoaded)
@@ -190,7 +190,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
             if _album == nil {
                 let album = ISMSAlbum()
                 let song = _dataModel.songForTableViewRow(_dataModel.albumsCount)
-                album.title = song.albumName
+                album.name = song.albumName
                 album.artistName = song.artistName
                 album.coverArtId = song.coverArtId
                 _album = album
@@ -198,7 +198,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
             
             albumInfoArtView!.coverArtId = _album!.coverArtId
             albumInfoArtistLabel!.text = _album!.artistName
-            albumInfoAlbumLabel!.text = _album!.title
+            albumInfoAlbumLabel!.text = _album!.name
             
             albumInfoDurationLabel!.text = NSString.formatTime(Double(_dataModel.folderLength))
             albumInfoTrackCountLabel!.text = "\(_dataModel.songsCount) Tracks"
@@ -228,7 +228,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     
     @IBAction public func a_expandCoverArt(sender: AnyObject?) {
         if _album?.coverArtId != nil {
-            let largeArt = ModalAlbumArtViewController(title: _album!.title, subtitle: _album!.artistName, coverArtId: _album!.coverArtId, numberOfTracks: _dataModel.songsCount, albumLength: _dataModel.folderLength)
+            let largeArt = ModalAlbumArtViewController(title: _album!.name, subtitle: _album!.artistName, coverArtId: _album!.coverArtId, numberOfTracks: _dataModel.songsCount, albumLength: _dataModel.folderLength)
             
             if IS_IPAD() {
                 _appDelegate.ipadRootViewController.presentViewController(largeArt, animated: true, completion: nil)
@@ -293,7 +293,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
             
             cell.associatedObject = album
             cell.coverArtId = album.coverArtId
-            cell.title = album.title
+            cell.title = album.name
             
             // Setup cell backgrond color
             cell.backgroundView = _viewObjects.createCellBackground(indexPath.row)
@@ -386,7 +386,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
                 song.addToCacheQueueDbQueue()
             case let album as ISMSAlbum:
                 let artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
-                _database.downloadAllSongs(album.albumId, artist: artist)
+                _database.downloadAllSongs(album.albumId.stringValue, artist: artist)
             default:
                 break;
         }
@@ -401,7 +401,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
                 NSNotificationCenter.postNotificationToMainThreadWithName(ISMSNotification_CurrentPlaylistSongsQueued)
             case let album as ISMSAlbum:
                 let artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
-                _database.queueAllSongs(album.albumId, artist: artist)
+                _database.queueAllSongs(album.albumId.stringValue, artist: artist)
             default:
                 break;
         }

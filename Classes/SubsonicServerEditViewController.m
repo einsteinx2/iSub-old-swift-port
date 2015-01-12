@@ -7,7 +7,6 @@
 //
 
 #import "SubsonicServerEditViewController.h"
-#import "ServerTypeViewController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 
@@ -36,12 +35,9 @@
 {
     [super viewDidLoad];
 	
-	if (!self.parentController)
-	{
-		CGRect frame = self.view.frame;
-		frame.origin.y = 20;
-		self.view.frame = frame;
-	}
+    CGRect frame = self.view.frame;
+    frame.origin.y = 20;
+    self.view.frame = frame;
 	
 	self.theNewRedirectUrl = nil;
 	
@@ -110,9 +106,6 @@
 {
 	viewObjectsS.serverToEdit = nil;
 	
-	if (self.parentController)
-		[self.parentController dismissViewControllerAnimated:YES completion:nil];
-	
 	[self dismissViewControllerAnimated:YES completion:nil];
 	
 	if (![[NSUserDefaults standardUserDefaults] objectForKey:@"servers"])
@@ -160,7 +153,7 @@
 	{
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
         		
-		SUSStatusLoader *loader = [[SUSStatusLoader alloc] initWithDelegate:self];
+		ISMSStatusLoader *loader = [[ISMSStatusLoader alloc] initWithDelegate:self];
         loader.urlString = self.urlField.text;
         loader.username = self.usernameField.text;
         loader.password = self.passwordField.text;
@@ -251,9 +244,6 @@
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 		
-		if (self.parentController)
-			[self.parentController dismissViewControllerAnimated:YES completion:nil];
-		
 		[self dismissViewControllerAnimated:YES completion:nil];
 		
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -261,8 +251,8 @@
 		{
 			userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
 		}
-        userInfo[@"isVideoSupported"] = @(((SUSStatusLoader *)theLoader).isVideoSupported);
-        userInfo[@"isNewSearchAPI"] = @(((SUSStatusLoader *)theLoader).isNewSearchAPI);
+        userInfo[@"isVideoSupported"] = @(((ISMSStatusLoader *)theLoader).isVideoSupported);
+        userInfo[@"isNewSearchAPI"] = @(((ISMSStatusLoader *)theLoader).isNewSearchAPI);
         if (self.theNewRedirectUrl)
             userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
         
@@ -274,8 +264,8 @@
 		viewObjectsS.serverToEdit = theServer;
 		[settingsS.serverList addObject:viewObjectsS.serverToEdit];
         
-        settingsS.isVideoSupported = ((SUSStatusLoader *)theLoader).isVideoSupported;
-        settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
+        settingsS.isVideoSupported = ((ISMSStatusLoader *)theLoader).isVideoSupported;
+        settingsS.isNewSearchAPI = ((ISMSStatusLoader *)theLoader).isNewSearchAPI;
 		
 		// Save the plist values
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -288,9 +278,6 @@
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
 		[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
 		
-		if (self.parentController)
-			[self.parentController dismissViewControllerAnimated:YES completion:nil];
-		
 		[self dismissViewControllerAnimated:YES completion:nil];
 		
 		if (IS_IPAD())
@@ -301,8 +288,8 @@
 		{
 			userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
 		}
-        userInfo[@"isVideoSupported"] = @(((SUSStatusLoader *)theLoader).isVideoSupported);
-        userInfo[@"isNewSearchAPI"] = @(((SUSStatusLoader *)theLoader).isNewSearchAPI);
+        userInfo[@"isVideoSupported"] = @(((ISMSStatusLoader *)theLoader).isVideoSupported);
+        userInfo[@"isNewSearchAPI"] = @(((ISMSStatusLoader *)theLoader).isNewSearchAPI);
         if (self.theNewRedirectUrl)
             userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
         

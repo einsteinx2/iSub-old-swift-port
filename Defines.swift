@@ -53,6 +53,8 @@ let ISMSSongFont = ISMSRegularFont(16)
 let ISMSiPadBackgroundColor = ISMSHeaderColor
 let ISMSiPadCornerRadius = 5.0
 
+let ISMSFolderCellHeight: CGFloat = 44.0
+let ISMSSubfolderCellHeight: CGFloat = 50.0
 let ISMSSongCellHeight: CGFloat = 44.0
 let ISMSAlbumCellHeight: CGFloat = 50.0
 let ISMSArtistCellHeight: CGFloat = 44.0

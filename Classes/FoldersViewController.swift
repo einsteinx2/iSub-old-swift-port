@@ -439,15 +439,8 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     // MARK: - Actions -
     
     private func a_reload(sender: UIButton) {
-        if !SUSAllSongsLoader.isLoading() {
-            let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId)
-            _loadData(selectedFolderId)
-        }
-        else
-        {
-            let alert = CustomUIAlertView(title: "Please Wait", message: "You cannot reload the Artists tab while the Albums or Songs tabs are loading", delegate: self, cancelButtonTitle: "OK")
-            alert.show()
-        }
+        let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId)
+        _loadData(selectedFolderId)
     }
     
     // MARK: - Search Bar -
@@ -708,7 +701,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     
     public func tableCellDownloadButtonPressed(cell: CustomUITableViewCell) {
         if let artist = cell.associatedObject as? ISMSArtist {
-            _database.downloadAllSongs(artist.artistId, artist: artist)
+            _database.downloadAllSongs(artist.artistId.stringValue, artist: artist)
         }
         
         cell.overlayView?.disableDownloadButton()
@@ -716,7 +709,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     
     public func tableCellQueueButtonPressed(cell: CustomUITableViewCell) {
         if let artist = cell.associatedObject as? ISMSArtist {
-            _database.queueAllSongs(artist.artistId, artist:artist)
+            _database.queueAllSongs(artist.artistId.stringValue, artist:artist)
         }
     }
 }

@@ -220,7 +220,7 @@
 			cell.indexShowing = NO;
 			
 			cell.coverArtId = anAlbum.coverArtId;
-            cell.title = anAlbum.title;			
+            cell.title = anAlbum.name;
 			
 			// Setup cell backgrond color
 			cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
@@ -464,14 +464,14 @@
     if ([associatedObject isKindOfClass:[ISMSArtist class]])
     {
         ISMSArtist *artist = associatedObject;
-        [databaseS downloadAllSongs:artist.artistId artist:artist];
+        [databaseS downloadAllSongs:artist.artistId.stringValue artist:artist];
     }
     else if ([associatedObject isKindOfClass:[ISMSAlbum class]])
     {
         ISMSAlbum *album = associatedObject;
         ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
         
-        [databaseS downloadAllSongs:album.albumId artist:artist];
+        [databaseS downloadAllSongs:album.albumId.stringValue artist:artist];
     }
     else if ([associatedObject isKindOfClass:[ISMSSong class]])
     {
@@ -487,14 +487,14 @@
     if ([associatedObject isKindOfClass:[ISMSArtist class]])
     {
         ISMSArtist *artist = associatedObject;
-        [databaseS queueAllSongs:artist.artistId artist:artist];
+        [databaseS queueAllSongs:artist.artistId.stringValue artist:artist];
     }
     else if ([associatedObject isKindOfClass:[ISMSAlbum class]])
     {
         ISMSAlbum *album = associatedObject;
         ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
         
-        [databaseS queueAllSongs:album.albumId artist:artist];
+        [databaseS queueAllSongs:album.albumId.stringValue artist:artist];
     }
     else if ([associatedObject isKindOfClass:[ISMSSong class]])
     {

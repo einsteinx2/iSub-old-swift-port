@@ -113,7 +113,7 @@
 {
     [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
         
-    ISMSQuickAlbumsLoader *loader = [ISMSQuickAlbumsLoader loaderWithDelegate:self];
+    ISMSQuickAlbumsLoader *loader = [[ISMSQuickAlbumsLoader alloc] initWithDelegate:self];
     loader.modifier = theModifier;
     [loader startLoad];
 }
@@ -130,7 +130,7 @@
 {
     [viewObjectsS hideLoadingScreen];
 
-    SUSQuickAlbumsLoader *loader = (SUSQuickAlbumsLoader *)theLoader;
+    ISMSQuickAlbumsLoader *loader = (ISMSQuickAlbumsLoader *)theLoader;
     
     HomeAlbumViewController *albumViewController = [[HomeAlbumViewController alloc] initWithNibName:@"HomeAlbumViewController" bundle:nil];
 	albumViewController.title = [self.titles objectForKey:loader.modifier];

@@ -56,7 +56,7 @@
 	self.isLoading = YES;
 	self.offset += 20;
     
-    self.loader = [ISMSQuickAlbumsLoader loaderWithDelegate:self];
+    self.loader = [[ISMSQuickAlbumsLoader alloc] initWithDelegate:self];
     self.loader.modifier = self.modifier;
     self.loader.offset = self.offset;
     [self.loader startLoad];
@@ -120,7 +120,7 @@
 		
 		cell.coverArtId = anAlbum.coverArtId;
 		
-        cell.title = anAlbum.title;
+        cell.title = anAlbum.name;
         cell.subTitle = anAlbum.artistName;
 		
 		// Setup cell backgrond color
@@ -189,7 +189,7 @@
         ISMSAlbum *album = associatedObject;
         ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
         
-        [databaseS downloadAllSongs:album.albumId artist:artist];
+        [databaseS downloadAllSongs:album.albumId.stringValue artist:artist];
     }
     
     [cell.overlayView disableDownloadButton];
@@ -203,7 +203,7 @@
         ISMSAlbum *album = associatedObject;
         ISMSArtist *artist = [ISMSArtist artistWithName:album.artistName andArtistId:album.artistId];
         
-        [databaseS queueAllSongs:album.albumId artist:artist];
+        [databaseS queueAllSongs:album.albumId.stringValue artist:artist];
     }
     
     [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CurrentPlaylistSongsQueued];

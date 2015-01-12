@@ -30,6 +30,8 @@
 #import "EX2Reachability.h"
 #import "HockeySDK.h"
 #import "iSub-Swift.h"
+#import "CustomUITabBarController.h"
+#import "NewHomeViewController.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -195,40 +197,31 @@ LOG_LEVEL_ISUB_DEFAULT
 	}
 	else
 	{
+        // Add the artists view controller
+        ISMSRootArtistsLoader *artistsLoader = [[ISMSRootArtistsLoader alloc] init];
+        self.artistsViewController = [[ItemViewController alloc] initWithItemLoader:artistsLoader];
+        self.artistsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.artistsViewController];
+        self.artistsNavigationController.tabBarItem.tag = 10;
+        NSMutableArray *viewControllers = [[self.mainTabBarController viewControllers] mutableCopy];
+        [viewControllers addObject:self.artistsNavigationController];
+        self.mainTabBarController.viewControllers = viewControllers;
+        
         [[UITabBar appearance] setBarTintColor:[UIColor blackColor]];
         self.mainTabBarController.tabBar.translucent = NO;
         self.offlineTabBarController.tabBar.translucent = NO;
         
-		// Setup the tabBarController
-		self.mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
-		/*// Add the support tab
-		[Crittercism showCrittercism:nil];
-		UIViewController *vc = (UIViewController *)[Crittercism sharedInstance].crittercismViewController;
-		self.supportNavigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-		supportNavigationController.tabBarItem.tag = 9;
-		supportNavigationController.tabBarItem.image = [UIImage imageNamed:@"support-tabbaricon"];
-		supportNavigationController.tabBarItem.title = @"Support";
-		NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:mainTabBarController.viewControllers];
-		[viewControllers addObject:supportNavigationController];
-		[mainTabBarController setViewControllers:viewControllers animated:NO];
-		[vc logMethods];
-         //DLog(@"toolbarItems: %@", [vc toolbarItems]);*/
 		
-		//DLog(@"isOfflineMode: %i", settingsS.isOfflineMode);
+		self.mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+
 		if (settingsS.isOfflineMode)
 		{
-			//DLog(@"--------------- isOfflineMode");
 			self.currentTabBarController = self.offlineTabBarController;
-			//[self.window addSubview:self.offlineTabBarController.view];
             self.window.rootViewController = self.offlineTabBarController;
 		}
 		else 
 		{
 			// Recover the tab order and load the main tabBarController
 			self.currentTabBarController = self.mainTabBarController;
-			
-			//[viewObjectsS orderMainTabBarController]; // Do this after server check
-			//[self.window addSubview:self.mainTabBarController.view];
             self.window.rootViewController = self.mainTabBarController;
 		}
         
@@ -391,10 +384,10 @@ LOG_LEVEL_ISUB_DEFAULT
 	// have internet access or if the host url entered was wrong.
     if (!settingsS.isOfflineMode) 
 	{
-        self.statusLoader = [ISMSStatusLoader loaderWithDelegate:self];
+        self.statusLoader = [[ISMSStatusLoader alloc] initWithDelegate:self];
         if ([settingsS.serverType isEqualToString:SUBSONIC])
         {
-            SUSStatusLoader *subsonicLoader = (SUSStatusLoader *)self.statusLoader;
+            ISMSStatusLoader *subsonicLoader = (ISMSStatusLoader *)self.statusLoader;
             subsonicLoader.urlString = settingsS.urlString;
             subsonicLoader.username = settingsS.username;
             subsonicLoader.password = settingsS.password;
@@ -457,14 +450,10 @@ LOG_LEVEL_ISUB_DEFAULT
         
         self.statusLoader = nil;
         
-        if ([theLoader isKindOfClass:[SUSStatusLoader class]])
+        if ([theLoader isKindOfClass:[ISMSStatusLoader class]])
         {
-            settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
-            settingsS.isVideoSupported = ((SUSStatusLoader *)theLoader).isVideoSupported;
-        }
-        else if ([theLoader isKindOfClass:[PMSStatusLoader class]])
-        {
-            settingsS.isVideoSupported = YES;
+            settingsS.isNewSearchAPI = ((ISMSStatusLoader *)theLoader).isNewSearchAPI;
+            settingsS.isVideoSupported = ((ISMSStatusLoader *)theLoader).isVideoSupported;
         }
     }
 }
@@ -474,10 +463,10 @@ LOG_LEVEL_ISUB_DEFAULT
     // This happens right on app launch
     if (theLoader.type == ISMSLoaderType_Status)
     {
-        if ([theLoader isKindOfClass:[SUSStatusLoader class]])
+        if ([theLoader isKindOfClass:[ISMSStatusLoader class]])
         {
-            settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
-            settingsS.isVideoSupported = ((SUSStatusLoader *)theLoader).isVideoSupported;
+            settingsS.isNewSearchAPI = ((ISMSStatusLoader *)theLoader).isNewSearchAPI;
+            settingsS.isVideoSupported = ((ISMSStatusLoader *)theLoader).isVideoSupported;
         }
         
         self.statusLoader = nil;

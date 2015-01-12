@@ -16,13 +16,17 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
     private let _database = DatabaseSingleton.sharedInstance()
     
     private let _reuseIdentifier = "Custom Cell"
+    private let _foldersSectionIndex = 0
+    private let _artistsSectionIndex = 1
+    private let _albumsSectionIndex  = 2
+    private let _songsSectionIndex   = 3
     
     private let _itemLoader: ISMSItemLoader
     private var _reloading: Bool = false
     // TODO: Use tuples after porting the data model
     private var _sectionIndexes: [ISMSSectionIndex]?
     
-    private let _hasCachedItems: Bool
+    private var _hasCachedItems: Bool = false
     
     @IBOutlet public var playAllShuffleAllView: UIView?
     @IBOutlet public var albumInfoView: UIView?
@@ -35,15 +39,9 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
     @IBOutlet public var albumInfoDurationLabel: UILabel?
     
     public init(itemLoader: ISMSItemLoader) {
-        _hasCachedItems = itemLoader.loadModelsFromCache()
         _itemLoader = itemLoader
         
         super.init(nibName: "ItemViewController", bundle: nil)
-        
-        _itemLoader.delegate = self
-        if !_hasCachedItems {
-            _itemLoader.startLoad()
-        }
     }
     
     public required init(coder aDecoder: NSCoder) {
@@ -58,8 +56,11 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
         
         albumInfoArtView?.delegate = self
         
-        if _hasCachedItems {
+        _itemLoader.delegate = self
+        if _itemLoader.loadModelsFromCache() {
             _addHeaderAndIndex()
+        } else {
+            _itemLoader.startLoad()
         }
     }
     
@@ -133,10 +134,11 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
     }
     
     private func _addHeaderAndIndex() {
-        let songsCount = _itemLoader.songs.count
-        let foldersCount = _itemLoader.folders.count
+        let foldersCount = _itemLoader.folders == nil ? 0 : _itemLoader.folders.count
+        let artistsCount = _itemLoader.artists == nil ? 0 : _itemLoader.artists.count
+        let songsCount = _itemLoader.songs == nil ? 0 : _itemLoader.songs.count
         
-        if songsCount == 0 && foldersCount == 0 {
+        if (songsCount == 0 && foldersCount == 0) || artistsCount > 0 {
             self.tableView.tableHeaderView = nil;
         } else if songsCount > 0 {
             if self.tableView.tableHeaderView == nil {
@@ -159,15 +161,11 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
                 albumInfoArtView!.coverArtId = folder.coverArtId?.stringValue
                 albumInfoArtistLabel!.text = folder.name
                 //albumInfoAlbumLabel!.text = _album!.title
+                albumInfoDurationLabel!.text = NSString.formatTime(_itemLoader.songsDuration)
+                albumInfoTrackCountLabel!.text = pluralizedString(count: _itemLoader.songs!.count, singularNoun: "Track")
             default:
                 break
             }
-
-//            albumInfoDurationLabel!.text = NSString.formatTime(Double(_dataModel.folderLength))
-//            albumInfoTrackCountLabel!.text = "\(_dataModel.songsCount) Tracks"
-//            if _dataModel.songsCount == 1 {
-//                albumInfoTrackCountLabel!.text = "\(_dataModel.songsCount) Track"
-//            }
             
             if self.tableView.tableFooterView == nil {
                 self.tableView.tableFooterView = UIView()
@@ -179,9 +177,14 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
             }
         }
         
-        if foldersCount > 20 && songsCount == 0 {
-            _sectionIndexes = sectionIndexesForItems(_itemLoader.songs as [ISMSSong])
-            self.tableView.reloadData()
+        if songsCount == 0 {
+            if foldersCount > 20 {
+                _sectionIndexes = sectionIndexesForItems(_itemLoader.folders as [ISMSFolder])
+                self.tableView.reloadData()
+            } else if artistsCount > 20 {
+                _sectionIndexes = sectionIndexesForItems(_itemLoader.artists as [ISMSArtist])
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -230,24 +233,49 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
     
     public override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
         if let sectionIndexes = _sectionIndexes? {
-            let sectionIndex = sectionIndexes[index]
-            let indexPath = NSIndexPath(forRow: sectionIndex.firstIndex, inSection: 0)
-            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+            let row = sectionIndexes[index].firstIndex
+            
+            // Find the section with items in it
+            var section = -1
+            if _itemLoader.folders?.count > row {
+                section = _foldersSectionIndex
+            } else if _itemLoader.artists?.count > row {
+                section = _artistsSectionIndex
+            } else if _itemLoader.albums?.count > row {
+                section = _albumsSectionIndex
+            } else if _itemLoader.songs?.count > row {
+                section = _songsSectionIndex
+            }
+            
+            if section >= 0 {
+                let indexPath = NSIndexPath(forRow: row, inSection: section)
+                tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+            }
         }
         
         return -1;
     }
     
     public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 4
     }
     
     public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return _itemLoader.folders.count
-        } else {
-            return _itemLoader.songs.count
+        var count: Int? = nil
+        
+        switch section {
+        case _foldersSectionIndex:
+            count = _itemLoader.folders?.count
+        case _artistsSectionIndex:
+            count = _itemLoader.artists?.count
+        case _albumsSectionIndex:
+            count = _itemLoader.albums?.count
+        case _songsSectionIndex:
+            count = _itemLoader.songs?.count
+        default: break
         }
+        
+        return count == nil ? 0 : count!
     }
     
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -255,7 +283,8 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
         cell.alwaysShowSubtitle = true
         cell.delegate = self
         
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case _foldersSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             cell.alwaysShowCoverArt = true
             
@@ -268,15 +297,40 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
             cell.associatedObject = folder
             cell.coverArtId = folder.coverArtId?.stringValue
             cell.title = folder.name
+            break
+        case _artistsSectionIndex:
+            cell.accessoryType = UITableViewCellAccessoryType.None
             
-            return cell;
-        } else {
+            let artist = _itemLoader.artists[indexPath.row] as ISMSArtist
+            
+            if _sectionIndexes != nil {
+                cell.indexShowing = true
+            }
+            
+            cell.associatedObject = artist
+            cell.coverArtId = nil
+            cell.title = artist.name
+        case _albumsSectionIndex:
+            cell.accessoryType = UITableViewCellAccessoryType.None
+            
+            let album = _itemLoader.albums[indexPath.row] as ISMSAlbum
+            
+            if _sectionIndexes != nil {
+                cell.indexShowing = true
+            }
+            
+            cell.associatedObject = album
+            cell.coverArtId = album.coverArtId
+            cell.title = album.name
+            break
+        case _songsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.None
             
             let song = _itemLoader.songs[indexPath.row] as ISMSSong
             
             cell.indexPath = indexPath
             cell.associatedObject = song
+            cell.coverArtId = nil
             cell.trackNumber = song.track
             cell.title = song.title
             cell.subTitle = song.artistName == nil ? "" : song.artistName
@@ -289,19 +343,36 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
             } else {
                 cell.backgroundView = _viewObjects.createCellBackground(indexPath.row)
             }
-            
-            return cell
+        default:
+            break
         }
+        
+        return cell
     }
     
     public override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let height = indexPath.section == 0 ? ISMSAlbumCellHeight : ISMSSongCellHeight
+        var height: CGFloat = 0
+        
+        switch indexPath.section {
+        case _foldersSectionIndex:
+            height = ISMSSubfolderCellHeight
+        case _artistsSectionIndex:
+            height = ISMSArtistCellHeight
+        case _albumsSectionIndex:
+            height = ISMSAlbumCellHeight
+        case _songsSectionIndex:
+            height = ISMSSongCellHeight
+        default:
+            break
+        }
+        
         return ISMSNormalize(height)
     }
     
     public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if _viewObjects.isCellEnabled {
-            if indexPath.section == 0 {
+            switch indexPath.section {
+            case _foldersSectionIndex:
                 let folder = _itemLoader.folders[indexPath.row] as ISMSFolder
                 let folderLoader = ISMSFolderLoader()
                 folderLoader.folderId = folder.folderId
@@ -309,7 +380,11 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
                 
                 let itemViewController = ItemViewController(itemLoader: folderLoader)
                 self.pushViewControllerCustom(itemViewController)
-            } else {
+            case _artistsSectionIndex:
+                break
+            case _albumsSectionIndex:
+                break
+            case _songsSectionIndex:
                 // TODO: Implement a way to just switch play index when we're playing from the same array to save time
                 playAll(songs: _itemLoader.songs as [ISMSSong], playIndex: indexPath.row)
                 
@@ -317,6 +392,8 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
                 if !song.isVideo {
                     self.showPlayer()
                 }
+            default:
+                break
             }
         }
         else
@@ -357,7 +434,7 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
                 song.addToCacheQueueDbQueue()
             case let album as ISMSAlbum:
                 let artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
-                _database.downloadAllSongs(album.albumId, artist: artist)
+                _database.downloadAllSongs(album.albumId.stringValue, artist: artist)
             default:
                 break;
         }
@@ -372,7 +449,7 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
                 NSNotificationCenter.postNotificationToMainThreadWithName(ISMSNotification_CurrentPlaylistSongsQueued)
             case let album as ISMSAlbum:
                 let artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
-                _database.queueAllSongs(album.albumId, artist: artist)
+                _database.queueAllSongs(album.albumId.stringValue, artist: artist)
             default:
                 break;
         }

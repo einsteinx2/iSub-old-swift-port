@@ -10,7 +10,7 @@
 
 @interface HomeAlbumViewController : CustomUITableViewController <ISMSLoaderDelegate>
 
-@property (nonatomic, strong) SUSQuickAlbumsLoader *loader;
+@property (nonatomic, strong) ISMSQuickAlbumsLoader *loader;
 
 @property (nonatomic, strong) NSMutableArray *listOfAlbums;
 @property (nonatomic, copy) NSString *modifier;

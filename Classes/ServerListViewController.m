@@ -10,9 +10,6 @@
 #import "SubsonicServerEditViewController.h"
 #import "SettingsTabViewController.h"
 #import "HelpTabViewController.h"
-#import "ServerTypeViewController.h"
-#import "UbuntuServerEditViewController.h"
-#import "PMSServerEditViewControllerViewController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "iSub-Swift.h"
@@ -157,15 +154,16 @@
 {
 	viewObjectsS.serverToEdit = nil;
 	
-	ServerTypeViewController *serverTypeViewController = [[ServerTypeViewController alloc] initWithNibName:@"ServerTypeViewController" bundle:nil];
+    SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithNibName:@"SubsonicServerEditViewController" bundle:nil];
+    subsonicServerEditViewController.view.frame = self.view.bounds;
+    subsonicServerEditViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-	if ([serverTypeViewController respondsToSelector:@selector(setModalPresentationStyle:)])
-		serverTypeViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+    [Flurry logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"Subsonic" forKey:@"type"]];
     
-	if (IS_IPAD())
-		[appDelegateS.ipadRootViewController presentViewController:serverTypeViewController animated:YES completion:nil];
-	else
-		[self presentViewController:serverTypeViewController animated:YES completion:nil];
+    if (IS_IPAD())
+        [appDelegateS.ipadRootViewController presentViewController:subsonicServerEditViewController animated:YES completion:nil];
+    else
+        [self presentViewController:subsonicServerEditViewController animated:YES completion:nil];
 }
 
 - (void)saveAction:(id)sender
@@ -181,27 +179,10 @@
 
 - (void)showServerEditScreen
 {
-	if ([viewObjectsS.serverToEdit.type isEqualToString:UBUNTU_ONE])
-	{
-		UbuntuServerEditViewController *ubuntuServerEditViewController = [[UbuntuServerEditViewController alloc] initWithNibName:@"UbuntuServerEditViewController" bundle:nil];
-		if ([ubuntuServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
-			ubuntuServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-		[self presentViewController:ubuntuServerEditViewController animated:YES completion:nil];
-	}
-	else if ([viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC])
-	{
-		SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithNibName:@"SubsonicServerEditViewController" bundle:nil];
-		if ([subsonicServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
-			subsonicServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-		[self presentViewController:subsonicServerEditViewController animated:YES completion:nil];
-	}
-    else if ([viewObjectsS.serverToEdit.type isEqualToString:WAVEBOX])
-    {
-        PMSServerEditViewControllerViewController *pmsServerEditViewController = [[PMSServerEditViewControllerViewController alloc] initWithNibName:@"PMSServerEditViewControllerViewController" bundle:nil];
-		if ([pmsServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
-			pmsServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-		[self presentViewController:pmsServerEditViewController animated:YES completion:nil];
-    }
+    SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithNibName:@"SubsonicServerEditViewController" bundle:nil];
+    if ([subsonicServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
+        subsonicServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+    [self presentViewController:subsonicServerEditViewController animated:YES completion:nil];
 }
 
 - (void)switchServer:(NSNotification*)notification 
@@ -245,20 +226,6 @@
 		
 		// Cancel any caching
 		[streamManagerS removeAllStreams];
-		
-		// Cancel any tab loads
-		if ([SUSAllSongsLoader isLoading])
-		{
-		//DLog(@"detected all songs loading");
-			settingsS.isCancelLoading = YES;
-		}
-		
-		while (settingsS.isCancelLoading)
-		{
-			//NSLog(@"waiting for the load to cancel before continuing");
-			if (!settingsS.isCancelLoading)
-				break;
-		}
 		
 		// Stop any playing song and remove old tab bar controller from window
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
@@ -384,19 +351,11 @@
 		self.theNewRedirectionUrl = nil;
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
         
-        if ([viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC] || [viewObjectsS.serverToEdit.type isEqualToString:UBUNTU_ONE])
-        {
-            SUSStatusLoader *statusLoader = [[SUSStatusLoader alloc] initWithDelegate:self];
-            statusLoader.urlString = viewObjectsS.serverToEdit.url;
-            statusLoader.username = viewObjectsS.serverToEdit.username;
-            statusLoader.password = viewObjectsS.serverToEdit.password;
-            [statusLoader startLoad];
-        }
-        else if ([viewObjectsS.serverToEdit.type isEqualToString:WAVEBOX])
-        {
-            PMSLoginLoader *loginLoader = [[PMSLoginLoader alloc] initWithDelegate:self urlString:viewObjectsS.serverToEdit.url username:viewObjectsS.serverToEdit.username password:viewObjectsS.serverToEdit.password];
-            [loginLoader startLoad];
-        }
+        ISMSStatusLoader *statusLoader = [[ISMSStatusLoader alloc] initWithDelegate:self];
+        statusLoader.urlString = viewObjectsS.serverToEdit.url;
+        statusLoader.username = viewObjectsS.serverToEdit.username;
+        statusLoader.password = viewObjectsS.serverToEdit.password;
+        [statusLoader startLoad];
 	}
 }
 
@@ -507,17 +466,8 @@
 	settingsS.password = viewObjectsS.serverToEdit.password;
     settingsS.redirectUrlString = self.theNewRedirectionUrl;
     
-    if (theLoader.type == ISMSLoaderType_Login)
-    {
-        settingsS.sessionId = ((PMSLoginLoader *)theLoader).sessionId;
-        settingsS.isVideoSupported = YES;
-        [databaseS setCurrentMetadataDatabase];
-    }
-    else if (theLoader.type == ISMSLoaderType_Status && [viewObjectsS.serverToEdit.type isEqualToString:SUBSONIC])
-    {
-        settingsS.isVideoSupported = ((SUSStatusLoader *)theLoader).isVideoSupported;
-        settingsS.isNewSearchAPI = ((SUSStatusLoader *)theLoader).isNewSearchAPI;
-    }
+    settingsS.isVideoSupported = ((ISMSStatusLoader *)theLoader).isVideoSupported;
+    settingsS.isNewSearchAPI = ((ISMSStatusLoader *)theLoader).isNewSearchAPI;
 	
 	[self switchServer:nil];
     
