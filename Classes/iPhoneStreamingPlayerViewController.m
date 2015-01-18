@@ -1583,23 +1583,6 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 			[self saveBookmark:text];
 		}
 	}
-	else if([alertView.title isEqualToString:@"Overwrite?"])
-	{
-        NSString *text = [alertView ex2CustomObjectForKey:@"name"];
-		if(buttonIndex == 1)
-		{
-			// Overwrite the bookmark
-			[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
-			{
-				NSUInteger bookmarkId = [db intForQuery:@"SELECT bookmarkId FROM bookmarks WHERE name = ?", text];
-				
-				[db executeUpdate:@"DELETE FROM bookmarks WHERE name = ?", text];
-				[db executeUpdate:[NSString stringWithFormat:@"DROP TABLE IF EXISTS bookmark%lu", (unsigned long)bookmarkId]];
-			}];
-			
-			[self saveBookmark:text];
-		}
-	}
 }
 
 - (IBAction)shuffleButtonToggle:(id)sender
