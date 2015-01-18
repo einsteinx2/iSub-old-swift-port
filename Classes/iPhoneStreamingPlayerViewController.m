@@ -1580,25 +1580,7 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
         NSString *text = [alertView textFieldAtIndex:0].text;
 		if(buttonIndex == 1)
 		{
-			__block BOOL exists;
-			[databaseS.bookmarksDbQueue inDatabase:^(FMDatabase *db)
-			{
-				exists = [db intForQuery:@"SELECT COUNT(*) FROM bookmarks WHERE name = ? LIMIT 1", text];
-			}];
-			
-			// Check if the bookmark exists
-			if (exists)
-			{
-				// Bookmark exists so ask to overwrite
-				UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Overwrite?" message:@"There is already a bookmark with this name. Overwrite it?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-                [myAlertView ex2SetCustomObject:text forKey:@"name"];
-				[myAlertView show];
-			}
-			else
-			{
-				// Bookmark doesn't exist so save it
-				[self saveBookmark:text];
-			}
+			[self saveBookmark:text];
 		}
 	}
 	else if([alertView.title isEqualToString:@"Overwrite?"])
