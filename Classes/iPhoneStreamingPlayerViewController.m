@@ -46,6 +46,11 @@ static const CGFloat kDefaultReflectionOpacity = 0.55;
 #pragma mark -
 #pragma mark Controller Life Cycle
 
+- (BOOL)prefersStatusBarHidden
+{
+    return NO;
+}
+
 - (NSString *)stringFromSeconds:(NSUInteger)seconds
 {
 	if (seconds < 60)

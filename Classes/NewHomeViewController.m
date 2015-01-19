@@ -29,6 +29,11 @@
 @synthesize receivedData, connection;
 @synthesize playerButton, jukeboxButton, searchBar, searchSegment, searchSegmentBackground, searchOverlay, dismissButton, isSearch, quickLabel, shuffleLabel, jukeboxLabel, settingsLabel, chatLabel, playerLabel, coverArtBorder, coverArtView, artistLabel, albumLabel, songLabel;
 
+- (BOOL)prefersStatusBarHidden
+{
+    return NO;
+}
+
 - (BOOL)shouldAutorotate
 {
     if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
@@ -137,8 +142,7 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     DLog(@"y: %@", self.bottomRowLabels.firstObjectSafe);
-
-    
+        
     // Since the values in viewWillRotate would have to be rounded, we need to fix them here
     if (IS_TALL_SCREEN())
     {

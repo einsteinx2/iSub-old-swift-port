@@ -70,6 +70,8 @@
 	</array>
 	<key>UTExportedTypeDeclarations</key>
 	<array/>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
 	<key>UTImportedTypeDeclarations</key>
 	<array/>
 </dict>
