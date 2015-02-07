@@ -103,7 +103,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	// Setup network reachability notifications
 	self.wifiReach = [EX2Reachability reachabilityForLocalWiFi];
 	[self.wifiReach startNotifier];
-	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: EX2ReachabilityNotification_ReachabilityChanged object:nil];
 	[self.wifiReach currentReachabilityStatus];
 	
 	// Check battery state and register for notifications
@@ -1515,10 +1515,6 @@ LOG_LEVEL_ISUB_DEFAULT
         {
             [self playSubsonicVideo:aSong bitrates:settingsS.currentVideoBitrates];
         }
-        else if ([serverType isEqualToString:WAVEBOX])
-        {
-            [self playWaveBoxVideo:aSong bitrates:settingsS.currentVideoBitrates];
-        }
     }
     else
 	{
@@ -1549,29 +1545,6 @@ LOG_LEVEL_ISUB_DEFAULT
     host = [host.lowercaseString hasPrefix:@"https"] ? [NSString stringWithFormat:@"http://localhost:%u%@", self.hlsProxyServer.listeningPort, request.URL.relativePath] : host;
     NSString *urlString = [NSString stringWithFormat:@"%@?%@", host, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
     DLog(@"HLS urlString: %@", urlString);
-    
-    [self createMoviePlayer];
-    
-    [self.moviePlayer stop]; // Doing this to prevent potential crash
-    self.moviePlayer.contentURL = [NSURL URLWithString:urlString];
-    //[moviePlayer prepareToPlay];
-    [self.moviePlayer play];
-}
-
-- (void)playWaveBoxVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates
-{
-    [audioEngineS.player stop];
-    
-    if (!aSong.itemId || !bitrates)
-        return;
-    
-    NSDictionary *parameters = @{ @"id" : aSong.itemId, @"transQuality" : bitrates };
-    NSURLRequest *request = [NSMutableURLRequest requestWithPMSAction:@"transcodehls" parameters:parameters];
-    
-    NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
-    
-    //NSString *urlString = [NSString stringWithFormat:@"%@/rest/hls.m3u8?c=iSub&v=1.8.0&u=%@&p=%@&id=%@", settingsS.urlString, [settingsS.username URLEncodeString], [settingsS.password URLEncodeString], aSong.itemId];
-    DLog(@"urlString: %@", urlString);
     
     [self createMoviePlayer];
     

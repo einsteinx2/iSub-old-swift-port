@@ -288,41 +288,36 @@
 	{
         // Parse the data
         //
-		NSError *error;
-		TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
-		if (!error)
-		{
-			TBXMLElement *root = tbxml.rootXMLElement;
-
-			TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
-			if (error)
-			{
-				// TODO: handle error
-			}
-			else
-			{
-				TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
-				if (playlist)
-				{
-					[databaseS removeServerPlaylistTable:self.md5];
-					[databaseS createServerPlaylistTable:self.md5];
-					
-					TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
-					while (entry != nil)
-					{
-						@autoreleasepool {
-							
-							ISMSSong *aSong = [[ISMSSong alloc] initWithTBXMLElement:entry];
-							[aSong insertIntoServerPlaylistWithPlaylistId:self.md5];
-							
-							// Get the next message
-							entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
-							
-						}
-					}
-				}
-			}
-		}
+        RXMLElement *root = [[RXMLElement alloc] initFromXMLData:self.receivedData];
+        if (![root isValid])
+        {
+            //NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
+            // TODO: Handle this error
+        }
+        else
+        {
+            RXMLElement *error = [root child:@"error"];
+            if ([error isValid])
+            {
+                //NSString *code = [error attribute:@"code"];
+                //NSString *message = [error attribute:@"message"];
+                //[self subsonicErrorCode:[code intValue] message:message];
+                // TODO: Handle this error
+            }
+            else
+            {
+                // TODO: Handle !isValid case
+                if ([[root child:@"playlist"] isValid])
+                {
+                    [databaseS removeServerPlaylistTable:self.md5];
+                    [databaseS createServerPlaylistTable:self.md5];
+                    [root iterate:@"playlist.entry" usingBlock:^(RXMLElement *e) {
+                        ISMSSong *aSong = [[ISMSSong alloc] initWithRXMLElement:e];
+                        [aSong insertIntoServerPlaylistWithPlaylistId:self.md5];
+                    }];
+                }
+            }
+        }
 		
 		self.tableView.scrollEnabled = YES;
 
@@ -354,25 +349,27 @@ static NSString *kName_Error = @"error";
 }
 
 - (void)parseData
-{	
-	// Parse the data
-	//
-	NSError *error;
-    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
-	if (!error)
-	{
-		TBXMLElement *root = tbxml.rootXMLElement;
-
-		TBXMLElement *error = [TBXML childElementNamed:kName_Error parentElement:root];
-		if (error)
-		{
-			NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
-			NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
-			[self subsonicErrorCode:code message:message];
-		}
-	}
-		
-	[viewObjectsS hideLoadingScreen];
+{
+    // Parse the data
+    //
+    RXMLElement *root = [[RXMLElement alloc] initFromXMLData:self.receivedData];
+    if (![root isValid])
+    {
+        NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
+        [self subsonicErrorCode:nil message:error.description];
+    }
+    else
+    {
+        RXMLElement *error = [root child:@"error"];
+        if ([error isValid])
+        {
+            NSString *code = [error attribute:@"code"];
+            NSString *message = [error attribute:@"message"];
+            [self subsonicErrorCode:code message:message];
+        }
+    }
+    
+    [viewObjectsS hideLoadingScreen];
 }
 
 

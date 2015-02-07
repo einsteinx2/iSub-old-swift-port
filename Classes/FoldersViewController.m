@@ -268,8 +268,8 @@
 	[self dataSourceDidFinishLoadingNewData];
 	
 	// Inform the user that the connection failed.
-	CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Error" message:@"There was an error loading the artist list.\n\nCould not create the network request." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert show];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Subsonic Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+    [alert show];
 }
 
 - (void)loadingFinished:(ISMSLoader*)theLoader

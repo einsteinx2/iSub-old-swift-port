@@ -195,50 +195,45 @@
 {	
     // Parse the data
     //
-	NSError *error;
-    TBXML *tbxml = [[TBXML alloc] initWithXMLData:self.receivedData error:&error];
-	if (!error)
-	{
-		TBXMLElement *root = tbxml.rootXMLElement;
-
-		TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
-		if (error)
-		{
-			// TODO: handle error
-		}
-		else
-		{
-			TBXMLElement *playlist = [TBXML childElementNamed:@"playlist" parentElement:root];
-			if (playlist)
-			{
-				NSString *md5 = [serverPlaylist.playlistName md5];
-				[databaseS removeServerPlaylistTable:md5];
-				[databaseS createServerPlaylistTable:md5];
-				
-				TBXMLElement *entry = [TBXML childElementNamed:@"entry" parentElement:playlist];
-				while (entry != nil)
-				{
-					@autoreleasepool {
-						
-						ISMSSong *aSong = [[ISMSSong alloc] initWithTBXMLElement:entry];
-						[aSong insertIntoServerPlaylistWithPlaylistId:md5];
-						if (isDownload)
-						{
-							[aSong addToCacheQueueDbQueue];
-						}
-						else
-						{
-							[aSong addToCurrentPlaylistDbQueue];
-						}
-						
-						// Get the next message
-						entry = [TBXML nextSiblingNamed:@"entry" searchFromElement:entry];
-						
-					}
-				}
-			}
-		}
-	}
+    RXMLElement *root = [[RXMLElement alloc] initFromXMLData:receivedData];
+    if (![root isValid])
+    {
+        //NSError *error = [NSError errorWithISMSCode:ISMSErrorCode_NotXML];
+        // TODO: handle this error
+    }
+    else
+    {
+        RXMLElement *error = [root child:@"error"];
+        if ([error isValid])
+        {
+            //NSString *code = [error attribute:@"code"];
+            //NSString *message = [error attribute:@"message"];
+            // TODO: handle this error
+        }
+        else
+        {
+            // TODO: Handle !isValid case
+            if ([[root child:@"playlist"] isValid])
+            {
+                NSString *md5 = [serverPlaylist.playlistName md5];
+                [databaseS removeServerPlaylistTable:md5];
+                [databaseS createServerPlaylistTable:md5];
+                
+                [root iterate:@"playlist.entry" usingBlock:^(RXMLElement *e) {
+                    ISMSSong *aSong = [[ISMSSong alloc] initWithRXMLElement:e];
+                    [aSong insertIntoServerPlaylistWithPlaylistId:md5];
+                    if (isDownload)
+                    {
+                        [aSong addToCacheQueueDbQueue];
+                    }
+                    else
+                    {
+                        [aSong addToCurrentPlaylistDbQueue];
+                    }
+                }];
+            }
+        }
+    }
 	
 	// Hide the loading screen
 	[viewObjectsS hideLoadingScreen];
