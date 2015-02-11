@@ -138,6 +138,9 @@
 - (void)viewWillAppear:(BOOL)animated 
 {
     [super viewWillAppear:animated];
+    
+    // For some reason this controller needs to do this, but none of the others do :/
+    self.navigationController.navigationBar.translucent = NO;
 	
 	if(musicS.showPlayerIcon)
 	{
