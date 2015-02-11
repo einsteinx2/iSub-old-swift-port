@@ -192,6 +192,7 @@ LOG_LEVEL_ISUB_DEFAULT
         
 		// Setup the tabBarController
 		self.mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
+        self.mainTabBarController.moreNavigationController.navigationBar.translucent = NO;
 		/*// Add the support tab
 		[Crittercism showCrittercism:nil];
 		UIViewController *vc = (UIViewController *)[Crittercism sharedInstance].crittercismViewController;
