@@ -519,6 +519,8 @@
 		{
 			[self.effectDAO deleteCustomPresetForId:self.effectDAO.selectedPresetId];
 			[self updatePresetPicker];
+            [self.presetPicker selectRow:0 inComponent:0 animated:NO];
+            [self pickerView:self.presetPicker didSelectRow:0 inComponent:0];
 		}
 	}
 	else if (alertView.tag == 2)
