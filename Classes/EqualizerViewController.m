@@ -152,6 +152,7 @@
 	[self.savePresetButton addTarget:self action:@selector(promptToSaveCustomPreset) forControlEvents:UIControlEventTouchUpInside];
 	self.savePresetButton.alpha = 0.;
 	self.savePresetButton.enabled = NO;
+    self.savePresetButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	[self.controlsContainer addSubview:self.savePresetButton];
 	
     self.isDeletePresetButtonShowing = NO;
@@ -161,6 +162,7 @@
 	[self.deletePresetButton addTarget:self action:@selector(promptToDeleteCustomPreset) forControlEvents:UIControlEventTouchUpInside];
 	self.deletePresetButton.alpha = 0.;
 	self.deletePresetButton.enabled = NO;
+    self.deletePresetButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	[self.controlsContainer addSubview:self.deletePresetButton];
     
     self.effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
