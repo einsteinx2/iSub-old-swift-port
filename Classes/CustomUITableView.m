@@ -131,8 +131,8 @@
 - (BOOL)isTouchHorizontal:(UITouch *)touch 
 {
     CGPoint currentTouchPosition = [touch locationInView:self];
-    CGFloat xMovement = fabsf(startTouchPosition.x - currentTouchPosition.x);
-    CGFloat yMovement = fabsf(startTouchPosition.y - currentTouchPosition.y);
+    CGFloat xMovement = fabs(startTouchPosition.x - currentTouchPosition.x);
+    CGFloat yMovement = fabs(startTouchPosition.y - currentTouchPosition.y);
     NSLog(@"xMovement: %f  yMovement: %f", xMovement, yMovement);
     
 	return xMovement > yMovement;
@@ -146,8 +146,8 @@
 	if (!self.hasSwiped) 
 	{
 		// Check if this is a full swipe
-		if (fabsf(self.startTouchPosition.x - currentTouchPosition.x) >= ISMSHorizSwipeDragMin 
-			&& fabsf(self.startTouchPosition.y - currentTouchPosition.y) <= ISMSVertSwipeDragMax)
+		if (fabs(self.startTouchPosition.x - currentTouchPosition.x) >= ISMSHorizSwipeDragMin
+			&& fabs(self.startTouchPosition.y - currentTouchPosition.y) <= ISMSVertSwipeDragMax)
 		{			
 			self.hasSwiped = YES;
 			self.scrollEnabled = NO;			
