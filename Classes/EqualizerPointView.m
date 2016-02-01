@@ -7,6 +7,7 @@
 //
 
 #import "EqualizerPointView.h"
+#import "Imports.h"
 
 #define myWidth 30
 #define myHeight 30

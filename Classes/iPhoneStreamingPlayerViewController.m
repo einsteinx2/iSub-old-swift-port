@@ -7,6 +7,7 @@
 //
 
 #import "iPhoneStreamingPlayerViewController.h"
+#import "Imports.h"
 #import "PageControlViewController.h"
 #import <QuartzCore/CoreAnimation.h>
 #import <MediaPlayer/MediaPlayer.h>

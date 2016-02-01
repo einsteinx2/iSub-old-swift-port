@@ -6,7 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@interface GenresViewController : CustomUITableViewController 
+#import "CustomUITableViewController.h"
+
+@interface GenresViewController : CustomUITableViewController
 
 @property (nonatomic) BOOL isNoGenresScreenShowing;
 @property (nonatomic, strong) UIImageView *noGenresScreen;

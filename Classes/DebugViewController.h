@@ -7,8 +7,7 @@
 //
 
 
-@class Song;
-
+@class ISMSSong;
 @interface DebugViewController : UIViewController 
 
 @property (strong) IBOutlet UIProgressView *currentSongProgressView;

@@ -7,6 +7,7 @@
 //
 
 #import "SongInfoPlaylistCustomUITableView.h"
+#import "Imports.h"
 
 @interface NSObject (cell)
 - (void)toggleDelete;

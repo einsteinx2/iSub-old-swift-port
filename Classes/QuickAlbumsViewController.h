@@ -6,6 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "ISMSLoaderDelegate.h"
+
 @interface QuickAlbumsViewController : UIViewController <ISMSLoaderDelegate>
 
 @property (nonatomic, weak) UIViewController *parent;

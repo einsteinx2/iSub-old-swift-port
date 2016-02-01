@@ -7,6 +7,7 @@
 //
 
 #import "EqualizerViewController.h"
+#import "Imports.h"
 #import "EqualizerView.h"
 #import "EqualizerPointView.h"
 #import "EqualizerPathView.h"
@@ -543,7 +544,7 @@
 	settingsS.gainMultiplier = gainValue;
 	audioEngineS.equalizer.gain = gainValue;
 	
-	CGFloat difference = fabsf(gainValue - self.lastGainValue);
+	CGFloat difference = fabs(gainValue - self.lastGainValue);
 	if (difference >= .1 || gainValue == minValue || gainValue == maxValue)
 	{
 		self.gainBoostAmountLabel.text = [NSString stringWithFormat:@"%.1fx", gainValue];

@@ -6,8 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class ServerTypeViewController;
+#import "ISMSLoaderDelegate.h"
 
+@class ServerTypeViewController;
 @interface SubsonicServerEditViewController : UIViewController <ISMSLoaderDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *urlField;

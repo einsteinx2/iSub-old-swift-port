@@ -6,10 +6,9 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-#import "FolderPickerDialog.h"
-#import "NewHomeViewController.h"
+#import "CustomUITableViewController.h"
 
-
+@class FolderPickerDialog;
 @interface ShuffleFolderPickerViewController : CustomUITableViewController 
 
 @property (strong) NSArray *mediaFolders;

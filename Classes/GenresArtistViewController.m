@@ -7,6 +7,7 @@
 //
 
 #import "GenresArtistViewController.h"
+#import "Imports.h"
 #import "GenresAlbumViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"

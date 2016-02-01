@@ -6,8 +6,10 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class SUSNowPlayingDAO;
+#import "CustomUITableViewController.h"
+#import "ISMSLoaderDelegate.h"
 
+@class SUSNowPlayingDAO;
 @interface PlayingViewController : CustomUITableViewController <ISMSLoaderDelegate>
 
 @property (nonatomic) BOOL isNothingPlayingScreenShowing;

@@ -7,6 +7,7 @@
 //
 
 #import "ISMSPlayerViewController.h"
+#import "Imports.h"
 
 @interface ISMSPlayerViewController ()
 

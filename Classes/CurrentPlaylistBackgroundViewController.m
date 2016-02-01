@@ -7,6 +7,7 @@
 //
 
 #import "CurrentPlaylistBackgroundViewController.h"
+#import "Imports.h"
 #import "CurrentPlaylistViewController.h"
 
 @implementation CurrentPlaylistBackgroundViewController

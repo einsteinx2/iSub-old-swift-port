@@ -7,6 +7,7 @@
 //
 
 #import "ViewObjectsSingleton.h"
+#import "Imports.h"
 
 @implementation ViewObjectsSingleton
 

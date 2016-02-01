@@ -7,12 +7,14 @@
 //
 
 #import "iSubAppDelegate.h"
+#import "Imports.h"
+#import "iSub-Swift.h"
 #import "ServerListViewController.h"
 #import <CoreFoundation/CoreFoundation.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
-#include <netinet/in.h> 
-#include <netdb.h>
-#include <arpa/inet.h>
+#import <netinet/in.h>
+#import <netdb.h>
+#import <arpa/inet.h>
 #import "IntroViewController.h"
 #import "SFHFKeychainUtils.h"
 #import "iPadRootViewController.h"
@@ -29,14 +31,13 @@
 #import "ISMSLoaderDelegate.h"
 #import "EX2Reachability.h"
 #import "HockeySDK.h"
-#import "iSub-Swift.h"
 #import "CustomUITabBarController.h"
 #import "NewHomeViewController.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-LOG_LEVEL_ISUB_DEFAULT
+//LOG_LEVEL_ISUB_DEFAULT
 
 @interface iSubAppDelegate() <MFMailComposeViewControllerDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate, ISMSLoaderDelegate>
 @end
@@ -289,7 +290,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	if(!success)
 	{
-		DDLogError(@"Error starting HLS proxy server: %@", error);
+		//DDLogError(@"Error starting HLS proxy server: %@", error);
 	}
 }
 
@@ -443,7 +444,7 @@ LOG_LEVEL_ISUB_DEFAULT
              
              [self enterOfflineModeForce];*/
             
-            DDLogVerbose(@"Loading failed for loading type %i, entering offline mode. Error: %@", theLoader.type, error);
+            //DDLogVerbose(@"Loading failed for loading type %i, entering offline mode. Error: %@", theLoader.type, error);
             
             [self enterOfflineMode];
         }
@@ -949,7 +950,7 @@ LOG_LEVEL_ISUB_DEFAULT
 		//Change over to offline mode
 		if (!settingsS.isOfflineMode)
 		{
-            DDLogVerbose(@"Reachability changed to NotReachable, prompting to go to offline mode");
+            //DDLogVerbose(@"Reachability changed to NotReachable, prompting to go to offline mode");
 			[self enterOfflineMode];
 		}
 	}

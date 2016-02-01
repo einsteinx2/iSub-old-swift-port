@@ -10,10 +10,11 @@
 //
 
 #import "AsynchronousImageView.h"
-#import "PageControlViewController.h"
 #import "AsynchronousImageViewDelegate.h"
+#import "Imports.h"
+#import "PageControlViewController.h"
 
-LOG_LEVEL_ISUB_DEBUG
+//LOG_LEVEL_ISUB_DEBUG
 
 @interface AsynchronousImageView ()
 {
@@ -149,7 +150,7 @@ LOG_LEVEL_ISUB_DEBUG
 
 - (void)loadingFailed:(ISMSLoader*)theLoader withError:(NSError *)error
 {
-    DDLogVerbose(@"[AsynchronousImageView] async cover art loading failed");
+    //DDLogVerbose(@"[AsynchronousImageView] async cover art loading failed");
     
 	[self.activityIndicator removeFromSuperview];
 	self.activityIndicator = nil;
@@ -163,7 +164,7 @@ LOG_LEVEL_ISUB_DEBUG
 
 - (void)loadingFinished:(ISMSLoader*)theLoader
 {
-    DLog(@"[AsynchronousImageView] async cover art loading finished for: %@", self.coverArtId);
+    //DDLogVerbose(@"[AsynchronousImageView] async cover art loading finished for: %@", self.coverArtId);
     
 	[self.activityIndicator removeFromSuperview];
 	self.activityIndicator = nil;

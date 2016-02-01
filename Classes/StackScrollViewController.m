@@ -6,7 +6,11 @@
 //  Copyright 2011 raw engineering . All rights reserved.
 //
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+
 #import "StackScrollViewController.h"
+#import "Imports.h"
 #import <QuartzCore/QuartzCore.h>
 #import "StackContainerView.h"
 
@@ -1097,6 +1101,6 @@ const CGFloat BOUNCE_DISTANCE = 10.0;
 	viewAtLeft2.hidden = NO;
 }
 
-
-
 @end
+
+#pragma clang diagnostic pop

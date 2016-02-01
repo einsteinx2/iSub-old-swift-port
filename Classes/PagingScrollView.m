@@ -7,6 +7,7 @@
 //
 
 #import "PagingScrollView.h"
+#import "Imports.h"
 #import "EqualizerViewController.h"
 
 @implementation PagingScrollView

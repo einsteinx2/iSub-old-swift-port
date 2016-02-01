@@ -7,6 +7,7 @@
 //
 
 #import "EqualizerPathView.h"
+#import "Imports.h"
 
 static CGColorRef strokeColor;
 static CGColorRef fillColorOff;

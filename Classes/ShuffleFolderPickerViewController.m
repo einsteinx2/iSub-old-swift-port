@@ -7,6 +7,8 @@
 //
 
 #import "ShuffleFolderPickerViewController.h"
+#import "FolderPickerDialog.h"
+#import "Imports.h"
 
 @implementation ShuffleFolderPickerViewController
 
@@ -83,7 +85,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSInteger folderId = [[tableView cellForRowAtIndexPath:indexPath] tag];
+	NSInteger folderId = [(UITableViewCell *)[tableView cellForRowAtIndexPath:indexPath] tag];
 	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@(folderId) forKey:@"folderId"];
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:@"performServerShuffle" userInfo:userInfo];

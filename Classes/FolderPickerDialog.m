@@ -42,6 +42,7 @@
  */
 
 #import "FolderPickerDialog.h"
+#import "Imports.h"
 #import "ShuffleFolderPickerViewController.h"
 
 static CGFloat kDDSocialDialogBorderWidth = 10;
@@ -396,7 +397,7 @@ static CGFloat kDDSocialDialogPadding = 10;
         
         if ([self shouldRotateToOrientation:orientation]) {
             if (!showingKeyboard_) {
-                if (UIInterfaceOrientationIsLandscape(orientation)) {
+                if (UIDeviceOrientationIsLandscape(orientation)) {
                     folderPicker_.view.frame = CGRectMake(kDDSocialDialogBorderWidth + 1,
                                                           kDDSocialDialogBorderWidth + titleLabel_.frame.size.height,
                                                           self.frame.size.width - (kDDSocialDialogBorderWidth+1)*2,

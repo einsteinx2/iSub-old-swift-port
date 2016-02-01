@@ -7,6 +7,7 @@
 //
 
 #import "SubsonicServerEditViewController.h"
+#import "Imports.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 

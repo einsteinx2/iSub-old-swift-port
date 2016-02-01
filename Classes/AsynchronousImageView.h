@@ -6,6 +6,8 @@
 //  Copyright 2009 Slava Bushtruk. All rights reserved.
 //
 
+#import "ISMSLoaderDelegate.h"
+
 @protocol AsynchronousImageViewDelegate;
 @class SUSCoverArtDAO;
 @interface AsynchronousImageView : UIImageView <ISMSLoaderDelegate>

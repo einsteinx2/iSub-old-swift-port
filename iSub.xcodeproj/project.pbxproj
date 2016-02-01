@@ -96,12 +96,8 @@
 		530BB65F1A61AA9A00FBC005 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */; };
 		530BB6601A61AA9A00FBC005 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */; };
 		530CE844119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */; };
-		530D20FD16670085009DAF1B /* EX2KitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 530D20FA16670062009DAF1B /* EX2KitResources.bundle */; };
-		530D20FE1667009B009DAF1B /* EX2KitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 530D20FA16670062009DAF1B /* EX2KitResources.bundle */; };
 		530D2100166700B4009DAF1B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
-		530D2101166700C5009DAF1B /* EX2KitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 530D20FA16670062009DAF1B /* EX2KitResources.bundle */; };
 		530D2102166700C7009DAF1B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
-		530D2104166700DC009DAF1B /* EX2KitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 530D20FA16670062009DAF1B /* EX2KitResources.bundle */; };
 		530D2105166700DE009DAF1B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
 		530F63981A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
 		530F63991A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
@@ -1566,54 +1562,12 @@
 			remoteGlobalIDString = 5304A01D168FB35F009B2732;
 			remoteInfo = libSubTests;
 		};
-		530D20F716670062009DAF1B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 53F15ED7162B9F1B00C24FC1;
-			remoteInfo = EX2Kit;
-		};
-		530D20F916670062009DAF1B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 53F15EE9162B9F6800C24FC1;
-			remoteInfo = EX2KitResources;
-		};
-		530D20FB1667007C009DAF1B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 53F15EE8162B9F6800C24FC1;
-			remoteInfo = EX2KitResources;
-		};
-		530D2106166700E9009DAF1B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 53F15EE8162B9F6800C24FC1;
-			remoteInfo = EX2KitResources;
-		};
-		530D2108166700ED009DAF1B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 53F15EE8162B9F6800C24FC1;
-			remoteInfo = EX2KitResources;
-		};
 		530D210A166700F9009DAF1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5374F26A1661C56000529EF3 /* libSub.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 536C947216618FA4005A73C6;
 			remoteInfo = libSub;
-		};
-		530D210C166700F9009DAF1B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 53F15EE8162B9F6800C24FC1;
-			remoteInfo = EX2KitResources;
 		};
 		530D210E166700F9009DAF1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1720,13 +1674,6 @@
 			remoteGlobalIDString = 536C947216618FA4005A73C6;
 			remoteInfo = libSub;
 		};
-		53970B57169233CF00C092BF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5304A20F16901857009B2732;
-			remoteInfo = EX2KitOSX;
-		};
 		53970B5F169233CF00C092BF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5374F26A1661C56000529EF3 /* libSub.xcodeproj */;
@@ -1785,7 +1732,6 @@
 		530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
 		530CE842119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SongInfoPlaylistCustomUITableView.h; sourceTree = "<group>"; };
 		530CE843119B9D9100728ED5 /* SongInfoPlaylistCustomUITableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongInfoPlaylistCustomUITableView.m; sourceTree = "<group>"; };
-		530D20F216670062009DAF1B /* EX2Kit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EX2Kit.xcodeproj; path = Frameworks/libSub/Frameworks/EX2Kit/Project/EX2Kit.xcodeproj; sourceTree = "<group>"; };
 		530F63971A3FC78C006D7666 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
 		5311C32E1A3510A500054941 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		5311C3311A3510F800054941 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
@@ -2472,7 +2418,6 @@
 			isa = PBXGroup;
 			children = (
 				5374F26A1661C56000529EF3 /* libSub.xcodeproj */,
-				530D20F216670062009DAF1B /* EX2Kit.xcodeproj */,
 				536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */,
 				5311C3311A3510F800054941 /* QuickLook.framework */,
 				5311C32E1A3510A500054941 /* AssetsLibrary.framework */,
@@ -2530,16 +2475,6 @@
 				537E9A5414F4CE41006CB0BC /* underPageBackgroundDark@2x.png */,
 			);
 			name = iPad;
-			sourceTree = "<group>";
-		};
-		530D20F316670062009DAF1B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				530D20F816670062009DAF1B /* libEX2Kit.a */,
-				530D20FA16670062009DAF1B /* EX2KitResources.bundle */,
-				53970B58169233CF00C092BF /* EX2KitOSX.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		53159F77156F6DC6001B0268 /* KIF Integration Tests */ = {
@@ -3193,7 +3128,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				530D2107166700E9009DAF1B /* PBXTargetDependency */,
 				5374F29C1661C59200529EF3 /* PBXTargetDependency */,
 				5374F2981661C59200529EF3 /* PBXTargetDependency */,
 				5374F29A1661C59200529EF3 /* PBXTargetDependency */,
@@ -3215,7 +3149,6 @@
 			);
 			dependencies = (
 				530D210B166700F9009DAF1B /* PBXTargetDependency */,
-				530D210D166700F9009DAF1B /* PBXTargetDependency */,
 				530D210F166700F9009DAF1B /* PBXTargetDependency */,
 				530D2111166700F9009DAF1B /* PBXTargetDependency */,
 			);
@@ -3254,7 +3187,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				530D20FC1667007C009DAF1B /* PBXTargetDependency */,
 				5374F28D1661C56E00529EF3 /* PBXTargetDependency */,
 				536C9B861661B96A005A73C6 /* PBXTargetDependency */,
 				536C9B881661B96A005A73C6 /* PBXTargetDependency */,
@@ -3275,7 +3207,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				530D2109166700ED009DAF1B /* PBXTargetDependency */,
 				5374F2941661C57E00529EF3 /* PBXTargetDependency */,
 				5374F2901661C57E00529EF3 /* PBXTargetDependency */,
 				5374F2921661C57E00529EF3 /* PBXTargetDependency */,
@@ -3301,7 +3232,7 @@
 						DevelopmentTeam = 8YEY8R75NJ;
 					};
 					53BC269F139AF0DD00A825F1 = {
-						DevelopmentTeam = 8YEY8R75NJ;
+						DevelopmentTeam = 7596YH3S97;
 					};
 					53DCF3FC13BFEAD3009160F9 = {
 						DevelopmentTeam = 8YEY8R75NJ;
@@ -3322,10 +3253,6 @@
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectReferences = (
-				{
-					ProductGroup = 530D20F316670062009DAF1B /* Products */;
-					ProjectRef = 530D20F216670062009DAF1B /* EX2Kit.xcodeproj */;
-				},
 				{
 					ProductGroup = 536C9B801661B94F005A73C6 /* Products */;
 					ProjectRef = 536C9B7F1661B94F005A73C6 /* HockeySDK.xcodeproj */;
@@ -3354,20 +3281,6 @@
 			remoteRef = 5304A04B168FB555009B2732 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		530D20F816670062009DAF1B /* libEX2Kit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libEX2Kit.a;
-			remoteRef = 530D20F716670062009DAF1B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		530D20FA16670062009DAF1B /* EX2KitResources.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = EX2KitResources.bundle;
-			remoteRef = 530D20F916670062009DAF1B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		5311C32D1A350AFC00054941 /* HockeySDKTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
@@ -3394,13 +3307,6 @@
 			fileType = archive.ar;
 			path = libSub.a;
 			remoteRef = 5374F2811661C56000529EF3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		53970B58169233CF00C092BF /* EX2KitOSX.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = EX2KitOSX.framework;
-			remoteRef = 53970B57169233CF00C092BF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		53970B60169233CF00C092BF /* libSubOSX.framework */ = {
@@ -3701,7 +3607,6 @@
 				5349AD041613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABB16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65ABF16533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
-				530D2101166700C5009DAF1B /* EX2KitResources.bundle in Resources */,
 				530D2102166700C7009DAF1B /* HockeySDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3973,7 +3878,6 @@
 				533C657815ABB952003EAF29 /* NewHomeViewController.xib in Resources */,
 				53B65ABE16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65AC216533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
-				530D2104166700DC009DAF1B /* EX2KitResources.bundle in Resources */,
 				530D2105166700DE009DAF1B /* HockeySDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4272,7 +4176,6 @@
 				53B65ABD16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65AC116533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
 				536C9B9A1661B98B005A73C6 /* HockeySDKResources.bundle in Resources */,
-				530D20FD16670085009DAF1B /* EX2KitResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4564,7 +4467,6 @@
 				5349AD051613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABC16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65AC016533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
-				530D20FE1667009B009DAF1B /* EX2KitResources.bundle in Resources */,
 				530D2100166700B4009DAF1B /* HockeySDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4929,30 +4831,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		530D20FC1667007C009DAF1B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = EX2KitResources;
-			targetProxy = 530D20FB1667007C009DAF1B /* PBXContainerItemProxy */;
-		};
-		530D2107166700E9009DAF1B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = EX2KitResources;
-			targetProxy = 530D2106166700E9009DAF1B /* PBXContainerItemProxy */;
-		};
-		530D2109166700ED009DAF1B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = EX2KitResources;
-			targetProxy = 530D2108166700ED009DAF1B /* PBXContainerItemProxy */;
-		};
 		530D210B166700F9009DAF1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = libSub;
 			targetProxy = 530D210A166700F9009DAF1B /* PBXContainerItemProxy */;
-		};
-		530D210D166700F9009DAF1B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = EX2KitResources;
-			targetProxy = 530D210C166700F9009DAF1B /* PBXContainerItemProxy */;
 		};
 		530D210F166700F9009DAF1B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5555,6 +5437,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -5598,6 +5481,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -5622,7 +5506,7 @@
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = "iSub Beta";
-				PROVISIONING_PROFILE = "86fb1fbe-02aa-4f53-8dbb-612deddfefa6";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "86fb1fbe-02aa-4f53-8dbb-612deddfefa6";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -5641,6 +5525,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;

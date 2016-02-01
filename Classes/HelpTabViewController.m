@@ -7,6 +7,7 @@
 //
 
 #import "HelpTabViewController.h"
+#import "Imports.h"
 
 @implementation HelpTabViewController
 

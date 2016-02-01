@@ -7,6 +7,7 @@
 //
 
 #import "SettingsTabViewController.h"
+#import "Imports.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "iPhoneStreamingPlayerViewController.h"
@@ -530,11 +531,8 @@
 					[viewObjectsS orderMainTabBarController];
 				
 				[databaseS.allAlbumsDbQueue close];
-				databaseS.allAlbumsDbQueue = nil;
 				[databaseS.allSongsDbQueue close];
-				databaseS.allSongsDbQueue = nil;
 				[databaseS.genresDbQueue close];
-				databaseS.genresDbQueue = nil;
 			}
 		}
 		else if (sender == self.disableRotationSwitch)
@@ -753,7 +751,7 @@
                      else if ([[account accounts] count] > 1)
                      {
                          // more than one account, use Chooser
-                         IDTwitterAccountChooserViewController *chooser = [[IDTwitterAccountChooserViewController alloc] initWithRootViewController:nil];
+                         IDTwitterAccountChooserViewController *chooser = [[IDTwitterAccountChooserViewController alloc] initWithRootViewController:self];
                          [chooser setTwitterAccounts:[account accounts]];
                          [chooser setCompletionHandler:^(ACAccount *account)
                           {

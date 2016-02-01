@@ -7,6 +7,7 @@
 //
 
 #import "QuickAlbumsViewController.h"
+#import "Imports.h"
 #import "HomeAlbumViewController.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"

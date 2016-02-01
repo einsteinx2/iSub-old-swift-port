@@ -6,8 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class SUSServerPlaylist;
+#import "CustomUITableViewController.h"
 
+@class SUSServerPlaylist;
 @interface PlaylistSongsViewController : CustomUITableViewController
 
 @property (nonatomic, copy) NSString *md5;

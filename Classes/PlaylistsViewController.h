@@ -6,9 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+#import "CustomUITableViewController.h"
 
 @class BBSimpleConnectionQueue, SUSServerPlaylistsDAO;
-
 @interface PlaylistsViewController : CustomUITableViewController
 
 @end

@@ -6,7 +6,7 @@
 //
 
 #import "OBSlider.h"
-
+#import "Imports.h"
 
 @interface OBSlider ()
 
@@ -120,7 +120,7 @@
         CGFloat trackingOffset = currentLocation.x - previousLocation.x;
         
         // Find the scrubbing speed that curresponds to the touch's vertical offset
-        CGFloat verticalOffset = fabsf(currentLocation.y - self.beganTrackingLocation.y);
+        CGFloat verticalOffset = fabs(currentLocation.y - self.beganTrackingLocation.y);
         NSUInteger scrubbingSpeedChangePosIndex = [self indexOfLowerScrubbingSpeed:self.scrubbingSpeedChangePositions forOffset:verticalOffset];        
         if (scrubbingSpeedChangePosIndex == NSNotFound) {
             scrubbingSpeedChangePosIndex = [self.scrubbingSpeeds count];
@@ -133,7 +133,7 @@
 			((self.beganTrackingLocation.y > currentLocation.y) && (currentLocation.y > previousLocation.y)) )
 		{
             // We are getting closer to the slider, go closer to the real location
-            self.value = self.value + self.scrubbingSpeed * (self.maximumValue - self.minimumValue) * (trackingOffset / trackRect.size.width) + (realPositionValue - self.value) / ( 1 + fabsf(currentLocation.y - self.beganTrackingLocation.y));
+            self.value = self.value + self.scrubbingSpeed * (self.maximumValue - self.minimumValue) * (trackingOffset / trackRect.size.width) + (realPositionValue - self.value) / ( 1 + fabs(currentLocation.y - self.beganTrackingLocation.y));
         } else {
             self.value = self.value + self.scrubbingSpeed * (self.maximumValue - self.minimumValue) * (trackingOffset / trackRect.size.width);
         }

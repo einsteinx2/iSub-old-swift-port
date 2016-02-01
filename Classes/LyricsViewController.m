@@ -7,6 +7,7 @@
 //
 
 #import "LyricsViewController.h"
+#import "Imports.h"
 
 @implementation LyricsViewController
 

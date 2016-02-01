@@ -6,7 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@interface GenresArtistViewController : CustomUITableViewController 
+#import "CustomUITableViewController.h"
+
+@interface GenresArtistViewController : CustomUITableViewController
 
 @property (strong) NSMutableArray *listOfArtists;
 

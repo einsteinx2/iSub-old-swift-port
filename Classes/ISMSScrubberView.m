@@ -7,6 +7,7 @@
 //
 
 #import "ISMSScrubberView.h"
+#import "Imports.h"
 
 @interface ISMSScrubberView ()
 {

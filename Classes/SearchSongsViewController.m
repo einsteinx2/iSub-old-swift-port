@@ -6,8 +6,9 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "iSub-Swift.h"
 #import "SearchSongsViewController.h"
+#import "iSub-Swift.h"
+#import "Imports.h"
 #import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
@@ -152,7 +153,7 @@
 	{
 		cell.textLabel.text = @"Loading more results...";
 		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-		CGFloat y = [self tableView:nil heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]] / 2.;
+		CGFloat y = [self tableView:self.tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]] / 2.;
 		indicator.center = CGPointMake(300, y);
 		indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[cell addSubview:indicator];

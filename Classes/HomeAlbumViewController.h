@@ -6,8 +6,10 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class ISMSArtist, ISMSAlbum;
+#import "CustomUITableViewController.h"
+#import "ISMSLoaderDelegate.h"
 
+@class ISMSArtist, ISMSAlbum, ISMSQuickAlbumsLoader;
 @interface HomeAlbumViewController : CustomUITableViewController <ISMSLoaderDelegate>
 
 @property (nonatomic, strong) ISMSQuickAlbumsLoader *loader;

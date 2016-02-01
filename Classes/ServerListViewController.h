@@ -6,8 +6,10 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-@class SettingsTabViewController, HelpTabViewController, PMSLoginLoader;
+#import "ISMSLoaderDelegate.h"
+#import "CustomUITableViewController.h"
 
+@class SettingsTabViewController, HelpTabViewController, PMSLoginLoader;
 @interface ServerListViewController : CustomUITableViewController <ISMSLoaderDelegate>
 
 @property (nonatomic) BOOL isEditing;
