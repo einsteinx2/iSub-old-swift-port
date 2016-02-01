@@ -187,7 +187,7 @@ public class CustomUITableViewCell : UITableViewCell {
         super.init(frame: frame)
     }
 
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _commonInit()
     }
@@ -206,7 +206,7 @@ public class CustomUITableViewCell : UITableViewCell {
 
     public func showOverlay() {
         if !self.overlayShowing && !self.overlayDisabled {
-            self.overlayView = CellOverlay(tableCell: self)
+            self.overlayView = CellOverlay(coder: self)
             self.contentView.addSubview(self.overlayView!)
             
             if self.showDeleteButton {

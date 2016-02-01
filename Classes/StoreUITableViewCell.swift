@@ -39,7 +39,7 @@ public class StoreUITableViewCell : UITableViewCell
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.titleLabel.frame = CGRectMake(10, 10, 250, 25)
-        self.titleLabel.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleRightMargin
+        self.titleLabel.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleRightMargin]
         self.titleLabel.font = ISMSBoldFont(20)
         self.titleLabel.textColor = UIColor.blackColor()
         self.titleLabel.textAlignment = NSTextAlignment.Left
@@ -62,7 +62,7 @@ public class StoreUITableViewCell : UITableViewCell
         self.contentView.addSubview(self.priceLabel)
     }
 
-    required public init(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

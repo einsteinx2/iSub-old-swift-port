@@ -28,7 +28,7 @@ public func sectionIndexesForItems(items: [ISMSItem]) -> [ISMSSectionIndex] {
         let s = String(c)
         let ix = s.startIndex
         let ix2 = s.endIndex
-        let result = s.rangeOfCharacterFromSet(cset, options: nil, range: ix..<ix2)
+        let result = s.rangeOfCharacterFromSet(cset, options: [], range: ix..<ix2)
         return result != nil
     }
     
@@ -47,12 +47,12 @@ public func sectionIndexesForItems(items: [ISMSItem]) -> [ISMSSectionIndex] {
         return ignoredArticles
     }
     
-    func nameIgnoringArticles(#name: String, #articles: [String]) -> String {
+    func nameIgnoringArticles(name name: String, articles: [String]) -> String {
         if articles.count > 0 {
             for article in articles {
                 let articlePlusSpace = article + " "
                 if name.hasPrefix(articlePlusSpace) {
-                    let index = advance(name.startIndex, countElements(articlePlusSpace))
+                    let index = name.startIndex.advancedBy(countElements(articlePlusSpace))
                     return name.substringFromIndex(index)
                 }
             }
@@ -109,22 +109,22 @@ public func sectionIndexesForItems(items: [ISMSItem]) -> [ISMSSectionIndex] {
 
 // MARK: - Play Songs -
 
-private func _playAll(#songs: [ISMSSong], #shuffle: Bool, #playIndex: Int) {
+private func _playAll(songs songs: [ISMSSong], shuffle: Bool, playIndex: Int) {
     // TODO: Implement
     fatalError("_playAll not implemented yet");
 }
 
-public func playAll(#songs: [ISMSSong], #playIndex: Int) {
+public func playAll(songs songs: [ISMSSong], playIndex: Int) {
     _playAll(songs: songs, shuffle: false, playIndex: playIndex)
 }
 
-public func shuffleAll(#songs: [ISMSSong], #playIndex: Int) {
+public func shuffleAll(songs songs: [ISMSSong], playIndex: Int) {
     _playAll(songs: songs, shuffle: true, playIndex: playIndex)
 }
 
 // MARK: - Strings -
 
-public func pluralizedString(#count: Int, #singularNoun: String) -> String {
+public func pluralizedString(count count: Int, singularNoun: String) -> String {
     var pluralizedString = "\(count) \(singularNoun)"
     if count != 1 {
         pluralizedString += "s"

@@ -75,7 +75,7 @@ public class BookmarksViewController: CustomUITableViewController {
             _isNoBookmarksScreenShowing = true
             
             if _noBookmarksScreen.subviews.count == 0 {
-                _noBookmarksScreen.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleTopMargin | UIViewAutoresizing.FlexibleRightMargin | UIViewAutoresizing.FlexibleBottomMargin
+                _noBookmarksScreen.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleTopMargin, UIViewAutoresizing.FlexibleRightMargin, UIViewAutoresizing.FlexibleBottomMargin]
                 _noBookmarksScreen.frame = CGRectMake(40, 100, 240, 180)
                 _noBookmarksScreen.center = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0)
                 _noBookmarksScreen.image = UIImage(named:"loading-screen-image")
@@ -104,7 +104,7 @@ public class BookmarksViewController: CustomUITableViewController {
                 _headerView.backgroundColor = UIColor(white:0.3, alpha:1.0)
                 
                 _bookmarkCountLabel.frame = CGRectMake(0, 0, 232, 50)
-                _bookmarkCountLabel.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleRightMargin
+                _bookmarkCountLabel.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleRightMargin]
                 _bookmarkCountLabel.backgroundColor = UIColor.clearColor()
                 _bookmarkCountLabel.textColor = UIColor.whiteColor()
                 _bookmarkCountLabel.textAlignment = NSTextAlignment.Center
@@ -117,7 +117,7 @@ public class BookmarksViewController: CustomUITableViewController {
                 _headerView.addSubview(_deleteBookmarksButton)
                 
                 _editBookmarksLabel.frame = CGRectMake(232, 0, 88, 50)
-                _editBookmarksLabel.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleLeftMargin
+                _editBookmarksLabel.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleLeftMargin]
                 _editBookmarksLabel.backgroundColor = UIColor.clearColor()
                 _editBookmarksLabel.textColor = UIColor.whiteColor()
                 _editBookmarksLabel.textAlignment = NSTextAlignment.Center
@@ -131,7 +131,7 @@ public class BookmarksViewController: CustomUITableViewController {
                 _headerView.addSubview(_editBookmarksButton)
                 
                 _deleteBookmarksLabel.frame = CGRectMake(0, 0, 232, 50)
-                _deleteBookmarksLabel.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleRightMargin
+                _deleteBookmarksLabel.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleRightMargin]
                 _deleteBookmarksLabel.backgroundColor = UIColor(red:1, green:0, blue:0, alpha:0.5)
                 _deleteBookmarksLabel.textColor = UIColor.whiteColor()
                 _deleteBookmarksLabel.textAlignment = NSTextAlignment.Center
@@ -352,7 +352,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath:indexPath) as CustomUITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath:indexPath) as! CustomUITableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         cell.overlayDisabled = true
         cell.indexPath = indexPath

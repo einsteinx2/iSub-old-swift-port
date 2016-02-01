@@ -256,7 +256,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     }
     
     private func _loadData(folderId: Int) {
-        println("_loadData called for \(folderId)")
+        print("_loadData called for \(folderId)")
         _viewObjects.isArtistsLoading = true
         _viewObjects.showAlbumLoadingScreen(_appDelegate.window, sender:self)
         
@@ -447,12 +447,12 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     
     private func _createSearchOverlay() {
         _searchOverlay.frame = CGRectMake(0, 0, 480, 480)
-        _searchOverlay.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        _searchOverlay.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         _searchOverlay.backgroundColor = UIColor(white: 0.0, alpha: 0.80)
         _searchOverlay.alpha = 0.0
         self.tableView.tableFooterView = _searchOverlay
         
-        _dismissButton.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        _dismissButton.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         _dismissButton.addTarget(self, action: "a_doneSearching:", forControlEvents: UIControlEvents.TouchUpInside)
         _dismissButton.frame = self.view.bounds
         _dismissButton.enabled = false
@@ -586,7 +586,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     }
     
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as CustomUITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! CustomUITableViewCell
         cell.delegate = self
         
         var folder: ISMSFolder? = nil
@@ -629,7 +629,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         return ""
     }
     
-    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [AnyObject]! {
+    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]! {
         if _searching {
             return nil
         }

@@ -248,7 +248,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     
     // MARK: - Table View Delegate -
     
-    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [AnyObject]! {
+    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]! {
         var indexes: [AnyObject] = []
         
         if let sectionInfo = _sectionInfo? {
@@ -279,7 +279,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row < _dataModel.albumsCount {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifierAlbum, forIndexPath: indexPath) as CustomUITableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifierAlbum, forIndexPath: indexPath) as! CustomUITableViewCell
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             cell.alwaysShowCoverArt = true
             cell.alwaysShowSubtitle = true
@@ -300,7 +300,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
             
             return cell;
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifierSong, forIndexPath: indexPath) as CustomUITableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifierSong, forIndexPath: indexPath) as! CustomUITableViewCell
             cell.alwaysShowSubtitle = true
             cell.accessoryType = UITableViewCellAccessoryType.None
             cell.delegate = self

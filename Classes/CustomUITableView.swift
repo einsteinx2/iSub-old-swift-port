@@ -47,7 +47,7 @@ public class CustomUITableView: UITableView {
         self._setup()
     }
     
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self._setup()
     }
@@ -55,7 +55,7 @@ public class CustomUITableView: UITableView {
     // MARK: - Touch Gestures Interception -
     
     private func _hideAllOverlays(cellToSkip: UITableViewCell?) {
-        for cell in self.visibleCells() as [UITableViewCell] {
+        for cell in self.visibleCells as [UITableViewCell] {
             if let customCell: CustomUITableViewCell = cell as? CustomUITableViewCell {
                 if customCell != cellToSkip {
                     customCell.hideOverlay()
@@ -102,7 +102,7 @@ public class CustomUITableView: UITableView {
         return super.hitTest(point, withEvent: event)
     }
     
-    public override func touchesShouldCancelInContentView(view: UIView!) -> Bool {
+    public override func touchesShouldCancelInContentView(view: UIView) -> Bool {
         return true
     }
     
@@ -215,14 +215,14 @@ public class CustomUITableView: UITableView {
         // Handle tap and hold
         if (_settings.isTapAndHoldEnabled) {
             let indexPath = self.indexPathForRowAtPoint(self._startTouchPosition!)
-            if let indexPath = indexPath? {
+            if let indexPath = indexPath {
                 self._tapAndHoldCell = self.cellForRowAtIndexPath(indexPath)
                 
                 _tapAndHoldTimer = NSTimer.scheduledTimerWithTimeInterval(TapAndHoldDelay, target: self, selector: "_tapAndHoldFired", userInfo: nil, repeats: false);
             }
         }
         
-        super.touchesBegan(touches, withEvent: event)
+        super.touchesBegan(touches as! Set<UITouch>, withEvent: event)
     }
     
     public override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
@@ -230,11 +230,11 @@ public class CustomUITableView: UITableView {
         self._cancelTapAndHold()
         
         // Check for swipe
-        if self._isTouchHorizontal(touches.anyObject()! as UITouch) {
+        if self._isTouchHorizontal(touches.anyObject()! as! UITouch) {
             self._lookForSwipeGestureInTouches(touches, event: event)
         }
         
-        super.touchesMoved(touches, withEvent: event)
+        super.touchesMoved(touches as! Set<UITouch>, withEvent: event)
     }
 
     public override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
@@ -264,7 +264,7 @@ public class CustomUITableView: UITableView {
         }
         self._swiped = false
         
-        super.touchesEnded(touches, withEvent: event)
+        super.touchesEnded(touches as! Set<UITouch>, withEvent: event)
     }
     
     public override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {

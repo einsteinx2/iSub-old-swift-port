@@ -154,7 +154,7 @@ public class ChatViewController : CustomUITableViewController, ISMSLoaderDelegat
         if (!_noChatMessagesScreenShowing) {
             _noChatMessagesScreenShowing = true
             _noChatMessagesScreen = UIImageView()
-            _noChatMessagesScreen.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleBottomMargin | UIViewAutoresizing.FlexibleRightMargin | UIViewAutoresizing.FlexibleTopMargin
+            _noChatMessagesScreen.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleBottomMargin, UIViewAutoresizing.FlexibleRightMargin, UIViewAutoresizing.FlexibleTopMargin]
             _noChatMessagesScreen.frame = CGRectMake(40, 100, 240, 180)
             _noChatMessagesScreen.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2)
             _noChatMessagesScreen.image = UIImage(named: "loading-screen-image")
@@ -216,7 +216,7 @@ extension ChatViewController : ISMSLoaderDelegate {
         self._dataSourceDidFinishLoadingNewData()
         
         if Int32(error.code) == ISMSErrorCode_CouldNotSendChatMessage {
-            _textInput.text = error.userInfo?["test"] as String
+            _textInput.text = error.userInfo["test"] as String
         }
     }
 }
@@ -230,13 +230,13 @@ extension ChatViewController : UITextViewDelegate {
         _chatMessageOverlay = UIView()
         _chatMessageOverlay.frame = IS_IPAD() ? CGRectMake(0, 82, 1024, 1024) : CGRectMake(0, 82, 480, 480)
     
-        _chatMessageOverlay.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+        _chatMessageOverlay.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight];
         _chatMessageOverlay.backgroundColor = UIColor(white: 0, alpha: 0.80)
         _chatMessageOverlay.alpha = 0.0
         self.view.addSubview(_chatMessageOverlay)
     
         _dismissButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
-        _dismissButton.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+        _dismissButton.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight];
         _dismissButton.addTarget(self, action: "a_doneSearching:", forControlEvents: UIControlEvents.TouchUpInside)
         _dismissButton.frame = self.view.bounds;
         _dismissButton.enabled = false
@@ -292,7 +292,7 @@ extension ChatViewController : UITableViewDelegate, UITableViewDataSource {
     }
 
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as ChatUITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! ChatUITableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         let chatMessages: NSArray = _dataModel.chatMessages

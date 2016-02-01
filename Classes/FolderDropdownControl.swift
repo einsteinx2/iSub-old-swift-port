@@ -91,7 +91,7 @@ public class FolderDropdownControlSwift: UIView {
         _commonInit()
     }
 
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _commonInit()
     }
@@ -223,7 +223,7 @@ public class FolderDropdownControlSwift: UIView {
         _selectedFolderId = folderId
         
         if let folders = folders {
-            let folder = filter(folders) { e in e.mediaFolderId == folderId }
+            let folder = folders.filter { e in e.mediaFolderId == folderId }
             if folder.count > 0 {
                 _selectedFolderLabel.text = folder[0].name
                 _dropdownButton.accessibilityLabel = _selectedFolderLabel.text

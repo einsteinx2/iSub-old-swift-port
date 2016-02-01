@@ -93,7 +93,7 @@ public class CellOverlay : UIView {
         _commonInit()
     }
 
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         _commonInit()
     }

@@ -219,7 +219,7 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
     
     // MARK: - Table View Delegate -
     
-    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [AnyObject]! {
+    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]! {
         var titles: [String] = []
         
         if let sectionIndexes = _sectionIndexes {
@@ -279,7 +279,7 @@ public class ItemViewController: CustomUITableViewController, ISMSLoaderDelegate
     }
     
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as CustomUITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! CustomUITableViewCell
         cell.alwaysShowSubtitle = true
         cell.delegate = self
         

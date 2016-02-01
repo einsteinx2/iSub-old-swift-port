@@ -82,7 +82,7 @@ public class ModalAlbumArtViewController: UIViewController, AsynchronousImageVie
         self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
     }
 
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
     }
