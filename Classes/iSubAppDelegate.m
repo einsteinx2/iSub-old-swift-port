@@ -77,7 +77,7 @@
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
     // Set up the window
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    //self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     // Make sure audio engine and cache singletons get loaded
 	[AudioEngine sharedInstance];
