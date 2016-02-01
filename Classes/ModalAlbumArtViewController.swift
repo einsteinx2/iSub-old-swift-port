@@ -60,7 +60,7 @@ public class ModalAlbumArtViewController: UIViewController, AsynchronousImageVie
     
     // MARK: - Life Cycle -
     
-    public override init() {
+    public init() {
         super.init(nibName: "ModalAlbumArtViewController", bundle: nil)
         self.modalPresentationStyle = UIModalPresentationStyle.FormSheet;
     }

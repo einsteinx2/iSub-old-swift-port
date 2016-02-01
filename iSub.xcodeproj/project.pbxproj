@@ -79,9 +79,9 @@
 		530ABE101A4F8D1A005ACE6B /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530ABE0E1A4F8D1A005ACE6B /* BookmarksViewController.swift */; };
 		530ABE111A4F8D1A005ACE6B /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530ABE0E1A4F8D1A005ACE6B /* BookmarksViewController.swift */; };
 		530AD58E116913AC00AD2540 /* now-playing.png in Resources */ = {isa = PBXBuildFile; fileRef = 530AD58D116913AC00AD2540 /* now-playing.png */; };
-		530AEF201A40DA200012CC10 /* CustomUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF1F1A40DA200012CC10 /* CustomUITableViewCell.swift */; };
-		530AEF2D1A40E2C60012CC10 /* CustomUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF1F1A40DA200012CC10 /* CustomUITableViewCell.swift */; };
-		530AEF2E1A40E2C70012CC10 /* CustomUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF1F1A40DA200012CC10 /* CustomUITableViewCell.swift */; };
+		530AEF201A40DA200012CC10 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */; };
+		530AEF2D1A40E2C60012CC10 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */; };
+		530AEF2E1A40E2C70012CC10 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */; };
 		530AEF301A40E7AE0012CC10 /* CellOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */; };
 		530AEF311A40E7AE0012CC10 /* CellOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */; };
 		530AEF321A40E7AE0012CC10 /* CellOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */; };
@@ -1772,7 +1772,7 @@
 		530A5F8C15167CBA0081A83A /* playing-cell-icon-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon-white@2x.png"; path = "Images/Other/playing-cell-icon-white@2x.png"; sourceTree = "<group>"; };
 		530ABE0E1A4F8D1A005ACE6B /* BookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksViewController.swift; sourceTree = "<group>"; };
 		530AD58D116913AC00AD2540 /* now-playing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "now-playing.png"; path = "Images/Other/now-playing.png"; sourceTree = "<group>"; };
-		530AEF1F1A40DA200012CC10 /* CustomUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUITableViewCell.swift; sourceTree = "<group>"; };
+		530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
 		530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellOverlay.swift; sourceTree = "<group>"; };
 		530B416F11B607A200743C09 /* CacheViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CacheViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		530B417011B607A200743C09 /* CacheViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CacheViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -2591,7 +2591,7 @@
 				53500EBF18064EED00D0A490 /* CustomUITableViewController.h */,
 				53500EC018064EED00D0A490 /* CustomUITableViewController.m */,
 				535142641A4664A400674DE2 /* CustomUITableView.swift */,
-				530AEF1F1A40DA200012CC10 /* CustomUITableViewCell.swift */,
+				530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */,
 				530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */,
 				5379DC491219E48800F426CD /* ChatUITableViewCell.swift */,
 				53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */,
@@ -4640,7 +4640,7 @@
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
 				5398F27811DA627500007870 /* HelpTabViewController.m in Sources */,
 				534050FB11E9966C004AEC41 /* LyricsViewController.m in Sources */,
-				530AEF201A40DA200012CC10 /* CustomUITableViewCell.swift in Sources */,
+				530AEF201A40DA200012CC10 /* ItemTableViewCell.swift in Sources */,
 				5379DC4F1219E48800F426CD /* ChatUITableViewCell.swift in Sources */,
 				53BB7ECA121B8D8F00BEE7E8 /* CustomUITextView.m in Sources */,
 				531F166E126FA2E600F524BD /* HomeAlbumViewController.m in Sources */,
@@ -4794,7 +4794,7 @@
 				53BC27D6139AF0DD00A825F1 /* UAApplication.m in Sources */,
 				53BC27D7139AF0DD00A825F1 /* CacheAlbumViewController.m in Sources */,
 				53BC27DD139AF0DD00A825F1 /* GenresAlbumViewController.m in Sources */,
-				530AEF2E1A40E2C70012CC10 /* CustomUITableViewCell.swift in Sources */,
+				530AEF2E1A40E2C70012CC10 /* ItemTableViewCell.swift in Sources */,
 				53BC27DE139AF0DD00A825F1 /* GenresArtistViewController.m in Sources */,
 				D0F7918D19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */,
 				D0EA476419DE41510083CE05 /* ISMSPlayerView.m in Sources */,
@@ -4876,7 +4876,7 @@
 				53DCF53713BFEAD3009160F9 /* UAApplication.m in Sources */,
 				53DCF53813BFEAD3009160F9 /* CacheAlbumViewController.m in Sources */,
 				53DCF53E13BFEAD3009160F9 /* GenresAlbumViewController.m in Sources */,
-				530AEF2D1A40E2C60012CC10 /* CustomUITableViewCell.swift in Sources */,
+				530AEF2D1A40E2C60012CC10 /* ItemTableViewCell.swift in Sources */,
 				53DCF53F13BFEAD3009160F9 /* GenresArtistViewController.m in Sources */,
 				D0F7918C19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */,
 				D0EA476319DE41510083CE05 /* ISMSPlayerView.m in Sources */,

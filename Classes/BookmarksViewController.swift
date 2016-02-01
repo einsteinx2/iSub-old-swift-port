@@ -27,10 +27,10 @@ public class BookmarksViewController: CustomUITableViewController {
     private let _textLabel = UILabel()
     private let _headerView = UIView()
     private let _bookmarkCountLabel = UILabel()
-    private let _deleteBookmarksButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+    private let _deleteBookmarksButton = UIButton(type: .Custom)
     private let _deleteBookmarksLabel = UILabel()
     private let _editBookmarksLabel = UILabel()
-    private let _editBookmarksButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+    private let _editBookmarksButton = UIButton(type: .Custom)
     private var _bookmarkIds = [Int]()
     
     // MARK: - View Lifecycle -
@@ -46,7 +46,7 @@ public class BookmarksViewController: CustomUITableViewController {
     }
     
     public override func customizeTableView(tableView: UITableView!) {
-        tableView.registerClass(CustomUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifier)
+        tableView.registerClass(ItemUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifier)
         
         tableView.separatorColor = UIColor.clearColor()
         tableView.rowHeight = ISMSAlbumCellHeight + ISMSCellHeaderHeight
@@ -75,7 +75,7 @@ public class BookmarksViewController: CustomUITableViewController {
             _isNoBookmarksScreenShowing = true
             
             if _noBookmarksScreen.subviews.count == 0 {
-                _noBookmarksScreen.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleTopMargin, UIViewAutoresizing.FlexibleRightMargin, UIViewAutoresizing.FlexibleBottomMargin]
+                _noBookmarksScreen.autoresizingMask = [.FlexibleLeftMargin, .FlexibleTopMargin, .FlexibleRightMargin, .FlexibleBottomMargin]
                 _noBookmarksScreen.frame = CGRectMake(40, 100, 240, 180)
                 _noBookmarksScreen.center = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0)
                 _noBookmarksScreen.image = UIImage(named:"loading-screen-image")
@@ -104,20 +104,20 @@ public class BookmarksViewController: CustomUITableViewController {
                 _headerView.backgroundColor = UIColor(white:0.3, alpha:1.0)
                 
                 _bookmarkCountLabel.frame = CGRectMake(0, 0, 232, 50)
-                _bookmarkCountLabel.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleRightMargin]
+                _bookmarkCountLabel.autoresizingMask = [.FlexibleWidth, .FlexibleRightMargin]
                 _bookmarkCountLabel.backgroundColor = UIColor.clearColor()
                 _bookmarkCountLabel.textColor = UIColor.whiteColor()
                 _bookmarkCountLabel.textAlignment = NSTextAlignment.Center
                 _bookmarkCountLabel.font = ISMSBoldFont(22)
                 _headerView.addSubview(_bookmarkCountLabel)
                 
-                _deleteBookmarksButton.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleRightMargin
+                _deleteBookmarksButton.autoresizingMask = [.FlexibleWidth, UIViewAutoresizing.FlexibleRightMargin]
                 _deleteBookmarksButton.frame = CGRectMake(0, 0, 232, 50)
                 _deleteBookmarksButton.addTarget(self, action:"_deleteBookmarksAction:", forControlEvents:UIControlEvents.TouchUpInside)
                 _headerView.addSubview(_deleteBookmarksButton)
                 
                 _editBookmarksLabel.frame = CGRectMake(232, 0, 88, 50)
-                _editBookmarksLabel.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleLeftMargin]
+                _editBookmarksLabel.autoresizingMask = [.FlexibleWidth, .FlexibleLeftMargin]
                 _editBookmarksLabel.backgroundColor = UIColor.clearColor()
                 _editBookmarksLabel.textColor = UIColor.whiteColor()
                 _editBookmarksLabel.textAlignment = NSTextAlignment.Center
@@ -125,13 +125,13 @@ public class BookmarksViewController: CustomUITableViewController {
                 _editBookmarksLabel.text = "Edit"
                 _headerView.addSubview(_editBookmarksLabel)
                 
-                _editBookmarksButton.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleLeftMargin
+                _editBookmarksButton.autoresizingMask = [.FlexibleWidth, .FlexibleLeftMargin]
                 _editBookmarksButton.frame = CGRectMake(232, 0, 88, 40)
                 _editBookmarksButton.addTarget(self, action:"_editBookmarksAction:", forControlEvents:UIControlEvents.TouchUpInside)
                 _headerView.addSubview(_editBookmarksButton)
                 
                 _deleteBookmarksLabel.frame = CGRectMake(0, 0, 232, 50)
-                _deleteBookmarksLabel.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleRightMargin]
+                _deleteBookmarksLabel.autoresizingMask = [.FlexibleWidth, .FlexibleRightMargin]
                 _deleteBookmarksLabel.backgroundColor = UIColor(red:1, green:0, blue:0, alpha:0.5)
                 _deleteBookmarksLabel.textColor = UIColor.whiteColor()
                 _deleteBookmarksLabel.textAlignment = NSTextAlignment.Center
@@ -247,7 +247,7 @@ public class BookmarksViewController: CustomUITableViewController {
             // TODO: Stop calling view delegate methods directly
             self.viewWillAppear(false)
         } else {
-            var indexPaths = [AnyObject]()
+            var indexPaths = [NSIndexPath]()
             for index in _multiDeleteList {
                 indexPaths.append(NSIndexPath(forRow:index, inSection:0))
                 
@@ -267,7 +267,7 @@ public class BookmarksViewController: CustomUITableViewController {
     }
 }
 
-extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
+extension BookmarksViewController {
     
     /*public override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
         // Move the bookmark
@@ -352,12 +352,12 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath:indexPath) as! CustomUITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath:indexPath) as! ItemUITableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         cell.overlayDisabled = true
         cell.indexPath = indexPath
         
-        cell.markedForDelete = contains(_multiDeleteList, indexPath.row)
+        cell.markedForDelete = _multiDeleteList.contains(indexPath.row)
         
         // Set up the cell...
         var song: ISMSSong? = nil
@@ -409,7 +409,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
         // See if there's a playlist table for this bookmark
         if _database.bookmarksDbQueue.tableExists("bookmark\(bookmarkId)") {
             // Save the playlist
-            let databaseName = _settings.isOfflineMode ? "offlineCurrentPlaylist.db" : "\(_settings.urlString.md5())currentPlaylist.db"
+            let databaseName = _settings.isOfflineMode ? "offlineCurrentPlaylist.db" : "\(_settings.urlString!.md5())currentPlaylist.db"
             let currTable = _settings.isJukeboxEnabled ? "jukeboxCurrentPlaylist" : "currentPlaylist"
             let shufTable = _settings.isJukeboxEnabled ? "jukeboxShufflePlaylist" : "shufflePlaylist"
             let table = _playlist.isShuffle ? shufTable : currTable
@@ -437,7 +437,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
         // Check if these are old bookmarks and don't have byteOffset saved
         if offsetBytes == 0 && offsetSeconds != 0 {
             // By default, use the server reported bitrate
-            var bitrate = Int(song!.bitRate)
+            var bitrate = Int(song!.bitRate!)
             
             if song!.transcodedSuffix != nil {
                 // This is a transcode, guess the bitrate and byteoffset
@@ -446,7 +446,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
             // Use the bitrate to get byteoffset
-            offsetBytes = BytesForSecondsAtBitrate(offsetSeconds, bitrate)
+            offsetBytes = BytesForSecondsAtBitrate(offsetSeconds, bitrate: bitrate)
         }
         
         if _settings.isJukeboxEnabled {

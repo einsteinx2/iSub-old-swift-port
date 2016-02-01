@@ -1,5 +1,5 @@
 //
-//  CustomUITableViewCell.swift
+//  ItemUITableViewCell.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 12/16/14.
@@ -13,22 +13,22 @@
 import Foundation
 import UIKit
 
-@objc public protocol CustomUITableViewCellDelegate {
-    func tableCellDownloadButtonPressed(cell: CustomUITableViewCell)
-    func tableCellQueueButtonPressed(cell: CustomUITableViewCell)
-    optional func tableCellBlockerButtonPressed(cell: CustomUITableViewCell)
-    optional func tableCellDeleteButtonPressed(cell: CustomUITableViewCell)
-    optional func tableCellDeleteToggled(cell: CustomUITableViewCell, markedForDelete: Bool)
+@objc public protocol ItemUITableViewCellDelegate {
+    func tableCellDownloadButtonPressed(cell: ItemUITableViewCell)
+    func tableCellQueueButtonPressed(cell: ItemUITableViewCell)
+    optional func tableCellBlockerButtonPressed(cell: ItemUITableViewCell)
+    optional func tableCellDeleteButtonPressed(cell: ItemUITableViewCell)
+    optional func tableCellDeleteToggled(cell: ItemUITableViewCell, markedForDelete: Bool)
 }
 
-public class CustomUITableViewCell : UITableViewCell {
+public class ItemUITableViewCell : UITableViewCell {
     
     // Disabled for now until optimized
     let _shouldRepositionLabels = false
     
     let _viewObjects = ViewObjectsSingleton.sharedInstance()
     
-    public weak var delegate: CustomUITableViewCellDelegate?
+    public weak var delegate: ItemUITableViewCellDelegate?
     public var associatedObject: AnyObject?
     
     public var indexShowing: Bool = false
@@ -93,7 +93,7 @@ public class CustomUITableViewCell : UITableViewCell {
     
     public var duration: NSNumber? {
         didSet {
-            if let duration = duration? {
+            if let duration = duration {
                 self._durationLabel.text = NSString.formatTime(duration.doubleValue)
             }
             if _shouldRepositionLabels { _repositionLabels() }
@@ -173,18 +173,9 @@ public class CustomUITableViewCell : UITableViewCell {
         self.contentView.addSubview(self._durationLabel)
     }
     
-    public override init() {
-        super.init()
-        _commonInit()
-    }
-    
     public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         _commonInit()
-    }
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -206,7 +197,7 @@ public class CustomUITableViewCell : UITableViewCell {
 
     public func showOverlay() {
         if !self.overlayShowing && !self.overlayDisabled {
-            self.overlayView = CellOverlay(coder: self)
+            self.overlayView = CellOverlay(tableCell: self)
             self.contentView.addSubview(self.overlayView!)
             
             if self.showDeleteButton {
@@ -276,7 +267,7 @@ public class CustomUITableViewCell : UITableViewCell {
     }
     
     public func toggleDelete() {
-        if let indexPath = self.indexPath? {
+        if let _ = self.indexPath {
             self.markedForDelete = !self.markedForDelete
             
             self.delegate?.tableCellDeleteToggled?(self, markedForDelete: self.markedForDelete)
@@ -313,7 +304,7 @@ public class CustomUITableViewCell : UITableViewCell {
             scrollViewFrame.size.width -= 27.0
         }
         
-        if let headerTitle = self.headerTitle {
+        if let _ = self.headerTitle {
             self._headerTitleLabel.hidden = false
             
             let height: CGFloat = 20.0
@@ -325,7 +316,7 @@ public class CustomUITableViewCell : UITableViewCell {
         
         let scrollViewHeight = scrollViewFrame.size.height
         
-        if let title = self.title? {
+        if let _ = self.title {
             self._titleLabel.hidden = false
             
             let height = self.subTitle == nil ? scrollViewHeight : scrollViewHeight * 0.60
@@ -352,7 +343,7 @@ public class CustomUITableViewCell : UITableViewCell {
             scrollViewFrame.size.width -= scrollViewHeight
             scrollViewFrame.origin.x += scrollViewHeight
         } else {
-            if let trackNumber = self.trackNumber? {
+            if let _ = self.trackNumber {
                 self._trackNumberLabel.hidden = self.playing
                 self._nowPlayingImageView.hidden = !self.playing
                 let width: CGFloat = 30.0
@@ -364,7 +355,7 @@ public class CustomUITableViewCell : UITableViewCell {
             }
         }
         
-        if let duration = self.duration? {
+        if let _ = self.duration {
             self._durationLabel.hidden = false
             let width: CGFloat = 45.0
             self._durationLabel.frame = CGRectMake(cellWidth - width - (spacer * 3),
@@ -378,7 +369,7 @@ public class CustomUITableViewCell : UITableViewCell {
     }
 }
 
-extension CustomUITableViewCell : CellOverlayDelegate {
+extension ItemUITableViewCell : CellOverlayDelegate {
     
     public func cellOverlayDownloadButtonPressed(overlay: CellOverlay) {
         self.hideOverlay()

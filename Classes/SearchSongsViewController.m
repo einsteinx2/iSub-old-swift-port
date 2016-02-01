@@ -15,7 +15,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
 
-@interface SearchSongsViewController() <CustomUITableViewCellDelegate>
+@interface SearchSongsViewController() <ItemUITableViewCellDelegate>
 
 @end
 
@@ -183,10 +183,10 @@
 		if (indexPath.row < self.listOfArtists.count)
 		{
 			static NSString *cellIdentifier = @"ArtistCell";
-			CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 			if (!cell)
 			{
-				cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+				cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
                 cell.delegate = self;
 			}
 						
@@ -207,10 +207,10 @@
 		if (indexPath.row < self.listOfAlbums.count)
 		{
 			static NSString *cellIdentifier = @"AlbumCell";
-			CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 			if (!cell)
 			{
-				cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+				cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
                 cell.delegate = self;
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			}
@@ -237,10 +237,10 @@
 		if (indexPath.row < self.listOfSongs.count)
 		{
 			static NSString *cellIdentifier = @"SearchSongCell";
-			CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+			ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 			if (!cell)
 			{
-				cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+				cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
                 cell.delegate = self;
 			}
 			
@@ -456,9 +456,9 @@
 	self.connection = nil;
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSArtist class]])
@@ -481,7 +481,7 @@
     [cell.overlayView disableDownloadButton];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSArtist class]])

@@ -207,18 +207,18 @@
 {
     for (UITableViewCell *cell in self.tableView.visibleCells)
     {
-        if ([cell isKindOfClass:[CustomUITableViewCell class]])
+        if ([cell isKindOfClass:[ItemUITableViewCell class]])
         {
-            [(CustomUITableViewCell *)cell setPlaying:NO];
+            [(ItemUITableViewCell *)cell setPlaying:NO];
         }
     }
     
     if (indexPath)
     {
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        if ([cell isKindOfClass:[CustomUITableViewCell class]])
+        if ([cell isKindOfClass:[ItemUITableViewCell class]])
         {
-            [(CustomUITableViewCell *)cell setPlaying:YES];
+            [(ItemUITableViewCell *)cell setPlaying:YES];
         }
     }
 }

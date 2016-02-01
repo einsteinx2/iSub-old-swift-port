@@ -18,7 +18,7 @@ public class StoreViewController : CustomUITableViewController {
     private let _reuseIdentifier = "Store Cell"
     
     private let _storeManager: MKStoreManager = MKStoreManager.sharedManager()
-    private var _storeItems: [AnyObject] = MKStoreManager.sharedManager().purchasableObjects
+    private var _storeItems: [SKProduct] = MKStoreManager.sharedManager().purchasableObjects
     private var _checkProductsTimer: NSTimer?
     
     // MARK: - Rotation -
@@ -94,13 +94,14 @@ public class StoreViewController : CustomUITableViewController {
         var purchased: [SKProduct] = []
         
         for item in _storeItems {
-            if let product = item as? SKProduct {
-                var array = MKStoreManager.isFeaturePurchased(product.productIdentifier) ? purchased : sorted
-                array.append(product)
+            if MKStoreManager.isFeaturePurchased(item.productIdentifier) {
+                purchased.append(item)
+            } else {
+                sorted.append(item)
             }
         }
         
-        sorted.extend(purchased)
+        sorted.appendContentsOf(purchased)
         
         _storeItems = sorted
     }
@@ -108,7 +109,7 @@ public class StoreViewController : CustomUITableViewController {
 
 // MARK: - Table view data source
 
-extension StoreViewController : UITableViewDelegate, UITableViewDataSource {
+extension StoreViewController {
     
     public override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return indexPath.row == 0 ? 75.0 : 150.0
@@ -131,7 +132,7 @@ extension StoreViewController : UITableViewDelegate, UITableViewDataSource {
         } else {
             let adjustedRow = indexPath.row - 1
             let cell = StoreUITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "NoReuse")
-            cell.product = _storeItems[adjustedRow] as? SKProduct
+            cell.product = _storeItems[adjustedRow]
             
             return cell
         }

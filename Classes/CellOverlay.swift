@@ -19,9 +19,9 @@ public class CellOverlay : UIView {
     
     let _settings = SavedSettings.sharedInstance()
     
-    let _inputBlocker = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
-    let _downloadButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
-    let _queueButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+    let _inputBlocker = UIButton(type: .Custom)
+    let _downloadButton = UIButton(type: .Custom)
+    let _queueButton = UIButton(type: .Custom)
     
     public weak var delegate: CellOverlayDelegate?
     
@@ -32,13 +32,13 @@ public class CellOverlay : UIView {
     
         self.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         
-        self._inputBlocker.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        self._inputBlocker.autoresizingMask = [.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         self._inputBlocker.addTarget(self, action: "a_blockerButton:", forControlEvents: UIControlEvents.TouchUpInside)
         self._inputBlocker.frame = self.frame
         self._inputBlocker.userInteractionEnabled = false
         self.addSubview(self._inputBlocker)
         
-        self._downloadButton.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
+        self._downloadButton.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin]
         self._downloadButton.alpha = 1.0
         self._downloadButton.addTarget(self, action: "a_downloadButton:", forControlEvents: UIControlEvents.TouchUpInside)
         self._downloadButton.userInteractionEnabled = false
@@ -57,7 +57,7 @@ public class CellOverlay : UIView {
             self._downloadButton.enabled = false
         }
         
-        self._queueButton.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
+        self._queueButton.autoresizingMask = [.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         self._queueButton.alpha = 1.0
         self._queueButton.addTarget(self, action: "a_queueButton:", forControlEvents: UIControlEvents.TouchUpInside)
         self._queueButton.userInteractionEnabled = false
@@ -77,8 +77,8 @@ public class CellOverlay : UIView {
         }
     }
     
-    public override init() {
-        super.init()
+    public init() {
+        super.init(frame: CGRectZero)
         _commonInit()
     }
     

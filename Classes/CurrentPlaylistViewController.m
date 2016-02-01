@@ -11,7 +11,7 @@
 #import "NSMutableURLRequest+PMS.h"
 #import "iSub-Swift.h"
 
-@interface CurrentPlaylistViewController() <CustomUITableViewCellDelegate>
+@interface CurrentPlaylistViewController() <ItemUITableViewCellDelegate>
 {
     NSMutableArray *_multiDeleteList;
 }
@@ -643,10 +643,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
 	static NSString *cellIdentifier = @"CurrentPlaylistSongSmallCell";
-    CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) 
 	{
-        cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.delegate = self;
     }
 	
@@ -946,9 +946,9 @@ static NSString *kName_Error = @"error";
 	[viewObjectsS hideLoadingScreen];
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])
@@ -959,7 +959,7 @@ static NSString *kName_Error = @"error";
     [cell.overlayView disableDownloadButton];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])

@@ -13,7 +13,7 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iSub-Swift.h"
 
-@interface GenresViewController() <CustomUITableViewCellDelegate>
+@interface GenresViewController() <ItemUITableViewCellDelegate>
 @end
 
 @implementation GenresViewController
@@ -122,10 +122,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	static NSString *cellIdentifier = @"GenresGenreCell";
-	CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	}
 
     // Configure the cell...
@@ -213,9 +213,9 @@
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
     [viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
     [self performSelector:@selector(downloadAllSongs:) withObject:cell afterDelay:0.05];
@@ -223,7 +223,7 @@
     [cell.overlayView disableDownloadButton];
 }
 
-- (void)downloadAllSongs:(CustomUITableViewCell *)cell
+- (void)downloadAllSongs:(ItemUITableViewCell *)cell
 {
     FMDatabaseQueue *dbQueue;
     NSString *query;
@@ -267,13 +267,13 @@
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     [viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
     [self performSelector:@selector(queueAllSongs:) withObject:cell afterDelay:0.05];
 }
 
-- (void)queueAllSongs:(CustomUITableViewCell *)cell
+- (void)queueAllSongs:(ItemUITableViewCell *)cell
 {
     FMDatabaseQueue *dbQueue;
     NSString *query;

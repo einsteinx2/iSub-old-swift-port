@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class FoldersViewController: CustomUITableViewController, UISearchBarDelegate, FolderDropdownControlDelegateSwift, CustomUITableViewCellDelegate {
+public class FoldersViewController: CustomUITableViewController, UISearchBarDelegate, FolderDropdownControlDelegateSwift, ItemUITableViewCellDelegate {
     
     private lazy var _appDelegate = iSubAppDelegate.sharedInstance()
     private let _settings = SavedSettings.sharedInstance()
@@ -35,9 +35,9 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     private let _searchBar: UISearchBar = UISearchBar()
     private let _countLabel: UILabel = UILabel()
     private let _reloadTimeLabel: UILabel = UILabel()
-    private let _blockerButton: UIButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+    private let _blockerButton: UIButton = UIButton(type: .Custom)
     private let _searchOverlay: UIView = UIView()
-    private let _dismissButton: UIButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+    private let _dismissButton: UIButton = UIButton(type: .Custom)
     private let _dropdown: FolderDropdownControlSwift = FolderDropdownControlSwift(frame: CGRectZero)
     
     private lazy var _reloadTimeFormatter: NSDateFormatter = {
@@ -49,8 +49,8 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     
     // MARK: - Lifecycle -
     
-    public override init() {
-        super.init()
+    public init() {
+        super.init(nibName: "FoldersViewController", bundle: nil)
     }
     
     public override init(style: UITableViewStyle) {
@@ -61,7 +61,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -94,7 +94,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     }
     
     override public func customizeTableView(tableView: UITableView!) {
-        tableView.registerClass(CustomUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifier)
+        tableView.registerClass(ItemUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifier)
         tableView.rowHeight = ISMSNormalize(ISMSArtistCellHeight);
     }
     
@@ -112,7 +112,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     public override func didPullToRefresh() {
         if !_reloading {
             _reloading = true
-            let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId)
+            let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId!)
             _loadData(selectedFolderId)
         }
     }
@@ -124,15 +124,15 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     
     private func _initialLoad() {
         // Load data if it's not cached yet and we're not processing the Artists/Albums/Songs tabs
-        let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId)
+        let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId!)
         if _mediaFolders.count <= 1 {
             _updateMediaFolders()
         } else {
             if selectedFolderId == -1 {
-                _folders = ISMSMediaFolder.allRootFolders() as? [ISMSFolder]
+                _folders = ISMSMediaFolder.allRootFolders()
             } else {
                 let mediaFolder = ISMSMediaFolder(mediaFolderId: selectedFolderId)
-                _folders = mediaFolder.rootFolders() as? [ISMSFolder]
+                _folders = mediaFolder?.rootFolders()
             }
             
             if !_countShowing {
@@ -204,7 +204,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         _dropdown.frame = CGRectMake(50, 53, 220, 30)
         _dropdown.delegate = self
         _dropdown.folders = _mediaFolders
-        let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId)
+        let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId!)
         _dropdown.selectFolderWithId(selectedFolderId)
         
         _headerView.addSubview(_dropdown)
@@ -214,7 +214,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         // Special handling for voice over users
         if UIAccessibilityIsVoiceOverRunning() {
             // Add a refresh button
-            let voiceOverRefresh = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+            let voiceOverRefresh = UIButton(type: UIButtonType.Custom)
             voiceOverRefresh.frame = CGRectMake(0, 0, 50, 50)
             voiceOverRefresh.addTarget(self, action: "a_reload:", forControlEvents: UIControlEvents.TouchUpInside)
             voiceOverRefresh.accessibilityLabel = "Reload Folders"
@@ -229,13 +229,13 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     }
     
     private func _updateMediaFolders() {
-        let loader = ISMSMediaFoldersLoader(callbackBlock: { (success: Bool, error: NSError!, loader: ISMSLoader!) -> Void in
-            let loader = loader as ISMSMediaFoldersLoader
+        let loader = ISMSMediaFoldersLoader(callbackBlock: { (success: Bool, error: NSError?, loader: ISMSLoader) -> Void in
+            let loader = loader as! ISMSMediaFoldersLoader
             if success {
                 loader.persistModels()
                 self._mediaFolders = ISMSMediaFolder.allMediaFoldersIncludingAllFolders() as [ISMSMediaFolder]
                 self._dropdown.folders = self._mediaFolders
-                let selectedFolderId = self._settings.rootFoldersSelectedFolderId == nil ? -1 : Int(self._settings.rootFoldersSelectedFolderId)
+                let selectedFolderId = self._settings.rootFoldersSelectedFolderId == nil ? -1 : Int(self._settings.rootFoldersSelectedFolderId!)
                 self._dropdown.selectFolderWithId(selectedFolderId)
                 self._loadData(selectedFolderId)
             } else {
@@ -243,7 +243,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
             }
         })
         
-        loader.startLoad()
+        loader?.startLoad()
     }
     
     public func cancelLoad() {
@@ -263,32 +263,32 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         var i = _mediaFolders.count
         var allFolders: [ISMSFolder] = []
 
-        println("i = \(i)  mediaFolders = \(_mediaFolders)")
+        print("i = \(i)  mediaFolders = \(_mediaFolders)")
         if _mediaFolders.count <= 1 {
-            println("_mediaFolders.count = \(_mediaFolders.count)")
+            print("_mediaFolders.count = \(_mediaFolders.count)")
         }
         
         for mediaFolder in _mediaFolders {
             // Don't load the "All Folders" placeholder
             if mediaFolder.mediaFolderId == -1 {
                 i--
-                println("mediaFolderId = \(mediaFolder.mediaFolderId) so skipping, i = \(i)")
+                print("mediaFolderId = \(mediaFolder.mediaFolderId) so skipping, i = \(i)")
                 continue
             }
             
             // Only process if folderId == -1 (meaning load all folders) or folderId matches this media folder
             if folderId != -1 && folderId != mediaFolder.mediaFolderId {
                 i--
-                println("mediaFolderId = \(mediaFolder.mediaFolderId) and folderId = \(folderId) so skipping, i = \(i)")
+                print("mediaFolderId = \(mediaFolder.mediaFolderId) and folderId = \(folderId) so skipping, i = \(i)")
                 continue
             }
 
             let loader = ISMSNewRootFoldersLoader { (success: Bool, error: NSError?, theLoader: ISMSLoader!) -> Void in
                 if success {
-                    let loader = theLoader as ISMSNewRootFoldersLoader
+                    let loader = theLoader as! ISMSNewRootFoldersLoader
                     loader.persistModels()
-                    if let folders = loader.folders as? [ISMSFolder] {
-                        allFolders.extend(folders)
+                    if let folders = loader.folders {
+                        allFolders.appendContentsOf(folders)
                     }
                 }
 
@@ -320,10 +320,14 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
                 let index = (self._loaders as NSArray).indexOfObject(theLoader)
                 self._loaders.removeAtIndex(index)
             }
-            loader.mediaFolderId = mediaFolder.mediaFolderId
-            _loaders.append(loader)
-            loader.startLoad()
-            println("started load for mediaFolderId \(mediaFolder.mediaFolderId)")
+            
+            if let loader = loader {
+                loader.mediaFolderId = mediaFolder.mediaFolderId
+                _loaders.append(loader)
+                loader.startLoad()
+            }
+            
+            print("started load for mediaFolderId \(mediaFolder.mediaFolderId)")
         }
     }
 //    
@@ -406,13 +410,13 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         // Reload the data
         _searching = false
         if folderId == -1 {
-            _folders = ISMSMediaFolder.allRootFolders() as? [ISMSFolder]
+            _folders = ISMSMediaFolder.allRootFolders()
             _updateCount()
             _sectionIndexes = sectionIndexesForItems(_folders!)
             self.tableView.reloadData()
         } else {
             if let mediaFolder = ISMSMediaFolder(mediaFolderId: folderId) {
-                _folders = mediaFolder.rootFolders() as? [ISMSFolder]
+                _folders = mediaFolder.rootFolders()
                 
                 if _folders?.count > 0 {
                     _updateCount()
@@ -439,7 +443,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     // MARK: - Actions -
     
     private func a_reload(sender: UIButton) {
-        let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId)
+        let selectedFolderId = _settings.rootFoldersSelectedFolderId == nil ? -1 : Int(_settings.rootFoldersSelectedFolderId!)
         _loadData(selectedFolderId)
     }
     
@@ -493,7 +497,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         _dropdown.closeDropdownFast()
         self.tableView.setContentOffset(CGPointMake(0, 86), animated: true)
         
-        if countElements(searchBar.text) == 0 {
+        if searchBar.text?.characters.count == 0 {
             _createSearchOverlay()
             
             _letUserSelectRow = false
@@ -505,15 +509,16 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     }
     
     public func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        if countElements(searchText) > 0 {
+        if searchText.characters.count > 0 {
             self._hideSearchOverlay()
             
             _letUserSelectRow = true
             self.tableView.scrollEnabled = true
             
-            let searchTerm = _searchBar.text.lowercaseString
-            _filteredFolders = _folders?.filter {
-                $0.name.lowercaseString.rangeOfString(searchTerm) != nil
+            if let searchTerm = _searchBar.text?.lowercaseString {
+                _filteredFolders = _folders?.filter {
+                    $0.name?.lowercaseString.rangeOfString(searchTerm) != nil
+                }
             }
             
             self.tableView.reloadData()
@@ -586,7 +591,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
     }
     
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! CustomUITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! ItemUITableViewCell
         cell.delegate = self
         
         var folder: ISMSFolder? = nil
@@ -629,7 +634,7 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         return ""
     }
     
-    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]! {
+    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
         if _searching {
             return nil
         }
@@ -697,19 +702,19 @@ public class FoldersViewController: CustomUITableViewController, UISearchBarDele
         }
     }
     
-    // MARK: - CustomUITableViewCell Delegate -
+    // MARK: - ItemUITableViewCell Delegate -
     
-    public func tableCellDownloadButtonPressed(cell: CustomUITableViewCell) {
-        if let artist = cell.associatedObject as? ISMSArtist {
-            _database.downloadAllSongs(artist.artistId.stringValue, artist: artist)
+    public func tableCellDownloadButtonPressed(cell: ItemUITableViewCell) {
+        if let artist = cell.associatedObject as? ISMSArtist, let artistId = artist.artistId {
+            _database.downloadAllSongs(artistId.stringValue, artist: artist)
         }
         
         cell.overlayView?.disableDownloadButton()
     }
     
-    public func tableCellQueueButtonPressed(cell: CustomUITableViewCell) {
-        if let artist = cell.associatedObject as? ISMSArtist {
-            _database.queueAllSongs(artist.artistId.stringValue, artist:artist)
+    public func tableCellQueueButtonPressed(cell: ItemUITableViewCell) {
+        if let artist = cell.associatedObject as? ISMSArtist, let artistId = artist.artistId {
+            _database.queueAllSongs(artistId.stringValue, artist:artist)
         }
     }
 }

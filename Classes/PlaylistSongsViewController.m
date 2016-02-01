@@ -14,7 +14,7 @@
 #import "NSMutableURLRequest+PMS.h"
 #import "iSub-Swift.h"
 
-@interface PlaylistSongsViewController() <CustomUITableViewCellDelegate>
+@interface PlaylistSongsViewController() <ItemUITableViewCellDelegate>
 {
     BOOL _reloading;
     NSUInteger _playlistCount;
@@ -380,10 +380,10 @@ static NSString *kName_Error = @"error";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellIdentifier = @"PlaylistSongCell";
-	CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+	ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (!cell)
 	{
-		cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+		cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.alwaysShowCoverArt = YES;
         cell.delegate = self;
 	}
@@ -475,9 +475,9 @@ static NSString *kName_Error = @"error";
         [self showPlayer];
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
     ISMSSong *song = cell.associatedObject;
     [song addToCacheQueueDbQueue];
@@ -485,7 +485,7 @@ static NSString *kName_Error = @"error";
     [[cell overlayView] disableDownloadButton];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     ISMSSong *song = cell.associatedObject;
     [song addToCurrentPlaylistDbQueue];

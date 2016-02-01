@@ -15,7 +15,7 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
 
-@interface PlaylistsViewController() <EX2SimpleConnectionQueueDelegate, ISMSLoaderDelegate, CustomUITableViewCellDelegate>
+@interface PlaylistsViewController() <EX2SimpleConnectionQueueDelegate, ISMSLoaderDelegate, ItemUITableViewCellDelegate>
 {
     SUSServerPlaylistsDAO *_serverPlaylistsDataModel;
     
@@ -1533,10 +1533,10 @@ static NSString *kName_Error = @"error";
 	if (_segmentedControl.selectedSegmentIndex == 0)
 	{
 		static NSString *cellIdentifier = @"CurrentPlaylistSongCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             cell.delegate = self;
             cell.alwaysShowCoverArt = YES;
             cell.alwaysShowSubtitle = YES;
@@ -1580,10 +1580,10 @@ static NSString *kName_Error = @"error";
 	else if (_segmentedControl.selectedSegmentIndex == 1)
 	{
 		static NSString *cellIdentifier = @"LocalPlaylistsCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             cell.delegate = self;
 		}
 		cell.indexPath = indexPath;
@@ -1607,10 +1607,10 @@ static NSString *kName_Error = @"error";
 	else if (_segmentedControl.selectedSegmentIndex == 2)
 	{
 		static NSString *cellIdentifier = @"PlaylistsCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.delegate = self;
 		}
@@ -1727,9 +1727,9 @@ static NSString *kName_Error = @"error";
 	}
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])
@@ -1778,7 +1778,7 @@ static NSString *kName_Error = @"error";
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])
@@ -1826,7 +1826,7 @@ static NSString *kName_Error = @"error";
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)tableCellDeleteToggled:(CustomUITableViewCell *)cell markedForDelete:(BOOL)markedForDelete
+- (void)tableCellDeleteToggled:(ItemUITableViewCell *)cell markedForDelete:(BOOL)markedForDelete
 {
     NSObject *object = @(cell.indexPath.row);
     if (markedForDelete)

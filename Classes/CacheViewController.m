@@ -15,7 +15,7 @@
 
 // TODO: Finish cleanup
 
-@interface CacheViewController() <CustomUITableViewCellDelegate>
+@interface CacheViewController() <ItemUITableViewCellDelegate>
 {
     UIView *_headerView2;
     UISegmentedControl *_segmentedControl;
@@ -1194,10 +1194,10 @@
 	if (_segmentedControl.selectedSegmentIndex == 0)
 	{
 		static NSString *cellIdentifier = @"CacheArtistCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                      reuseIdentifier:cellIdentifier];
             cell.delegate = self;
             cell.showDeleteButton = YES;
@@ -1220,10 +1220,10 @@
 	else
 	{
 		static NSString *cellIdentifier = @"CacheQueueCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                      reuseIdentifier:cellIdentifier];
             cell.delegate = self;
             cell.showDeleteButton = YES;
@@ -1382,14 +1382,14 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 	}
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
     
 }
 
-- (void)tableCellDeleteButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDeleteButtonPressed:(ItemUITableViewCell *)cell
 {
     if (_segmentedControl.selectedSegmentIndex == 0)
     {
@@ -1441,7 +1441,7 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     if (_segmentedControl.selectedSegmentIndex == 0)
     {
@@ -1486,7 +1486,7 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)tableCellDeleteToggled:(CustomUITableViewCell *)cell markedForDelete:(BOOL)markedForDelete
+- (void)tableCellDeleteToggled:(ItemUITableViewCell *)cell markedForDelete:(BOOL)markedForDelete
 {
     if (_segmentedControl.selectedSegmentIndex == 0)
     {

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class ChatViewController : CustomUITableViewController, ISMSLoaderDelegate {
+public class ChatViewController : CustomUITableViewController {
     
     let _viewObjects = ViewObjectsSingleton.sharedInstance()
     
@@ -81,7 +81,7 @@ public class ChatViewController : CustomUITableViewController, ISMSLoaderDelegat
         _textInput.delegate = self;
         headerView.addSubview(_textInput)
         
-        let sendButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        let sendButton = UIButton(type: .Custom)
         sendButton.frame = CGRectMake(252, 11, 60, 60);
         sendButton.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
         sendButton.addTarget(self, action: "a_sendButton:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -129,7 +129,7 @@ public class ChatViewController : CustomUITableViewController, ISMSLoaderDelegat
     // MARK: - Actions -
     
     func a_sendButton(sender: AnyObject) {
-        if (countElements(_textInput.text) != 0) {
+        if _textInput.text.characters.count != 0 {
             _textInput.resignFirstResponder()
             
             self.setupRightBarButton()
@@ -216,7 +216,7 @@ extension ChatViewController : ISMSLoaderDelegate {
         self._dataSourceDidFinishLoadingNewData()
         
         if Int32(error.code) == ISMSErrorCode_CouldNotSendChatMessage {
-            _textInput.text = error.userInfo["test"] as String
+            _textInput.text = error.userInfo["test"] as? String
         }
     }
 }
@@ -230,14 +230,14 @@ extension ChatViewController : UITextViewDelegate {
         _chatMessageOverlay = UIView()
         _chatMessageOverlay.frame = IS_IPAD() ? CGRectMake(0, 82, 1024, 1024) : CGRectMake(0, 82, 480, 480)
     
-        _chatMessageOverlay.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight];
+        _chatMessageOverlay.autoresizingMask = [.FlexibleWidth, .FlexibleHeight];
         _chatMessageOverlay.backgroundColor = UIColor(white: 0, alpha: 0.80)
         _chatMessageOverlay.alpha = 0.0
         self.view.addSubview(_chatMessageOverlay)
     
-        _dismissButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
-        _dismissButton.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight];
-        _dismissButton.addTarget(self, action: "a_doneSearching:", forControlEvents: UIControlEvents.TouchUpInside)
+        _dismissButton = UIButton(type: UIButtonType.Custom)
+        _dismissButton.autoresizingMask = [.FlexibleWidth, .FlexibleHeight];
+        _dismissButton.addTarget(self, action: "a_doneSearching:", forControlEvents: .TouchUpInside)
         _dismissButton.frame = self.view.bounds;
         _dismissButton.enabled = false
         _chatMessageOverlay.addSubview(_dismissButton)
@@ -249,7 +249,7 @@ extension ChatViewController : UITextViewDelegate {
         }, completion: nil)
     
         // Add the done button.
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "a_doneSearching:")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "a_doneSearching:")
         }
     
     public func textViewDidEndEditing(textView: UITextView) {
@@ -263,15 +263,16 @@ extension ChatViewController : UITextViewDelegate {
 
 // MARK: Table View Delegate
 
-extension ChatViewController : UITableViewDelegate, UITableViewDataSource {
+extension ChatViewController {
     
     override public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         // Automatically set the height based on the height of the message text
-        let chatMessages: NSArray = _dataModel.chatMessages
-        let chatMessage: ISMSChatMessage = chatMessages.objectAtIndex(indexPath.row) as ISMSChatMessage
-        let messageString: NSString = chatMessage.message
+        var expectedLabelSize = CGSizeZero
+        guard let chatMessage = _dataModel.chatMessages?[indexPath.row], let messageString = chatMessage.message else {
+            return 0
+        }
         
-        var expectedLabelSize = messageString.boundingRectWithSize(CGSizeMake(310, CGFloat.max), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: ISMSRegularFont(20)], context: nil).size
+        expectedLabelSize = messageString.boundingRectWithSize(CGSizeMake(310, CGFloat.max), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: ISMSRegularFont(20)], context: nil).size
         if expectedLabelSize.height < 40 {
             expectedLabelSize.height = 40
         }
@@ -284,24 +285,23 @@ extension ChatViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     override public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let chatMessages: NSArray = _dataModel?.chatMessages {
-            return chatMessages.count
+        guard let chatMessages = _dataModel.chatMessages else {
+            return 0
         }
         
-        return 0;
+        return chatMessages.count
     }
 
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! ChatUITableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
-        let chatMessages: NSArray = _dataModel.chatMessages
-        let chatMessage = chatMessages.objectAtIndex(indexPath.row) as ISMSChatMessage
-        
-        cell.userNameLabel.text = "\(chatMessage.user) - \(self._formatDate(chatMessage.timestamp))"
-        cell.messageLabel.text = chatMessage.message
-        
-        cell.backgroundView = _viewObjects.createCellBackground(indexPath.row)
+        if let chatMessage = _dataModel.chatMessages?[indexPath.row] {
+            cell.userNameLabel.text = "\(chatMessage.user) - \(self._formatDate(chatMessage.timestamp))"
+            cell.messageLabel.text = chatMessage.message
+            
+            cell.backgroundView = _viewObjects.createCellBackground(indexPath.row)
+        }
         
         return cell
     }

@@ -22,7 +22,11 @@ public class ISMSSectionIndex {
     }
 }
 
-public func sectionIndexesForItems(items: [ISMSItem]) -> [ISMSSectionIndex] {
+public func sectionIndexesForItems(items: [ISMSItem]?) -> [ISMSSectionIndex] {
+    guard let items = items else {
+        return []
+    }
+    
     func isDigit(c: Character) -> Bool {
         let cset = NSCharacterSet.decimalDigitCharacterSet()
         let s = String(c)
@@ -36,13 +40,11 @@ public func sectionIndexesForItems(items: [ISMSItem]) -> [ISMSSectionIndex] {
         var ignoredArticles = [String]()
         
         let database = DatabaseSingleton.sharedInstance() as DatabaseSingleton
-        database.songModelDbQueue.inDatabase({ (db: FMDatabase!) in
-            let result = db.executeQuery("SELECT name FROM ignoredArticles", withArgumentsInArray:[])
-            while result.next() {
-                ignoredArticles.append(result.stringForColumnIndex(0))
-            }
-            result.close()
-        })
+        let result = database.songModelReadDb.executeQuery("SELECT name FROM ignoredArticles", withArgumentsInArray:[])
+        while result.next() {
+            ignoredArticles.append(result.stringForColumnIndex(0))
+        }
+        result.close()
         
         return ignoredArticles
     }
@@ -52,7 +54,7 @@ public func sectionIndexesForItems(items: [ISMSItem]) -> [ISMSSectionIndex] {
             for article in articles {
                 let articlePlusSpace = article + " "
                 if name.hasPrefix(articlePlusSpace) {
-                    let index = name.startIndex.advancedBy(countElements(articlePlusSpace))
+                    let index = name.startIndex.advancedBy(articlePlusSpace.characters.count)
                     return name.substringFromIndex(index)
                 }
             }
@@ -68,37 +70,39 @@ public func sectionIndexesForItems(items: [ISMSItem]) -> [ISMSSectionIndex] {
     var index: Int = 0
     var count: Int = 0
     for item in items {
-        let name = nameIgnoringArticles(name: item.itemName, articles: articles)
-        var firstLetter = Array(name.uppercaseString)[0]
-        
-        // Sort digits to the end in a single "#" section
-        if isDigit(firstLetter) {
-            firstLetter = "#"
-        }
-        
-        if lastFirstLetter == nil {
-            lastFirstLetter = firstLetter
-            sectionIndexes.append(ISMSSectionIndex(firstIndex: 0, sectionCount: 0, letter: firstLetter))
-        }
-        
-        if lastFirstLetter != firstLetter {
-            lastFirstLetter = firstLetter
+        if (item.itemName != nil) {
+            let name = nameIgnoringArticles(name: item.itemName!, articles: articles)
+            var firstLetter = Array(name.uppercaseString.characters)[0]
             
-            if var last = sectionIndexes.last {
-                last.sectionCount = count
-                sectionIndexes.removeLast()
-                sectionIndexes.append(last)
+            // Sort digits to the end in a single "#" section
+            if isDigit(firstLetter) {
+                firstLetter = "#"
             }
-            count = 0
             
-            sectionIndexes.append(ISMSSectionIndex(firstIndex: index, sectionCount: 0, letter: firstLetter))
+            if lastFirstLetter == nil {
+                lastFirstLetter = firstLetter
+                sectionIndexes.append(ISMSSectionIndex(firstIndex: 0, sectionCount: 0, letter: firstLetter))
+            }
+            
+            if lastFirstLetter != firstLetter {
+                lastFirstLetter = firstLetter
+                
+                if let last = sectionIndexes.last {
+                    last.sectionCount = count
+                    sectionIndexes.removeLast()
+                    sectionIndexes.append(last)
+                }
+                count = 0
+                
+                sectionIndexes.append(ISMSSectionIndex(firstIndex: index, sectionCount: 0, letter: firstLetter))
+            }
+            
+            index++
+            count++
         }
-        
-        index++
-        count++
     }
     
-    if var last = sectionIndexes.last {
+    if let last = sectionIndexes.last {
         last.sectionCount = count
         sectionIndexes.removeLast()
         sectionIndexes.append(last)

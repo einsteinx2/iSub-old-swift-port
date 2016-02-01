@@ -12,7 +12,7 @@
 #import "ServerListViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 
-@interface PlayingViewController() <CustomUITableViewCellDelegate>
+@interface PlayingViewController() <ItemUITableViewCellDelegate>
 - (void)dataSourceDidFinishLoadingNewData;
 @end
 
@@ -92,10 +92,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIdentifier = @"PlayingCell";
-    CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell)
     {
-        cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.delegate = self;
     }
@@ -225,9 +225,9 @@
     [self.refreshControl endRefreshing];
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])
@@ -238,7 +238,7 @@
     [cell.overlayView disableDownloadButton];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])

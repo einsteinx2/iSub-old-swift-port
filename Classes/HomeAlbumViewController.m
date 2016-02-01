@@ -12,7 +12,7 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iSub-Swift.h"
 
-@interface HomeAlbumViewController() <CustomUITableViewCellDelegate>
+@interface HomeAlbumViewController() <ItemUITableViewCellDelegate>
 @end
 
 @implementation HomeAlbumViewController
@@ -106,10 +106,10 @@
 	if (indexPath.row < self.listOfAlbums.count)
 	{
 		static NSString *cellIdentifier = @"AllAlbumsCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             cell.alwaysShowCoverArt = YES;
             cell.delegate = self;
 		}
@@ -179,9 +179,9 @@
 	}
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSAlbum class]])
@@ -195,7 +195,7 @@
     [cell.overlayView disableDownloadButton];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSAlbum class]])

@@ -32,16 +32,6 @@ public class CustomUITableView: UITableView {
         self.sectionIndexBackgroundColor = UIColor.clearColor()
     }
     
-    public override init() {
-        super.init()
-        self._setup()
-    }
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        self._setup()
-    }
-    
     public override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame: frame, style: style)
         self._setup()
@@ -56,7 +46,7 @@ public class CustomUITableView: UITableView {
     
     private func _hideAllOverlays(cellToSkip: UITableViewCell?) {
         for cell in self.visibleCells as [UITableViewCell] {
-            if let customCell: CustomUITableViewCell = cell as? CustomUITableViewCell {
+            if let customCell: ItemUITableViewCell = cell as? ItemUITableViewCell {
                 if customCell != cellToSkip {
                     customCell.hideOverlay()
                 }
@@ -73,12 +63,12 @@ public class CustomUITableView: UITableView {
                 
                 if let cell = self.cellForRowAtIndexPath(indexPath) {
                     
-                    // TODO: Move multi delete touch handling to CustomUITableViewCell
+                    // TODO: Move multi delete touch handling to ItemUITableViewCell
                     
                     // Handle multi delete touching
                     if self.editing && point.x < 40.0 && NSDate().timeIntervalSinceDate(self._lastDeleteToggle) > 0.25 {
                         self._lastDeleteToggle = NSDate()
-                        if let customCell: CustomUITableViewCell = cell as? CustomUITableViewCell {
+                        if let customCell: ItemUITableViewCell = cell as? ItemUITableViewCell {
                             customCell.toggleDelete()
                         }
                     }
@@ -87,9 +77,9 @@ public class CustomUITableView: UITableView {
                     if !self._swiped {
                         self._hideAllOverlays(cell)
                         
-                        if let customCell: CustomUITableViewCell = cell as? CustomUITableViewCell {
+                        if let customCell: ItemUITableViewCell = cell as? ItemUITableViewCell {
                             if customCell.overlayShowing {
-                                EX2Dispatch.runInMainThreadAfterDelay(1.0, {
+                                EX2Dispatch.runInMainThreadAfterDelay(1.0, block: {
                                     customCell.hideOverlay()
                                 })
                             }
@@ -106,7 +96,7 @@ public class CustomUITableView: UITableView {
         return true
     }
     
-    public override func touchesShouldBegin(touches: NSSet!, withEvent event: UIEvent!, inContentView view: UIView!) -> Bool {
+    public override func touchesShouldBegin(touches: Set<UITouch>, withEvent event: UIEvent?, inContentView view: UIView) -> Bool {
         return true
     }
     
@@ -114,7 +104,7 @@ public class CustomUITableView: UITableView {
     
     private func _disableCellsTemporarily() {
         self.allowsSelection = false
-        EX2Dispatch.runInMainThreadAfterDelay(CellEnableDelay, {
+        EX2Dispatch.runInMainThreadAfterDelay(CellEnableDelay, block: {
             self.allowsSelection = true
         })
     }
@@ -122,7 +112,7 @@ public class CustomUITableView: UITableView {
     private func _isTouchHorizontal(touch: UITouch) -> Bool
     {
         let currentTouchPosition: CGPoint = touch.locationInView(self)
-        if let startTouchPosition = self._startTouchPosition? {
+        if let startTouchPosition = self._startTouchPosition {
             let xMovement = fabs(Double(startTouchPosition.x) - Double(currentTouchPosition.x))
             let yMovement = fabs(Double(startTouchPosition.y) - Double(currentTouchPosition.y))
             
@@ -132,11 +122,11 @@ public class CustomUITableView: UITableView {
         return false
     }
     
-    private func _lookForSwipeGestureInTouches(touches: NSSet, event: UIEvent)
+    private func _lookForSwipeGestureInTouches(touches: Set<UITouch>, event: UIEvent?)
     {
         var cell: UITableViewCell? = nil
         
-        let currentTouchPosition: CGPoint? = touches.anyObject()?.locationInView(self)
+        let currentTouchPosition: CGPoint? = touches.first?.locationInView(self)
         if currentTouchPosition != nil {
             let indexPath: NSIndexPath? = self.indexPathForRowAtPoint(currentTouchPosition!)
             if indexPath != nil {
@@ -147,7 +137,7 @@ public class CustomUITableView: UITableView {
         if (!self._swiped && cell != nil)
         {
             // Check if this is a full swipe
-            if let startTouchPosition: CGPoint = self._startTouchPosition? {
+            if let startTouchPosition: CGPoint = self._startTouchPosition {
                 
                 let startTouchX = Double(startTouchPosition.x)
                 let startTouchY = Double(startTouchPosition.y)
@@ -171,7 +161,7 @@ public class CustomUITableView: UITableView {
                         if startTouchX < currentTouchX {
                             // Right swipe
                             if _settings.isSwipeEnabled && !IS_IPAD() {
-                                if let customCell = cell as? CustomUITableViewCell {
+                                if let customCell = cell as? ItemUITableViewCell {
                                     customCell.showOverlay()
                                 }
                                 
@@ -179,7 +169,7 @@ public class CustomUITableView: UITableView {
                             }
                         } else {
                             // Left Swipe
-                            if let customCell = cell as? CustomUITableViewCell {
+                            if let customCell = cell as? ItemUITableViewCell {
                                 customCell.scrollLabels()
                             }
                         }
@@ -192,7 +182,7 @@ public class CustomUITableView: UITableView {
     
     public func _tapAndHoldFired() {
         self._swiped = true
-        if let customCell: CustomUITableViewCell = self._tapAndHoldCell as? CustomUITableViewCell {
+        if let customCell: ItemUITableViewCell = self._tapAndHoldCell as? ItemUITableViewCell {
             customCell.showOverlay()
         }
         self._cellShowingOverlay = self._tapAndHoldCell
@@ -203,41 +193,46 @@ public class CustomUITableView: UITableView {
         _tapAndHoldTimer = nil
     }
     
-    public override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    public override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    
         self.allowsSelection = false
         self.scrollEnabled = true
-        
+    
         // Handle swipe
-        self._startTouchPosition = touches.anyObject()!.locationInView(self)
-        self._swiped = false
-        self._cellShowingOverlay = nil
-        
-        // Handle tap and hold
-        if (_settings.isTapAndHoldEnabled) {
-            let indexPath = self.indexPathForRowAtPoint(self._startTouchPosition!)
-            if let indexPath = indexPath {
-                self._tapAndHoldCell = self.cellForRowAtIndexPath(indexPath)
-                
-                _tapAndHoldTimer = NSTimer.scheduledTimerWithTimeInterval(TapAndHoldDelay, target: self, selector: "_tapAndHoldFired", userInfo: nil, repeats: false);
+        if let touch = touches.first {
+            self._startTouchPosition = touch.locationInView(self)
+            self._swiped = false
+            self._cellShowingOverlay = nil
+            
+            // Handle tap and hold
+            if (_settings.isTapAndHoldEnabled) {
+                let indexPath = self.indexPathForRowAtPoint(self._startTouchPosition!)
+                if let indexPath = indexPath {
+                    self._tapAndHoldCell = self.cellForRowAtIndexPath(indexPath)
+                    
+                    _tapAndHoldTimer = NSTimer.scheduledTimerWithTimeInterval(TapAndHoldDelay, target: self, selector: "_tapAndHoldFired", userInfo: nil, repeats: false);
+                }
             }
         }
         
-        super.touchesBegan(touches as! Set<UITouch>, withEvent: event)
+        super.touchesBegan(touches, withEvent: event)
     }
     
-    public override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+    public override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         // Cancel the tap and hold if user moves finger
         self._cancelTapAndHold()
         
         // Check for swipe
-        if self._isTouchHorizontal(touches.anyObject()! as! UITouch) {
-            self._lookForSwipeGestureInTouches(touches, event: event)
+        if let touch = touches.first {
+            if self._isTouchHorizontal(touch) {
+                self._lookForSwipeGestureInTouches(touches, event: event)
+            }
         }
         
-        super.touchesMoved(touches as! Set<UITouch>, withEvent: event)
+        super.touchesMoved(touches, withEvent: event)
     }
 
-    public override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.allowsSelection = true
         self.scrollEnabled = true
         
@@ -245,18 +240,19 @@ public class CustomUITableView: UITableView {
         
         if self._swiped {
             // Enable the buttons if the overlay is showing
-            if let customCell: CustomUITableViewCell = self._cellShowingOverlay as? CustomUITableViewCell {
+            if let customCell: ItemUITableViewCell = self._cellShowingOverlay as? ItemUITableViewCell {
                 customCell.overlayView?.enableButtons();
             }
-        } else {
+        } else if let touch = touches.first {
             // Select the cell if this was a touch not a swipe or tap and hold
-            let currentTouchPosition = touches.anyObject()!.locationInView(self)
+            
+            let currentTouchPosition = touch.locationInView(self)
             if (self.editing && Float(currentTouchPosition.x) > 40.0) || !self.editing {
                 let indexPath: NSIndexPath? = self.indexPathForRowAtPoint(currentTouchPosition)
                 
                 if indexPath != nil {
-                    self.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: UITableViewScrollPosition.None)
-                    if let delegate: UITableViewDelegate = self.delegate? {
+                    self.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+                    if let delegate: UITableViewDelegate = self.delegate {
                         delegate.tableView?(self, didSelectRowAtIndexPath: indexPath!)
                     }
                 }
@@ -264,17 +260,17 @@ public class CustomUITableView: UITableView {
         }
         self._swiped = false
         
-        super.touchesEnded(touches as! Set<UITouch>, withEvent: event)
+        super.touchesEnded(touches, withEvent: event)
     }
     
-    public override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
+    public override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
         self._cancelTapAndHold()
         
         self.allowsSelection = true
         self.scrollEnabled = true
         self._swiped = false
         
-        if let customCell: CustomUITableViewCell = self._cellShowingOverlay as? CustomUITableViewCell {
+        if let customCell: ItemUITableViewCell = self._cellShowingOverlay as? ItemUITableViewCell {
             customCell.overlayView?.enableButtons();
         }
         

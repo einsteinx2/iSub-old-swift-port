@@ -13,7 +13,7 @@
 #import "StackScrollViewController.h"
 #import "iSub-Swift.h"
 
-@interface CacheAlbumViewController() <CustomUITableViewCellDelegate>
+@interface CacheAlbumViewController() <ItemUITableViewCellDelegate>
 @end
 
 @implementation CacheAlbumViewController
@@ -406,10 +406,10 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 	if (indexPath.row < self.listOfAlbums.count)
 	{
 		static NSString *cellIdentifier = @"CacheAlbumCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.alwaysShowCoverArt = YES;
             cell.delegate = self;
@@ -426,10 +426,10 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 	else
 	{
 		static NSString *cellIdentifier = @"CacheSongCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryNone;
             cell.delegate = self;
             cell.showDeleteButton = YES;
@@ -586,13 +586,13 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
 	}
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
 }
 
-- (void)tableCellDeleteButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDeleteButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])
@@ -613,7 +613,7 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
     [cell.overlayView disableDownloadButton];
 }
 
-- (void)deleteAllSongs:(CustomUITableViewCell *)cell
+- (void)deleteAllSongs:(ItemUITableViewCell *)cell
 {
     NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
     [newSegments addObject:cell.title];
@@ -663,7 +663,7 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])
@@ -678,7 +678,7 @@ static NSInteger trackSort(id obj1, id obj2, void *context)
     }
 }
 
-- (void)queueAllSongs:(CustomUITableViewCell *)cell
+- (void)queueAllSongs:(ItemUITableViewCell *)cell
 {
     NSMutableArray *newSegments = [NSMutableArray arrayWithArray:segments];
     [newSegments addObject:cell.title];

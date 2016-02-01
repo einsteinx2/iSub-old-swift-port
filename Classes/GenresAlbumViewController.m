@@ -11,7 +11,7 @@
 #import "UIViewController+PushViewControllerCustom.h"
 #import "iSub-Swift.h"
 
-@interface GenresAlbumViewController() < CustomUITableViewCellDelegate>
+@interface GenresAlbumViewController() < ItemUITableViewCellDelegate>
 @end
 
 @implementation GenresAlbumViewController
@@ -261,10 +261,10 @@
 	if (indexPath.row < [listOfAlbums count])
 	{
 		static NSString *cellIdentifier = @"GenresAlbumCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.delegate = self;
 		}
@@ -291,10 +291,10 @@
 	else
 	{
 		static NSString *cellIdentifier = @"GenresSongCell";
-		CustomUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		ItemUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 		if (!cell)
 		{
-			cell = [[CustomUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+			cell = [[ItemUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 			cell.accessoryType = UITableViewCellAccessoryNone;
             cell.delegate = self;
 		}
@@ -449,9 +449,9 @@
 	}
 }
 
-#pragma mark - CustomUITableViewCell Delegate -
+#pragma mark - ItemUITableViewCell Delegate -
 
-- (void)tableCellDownloadButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellDownloadButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])
@@ -467,7 +467,7 @@
     [cell.overlayView disableDownloadButton];
 }
 
-- (void)downloadAllSongs:(CustomUITableViewCell *)cell
+- (void)downloadAllSongs:(ItemUITableViewCell *)cell
 {
     FMDatabaseQueue *dbQueue;
     NSString *query;
@@ -511,7 +511,7 @@
     [viewObjectsS hideLoadingScreen];
 }
 
-- (void)tableCellQueueButtonPressed:(CustomUITableViewCell *)cell
+- (void)tableCellQueueButtonPressed:(ItemUITableViewCell *)cell
 {
     id associatedObject = cell.associatedObject;
     if ([associatedObject isKindOfClass:[ISMSSong class]])
@@ -526,7 +526,7 @@
     }
 }
 
-- (void)queueAllSongs:(CustomUITableViewCell *)cell
+- (void)queueAllSongs:(ItemUITableViewCell *)cell
 {
     FMDatabaseQueue *dbQueue;
     NSString *query;

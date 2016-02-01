@@ -37,7 +37,7 @@ public class FolderDropdownControlSwift: UIView {
     
     private var _isOpen: Bool = false
     
-    private var _dropdownButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+    private var _dropdownButton = UIButton(type: .Custom)
     
     // Colors
     private let _borderColor: UIColor = ISMSHeaderTextColor
@@ -81,8 +81,8 @@ public class FolderDropdownControlSwift: UIView {
         self.addSubview(_dropdownButton)
     }
     
-    public override init() {
-        super.init()
+    public init() {
+        super.init(frame: CGRectZero)
         _commonInit()
     }
     
@@ -126,14 +126,14 @@ public class FolderDropdownControlSwift: UIView {
             folderLabel.textAlignment = NSTextAlignment.Center
             folderLabel.font = ISMSBoldFont(20)
             folderLabel.text = name
-            folderLabel.tag = tag.integerValue
+            folderLabel.tag = tag == nil ? 0 : tag!.integerValue
             folderLabel.isAccessibilityElement = false
             self.addSubview(folderLabel)
             _labels.append(folderLabel)
             
-            let folderButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+            let folderButton = UIButton(type: UIButtonType.Custom)
             folderButton.frame = buttonFrame
-            folderButton.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+            folderButton.autoresizingMask = [.FlexibleWidth, .FlexibleHeight];
             folderButton.accessibilityLabel = folderLabel.text
             folderButton.addTarget(self, action: "selectFolder:", forControlEvents: UIControlEvents.TouchUpInside)
             folderLabel.addSubview(folderButton)

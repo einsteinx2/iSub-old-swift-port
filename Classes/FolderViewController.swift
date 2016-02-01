@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class FolderViewController: CustomUITableViewController, ISMSLoaderDelegate, CustomUITableViewCellDelegate {
+public class FolderViewController: CustomUITableViewController, ISMSLoaderDelegate, ItemUITableViewCellDelegate, AsynchronousImageViewDelegate {
     
     private let _appDelegate = iSubAppDelegate.sharedInstance()
     private let _viewObjects = ViewObjectsSingleton.sharedInstance()
@@ -18,7 +18,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     private let _reuseIdentifierAlbum = "Album Cell"
     private let _reuseIdentifierSong = "Song Cell"
     
-    private let _folderId: String?
+    private var _folderId: String?
     private var _artist: ISMSArtist?
     private var _album: ISMSAlbum?
     private var _reloading: Bool = false
@@ -40,14 +40,14 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     {
         var isArtist = false
         
-        if let artist = artist? {
+        if let artist = artist {
             isArtist = true
-            _folderId = artist.artistId.stringValue
+            _folderId = artist.artistId == nil ? nil : artist.artistId!.stringValue
             _artist = artist
             _album = nil
             
-        } else if let album = album? {
-            _folderId = album.albumId.stringValue
+        } else if let album = album {
+            _folderId = album.albumId == nil ? nil : album.albumId!.stringValue
             _artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
             _album = album
             
@@ -85,7 +85,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
         self.init(artist: nil, album: album)
     }
     
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -99,8 +99,8 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     }
     
     public override func customizeTableView(tableView: UITableView!) {
-        tableView.registerClass(CustomUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifierAlbum)
-        tableView.registerClass(CustomUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifierSong)
+        tableView.registerClass(ItemUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifierAlbum)
+        tableView.registerClass(ItemUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifierSong)
     }
     
     public override func viewWillAppear(animated: Bool) {
@@ -248,12 +248,18 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     
     // MARK: - Table View Delegate -
     
-    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]! {
-        var indexes: [AnyObject] = []
+    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        var indexes: [String] = []
         
-        if let sectionInfo = _sectionInfo? {
+        if let sectionInfo = _sectionInfo {
             for section in sectionInfo {
-                indexes.append(section[0])
+                let sectionTitle = section[0]
+                
+                if sectionTitle is NSNumber {
+                    indexes.append((sectionTitle as! NSNumber).stringValue)
+                } else {
+                    indexes.append(sectionTitle as! String)
+                }
             }
         }
 
@@ -262,7 +268,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     
     public override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
         
-        if let sectionInfo = _sectionInfo? {
+        if let sectionInfo = _sectionInfo {
             if let row: Int = sectionInfo[index][1] as? Int {
                 let indexPath = NSIndexPath(forRow: row, inSection: 0)
                 tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
@@ -279,7 +285,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row < _dataModel.albumsCount {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifierAlbum, forIndexPath: indexPath) as! CustomUITableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifierAlbum, forIndexPath: indexPath) as! ItemUITableViewCell
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             cell.alwaysShowCoverArt = true
             cell.alwaysShowSubtitle = true
@@ -300,7 +306,7 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
             
             return cell;
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifierSong, forIndexPath: indexPath) as! CustomUITableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifierSong, forIndexPath: indexPath) as! ItemUITableViewCell
             cell.alwaysShowSubtitle = true
             cell.accessoryType = UITableViewCellAccessoryType.None
             cell.delegate = self
@@ -378,15 +384,17 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
         _dataSourceDidFinishLoadingNewData()
     }
     
-    // MARK: - CustomUITableViewCell Delegate -
+    // MARK: - ItemUITableViewCell Delegate -
 
-    public func tableCellDownloadButtonPressed(cell: CustomUITableViewCell) {
+    public func tableCellDownloadButtonPressed(cell: ItemUITableViewCell) {
         switch cell.associatedObject {
             case let song as ISMSSong:
                 song.addToCacheQueueDbQueue()
             case let album as ISMSAlbum:
-                let artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
-                _database.downloadAllSongs(album.albumId.stringValue, artist: artist)
+                if let albumId = album.albumId {
+                    let artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
+                    _database.downloadAllSongs(albumId.stringValue, artist: artist)
+                }
             default:
                 break;
         }
@@ -394,14 +402,16 @@ public class FolderViewController: CustomUITableViewController, ISMSLoaderDelega
         cell.overlayView?.disableDownloadButton()
     }
     
-    public func tableCellQueueButtonPressed(cell: CustomUITableViewCell) {
+    public func tableCellQueueButtonPressed(cell: ItemUITableViewCell) {
         switch cell.associatedObject {
             case let song as ISMSSong:
                 song.addToCurrentPlaylistDbQueue()
                 NSNotificationCenter.postNotificationToMainThreadWithName(ISMSNotification_CurrentPlaylistSongsQueued)
             case let album as ISMSAlbum:
-                let artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
-                _database.queueAllSongs(album.albumId.stringValue, artist: artist)
+                if let albumId = album.albumId {
+                    let artist = ISMSArtist(name: album.artistName, andArtistId: album.artistId)
+                    _database.queueAllSongs(albumId.stringValue, artist: artist)
+                }
             default:
                 break;
         }

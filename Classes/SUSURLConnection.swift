@@ -14,9 +14,9 @@ import Foundation
     public let parameters: Dictionary<String, String>?
     public let userInfo: Dictionary<String, AnyObject>?
     
-    private let _request: NSMutableURLRequest
-    private let _connection: NSURLConnection?
-    private let _receivedData: NSMutableData?
+    private var _request: NSMutableURLRequest
+    private var _connection: NSURLConnection?
+    private var _receivedData: NSMutableData?
     
     private let _receivedDataHandler: ((data: NSData) -> ())?
     private let _successHandler: (data: NSData?, userInfo: Dictionary<String, AnyObject>?) -> ()
@@ -66,11 +66,16 @@ import Foundation
     }
     
     public func connection(connection: NSURLConnection, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge) {
-        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
-            challenge.sender.useCredential(NSURLCredential(forTrust: challenge.protectionSpace.serverTrust), forAuthenticationChallenge: challenge)
+        guard let sender = challenge.sender, let serverTrust = challenge.protectionSpace.serverTrust else {
+            return
         }
         
-        challenge.sender.continueWithoutCredentialForAuthenticationChallenge(challenge)
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
+            sender.useCredential(NSURLCredential(forTrust: serverTrust), forAuthenticationChallenge: challenge)
+        }
+        
+        sender.continueWithoutCredentialForAuthenticationChallenge(challenge)
+
     }
     
     public func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
