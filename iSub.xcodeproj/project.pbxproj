@@ -836,6 +836,21 @@
 		53AAF1DE11DA9F0200447FF7 /* now-playing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1DD11DA9F0200447FF7 /* now-playing@2x.png */; };
 		53AAF1E811DAA1BC00447FF7 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1E711DAA1BC00447FF7 /* Icon@2x.png */; };
 		53AAF1EC11DAA21600447FF7 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1EB11DAA21600447FF7 /* Icon-72.png */; };
+		53ABE13D1C60341300E0E72B /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */; };
+		53ABE13E1C60341300E0E72B /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */; };
+		53ABE13F1C60341300E0E72B /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */; };
+		53ABE1421C60363E00E0E72B /* NewItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE1401C60363E00E0E72B /* NewItemViewController.xib */; };
+		53ABE1431C60363E00E0E72B /* NewItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE1401C60363E00E0E72B /* NewItemViewController.xib */; };
+		53ABE1441C60363E00E0E72B /* NewItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE1401C60363E00E0E72B /* NewItemViewController.xib */; };
+		53ABE1451C60363E00E0E72B /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* NewItemViewController.swift */; };
+		53ABE1461C60363E00E0E72B /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* NewItemViewController.swift */; };
+		53ABE1471C60363E00E0E72B /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* NewItemViewController.swift */; };
+		53ABE1491C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */; };
+		53ABE14A1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */; };
+		53ABE14B1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */; };
+		53ABE14D1C60490F00E0E72B /* NewItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */; };
+		53ABE14E1C60490F00E0E72B /* NewItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */; };
+		53ABE14F1C60490F00E0E72B /* NewItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */; };
 		53ABE3631165C83900197877 /* PlayingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE3611165C83900197877 /* PlayingViewController.m */; };
 		53ABE3641165C83900197877 /* PlayingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE3621165C83900197877 /* PlayingViewController.xib */; };
 		53ABE4EF1166538500197877 /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE4EE1166538500197877 /* gear.png */; };
@@ -1982,6 +1997,11 @@
 		53AAF1DD11DA9F0200447FF7 /* now-playing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "now-playing@2x.png"; path = "Images/Other/now-playing@2x.png"; sourceTree = "<group>"; };
 		53AAF1E711DAA1BC00447FF7 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Images/App Icons/Icon@2x.png"; sourceTree = "<group>"; };
 		53AAF1EB11DAA21600447FF7 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Images/App Icons/Icon-72.png"; sourceTree = "<group>"; };
+		53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMenuViewController.swift; sourceTree = "<group>"; };
+		53ABE1401C60363E00E0E72B /* NewItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewItemViewController.xib; sourceTree = "<group>"; };
+		53ABE1411C60363E00E0E72B /* NewItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
+		53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemTableViewCell.swift; sourceTree = "<group>"; };
+		53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemViewModel.swift; sourceTree = "<group>"; };
 		53ABE3601165C83900197877 /* PlayingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingViewController.h; sourceTree = "<group>"; };
 		53ABE3611165C83900197877 /* PlayingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PlayingViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		53ABE3621165C83900197877 /* PlayingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayingViewController.xib; sourceTree = "<group>"; };
@@ -2341,6 +2361,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				53ABE1361C6033F100E0E72B /* New UI */,
 				536F9D7D119783D4002E526A /* Main */,
 				539797F01162CE4B00F41D8B /* View Controllers */,
 				533F651F16054282000098E1 /* Custom UI Objects */,
@@ -2915,6 +2936,18 @@
 			name = "Player Icons";
 			sourceTree = "<group>";
 		};
+		53ABE1361C6033F100E0E72B /* New UI */ = {
+			isa = PBXGroup;
+			children = (
+				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
+				53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */,
+				53ABE1411C60363E00E0E72B /* NewItemViewController.swift */,
+				53ABE1401C60363E00E0E72B /* NewItemViewController.xib */,
+				53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */,
+			);
+			name = "New UI";
+			sourceTree = "<group>";
+		};
 		53ABE35E1165C7F900197877 /* Playing Tab */ = {
 			isa = PBXGroup;
 			children = (
@@ -3419,6 +3452,7 @@
 				53404FFA11E94AA5004AEC41 /* controller-bookmark-on.png in Resources */,
 				53404FFB11E94AA5004AEC41 /* controller-bookmark-on@2x.png in Resources */,
 				5333F01F182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */,
+				53ABE1421C60363E00E0E72B /* NewItemViewController.xib in Resources */,
 				5333F01B182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */,
 				53404FFC11E94AA5004AEC41 /* controller-bookmark.png in Resources */,
 				53404FFD11E94AA5004AEC41 /* controller-bookmark@2x.png in Resources */,
@@ -4019,6 +4053,7 @@
 				53BC2740139AF0DD00A825F1 /* home-shuffle@2x.png in Resources */,
 				53BC2742139AF0DD00A825F1 /* controller-stop.png in Resources */,
 				53BC2743139AF0DD00A825F1 /* controller-stop@2x.png in Resources */,
+				53ABE1441C60363E00E0E72B /* NewItemViewController.xib in Resources */,
 				53BC2745139AF0DD00A825F1 /* Default@2x.png in Resources */,
 				53BC2746139AF0DD00A825F1 /* home-quick-random.png in Resources */,
 				53BC2747139AF0DD00A825F1 /* home-quick-random@2x.png in Resources */,
@@ -4279,6 +4314,7 @@
 				53DCF45D13BFEAD3009160F9 /* controller-bookmark-on.png in Resources */,
 				53DCF45E13BFEAD3009160F9 /* controller-bookmark-on@2x.png in Resources */,
 				5333F020182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */,
+				53ABE1431C60363E00E0E72B /* NewItemViewController.xib in Resources */,
 				5333F01C182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */,
 				53DCF45F13BFEAD3009160F9 /* controller-bookmark.png in Resources */,
 				53DCF46013BFEAD3009160F9 /* controller-bookmark@2x.png in Resources */,
@@ -4516,6 +4552,7 @@
 				D0EA476C19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53A375C21A5F938A00318F78 /* ItemViewController.swift in Sources */,
 				53BCC51B181387B300442E86 /* CustomUINavigationController.m in Sources */,
+				53ABE13D1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
 				53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */,
 				5396AD141A48DBCC00881307 /* FolderViewController.swift in Sources */,
 				53ABE3631165C83900197877 /* PlayingViewController.m in Sources */,
@@ -4552,6 +4589,7 @@
 				53C22CCF128EE81C00FFBA67 /* ModalAlbumArtViewController.swift in Sources */,
 				5327F58512B95D2900735119 /* StoreViewController.swift in Sources */,
 				53AAB77A12B98699007EA08B /* StoreUITableViewCell.swift in Sources */,
+				53ABE1491C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
 				532D9B43131AE19700FD8CA7 /* CustomUIAlertView.swift in Sources */,
 				530ABE0F1A4F8D1A005ACE6B /* BookmarksViewController.swift in Sources */,
@@ -4569,10 +4607,12 @@
 				5365859314789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696531810DA8700997C7B /* FXBlurView.m in Sources */,
 				53A2BE24147DF09800E44822 /* EqualizerPointView.m in Sources */,
+				53ABE1451C60363E00E0E72B /* NewItemViewController.swift in Sources */,
 				5306236D14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				5325910114EE22C700DF4BDB /* MBProgressHUD.m in Sources */,
 				5304FC2D14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3014F2F0D100A2AD42 /* MenuViewController.m in Sources */,
+				53ABE14D1C60490F00E0E72B /* NewItemViewModel.swift in Sources */,
 				530AEF301A40E7AE0012CC10 /* CellOverlay.swift in Sources */,
 				5304FC3614F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3C14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
@@ -4676,6 +4716,7 @@
 				D0EA476E19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53A375C41A5F938A00318F78 /* ItemViewController.swift in Sources */,
 				53BCC51D181387B300442E86 /* CustomUINavigationController.m in Sources */,
+				53ABE13F1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
 				53BC27AE139AF0DD00A825F1 /* ServerListViewController.m in Sources */,
 				5396AD161A48DBCC00881307 /* FolderViewController.swift in Sources */,
 				53BC27B3139AF0DD00A825F1 /* PlayingViewController.m in Sources */,
@@ -4712,6 +4753,7 @@
 				53BC2815139AF0DD00A825F1 /* ModalAlbumArtViewController.swift in Sources */,
 				53BC281D139AF0DD00A825F1 /* StoreViewController.swift in Sources */,
 				53BC281E139AF0DD00A825F1 /* StoreUITableViewCell.swift in Sources */,
+				53ABE14B1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */,
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
 				53BC282B139AF0DD00A825F1 /* CustomUIAlertView.swift in Sources */,
 				530ABE111A4F8D1A005ACE6B /* BookmarksViewController.swift in Sources */,
@@ -4729,10 +4771,12 @@
 				5365859514789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696551810DA8700997C7B /* FXBlurView.m in Sources */,
 				53A2BE26147DF09800E44822 /* EqualizerPointView.m in Sources */,
+				53ABE1471C60363E00E0E72B /* NewItemViewController.swift in Sources */,
 				5306236F14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				5325910314EE22C700DF4BDB /* MBProgressHUD.m in Sources */,
 				5304FC2F14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3214F2F0D100A2AD42 /* MenuViewController.m in Sources */,
+				53ABE14F1C60490F00E0E72B /* NewItemViewModel.swift in Sources */,
 				530AEF321A40E7AE0012CC10 /* CellOverlay.swift in Sources */,
 				5304FC3814F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3E14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
@@ -4758,6 +4802,7 @@
 				D0EA476D19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53A375C31A5F938A00318F78 /* ItemViewController.swift in Sources */,
 				53BCC51C181387B300442E86 /* CustomUINavigationController.m in Sources */,
+				53ABE13E1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
 				53DCF50F13BFEAD3009160F9 /* ServerListViewController.m in Sources */,
 				5396AD151A48DBCC00881307 /* FolderViewController.swift in Sources */,
 				53DCF51413BFEAD3009160F9 /* PlayingViewController.m in Sources */,
@@ -4794,6 +4839,7 @@
 				53DCF57613BFEAD3009160F9 /* ModalAlbumArtViewController.swift in Sources */,
 				53DCF57E13BFEAD3009160F9 /* StoreViewController.swift in Sources */,
 				53DCF57F13BFEAD3009160F9 /* StoreUITableViewCell.swift in Sources */,
+				53ABE14A1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */,
 				53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */,
 				53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.swift in Sources */,
 				530ABE101A4F8D1A005ACE6B /* BookmarksViewController.swift in Sources */,
@@ -4811,10 +4857,12 @@
 				5365859414789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696541810DA8700997C7B /* FXBlurView.m in Sources */,
 				53A2BE25147DF09800E44822 /* EqualizerPointView.m in Sources */,
+				53ABE1461C60363E00E0E72B /* NewItemViewController.swift in Sources */,
 				5306236E14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				5325910214EE22C700DF4BDB /* MBProgressHUD.m in Sources */,
 				5304FC2E14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3114F2F0D100A2AD42 /* MenuViewController.m in Sources */,
+				53ABE14E1C60490F00E0E72B /* NewItemViewModel.swift in Sources */,
 				530AEF311A40E7AE0012CC10 /* CellOverlay.swift in Sources */,
 				5304FC3714F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3D14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,

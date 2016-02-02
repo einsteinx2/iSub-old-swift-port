@@ -207,6 +207,17 @@
         [viewControllers addObject:self.artistsNavigationController];
         self.mainTabBarController.viewControllers = viewControllers;
         
+        // Add the NEW items controller
+        ISMSFolderLoader *folderLoader = [[ISMSFolderLoader alloc] init];
+        folderLoader.folderId = @6;
+        folderLoader.mediaFolderId = @0;
+        NewItemViewModel *itemViewModel = [[NewItemViewModel alloc] initWithLoader:folderLoader];
+        self.foldersViewControllerNew = [[NewItemViewController alloc] initWithViewModel:itemViewModel];
+        self.foldersNavigationControllerNew = [[UINavigationController alloc] initWithRootViewController:self.foldersViewControllerNew];
+        self.foldersNavigationControllerNew.tabBarItem.tag = 10;
+        [viewControllers addObject:self.foldersNavigationControllerNew];
+        self.mainTabBarController.viewControllers = viewControllers;
+        
         [[UITabBar appearance] setBarTintColor:[UIColor blackColor]];
         self.mainTabBarController.tabBar.translucent = NO;
         self.offlineTabBarController.tabBar.translucent = NO;
