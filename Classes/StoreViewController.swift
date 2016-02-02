@@ -18,7 +18,7 @@ public class StoreViewController : CustomUITableViewController {
     private let _reuseIdentifier = "Store Cell"
     
     private let _storeManager: MKStoreManager = MKStoreManager.sharedManager()
-    private var _storeItems: [SKProduct] = MKStoreManager.sharedManager().purchasableObjects
+    private var _storeItems: NSMutableArray! = MKStoreManager.sharedManager().purchasableObjects
     private var _checkProductsTimer: NSTimer?
     
     // MARK: - Rotation -
@@ -90,18 +90,18 @@ public class StoreViewController : CustomUITableViewController {
 
     func _organizeList() {
         // Place purchased products at the the end of the list
-        var sorted: [SKProduct] = []
-        var purchased: [SKProduct] = []
+        let sorted: NSMutableArray = []
+        let purchased: NSMutableArray = []
         
         for item in _storeItems {
             if MKStoreManager.isFeaturePurchased(item.productIdentifier) {
-                purchased.append(item)
+                purchased.addObject(item)
             } else {
-                sorted.append(item)
+                sorted.addObject(item)
             }
         }
         
-        sorted.appendContentsOf(purchased)
+        sorted.addObjectsFromArray(purchased as [AnyObject])
         
         _storeItems = sorted
     }
@@ -132,7 +132,7 @@ extension StoreViewController {
         } else {
             let adjustedRow = indexPath.row - 1
             let cell = StoreUITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "NoReuse")
-            cell.product = _storeItems[adjustedRow]
+            cell.product = (_storeItems[adjustedRow] as! SKProduct)
             
             return cell
         }
@@ -140,14 +140,14 @@ extension StoreViewController {
     
     public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
-            _storeManager.restorePreviousTransactions()
+            _storeManager.restorePreviousTransactionsOnComplete(nil, onError: nil)
         } else {
             let adjustedRow = indexPath.row - 1
-            let product: SKProduct = _storeItems[adjustedRow] as SKProduct
+            let product: SKProduct = _storeItems[adjustedRow] as! SKProduct
             let identifier: String = product.productIdentifier
     
             if !MKStoreManager.isFeaturePurchased(identifier) {
-                _storeManager.buyFeature(identifier)
+                _storeManager.buyFeature(identifier, onComplete: nil, onCancelled: nil)
                 
                 self.navigationController?.popToRootViewControllerAnimated(true)
             }

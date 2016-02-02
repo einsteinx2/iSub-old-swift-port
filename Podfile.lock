@@ -1,0 +1,75 @@
+PODS:
+  - CocoaAsyncSocket (7.4.2)
+  - CocoaHTTPServer (2.3):
+    - CocoaAsyncSocket
+    - CocoaLumberjack
+  - CocoaLumberjack (2.2.0):
+    - CocoaLumberjack/Default (= 2.2.0)
+    - CocoaLumberjack/Extensions (= 2.2.0)
+  - CocoaLumberjack/Core (2.2.0)
+  - CocoaLumberjack/Default (2.2.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (2.2.0):
+    - CocoaLumberjack/Default
+  - EX2Kit (0.0.1):
+    - CocoaLumberjack
+    - EX2Kit/arc (= 0.0.1)
+    - EX2Kit/noarc (= 0.0.1)
+  - EX2Kit/arc (0.0.1):
+    - CocoaLumberjack
+  - EX2Kit/noarc (0.0.1):
+    - CocoaLumberjack
+  - Flurry-iOS-SDK (7.3.0):
+    - Flurry-iOS-SDK/FlurrySDK (= 7.3.0)
+  - Flurry-iOS-SDK/FlurrySDK (7.3.0)
+  - FMDB (2.6):
+    - FMDB/standard (= 2.6)
+  - FMDB/standard (2.6)
+  - HockeySDK (3.8.5):
+    - HockeySDK/AllFeaturesLib (= 3.8.5)
+  - HockeySDK/AllFeaturesLib (3.8.5)
+  - libSub (0.0.1):
+    - CocoaHTTPServer
+    - EX2Kit
+    - Flurry-iOS-SDK
+    - FMDB
+    - MKStoreKit
+    - RaptureXML
+    - SBJson (~> 3.0)
+    - TBXML
+    - ZipKit
+  - MKStoreKit (4.99)
+  - RaptureXML (1.0.1)
+  - SBJson (3.2)
+  - TBXML (1.5)
+  - ZipKit (1.0.3)
+
+DEPENDENCIES:
+  - EX2Kit (from `Frameworks/libSub/Frameworks/EX2Kit/EX2Kit.podspec`)
+  - HockeySDK
+  - libSub (from `Frameworks/libSub/libSub.podspec`)
+
+EXTERNAL SOURCES:
+  EX2Kit:
+    :path: Frameworks/libSub/Frameworks/EX2Kit/EX2Kit.podspec
+  libSub:
+    :path: Frameworks/libSub/libSub.podspec
+
+SPEC CHECKSUMS:
+  CocoaAsyncSocket: f5783bdedd232d91b89769bc4b5a1580aed518ad
+  CocoaHTTPServer: 5624681fc3473d43b18202f635f9b3abb013b530
+  CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
+  EX2Kit: 29e4b9e33e2df1bc1b09dff017ce3ecf3f2a7ec0
+  Flurry-iOS-SDK: 054befae0fa0244fb000985bfe757d70f87a9f60
+  FMDB: c1968bab3ab0aed38f66cb778ae1e7fa9a652b6e
+  HockeySDK: dd11a2b9da3372fd025643bee5bc10c8c613d169
+  libSub: 8a71d63316b0b4bfa29f08b8a4068d61e522fa9e
+  MKStoreKit: 748617e5f87ad1e0d3f075155047945248eccefc
+  RaptureXML: b5c33c04c1a4adfd8ad0d5463329a31820596e82
+  SBJson: 9626892a7dc75ccaa2aad207ed4e4f73d6762846
+  TBXML: 9f9dadb239f2f2af1dadb87fe43a0ce6e479379a
+  ZipKit: 594735e7ad2fd3ee7349759681a0423a1b296572
+
+PODFILE CHECKSUM: ce67e0391d2f494bc201e949a904d7a4e6852103
+
+COCOAPODS: 1.0.0.beta.2
