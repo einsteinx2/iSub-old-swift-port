@@ -8,7 +8,7 @@
 
 #import "CustomUITableViewController.h"
 
-@class BBSimpleConnectionQueue, SUSServerPlaylistsDAO;
+@class BBSimpleConnectionQueue, ISMSPlaylistsDAO;
 @interface PlaylistsViewController : CustomUITableViewController
 
 @end

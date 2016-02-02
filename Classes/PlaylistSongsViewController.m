@@ -73,7 +73,7 @@
 	}
 	else
 	{
-        self.title = _serverPlaylist.playlistName;
+        self.title = _serverPlaylist.name;
         NSString *query = [NSString stringWithFormat:@"SELECT COUNT(*) FROM splaylist%@", _md5];
 		_playlistCount = [databaseS.localPlaylistsDbQueue intForQuery:query];
 		[self.tableView reloadData];

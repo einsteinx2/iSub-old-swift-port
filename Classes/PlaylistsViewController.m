@@ -18,7 +18,7 @@
 
 @interface PlaylistsViewController() <EX2SimpleConnectionQueueDelegate, ISMSLoaderDelegate, ItemUITableViewCellDelegate>
 {
-    SUSServerPlaylistsDAO *_serverPlaylistsDataModel;
+    ISMSPlaylistsDAO *_serverPlaylistsDataModel;
     
     UIView *_headerView;
     UISegmentedControl *_segmentedControl;
@@ -77,7 +77,7 @@
 {
     [super viewDidLoad];
 		
-	_serverPlaylistsDataModel = [[SUSServerPlaylistsDAO alloc] initWithDelegate:self];
+	_serverPlaylistsDataModel = [[ISMSPlaylistsDAO alloc] initWithDelegate:self];
 	
 	_noPlaylistsScreenShowing = NO;
 	_playlistSaveEditShowing = NO;
@@ -986,7 +986,7 @@
 				
 				for (NSNumber *index in _multiDeleteList)
 				{
-                    NSString *playlistId = [[_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:[index intValue]] playlistId];
+                    NSNumber *playlistId = [[_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:[index intValue]] playlistId];
                     NSDictionary *parameters = [NSDictionary dictionaryWithObject:n2N(playlistId) forKey:@"id"];
                     DLog(@"parameters: %@", parameters);
                     NSMutableURLRequest *aRequest = [NSMutableURLRequest requestWithSUSAction:@"deletePlaylist" parameters:parameters];
@@ -1616,19 +1616,19 @@ static NSString *kName_Error = @"error";
             cell.delegate = self;
 		}
 		cell.indexPath = indexPath;
-        SUSServerPlaylist *playlist = [_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
+        ISMSPlaylist *playlist = [_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
         cell.associatedObject = playlist;
 		
         cell.markedForDelete = [_multiDeleteList containsObject:@(indexPath.row)];
 		
-        cell.title = playlist.playlistName;
+        cell.title = playlist.name;
         
         if (!_cellSuccessBlock)
         {
             __weak PlaylistsViewController *weakSelf = self;
             NSData *receivedData = _receivedData;
             _cellSuccessBlock = ^(NSData *data, NSDictionary *userInfo) {
-                SUSServerPlaylist *serverPlaylist = userInfo[@"serverPlaylist"];
+                ISMSPlaylist *serverPlaylist = userInfo[@"serverPlaylist"];
                 BOOL isDownload = [userInfo[@"isDownload"] boolValue];
                 
                 // Parse the data
@@ -1653,7 +1653,7 @@ static NSString *kName_Error = @"error";
                         // TODO: Handle !isValid case
                         if ([[root child:@"playlist"] isValid])
                         {
-                            NSString *md5 = [serverPlaylist.playlistName md5];
+                            NSString *md5 = [serverPlaylist.name md5];
                             [databaseS removeServerPlaylistTable:md5];
                             [databaseS createServerPlaylistTable:md5];
                             
@@ -1716,8 +1716,8 @@ static NSString *kName_Error = @"error";
 		else if (_segmentedControl.selectedSegmentIndex == 2)
 		{
 			PlaylistSongsViewController *playlistSongsViewController = [[PlaylistSongsViewController alloc] initWithNibName:@"PlaylistSongsViewController" bundle:nil];
-            SUSServerPlaylist *playlist = [_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
-			playlistSongsViewController.md5 = [playlist.playlistName md5];
+            ISMSPlaylist *playlist = [_serverPlaylistsDataModel.serverPlaylists objectAtIndexSafe:indexPath.row];
+			playlistSongsViewController.md5 = [playlist.name md5];
             playlistSongsViewController.serverPlaylist = playlist;
 			[self pushViewControllerCustom:playlistSongsViewController];
 		}
@@ -1744,11 +1744,11 @@ static NSString *kName_Error = @"error";
         
         [cell.overlayView disableDownloadButton];
     }
-    else if ([associatedObject isKindOfClass:[SUSServerPlaylist class]])
+    else if ([associatedObject isKindOfClass:[ISMSPlaylist class]])
     {
         [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
         
-        SUSServerPlaylist *serverPlaylist = (SUSServerPlaylist *)cell.associatedObject;
+        ISMSPlaylist *serverPlaylist = (ISMSPlaylist *)cell.associatedObject;
         NSDictionary *parameters = @{ @"id": n2N(serverPlaylist.playlistId) };
         NSDictionary *userInfo = @{ @"serverPlaylist": serverPlaylist, @"isDownload": @YES };
         
@@ -1791,11 +1791,11 @@ static NSString *kName_Error = @"error";
         [viewObjectsS showLoadingScreenOnMainWindowWithMessage:nil];
         [self performSelector:@selector(queueAllSongsForLocalPlaylistMd5:) withObject:associatedObject afterDelay:0.05];
     }
-    else if ([associatedObject isKindOfClass:[SUSServerPlaylist class]])
+    else if ([associatedObject isKindOfClass:[ISMSPlaylist class]])
     {
         [viewObjectsS showAlbumLoadingScreen:appDelegateS.window sender:self];
         
-        SUSServerPlaylist *serverPlaylist = (SUSServerPlaylist *)cell.associatedObject;
+        ISMSPlaylist *serverPlaylist = (ISMSPlaylist *)cell.associatedObject;
         NSDictionary *parameters = @{ @"id": n2N(serverPlaylist.playlistId) };
         NSDictionary *userInfo = @{ @"serverPlaylist": serverPlaylist, @"isDownload": @NO };
         

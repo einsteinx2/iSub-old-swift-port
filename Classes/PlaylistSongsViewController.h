@@ -8,11 +8,11 @@
 
 #import "CustomUITableViewController.h"
 
-@class SUSServerPlaylist;
+@class ISMSPlaylist;
 @interface PlaylistSongsViewController : CustomUITableViewController
 
 @property (nonatomic, copy) NSString *md5;
-@property (nonatomic, strong) SUSServerPlaylist *serverPlaylist;
+@property (nonatomic, strong) ISMSPlaylist *serverPlaylist;
 @property (nonatomic, getter=isLocalPlaylist) BOOL localPlaylist;
 
 @end
