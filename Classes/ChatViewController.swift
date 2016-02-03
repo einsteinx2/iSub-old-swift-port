@@ -182,9 +182,7 @@ public class ChatViewController : CustomUITableViewController {
         }
     }
     
-    func _formatDate(unixTime: Int) -> String {
-        let date = NSDate(timeIntervalSince1970: NSTimeInterval(unixTime))
-    
+    func _formatDate(date: NSDate) -> String {
         let formatter = NSDateFormatter()
         formatter.dateStyle = NSDateFormatterStyle.ShortStyle
         formatter.timeStyle = NSDateFormatterStyle.ShortStyle
@@ -295,13 +293,14 @@ extension ChatViewController {
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! ChatUITableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.backgroundView = _viewObjects.createCellBackground(indexPath.row)
         
-        if let chatMessage = _dataModel.chatMessages?[indexPath.row] {
-            cell.userNameLabel.text = "\(chatMessage.user) - \(self._formatDate(chatMessage.timestamp))"
-            cell.messageLabel.text = chatMessage.message
-            
-            cell.backgroundView = _viewObjects.createCellBackground(indexPath.row)
+        guard let chatMessage = _dataModel.chatMessages?[indexPath.row], timestamp = chatMessage.timestamp else {
+            return cell;
         }
+        
+        cell.userNameLabel.text = "\(chatMessage.user) - \(self._formatDate(timestamp))"
+        cell.messageLabel.text = chatMessage.message
         
         return cell
     }
