@@ -11,6 +11,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
+		3753F366107F3B2424C1DA6C /* libPods-iSub Release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5654140B2178CDAE202D3159 /* libPods-iSub Release.a */; };
 		5301583A15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
 		5301583B15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
 		5301583C15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
@@ -1555,6 +1556,7 @@
 		D0F7918B19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */; };
 		D0F7918C19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */; };
 		D0F7918D19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */; };
+		EF7AF858D04A41F2C4FD7464 /* libPods-iSub Lite Release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE278C674DD50ADAEAA5AA25 /* libPods-iSub Lite Release.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -2024,7 +2026,12 @@
 		53FDEE6011E82A8700FE3ECD /* cache-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cache-button@2x.png"; path = "Images/Other/cache-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button@2x.png"; path = "Images/Other/queue-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete-button@2x.png"; path = "Images/Other/delete-button@2x.png"; sourceTree = "<group>"; };
+		5654140B2178CDAE202D3159 /* libPods-iSub Release.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iSub Release.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BC88F775105978B28CBC42B /* Pods-iSub Release.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Release.release.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Release/Pods-iSub Release.release.xcconfig"; sourceTree = "<group>"; };
 		74155B984ADDF2CA2C405AEB /* Pods-iSub Beta.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Beta.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Beta/Pods-iSub Beta.adhoc.xcconfig"; sourceTree = "<group>"; };
+		7B0C3635690A8AEA688EE3E3 /* Pods-iSub Release.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Release.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Release/Pods-iSub Release.adhoc.xcconfig"; sourceTree = "<group>"; };
+		C4E706FC7D573FCCDBA8C3DA /* Pods-iSub Lite Release.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Lite Release.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Lite Release/Pods-iSub Lite Release.debug.xcconfig"; sourceTree = "<group>"; };
+		C96C134ACDFCA33104F03DEC /* Pods-iSub Release.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Release.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Release/Pods-iSub Release.debug.xcconfig"; sourceTree = "<group>"; };
 		D0EA476019DE41510083CE05 /* ISMSPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSPlayerView.h; sourceTree = "<group>"; };
 		D0EA476119DE41510083CE05 /* ISMSPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSPlayerView.m; sourceTree = "<group>"; };
 		D0EA476519DE41E30083CE05 /* ISMSPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSPlayerViewController.h; sourceTree = "<group>"; };
@@ -2033,6 +2040,9 @@
 		D0EA476B19DE449A0083CE05 /* UIView+AutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AutoLayout.m"; sourceTree = "<group>"; };
 		D0F7918919DE4DFC008032A3 /* ISMSScrubberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSScrubberView.h; sourceTree = "<group>"; };
 		D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSScrubberView.m; sourceTree = "<group>"; };
+		F22F940DD896CF9A72E3B608 /* Pods-iSub Lite Release.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Lite Release.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Lite Release/Pods-iSub Lite Release.adhoc.xcconfig"; sourceTree = "<group>"; };
+		FE278C674DD50ADAEAA5AA25 /* libPods-iSub Lite Release.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iSub Lite Release.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFF21D00CD5C0AA31268AFBB /* Pods-iSub Lite Release.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Lite Release.release.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Lite Release/Pods-iSub Lite Release.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2068,6 +2078,7 @@
 				53EB4AA61405FE1B00CBA075 /* libz.dylib in Frameworks */,
 				5327F52512B955F100735119 /* StoreKit.framework in Frameworks */,
 				53F7A128131B7F3B002C829D /* Security.framework in Frameworks */,
+				3753F366107F3B2424C1DA6C /* libPods-iSub Release.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2199,6 +2210,7 @@
 				53DCF5C013BFEAD3009160F9 /* Security.framework in Frameworks */,
 				5311C3301A3510B100054941 /* AssetsLibrary.framework in Frameworks */,
 				53DE598414F1933400206529 /* CoreText.framework in Frameworks */,
+				EF7AF858D04A41F2C4FD7464 /* libPods-iSub Lite Release.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2222,6 +2234,12 @@
 				2B17B0201612E469305FEA71 /* Pods-iSub Beta.debug.xcconfig */,
 				74155B984ADDF2CA2C405AEB /* Pods-iSub Beta.adhoc.xcconfig */,
 				093A1C02CFEA5C75C3A922EF /* Pods-iSub Beta.release.xcconfig */,
+				C4E706FC7D573FCCDBA8C3DA /* Pods-iSub Lite Release.debug.xcconfig */,
+				F22F940DD896CF9A72E3B608 /* Pods-iSub Lite Release.adhoc.xcconfig */,
+				FFF21D00CD5C0AA31268AFBB /* Pods-iSub Lite Release.release.xcconfig */,
+				C96C134ACDFCA33104F03DEC /* Pods-iSub Release.debug.xcconfig */,
+				7B0C3635690A8AEA688EE3E3 /* Pods-iSub Release.adhoc.xcconfig */,
+				6BC88F775105978B28CBC42B /* Pods-iSub Release.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -2324,6 +2342,8 @@
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
 				3AE7B47449707E06ED6FC30C /* libPods-iSub Beta.a */,
+				FE278C674DD50ADAEAA5AA25 /* libPods-iSub Lite Release.a */,
+				5654140B2178CDAE202D3159 /* libPods-iSub Release.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2977,9 +2997,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "iSub Release" */;
 			buildPhases = (
+				FA5FE9F12805D8D1E099D78E /* Check Pods Manifest.lock */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				E784CC9207B6CFAA086B4C98 /* Embed Pods Frameworks */,
+				63C57FE68400BD0E70B87560 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3050,9 +3073,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 53DCF5C213BFEAD3009160F9 /* Build configuration list for PBXNativeTarget "iSub Lite Release" */;
 			buildPhases = (
+				B98B803268927423D1FC0AA7 /* Check Pods Manifest.lock */,
 				53DCF3FD13BFEAD3009160F9 /* Resources */,
 				53DCF4FB13BFEAD3009160F9 /* Sources */,
 				53DCF5B013BFEAD3009160F9 /* Frameworks */,
+				097320DBC898FE65E7B327A4 /* Embed Pods Frameworks */,
+				942195B45FFAF7050D1E1687 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -4277,6 +4303,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		097320DBC898FE65E7B327A4 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iSub Lite Release/Pods-iSub Lite Release-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4190EEE12E9F83805434E75A /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4319,6 +4360,21 @@
 			shellPath = /bin/sh;
 			shellScript = "TAGS=\"TODO:|FIXME:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" -o -name \"*.m\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"";
 		};
+		63C57FE68400BD0E70B87560 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iSub Release/Pods-iSub Release-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		906981267EDD99F342F3216A /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4334,6 +4390,36 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iSub Beta/Pods-iSub Beta-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		942195B45FFAF7050D1E1687 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iSub Lite Release/Pods-iSub Lite Release-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B98B803268927423D1FC0AA7 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		CD45AE769E8362C52487B1F9 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4347,6 +4433,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iSub Beta/Pods-iSub Beta-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E784CC9207B6CFAA086B4C98 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iSub Release/Pods-iSub Release-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FA5FE9F12805D8D1E099D78E /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -4796,6 +4912,7 @@
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C96C134ACDFCA33104F03DEC /* Pods-iSub Release.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_OBJC_UNUSED_IVARS = NO;
@@ -4835,6 +4952,7 @@
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6BC88F775105978B28CBC42B /* Pods-iSub Release.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_OBJC_UNUSED_IVARS = NO;
@@ -4871,6 +4989,7 @@
 		};
 		53049D2311962C660098582B /* AdHoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				"ARCHS[sdk=iphonesimulator*]" = i386;
@@ -4934,6 +5053,7 @@
 		};
 		53049D2411962C660098582B /* AdHoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7B0C3635690A8AEA688EE3E3 /* Pods-iSub Release.adhoc.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_OBJC_UNUSED_IVARS = NO;
@@ -5357,6 +5477,7 @@
 		};
 		53DCF5C313BFEAD3009160F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C4E706FC7D573FCCDBA8C3DA /* Pods-iSub Lite Release.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -5398,6 +5519,7 @@
 		};
 		53DCF5C413BFEAD3009160F9 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F22F940DD896CF9A72E3B608 /* Pods-iSub Lite Release.adhoc.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -5438,6 +5560,7 @@
 		};
 		53DCF5C513BFEAD3009160F9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FFF21D00CD5C0AA31268AFBB /* Pods-iSub Lite Release.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -5476,6 +5599,7 @@
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				"ARCHS[sdk=iphonesimulator*]" = i386;
@@ -5539,6 +5663,7 @@
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53F1412015FD550C004D00D5 /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				"ARCHS[sdk=iphonesimulator*]" = i386;

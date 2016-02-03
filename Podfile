@@ -4,6 +4,15 @@ def all_pods
 	pod 'HockeySDK'
 end
 
+target 'iSub Release' do
+	all_pods
+end
+
+target 'iSub Lite Release' do
+	all_pods
+end
+
 target 'iSub Beta' do
 	all_pods
 end
+
