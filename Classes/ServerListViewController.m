@@ -255,8 +255,9 @@
 		[databaseS setupDatabases];
 		
 		// Reset the tabs
-		if (!IS_IPAD())
-			[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+        // TODO: Redo with new UI
+//		if (!IS_IPAD())
+//			[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
         
 		appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
 		

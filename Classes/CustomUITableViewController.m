@@ -8,7 +8,6 @@
 
 #import "CustomUITableViewController.h"
 #import "Imports.h"
-#import "iPhoneStreamingPlayerViewController.h"
 #import "ServerListViewController.h"
 #import "iSub-Swift.h"
 
@@ -235,9 +234,10 @@
 
 - (void)a_nowPlaying:(id)sender
 {
-    iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-    streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:streamingPlayerViewController animated:YES];
+    // TODO: Update for new UI
+//    iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+//    streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+//    [self.navigationController pushViewController:streamingPlayerViewController animated:YES];
 }
 
 #pragma mark - Table View Delegate -

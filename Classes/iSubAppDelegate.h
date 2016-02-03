@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, NewItemViewController;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 
@@ -33,10 +33,11 @@
 @property (strong) IBOutlet UITabBarController *mainTabBarController;
 @property (strong) IBOutlet UITabBarController *offlineTabBarController;
 @property (strong) IBOutlet UINavigationController *homeNavigationController;
-@property (strong) IBOutlet FoldersViewController *rootViewController;
 @property (strong) IBOutlet UINavigationController *playerNavigationController;
 @property (strong) IBOutlet UINavigationController *artistsNavigationController;
 @property (strong) IBOutlet ItemViewController *artistsViewController;
+@property (strong) IBOutlet UINavigationController *foldersNavigationControllerNew;
+@property (strong) IBOutlet NewItemViewController *foldersViewControllerNew; // Test
 @property (strong) IBOutlet UINavigationController *allAlbumsNavigationController;
 @property (strong) IBOutlet UINavigationController *allSongsNavigationController;
 @property (strong) IBOutlet UINavigationController *playlistsNavigationController;
