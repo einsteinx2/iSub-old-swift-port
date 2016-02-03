@@ -1,6 +1,3 @@
-[submodule "Frameworks/KIF"]
-	path = Frameworks/KIF
-	url = git@github.com:square/KIF.git
 [submodule "Frameworks/CocoaLumberjack"]
 	path = Frameworks/CocoaLumberjack
 	url = git@github.com:robbiehanson/CocoaLumberjack.git
@@ -22,6 +19,3 @@
 [submodule "Frameworks/libSub"]
 	path = Frameworks/libSub
 	url = git@github.com:einsteinx2/libSub.git
-[submodule "Frameworks/JASidePanels"]
-        path = Frameworks/JASidePanels
-        url = git://github.com/gotosleep/JASidePanels

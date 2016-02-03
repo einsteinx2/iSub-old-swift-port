@@ -91,9 +91,6 @@
 		530BB65E1A61AA9A00FBC005 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */; };
 		530BB65F1A61AA9A00FBC005 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */; };
 		530BB6601A61AA9A00FBC005 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */; };
-		530D2100166700B4009DAF1B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
-		530D2102166700C7009DAF1B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
-		530D2105166700DE009DAF1B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 536C9B981661B96A005A73C6 /* HockeySDKResources.bundle */; };
 		530F63981A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
 		530F63991A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
 		530F639A1A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
@@ -441,7 +438,6 @@
 		5327F52512B955F100735119 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5327F52412B955F100735119 /* StoreKit.framework */; };
 		5327F58512B95D2900735119 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.swift */; };
 		532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
-		532B227C156F762A00C72D1B /* GHUnitIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 532B227A156F762100C72D1B /* GHUnitIOS.framework */; };
 		532D9B43131AE19700FD8CA7 /* CustomUIAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */; };
 		5331C58D1A3EA63A00458859 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5331C58C1A3EA63A00458859 /* ChatViewController.swift */; };
 		5331C58E1A3EA63A00458859 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5331C58C1A3EA63A00458859 /* ChatViewController.swift */; };
@@ -558,9 +554,6 @@
 		53493F4415FC6CAE0059492E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53493F4015FC6CAE0059492E /* MainWindow.xib */; };
 		53493F4515FC6CAE0059492E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53493F4015FC6CAE0059492E /* MainWindow.xib */; };
 		53493F4615FC6CAE0059492E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53493F4015FC6CAE0059492E /* MainWindow.xib */; };
-		53493F4E15FC6D210059492E /* iSubTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F4915FC6D200059492E /* iSubTestController.m */; };
-		53493F4F15FC6D210059492E /* KIFTestScenario+CacheTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F4B15FC6D200059492E /* KIFTestScenario+CacheTab.m */; };
-		53493F5015FC6D210059492E /* KIFTestScenario+FoldersTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F4D15FC6D210059492E /* KIFTestScenario+FoldersTab.m */; };
 		5349AD041613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
 		5349AD051613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
 		5349AD061613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
@@ -645,7 +638,6 @@
 		536D616511442AA000DFCE56 /* controller-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D616011442AA000DFCE56 /* controller-shuffle.png */; };
 		536D620B1144495400DFCE56 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536D620A1144495400DFCE56 /* SystemConfiguration.framework */; };
 		536D624411444E4600DFCE56 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D624311444E4600DFCE56 /* Icon.png */; };
-		5377429A15AA4DC700DD547D /* kif.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5377429915AA4DC700DD547D /* kif.framework */; };
 		5379DC4F1219E48800F426CD /* ChatUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.swift */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		537E6C1E181208A200127E29 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E6C1D181208A200127E29 /* CustomUITabBarController.m */; };
@@ -707,7 +699,6 @@
 		53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE29147DF14300E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
-		53A64E23161E2E6400FCBBAF /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A64E22161E2E6400FCBBAF /* CrashReporter.framework */; };
 		53AA300411461A04003E57E3 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AA300311461A04003E57E3 /* background.png */; };
 		53AAB77A12B98699007EA08B /* StoreUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */; };
 		53AAF18911DA8D7500447FF7 /* albums-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18811DA8D7500447FF7 /* albums-tabbaricon@2x.png */; };
@@ -1364,7 +1355,6 @@
 		D09496D21C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D31C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D41C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		D09496D51C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D61C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D71C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D81C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -1466,7 +1456,6 @@
 		5327F58312B95D2900735119 /* StoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
 		532862D911C573AD00B40FF0 /* UAApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAApplication.h; sourceTree = "<group>"; };
 		532862DA11C573AD00B40FF0 /* UAApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAApplication.m; sourceTree = "<group>"; };
-		532B227A156F762100C72D1B /* GHUnitIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GHUnitIOS.framework; path = Frameworks/GHUnitIOS.framework; sourceTree = "<group>"; };
 		532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIAlertView.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		5331C58C1A3EA63A00458859 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -1526,14 +1515,6 @@
 		53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = BassEffectDefaultPresets.plist; path = Other/BassEffectDefaultPresets.plist; sourceTree = "<group>"; };
 		53493F3F15FC6CAE0059492E /* MainWindow-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Other/MainWindow-iPad.xib"; sourceTree = SOURCE_ROOT; };
 		53493F4015FC6CAE0059492E /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainWindow.xib; path = Other/MainWindow.xib; sourceTree = SOURCE_ROOT; };
-		53493F4715FC6CE30059492E /* iSub-Unit-Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "iSub-Unit-Tests-Info.plist"; path = "Testing/GHUnit_Tests/iSub-Unit-Tests-Info.plist"; sourceTree = "<group>"; };
-		53493F4815FC6D200059492E /* iSubTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iSubTestController.h; path = Testing/KIF_Integration_Tests/iSubTestController.h; sourceTree = "<group>"; };
-		53493F4915FC6D200059492E /* iSubTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = iSubTestController.m; path = Testing/KIF_Integration_Tests/iSubTestController.m; sourceTree = "<group>"; };
-		53493F4A15FC6D200059492E /* KIFTestScenario+CacheTab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KIFTestScenario+CacheTab.h"; path = "Testing/KIF_Integration_Tests/KIFTestScenario+CacheTab.h"; sourceTree = "<group>"; };
-		53493F4B15FC6D200059492E /* KIFTestScenario+CacheTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KIFTestScenario+CacheTab.m"; path = "Testing/KIF_Integration_Tests/KIFTestScenario+CacheTab.m"; sourceTree = "<group>"; };
-		53493F4C15FC6D210059492E /* KIFTestScenario+FoldersTab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KIFTestScenario+FoldersTab.h"; path = "Testing/KIF_Integration_Tests/KIFTestScenario+FoldersTab.h"; sourceTree = "<group>"; };
-		53493F4D15FC6D210059492E /* KIFTestScenario+FoldersTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KIFTestScenario+FoldersTab.m"; path = "Testing/KIF_Integration_Tests/KIFTestScenario+FoldersTab.m"; sourceTree = "<group>"; };
-		53493F5115FC6D280059492E /* iSub-Integration-Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "iSub-Integration-Tests-Info.plist"; path = "Testing/KIF_Integration_Tests/iSub-Integration-Tests-Info.plist"; sourceTree = "<group>"; };
 		5349AD031613724D003603AF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Images/Other/Default-568h@2x.png"; sourceTree = "<group>"; };
 		5349F14D16E9458B00E56582 /* IDTwitterAccountChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDTwitterAccountChooserViewController.h; sourceTree = "<group>"; };
 		5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDTwitterAccountChooserViewController.m; sourceTree = "<group>"; };
@@ -1599,7 +1580,6 @@
 		536D620A1144495400DFCE56 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		536D624311444E4600DFCE56 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = "Images/App Icons/Icon.png"; sourceTree = "<group>"; };
 		53733C6414F88D62001D8104 /* AsynchronousImageViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsynchronousImageViewDelegate.h; sourceTree = "<group>"; };
-		5377429915AA4DC700DD547D /* kif.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = kif.framework; path = Frameworks/kif.framework; sourceTree = "<group>"; };
 		5379DC491219E48800F426CD /* ChatUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatUITableViewCell.swift; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537E6C1C181208A200127E29 /* CustomUITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITabBarController.h; sourceTree = "<group>"; };
@@ -1634,7 +1614,6 @@
 		53A2BE22147DF09800E44822 /* EqualizerPointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualizerPointView.h; sourceTree = "<group>"; };
 		53A2BE23147DF09800E44822 /* EqualizerPointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerPointView.m; sourceTree = "<group>"; };
 		53A2BE27147DF13600E44822 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		53A64E22161E2E6400FCBBAF /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CrashReporter.framework; path = Frameworks/HockeySDK/Vendor/CrashReporter.framework; sourceTree = "<group>"; };
 		53AA300311461A04003E57E3 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Images/Other/background.png; sourceTree = "<group>"; };
 		53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreUITableViewCell.swift; sourceTree = "<group>"; };
 		53AAF18811DA8D7500447FF7 /* albums-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "albums-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/albums-tabbaricon@2x.png"; sourceTree = "<group>"; };
@@ -1880,7 +1859,6 @@
 				53159F5E156F69D0001B0268 /* libz.dylib in Frameworks */,
 				53159F5F156F69D0001B0268 /* StoreKit.framework in Frameworks */,
 				53159F60156F69D0001B0268 /* Security.framework in Frameworks */,
-				5377429A15AA4DC700DD547D /* kif.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1888,7 +1866,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				532B227C156F762A00C72D1B /* GHUnitIOS.framework in Frameworks */,
 				5315A3E3156F7064001B0268 /* MessageUI.framework in Frameworks */,
 				5315A3E4156F7064001B0268 /* CoreText.framework in Frameworks */,
 				5315A3E5156F7064001B0268 /* libSystem.dylib in Frameworks */,
@@ -2030,8 +2007,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				53159F89156F6F6E001B0268 /* GHUnit Tests */,
-				53159F77156F6DC6001B0268 /* KIF Integration Tests */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -2144,30 +2119,6 @@
 			name = iPad;
 			sourceTree = "<group>";
 		};
-		53159F77156F6DC6001B0268 /* KIF Integration Tests */ = {
-			isa = PBXGroup;
-			children = (
-				5377429915AA4DC700DD547D /* kif.framework */,
-				53493F5115FC6D280059492E /* iSub-Integration-Tests-Info.plist */,
-				53493F4815FC6D200059492E /* iSubTestController.h */,
-				53493F4915FC6D200059492E /* iSubTestController.m */,
-				53493F4A15FC6D200059492E /* KIFTestScenario+CacheTab.h */,
-				53493F4B15FC6D200059492E /* KIFTestScenario+CacheTab.m */,
-				53493F4C15FC6D210059492E /* KIFTestScenario+FoldersTab.h */,
-				53493F4D15FC6D210059492E /* KIFTestScenario+FoldersTab.m */,
-			);
-			name = "KIF Integration Tests";
-			sourceTree = "<group>";
-		};
-		53159F89156F6F6E001B0268 /* GHUnit Tests */ = {
-			isa = PBXGroup;
-			children = (
-				532B227A156F762100C72D1B /* GHUnitIOS.framework */,
-				53493F4715FC6CE30059492E /* iSub-Unit-Tests-Info.plist */,
-			);
-			name = "GHUnit Tests";
-			sourceTree = "<group>";
-		};
 		532E6FD311AB31CF000A0E3B /* Settings view */ = {
 			isa = PBXGroup;
 			children = (
@@ -2277,16 +2228,6 @@
 				530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */,
 			);
 			name = Main;
-			sourceTree = "<group>";
-		};
-		5374F26B1661C56000529EF3 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5374F2821661C56000529EF3 /* libSub.a */,
-				5304A04C168FB555009B2732 /* libSubTests.app */,
-				53970B60169233CF00C092BF /* libSubOSX.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		5379DC431219E36C00F426CD /* Chat Tab */ = {
@@ -4150,9 +4091,6 @@
 				53159F1C156F69D0001B0268 /* MenuTableViewCell.m in Sources */,
 				53159F1D156F69D0001B0268 /* UIViewController+PushViewControllerCustom.m in Sources */,
 				53159F1E156F69D0001B0268 /* StackContainerView.m in Sources */,
-				53493F4E15FC6D210059492E /* iSubTestController.m in Sources */,
-				53493F4F15FC6D210059492E /* KIFTestScenario+CacheTab.m in Sources */,
-				53493F5015FC6D210059492E /* KIFTestScenario+FoldersTab.m in Sources */,
 				536C995016619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F15216E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
