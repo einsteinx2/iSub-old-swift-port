@@ -29,7 +29,7 @@
 #import "NSMutableURLRequest+PMS.h"
 #import "ISMSLoaderDelegate.h"
 #import "EX2Reachability.h"
-#import "HockeySDK.h"
+#import <HockeySDK/HockeySDK.h>
 #import "CustomUITabBarController.h"
 
 #import <MessageUI/MessageUI.h>
@@ -523,8 +523,6 @@
 	
 	if (isSessionStarted)
 	{
-		[Flurry setSecureTransportEnabled:YES];
-		
 		// These set to no as per Flurry support instructions to prevent crashes
 		[Flurry setSessionReportsOnPauseEnabled:NO];
 		[Flurry setSessionReportsOnCloseEnabled:NO];

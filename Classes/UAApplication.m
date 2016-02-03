@@ -8,8 +8,9 @@
 
 #import "UAApplication.h"
 #import "Imports.h"
+#import "CocoaLumberjack.h"
 
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+static const int ddLogLevel = DDLogLevelDebug;
 
 @implementation UAApplication
 

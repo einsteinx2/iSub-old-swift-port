@@ -16,7 +16,14 @@
 #import "CustomUITableViewController.h"
 #import "CustomUINavigationController.h"
 #import "SUSChatDAO.h"
+
+// MKStoreManager.h contains a user-defined warning. Since we forbid all warnings, importing
+// this without suppressing the warning throws a wrench into our build.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-W#warnings"
 #import "MKStoreManager.h"
+#pragma clang diagnostic pop
+
 #import "AsynchronousImageView.h"
 #import "AsynchronousImageViewDelegate.h"
 #import "NSMutableURLRequest+SUS.h"
