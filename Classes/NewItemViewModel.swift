@@ -61,10 +61,7 @@ public class NewItemViewModel : NSObject {
         _loader.startLoad()
     }
     
-    // Eventually only do this if they've actually changed
     private func processModels() {
-        _loader.persistModels()
-        
         guard let items = _loader.items else {
             // No models to process
             return;

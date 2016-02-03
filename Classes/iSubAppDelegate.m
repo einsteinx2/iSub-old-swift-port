@@ -19,7 +19,6 @@
 #import "SFHFKeychainUtils.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import "iPhoneStreamingPlayerViewController.h"
 #import "ISMSUpdateChecker.h"
 #import "MKStoreManager.h"
 #import <MediaPlayer/MediaPlayer.h>
@@ -32,7 +31,6 @@
 #import "EX2Reachability.h"
 #import "HockeySDK.h"
 #import "CustomUITabBarController.h"
-#import "NewHomeViewController.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -69,9 +67,10 @@
 
 - (void)showPlayer
 {
-    iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-    streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-    [(UINavigationController*)self.currentTabBarController.selectedViewController pushViewController:streamingPlayerViewController animated:YES];
+    // TODO: Update for new UI
+//    iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+//    streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
+//    [(UINavigationController*)self.currentTabBarController.selectedViewController pushViewController:streamingPlayerViewController animated:YES];
 }
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
@@ -179,7 +178,9 @@
 	//[self loadCrittercism];
 		
 	[self loadInAppPurchaseStore];
-			
+	
+    // TODO: Update for new UI
+    /*
 	// Create and display UI
 	self.introController = nil;
 	if (IS_IPAD())
@@ -258,7 +259,7 @@
 		[viewObjectsS showAlbumLoadingScreen:self.window sender:self];
 		
 		[self checkServer];
-	}
+	}*/
     
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(showPlayer) name:ISMSNotification_ShowPlayer object:nil];
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(playVideoNotification:) name:ISMSNotification_PlayVideo object:nil];
@@ -1511,7 +1512,7 @@
     if (settingsS.isVideoUnlocked)
     {
         NSString *serverType = settingsS.serverType;
-        if (!aSong.isVideo || (([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE]) && !settingsS.isVideoSupported))
+        if (aSong.contentType.basicType != ISMSBasicContentTypeVideo || (([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE]) && !settingsS.isVideoSupported))
             return;
         
         if (IS_IPAD())

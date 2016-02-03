@@ -12,7 +12,6 @@
 #import "AsynchronousImageView.h"
 #import "AsynchronousImageViewDelegate.h"
 #import "Imports.h"
-#import "PageControlViewController.h"
 
 //LOG_LEVEL_ISUB_DEBUG
 

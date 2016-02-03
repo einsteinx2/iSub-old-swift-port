@@ -303,11 +303,12 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
             cell.indexPath = indexPath
             cell.associatedObject = song
             cell.coverArtId = nil
-            cell.trackNumber = song.track
+            cell.trackNumber = song.trackNumber
             cell.title = song.title
-            cell.subTitle = song.artistName == nil ? "" : song.artistName
+            cell.subTitle = song.artist?.name
             cell.duration = song.duration
-            cell.playing = song.isCurrentPlayingSong()
+            // TODO: Readd this with new data model
+            //cell.playing = song.isCurrentPlayingSong()
             
             if song.isFullyCached {
                 cell.backgroundView = UIView()
@@ -352,8 +353,9 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
                 folderLoader.folderId = folder.folderId
                 folderLoader.mediaFolderId = folder.mediaFolderId
                 
-                let itemViewController = ItemViewController(itemLoader: folderLoader)
-                self.pushViewControllerCustom(itemViewController)
+                let viewModel = NewItemViewModel(loader: folderLoader)
+                let viewController = NewItemViewController(viewModel: viewModel)
+                self.pushViewControllerCustom(viewController)
             case _artistsSectionIndex:
                 break
             case _albumsSectionIndex:
@@ -363,7 +365,7 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
                 playAll(songs: _viewModel.songs, playIndex: indexPath.row)
                 
                 let song = _viewModel.songs[indexPath.row] as ISMSSong
-                if !song.isVideo {
+                if song.contentType?.basicType == ISMSBasicContentType.Audio {
                     self.showPlayer()
                 }
                 break

@@ -33,7 +33,6 @@
 @property (strong) IBOutlet UITabBarController *mainTabBarController;
 @property (strong) IBOutlet UITabBarController *offlineTabBarController;
 @property (strong) IBOutlet UINavigationController *homeNavigationController;
-@property (strong) IBOutlet FoldersViewController *rootViewController;
 @property (strong) IBOutlet UINavigationController *playerNavigationController;
 @property (strong) IBOutlet UINavigationController *artistsNavigationController;
 @property (strong) IBOutlet ItemViewController *artistsViewController;

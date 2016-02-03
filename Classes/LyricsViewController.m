@@ -104,7 +104,7 @@
 - (void)updateLyricsLabel
 {	
 	ISMSSong *currentSong = playlistS.currentSong;
-	NSString *lyrics = [self.dataModel loadLyricsForArtist:currentSong.artistName andTitle:currentSong.title];
+	NSString *lyrics = [self.dataModel loadLyricsForArtist:currentSong.artist.name andTitle:currentSong.title];
 	//DLog(@"lyrics = %@", lyrics);
 	if (!lyrics)
 		lyrics = @"\n\nNo lyrics found";

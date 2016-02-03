@@ -12,12 +12,6 @@
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import "MenuTableViewCell.h"
-#import "NewHomeViewController.h"
-#import "PlaylistsViewController.h"
-#import "PlayingViewController.h"
-#import "GenresViewController.h"
-#import "CacheViewController.h"
-#import "iPhoneStreamingPlayerViewController.h"
 #import "UIViewController+PushViewControllerCustom.h"
 #import "ServerListViewController.h"
 
@@ -82,14 +76,15 @@
         _playerHolder.translatesAutoresizingMaskIntoConstraints = NO;
         [self.view addSubview:_playerHolder];
         
-        // Create the player
-		_playerController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-		_playerNavController = [[CustomUINavigationController alloc] initWithRootViewController:_playerController];
-        _playerNavController.view.frame = _playerHolder.frame;
-        _playerNavController.view.translatesAutoresizingMaskIntoConstraints = YES;
-        _playerNavController.view.autoresizingMask = UIViewAutoresizingNone;
-        _playerNavController.navigationBar.barTintColor = [UIColor blackColor];
-        [_playerHolder addSubview:_playerNavController.view];
+        // TODO: Update for new UI
+//        // Create the player
+//		_playerController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
+//		_playerNavController = [[CustomUINavigationController alloc] initWithRootViewController:_playerController];
+//        _playerNavController.view.frame = _playerHolder.frame;
+//        _playerNavController.view.translatesAutoresizingMaskIntoConstraints = YES;
+//        _playerNavController.view.autoresizingMask = UIViewAutoresizingNone;
+//        _playerNavController.navigationBar.barTintColor = [UIColor blackColor];
+//        [_playerHolder addSubview:_playerNavController.view];
 				
 		_isFirstLoad = YES;
 		_lastSelectedRow = NSIntegerMax;
@@ -311,7 +306,8 @@
 
 - (void)showControllerForIndexPath:(NSIndexPath *)indexPath
 {
-    // If we have the back button displayed, subtract 1 from the row to get the correct action
+    // TODO: Update for new UI
+    /*// If we have the back button displayed, subtract 1 from the row to get the correct action
     NSUInteger row = appDelegateS.referringAppUrl ? indexPath.row - 1 : indexPath.row;
     
 	// Present the view controller
@@ -372,7 +368,7 @@
                             invokeByController:self
                               isStackStartView:YES];
 	
-    _lastSelectedRow = indexPath.row;
+    _lastSelectedRow = indexPath.row;*/
 }
 
 #pragma mark - Memory management

@@ -10,7 +10,6 @@
 #import "Imports.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
-#import "iPhoneStreamingPlayerViewController.h"
 #import "iPadRootViewController.h"
 #import "StackScrollViewController.h"
 #import <Accounts/Accounts.h>
@@ -311,9 +310,10 @@
 				case 8: settingsS.quickSkipNumberOfSeconds = 1200; break;
 				default: break;
 			}
-			
-			if (IS_IPAD())
-				[appDelegateS.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
+
+            // TODO: Update for new UI
+//			if (IS_IPAD())
+//				[appDelegateS.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
 		}
         else if (sender == self.maxVideoBitrate3GSegmentedControl)
         {
@@ -518,8 +518,6 @@
 					[controllers addObject:appDelegateS.genresNavigationController];
 					appDelegateS.mainTabBarController.viewControllers = controllers;
 				}
-				
-				[databaseS setupAllSongsDb];
 			}
 			else
 			{
@@ -529,10 +527,6 @@
 					[appDelegateS.ipadRootViewController.menuViewController loadCellContents];
 				else
 					[viewObjectsS orderMainTabBarController];
-				
-				[databaseS.allAlbumsDbQueue close];
-				[databaseS.allSongsDbQueue close];
-				[databaseS.genresDbQueue close];
 			}
 		}
 		else if (sender == self.disableRotationSwitch)
@@ -611,10 +605,11 @@
 
 - (void)popFoldersTab
 {
-	if (IS_IPAD())
-		[appDelegateS.artistsNavigationController popToRootViewControllerAnimated:NO];
-	else
-		[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+    // TODO: Do in new UI
+//	if (IS_IPAD())
+//		[appDelegateS.artistsNavigationController popToRootViewControllerAnimated:NO];
+//	else
+//		[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
