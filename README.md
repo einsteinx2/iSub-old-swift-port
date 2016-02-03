@@ -1,5 +1,4 @@
-# \#iSUBFOREVER
-### iSub is back!
+# \#iSUBFOREVER - iSub is back!
 
 ### How to build
 0. Install Cocoapods: `sudo gem install cocoapods`
