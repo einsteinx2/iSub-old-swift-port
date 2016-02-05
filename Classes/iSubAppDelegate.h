@@ -24,9 +24,8 @@
 
 @property (strong) ISMSStatusLoader *statusLoader;
 
-@property (strong, nonatomic) IBOutlet UIWindow *window;
-
 // New UI
+@property (nonatomic, strong) UIWindow *window;
 @property (strong) JASidePanelController *sidePanelController;
 
 

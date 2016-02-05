@@ -31,3 +31,5 @@
 #import "UIView+Tools.h"
 #import "NSString+Time.h"
 #import "iPadRootViewController.h"
+
+#import <JASidePanels/JASidePanelController.h>

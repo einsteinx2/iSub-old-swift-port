@@ -458,6 +458,12 @@
 		5332468C14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
 		5332468D14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
 		5332468E14D7BDFA008B35F6 /* controller-previous-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */; };
+		5333D1071C6540E100DC19F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5333D1061C6540E100DC19F4 /* Main.storyboard */; };
+		5333D1081C6540E100DC19F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5333D1061C6540E100DC19F4 /* Main.storyboard */; };
+		5333D1091C6540E100DC19F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5333D1061C6540E100DC19F4 /* Main.storyboard */; };
+		5333D10B1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */; };
+		5333D10C1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */; };
+		5333D10D1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */; };
 		5333F01B182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
 		5333F01C182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
 		5333F01D182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
@@ -548,12 +554,6 @@
 		53493F3815FC6C3A0059492E /* BassEffectDefaultPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */; };
 		53493F3915FC6C3B0059492E /* BassEffectDefaultPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */; };
 		53493F3A15FC6C3B0059492E /* BassEffectDefaultPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */; };
-		53493F4115FC6CAE0059492E /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53493F3F15FC6CAE0059492E /* MainWindow-iPad.xib */; };
-		53493F4215FC6CAE0059492E /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53493F3F15FC6CAE0059492E /* MainWindow-iPad.xib */; };
-		53493F4315FC6CAE0059492E /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53493F3F15FC6CAE0059492E /* MainWindow-iPad.xib */; };
-		53493F4415FC6CAE0059492E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53493F4015FC6CAE0059492E /* MainWindow.xib */; };
-		53493F4515FC6CAE0059492E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53493F4015FC6CAE0059492E /* MainWindow.xib */; };
-		53493F4615FC6CAE0059492E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53493F4015FC6CAE0059492E /* MainWindow.xib */; };
 		5349AD041613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
 		5349AD051613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
 		5349AD061613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
@@ -1464,6 +1464,8 @@
 		5332467D14D7BDFA008B35F6 /* controller-pause-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause-ipad.png"; path = "Images/Player Icons/controller-pause-ipad.png"; sourceTree = "<group>"; };
 		5332467E14D7BDFA008B35F6 /* controller-play-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play-ipad.png"; path = "Images/Player Icons/controller-play-ipad.png"; sourceTree = "<group>"; };
 		5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-previous-ipad.png"; path = "Images/Player Icons/controller-previous-ipad.png"; sourceTree = "<group>"; };
+		5333D1061C6540E100DC19F4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueueViewController.swift; sourceTree = "<group>"; };
 		5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-volumeslider-thumb.png"; path = "Images/Player Icons/controller-volumeslider-thumb.png"; sourceTree = "<group>"; };
 		5333F01A182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-volumeslider-thumb@2x.png"; path = "Images/Player Icons/controller-volumeslider-thumb@2x.png"; sourceTree = "<group>"; };
 		533A2D05113C61C900B3A376 /* AsynchronousImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AsynchronousImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1513,8 +1515,6 @@
 		53493F2C15FC6BD90059492E /* KeychainAccessGroups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = KeychainAccessGroups.plist; path = Other/KeychainAccessGroups.plist; sourceTree = "<group>"; };
 		53493F3315FC6BF10059492E /* Imports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Imports.h; path = Other/Imports.h; sourceTree = "<group>"; };
 		53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = BassEffectDefaultPresets.plist; path = Other/BassEffectDefaultPresets.plist; sourceTree = "<group>"; };
-		53493F3F15FC6CAE0059492E /* MainWindow-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Other/MainWindow-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		53493F4015FC6CAE0059492E /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainWindow.xib; path = Other/MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		5349AD031613724D003603AF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Images/Other/Default-568h@2x.png"; sourceTree = "<group>"; };
 		5349F14D16E9458B00E56582 /* IDTwitterAccountChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IDTwitterAccountChooserViewController.h; path = Classes/IDTwitterAccountChooserViewController.h; sourceTree = "<group>"; };
 		5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IDTwitterAccountChooserViewController.m; path = Classes/IDTwitterAccountChooserViewController.m; sourceTree = "<group>"; };
@@ -2216,8 +2216,7 @@
 		536F9D7D119783D4002E526A /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				53493F3F15FC6CAE0059492E /* MainWindow-iPad.xib */,
-				53493F4015FC6CAE0059492E /* MainWindow.xib */,
+				5333D1061C6540E100DC19F4 /* Main.storyboard */,
 				1D3623240D0F684500981E51 /* iSubAppDelegate.h */,
 				1D3623250D0F684500981E51 /* iSubAppDelegate.m */,
 				532862D911C573AD00B40FF0 /* UAApplication.h */,
@@ -2459,6 +2458,7 @@
 			isa = PBXGroup;
 			children = (
 				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
+				5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */,
 				53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */,
 				53ABE1411C60363E00E0E72B /* NewItemViewController.swift */,
 				53ABE1401C60363E00E0E72B /* NewItemViewController.xib */,
@@ -2805,6 +2805,7 @@
 				53AAF19711DA90D800447FF7 /* playing-tabbaricon@2x.png in Resources */,
 				53AAF19811DA90D800447FF7 /* playlists-tabbaricon@2x.png in Resources */,
 				53AAF19911DA90D800447FF7 /* songs-tabbaricon@2x.png in Resources */,
+				5333D1071C6540E100DC19F4 /* Main.storyboard in Resources */,
 				53AAF1C411DA983700447FF7 /* gear@2x.png in Resources */,
 				53AAF1D911DA9DB600447FF7 /* background@2x.png in Resources */,
 				53AAF1DE11DA9F0200447FF7 /* now-playing@2x.png in Resources */,
@@ -3011,8 +3012,6 @@
 				53493F1715FC6A3A0059492E /* shuffle-small@2x.png in Resources */,
 				53493F3015FC6BD90059492E /* KeychainAccessGroups.plist in Resources */,
 				53493F3815FC6C3A0059492E /* BassEffectDefaultPresets.plist in Resources */,
-				53493F4115FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
-				53493F4415FC6CAE0059492E /* MainWindow.xib in Resources */,
 				5349AD041613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABB16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65ABF16533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
@@ -3310,6 +3309,7 @@
 				53BC26BF139AF0DD00A825F1 /* albums-tabbaricon.png in Resources */,
 				53BC26C0139AF0DD00A825F1 /* songs-tabbaricon.png in Resources */,
 				53BC26C1139AF0DD00A825F1 /* playing-tabbaricon.png in Resources */,
+				5333D1091C6540E100DC19F4 /* Main.storyboard in Resources */,
 				53BC26C3139AF0DD00A825F1 /* current-server.png in Resources */,
 				53BC26C5139AF0DD00A825F1 /* now-playing.png in Resources */,
 				53BC26C6139AF0DD00A825F1 /* reload-table.png in Resources */,
@@ -3539,9 +3539,7 @@
 				53493F1915FC6A3A0059492E /* shuffle-small@2x.png in Resources */,
 				53493F3215FC6BD90059492E /* KeychainAccessGroups.plist in Resources */,
 				53493F3A15FC6C3B0059492E /* BassEffectDefaultPresets.plist in Resources */,
-				53493F4315FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
 				53649DD7184DA99B00E600EC /* Icon-76@2x.png in Resources */,
-				53493F4615FC6CAE0059492E /* MainWindow.xib in Resources */,
 				5355C81D1A491E3800CBB225 /* ChatViewController.xib in Resources */,
 				5349AD061613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABD16533E4800472DBF /* back-tabbaricon.png in Resources */,
@@ -3607,6 +3605,7 @@
 				53DCF44013BFEAD3009160F9 /* playing-tabbaricon@2x.png in Resources */,
 				53DCF44113BFEAD3009160F9 /* playlists-tabbaricon@2x.png in Resources */,
 				53DCF44213BFEAD3009160F9 /* songs-tabbaricon@2x.png in Resources */,
+				5333D1081C6540E100DC19F4 /* Main.storyboard in Resources */,
 				53DCF44313BFEAD3009160F9 /* gear@2x.png in Resources */,
 				53DCF44413BFEAD3009160F9 /* background@2x.png in Resources */,
 				53DCF44513BFEAD3009160F9 /* now-playing@2x.png in Resources */,
@@ -3813,8 +3812,6 @@
 				53493F1815FC6A3A0059492E /* shuffle-small@2x.png in Resources */,
 				53493F3115FC6BD90059492E /* KeychainAccessGroups.plist in Resources */,
 				53493F3915FC6C3B0059492E /* BassEffectDefaultPresets.plist in Resources */,
-				53493F4215FC6CAE0059492E /* MainWindow-iPad.xib in Resources */,
-				53493F4515FC6CAE0059492E /* MainWindow.xib in Resources */,
 				5349AD051613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABC16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65AC016533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
@@ -4044,6 +4041,7 @@
 				537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
 				537E9A3114F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
+				5333D10B1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
 				D0EA476719DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
 				536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F14F16E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
@@ -4159,6 +4157,7 @@
 				537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
 				537E9A3314F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,
+				5333D10D1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
 				D0EA476919DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
 				536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F15116E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
@@ -4220,6 +4219,7 @@
 				537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
 				537E9A3214F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53493F2815FC6AC40059492E /* main.m in Sources */,
+				5333D10C1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
 				D0EA476819DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
 				536C994E16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F15016E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
