@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, NewItemViewController;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, NewItemViewController, JASidePanelController;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 
@@ -25,6 +25,11 @@
 @property (strong) ISMSStatusLoader *statusLoader;
 
 @property (strong, nonatomic) IBOutlet UIWindow *window;
+
+// New UI
+@property (strong) JASidePanelController *sidePanelController;
+
+
 
 @property (strong) IntroViewController *introController;
 @property (strong) SettingsViewController *settingsViewController;

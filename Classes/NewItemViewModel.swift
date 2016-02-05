@@ -8,37 +8,37 @@
 
 import Foundation
 
-public protocol NewItemViewModelDelegate {
+protocol NewItemViewModelDelegate {
     func itemsChanged()
     func loadingError(error: String)
 }
 
-public typealias LoadModelsCompletion = (success: Bool, error: NSError?) -> Void
+typealias LoadModelsCompletion = (success: Bool, error: NSError?) -> Void
 
-public class NewItemViewModel : NSObject {
+class NewItemViewModel : NSObject {
     
     private let _loader: ISMSItemLoader
     
-    public var delegate: NewItemViewModelDelegate?
+    var delegate: NewItemViewModelDelegate?
     
-    public private(set) var rootItem: ISMSItem?
+    private(set) var rootItem: ISMSItem?
     
-    public private(set) var items = [ISMSItem]()
-    public private(set) var folders = [ISMSFolder]()
-    public private(set) var artists = [ISMSArtist]()
-    public private(set) var albums = [ISMSAlbum]()
-    public private(set) var songs = [ISMSSong]()
-    public private(set) var playlists = [ISMSPlaylist]()
+    private(set) var items = [ISMSItem]()
+    private(set) var folders = [ISMSFolder]()
+    private(set) var artists = [ISMSArtist]()
+    private(set) var albums = [ISMSAlbum]()
+    private(set) var songs = [ISMSSong]()
+    private(set) var playlists = [ISMSPlaylist]()
     
-    public private(set) var songsDuration = 0
-    public private(set) var sectionIndexes = [ISMSSectionIndex]()
+    private(set) var songsDuration = 0
+    private(set) var sectionIndexes = [ISMSSectionIndex]()
     
     init(loader: ISMSItemLoader) {
         _loader = loader
         rootItem = loader.associatedObject as? ISMSItem
     }
     
-    public func loadModelsFromCache() -> Bool {
+    func loadModelsFromCache() -> Bool {
         let success = _loader.loadModelsFromCache()
         if (success) {
             self.processModels()
@@ -47,7 +47,7 @@ public class NewItemViewModel : NSObject {
         return success
     }
     
-    public func loadModelsFromWeb(completion: LoadModelsCompletion?) {
+    func loadModelsFromWeb(completion: LoadModelsCompletion?) {
         _loader.callbackBlock = { success, error, loader in
             if success {
                 self.processModels()
@@ -61,7 +61,7 @@ public class NewItemViewModel : NSObject {
         _loader.startLoad()
     }
     
-    private func processModels() {
+    func processModels() {
         guard let items = _loader.items else {
             // No models to process
             return;
@@ -95,7 +95,7 @@ public class NewItemViewModel : NSObject {
         }
     }
     
-    public func cancelLoad() {
+    func cancelLoad() {
         _loader.cancelLoad()
     }
 }

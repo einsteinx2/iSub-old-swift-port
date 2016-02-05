@@ -31,6 +31,7 @@
 #import "EX2Reachability.h"
 #import <HockeySDK/HockeySDK.h>
 #import "CustomUITabBarController.h"
+#import "JASidePanelController.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -260,6 +261,10 @@
 		
 		[self checkServer];
 	}*/
+    
+    // New UI
+    _sidePanelController = [[JASidePanelController alloc] init];
+    
     
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(showPlayer) name:ISMSNotification_ShowPlayer object:nil];
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(playVideoNotification:) name:ISMSNotification_PlayVideo object:nil];

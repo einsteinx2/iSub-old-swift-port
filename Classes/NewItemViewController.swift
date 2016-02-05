@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class NewItemViewController: CustomUITableViewController, AsynchronousImageViewDelegate {
+class NewItemViewController: CustomUITableViewController, AsynchronousImageViewDelegate {
     
     private let _appDelegate = iSubAppDelegate.sharedInstance()
     private let _viewObjects = ViewObjectsSingleton.sharedInstance()
@@ -38,17 +38,17 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
     @IBOutlet public var albumInfoTrackCountLabel: UILabel?
     @IBOutlet public var albumInfoDurationLabel: UILabel?
     
-    public init(viewModel: NewItemViewModel) {
+    init(viewModel: NewItemViewModel) {
         _viewModel = viewModel
         
         super.init(nibName: "NewItemViewController", bundle: nil)
     }
     
-    public required init(coder aDecoder: NSCoder) {
+    required init(coder aDecoder: NSCoder) {
         fatalError("NSCoding not supported")
     }
     
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         self.edgesForExtendedLayout = UIRectEdge.None
@@ -64,11 +64,11 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
         }
     }
     
-    public override func customizeTableView(tableView: UITableView!) {
+    override func customizeTableView(tableView: UITableView!) {
         tableView.registerClass(NewItemUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifier)
     }
     
-    public override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         self.tableView.reloadData()
@@ -76,7 +76,7 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
         _registerForNotifications()
     }
     
-    public override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
         _viewModel.cancelLoad()
@@ -100,21 +100,21 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
         NSNotificationCenter.defaultCenter().removeObserver(self, name: ISMSNotification_SongPlaybackStarted, object: nil)
     }
     
-    public func currentPlaylistIndexChanged(notification: NSNotification?) {
+    func currentPlaylistIndexChanged(notification: NSNotification?) {
         self.tableView.reloadData()
     }
     
-    public func songPlaybackStarted(notification: NSNotification?) {
+    func songPlaybackStarted(notification: NSNotification?) {
         self.tableView.reloadData()
     }
     
     // MARK: - Loading -
     
-    public override func shouldSetupRefreshControl() -> Bool {
+    override func shouldSetupRefreshControl() -> Bool {
         return true
     }
     
-    public override func didPullToRefresh() {
+    override func didPullToRefresh() {
         if !_reloading {
             _reloading = true
             _viewModel.loadModelsFromWeb(nil)
@@ -126,7 +126,7 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
         self.refreshControl?.endRefreshing()
     }
     
-    public func cancelLoad() {
+    func cancelLoad() {
         _viewModel.cancelLoad()
         self._dataSourceDidFinishLoadingNewData()
     }
@@ -176,7 +176,7 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
     
     // MARK: - Actions -
     
-    @IBAction public func a_expandCoverArt(sender: AnyObject?) {
+    @IBAction func a_expandCoverArt(sender: AnyObject?) {
         var modalArtViewController: ModalAlbumArtViewController?
         
         switch _viewModel.rootItem {
@@ -197,7 +197,7 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
     
     // MARK: - Table View Delegate -
     
-    public override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+    override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
         var titles: [String] = []
         
         if let sectionIndexes = _sectionIndexes {
@@ -209,7 +209,7 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
         return titles;
     }
     
-    public override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
+    override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
         if let sectionIndexes = _sectionIndexes {
             let row = sectionIndexes[index].firstIndex
             
@@ -234,11 +234,11 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
         return -1;
     }
     
-    public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 5
     }
     
-    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var count: Int? = nil
         
         switch section {
@@ -253,7 +253,7 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
         return count == nil ? 0 : count!
     }
     
-    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! NewItemUITableViewCell
         cell.alwaysShowSubtitle = true
         //cell.delegate = self
@@ -325,7 +325,7 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
         return cell
     }
     
-    public override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         var height: CGFloat = 0
         
         switch indexPath.section {
@@ -344,7 +344,7 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
         return ISMSNormalize(height)
     }
     
-    public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if _viewObjects.isCellEnabled {
             switch indexPath.section {
             case _foldersSectionIndex:
@@ -382,14 +382,14 @@ public class NewItemViewController: CustomUITableViewController, AsynchronousIma
 
 extension NewItemViewController : NewItemViewModelDelegate {
     
-    public func itemsChanged() {
+    func itemsChanged() {
         self.tableView.reloadData()
         _addHeaderAndIndex()
         
         _dataSourceDidFinishLoadingNewData()
     }
     
-    public func loadingError(error: String) {
+    func loadingError(error: String) {
         let message = "There was an error loading the folder.\n\nError \(error)"
         
         let alert = CustomUIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "OK")

@@ -28,6 +28,7 @@ PODS:
   - HockeySDK (3.8.5):
     - HockeySDK/AllFeaturesLib (= 3.8.5)
   - HockeySDK/AllFeaturesLib (3.8.5)
+  - JASidePanels (1.3.2)
   - libSub (0.0.1):
     - CocoaHTTPServer
     - EX2Kit
@@ -47,6 +48,7 @@ PODS:
 DEPENDENCIES:
   - EX2Kit (from `Frameworks/libSub/Frameworks/EX2Kit/EX2Kit.podspec`)
   - HockeySDK
+  - JASidePanels
   - libSub (from `Frameworks/libSub/libSub.podspec`)
 
 EXTERNAL SOURCES:
@@ -63,6 +65,7 @@ SPEC CHECKSUMS:
   Flurry-iOS-SDK: 054befae0fa0244fb000985bfe757d70f87a9f60
   FMDB: c1968bab3ab0aed38f66cb778ae1e7fa9a652b6e
   HockeySDK: dd11a2b9da3372fd025643bee5bc10c8c613d169
+  JASidePanels: c8f5b130e18d51ee3de988d1c1fad2f88e0b0d21
   libSub: 8a71d63316b0b4bfa29f08b8a4068d61e522fa9e
   MKStoreKit: 748617e5f87ad1e0d3f075155047945248eccefc
   RaptureXML: b5c33c04c1a4adfd8ad0d5463329a31820596e82
@@ -70,6 +73,6 @@ SPEC CHECKSUMS:
   TBXML: 9f9dadb239f2f2af1dadb87fe43a0ce6e479379a
   ZipKit: 594735e7ad2fd3ee7349759681a0423a1b296572
 
-PODFILE CHECKSUM: b9150ee830296b43bfe7d72ddd8ad7bd8fc7b83c
+PODFILE CHECKSUM: e348b6f5a49122a589cd468161c84c9f0bf675e8
 
 COCOAPODS: 1.0.0.beta.3
