@@ -33,3 +33,4 @@
 #import "iPadRootViewController.h"
 
 #import <JASidePanels/JASidePanelController.h>
+#import <JASidePanels/UIViewController+JASidePanel.h>

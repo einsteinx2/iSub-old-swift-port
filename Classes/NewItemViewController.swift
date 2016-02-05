@@ -29,14 +29,14 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     
     private var _hasCachedItems: Bool = false
     
-    @IBOutlet public var albumInfoView: UIView?
-    @IBOutlet public var albumInfoArtHolderView: UIView?
-    @IBOutlet public var albumInfoArtView: AsynchronousImageView?
-    @IBOutlet public var albumInfoLabelHolderView: UIView?
-    @IBOutlet public var albumInfoArtistLabel: UILabel?
-    @IBOutlet public var albumInfoAlbumLabel: UILabel?
-    @IBOutlet public var albumInfoTrackCountLabel: UILabel?
-    @IBOutlet public var albumInfoDurationLabel: UILabel?
+    @IBOutlet var albumInfoView: UIView?
+    @IBOutlet var albumInfoArtHolderView: UIView?
+    @IBOutlet var albumInfoArtView: AsynchronousImageView?
+    @IBOutlet var albumInfoLabelHolderView: UIView?
+    @IBOutlet var albumInfoArtistLabel: UILabel?
+    @IBOutlet var albumInfoAlbumLabel: UILabel?
+    @IBOutlet var albumInfoTrackCountLabel: UILabel?
+    @IBOutlet var albumInfoDurationLabel: UILabel?
     
     init(viewModel: NewItemViewModel) {
         _viewModel = viewModel
@@ -46,6 +46,10 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     
     required init(coder aDecoder: NSCoder) {
         fatalError("NSCoding not supported")
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
     }
     
     override func viewDidLoad() {

@@ -10,35 +10,13 @@ import UIKit
 
 private class MenuItem {
     let name: String
-    let function: (MenuItem) -> Void
+    let function: NewMenuViewController -> (MenuItem) -> Void
     var navController: UINavigationController?
     
-    init(name: String, function: (MenuItem) -> Void) {
+    init(name: String, function: NewMenuViewController -> (MenuItem) -> Void) {
         self.name = name
         self.function = function
     }
-}
-
-private func showFolders(menuItem: MenuItem) {
-    if menuItem.navController == nil {
-        let loader = ISMSNewRootFoldersLoader()
-        let viewModel = NewItemViewModel(loader: loader)
-        let viewController = NewItemViewController(viewModel: viewModel)
-        menuItem.navController = UINavigationController(rootViewController: viewController)
-    }
-    
-    iSubAppDelegate.sharedInstance().sidePanelController.centerPanel = menuItem.navController
-}
-
-private func showArtists(menuItem: MenuItem) {
-    if menuItem.navController == nil {
-        let loader = ISMSRootArtistsLoader()
-        let viewModel = NewItemViewModel(loader: loader)
-        let viewController = NewItemViewController(viewModel: viewModel)
-        menuItem.navController = UINavigationController(rootViewController: viewController)
-    }
-    
-    iSubAppDelegate.sharedInstance().sidePanelController.centerPanel = menuItem.navController
 }
 
 class NewMenuViewController: UITableViewController {
@@ -47,14 +25,44 @@ class NewMenuViewController: UITableViewController {
     private let menuItems = [MenuItem(name: "Folders", function: showFolders),
                              MenuItem(name: "Artists", function: showArtists)];
     
-    func showDefaultViewController() {
-        let defaultMenuItem = menuItems[0]
-        defaultMenuItem.function(defaultMenuItem)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor.darkGrayColor()
+        
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
+        self.tableView.separatorStyle = .None
+    }
+    
+    func showDefaultViewController() {
+        let defaultMenuItem = menuItems[0]
+        defaultMenuItem.function(self)(defaultMenuItem)
+    }
+    
+    private func showFolders(menuItem: MenuItem) {
+        if menuItem.navController == nil {
+            let loader = ISMSNewRootFoldersLoader()
+            let viewModel = NewItemViewModel(loader: loader)
+            let viewController = NewItemViewController(viewModel: viewModel)
+            let navController = UINavigationController(rootViewController: viewController)
+            navController.navigationBar.barStyle = .Black
+            menuItem.navController = navController
+        }
+        
+        self.sidePanelController!.centerPanel = menuItem.navController
+    }
+    
+    private func showArtists(menuItem: MenuItem) {
+        if menuItem.navController == nil {
+            let loader = ISMSRootArtistsLoader()
+            let viewModel = NewItemViewModel(loader: loader)
+            let viewController = NewItemViewController(viewModel: viewModel)
+            let navController = UINavigationController(rootViewController: viewController)
+            navController.navigationBar.barStyle = .Black
+            menuItem.navController = navController
+        }
+        
+        self.sidePanelController!.centerPanel = menuItem.navController
     }
 
     // MARK: - Table View Delegate -
@@ -69,6 +77,11 @@ class NewMenuViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier, forIndexPath: indexPath)
+        cell.backgroundColor = UIColor.clearColor()
+        cell.textLabel?.textColor = UIColor.whiteColor()
+        
+        let menuItem = self.menuItems[indexPath.row]
+        cell.textLabel?.text = menuItem.name
         
         return cell
     }
@@ -79,6 +92,6 @@ class NewMenuViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let menuItem = self.menuItems[indexPath.row]
-        menuItem.function(menuItem)
+        menuItem.function(self)(menuItem)
     }
 }

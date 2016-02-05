@@ -464,6 +464,9 @@
 		5333D10B1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */; };
 		5333D10C1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */; };
 		5333D10D1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */; };
+		5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D10E1C654B5900DC19F4 /* SidePanelController.swift */; };
+		5333D1101C654B5900DC19F4 /* SidePanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D10E1C654B5900DC19F4 /* SidePanelController.swift */; };
+		5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333D10E1C654B5900DC19F4 /* SidePanelController.swift */; };
 		5333F01B182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
 		5333F01C182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
 		5333F01D182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */; };
@@ -1466,6 +1469,7 @@
 		5332467F14D7BDFA008B35F6 /* controller-previous-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-previous-ipad.png"; path = "Images/Player Icons/controller-previous-ipad.png"; sourceTree = "<group>"; };
 		5333D1061C6540E100DC19F4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueueViewController.swift; sourceTree = "<group>"; };
+		5333D10E1C654B5900DC19F4 /* SidePanelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidePanelController.swift; sourceTree = "<group>"; };
 		5333F019182C5D17003CFB6F /* controller-volumeslider-thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-volumeslider-thumb.png"; path = "Images/Player Icons/controller-volumeslider-thumb.png"; sourceTree = "<group>"; };
 		5333F01A182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-volumeslider-thumb@2x.png"; path = "Images/Player Icons/controller-volumeslider-thumb@2x.png"; sourceTree = "<group>"; };
 		533A2D05113C61C900B3A376 /* AsynchronousImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AsynchronousImageView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2457,6 +2461,7 @@
 		53ABE1361C6033F100E0E72B /* New UI */ = {
 			isa = PBXGroup;
 			children = (
+				5333D10E1C654B5900DC19F4 /* SidePanelController.swift */,
 				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
 				5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */,
 				53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */,
@@ -4043,6 +4048,7 @@
 				53493F2715FC6AC40059492E /* main.m in Sources */,
 				5333D10B1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
 				D0EA476719DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
+				5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F14F16E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
@@ -4159,6 +4165,7 @@
 				53493F2915FC6AC40059492E /* main.m in Sources */,
 				5333D10D1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
 				D0EA476919DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
+				5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F15116E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
@@ -4221,6 +4228,7 @@
 				53493F2815FC6AC40059492E /* main.m in Sources */,
 				5333D10C1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
 				D0EA476819DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
+				5333D1101C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				536C994E16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5349F15016E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
