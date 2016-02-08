@@ -27,9 +27,4 @@
 - (void)hideDeleteToggles;
 - (void)markCellAsPlayingAtIndexPath:(NSIndexPath *)indexPath;
 
-#pragma mark - Actions -
-
-- (void)a_settings:(id)sender;
-- (void)a_nowPlaying:(id)sender;
-
 @end

@@ -15,7 +15,7 @@
 
 @class FoldersViewController, ISMSArtist, LoadingScreen, ISMSAlbum, ISMSServer;
 
-@interface ViewObjectsSingleton : NSObject <UITabBarControllerDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate>
+@interface ViewObjectsSingleton : NSObject <MBProgressHUDDelegate>
 
 @property (strong) MBProgressHUD *HUD;
 
@@ -85,8 +85,6 @@
 
 + (instancetype)sharedInstance;
 
-- (void)orderMainTabBarController;
-
 - (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message;
 - (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message;
 - (void)showAlbumLoadingScreenOnMainWindowWithSender:(id)sender;
@@ -96,8 +94,6 @@
 - (UIColor *) currentDarkColor;
 
 - (void)enableCells;
-
-- (UIView *)createCellBackground:(NSInteger)row;
 
 @end
 

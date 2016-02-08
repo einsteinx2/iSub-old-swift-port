@@ -67,7 +67,7 @@
     [super viewWillAppear:animated];
     
     if(self != [[self.navigationController viewControllers] objectAtIndexSafe:0])
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(saveAction:)];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
@@ -83,7 +83,7 @@
 		if(self == [[self.navigationController viewControllers] firstObjectSafe])
 			self.navigationItem.leftBarButtonItem = nil;
 		else
-			self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(saveAction:)];
+			self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(saveAction:)];
 		
 	}
 }
@@ -234,20 +234,21 @@
 		[audioEngineS.player stop];
 		 settingsS.isJukeboxEnabled = NO;
 		
-		if (settingsS.isOfflineMode)
-		{
-			settingsS.isOfflineMode = NO;
-			
-			if (IS_IPAD())
-			{
-				[appDelegateS.ipadRootViewController.menuViewController toggleOfflineMode];
-			}
-			else
-			{
-                appDelegateS.window.rootViewController = appDelegateS.mainTabBarController;
-				[viewObjectsS orderMainTabBarController];
-			}
-		}
+        // TODO: Redo with new UI
+//		if (settingsS.isOfflineMode)
+//		{
+//			settingsS.isOfflineMode = NO;
+//			
+//			if (IS_IPAD())
+//			{
+//				[appDelegateS.ipadRootViewController.menuViewController toggleOfflineMode];
+//			}
+//			else
+//			{
+//                appDelegateS.window.rootViewController = appDelegateS.mainTabBarController;
+//				[viewObjectsS orderMainTabBarController];
+//			}
+//		}
 		
 		// Reset the databases
 		[databaseS closeAllDatabases];
@@ -332,7 +333,7 @@
 	}
 	serverType.frame = CGRectMake(271, 3, 44, 44);
 	
-	cell.backgroundView = [viewObjectsS createCellBackground:indexPath.row];
+    cell.backgroundView = [[UIView alloc] init];
 	
 	return cell;
 }

@@ -318,7 +318,7 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
                 cell.backgroundView = UIView()
                 cell.backgroundView!.backgroundColor = _viewObjects.currentLightColor()
             } else {
-                cell.backgroundView = _viewObjects.createCellBackground(indexPath.row)
+                cell.backgroundView = UIView()
             }
 
             break

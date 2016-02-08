@@ -293,7 +293,7 @@ extension ChatViewController {
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! ChatUITableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        cell.backgroundView = _viewObjects.createCellBackground(indexPath.row)
+        cell.backgroundView = UIView()
         
         guard let chatMessage = _dataModel.chatMessages?[indexPath.row], timestamp = chatMessage.timestamp else {
             return cell;
