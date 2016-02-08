@@ -17,6 +17,8 @@
 #import "CustomUINavigationController.h"
 #import "SUSChatDAO.h"
 
+#import "IntroViewController.h"
+
 // MKStoreManager.h contains a user-defined warning. Since we forbid all warnings, importing
 // this without suppressing the warning throws a wrench into our build.
 #pragma clang diagnostic push
@@ -34,3 +36,8 @@
 
 #import <JASidePanels/JASidePanelController.h>
 #import <JASidePanels/UIViewController+JASidePanel.h>
+
+#import <HockeySDK/HockeySDK.h>
+#import <MKStoreKit/MKStoreManager.h>
+#import <MKStoreKit/SFHFKeychainUtils.h>
+#import <CocoaHTTPServer/HTTPServer.h>
