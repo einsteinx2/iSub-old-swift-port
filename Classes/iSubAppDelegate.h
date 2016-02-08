@@ -34,22 +34,7 @@
 @property (strong) SettingsViewController *settingsViewController;
 @property (strong) IBOutlet UIImageView *background;
 @property (strong) UITabBarController *currentTabBarController;
-@property (strong) IBOutlet UITabBarController *mainTabBarController;
-@property (strong) IBOutlet UITabBarController *offlineTabBarController;
-@property (strong) IBOutlet UINavigationController *homeNavigationController;
-@property (strong) IBOutlet UINavigationController *playerNavigationController;
-@property (strong) IBOutlet UINavigationController *artistsNavigationController;
-@property (strong) IBOutlet ItemViewController *artistsViewController;
-@property (strong) IBOutlet UINavigationController *foldersNavigationControllerNew;
-@property (strong) IBOutlet NewItemViewController *foldersViewControllerNew; // Test
-@property (strong) IBOutlet UINavigationController *allAlbumsNavigationController;
-@property (strong) IBOutlet UINavigationController *allSongsNavigationController;
-@property (strong) IBOutlet UINavigationController *playlistsNavigationController;
-@property (strong) IBOutlet UINavigationController *bookmarksNavigationController;
-@property (strong) IBOutlet UINavigationController *playingNavigationController;
-@property (strong) IBOutlet UINavigationController *genresNavigationController;
-@property (strong) IBOutlet UINavigationController *cacheNavigationController;
-@property (strong) IBOutlet UINavigationController *chatNavigationController;
+
 @property (strong) UINavigationController *supportNavigationController;
 
 @property (strong) ServerListViewController *serverListViewController;
@@ -78,20 +63,13 @@
 
 - (void)loadFlurryAnalytics;
 - (void)loadHockeyApp;
-//- (void)loadCrittercism;
 - (void)loadInAppPurchaseStore;
 
 - (void)reachabilityChanged:(NSNotification *)note;
-- (NSInteger)getHour;
 
 - (void)showSettings;
 
-//- (BOOL)isWifi;
-
 - (void)batteryStateChanged:(NSNotification *)notification;
-
-- (void)startRedirectingLogToFile;
-- (void)stopRedirectingLogToFile;
 
 - (void)checkServer;
 
