@@ -95,9 +95,6 @@
     
     self.disableCellUsageSwitch.on = settingsS.isDisableUsageOver3G;
 	
-	self.enableSongsTabSwitch.on = settingsS.isSongsTabEnabled;
-//DLog(@"isSongsTabEnabled: %i", settingsS.isSongsTabEnabled);
-	
 	self.recoverSegmentedControl.selectedSegmentIndex = settingsS.recoverSetting;
 	
 	self.maxBitrateWifiSegmentedControl.selectedSegmentIndex = settingsS.maxBitrateWifi;
@@ -499,35 +496,6 @@
 		else if (sender == self.disablePopupsSwitch)
 		{
 			settingsS.isPopupsEnabled = !self.disablePopupsSwitch.on;
-		}
-		else if (sender == self.enableSongsTabSwitch)
-		{
-			if (self.enableSongsTabSwitch.on)
-			{
-				settingsS.isSongsTabEnabled = YES;
-				
-				if (IS_IPAD())
-				{
-					[appDelegateS.ipadRootViewController.menuViewController loadCellContents];
-				}
-				else
-				{
-					NSMutableArray *controllers = [NSMutableArray arrayWithArray:appDelegateS.mainTabBarController.viewControllers];
-					[controllers addObject:appDelegateS.allAlbumsNavigationController];
-					[controllers addObject:appDelegateS.allSongsNavigationController];
-					[controllers addObject:appDelegateS.genresNavigationController];
-					appDelegateS.mainTabBarController.viewControllers = controllers;
-				}
-			}
-			else
-			{
-				settingsS.isSongsTabEnabled = NO;
-
-				if (IS_IPAD())
-					[appDelegateS.ipadRootViewController.menuViewController loadCellContents];
-				else
-					[viewObjectsS orderMainTabBarController];
-			}
 		}
 		else if (sender == self.disableRotationSwitch)
 		{
