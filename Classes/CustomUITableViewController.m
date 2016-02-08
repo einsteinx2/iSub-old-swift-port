@@ -10,6 +10,8 @@
 #import "Imports.h"
 #import "ServerListViewController.h"
 #import "iSub-Swift.h"
+#import <JASidePanels/JASidePanelController.h>
+#import <JASidePanels/UIViewController+JASidePanel.h>
 
 @implementation CustomUITableViewController
 
@@ -104,31 +106,10 @@
 
 - (UIBarButtonItem *)setupLeftBarButton
 {
-    BOOL isRootViewController = self.navigationController.viewControllers[0] == self;
-    BOOL isInsideMoreTab = appDelegateS.mainTabBarController.selectedIndex == 4;
-    
-    UIBarButtonItem *leftBarButtonItem = nil;
-    
-    if (isRootViewController)
-    {
-        if (settingsS.isOfflineMode)
-        {
-            leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear"]
-                                                                 style:UIBarButtonItemStyleBordered
-                                                                target:self
-                                                                action:@selector(a_settings:)];
-        }
-        else if (appDelegateS.referringAppUrl && !isInsideMoreTab)
-        {
-            // Add a back button to return to the reffering app if there is one and we're the root controller
-            leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back"
-                                                                 style:UIBarButtonItemStyleBordered
-                                                                target:appDelegateS
-                                                                action:@selector(backToReferringApp)];
-        }
-    }
-    
-    return leftBarButtonItem;
+    return [[UIBarButtonItem alloc] initWithTitle:@"Menu"
+                                            style:UIBarButtonItemStylePlain
+                                           target:self
+                                           action:@selector(showMenu:)];
 }
 
 - (UIBarButtonItem *)setupRightBarButton
@@ -137,9 +118,9 @@
     if(musicS.showPlayerIcon)
     {
         rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing"]
-                                                              style:UIBarButtonItemStyleBordered
+                                                              style:UIBarButtonItemStylePlain
                                                              target:self
-                                                             action:@selector(a_nowPlaying:)];
+                                                             action:@selector(showPlayQueue:)];
     }
     
     return rightBarButtonItem;
@@ -225,19 +206,14 @@
 
 #pragma mark - Actions -
 
-- (void)a_settings:(id)sender
+- (void)showMenu:(id)sender
 {
-    ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-    serverListViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:serverListViewController animated:YES];
+    [self.sidePanelController showLeftPanelAnimated:YES];
 }
 
-- (void)a_nowPlaying:(id)sender
+- (void)showPlayQueue:(id)sender
 {
-    // TODO: Update for new UI
-//    iPhoneStreamingPlayerViewController *streamingPlayerViewController = [[iPhoneStreamingPlayerViewController alloc] initWithNibName:@"iPhoneStreamingPlayerViewController" bundle:nil];
-//    streamingPlayerViewController.hidesBottomBarWhenPushed = YES;
-//    [self.navigationController pushViewController:streamingPlayerViewController animated:YES];
+    [self.sidePanelController showRightPanelAnimated:YES];
 }
 
 #pragma mark - Table View Delegate -
