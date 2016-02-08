@@ -86,9 +86,6 @@
     // Start the save defaults timer and mem cache initial defaults
 	[settingsS setupSaveState];
     
-    // Run the one time actions
-    [self oneTimeRun];
-    
     //NSSetUncaughtExceptionHandler(&onUncaughtException);
 
     // Adjust the window to the correct size before anything else loads to prevent
@@ -282,15 +279,6 @@
         appDelegateS.window.backgroundColor = viewObjectsS.jukeboxColor;
     else
         appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
-}
-
-- (void)oneTimeRun
-{
-    if (settingsS.oneTimeRunIncrementor < 1)
-    {
-        settingsS.isPartialCacheNextSong = NO;
-        settingsS.oneTimeRunIncrementor = 1;
-    }
 }
 
 - (void)startHLSProxy
@@ -487,9 +475,6 @@
         
         //DLog(@"server verification passed, hiding loading screen");
         [viewObjectsS hideLoadingScreen];
-        
-        if (!IS_IPAD() && !settingsS.isOfflineMode)
-            [viewObjectsS orderMainTabBarController];
         
         // Since the download queue has been a frequent source of crashes in the past, and we start this on launch automatically
         // potentially resulting in a crash loop, do NOT start the download queue automatically if the app crashed on last launch.
@@ -897,24 +882,26 @@
 	
 	[cacheQueueManagerS stopDownloadQueue];
 
-	if (IS_IPAD())
-		[self.ipadRootViewController.menuViewController toggleOfflineMode];
-	else
-		[self.mainTabBarController.view removeFromSuperview];
+    // TODO: Implement offline mode in new UI
+//	if (IS_IPAD())
+//		[self.ipadRootViewController.menuViewController toggleOfflineMode];
+//	else
+//		[self.mainTabBarController.view removeFromSuperview];
 	
 	[databaseS closeAllDatabases];
 	[databaseS setupDatabases];
 	
-	if (IS_IPAD())
-	{
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-	}
-	else
-	{
-		self.currentTabBarController = self.offlineTabBarController;
-		//[self.window addSubview:self.offlineTabBarController.view];
-        self.window.rootViewController = self.offlineTabBarController;
-	}
+    // TODO: Implement offline mode in new UI
+//	if (IS_IPAD())
+//	{
+//		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
+//	}
+//	else
+//	{
+//		self.currentTabBarController = self.offlineTabBarController;
+//		//[self.window addSubview:self.offlineTabBarController.view];
+//        self.window.rootViewController = self.offlineTabBarController;
+//	}
 	
 	[musicS updateLockScreenInfo];
 }
@@ -940,16 +927,17 @@
 	[self checkServer];
 	[cacheQueueManagerS startDownloadQueue];
 	
-	if (IS_IPAD())
-	{
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
-	}
-	else
-	{
-		[viewObjectsS orderMainTabBarController];
-		//[self.window addSubview:self.mainTabBarController.view];
-        self.window.rootViewController = self.mainTabBarController;
-	}
+    // TODO: Implement offline mode in new UI
+//	if (IS_IPAD())
+//	{
+//		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ShowPlayer];
+//	}
+//	else
+//	{
+//		[viewObjectsS orderMainTabBarController];
+//		//[self.window addSubview:self.mainTabBarController.view];
+//        self.window.rootViewController = self.mainTabBarController;
+//	}
 	
 	[musicS updateLockScreenInfo];
 }
@@ -1301,7 +1289,7 @@
 	return (isReachable && !needsConnection) ? YES : NO;
 }*/
 
-- (NSInteger) getHour
+/*- (NSInteger) getHour
 {
 	// Get the time
 	NSCalendar *calendar= [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -1318,7 +1306,7 @@
 	//NSInteger sec = [dateComponents second];
 	
 	return [dateComponents hour];
-}
+}*/
 
 - (void)checkWaveBoxRelease
 {
@@ -1468,16 +1456,17 @@
         self.moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
         self.moviePlayer.allowsAirPlay = YES;
         
-        if (IS_IPAD())
-        {
-            [appDelegateS.ipadRootViewController.menuViewController.playerHolder addSubview:self.moviePlayer.view];
-            self.moviePlayer.view.frame = self.moviePlayer.view.superview.bounds;
-        }
-        else
-        {
-            [appDelegateS.mainTabBarController.view addSubview:self.moviePlayer.view];
-            self.moviePlayer.view.frame = CGRectZero;
-        }
+        // TODO: Implement video playback in new UI
+//        if (IS_IPAD())
+//        {
+//            [appDelegateS.ipadRootViewController.menuViewController.playerHolder addSubview:self.moviePlayer.view];
+//            self.moviePlayer.view.frame = self.moviePlayer.view.superview.bounds;
+//        }
+//        else
+//        {
+//            [appDelegateS.mainTabBarController.view addSubview:self.moviePlayer.view];
+//            self.moviePlayer.view.frame = CGRectZero;
+//        }
         
         [self.moviePlayer setFullscreen:YES animated:YES];
     }

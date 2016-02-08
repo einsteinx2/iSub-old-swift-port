@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AppDelegate: NSObject, UIApplicationDelegate, UIAlertViewDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate, ISMSLoaderDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, UIAlertViewDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate {//, ISMSLoaderDelegate {
     
     var window: UIWindow?
     

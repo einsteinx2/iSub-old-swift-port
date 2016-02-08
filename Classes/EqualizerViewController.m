@@ -199,7 +199,7 @@
         self.deletePresetButton.x -= 5.;
     }
 	
-	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation) && !IS_IPAD())
+	if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) && !IS_IPAD())
 	{
 		self.controlsContainer.alpha = 0.0;
 		self.controlsContainer.userInteractionEnabled = NO;
@@ -226,13 +226,13 @@
 
 - (void)swipeLeft
 {
-	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+	if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
 		[self.equalizerView nextType];
 }
 
 - (void)swipeRight
 {
-	if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+	if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
 		[self.equalizerView prevType];
 }
 
@@ -242,7 +242,7 @@
 		
 	[self createEqViews];
 	
-	if (!IS_IPAD() && UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+	if (!IS_IPAD() && UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
 	{
 		[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 		self.equalizerPath.alpha = 0.0;
@@ -602,7 +602,7 @@
 			[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(type:) object:nil];
 			
 			// Only create EQ points in portrait mode when EQ is visible
-			if (IS_IPAD() || UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+			if (IS_IPAD() || UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]))
 			{
 				// add a point
 				//DLog(@"double tap, adding point");
