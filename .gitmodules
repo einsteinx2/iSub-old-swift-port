@@ -1,21 +1,3 @@
-[submodule "Frameworks/CocoaLumberjack"]
-	path = Frameworks/CocoaLumberjack
-	url = git@github.com:robbiehanson/CocoaLumberjack.git
-[submodule "Frameworks/EX2Kit"]
-	path = Frameworks/EX2Kit
-	url = git@github.com:einsteinx2/EX2Kit.git
-[submodule "Frameworks/FMDB"]
-	path = Frameworks/FMDB
-	url = git@github.com:einsteinx2/fmdb.git
-[submodule "Frameworks/SBJson"]
-	path = Frameworks/SBJson
-	url = git@github.com:stig/json-framework.git
-[submodule "Frameworks/TBXML"]
-	path = Frameworks/TBXML
-	url = git@github.com:einsteinx2/TBXML.git
-[submodule "Frameworks/ZipKit"]
-	path = Frameworks/ZipKit
-	url = git@github.com:einsteinx2/ZipKit.git
 [submodule "Frameworks/libSub"]
 	path = Frameworks/libSub
 	url = git@github.com:einsteinx2/libSub.git
