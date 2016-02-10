@@ -3,6 +3,7 @@ def all_pods
 	pod 'HockeySDK'
 	pod 'JASidePanels', '~> 1.3.2'
 	pod 'MBProgressHUD', '~> 0.9.2'
+	use_frameworks!
 end
 
 target 'iSub Release' do

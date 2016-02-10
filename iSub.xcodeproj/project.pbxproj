@@ -11,7 +11,6 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
-		49C2325D932C74EC0EAE8E01 /* libPods-iSub Beta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F553E87A06C9891B88994032 /* libPods-iSub Beta.a */; };
 		5301583A15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
 		5301583B15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
 		5301583C15081B0A00B54CEF /* settings-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5301583815081B0A00B54CEF /* settings-tabbaricon.png */; };
@@ -1063,9 +1062,6 @@
 		53C7FDAE150F1DE7008DA51C /* home-support@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA4150F1DE7008DA51C /* home-support@2x.png */; };
 		53C7FDAF150F1DE7008DA51C /* home-support@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA4150F1DE7008DA51C /* home-support@2x.png */; };
 		53C7FDB0150F1DE7008DA51C /* home-support@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FDA4150F1DE7008DA51C /* home-support@2x.png */; };
-		53CBB2CE1C683BCA009DE52A /* CocoaLumberjack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CBB2CD1C683BCA009DE52A /* CocoaLumberjack.swift */; };
-		53CBB2CF1C683BCA009DE52A /* CocoaLumberjack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CBB2CD1C683BCA009DE52A /* CocoaLumberjack.swift */; };
-		53CBB2D01C683BCA009DE52A /* CocoaLumberjack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CBB2CD1C683BCA009DE52A /* CocoaLumberjack.swift */; };
 		53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CBB2D11C683E09009DE52A /* CancelBlocks.swift */; };
 		53CBB2D31C683E09009DE52A /* CancelBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CBB2D11C683E09009DE52A /* CancelBlocks.swift */; };
 		53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CBB2D11C683E09009DE52A /* CancelBlocks.swift */; };
@@ -1359,6 +1355,9 @@
 		53FDEE6111E82A8700FE3ECD /* cache-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6011E82A8700FE3ECD /* cache-button@2x.png */; };
 		53FDEE6911E82CD700FE3ECD /* queue-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */; };
 		53FDEE6D11E82D7700FE3ECD /* delete-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */; };
+		5B1C31E962F9C6AC15DCE681 /* Pods_iSub_Beta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD03A2D21036CD996CD4DE8 /* Pods_iSub_Beta.framework */; };
+		6B4FB17BEB1A8C2ABC60FD99 /* Pods_iSub_Lite_Release.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD68DDE4C3FB1C97D1EE3B5 /* Pods_iSub_Lite_Release.framework */; };
+		6E50E0999D1DFE096C0173F7 /* Pods_iSub_Release.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9CEA6B9EE3FE0EF1EBEA3C6 /* Pods_iSub_Release.framework */; };
 		D09496D21C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D31C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D41C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -1385,8 +1384,6 @@
 		D0F7918B19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */; };
 		D0F7918C19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */; };
 		D0F7918D19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */; };
-		DE3D828DC4E6A447437DBE76 /* libPods-iSub Release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED107DD6931444C8B8E47A26 /* libPods-iSub Release.a */; };
-		E27E8FD3F73055BD8B7E8A49 /* libPods-iSub Lite Release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F6EAAF91F33BFA16FA5D23 /* libPods-iSub Lite Release.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1729,7 +1726,6 @@
 		53C7FDA2150F1DE7008DA51C /* home-support-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-support-ipad@2x.png"; path = "Images/Home Screen/home-support-ipad@2x.png"; sourceTree = "<group>"; };
 		53C7FDA3150F1DE7008DA51C /* home-support.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-support.png"; path = "Images/Home Screen/home-support.png"; sourceTree = "<group>"; };
 		53C7FDA4150F1DE7008DA51C /* home-support@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-support@2x.png"; path = "Images/Home Screen/home-support@2x.png"; sourceTree = "<group>"; };
-		53CBB2CD1C683BCA009DE52A /* CocoaLumberjack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CocoaLumberjack.swift; path = Pods/CocoaLumberjack/Classes/CocoaLumberjack.swift; sourceTree = "<group>"; };
 		53CBB2D11C683E09009DE52A /* CancelBlocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancelBlocks.swift; sourceTree = "<group>"; };
 		53CED25C113E2FF100B09699 /* SubsonicServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubsonicServerEditViewController.h; sourceTree = "<group>"; };
 		53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubsonicServerEditViewController.m; sourceTree = "<group>"; };
@@ -1785,9 +1781,11 @@
 		53FDEE6811E82CD700FE3ECD /* queue-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-button@2x.png"; path = "Images/Other/queue-button@2x.png"; sourceTree = "<group>"; };
 		53FDEE6C11E82D7700FE3ECD /* delete-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete-button@2x.png"; path = "Images/Other/delete-button@2x.png"; sourceTree = "<group>"; };
 		6BC88F775105978B28CBC42B /* Pods-iSub Release.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Release.release.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Release/Pods-iSub Release.release.xcconfig"; sourceTree = "<group>"; };
+		6CD03A2D21036CD996CD4DE8 /* Pods_iSub_Beta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iSub_Beta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74155B984ADDF2CA2C405AEB /* Pods-iSub Beta.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Beta.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Beta/Pods-iSub Beta.adhoc.xcconfig"; sourceTree = "<group>"; };
-		74F6EAAF91F33BFA16FA5D23 /* libPods-iSub Lite Release.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iSub Lite Release.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B0C3635690A8AEA688EE3E3 /* Pods-iSub Release.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Release.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Release/Pods-iSub Release.adhoc.xcconfig"; sourceTree = "<group>"; };
+		B9CEA6B9EE3FE0EF1EBEA3C6 /* Pods_iSub_Release.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iSub_Release.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCD68DDE4C3FB1C97D1EE3B5 /* Pods_iSub_Lite_Release.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iSub_Lite_Release.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4E706FC7D573FCCDBA8C3DA /* Pods-iSub Lite Release.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Lite Release.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Lite Release/Pods-iSub Lite Release.debug.xcconfig"; sourceTree = "<group>"; };
 		C96C134ACDFCA33104F03DEC /* Pods-iSub Release.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Release.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Release/Pods-iSub Release.debug.xcconfig"; sourceTree = "<group>"; };
 		D0EA476019DE41510083CE05 /* ISMSPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSPlayerView.h; sourceTree = "<group>"; };
@@ -1798,9 +1796,7 @@
 		D0EA476B19DE449A0083CE05 /* UIView+AutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+AutoLayout.m"; path = "Classes/UIView+AutoLayout.m"; sourceTree = "<group>"; };
 		D0F7918919DE4DFC008032A3 /* ISMSScrubberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSScrubberView.h; sourceTree = "<group>"; };
 		D0F7918A19DE4DFC008032A3 /* ISMSScrubberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSScrubberView.m; sourceTree = "<group>"; };
-		ED107DD6931444C8B8E47A26 /* libPods-iSub Release.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iSub Release.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F22F940DD896CF9A72E3B608 /* Pods-iSub Lite Release.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Lite Release.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Lite Release/Pods-iSub Lite Release.adhoc.xcconfig"; sourceTree = "<group>"; };
-		F553E87A06C9891B88994032 /* libPods-iSub Beta.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iSub Beta.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFF21D00CD5C0AA31268AFBB /* Pods-iSub Lite Release.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iSub Lite Release.release.xcconfig"; path = "Pods/Target Support Files/Pods-iSub Lite Release/Pods-iSub Lite Release.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1837,7 +1833,7 @@
 				53EB4AA61405FE1B00CBA075 /* libz.dylib in Frameworks */,
 				5327F52512B955F100735119 /* StoreKit.framework in Frameworks */,
 				53F7A128131B7F3B002C829D /* Security.framework in Frameworks */,
-				DE3D828DC4E6A447437DBE76 /* libPods-iSub Release.a in Frameworks */,
+				6E50E0999D1DFE096C0173F7 /* Pods_iSub_Release.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1931,7 +1927,7 @@
 				53BC285E139AF0DD00A825F1 /* StoreKit.framework in Frameworks */,
 				53BC285F139AF0DD00A825F1 /* Security.framework in Frameworks */,
 				5311C32F1A3510A500054941 /* AssetsLibrary.framework in Frameworks */,
-				49C2325D932C74EC0EAE8E01 /* libPods-iSub Beta.a in Frameworks */,
+				5B1C31E962F9C6AC15DCE681 /* Pods_iSub_Beta.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1967,7 +1963,7 @@
 				53DCF5C013BFEAD3009160F9 /* Security.framework in Frameworks */,
 				5311C3301A3510B100054941 /* AssetsLibrary.framework in Frameworks */,
 				53DE598414F1933400206529 /* CoreText.framework in Frameworks */,
-				E27E8FD3F73055BD8B7E8A49 /* libPods-iSub Lite Release.a in Frameworks */,
+				6B4FB17BEB1A8C2ABC60FD99 /* Pods_iSub_Lite_Release.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2037,7 +2033,6 @@
 				530F63971A3FC78C006D7666 /* Defines.swift */,
 				53493F3315FC6BF10059492E /* Imports.h */,
 				5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */,
-				53CBB2CD1C683BCA009DE52A /* CocoaLumberjack.swift */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -2099,9 +2094,9 @@
 				536AD1D211EA628200387CB0 /* libxml2.dylib */,
 				53EB4AA51405FE1B00CBA075 /* libz.dylib */,
 				5382F65614856F3C001C14C8 /* libSystem.dylib */,
-				F553E87A06C9891B88994032 /* libPods-iSub Beta.a */,
-				74F6EAAF91F33BFA16FA5D23 /* libPods-iSub Lite Release.a */,
-				ED107DD6931444C8B8E47A26 /* libPods-iSub Release.a */,
+				6CD03A2D21036CD996CD4DE8 /* Pods_iSub_Beta.framework */,
+				BCD68DDE4C3FB1C97D1EE3B5 /* Pods_iSub_Lite_Release.framework */,
+				B9CEA6B9EE3FE0EF1EBEA3C6 /* Pods_iSub_Release.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -4058,7 +4053,6 @@
 				D0EA476719DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
 				5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
-				53CBB2CE1C683BCA009DE52A /* CocoaLumberjack.swift in Sources */,
 				5349F14F16E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4176,7 +4170,6 @@
 				D0EA476919DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
 				5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
-				53CBB2D01C683BCA009DE52A /* CocoaLumberjack.swift in Sources */,
 				5349F15116E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4241,7 +4234,6 @@
 				D0EA476819DE41E30083CE05 /* ISMSPlayerViewController.m in Sources */,
 				5333D1101C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				536C994E16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
-				53CBB2CF1C683BCA009DE52A /* CocoaLumberjack.swift in Sources */,
 				5349F15016E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
