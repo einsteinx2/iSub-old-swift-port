@@ -6,6 +6,7 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
+import libSub
 import UIKit
 
 public class CustomUIAlertView : UIAlertView {

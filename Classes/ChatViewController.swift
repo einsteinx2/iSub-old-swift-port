@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Ben Baron. All rights reserved.
 //
 
+import libSub
 import Foundation
 import UIKit
+import Flurry_iOS_SDK
 
 public class ChatViewController : CustomUITableViewController {
     
@@ -173,7 +175,7 @@ public class ChatViewController : CustomUITableViewController {
             self.view.addSubview(_noChatMessagesScreen)
     
             if (!IS_IPAD()) {
-                if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
+                if (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication().statusBarOrientation)) {
                     let translate = CGAffineTransformMakeTranslation(0.0, 42.0)
                     let scale = CGAffineTransformMakeScale(0.75, 0.75)
                     _noChatMessagesScreen.transform = CGAffineTransformConcat(scale, translate)
@@ -213,7 +215,7 @@ extension ChatViewController : ISMSLoaderDelegate {
         self.tableView.reloadData()
         self._dataSourceDidFinishLoadingNewData()
         
-        if Int32(error.code) == ISMSErrorCode_CouldNotSendChatMessage {
+        if error.code == ISMSErrorCode_CouldNotSendChatMessage {
             _textInput.text = error.userInfo["test"] as? String
         }
     }

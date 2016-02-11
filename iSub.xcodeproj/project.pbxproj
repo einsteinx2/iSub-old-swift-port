@@ -4308,7 +4308,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -4347,7 +4346,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -4399,7 +4397,6 @@
 					"IOS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -4410,8 +4407,6 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
-					"\"$(SRCROOT)/Frameworks/libSub/Sub\"",
-					"\"$(SRCROOT)/Frameworks/libSub/Frameworks\"/**",
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -4452,7 +4447,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Other/iSub_Prefix.pch;
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -4746,7 +4740,6 @@
 					"BETA=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
@@ -4794,7 +4787,6 @@
 					"BETA=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
@@ -4840,7 +4832,6 @@
 					"BETA=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
@@ -4883,7 +4874,6 @@
 					"LITE=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Other/iSub-Info-Lite.plist";
@@ -4926,7 +4916,6 @@
 					"LITE=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Other/iSub-Info-Lite.plist";
@@ -4966,7 +4955,6 @@
 					"LITE=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Other/iSub-Info-Lite.plist";
@@ -5017,7 +5005,6 @@
 					"IOS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5028,8 +5015,6 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
-					"\"$(SRCROOT)/Frameworks/libSub/Sub\"",
-					"\"$(SRCROOT)/Frameworks/libSub/Frameworks\"/**",
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -5080,7 +5065,6 @@
 					"IOS=1",
 				);
 				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -5091,8 +5075,6 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
-					"\"$(SRCROOT)/Frameworks/libSub/Sub\"",
-					"\"$(SRCROOT)/Frameworks/libSub/Frameworks\"/**",
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

@@ -6,6 +6,7 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+import libSub
 import Foundation
 import UIKit
 
@@ -114,7 +115,7 @@ public class ModalAlbumArtViewController: UIViewController, AsynchronousImageVie
         albumArtReflection!.image = albumArt!.reflectedImageWithHeight(albumArtReflection!.height)
     
         if (!IS_IPAD()) {
-            if UIInterfaceOrientationIsLandscape(self.interfaceOrientation) {
+            if UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication().statusBarOrientation) {
                 UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: UIStatusBarAnimation.Slide)
                 albumArt!.width = 480.0
             } else {

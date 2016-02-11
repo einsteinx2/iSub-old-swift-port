@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Ben Baron. All rights reserved.
 //
 
+import libSub
 import Foundation
 
 @objc public protocol CellOverlayDelegate {

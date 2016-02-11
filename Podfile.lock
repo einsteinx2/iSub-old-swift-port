@@ -14,7 +14,6 @@ PODS:
     - FMDB
     - libSub/noarc (= 0.0.1)
     - MKStoreKit
-    - RaptureXML
     - SBJson (~> 3.0)
     - TBXML
     - ZipKit
@@ -22,13 +21,11 @@ PODS:
     - Flurry-iOS-SDK
     - FMDB
     - MKStoreKit
-    - RaptureXML
     - SBJson (~> 3.0)
     - TBXML
     - ZipKit
   - MBProgressHUD (0.9.2)
   - MKStoreKit (4.99)
-  - RaptureXML (1.0.1)
   - SBJson (3.2)
   - TBXML (1.5)
   - ZipKit (1.0.3)
@@ -48,10 +45,9 @@ SPEC CHECKSUMS:
   FMDB: c1968bab3ab0aed38f66cb778ae1e7fa9a652b6e
   HockeySDK: dd11a2b9da3372fd025643bee5bc10c8c613d169
   JASidePanels: c8f5b130e18d51ee3de988d1c1fad2f88e0b0d21
-  libSub: 09038061b842c41b6b7969841356bf930169e48c
+  libSub: e4e42747e1278d55971ac4ec307c0b3f1583025d
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MKStoreKit: 748617e5f87ad1e0d3f075155047945248eccefc
-  RaptureXML: b5c33c04c1a4adfd8ad0d5463329a31820596e82
   SBJson: 9626892a7dc75ccaa2aad207ed4e4f73d6762846
   TBXML: 9f9dadb239f2f2af1dadb87fe43a0ce6e479379a
   ZipKit: 594735e7ad2fd3ee7349759681a0423a1b296572

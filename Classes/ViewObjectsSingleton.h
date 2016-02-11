@@ -11,7 +11,7 @@
 
 #define viewObjectsS ((ViewObjectsSingleton *)[ViewObjectsSingleton sharedInstance])
 
-#import "MBProgressHUD.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 
 @class FoldersViewController, ISMSArtist, LoadingScreen, ISMSAlbum, ISMSServer;
 
