@@ -244,7 +244,7 @@ static void SetupDrawBitmap()
 
 - (void)drawTheEq
 {		
-	if (!audioEngineS.player.isPlaying || self.visualType == ISMSBassVisualType_none)
+	if (![[PlayQueue sharedInstance] isPlaying] || self.visualType == ISMSBassVisualType_none)
 		return;
 	
 	[audioEngineS.visualizer readAudioData];

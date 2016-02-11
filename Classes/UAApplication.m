@@ -55,6 +55,8 @@ static const int ddLogLevel = DDLogLevelDebug;
 
 #pragma mark - Remote Control
 
+// TODO: Audit all this and test
+
 - (void)playPauseStop
 {
 	DDLogVerbose(@"[UAApplication] playPauseStop called");
@@ -75,15 +77,15 @@ static const int ddLogLevel = DDLogLevelDebug;
 	else
 	{
 		DDLogVerbose(@"[UAApplication] playPauseStop jukebox NOT enabled");
-        if (audioEngineS.player)
+        if ([PlayQueue sharedInstance].isStarted)
 		{
-			DDLogVerbose(@"[UAApplication] audio engine player exists, playPauseStop [audioEngineS.player playPause] called");
-			[audioEngineS.player playPause];
+			DDLogVerbose(@"[UAApplication] audio engine player exists, playPauseStop [[PlayQueue sharedInstance] playPause] called");
+			[[PlayQueue sharedInstance] playPause];
 		}
 		else
 		{
 			DDLogVerbose(@"[UAApplication] audio engine player doesn't exist, playPauseStop [musicS playSongAtPosition:playlistS.currentIndex] called");
-			[musicS playSongAtPosition:playlistS.currentIndex];
+			[[PlayQueue sharedInstance] playSongAtIndex:[PlayQueue sharedInstance].currentIndex];
 		}
 	}
 }
@@ -111,11 +113,11 @@ static const int ddLogLevel = DDLogLevelDebug;
 			break;
 		case UIEventSubtypeRemoteControlNextTrack:
 			DDLogVerbose(@"UIEventSubtypeRemoteControlNextTrack, calling nextSong");
-			[musicS nextSong];
+            [[PlayQueue sharedInstance] playNextSong];
 			break;
 		case UIEventSubtypeRemoteControlPreviousTrack:
 			DDLogVerbose(@"[UAApplication] UIEventSubtypeRemoteControlPreviousTrack, calling prevSong");
-			[musicS prevSong];
+            [[PlayQueue sharedInstance] playPreviousSong];
 			break;
 		default:
 			return;

@@ -104,7 +104,14 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIAlertViewDelegate, BITHock
         
         // Recover current state if player was interrupted
         ISMSStreamManager.sharedInstance()
-        MusicSingleton.sharedInstance().resumeSong()
+        let audioEngine = AudioEngine.sharedInstance()
+        let currentSong = PlayQueue.sharedInstance.currentSong
+        if currentSong != nil && SavedSettings.sharedInstance().isRecover {
+            PlayQueue.sharedInstance.startSong(offsetBytes: Int(settings.byteOffset), offsetSeconds: settings.seekTime)
+        } else {
+            audioEngine.startByteOffset = UInt(settings.byteOffset)
+            audioEngine.startSecondsOffset = UInt(settings.seekTime)
+        }
         
         return true
     }
@@ -112,8 +119,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIAlertViewDelegate, BITHock
     // TODO: Test this
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         let audioEngine = AudioEngine.sharedInstance()
-        let musicSingleton = MusicSingleton.sharedInstance()
-        let playlistSingleton = PlaylistSingleton.sharedInstance()
+        let playQueue = PlayQueue.sharedInstance
         
         if let host = url.host?.lowercaseString {
             switch host {
@@ -123,24 +129,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIAlertViewDelegate, BITHock
                         player.playPause()
                     }
                 } else {
-                    musicSingleton.playSongAtPosition(playlistSingleton.currentIndex)
+                    playQueue.playSongAtIndex(playQueue.currentIndex)
                 }
             case "pause":
-                if let player = audioEngine.player {
-                    if player.isPlaying {
-                        player.playPause()
-                    }
-                }
+                playQueue.pause()
             case "playpause":
-                if let player = audioEngine.player {
-                    player.playPause()
-                } else {
-                    musicSingleton.playSongAtPosition(playlistSingleton.currentIndex)
-                }
+                playQueue.playPause()
             case "next":
-                musicSingleton.playSongAtPosition(playlistSingleton.nextIndex)
+                playQueue.playNextSong()
             case "prev":
-                musicSingleton.playSongAtPosition(playlistSingleton.prevIndex)
+                playQueue.playPreviousSong()
             default:
                 break
             }
@@ -223,7 +221,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIAlertViewDelegate, BITHock
         }
         
         // Update the lock screen art in case were were using another app
-        MusicSingleton.sharedInstance().updateLockScreenInfo()
+        PlayQueue.sharedInstance.updateLockScreenInfo()
     }
     
     func applicationWillTerminate(application: UIApplication) {

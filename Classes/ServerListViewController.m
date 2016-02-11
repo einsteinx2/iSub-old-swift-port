@@ -231,8 +231,8 @@
 		// Stop any playing song and remove old tab bar controller from window
 		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
 		[[NSUserDefaults standardUserDefaults] synchronize];
-		[audioEngineS.player stop];
-		 settingsS.isJukeboxEnabled = NO;
+		[[PlayQueue sharedInstance] stop];
+        settingsS.isJukeboxEnabled = NO;
 		
         // TODO: Redo with new UI
 //		if (settingsS.isOfflineMode)

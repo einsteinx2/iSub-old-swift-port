@@ -103,7 +103,7 @@
 
 - (void)updateLyricsLabel
 {	
-	ISMSSong *currentSong = playlistS.currentSong;
+	ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
 	NSString *lyrics = [self.dataModel loadLyricsForArtist:currentSong.artist.name andTitle:currentSong.title];
 	//DLog(@"lyrics = %@", lyrics);
 	if (!lyrics)

@@ -117,8 +117,8 @@
 
 - (void)cacheSongObjects
 {
-	self.currentSong = playlistS.currentDisplaySong;
-	self.nextSong = playlistS.nextSong;
+	self.currentSong = [PlayQueue sharedInstance].currentDisplaySong;
+	self.nextSong = [PlayQueue sharedInstance].nextSong;
 }
 		 
 - (void)updateStats

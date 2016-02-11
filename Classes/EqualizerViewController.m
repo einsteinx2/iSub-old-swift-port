@@ -140,11 +140,6 @@
     UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPresetPicker:)];
     [self.presetLabel.superview addGestureRecognizer:recognizer];
 	
-    if (!audioEngineS.player)
-    {
-        [audioEngineS startEmptyPlayer];
-    }
-	
 	self.isSavePresetButtonShowing = NO;
 	self.savePresetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	CGRect f = self.presetLabel.superview.frame;

@@ -115,7 +115,7 @@
 - (UIBarButtonItem *)setupRightBarButton
 {
     UIBarButtonItem *rightBarButtonItem = nil;
-    if(musicS.showPlayerIcon)
+    if(!IS_IPAD())
     {
         rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"now-playing"]
                                                               style:UIBarButtonItemStylePlain

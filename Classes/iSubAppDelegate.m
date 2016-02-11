@@ -269,7 +269,17 @@
     
 	// Recover current state if player was interrupted
 	[ISMSStreamManager sharedInstance];
-	[musicS resumeSong];
+    ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
+    if (currentSong && settingsS.isRecover)
+    {
+        [[PlayQueue sharedInstance] startSongWithOffsetBytes:settingsS.byteOffset offsetSeconds:settingsS.seekTime];
+    }
+    else
+    {
+        // TODO: Start handling this via PlayQueue
+        audioEngineS.startByteOffset = settingsS.byteOffset;
+        audioEngineS.startSecondsOffset = settingsS.seekTime;
+    }
 }
 
 - (void)jukeboxToggled
@@ -295,8 +305,12 @@
 	}
 }
 
+// TODO: Audit all this and test. Seems to duplicate code in UAApplication
+// TODO: Double check play function on new app launch
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    PlayQueue *playQueue = [PlayQueue sharedInstance];
+    
     // Handle being openned by a URL
     DLog(@"url host: %@ path components: %@", url.host, url.pathComponents );
     
@@ -304,43 +318,23 @@
     {
         if ([[url.host lowercaseString] isEqualToString:@"play"])
         {
-            if (audioEngineS.player)
-            {
-                if (!audioEngineS.player.isPlaying)
-                {
-                    [audioEngineS.player playPause];
-                }
-            }
-            else
-            {
-                [musicS playSongAtPosition:playlistS.currentIndex];
-            }
+            [playQueue play];
         }
         else if ([[url.host lowercaseString] isEqualToString:@"pause"])
         {
-            if (audioEngineS.player.isPlaying)
-            {
-                [audioEngineS.player playPause];
-            }
+            [playQueue pause];
         }
         else if ([[url.host lowercaseString] isEqualToString:@"playpause"])
         {
-            if (audioEngineS.player)
-            {
-                [audioEngineS.player playPause];
-            }
-            else
-            {
-                [musicS playSongAtPosition:playlistS.currentIndex];
-            }
+            [playQueue playPause];
         }
         else if ([[url.host lowercaseString] isEqualToString:@"next"])
         {
-            [musicS playSongAtPosition:playlistS.nextIndex];
+            [playQueue playNextSong];
         }
         else if ([[url.host lowercaseString] isEqualToString:@"prev"])
         {
-            [musicS playSongAtPosition:playlistS.prevIndex];
+            [playQueue playPreviousSong];
         }
     }
     
@@ -814,7 +808,7 @@
 	}
 
 	// Update the lock screen art in case were were using another app
-	[musicS updateLockScreenInfo];
+	[[PlayQueue sharedInstance] updateLockScreenInfo];
 }
 
 
@@ -826,7 +820,7 @@
 	
 	[settingsS saveState];
 	
-	[audioEngineS.player stop];
+	[[PlayQueue sharedInstance] stop];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
@@ -876,7 +870,7 @@
     
 	settingsS.isOfflineMode = YES;
 		
-	[audioEngineS.player stop];
+	[[PlayQueue sharedInstance] stop];
 	
 	[streamManagerS cancelAllStreams];
 	
@@ -903,7 +897,7 @@
 //        self.window.rootViewController = self.offlineTabBarController;
 //	}
 	
-	[musicS updateLockScreenInfo];
+	[[PlayQueue sharedInstance] updateLockScreenInfo];
 }
 
 - (void)enterOnlineModeForce
@@ -915,7 +909,7 @@
 		
 	settingsS.isOfflineMode = NO;
 	
-	[audioEngineS.player stop];
+	[[PlayQueue sharedInstance] stop];
 	
 	if (IS_IPAD())
 		[self.ipadRootViewController.menuViewController toggleOfflineMode];
@@ -939,7 +933,7 @@
 //        self.window.rootViewController = self.mainTabBarController;
 //	}
 	
-	[musicS updateLockScreenInfo];
+	[[PlayQueue sharedInstance] updateLockScreenInfo];
 }
 
 - (void)reachabilityChangedInternal:(EX2Reachability *)curReach
@@ -1506,8 +1500,8 @@
         if (IS_IPAD())
         {
             // Turn off repeat one so user doesn't get stuck
-            if (playlistS.repeatMode == ISMSRepeatMode_RepeatOne)
-                playlistS.repeatMode = ISMSRepeatMode_Normal;
+            if ([PlayQueue sharedInstance].repeatMode == RepeatModeRepeatOne)
+                [PlayQueue sharedInstance].repeatMode = RepeatModeNormal;
         }
         
         if ([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE])
@@ -1535,7 +1529,7 @@
 
 - (void)playSubsonicVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates
 {
-    [audioEngineS.player stop];
+    [[PlayQueue sharedInstance] stop];
     
     if (!aSong.itemId || !bitrates)
         return;
@@ -1559,7 +1553,7 @@
 
 - (void)playWaveBoxVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates
 {
-    [audioEngineS.player stop];
+    [[PlayQueue sharedInstance] stop];
     
     if (!aSong.itemId || !bitrates)
         return;
@@ -1606,8 +1600,9 @@
         if (reason && reason.integerValue == MPMovieFinishReasonPlaybackEnded)
         {
             // Playback ended normally, so start the next item
-            [playlistS incrementIndex];
-            [musicS playSongAtPosition:playlistS.currentIndex];
+            [[PlayQueue sharedInstance] playNextSong];
+//            [playlistS incrementIndex];
+//            [musicS playSongAtPosition:playlistS.currentIndex];
         }
     }
     else
