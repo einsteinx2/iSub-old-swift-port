@@ -29,7 +29,7 @@ class NewItemViewModel : NSObject {
     private(set) var artists = [ISMSArtist]()
     private(set) var albums = [ISMSAlbum]()
     private(set) var songs = [ISMSSong]()
-    private(set) var playlists = [ISMSPlaylist]()
+    private(set) var playlists = [Playlist]()
     
     private(set) var songsDuration = 0
     private(set) var sectionIndexes = [ISMSSectionIndex]()
@@ -74,7 +74,7 @@ class NewItemViewModel : NSObject {
             case is ISMSArtist:   self.artists.append(item as! ISMSArtist)
             case is ISMSAlbum:    self.albums.append(item as! ISMSAlbum)
             case is ISMSSong:     self.songs.append(item as! ISMSSong)
-            case is ISMSPlaylist: self.playlists.append(item as! ISMSPlaylist)
+            case is Playlist: self.playlists.append(item as! Playlist)
             default: assertionFailure("WHY YOU NO ITEM?")
             }
         }
