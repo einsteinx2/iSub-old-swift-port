@@ -1,8 +1,16 @@
 def all_pods
+	# Top level pods
 	pod 'libSub', :path => "Frameworks/libSub/libSub.podspec"
 	pod 'HockeySDK'
-	pod 'JASidePanels', '~> 1.3.2'
+	pod 'JASidePanels', '~> 1.3.2', :inhibit_warnings => true
 	pod 'MBProgressHUD', '~> 0.9.2'
+
+	# Pods from libSub that have annoying warnings
+	pod 'TBXML', :inhibit_warnings => true
+	pod 'ZipKit', :inhibit_warnings => true
+	pod 'MKStoreKit', :inhibit_warnings => true
+
+	# Allow Swift code in pods
 	use_frameworks!
 end
 
