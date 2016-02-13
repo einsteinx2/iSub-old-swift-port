@@ -15,10 +15,19 @@
 #import "MenuViewController.h"
 #import "iSub-Swift.h"
 
-@implementation ServerListViewController
+@interface ServerListViewController ()
+@property (nonatomic, strong) NSArray<ISMSServer*> *servers;
+@property (nonatomic) BOOL isEditing;
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+@property (nonatomic, copy) NSString *redirectUrl;
+@property (nonatomic, strong) SettingsTabViewController *settingsTabViewController;
+@property (nonatomic, strong) HelpTabViewController *helpTabViewController;
+- (void)addAction:(id)sender;
+- (void)segmentAction:(id)sender;
+@end
 
-@synthesize theNewRedirectionUrl, settingsTabViewController, helpTabViewController;
-@synthesize isEditing, headerView, segmentedControl;
+@implementation ServerListViewController
 
 - (void)dealloc
 {
@@ -29,17 +38,16 @@
 {
     [super viewDidLoad];
     
-	self.theNewRedirectionUrl = nil;
+	self.redirectUrl = nil;
 	
 	self.tableView.allowsSelectionDuringEditing = YES;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadServerList" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSaveButton) name:@"showSaveButton" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchServer:) name:@"switchServer" object:nil];
 	
 	self.title = @"Servers";
 	
-	if (settingsS.serverList == nil || [settingsS.serverList count] == 0)
+	if ([[ISMSServer allServers] count] == 0)
 		[self addAction:nil];
 	
 	// Setup segmented control in the header view
@@ -73,6 +81,7 @@
 
 - (void)reloadTable
 {
+    self.servers = [ISMSServer allServers];
 	[self.tableView reloadData];
 }
 
@@ -116,11 +125,11 @@
 		self.navigationItem.rightBarButtonItem = nil;
 		self.settingsTabViewController = [[SettingsTabViewController alloc] initWithNibName:@"SettingsTabViewController" bundle:nil];
 		self.settingsTabViewController.parentController = self;
-		self.tableView.tableFooterView = settingsTabViewController.view;
+		self.tableView.tableFooterView = self.settingsTabViewController.view;
 		if (!self.tableView.tableFooterView) self.tableView.tableFooterView = [[UIView alloc] init];
 		[self.tableView reloadData];
 	}
-	else if (segmentedControl.selectedSegmentIndex == 2)
+	else if (self.segmentedControl.selectedSegmentIndex == 2)
 	{
 		self.title = @"Help";
 		
@@ -153,9 +162,7 @@
 
 - (void)addAction:(id)sender
 {
-	viewObjectsS.serverToEdit = nil;
-	
-    SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithNibName:@"SubsonicServerEditViewController" bundle:nil];
+    SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithServer:nil];
     subsonicServerEditViewController.view.frame = self.view.bounds;
     subsonicServerEditViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
@@ -178,95 +185,18 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)showServerEditScreen
+- (void)showServerEditScreen:(ISMSServer *)server
 {
-    SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithNibName:@"SubsonicServerEditViewController" bundle:nil];
-    if ([subsonicServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
-        subsonicServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-    [self presentViewController:subsonicServerEditViewController animated:YES completion:nil];
+    if (server.type == ServerTypeSubsonic)
+    {
+        SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithServer:server];
+        if ([subsonicServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
+            subsonicServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:subsonicServerEditViewController animated:YES completion:nil];
+    }
 }
 
-- (void)switchServer:(NSNotification*)notification 
-{
-    // Save the url string first because the other settings in the if block below are saved using the url
-    settingsS.urlString = viewObjectsS.serverToEdit.url;
-
-	if (notification.userInfo)
-	{
-		self.theNewRedirectionUrl = [notification.userInfo objectForKey:@"theNewRedirectUrl"];
-        settingsS.isVideoSupported = [notification.userInfo[@"isVideoSupported"] boolValue];
-        settingsS.isNewSearchAPI = [notification.userInfo[@"isNewSearchAPI"] boolValue];
-	}
-	
-	// Save the plist values
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:viewObjectsS.serverToEdit.url forKey:@"url"];
-	[defaults setObject:viewObjectsS.serverToEdit.username forKey:@"username"];
-	[defaults setObject:viewObjectsS.serverToEdit.password forKey:@"password"];
-	[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
-	[defaults synchronize];
-	
-	// Update the variables
-	settingsS.serverType = viewObjectsS.serverToEdit.type;
-	settingsS.username = viewObjectsS.serverToEdit.username;
-	settingsS.password = viewObjectsS.serverToEdit.password;
-    settingsS.uuid = viewObjectsS.serverToEdit.uuid;
-    settingsS.lastQueryId = viewObjectsS.serverToEdit.lastQueryId;
-    settingsS.redirectUrlString = self.theNewRedirectionUrl;
-    
-	if (self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())
-	{
-		[self.navigationController.view removeFromSuperview];
-	}
-	else
-	{
-		[self.navigationController popToRootViewControllerAnimated:YES];
-		
-		if ([appDelegateS.wifiReach currentReachabilityStatus] == NotReachable)
-			return;
-		
-		// Cancel any caching
-		[streamManagerS removeAllStreams];
-		
-		// Stop any playing song and remove old tab bar controller from window
-		[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
-		[[NSUserDefaults standardUserDefaults] synchronize];
-		[[PlayQueue sharedInstance] stop];
-        settingsS.isJukeboxEnabled = NO;
-		
-        // TODO: Redo with new UI
-//		if (settingsS.isOfflineMode)
-//		{
-//			settingsS.isOfflineMode = NO;
-//			
-//			if (IS_IPAD())
-//			{
-//				[appDelegateS.ipadRootViewController.menuViewController toggleOfflineMode];
-//			}
-//			else
-//			{
-//                appDelegateS.window.rootViewController = appDelegateS.mainTabBarController;
-//				[viewObjectsS orderMainTabBarController];
-//			}
-//		}
-		
-		// Reset the databases
-		[databaseS closeAllDatabases];
-		
-		[databaseS setupDatabases];
-		
-		// Reset the tabs
-        // TODO: Redo with new UI
-//		if (!IS_IPAD())
-//			[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
-        
-		appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
-		
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerSwitched];
-	}
-}
-
-#pragma mark Table view methods
+#pragma mark - Table view methods -
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -275,7 +205,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	if (self.segmentedControl.selectedSegmentIndex == 0)
-		return settingsS.serverList.count;
+        return self.servers.count;
 	else
 		return 0;
 }
@@ -285,7 +215,7 @@
 	static NSString *cellIdentifier = @"ServerListCell";
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 	
-	ISMSServer *aServer = [settingsS.serverList objectAtIndexSafe:indexPath.row];
+    ISMSServer *server = self.servers[indexPath.row];
 	
 	// Set up the cell...
 	UILabel *serverNameLabel = [[UILabel alloc] init];
@@ -293,7 +223,7 @@
 	serverNameLabel.backgroundColor = [UIColor clearColor];
 	serverNameLabel.textAlignment = NSTextAlignmentLeft; // default
 	serverNameLabel.font = ISMSBoldFont(20);
-	[serverNameLabel setText:aServer.url];
+	[serverNameLabel setText:server.url];
 	[cell.contentView addSubview:serverNameLabel];
 	
 	UILabel *detailsLabel = [[UILabel alloc] init];
@@ -301,22 +231,18 @@
 	detailsLabel.backgroundColor = [UIColor clearColor];
 	detailsLabel.textAlignment = NSTextAlignmentLeft; // default
 	detailsLabel.font = ISMSRegularFont(15);
-	[detailsLabel setText:[NSString stringWithFormat:@"username: %@", aServer.username]];
+	[detailsLabel setText:[NSString stringWithFormat:@"username: %@", server.username]];
 	[cell.contentView addSubview:detailsLabel];
 	
 	UIImage *typeImage = nil;
-	if ([aServer.type isEqualToString:SUBSONIC])
+	if (server.type == ServerTypeSubsonic)
 		typeImage = [UIImage imageNamed:@"server-subsonic"];
-	else if ([aServer.type isEqualToString:UBUNTU_ONE])
-		typeImage = [UIImage imageNamed:@"server-ubuntu"];
 
 	UIImageView *serverType = [[UIImageView alloc] initWithImage:typeImage];
 	serverType.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 	[cell.contentView addSubview:serverType];
 	
-	if([settingsS.urlString isEqualToString:aServer.url] && 
-	   [settingsS.username isEqualToString:aServer.username] &&
-	   [settingsS.password isEqualToString:aServer.password])
+	if([settingsS.currentServer isEqual:server])
 	{
 		UIImageView *currentServerMarker = [[UIImageView alloc] init];
 		currentServerMarker.image = [UIImage imageNamed:@"current-server"];
@@ -343,21 +269,20 @@
 	if (!indexPath)
 		return;
 	
-	viewObjectsS.serverToEdit = [settingsS.serverList objectAtIndexSafe:indexPath.row];
+	ISMSServer *server = self.servers[indexPath.row];
 
+    // TODO: Figure out better way to get into edit mode, it's not intuitive
 	if (self.isEditing)
 	{
-		[self showServerEditScreen];
+        [self showServerEditScreen:server];
 	}
 	else
 	{
-		self.theNewRedirectionUrl = nil;
+		self.redirectUrl = nil;
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
         
-        ISMSStatusLoader *statusLoader = [[ISMSStatusLoader alloc] initWithDelegate:self];
-        statusLoader.urlString = viewObjectsS.serverToEdit.url;
-        statusLoader.username = viewObjectsS.serverToEdit.username;
-        statusLoader.password = viewObjectsS.serverToEdit.password;
+        ISMSStatusLoader *statusLoader = [[ISMSStatusLoader alloc] initWithServer:server];
+        statusLoader.delegate = self;
         [statusLoader startLoad];
 	}
 }
@@ -374,45 +299,42 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
-	NSArray *server = [ settingsS.serverList objectAtIndexSafe:fromIndexPath.row];
-	[settingsS.serverList removeObjectAtIndex:fromIndexPath.row];
-	[settingsS.serverList insertObject:server atIndex:toIndexPath.row];
-	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject: settingsS.serverList] forKey:@"servers"];
-	[[NSUserDefaults standardUserDefaults] synchronize];
-	
-	[self.tableView reloadData];
+    // TODO: Figure out how to implement this using the new data model. Or turn off move support.
+    
+//	NSArray *server = [ settingsS.serverList objectAtIndexSafe:fromIndexPath.row];
+//	[settingsS.serverList removeObjectAtIndex:fromIndexPath.row];
+//	[settingsS.serverList insertObject:server atIndex:toIndexPath.row];
+//	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject: settingsS.serverList] forKey:@"servers"];
+//	[[NSUserDefaults standardUserDefaults] synchronize];
+//	
+//	[self.tableView reloadData];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) 
 	{
-		// Alert user to select new default server if they deleting the default
-		if ([ settingsS.urlString isEqualToString:[(ISMSServer *)[ settingsS.serverList objectAtIndexSafe:indexPath.row] url]])
-		{
-			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			alert.tag = 4;
-			[alert show];
-		}
+        // TODO: Automatically switch to the next server. Or if it's the last server, connect to the test server
+//		// Alert user to select new default server if they deleting the default
+//		if ([ settingsS.urlString isEqualToString:[(ISMSServer *)[ settingsS.serverList objectAtIndexSafe:indexPath.row] url]])
+//		{
+//			CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//			alert.tag = 4;
+//			[alert show];
+//		}
 		
         // Delete the row from the data source
-        [settingsS.serverList removeObjectAtIndex:indexPath.row];
+        ISMSServer *server = self.servers[indexPath.row];
+        [server deleteModel];
 		
 		@try
 		{
-			[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+			[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 		}
 		@catch (NSException *exception) 
 		{
-		//DLog(@"Exception: %@ - %@", exception.name, exception.reason);
+            //DLog(@"Exception: %@ - %@", exception.name, exception.reason);
 		}
-		
-		[self.tableView reloadData];
-		
-		// Save the plist values
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject: settingsS.serverList] forKey:@"servers"];
-		[defaults synchronize];
     }   
 }
 
@@ -438,9 +360,7 @@
 	
     DLog(@"redirectUrlString: %@", redirectUrlString);
 	
-	self.theNewRedirectionUrl = [NSString stringWithString:redirectUrlString];
-    
-    //self.theNewRedirectionUrl = [NSString stringWithFormat:@"%@://%@:%@", url.scheme, url.host, url.port];
+	self.redirectUrl = [NSString stringWithString:redirectUrlString];
 }
 
 - (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
@@ -462,17 +382,13 @@
 }
 
 - (void)loadingFinished:(ISMSLoader *)theLoader
-{    	
-	settingsS.serverType = viewObjectsS.serverToEdit.type;
-	settingsS.urlString = viewObjectsS.serverToEdit.url;
-	settingsS.username = viewObjectsS.serverToEdit.username;
-	settingsS.password = viewObjectsS.serverToEdit.password;
-    settingsS.redirectUrlString = self.theNewRedirectionUrl;
+{
+    ISMSStatusLoader *statusLoader = (ISMSStatusLoader *)statusLoader;
     
-    settingsS.isVideoSupported = ((ISMSStatusLoader *)theLoader).isVideoSupported;
-    settingsS.isNewSearchAPI = ((ISMSStatusLoader *)theLoader).isNewSearchAPI;
+    settingsS.currentServer = statusLoader.server;
+    settingsS.redirectUrlString = self.redirectUrl;
 	
-	[self switchServer:nil];
+	[appDelegateS switchServer:statusLoader.server redirectUrl:self.redirectUrl];
     
     DLog(@"server verification passed, hiding loading screen");
     [viewObjectsS hideLoadingScreen];

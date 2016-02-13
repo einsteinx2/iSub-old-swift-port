@@ -45,10 +45,6 @@
 @property (copy) NSString *localPlaylist;
 @property (strong) NSMutableArray *listOfLocalPlaylists;
 
-// Settings page objects
-//
-@property (strong) ISMSServer *serverToEdit;
-
 // Chat page objects
 //
 @property (strong) NSMutableArray *chatMessages;

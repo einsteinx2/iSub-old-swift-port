@@ -194,7 +194,7 @@ public class ItemUITableViewCell : UITableViewCell {
         self._repositionLabels()
     }
     
-    // MARK - Public -
+    // MARK: - Public -
 
     public func showOverlay() {
         if !self.overlayShowing && !self.overlayDisabled {
@@ -284,7 +284,7 @@ public class ItemUITableViewCell : UITableViewCell {
         }
     }
     
-    // MARK - Private -
+    // MARK: - Private -
     
     // Automatically hide and show labels based on whether we have data for them, then reposition the others to fit
     func _repositionLabels() {

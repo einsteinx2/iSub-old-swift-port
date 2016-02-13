@@ -16,6 +16,13 @@
 #define kBadPassTag 3
 
 @interface SubsonicServerEditViewController() <UIAlertViewDelegate>
+@property (nonatomic, strong) IBOutlet UITextField *urlField;
+@property (nonatomic, strong) IBOutlet UITextField *usernameField;
+@property (nonatomic, strong) IBOutlet UITextField *passwordField;
+@property (nonatomic, strong) IBOutlet UIButton *cancelButton;
+@property (nonatomic, strong) IBOutlet UIButton *saveButton;
+- (IBAction) cancelButtonPressed:(id)sender;
+- (IBAction) saveButtonPressed:(id)sender;
 @end
 
 @implementation SubsonicServerEditViewController
@@ -32,7 +39,17 @@
 
 #pragma mark - Lifecycle
 
-- (void)viewDidLoad 
+- (instancetype) initWithServer:(ISMSServer *)server
+{
+    if (self = [super initWithNibName:@"SubsonicServerEditViewController" bundle:nil])
+    {
+        _server = server;
+    }
+    
+    return self;
+}
+
+- (void)viewDidLoad
 {
     [super viewDidLoad];
 	
@@ -40,13 +57,13 @@
     frame.origin.y = 20;
     self.view.frame = frame;
 	
-	self.theNewRedirectUrl = nil;
+	self.redirectUrl = nil;
 	
-	if (viewObjectsS.serverToEdit)
+	if (self.server)
 	{
-		self.urlField.text = viewObjectsS.serverToEdit.url;
-		self.usernameField.text = viewObjectsS.serverToEdit.username;
-		self.passwordField.text = viewObjectsS.serverToEdit.password;
+		self.urlField.text = self.server.url;
+		self.usernameField.text = self.server.username;
+		self.passwordField.text = self.server.password;
 	}
 }
 
@@ -105,28 +122,17 @@
 
 - (IBAction)cancelButtonPressed:(id)sender
 {
-	viewObjectsS.serverToEdit = nil;
-	
 	[self dismissViewControllerAnimated:YES completion:nil];
-	
-	if (![[NSUserDefaults standardUserDefaults] objectForKey:@"servers"])
-	{
-		// Pop the view back
-		if (appDelegateS.currentTabBarController.selectedIndex == 4)
-		{
-			[appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
-		}
-		else
-		{
-			[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
-		}
-	}
 }
 
 
 - (IBAction)saveButtonPressed:(id)sender
 {
-	if (![self checkUrl:self.urlField.text])
+    BOOL urlValid = [self checkUrl:self.urlField.text];
+    BOOL usernameValid = [self checkUsername:self.usernameField.text];
+    BOOL passwordValid = [self checkPassword:self.passwordField.text];
+    
+	if (!urlValid)
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The URL must be in the format: http://mywebsite.com:port/folder\n\nBoth the :port and /folder are optional" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         alert.delegate = self;
@@ -134,7 +140,7 @@
 		[alert show];
 	}
 	
-	if (![self checkUsername:self.usernameField.text])
+	if (!usernameValid)
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         alert.delegate = self;
@@ -142,7 +148,7 @@
 		[alert show];
 	}
 	
-	if (![self checkPassword:self.passwordField.text])
+	if (!passwordValid)
 	{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         alert.delegate = self;
@@ -150,14 +156,12 @@
 		[alert show];
 	}
 	
-	if ([self checkUrl:self.urlField.text] && [self checkUsername:self.usernameField.text] && [self checkPassword:self.passwordField.text])
+	if (urlValid && usernameValid && passwordValid)
 	{
 		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
-        		
-		ISMSStatusLoader *loader = [[ISMSStatusLoader alloc] initWithDelegate:self];
-        loader.urlString = self.urlField.text;
-        loader.username = self.usernameField.text;
-        loader.password = self.passwordField.text;
+        
+        ISMSStatusLoader *loader = [[ISMSStatusLoader alloc] initWithUrl:self.urlField.text username:self.usernameField.text password:self.passwordField.text];
+        loader.delegate = self;
         [loader startLoad];
 	}
 }
@@ -186,7 +190,7 @@
 	
 	//DLog(@"redirectUrlString: %@", redirectUrlString);
 	
-	self.theNewRedirectUrl = [NSString stringWithString:redirectUrlString];
+	self.redirectUrl = [NSString stringWithString:redirectUrlString];
 }
 
 - (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
@@ -213,90 +217,39 @@
 	
 - (void)loadingFinished:(ISMSLoader *)theLoader
 {
+    ISMSStatusLoader *statusLoader = (id)theLoader;
+    
 	//DLog(@"server check passed");
 	[viewObjectsS hideLoadingScreen];
-	
-	ISMSServer *theServer = [[ISMSServer alloc] init];
-	theServer.url = self.urlField.text;
-	theServer.username = self.usernameField.text;
-	theServer.password = self.passwordField.text;
-	theServer.type = SUBSONIC;
-	
-	if (!settingsS.serverList)
-		settingsS.serverList = [NSMutableArray arrayWithCapacity:1];
-	
-	if(viewObjectsS.serverToEdit)
-	{					
-		// Replace the entry in the server list
-		NSInteger index = [settingsS.serverList indexOfObject:viewObjectsS.serverToEdit];
-		[settingsS.serverList replaceObjectAtIndex:index withObject:theServer];
-		
-		// Update the serverToEdit to the new details
-		viewObjectsS.serverToEdit = theServer;
-        
-		// Save the plist values
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:theServer.url forKey:@"url"];
-		[defaults setObject:theServer.username forKey:@"username"];
-		[defaults setObject:theServer.password forKey:@"password"];
-		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
-		[defaults synchronize];
-		
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
-		
-		[self dismissViewControllerAnimated:YES completion:nil];
-		
-		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:0];
-		if (self.theNewRedirectUrl)
-		{
-			userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
-		}
-        userInfo[@"isVideoSupported"] = @(((ISMSStatusLoader *)theLoader).isVideoSupported);
-        userInfo[@"isNewSearchAPI"] = @(((ISMSStatusLoader *)theLoader).isNewSearchAPI);
-        if (self.theNewRedirectUrl)
-            userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
-        
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
-	}
-	else
-	{
-		// Create the entry in serverList
-		viewObjectsS.serverToEdit = theServer;
-		[settingsS.serverList addObject:viewObjectsS.serverToEdit];
-        
-        settingsS.isVideoSupported = ((ISMSStatusLoader *)theLoader).isVideoSupported;
-        settingsS.isNewSearchAPI = ((ISMSStatusLoader *)theLoader).isNewSearchAPI;
-		
-		// Save the plist values
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:self.urlField.text forKey:@"url"];
-		[defaults setObject:self.usernameField.text forKey:@"username"];
-		[defaults setObject:self.passwordField.text forKey:@"password"];
-		[defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:settingsS.serverList] forKey:@"servers"];
-		[defaults synchronize];
-		
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
-		
-		[self dismissViewControllerAnimated:YES completion:nil];
-		
-		if (IS_IPAD())
-			[appDelegateS.ipadRootViewController.menuViewController showHome];
-				
-		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:0];
-		if (self.theNewRedirectUrl)
-		{
-			userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
-		}
-        userInfo[@"isVideoSupported"] = @(((ISMSStatusLoader *)theLoader).isVideoSupported);
-        userInfo[@"isNewSearchAPI"] = @(((ISMSStatusLoader *)theLoader).isNewSearchAPI);
-        if (self.theNewRedirectUrl)
-            userInfo[@"theNewRedirectUrl"] = self.theNewRedirectUrl;
-        
-		[NSNotificationCenter postNotificationToMainThreadWithName:@"switchServer" userInfo:userInfo];
-	}
-	
+    
+    if (self.server)
+    {
+        // Update existing model
+        self.server.url = statusLoader.url;
+        self.server.username = statusLoader.username;
+        self.server.password = statusLoader.password;
+        [self.server replaceModel];
+    }
+    else
+    {
+        // Create new database entry
+        self.server = [[ISMSServer alloc] initWithType:ServerTypeSubsonic
+                                                   url:statusLoader.url
+                                              username:statusLoader.username
+                                           lastQueryId:@""
+                                                  uuid:@""
+                                              password:statusLoader.password];
+    }
+    
+    // TODO: Why are these notifications? And why no constants?
+    [NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
+    [NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if (IS_IPAD())
+        [appDelegateS.ipadRootViewController.menuViewController showHome];
+    
+    [appDelegateS switchServer:self.server redirectUrl:self.redirectUrl];
 }
 
 #pragma mark - UITextField Delegate -
@@ -325,7 +278,7 @@
 }
 
 // This dismisses the keyboard when any area outside the keyboard is touched
-- (void) touchesBegan :(NSSet *) touches withEvent:(UIEvent *)event
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	[self.urlField resignFirstResponder];
 	[self.usernameField resignFirstResponder];

@@ -60,7 +60,7 @@ public class ChatUITableViewCell : UITableViewCell {
         }
     }
 
-    // MARK - Overlay -
+    // MARK: - Overlay -
     
     public func hideOverlay() {
         

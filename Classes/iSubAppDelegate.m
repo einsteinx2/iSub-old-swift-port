@@ -380,14 +380,9 @@
 	// have internet access or if the host url entered was wrong.
     if (!settingsS.isOfflineMode) 
 	{
-        self.statusLoader = [[ISMSStatusLoader alloc] initWithDelegate:self];
-        if ([settingsS.serverType isEqualToString:SUBSONIC])
-        {
-            ISMSStatusLoader *subsonicLoader = (ISMSStatusLoader *)self.statusLoader;
-            subsonicLoader.urlString = settingsS.urlString;
-            subsonicLoader.username = settingsS.username;
-            subsonicLoader.password = settingsS.password;
-        }
+        ISMSServer *currentServer = settingsS.currentServer;
+        self.statusLoader = [[ISMSStatusLoader alloc] initWithUrl:currentServer.url username:currentServer.username password:currentServer.password];
+        self.statusLoader.delegate = self;
         [self.statusLoader startLoad];
     }
 	
@@ -445,12 +440,6 @@
         }
         
         self.statusLoader = nil;
-        
-        if ([theLoader isKindOfClass:[ISMSStatusLoader class]])
-        {
-            settingsS.isNewSearchAPI = ((ISMSStatusLoader *)theLoader).isNewSearchAPI;
-            settingsS.isVideoSupported = ((ISMSStatusLoader *)theLoader).isVideoSupported;
-        }
     }
 }
 
@@ -459,12 +448,6 @@
     // This happens right on app launch
     if (theLoader.type == ISMSLoaderType_Status)
     {
-        if ([theLoader isKindOfClass:[ISMSStatusLoader class]])
-        {
-            settingsS.isNewSearchAPI = ((ISMSStatusLoader *)theLoader).isNewSearchAPI;
-            settingsS.isVideoSupported = ((ISMSStatusLoader *)theLoader).isVideoSupported;
-        }
-        
         self.statusLoader = nil;
         
         //DLog(@"server verification passed, hiding loading screen");
@@ -1491,12 +1474,11 @@
 
 - (void)playVideo:(ISMSSong *)aSong
 {
+    if (aSong.contentType.basicType != ISMSBasicContentTypeVideo)
+        return;
+    
     if (settingsS.isVideoUnlocked)
     {
-        NSString *serverType = settingsS.serverType;
-        if (aSong.contentType.basicType != ISMSBasicContentTypeVideo || (([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE]) && !settingsS.isVideoSupported))
-            return;
-        
         if (IS_IPAD())
         {
             // Turn off repeat one so user doesn't get stuck
@@ -1504,17 +1486,19 @@
                 [PlayQueue sharedInstance].repeatMode = RepeatModeNormal;
         }
         
-        if ([serverType isEqualToString:SUBSONIC] || [serverType isEqualToString:UBUNTU_ONE])
+        ServerType serverType = settingsS.currentServer.type;
+        if (serverType == ServerTypeSubsonic)
         {
             [self playSubsonicVideo:aSong bitrates:settingsS.currentVideoBitrates];
         }
-        else if ([serverType isEqualToString:WAVEBOX])
+        else if (serverType == ServerTypeiSubServer || serverType == ServerTypeWaveBox)
         {
             [self playWaveBoxVideo:aSong bitrates:settingsS.currentVideoBitrates];
         }
     }
     else
 	{
+        // TODO: Redo for new UI
 //		StoreViewController *store = [[StoreViewController alloc] init];
 //        if (IS_IPAD())
 //        {
@@ -1611,6 +1595,64 @@
     }
 }
 
+- (void)switchServer:(ISMSServer *)server redirectUrl:(NSString *)redirectUrl
+{
+    // Update the variables
+    settingsS.currentServer = server;
+    settingsS.redirectUrlString = redirectUrl;
+
+    // TODO: Reimplement for new UI
+//    if (self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())
+//    {
+//        [self.navigationController.view removeFromSuperview];
+//    }
+//    else
+//    {
+//        [self.navigationController popToRootViewControllerAnimated:YES];
+//        
+//        if ([appDelegateS.wifiReach currentReachabilityStatus] == NotReachable)
+//            return;
+//        
+//        // Cancel any caching
+//        [streamManagerS removeAllStreams];
+//        
+//        // Stop any playing song and remove old tab bar controller from window
+//        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//        [[PlayQueue sharedInstance] stop];
+//        settingsS.isJukeboxEnabled = NO;
+//        
+//        // TODO: Redo with new UI
+//        //		if (settingsS.isOfflineMode)
+//        //		{
+//        //			settingsS.isOfflineMode = NO;
+//        //
+//        //			if (IS_IPAD())
+//        //			{
+//        //				[appDelegateS.ipadRootViewController.menuViewController toggleOfflineMode];
+//        //			}
+//        //			else
+//        //			{
+//        //                appDelegateS.window.rootViewController = appDelegateS.mainTabBarController;
+//        //				[viewObjectsS orderMainTabBarController];
+//        //			}
+//        //		}
+//        
+//        // Reset the databases
+//        [databaseS closeAllDatabases];
+//        
+//        [databaseS setupDatabases];
+//        
+//        // Reset the tabs
+//        // TODO: Redo with new UI
+//        //		if (!IS_IPAD())
+//        //			[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+//        
+//        appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
+//        
+//        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerSwitched];
+//    }
+}
 
 @end
 

@@ -134,7 +134,7 @@ public class ModalAlbumArtViewController: UIViewController, AsynchronousImageVie
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    // MARK - AsynchronousImageView Delegate -
+    // MARK: - AsynchronousImageView Delegate -
     
     public func asyncImageViewFinishedLoading(asyncImageView: AsynchronousImageView!) {
         albumArtReflection!.image = albumArt!.reflectedImageWithHeight(albumArtReflection!.height)
