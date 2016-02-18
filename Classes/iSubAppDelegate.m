@@ -38,7 +38,8 @@
 
 //LOG_LEVEL_ISUB_DEFAULT
 
-@interface iSubAppDelegate() <MFMailComposeViewControllerDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate, ISMSLoaderDelegate>
+@interface iSubAppDelegate() <MFMailComposeViewControllerDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate>
+@property (nonatomic) BOOL showIntro;
 @end
 
 @implementation iSubAppDelegate
@@ -60,12 +61,6 @@
 #pragma mark Application lifecycle
 #pragma mark -
 
-
-/*void onUncaughtException(NSException* exception)
-{
-    NSLog(@"uncaught exception: %@", exception.description);
-}*/
-
 - (void)showPlayer
 {
     // TODO: Update for new UI
@@ -76,27 +71,18 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
-    // Set up the window
-    //self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    /*
+        Setup data model
+     */
     
-    // Make sure audio engine and cache singletons get loaded
+    // Make sure the singletons get setup immediately and in the correct order
+    // Perfect example of why using singletons is bad practice!
+    [DatabaseSingleton sharedInstance];
 	[AudioEngine sharedInstance];
 	[CacheSingleton sharedInstance];
     
     // Start the save defaults timer and mem cache initial defaults
 	[settingsS setupSaveState];
-    
-    //NSSetUncaughtExceptionHandler(&onUncaughtException);
-
-    // Adjust the window to the correct size before anything else loads to prevent
-    // various sizing/positioning issues
-    /*if (!IS_IPAD())
-    {
-        CGSize screenSize = [[UIScreen mainScreen] preferredMode].size;
-        CGFloat screenScale = [UIScreen mainScreen].scale;
-        screenScale = screenScale == 0. ? 1. : screenScale;
-        self.window.size = CGSizeMake(screenSize.width / screenScale, screenSize.height / screenScale);
-    }*/
 	
 #if !IS_ADHOC() && !IS_RELEASE()
     // Don't turn on console logging for adhoc or release builds
@@ -107,8 +93,6 @@
 	fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
 	fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
 	[DDLog addLogger:fileLogger];
-    
-    
 	
 	// Setup network reachability notifications
 	self.wifiReach = [EX2Reachability reachabilityForLocalWiFi];
@@ -121,143 +105,18 @@
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(batteryStateChanged:)
                                                  name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
-	[self batteryStateChanged:nil];	
-	
-	// Handle offline mode
-	if (settingsS.isForceOfflineMode)
-	{
-		settingsS.isOfflineMode = YES;
+	[self batteryStateChanged:nil];
 		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Offline mode switch on, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		alert.tag = 4;
-		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
-	}
-	else if ([self.wifiReach currentReachabilityStatus] == NotReachable)
-	{
-		settingsS.isOfflineMode = YES;
-		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"No network detected, entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		alert.tag = 4;
-		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
-	}
-    else if ([self.wifiReach currentReachabilityStatus] == ReachableViaWWAN && settingsS.isDisableUsageOver3G)
-    {
-        settingsS.isOfflineMode = YES;
-		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"You are not on Wifi, and have chosen to disable use over cellular. Entering offline mode." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		alert.tag = 4;
-		[alert performSelector:@selector(show) withObject:nil afterDelay:1.1];
-    }
-	else
-	{
-		settingsS.isOfflineMode = NO;
-	}
-		
-	self.showIntro = NO;
-	if (settingsS.isTestServer)
-	{
-		if (settingsS.isOfflineMode)
-		{
-			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-			[alert performSelector:@selector(show) withObject:nil afterDelay:1.0];
-		}
-		else
-		{
-			self.showIntro = YES;
-		}
-	}
-		
-    self.introController = nil;
-	
-	//DLog(@"md5: %@", [settings.urlString md5]);
-	
 	[self loadFlurryAnalytics];
 	[self loadHockeyApp];
-	//[self loadCrittercism];
 		
 	[self loadInAppPurchaseStore];
-	
-    // TODO: Update for new UI
-    /*
-	// Create and display UI
-	self.introController = nil;
-	if (IS_IPAD())
-	{
-		self.ipadRootViewController = [[iPadRootViewController alloc] initWithNibName:nil bundle:nil];
-		[self.window setBackgroundColor:[UIColor clearColor]];
-        self.window.rootViewController = self.ipadRootViewController;
-		[self.window makeKeyAndVisible];
-        
-		if (self.showIntro)
-		{
-			self.introController = [[IntroViewController alloc] init];
-			self.introController.modalPresentationStyle = UIModalPresentationFormSheet;
-			[self.ipadRootViewController presentViewController:self.introController animated:NO completion:nil];
-		}
-	}
-	else
-	{
-        // Add the artists view controller
-        ISMSRootArtistsLoader *artistsLoader = [[ISMSRootArtistsLoader alloc] init];
-        self.artistsViewController = [[ItemViewController alloc] initWithItemLoader:artistsLoader];
-        self.artistsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.artistsViewController];
-        self.artistsNavigationController.tabBarItem.tag = 10;
-        NSMutableArray *viewControllers = [[self.mainTabBarController viewControllers] mutableCopy];
-        [viewControllers addObject:self.artistsNavigationController];
-        self.mainTabBarController.viewControllers = viewControllers;
-        
-        // Add the NEW items controller
-        ISMSFolderLoader *folderLoader = [[ISMSFolderLoader alloc] init];
-        folderLoader.folderId = @6;
-        folderLoader.mediaFolderId = @0;
-        NewItemViewModel *itemViewModel = [[NewItemViewModel alloc] initWithLoader:folderLoader];
-        self.foldersViewControllerNew = [[NewItemViewController alloc] initWithViewModel:itemViewModel];
-        self.foldersNavigationControllerNew = [[UINavigationController alloc] initWithRootViewController:self.foldersViewControllerNew];
-        self.foldersNavigationControllerNew.tabBarItem.tag = 10;
-        [viewControllers addObject:self.foldersNavigationControllerNew];
-        self.mainTabBarController.viewControllers = viewControllers;
-        
-        [[UITabBar appearance] setBarTintColor:[UIColor blackColor]];
-        self.mainTabBarController.tabBar.translucent = NO;
-        self.offlineTabBarController.tabBar.translucent = NO;
-        
-		
-		self.mainTabBarController.moreNavigationController.navigationBar.barStyle = UIBarStyleBlack;
-
-		if (settingsS.isOfflineMode)
-		{
-			self.currentTabBarController = self.offlineTabBarController;
-            self.window.rootViewController = self.offlineTabBarController;
-		}
-		else 
-		{
-			// Recover the tab order and load the main tabBarController
-			self.currentTabBarController = self.mainTabBarController;
-            self.window.rootViewController = self.mainTabBarController;
-		}
-        
-        [self.window makeKeyAndVisible];
-		
-		if (self.showIntro)
-		{
-			self.introController = [[IntroViewController alloc] init];
-			[self.currentTabBarController presentViewController:self.introController animated:NO completion:nil];
-		}
-	}
     
-	if (settingsS.isJukeboxEnabled)
-		self.window.backgroundColor = viewObjectsS.jukeboxColor;
-	else 
-		self.window.backgroundColor = viewObjectsS.windowColor;
-		
-	// Check the server status in the background
+    // Check the server status in the background
     if (!settingsS.isOfflineMode)
-	{
-		//DLog(@"adding loading screen");
-		[viewObjectsS showAlbumLoadingScreen:self.window sender:self];
-		
-		[self checkServer];
-	}*/
+    {
+        [self checkServer];
+    }
     
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(showPlayer) name:ISMSNotification_ShowPlayer object:nil];
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(playVideoNotification:) name:ISMSNotification_PlayVideo object:nil];
@@ -267,8 +126,8 @@
     
     [self startHLSProxy];
     
-	// Recover current state if player was interrupted
-	[ISMSStreamManager sharedInstance];
+    // Recover current state if player was interrupted
+    [ISMSStreamManager sharedInstance];
     ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
     if (currentSong && settingsS.isRecover)
     {
@@ -280,6 +139,47 @@
         audioEngineS.startByteOffset = settingsS.byteOffset;
         audioEngineS.startSecondsOffset = settingsS.seekTime;
     }
+    
+    /*
+        Setup UI
+     */
+    
+    self.sidePanelController = (id)self.window.rootViewController;
+    
+    // Handle offline mode
+    NetworkStatus netStatus = self.wifiReach.currentReachabilityStatus;
+    if (settingsS.isForceOfflineMode || netStatus == NotReachable || (netStatus == ReachableViaWWAN && settingsS.isDisableUsageOver3G))
+    {
+        settingsS.isOfflineMode = YES;
+    }
+    
+    // Show intro if necessary
+    if (settingsS.isTestServer)
+    {
+        if (settingsS.isOfflineMode)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert performSelector:@selector(show) withObject:nil afterDelay:1.0];
+        }
+        else
+        {
+            self.showIntro = YES;
+        }
+    }
+}
+
+- (void)applicationDidBecomeActive:(UIApplication*)application
+{
+    if (self.showIntro)
+    {
+        self.showIntro = NO;
+        IntroViewController *vc = [[IntroViewController alloc] init];
+        [self.sidePanelController presentViewController:vc animated:NO completion:nil];
+    }
+    
+    [self checkServer];
+    
+    [self checkWaveBoxRelease];
 }
 
 - (void)jukeboxToggled
@@ -370,7 +270,6 @@
 
 - (void)checkServer
 {
-    //DLog(@"urlString: %@", settingsS.urlString);
 	ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
 	[updateChecker checkForUpdate];
 
@@ -382,7 +281,33 @@
 	{
         ISMSServer *currentServer = settingsS.currentServer;
         self.statusLoader = [[ISMSStatusLoader alloc] initWithUrl:currentServer.url username:currentServer.username password:currentServer.password];
-        self.statusLoader.delegate = self;
+        __weak iSubAppDelegate *weakSelf = self;
+        self.statusLoader.callbackBlock = ^(BOOL success,  NSError * error, ISMSLoader * loader) {
+            settingsS.redirectUrlString = loader.redirectUrlString;
+            
+            if (success)
+            {
+                // TODO: Find a better way to handle this, or at least a button in the download queue to allow resuming rather
+                // than having to know that they need to queue another song for download
+                //
+                // Since the download queue has been a frequent source of crashes in the past, and we start this on launch automatically
+                // potentially resulting in a crash loop, do NOT start the download queue automatically if the app crashed on last launch.
+                if (![BITHockeyManager sharedHockeyManager].crashManager.didCrashInLastSession)
+                {
+                    // Start the queued downloads if Wifi is available
+                    [cacheQueueManagerS startDownloadQueue];
+                }
+            }
+            else
+            {
+                if(!settingsS.isOfflineMode)
+                {
+                    [weakSelf enterOfflineMode];
+                }
+            }
+            
+            weakSelf.statusLoader = nil;
+        };
         [self.statusLoader startLoad];
     }
 	
@@ -390,77 +315,6 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkServer) object:nil];
 	NSTimeInterval delay = 30 * 60; // 30 minutes
 	[self performSelector:@selector(checkServer) withObject:nil afterDelay:delay];
-}
-
-#pragma mark - ISMS Loader Delegate
-
-- (void)loadingRedirected:(ISMSLoader *)theLoader redirectUrl:(NSURL *)url
-{
-    NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
-	if (url.port)
-		[redirectUrlString appendFormat:@":%@", url.port];
-	
-	if ([url.pathComponents count] > 3)
-	{
-		for (NSString *component in url.pathComponents)
-		{
-			if ([component isEqualToString:@"api"] || [component isEqualToString:@"rest"])
-				break;
-			
-			if (![component isEqualToString:@"/"])
-			{
-				[redirectUrlString appendFormat:@"/%@", component];
-			}
-		}
-	}
-	
-    DLog(@"redirectUrlString: %@", redirectUrlString);
-	
-	settingsS.redirectUrlString = [NSString stringWithString:redirectUrlString];
-}
-
-- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
-{
-    if (theLoader.type == ISMSLoaderType_Status)
-    {
-        [viewObjectsS hideLoadingScreen];
-        
-        if(!settingsS.isOfflineMode)
-        {
-            /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Server Unavailable" message:[NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code %i:\n%@", [error code], [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Settings", nil];
-             alert.tag = 3;
-             [alert show];
-             [alert release];
-             
-             [self enterOfflineModeForce];*/
-            
-            //DDLogVerbose(@"Loading failed for loading type %i, entering offline mode. Error: %@", theLoader.type, error);
-            
-            [self enterOfflineMode];
-        }
-        
-        self.statusLoader = nil;
-    }
-}
-
-- (void)loadingFinished:(ISMSLoader *)theLoader
-{
-    // This happens right on app launch
-    if (theLoader.type == ISMSLoaderType_Status)
-    {
-        self.statusLoader = nil;
-        
-        //DLog(@"server verification passed, hiding loading screen");
-        [viewObjectsS hideLoadingScreen];
-        
-        // Since the download queue has been a frequent source of crashes in the past, and we start this on launch automatically
-        // potentially resulting in a crash loop, do NOT start the download queue automatically if the app crashed on last launch.
-        if (![BITHockeyManager sharedHockeyManager].crashManager.didCrashInLastSession)
-        {
-            // Start the queued downloads if Wifi is available
-            [cacheQueueManagerS startDownloadQueue];
-        }
-    }
 }
 
 #pragma mark -
@@ -548,7 +402,7 @@
 
 - (NSString *)latestLogFileName
 {
-    NSString *logsFolder = [settingsS.cachesPath stringByAppendingPathComponent:@"Logs"];
+    NSString *logsFolder = [[SavedSettings cachesPath] stringByAppendingPathComponent:@"Logs"];
 	NSArray *logFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:logsFolder error:nil];
 	
 	NSTimeInterval modifiedTime = 0.;
@@ -573,7 +427,7 @@
 
 - (NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager
 {
-    NSString *logsFolder = [settingsS.cachesPath stringByAppendingPathComponent:@"Logs"];
+    NSString *logsFolder = [[SavedSettings cachesPath] stringByAppendingPathComponent:@"Logs"];
 	NSString *fileNameToUse = [self latestLogFileName];
 	
 	if (fileNameToUse)
@@ -590,15 +444,15 @@
 - (NSString *)zipAllLogFiles
 {    
     NSString *zipFileName = @"iSub Logs.zip";
-    NSString *zipFilePath = [settingsS.cachesPath stringByAppendingPathComponent:zipFileName];
-    NSString *logsFolder = [settingsS.cachesPath stringByAppendingPathComponent:@"Logs"];
+    NSString *zipFilePath = [[SavedSettings cachesPath] stringByAppendingPathComponent:zipFileName];
+    NSString *logsFolder = [[SavedSettings cachesPath] stringByAppendingPathComponent:@"Logs"];
     
     // Delete the old zip if exists
     [[NSFileManager defaultManager] removeItemAtPath:zipFilePath error:nil];
     
     // Zip the logs
     ZKFileArchive *archive = [ZKFileArchive archiveWithArchivePath:zipFilePath];
-    NSInteger result = [archive deflateDirectory:logsFolder relativeToPath:settingsS.cachesPath usingResourceFork:NO];
+    NSInteger result = [archive deflateDirectory:logsFolder relativeToPath:[SavedSettings cachesPath] usingResourceFork:NO];
     if (result == zkSucceeded)
     {
         return zipFilePath;
@@ -691,20 +545,6 @@
 	
 	//DLog(@"applicationWillResignActive finished");
 }
-
-
-- (void)applicationDidBecomeActive:(UIApplication*)application
-{
-	//DLog(@"isWifi: %i", [self isWifi]);
-	//DLog(@"applicationDidBecomeActive called");
-	
-	//DLog(@"applicationDidBecomeActive finished");
-    
-    [self checkServer];
-    
-    [self checkWaveBoxRelease];
-}
-
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
@@ -1001,24 +841,9 @@
 	}
 	else
 	{
-		self.serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-		self.serverListViewController.hidesBottomBarWhenPushed = YES;
-		
-		if (self.currentTabBarController.selectedIndex >= 4)
-		{
-			//[self.currentTabBarController.moreNavigationController popToViewController:[currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
-			[self.currentTabBarController.moreNavigationController pushViewController:self.serverListViewController animated:YES];
-		}
-		else if (self.currentTabBarController.selectedIndex == NSNotFound)
-		{
-			//[self.currentTabBarController.moreNavigationController popToRootViewControllerAnimated:YES];
-			[self.currentTabBarController.moreNavigationController pushViewController:self.serverListViewController animated:YES];
-		}
-		else
-		{
-			//[(UINavigationController*)self.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
-			[(UINavigationController*)self.currentTabBarController.selectedViewController pushViewController:self.serverListViewController animated:YES];
-		}
+        ServerListViewController *vc = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        [self.sidePanelController presentViewController:nav animated:YES completion:nil];
 	}
 }
 
@@ -1175,7 +1000,7 @@
 					if (IS_IPAD())
 						[self.ipadRootViewController presentViewController:mailer animated:YES completion:nil];
 					else
-						[self.currentTabBarController presentViewController:mailer animated:YES completion:nil];
+						[self.sidePanelController presentViewController:mailer animated:YES completion:nil];
 					
 				}
 				else
@@ -1216,7 +1041,7 @@
 	if (IS_IPAD())
 		[self.ipadRootViewController dismissViewControllerAnimated:YES completion:nil];
 	else
-		[self.currentTabBarController dismissViewControllerAnimated:YES completion:nil];
+		[self.sidePanelController dismissViewControllerAnimated:YES completion:nil];
 }
 
 

@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, NewItemViewController, JASidePanelController, ISMSServer;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, NewItemViewController, SidePanelController, ISMSServer;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 
@@ -26,18 +26,7 @@
 
 // New UI
 @property (nonatomic, strong) UIWindow *window;
-@property (strong) JASidePanelController *sidePanelController;
-
-
-
-@property (strong) IntroViewController *introController;
-@property (strong) SettingsViewController *settingsViewController;
-@property (strong) IBOutlet UIImageView *background;
-@property (strong) UITabBarController *currentTabBarController;
-
-@property (strong) UINavigationController *supportNavigationController;
-
-@property (strong) ServerListViewController *serverListViewController;
+@property (strong) SidePanelController *sidePanelController;
 
 // Network connectivity objects and variables
 //
@@ -47,8 +36,6 @@
 // Multitasking stuff
 @property UIBackgroundTaskIdentifier backgroundTask;
 @property BOOL isInBackground;
-
-@property BOOL showIntro;
 
 @property (strong) NSURL *referringAppUrl;
 

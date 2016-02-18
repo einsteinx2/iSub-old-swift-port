@@ -389,16 +389,6 @@
 			{
 				[appDelegateS enterOnlineModeForce];
 			}
-			
-			// Handle the moreNavigationController stupidity
-			if (appDelegateS.currentTabBarController.selectedIndex == 4)
-			{
-				[appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
-			}
-			else
-			{
-				[(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
-			}
 		}
 		else if (sender == self.enableScrobblingSwitch)
 		{
@@ -523,28 +513,11 @@
             {
                 // We're on 3G and we just disabled use on 3G, so go offline
                 [appDelegateS enterOfflineModeForce];
-                
-                handleStupidity = YES;
             }
             else if (settingsS.isOfflineMode && !settingsS.isDisableUsageOver3G && ![LibSub isWifi])
             {
                 // We're on 3G and we just enabled use on 3G, so go online if we're offline
                 [appDelegateS enterOfflineModeForce];
-                
-                handleStupidity = YES;
-            }
-            
-            if (handleStupidity)
-            {
-                // Handle the moreNavigationController stupidity
-                if (appDelegateS.currentTabBarController.selectedIndex == 4)
-                {
-                    [appDelegateS.currentTabBarController.moreNavigationController popToViewController:[appDelegateS.currentTabBarController.moreNavigationController.viewControllers objectAtIndexSafe:1] animated:YES];
-                }
-                else
-                {
-                    [(UINavigationController*)appDelegateS.currentTabBarController.selectedViewController popToRootViewControllerAnimated:YES];
-                }
             }
         }
 	}

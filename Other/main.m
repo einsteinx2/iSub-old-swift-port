@@ -6,11 +6,11 @@
 //  Copyright __MyCompanyName__ 2010. All rights reserved.
 //
 
+#import "iSubAppDelegate.h"
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     @autoreleasepool {
-        int retVal = UIApplicationMain(argc, argv, @"UAApplication", @"iSubAppDelegate");
-        return retVal;
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([iSubAppDelegate class]));
     }
 }

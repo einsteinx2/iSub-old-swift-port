@@ -6,8 +6,10 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
+#import "iSub-Swift.h"
 #import "IntroViewController.h"
 #import "Imports.h"
+#import "ServerListViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 @implementation IntroViewController
@@ -99,10 +101,8 @@
 	}
 	else if (sender == self.ownServer)
 	{
-		[self dismissViewControllerAnimated:NO completion:nil];
-		
-		// Hack to get this working on iOS 4, can't call it directly because it doesn't detect the selected tab correctly
-		//[appDelegateS performSelector:@selector(showSettings) withObject:nil afterDelay:1.0];
+        [self dismissViewControllerAnimated:NO completion:nil];
+        
         [appDelegateS showSettings];
 	}
 }

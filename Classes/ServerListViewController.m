@@ -70,6 +70,20 @@
 	}
 }
 
+// Add close button
+- (UIBarButtonItem *)setupLeftBarButton
+{
+    return [[UIBarButtonItem alloc] initWithTitle:@"Close"
+                                            style:UIBarButtonItemStylePlain
+                                           target:self
+                                           action:@selector(close:)];
+}
+
+- (void)close:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
