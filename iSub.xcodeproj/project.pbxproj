@@ -1065,6 +1065,12 @@
 		53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CBB2D11C683E09009DE52A /* CancelBlocks.swift */; };
 		53CBB2D31C683E09009DE52A /* CancelBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CBB2D11C683E09009DE52A /* CancelBlocks.swift */; };
 		53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CBB2D11C683E09009DE52A /* CancelBlocks.swift */; };
+		53CD9DB51C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */; };
+		53CD9DB61C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */; };
+		53CD9DB71C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */; };
+		53CD9DB91C7783BC00A75438 /* PlayQueueViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CD9DB81C7783BC00A75438 /* PlayQueueViewController.xib */; };
+		53CD9DBA1C7783BC00A75438 /* PlayQueueViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CD9DB81C7783BC00A75438 /* PlayQueueViewController.xib */; };
+		53CD9DBB1C7783BC00A75438 /* PlayQueueViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CD9DB81C7783BC00A75438 /* PlayQueueViewController.xib */; };
 		53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
 		53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		53D9D24D16DEF85F002F55F7 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24B16DEF847002F55F7 /* Twitter.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -1727,6 +1733,8 @@
 		53C7FDA3150F1DE7008DA51C /* home-support.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-support.png"; path = "Images/Home Screen/home-support.png"; sourceTree = "<group>"; };
 		53C7FDA4150F1DE7008DA51C /* home-support@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-support@2x.png"; path = "Images/Home Screen/home-support@2x.png"; sourceTree = "<group>"; };
 		53CBB2D11C683E09009DE52A /* CancelBlocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancelBlocks.swift; sourceTree = "<group>"; };
+		53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueueViewModel.swift; sourceTree = "<group>"; };
+		53CD9DB81C7783BC00A75438 /* PlayQueueViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayQueueViewController.xib; sourceTree = "<group>"; };
 		53CED25C113E2FF100B09699 /* SubsonicServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubsonicServerEditViewController.h; sourceTree = "<group>"; };
 		53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubsonicServerEditViewController.m; sourceTree = "<group>"; };
 		53D44F8415AA621A00CDD3B8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -2465,7 +2473,9 @@
 			children = (
 				5333D10E1C654B5900DC19F4 /* SidePanelController.swift */,
 				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
+				53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */,
 				5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */,
+				53CD9DB81C7783BC00A75438 /* PlayQueueViewController.xib */,
 				53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */,
 				53ABE1411C60363E00E0E72B /* NewItemViewController.swift */,
 				53ABE1401C60363E00E0E72B /* NewItemViewController.xib */,
@@ -2762,6 +2772,7 @@
 				533A2D84113C963300B3A376 /* controller-pause.png in Resources */,
 				533A2D85113C963300B3A376 /* controller-play.png in Resources */,
 				533A2D86113C963300B3A376 /* controller-previous.png in Resources */,
+				53CD9DB91C7783BC00A75438 /* PlayQueueViewController.xib in Resources */,
 				533C65BB15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */,
 				535A889A113F62DD00979783 /* default-album-art.png in Resources */,
 				536D612911441F5B00DFCE56 /* settings-page.png in Resources */,
@@ -3396,6 +3407,7 @@
 				53BC273C139AF0DD00A825F1 /* home-settings.png in Resources */,
 				53BC273D139AF0DD00A825F1 /* home-settings@2x.png in Resources */,
 				53BC273E139AF0DD00A825F1 /* home-shuffle-ipad.png in Resources */,
+				53CD9DBB1C7783BC00A75438 /* PlayQueueViewController.xib in Resources */,
 				53BC273F139AF0DD00A825F1 /* home-shuffle.png in Resources */,
 				53BC2740139AF0DD00A825F1 /* home-shuffle@2x.png in Resources */,
 				53BC2742139AF0DD00A825F1 /* controller-stop.png in Resources */,
@@ -3562,6 +3574,7 @@
 				53DCF40213BFEAD3009160F9 /* controller-pause.png in Resources */,
 				53DCF40313BFEAD3009160F9 /* controller-play.png in Resources */,
 				53DCF40413BFEAD3009160F9 /* controller-previous.png in Resources */,
+				53CD9DBA1C7783BC00A75438 /* PlayQueueViewController.xib in Resources */,
 				533C65BC15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */,
 				53DCF40713BFEAD3009160F9 /* default-album-art.png in Resources */,
 				53DCF40813BFEAD3009160F9 /* settings-page.png in Resources */,
@@ -4047,6 +4060,7 @@
 				5304FC3614F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3C14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
+				53CD9DB51C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				537E9A3114F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
 				5333D10B1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
@@ -4164,6 +4178,7 @@
 				5304FC3814F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3E14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
+				53CD9DB71C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				537E9A3314F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,
 				5333D10D1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
@@ -4228,6 +4243,7 @@
 				5304FC3714F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3D14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
+				53CD9DB61C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				537E9A3214F43F43006CB0BC /* StackContainerView.m in Sources */,
 				53493F2815FC6AC40059492E /* main.m in Sources */,
 				5333D10C1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,

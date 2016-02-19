@@ -63,6 +63,13 @@ class NewItemViewModel : NSObject {
     }
     
     func processModels() {
+        // Reset models
+        self.folders.removeAll()
+        self.artists.removeAll()
+        self.albums.removeAll()
+        self.songs.removeAll()
+        self.playlists.removeAll()
+        
         guard let items = _loader.items else {
             // No models to process
             return;

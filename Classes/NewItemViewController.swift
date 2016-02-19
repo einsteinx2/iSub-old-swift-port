@@ -12,23 +12,17 @@ import UIKit
 
 class NewItemViewController: CustomUITableViewController, AsynchronousImageViewDelegate {
     
-    private let _appDelegate = iSubAppDelegate.sharedInstance()
-    private let _viewObjects = ViewObjectsSingleton.sharedInstance()
-    private let _database = DatabaseSingleton.sharedInstance()
+    private let reuseIdentifier = "Item Cell"
+    private let foldersSectionIndex   = 0
+    private let artistsSectionIndex   = 1
+    private let albumsSectionIndex    = 2
+    private let songsSectionIndex     = 3
+    private let playlistsSectionIndex = 4
     
-    private let _reuseIdentifier = "Item Cell"
-    private let _foldersSectionIndex   = 0
-    private let _artistsSectionIndex   = 1
-    private let _albumsSectionIndex    = 2
-    private let _songsSectionIndex     = 3
-    private let _playlistsSectionIndex = 4
-    
-    private let _viewModel: NewItemViewModel
-    private var _reloading: Bool = false
+    private let viewModel: NewItemViewModel
+    private var reloading: Bool = false
     // TODO: Use tuples after porting the data model
-    private var _sectionIndexes: [ISMSSectionIndex]?
-    
-    private var _hasCachedItems: Bool = false
+    private var sectionIndexes: [ISMSSectionIndex]?
     
     @IBOutlet var albumInfoView: UIView?
     @IBOutlet var albumInfoArtHolderView: UIView?
@@ -40,8 +34,7 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     @IBOutlet var albumInfoDurationLabel: UILabel?
     
     init(viewModel: NewItemViewModel) {
-        _viewModel = viewModel
-        
+        self.viewModel = viewModel
         super.init(nibName: "NewItemViewController", bundle: nil)
     }
     
@@ -61,16 +54,16 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
         
         albumInfoArtView?.delegate = self
         
-        _viewModel.delegate = self
-        if _viewModel.loadModelsFromCache() {
+        viewModel.delegate = self
+        if viewModel.loadModelsFromCache() {
             _addHeaderAndIndex()
         } else {
-            _viewModel.loadModelsFromWeb(nil)
+            viewModel.loadModelsFromWeb(nil)
         }
     }
     
     override func customizeTableView(tableView: UITableView!) {
-        tableView.registerClass(NewItemUITableViewCell.self, forCellReuseIdentifier: _reuseIdentifier)
+        tableView.registerClass(NewItemUITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -84,7 +77,7 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        _viewModel.cancelLoad()
+        viewModel.cancelLoad()
         
         _unregisterForNotifications()
     }
@@ -120,26 +113,26 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     }
     
     override func didPullToRefresh() {
-        if !_reloading {
-            _reloading = true
-            _viewModel.loadModelsFromWeb(nil)
+        if !reloading {
+            reloading = true
+            viewModel.loadModelsFromWeb(nil)
         }
     }
     
     private func _dataSourceDidFinishLoadingNewData() {
-        _reloading = false
+        reloading = false
         self.refreshControl?.endRefreshing()
     }
     
     func cancelLoad() {
-        _viewModel.cancelLoad()
+        viewModel.cancelLoad()
         self._dataSourceDidFinishLoadingNewData()
     }
     
     private func _addHeaderAndIndex() {
-        let foldersCount = _viewModel.folders.count
-        let artistsCount = _viewModel.artists.count
-        let songsCount = _viewModel.songs.count
+        let foldersCount = viewModel.folders.count
+        let artistsCount = viewModel.artists.count
+        let songsCount = viewModel.songs.count
         
         if (songsCount == 0 && foldersCount == 0) || artistsCount > 0 {
             self.tableView.tableHeaderView = nil;
@@ -157,12 +150,12 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
                 self.tableView.tableHeaderView = headerView
             }
             
-            switch _viewModel.rootItem {
+            switch viewModel.rootItem {
             case let folder as ISMSFolder:
                 albumInfoArtView!.coverArtId = folder.coverArtId?.stringValue
                 albumInfoArtistLabel!.text = folder.name
                 //albumInfoAlbumLabel!.text = _album!.title
-                albumInfoDurationLabel!.text = NSString.formatTime(Double(_viewModel.songsDuration))
+                albumInfoDurationLabel!.text = NSString.formatTime(Double(viewModel.songsDuration))
                 albumInfoTrackCountLabel!.text = pluralizedString(count: songsCount, singularNoun: "Track")
             default:
                 break
@@ -184,16 +177,16 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     @IBAction func a_expandCoverArt(sender: AnyObject?) {
         var modalArtViewController: ModalAlbumArtViewController?
         
-        switch _viewModel.rootItem {
+        switch viewModel.rootItem {
         case let folder as ISMSFolder:
-            modalArtViewController = ModalAlbumArtViewController(title: folder.name, subtitle: nil, coverArtId: folder.coverArtId?.stringValue, numberOfTracks: _viewModel.songs.count, albumLength: 0)
+            modalArtViewController = ModalAlbumArtViewController(title: folder.name, subtitle: nil, coverArtId: folder.coverArtId?.stringValue, numberOfTracks: viewModel.songs.count, albumLength: 0)
         default:
             break
         }
         
         if let controller = modalArtViewController {
             if IS_IPAD() {
-                _appDelegate.ipadRootViewController.presentViewController(controller, animated: true, completion: nil)
+                iSubAppDelegate.sharedInstance().ipadRootViewController.presentViewController(controller, animated: true, completion: nil)
             } else {
                 self.presentViewController(controller, animated: true, completion: nil)
             }
@@ -205,7 +198,7 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
         var titles: [String] = []
         
-        if let sectionIndexes = _sectionIndexes {
+        if let sectionIndexes = sectionIndexes {
             for sectionIndex in sectionIndexes {
                 titles.append(String(sectionIndex.letter))
             }
@@ -215,19 +208,19 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     }
     
     override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
-        if let sectionIndexes = _sectionIndexes {
+        if let sectionIndexes = sectionIndexes {
             let row = sectionIndexes[index].firstIndex
             
             // Find the section with items in it
             var section = -1
-            if _viewModel.folders.count > row {
-                section = _foldersSectionIndex
-            } else if _viewModel.artists.count > row {
-                section = _artistsSectionIndex
-            } else if _viewModel.albums.count > row {
-                section = _albumsSectionIndex
-            } else if _viewModel.songs.count > row {
-                section = _songsSectionIndex
+            if viewModel.folders.count > row {
+                section = foldersSectionIndex
+            } else if viewModel.artists.count > row {
+                section = artistsSectionIndex
+            } else if viewModel.albums.count > row {
+                section = albumsSectionIndex
+            } else if viewModel.songs.count > row {
+                section = songsSectionIndex
             }
             
             if section >= 0 {
@@ -247,11 +240,11 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
         var count: Int? = nil
         
         switch section {
-        case _foldersSectionIndex:   count = _viewModel.folders.count
-        case _artistsSectionIndex:   count = _viewModel.artists.count
-        case _albumsSectionIndex:    count = _viewModel.albums.count
-        case _songsSectionIndex:     count = _viewModel.songs.count
-        case _playlistsSectionIndex: count = _viewModel.playlists.count
+        case foldersSectionIndex:   count = viewModel.folders.count
+        case artistsSectionIndex:   count = viewModel.artists.count
+        case albumsSectionIndex:    count = viewModel.albums.count
+        case songsSectionIndex:     count = viewModel.songs.count
+        case playlistsSectionIndex: count = viewModel.playlists.count
         default: break
         }
         
@@ -259,52 +252,52 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(_reuseIdentifier, forIndexPath: indexPath) as! NewItemUITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! NewItemUITableViewCell
         cell.alwaysShowSubtitle = true
         //cell.delegate = self
         
         switch indexPath.section {
-        case _foldersSectionIndex:
+        case foldersSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             cell.alwaysShowCoverArt = true
-            if _sectionIndexes != nil {
+            if sectionIndexes != nil {
                 cell.indexShowing = true
             }
             
-            let folder = _viewModel.folders[indexPath.row]
+            let folder = viewModel.folders[indexPath.row]
             cell.associatedObject = folder
             cell.coverArtId = folder.coverArtId?.stringValue
             cell.title = folder.name
             
             break
-        case _artistsSectionIndex:
+        case artistsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.None
-            if _sectionIndexes != nil {
+            if sectionIndexes != nil {
                 cell.indexShowing = true
             }
             
-            let artist = _viewModel.artists[indexPath.row]
+            let artist = viewModel.artists[indexPath.row]
             cell.associatedObject = artist
             cell.coverArtId = nil
             cell.title = artist.name
             
             break
-        case _albumsSectionIndex:
+        case albumsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.None
-            if _sectionIndexes != nil {
+            if sectionIndexes != nil {
                 cell.indexShowing = true
             }
             
-            let album = _viewModel.albums[indexPath.row]
+            let album = viewModel.albums[indexPath.row]
             cell.associatedObject = album
             cell.coverArtId = album.coverArtId
             cell.title = album.name
             
             break
-        case _songsSectionIndex:
+        case songsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.None
             
-            let song = _viewModel.songs[indexPath.row]
+            let song = viewModel.songs[indexPath.row]
             cell.indexPath = indexPath
             cell.associatedObject = song
             cell.coverArtId = nil
@@ -317,7 +310,7 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
             
             if song.isFullyCached {
                 cell.backgroundView = UIView()
-                cell.backgroundView!.backgroundColor = _viewObjects.currentLightColor()
+                cell.backgroundView!.backgroundColor = ViewObjectsSingleton.sharedInstance().currentLightColor()
             } else {
                 cell.backgroundView = UIView()
             }
@@ -334,13 +327,13 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
         var height: CGFloat = 0
         
         switch indexPath.section {
-        case _foldersSectionIndex:
+        case foldersSectionIndex:
             height = ISMSSubfolderCellHeight
-        case _artistsSectionIndex:
+        case artistsSectionIndex:
             height = ISMSArtistCellHeight
-        case _albumsSectionIndex:
+        case albumsSectionIndex:
             height = ISMSAlbumCellHeight
-        case _songsSectionIndex:
+        case songsSectionIndex:
             height = ISMSSongCellHeight
         default:
             break
@@ -350,10 +343,10 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if _viewObjects.isCellEnabled {
+        if ViewObjectsSingleton.sharedInstance().isCellEnabled {
             switch indexPath.section {
-            case _foldersSectionIndex:
-                let folder = _viewModel.folders[indexPath.row]
+            case foldersSectionIndex:
+                let folder = self.viewModel.folders[indexPath.row]
                 let folderLoader = ISMSFolderLoader()
                 folderLoader.folderId = folder.folderId
                 folderLoader.mediaFolderId = folder.mediaFolderId
@@ -361,15 +354,16 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
                 let viewModel = NewItemViewModel(loader: folderLoader)
                 let viewController = NewItemViewController(viewModel: viewModel)
                 self.pushViewControllerCustom(viewController)
-            case _artistsSectionIndex:
+            case artistsSectionIndex:
                 break
-            case _albumsSectionIndex:
+            case albumsSectionIndex:
                 break
-            case _songsSectionIndex:
+            case songsSectionIndex:
                 // TODO: Implement a way to just switch play index when we're playing from the same array to save time
-                playAll(songs: _viewModel.songs, playIndex: indexPath.row)
+                //playAll(songs: viewModel.songs, playIndex: indexPath.row)
+                PlayQueue.sharedInstance.playSongs(viewModel.songs, playIndex: indexPath.row)
                 
-                let song = _viewModel.songs[indexPath.row] as ISMSSong
+                let song = viewModel.songs[indexPath.row] as ISMSSong
                 if song.contentType?.basicType == ISMSBasicContentType.Audio {
                     self.showPlayer()
                 }
@@ -400,7 +394,7 @@ extension NewItemViewController : NewItemViewModelDelegate {
         let alert = CustomUIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "OK")
         alert.show()
         
-        _viewObjects.hideLoadingScreen()
+        ViewObjectsSingleton.sharedInstance().hideLoadingScreen()
         
         _dataSourceDidFinishLoadingNewData()
     }

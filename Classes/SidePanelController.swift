@@ -31,7 +31,7 @@ class SidePanelController: JASidePanelController {
         
         let menu = NewMenuViewController()
         self.leftPanel = menu
-        self.rightPanel = PlayQueueViewController()
+        self.rightPanel = PlayQueueViewController(viewModel: PlayQueueViewModel())
         menu.showDefaultViewController()
     }
     
