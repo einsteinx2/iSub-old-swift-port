@@ -32,7 +32,7 @@ class NewItemViewModel : NSObject {
     private(set) var playlists = [Playlist]()
     
     private(set) var songsDuration = 0
-    private(set) var sectionIndexes = [ISMSSectionIndex]()
+    private(set) var sectionIndexes = [SectionIndex]()
     
     init(loader: ISMSItemLoader) {
         _loader = loader

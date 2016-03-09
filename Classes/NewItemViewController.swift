@@ -21,8 +21,7 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     
     private let viewModel: NewItemViewModel
     private var reloading: Bool = false
-    // TODO: Use tuples after porting the data model
-    private var sectionIndexes: [ISMSSectionIndex]?
+    private var sectionIndexes: [SectionIndex]?
     
     @IBOutlet var albumInfoView: UIView?
     @IBOutlet var albumInfoArtHolderView: UIView?
