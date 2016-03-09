@@ -1,7 +1,7 @@
 PODS:
-  - Flurry-iOS-SDK (7.3.0):
-    - Flurry-iOS-SDK/FlurrySDK (= 7.3.0)
-  - Flurry-iOS-SDK/FlurrySDK (7.3.0)
+  - Flurry-iOS-SDK (7.5.1):
+    - Flurry-iOS-SDK/FlurrySDK (= 7.5.1)
+  - Flurry-iOS-SDK/FlurrySDK (7.5.1)
   - FMDB (2.6):
     - FMDB/standard (= 2.6)
   - FMDB/standard (2.6)
@@ -27,6 +27,7 @@ PODS:
   - MBProgressHUD (0.9.2)
   - MKStoreKit (4.99)
   - SBJson (3.2)
+  - SnapKit (0.15.0)
   - TBXML (1.5)
   - ZipKit (1.0.3)
 
@@ -36,6 +37,7 @@ DEPENDENCIES:
   - libSub (from `Frameworks/libSub/libSub.podspec`)
   - MBProgressHUD (~> 0.9.2)
   - MKStoreKit
+  - SnapKit (~> 0.15.0)
   - TBXML
   - ZipKit
 
@@ -44,7 +46,7 @@ EXTERNAL SOURCES:
     :path: Frameworks/libSub/libSub.podspec
 
 SPEC CHECKSUMS:
-  Flurry-iOS-SDK: 054befae0fa0244fb000985bfe757d70f87a9f60
+  Flurry-iOS-SDK: c0c162b6be03b259ca51fd91a026e6b8fb5ae97e
   FMDB: c1968bab3ab0aed38f66cb778ae1e7fa9a652b6e
   HockeySDK: dd11a2b9da3372fd025643bee5bc10c8c613d169
   JASidePanels: c8f5b130e18d51ee3de988d1c1fad2f88e0b0d21
@@ -52,9 +54,10 @@ SPEC CHECKSUMS:
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MKStoreKit: 748617e5f87ad1e0d3f075155047945248eccefc
   SBJson: 9626892a7dc75ccaa2aad207ed4e4f73d6762846
+  SnapKit: 4962eed2ee18e48cbd2b2292fffc57efe7235f87
   TBXML: 9f9dadb239f2f2af1dadb87fe43a0ce6e479379a
   ZipKit: 594735e7ad2fd3ee7349759681a0423a1b296572
 
-PODFILE CHECKSUM: 5ca86495207fb75d1c0c7ed0f1fd7a103555ee3d
+PODFILE CHECKSUM: f5f2a4979b541141b4250af9d60f071c143ebc76
 
 COCOAPODS: 1.0.0.beta.3

@@ -20,6 +20,10 @@ class SidePanelController: JASidePanelController {
         return .LightContent
     }
     
+    override func stylePanel(panel: UIView!) {
+        // Intentionally empty to prevent rounded corners on panels
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,6 +32,9 @@ class SidePanelController: JASidePanelController {
         
         // TODO: Look into custom side panel animations
         //self.pushesSidePanels = true
+        
+        self.shouldResizeLeftPanel = true
+        self.shouldResizeRightPanel = true
         
         let menu = NewMenuViewController()
         self.leftPanel = menu

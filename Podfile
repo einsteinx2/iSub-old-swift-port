@@ -4,6 +4,7 @@ def all_pods
 	pod 'HockeySDK'
 	pod 'JASidePanels', '~> 1.3.2', :inhibit_warnings => true
 	pod 'MBProgressHUD', '~> 0.9.2'
+	pod 'SnapKit', '~> 0.15.0'
 
 	# Pods from libSub that have annoying warnings
 	pod 'TBXML', :inhibit_warnings => true

@@ -13,11 +13,11 @@
 @interface AsynchronousImageView : UIImageView <ISMSLoaderDelegate>
 
 @property (weak) IBOutlet NSObject<AsynchronousImageViewDelegate> *delegate;
-@property (copy) NSString *coverArtId;
-@property (strong) SUSCoverArtDAO *coverArtDAO;
+@property (nullable, copy) NSString *coverArtId;
+@property (nullable, strong) SUSCoverArtDAO *coverArtDAO;
 @property BOOL isLarge;
-@property (strong) UIActivityIndicatorView *activityIndicator;
+@property (nullable, strong) UIActivityIndicatorView *activityIndicator;
 
-- (id)initWithFrame:(CGRect)frame coverArtId:(NSString *)artId isLarge:(BOOL)large delegate:(NSObject<AsynchronousImageViewDelegate> *)theDelegate;
+- (nonnull instancetype)initWithFrame:(CGRect)frame coverArtId:(NSString *)artId isLarge:(BOOL)large delegate:(NSObject<AsynchronousImageViewDelegate> *)theDelegate;
 
 @end

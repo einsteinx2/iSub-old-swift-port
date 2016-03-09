@@ -28,7 +28,7 @@ class NewMenuViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.darkGrayColor()
+        self.view.backgroundColor = UIColor.blackColor()
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)

@@ -7,56 +7,125 @@
 //
 
 import UIKit
+import SnapKit
 
-class PlayQueueViewController: CustomUITableViewController {
+class PlayQueueViewController: UIViewController {
 
+    let nowPlayingView = UIView()
+    let nowPlayingArtView = AsynchronousImageView()
+    let nowPlayingSongLabel = UILabel()
+    let nowPlayingArtistLabel = UILabel()
+    let tableView = UITableView()
+    
     private let viewModel: PlayQueueViewModel
     private let reuseIdentifier = "Item Cell"
     
     init(viewModel: PlayQueueViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: "PlayQueueViewController", bundle: nil)
+        super.init(nibName: nil, bundle: nil)
+        
+        self.viewModel.delegate = self
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("NSCoding not supported")
     }
-    
-    override func customizeTableView(tableView: UITableView!) {
-        tableView.registerClass(NewItemUITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    override func loadView() {
+        self.view = UIView()
+        self.view.backgroundColor = UIColor.blackColor()
         
-        self.view.backgroundColor = UIColor.darkGrayColor()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        nowPlayingView.backgroundColor = UIColor.lightGrayColor()
+        self.view.addSubview(nowPlayingView)
+        nowPlayingView.snp_makeConstraints { make in
+            make.top.equalTo(self.view).offset(20)
+            make.leading.equalTo(self.view)
+            make.trailing.equalTo(self.view)
+            make.height.equalTo(60)
+        }
+        
+        nowPlayingView.addSubview(nowPlayingArtView)
+        nowPlayingArtView.snp_makeConstraints { make in
+            make.top.equalTo(nowPlayingView)
+            make.leading.equalTo(nowPlayingView)
+            make.bottom.equalTo(nowPlayingView)
+            make.width.equalTo(60)
+        }
+        
+        nowPlayingSongLabel.font = UIFont.systemFontOfSize(14)
+        nowPlayingSongLabel.textColor = UIColor.blackColor()
+        nowPlayingSongLabel.textAlignment = .Center
+        nowPlayingView.addSubview(nowPlayingSongLabel)
+        nowPlayingSongLabel.snp_makeConstraints { make in
+            make.top.equalTo(nowPlayingView)
+            make.leading.equalTo(nowPlayingArtView.snp_trailing).offset(5)
+            make.trailing.equalTo(nowPlayingView).inset(5)
+            make.height.equalTo(40)
+        }
+        
+        nowPlayingArtistLabel.font = UIFont.systemFontOfSize(10)
+        nowPlayingArtistLabel.textColor = UIColor.grayColor()
+        nowPlayingArtistLabel.textAlignment = .Center
+        nowPlayingView.addSubview(nowPlayingArtistLabel)
+        nowPlayingArtistLabel.snp_makeConstraints { make in
+            make.top.equalTo(nowPlayingSongLabel.snp_bottom)
+            make.leading.equalTo(nowPlayingSongLabel)
+            make.trailing.equalTo(nowPlayingSongLabel)
+            make.height.equalTo(20)
+        }
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = UIColor.clearColor()
+        tableView.separatorColor = UIColor.clearColor()
+        tableView.registerClass(NewItemUITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.view.addSubview(tableView)
+        tableView.snp_makeConstraints { make in
+            make.top.equalTo(nowPlayingView.snp_bottom)
+            make.leading.equalTo(self.view)
+            make.trailing.equalTo(self.view)
+            make.bottom.equalTo(self.view)
+        }
+        
+        updateNowPlayingView()
     }
     
-    // MARK: - Table View Delegate -
+    func updateNowPlayingView() {
+        if let song = viewModel.currentSong {
+            nowPlayingArtView.coverArtId = song.coverArtId?.stringValue
+            nowPlayingSongLabel.text = song.title
+            nowPlayingArtistLabel.text = song.artist?.name
+        } else {
+            nowPlayingArtView.coverArtId = nil
+            nowPlayingSongLabel.text = ""
+            nowPlayingArtistLabel.text = ""
+        }
+    }
+}
+
+extension PlayQueueViewController: PlayQueueViewModelDelegate {
+    func itemsChanged() {
+        updateNowPlayingView()
+        self.tableView.reloadData()
+    }
+}
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+extension PlayQueueViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.songs.count
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.numberOfTableViewRows
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! NewItemUITableViewCell
         cell.alwaysShowSubtitle = true
-        //cell.delegate = self
-        
         cell.accessoryType = UITableViewCellAccessoryType.None
         
-        let song = viewModel.songs[indexPath.row]
+        let song = viewModel.songForTableViewIndex(indexPath.row)
         cell.indexPath = indexPath
         cell.associatedObject = song
         cell.coverArtId = nil
@@ -73,15 +142,15 @@ class PlayQueueViewController: CustomUITableViewController {
         } else {
             cell.backgroundView = UIView()
         }
-
+        
         return cell
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return ISMSNormalize(ISMSSongCellHeight)
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        PlayQueue.sharedInstance.playSongAtIndex(indexPath.row)
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        viewModel.playSongAtTableViewIndex(indexPath.row)
     }
 }

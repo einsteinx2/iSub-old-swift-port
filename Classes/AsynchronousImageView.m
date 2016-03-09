@@ -36,49 +36,45 @@
 
 - (NSString *)coverArtId
 {
-	@synchronized(self)
-	{
-		return _coverArtId;
-	}
+	return _coverArtId;
 }
 
 - (void)setCoverArtId:(NSString *)artId
 {
-	@synchronized(self)
-	{
-		// Make sure old activity indicator is gone
-		[self.activityIndicator removeFromSuperview];
-		self.activityIndicator = nil;
-		
-		if (self.coverArtDAO)
-		{
-			[self.coverArtDAO cancelLoad];
-			self.coverArtDAO.delegate = nil;
-			self.coverArtDAO = nil;
-		}
-		
-		_coverArtId = [artId copy];
-		
-		self.coverArtDAO = [[SUSCoverArtDAO alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge];
-		if (self.coverArtDAO.isCoverArtCached)
-		{
-			self.image = self.coverArtDAO.coverArtImage;
-		}
-		else
-		{
-			self.image = self.coverArtDAO.defaultCoverArtImage;
-			
-			if (_coverArtId && self.isLarge)
-			{
-				self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-				self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-				self.activityIndicator.center = CGPointMake(self.width/2, self.height/2);
-				[self addSubview:self.activityIndicator];
-				[self.activityIndicator startAnimating];
-			}
-			[self.coverArtDAO startLoad];
-		}
-	}
+    // Make sure old activity indicator is gone
+    [self.activityIndicator removeFromSuperview];
+    self.activityIndicator = nil;
+    
+    if (self.coverArtDAO)
+    {
+        [self.coverArtDAO cancelLoad];
+        self.coverArtDAO.delegate = nil;
+        self.coverArtDAO = nil;
+    }
+    
+    _coverArtId = [artId copy];
+    self.image = self.coverArtDAO.defaultCoverArtImage;
+    
+    if (artId)
+    {
+        self.coverArtDAO = [[SUSCoverArtDAO alloc] initWithDelegate:self coverArtId:self.coverArtId isLarge:self.isLarge];
+        if (self.coverArtDAO.isCoverArtCached)
+        {
+            self.image = self.coverArtDAO.coverArtImage;
+        }
+        else
+        {
+            if (_coverArtId && self.isLarge)
+            {
+                self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+                self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+                self.activityIndicator.center = CGPointMake(self.width/2, self.height/2);
+                [self addSubview:self.activityIndicator];
+                [self.activityIndicator startAnimating];
+            }
+            [self.coverArtDAO startLoad];
+        }
+    }
 }
 
 #pragma mark -
