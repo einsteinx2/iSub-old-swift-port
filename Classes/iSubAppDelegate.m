@@ -129,16 +129,23 @@
     // Recover current state if player was interrupted. Do not resume if we're connected to the test server
     // because music will start playing behind the intro screen.
     [ISMSStreamManager sharedInstance];
-    ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
-    if (currentSong && settingsS.isRecover && !settingsS.isTestServer)
+    if (settingsS.isTestServer || !settingsS.isRecover)
     {
-        [[PlayQueue sharedInstance] startSongWithOffsetBytes:settingsS.byteOffset offsetSeconds:settingsS.seekTime];
+        [streamManagerS removeAllStreams];
     }
     else
     {
-        // TODO: Start handling this via PlayQueue
-        audioEngineS.startByteOffset = settingsS.byteOffset;
-        audioEngineS.startSecondsOffset = settingsS.seekTime;
+        ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
+        if (currentSong)
+        {
+            [[PlayQueue sharedInstance] startSongWithOffsetBytes:settingsS.byteOffset offsetSeconds:settingsS.seekTime];
+        }
+        else
+        {
+            // TODO: Start handling this via PlayQueue
+            audioEngineS.startByteOffset = settingsS.byteOffset;
+            audioEngineS.startSecondsOffset = settingsS.seekTime;
+        }
     }
     
     /*
