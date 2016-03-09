@@ -126,10 +126,11 @@
     
     [self startHLSProxy];
     
-    // Recover current state if player was interrupted
+    // Recover current state if player was interrupted. Do not resume if we're connected to the test server
+    // because music will start playing behind the intro screen.
     [ISMSStreamManager sharedInstance];
     ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
-    if (currentSong && settingsS.isRecover)
+    if (currentSong && settingsS.isRecover && !settingsS.isTestServer)
     {
         [[PlayQueue sharedInstance] startSongWithOffsetBytes:settingsS.byteOffset offsetSeconds:settingsS.seekTime];
     }
