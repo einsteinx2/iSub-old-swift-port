@@ -18,6 +18,6 @@
 @property BOOL isLarge;
 @property (nullable, strong) UIActivityIndicatorView *activityIndicator;
 
-- (nonnull instancetype)initWithFrame:(CGRect)frame coverArtId:(NSString *)artId isLarge:(BOOL)large delegate:(NSObject<AsynchronousImageViewDelegate> *)theDelegate;
+- (nonnull instancetype)initWithFrame:(CGRect)frame coverArtId:(nonnull NSString *)artId isLarge:(BOOL)large delegate:(nonnull NSObject<AsynchronousImageViewDelegate> *)theDelegate;
 
 @end

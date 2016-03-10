@@ -67,6 +67,17 @@
 	}
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    // If this is a new server entry, automatically make the url field active
+    if (!_server)
+    {
+        [self.urlField becomeFirstResponder];
+    }
+}
+
 #pragma mark - Button handling
 
 - (BOOL)checkUrl:(NSString *)url
@@ -241,9 +252,7 @@
                                               password:statusLoader.password];
     }
     
-    // TODO: Why are these notifications? And why no constants?
-    [NSNotificationCenter postNotificationToMainThreadWithName:@"reloadServerList"];
-    [NSNotificationCenter postNotificationToMainThreadWithName:@"showSaveButton"];
+    [self.delegate serverEdited:self.server];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     if (IS_IPAD())

@@ -849,9 +849,7 @@
 	}
 	else
 	{
-        ServerListViewController *vc = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-        [self.sidePanelController presentViewController:nav animated:YES completion:nil];
+        [(NewMenuViewController *)self.sidePanelController.leftPanel showSettings];
 	}
 }
 
@@ -1431,7 +1429,7 @@
 - (void)switchServer:(ISMSServer *)server redirectUrl:(NSString *)redirectUrl
 {
     // Update the variables
-    settingsS.currentServer = server;
+    settingsS.currentServerId = server.serverId;
     settingsS.redirectUrlString = redirectUrl;
 
     // TODO: Reimplement for new UI

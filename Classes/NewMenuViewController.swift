@@ -24,7 +24,8 @@ class NewMenuViewController: UITableViewController {
     
     private let reuseIdentifier = "Menu Cell"
     private let menuItems = [MenuItem(name: "Folders", function: showFolders),
-                             MenuItem(name: "Artists", function: showArtists)];
+                             MenuItem(name: "Artists", function: showArtists),
+                             MenuItem(name: "Settings", function: showSettings)];
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +67,21 @@ class NewMenuViewController: UITableViewController {
         self.sidePanelController!.centerPanel = menuItem.navController
     }
 
+    private func showSettings(menuItem: MenuItem) {
+        if menuItem.navController == nil {
+            let viewController = ServerListViewController(nibName: "ServerListViewController", bundle: nil)
+            let navController = UINavigationController(rootViewController: viewController)
+            navController.navigationBar.barStyle = .Black
+            menuItem.navController = navController
+        }
+        
+        self.sidePanelController!.centerPanel = menuItem.navController
+    }
+    
+    func showSettings() {
+        showSettings(menuItems.last!)
+    }
+    
     // MARK: - Table View Delegate -
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

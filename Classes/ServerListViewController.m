@@ -13,9 +13,10 @@
 #import "HelpTabViewController.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
+#import "ServerEditDelegate.h"
 #import "iSub-Swift.h"
 
-@interface ServerListViewController ()
+@interface ServerListViewController ()  <ISMSLoaderDelegate, ServerEditDelegate>
 @property (nonatomic, strong) NSArray<ISMSServer*> *servers;
 @property (nonatomic) BOOL isEditing;
 @property (nonatomic, strong) UIView *headerView;
@@ -42,9 +43,6 @@
 	
 	self.tableView.allowsSelectionDuringEditing = YES;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"reloadServerList" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSaveButton) name:@"showSaveButton" object:nil];
-	
 	self.title = @"Servers";
 	
 	if ([[ISMSServer allServers] count] == 0)
@@ -70,45 +68,23 @@
 	}
 }
 
-// Add close button
 - (UIBarButtonItem *)setupLeftBarButton
 {
-    return [[UIBarButtonItem alloc] initWithTitle:@"Close"
+    return [[UIBarButtonItem alloc] initWithTitle:@"Menu"
                                             style:UIBarButtonItemStylePlain
                                            target:self
-                                           action:@selector(close:)];
+                                           action:@selector(showMenu:)];
 }
 
-- (void)close:(id)sender
+- (void)showMenu:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    if(self != [[self.navigationController viewControllers] objectAtIndexSafe:0])
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(saveAction:)];
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self.sidePanelController showLeftPanelAnimated:YES];
 }
 
 - (void)reloadTable
 {
     self.servers = [ISMSServer allServers];
 	[self.tableView reloadData];
-}
-
-- (void)showSaveButton
-{
-	if(!self.isEditing)
-	{
-		if(self == [[self.navigationController viewControllers] firstObjectSafe])
-			self.navigationItem.leftBarButtonItem = nil;
-		else
-			self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(saveAction:)];
-		
-	}
 }
 
 - (void)segmentAction:(id)sender
@@ -170,22 +146,13 @@
     else
     {
 		self.isEditing = NO;
-		[self showSaveButton];
+		[self setupLeftBarButton];
     }
 }
 
 - (void)addAction:(id)sender
 {
-    SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithServer:nil];
-    subsonicServerEditViewController.view.frame = self.view.bounds;
-    subsonicServerEditViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    [Flurry logEvent:@"ServerType" withParameters:[NSDictionary dictionaryWithObject:@"Subsonic" forKey:@"type"]];
-    
-    if (IS_IPAD())
-        [appDelegateS.ipadRootViewController presentViewController:subsonicServerEditViewController animated:YES completion:nil];
-    else
-        [self presentViewController:subsonicServerEditViewController animated:YES completion:nil];
+    [self showServerEditScreen:nil];
 }
 
 - (void)saveAction:(id)sender
@@ -201,13 +168,17 @@
 
 - (void)showServerEditScreen:(ISMSServer *)server
 {
-    if (server.type == ServerTypeSubsonic)
-    {
-        SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithServer:server];
-        if ([subsonicServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
-            subsonicServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-        [self presentViewController:subsonicServerEditViewController animated:YES completion:nil];
-    }
+    SubsonicServerEditViewController *subsonicServerEditViewController = [[SubsonicServerEditViewController alloc] initWithServer:server];
+    subsonicServerEditViewController.delegate = self;
+    if ([subsonicServerEditViewController respondsToSelector:@selector(setModalPresentationStyle:)])
+        subsonicServerEditViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+    [self presentViewController:subsonicServerEditViewController animated:YES completion:nil];
+}
+
+- (void)serverEdited:(ISMSServer *)server
+{
+    [self reloadTable];
+    [self setupLeftBarButton];
 }
 
 #pragma mark - Table view methods -
@@ -397,9 +368,9 @@
 
 - (void)loadingFinished:(ISMSLoader *)theLoader
 {
-    ISMSStatusLoader *statusLoader = (ISMSStatusLoader *)statusLoader;
+    ISMSStatusLoader *statusLoader = (ISMSStatusLoader *)theLoader;
     
-    settingsS.currentServer = statusLoader.server;
+    settingsS.currentServerId = statusLoader.server.serverId;
     settingsS.redirectUrlString = self.redirectUrl;
 	
 	[appDelegateS switchServer:statusLoader.server redirectUrl:self.redirectUrl];

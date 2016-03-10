@@ -6,10 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "ISMSLoaderDelegate.h"
 #import "CustomUITableViewController.h"
 
-@class SettingsTabViewController, HelpTabViewController, PMSLoginLoader;
-@interface ServerListViewController : CustomUITableViewController <ISMSLoaderDelegate>
+@interface ServerListViewController : CustomUITableViewController
 
 @end

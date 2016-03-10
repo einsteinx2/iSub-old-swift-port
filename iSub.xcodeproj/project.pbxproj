@@ -1610,6 +1610,7 @@
 		5388A42B1198AD840049BA9E /* unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unselected.png; path = Images/Other/unselected.png; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
 		538C01AF12C3DCC40061545B /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Images/Other/back@2x.png"; sourceTree = "<group>"; };
+		5392A1C11C90EB7B00ADE09E /* ServerEditDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerEditDelegate.h; sourceTree = "<group>"; };
 		539799781163084200F41D8B /* loading-screen-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image.png"; path = "Images/Other/loading-screen-image.png"; sourceTree = "<group>"; };
 		5398F26A11DA61DA00007870 /* SettingsTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTabViewController.h; sourceTree = "<group>"; };
 		5398F26B11DA61DA00007870 /* SettingsTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTabViewController.m; sourceTree = "<group>"; };
@@ -2133,6 +2134,7 @@
 		532E6FD311AB31CF000A0E3B /* Settings view */ = {
 			isa = PBXGroup;
 			children = (
+				5392A1C11C90EB7B00ADE09E /* ServerEditDelegate.h */,
 				5398F26A11DA61DA00007870 /* SettingsTabViewController.h */,
 				5398F26B11DA61DA00007870 /* SettingsTabViewController.m */,
 				533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */,
