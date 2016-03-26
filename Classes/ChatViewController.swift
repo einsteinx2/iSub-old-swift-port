@@ -86,7 +86,7 @@ public class ChatViewController : CustomUITableViewController {
         let sendButton = UIButton(type: .Custom)
         sendButton.frame = CGRectMake(252, 11, 60, 60);
         sendButton.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
-        sendButton.addTarget(self, action: "a_sendButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        sendButton.addTarget(self, action: #selector(ChatViewController.a_sendButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         sendButton.setImage(UIImage(named: "comment-write"), forState: UIControlState.Normal)
         sendButton.setImage(UIImage(named: "comment-write-pressed"), forState: UIControlState.Highlighted)
         headerView.addSubview(sendButton)
@@ -237,7 +237,7 @@ extension ChatViewController : UITextViewDelegate {
     
         _dismissButton = UIButton(type: UIButtonType.Custom)
         _dismissButton.autoresizingMask = [.FlexibleWidth, .FlexibleHeight];
-        _dismissButton.addTarget(self, action: "a_doneSearching:", forControlEvents: .TouchUpInside)
+        _dismissButton.addTarget(self, action: #selector(ChatViewController.a_doneSearching(_:)), forControlEvents: .TouchUpInside)
         _dismissButton.frame = self.view.bounds;
         _dismissButton.enabled = false
         _chatMessageOverlay.addSubview(_dismissButton)
@@ -249,7 +249,7 @@ extension ChatViewController : UITextViewDelegate {
         }, completion: nil)
     
         // Add the done button.
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "a_doneSearching:")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(ChatViewController.a_doneSearching(_:)))
         }
     
     public func textViewDidEndEditing(textView: UITextView) {

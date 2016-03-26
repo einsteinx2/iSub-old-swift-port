@@ -88,8 +88,8 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     // MARK: - Notifications - 
     
     private func _registerForNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentPlaylistIndexChanged:", name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "songPlaybackStarted:", name: ISMSNotification_SongPlaybackStarted, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NewItemViewController.currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NewItemViewController.songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
     }
     
     private func _unregisterForNotifications() {

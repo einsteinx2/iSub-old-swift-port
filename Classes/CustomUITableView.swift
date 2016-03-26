@@ -211,7 +211,7 @@ public class CustomUITableView: UITableView {
                 if let indexPath = indexPath {
                     self._tapAndHoldCell = self.cellForRowAtIndexPath(indexPath)
                     
-                    _tapAndHoldTimer = NSTimer.scheduledTimerWithTimeInterval(TapAndHoldDelay, target: self, selector: "_tapAndHoldFired", userInfo: nil, repeats: false);
+                    _tapAndHoldTimer = NSTimer.scheduledTimerWithTimeInterval(TapAndHoldDelay, target: self, selector: #selector(CustomUITableView._tapAndHoldFired), userInfo: nil, repeats: false);
                 }
             }
         }

@@ -31,8 +31,8 @@ class PlayQueueViewModel: NSObject {
         reloadSongs()
         
         // Rather than loading the songs list all the time,
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playQueueChanged:", name: Playlist.playlistChangedNotificationName, object: playlist)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playQueueChanged:", name: PlayQueue.playQueueIndexChangedNotificationName, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PlayQueueViewModel.playQueueChanged(_:)), name: Playlist.playlistChangedNotificationName, object: playlist)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PlayQueueViewModel.playQueueChanged(_:)), name: PlayQueue.playQueueIndexChangedNotificationName, object: nil)
     }
     
     func playQueueChanged(notification: NSNotification) {

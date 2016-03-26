@@ -17,6 +17,6 @@
 @property (nullable, nonatomic, strong) ISMSServer *server;
 @property (nullable, nonatomic, copy) NSString *redirectUrl;
 
-- (instancetype)initWithServer:(nullable ISMSServer *)server;
+- (nonnull instancetype)initWithServer:(nullable ISMSServer *)server;
 
 @end

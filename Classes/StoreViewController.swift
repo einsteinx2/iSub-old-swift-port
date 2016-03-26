@@ -42,11 +42,11 @@ public class StoreViewController : CustomUITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "_storePurchaseComplete:", name: ISMSNotification_StorePurchaseComplete, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StoreViewController._storePurchaseComplete(_:)), name: ISMSNotification_StorePurchaseComplete, object: nil)
 
         if _storeItems.count == 0 {
             _viewObjects.showAlbumLoadingScreen(_appDelegate.window, sender: self)
-            self._checkProductsTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "a_checkProducts", userInfo: nil, repeats: true)
+            self._checkProductsTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(StoreViewController.a_checkProducts), userInfo: nil, repeats: true)
             self.a_checkProducts(nil)
         } else {
             self._organizeList()

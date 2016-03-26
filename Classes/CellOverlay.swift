@@ -34,14 +34,14 @@ public class CellOverlay : UIView {
         self.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         
         self._inputBlocker.autoresizingMask = [.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
-        self._inputBlocker.addTarget(self, action: "a_blockerButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        self._inputBlocker.addTarget(self, action: #selector(CellOverlay.a_blockerButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self._inputBlocker.frame = self.frame
         self._inputBlocker.userInteractionEnabled = false
         self.addSubview(self._inputBlocker)
         
         self._downloadButton.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin]
         self._downloadButton.alpha = 1.0
-        self._downloadButton.addTarget(self, action: "a_downloadButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        self._downloadButton.addTarget(self, action: #selector(CellOverlay.a_downloadButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self._downloadButton.userInteractionEnabled = false
         self._downloadButton.frame = CGRectMake(30, 5, 120, 34)
         let downloadWidth = self.frame.size.width == 320 ? 90.0 : (self.frame.size.width / 3.0) - 50.0
@@ -60,7 +60,7 @@ public class CellOverlay : UIView {
         
         self._queueButton.autoresizingMask = [.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         self._queueButton.alpha = 1.0
-        self._queueButton.addTarget(self, action: "a_queueButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        self._queueButton.addTarget(self, action: #selector(CellOverlay.a_queueButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self._queueButton.userInteractionEnabled = false
         self._queueButton.frame = CGRectMake(170, 5, 120, 34)
         let queueWidth = self.frame.size.width == 320 ? 230.0 : ((self.frame.size.width / 3.0) * 2.0) + 40.0
@@ -130,7 +130,7 @@ public class CellOverlay : UIView {
     public func showDeleteButton() {
         self._downloadButton.setTitle("Delete", forState:UIControlState.Normal)
         self._downloadButton.titleLabel?.textColor = UIColor.redColor()
-        self._downloadButton.addTarget(self, action: "a_deleteButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        self._downloadButton.addTarget(self, action: #selector(CellOverlay.a_deleteButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
     }
     
     // MARK: - Actions -

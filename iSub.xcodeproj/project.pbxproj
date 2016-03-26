@@ -4764,7 +4764,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D DebugBuild -D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbeta;
+				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -4784,8 +4784,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron (7596YH3S97)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron (7596YH3S97)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -4811,10 +4811,10 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D AdhocBuild -D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbeta;
+				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "86fb1fbe-02aa-4f53-8dbb-612deddfefa6";
+				PROVISIONING_PROFILE = "c55d206f-318f-41a2-b9a8-75945e5ae6b6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c55d206f-318f-41a2-b9a8-75945e5ae6b6";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -4856,7 +4856,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D ReleaseBuild -D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbeta;
+				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
