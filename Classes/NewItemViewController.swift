@@ -282,9 +282,21 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
                 let viewController = NewItemViewController(viewModel: viewModel)
                 self.pushViewControllerCustom(viewController)
             case artistsSectionIndex:
-                break
+                let artist = self.viewModel.artists[indexPath.row]
+                let artistLoader = ISMSArtistLoader()
+                artistLoader.artistId = artist.artistId
+                
+                let viewModel = NewItemViewModel(loader: artistLoader)
+                let viewController = NewItemViewController(viewModel: viewModel)
+                self.pushViewControllerCustom(viewController)
             case albumsSectionIndex:
-                break
+                let album = self.viewModel.albums[indexPath.row]
+                let albumLoader = ISMSAlbumLoader()
+                albumLoader.albumId = album.albumId
+                
+                let viewModel = NewItemViewModel(loader: albumLoader)
+                let viewController = NewItemViewController(viewModel: viewModel)
+                self.pushViewControllerCustom(viewController)
             case songsSectionIndex:
                 // TODO: Implement a way to just switch play index when we're playing from the same array to save time
                 //playAll(songs: viewModel.songs, playIndex: indexPath.row)
