@@ -713,8 +713,8 @@
 //	else
 //		[self.mainTabBarController.view removeFromSuperview];
 	
-	[databaseS closeAllDatabases];
-	[databaseS setupDatabases];
+//	[databaseS closeAllDatabases];
+//	[databaseS setupDatabases];
 	
     // TODO: Implement offline mode in new UI
 //	if (IS_IPAD())
@@ -747,8 +747,8 @@
 	//else
 	//	[self.offlineTabBarController.view removeFromSuperview];
 	
-	[databaseS closeAllDatabases];
-	[databaseS setupDatabases];
+//	[databaseS closeAllDatabases];
+//	[databaseS setupDatabases];
 	[self checkServer];
 	[cacheQueueManagerS startDownloadQueue];
 	
@@ -1431,6 +1431,11 @@
     // Update the variables
     settingsS.currentServerId = server.serverId;
     settingsS.redirectUrlString = redirectUrl;
+    
+    // Create the playlist table if necessary (does nothing if they exist)
+    [ISMSPlaylist createPlaylist:@"Play Queue" playlistId:[ISMSPlaylist playQueuePlaylistId] serverId:server.serverId];
+    [ISMSPlaylist createPlaylist:@"Download Queue" playlistId:[ISMSPlaylist downloadQueuePlaylistId] serverId:server.serverId];
+    [ISMSPlaylist createPlaylist:@"Downloaded Songs" playlistId:[ISMSPlaylist downloadedSongsPlaylistId] serverId:server.serverId];
 
     // TODO: Reimplement for new UI
 //    if (self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())

@@ -344,8 +344,6 @@
 		53159E8F156F69D0001B0268 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
 		53159E9B156F69D0001B0268 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
 		53159E9C156F69D0001B0268 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
-		53159E9D156F69D0001B0268 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
-		53159E9E156F69D0001B0268 /* ChatUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.swift */; };
 		53159EA1156F69D0001B0268 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53159EB6156F69D0001B0268 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.swift */; };
 		53159EB7156F69D0001B0268 /* StoreUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */; };
@@ -434,10 +432,6 @@
 		5327F58512B95D2900735119 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.swift */; };
 		532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
 		532D9B43131AE19700FD8CA7 /* CustomUIAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */; };
-		5331C58D1A3EA63A00458859 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5331C58C1A3EA63A00458859 /* ChatViewController.swift */; };
-		5331C58E1A3EA63A00458859 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5331C58C1A3EA63A00458859 /* ChatViewController.swift */; };
-		5331C58F1A3EA63A00458859 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5331C58C1A3EA63A00458859 /* ChatViewController.swift */; };
-		5331C5901A3EA63A00458859 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5331C58C1A3EA63A00458859 /* ChatViewController.swift */; };
 		5332468014D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
 		5332468114D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
 		5332468214D7BDFA008B35F6 /* controller-equalizer-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */; };
@@ -515,7 +509,6 @@
 		53404FFB11E94AA5004AEC41 /* controller-bookmark-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF711E94AA5004AEC41 /* controller-bookmark-on@2x.png */; };
 		53404FFC11E94AA5004AEC41 /* controller-bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF811E94AA5004AEC41 /* controller-bookmark.png */; };
 		53404FFD11E94AA5004AEC41 /* controller-bookmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53404FF911E94AA5004AEC41 /* controller-bookmark@2x.png */; };
-		534050FB11E9966C004AEC41 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
 		53493EF415FC69560059492E /* player-songinfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493EF215FC69560059492E /* player-songinfo.png */; };
 		53493EF515FC69560059492E /* player-songinfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493EF215FC69560059492E /* player-songinfo.png */; };
 		53493EF615FC69560059492E /* player-songinfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493EF215FC69560059492E /* player-songinfo.png */; };
@@ -577,9 +570,6 @@
 		5353B83D134D8019005C589E /* upload-playlist@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83B134D8019005C589E /* upload-playlist@2x.png */; };
 		53544D8A1187DED400B63DB9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
 		5354914B11B03FC900928E0F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
-		5355C81B1A491E3800CBB225 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5355C81A1A491E3800CBB225 /* ChatViewController.xib */; };
-		5355C81C1A491E3800CBB225 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5355C81A1A491E3800CBB225 /* ChatViewController.xib */; };
-		5355C81D1A491E3800CBB225 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5355C81A1A491E3800CBB225 /* ChatViewController.xib */; };
 		535696531810DA8700997C7B /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 535696521810DA8700997C7B /* FXBlurView.m */; };
 		535696541810DA8700997C7B /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 535696521810DA8700997C7B /* FXBlurView.m */; };
 		535696551810DA8700997C7B /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 535696521810DA8700997C7B /* FXBlurView.m */; };
@@ -639,7 +629,6 @@
 		536D616511442AA000DFCE56 /* controller-shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D616011442AA000DFCE56 /* controller-shuffle.png */; };
 		536D620B1144495400DFCE56 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536D620A1144495400DFCE56 /* SystemConfiguration.framework */; };
 		536D624411444E4600DFCE56 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D624311444E4600DFCE56 /* Icon.png */; };
-		5379DC4F1219E48800F426CD /* ChatUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.swift */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		537E6C1E181208A200127E29 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E6C1D181208A200127E29 /* CustomUITabBarController.m */; };
 		537E6C1F181208A200127E29 /* CustomUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E6C1D181208A200127E29 /* CustomUITabBarController.m */; };
@@ -718,9 +707,6 @@
 		53ABE13D1C60341300E0E72B /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */; };
 		53ABE13E1C60341300E0E72B /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */; };
 		53ABE13F1C60341300E0E72B /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */; };
-		53ABE1421C60363E00E0E72B /* NewItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE1401C60363E00E0E72B /* NewItemViewController.xib */; };
-		53ABE1431C60363E00E0E72B /* NewItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE1401C60363E00E0E72B /* NewItemViewController.xib */; };
-		53ABE1441C60363E00E0E72B /* NewItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE1401C60363E00E0E72B /* NewItemViewController.xib */; };
 		53ABE1451C60363E00E0E72B /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* NewItemViewController.swift */; };
 		53ABE1461C60363E00E0E72B /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* NewItemViewController.swift */; };
 		53ABE1471C60363E00E0E72B /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* NewItemViewController.swift */; };
@@ -961,8 +947,6 @@
 		53BC27D6139AF0DD00A825F1 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
 		53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
 		53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
-		53BC27E5139AF0DD00A825F1 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
-		53BC27F8139AF0DD00A825F1 /* ChatUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.swift */; };
 		53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53BC281D139AF0DD00A825F1 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.swift */; };
 		53BC281E139AF0DD00A825F1 /* StoreUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */; };
@@ -1268,8 +1252,6 @@
 		53DCF53713BFEAD3009160F9 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
 		53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
 		53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
-		53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 534050F911E9966C004AEC41 /* LyricsViewController.m */; };
-		53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5379DC491219E48800F426CD /* ChatUITableViewCell.swift */; };
 		53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53DCF57E13BFEAD3009160F9 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.swift */; };
 		53DCF57F13BFEAD3009160F9 /* StoreUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */; };
@@ -1463,7 +1445,6 @@
 		532862DA11C573AD00B40FF0 /* UAApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAApplication.m; sourceTree = "<group>"; };
 		532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIAlertView.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
-		5331C58C1A3EA63A00458859 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		5332467B14D7BDFA008B35F6 /* controller-equalizer-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-equalizer-ipad.png"; path = "Images/Player Icons/controller-equalizer-ipad.png"; sourceTree = "<group>"; };
 		5332467C14D7BDFA008B35F6 /* controller-next-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-next-ipad.png"; path = "Images/Player Icons/controller-next-ipad.png"; sourceTree = "<group>"; };
 		5332467D14D7BDFA008B35F6 /* controller-pause-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause-ipad.png"; path = "Images/Player Icons/controller-pause-ipad.png"; sourceTree = "<group>"; };
@@ -1502,8 +1483,6 @@
 		53404FF711E94AA5004AEC41 /* controller-bookmark-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-bookmark-on@2x.png"; path = "Images/Player Icons/controller-bookmark-on@2x.png"; sourceTree = "<group>"; };
 		53404FF811E94AA5004AEC41 /* controller-bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-bookmark.png"; path = "Images/Player Icons/controller-bookmark.png"; sourceTree = "<group>"; };
 		53404FF911E94AA5004AEC41 /* controller-bookmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-bookmark@2x.png"; path = "Images/Player Icons/controller-bookmark@2x.png"; sourceTree = "<group>"; };
-		534050F811E9966C004AEC41 /* LyricsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LyricsViewController.h; sourceTree = "<group>"; };
-		534050F911E9966C004AEC41 /* LyricsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LyricsViewController.m; sourceTree = "<group>"; };
 		53493EF215FC69560059492E /* player-songinfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "player-songinfo.png"; path = "Images/Player Icons/player-songinfo.png"; sourceTree = "<group>"; };
 		53493EF315FC69560059492E /* player-songinfo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "player-songinfo@2x.png"; path = "Images/Player Icons/player-songinfo@2x.png"; sourceTree = "<group>"; };
 		53493EFA15FC699A0059492E /* ipad-menu-selected-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ipad-menu-selected-background.png"; path = "Images/ipad-menu-selected-background.png"; sourceTree = "<group>"; };
@@ -1535,7 +1514,6 @@
 		5353B83B134D8019005C589E /* upload-playlist@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "upload-playlist@2x.png"; path = "Images/Other/upload-playlist@2x.png"; sourceTree = "<group>"; };
 		53544D891187DED400B63DB9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5354914A11B03FC900928E0F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		5355C81A1A491E3800CBB225 /* ChatViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatViewController.xib; sourceTree = "<group>"; };
 		535696511810DA8700997C7B /* FXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXBlurView.h; sourceTree = "<group>"; };
 		535696521810DA8700997C7B /* FXBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXBlurView.m; sourceTree = "<group>"; };
 		535A8899113F62DD00979783 /* default-album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art.png"; path = "Images/Other/default-album-art.png"; sourceTree = "<group>"; };
@@ -1587,7 +1565,6 @@
 		536D620A1144495400DFCE56 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		536D624311444E4600DFCE56 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = "Images/App Icons/Icon.png"; sourceTree = "<group>"; };
 		53733C6414F88D62001D8104 /* AsynchronousImageViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsynchronousImageViewDelegate.h; sourceTree = "<group>"; };
-		5379DC491219E48800F426CD /* ChatUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatUITableViewCell.swift; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537E6C1C181208A200127E29 /* CustomUITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITabBarController.h; sourceTree = "<group>"; };
 		537E6C1D181208A200127E29 /* CustomUITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUITabBarController.m; sourceTree = "<group>"; };
@@ -1638,7 +1615,6 @@
 		53AAF1E711DAA1BC00447FF7 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Images/App Icons/Icon@2x.png"; sourceTree = "<group>"; };
 		53AAF1EB11DAA21600447FF7 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Images/App Icons/Icon-72.png"; sourceTree = "<group>"; };
 		53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMenuViewController.swift; sourceTree = "<group>"; };
-		53ABE1401C60363E00E0E72B /* NewItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewItemViewController.xib; sourceTree = "<group>"; };
 		53ABE1411C60363E00E0E72B /* NewItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
 		53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemTableViewCell.swift; sourceTree = "<group>"; };
 		53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemViewModel.swift; sourceTree = "<group>"; };
@@ -2159,7 +2135,6 @@
 				535142641A4664A400674DE2 /* CustomUITableView.swift */,
 				530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */,
 				530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */,
-				5379DC491219E48800F426CD /* ChatUITableViewCell.swift */,
 				53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */,
 			);
 			name = "Custom Table View";
@@ -2241,15 +2216,6 @@
 			name = Main;
 			sourceTree = "<group>";
 		};
-		5379DC431219E36C00F426CD /* Chat Tab */ = {
-			isa = PBXGroup;
-			children = (
-				5331C58C1A3EA63A00458859 /* ChatViewController.swift */,
-				5355C81A1A491E3800CBB225 /* ChatViewController.xib */,
-			);
-			name = "Chat Tab";
-			sourceTree = "<group>";
-		};
 		539797F01162CE4B00F41D8B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2261,7 +2227,6 @@
 				53F4A070116FF44400BB8411 /* Player */,
 				532E6FD311AB31CF000A0E3B /* Settings view */,
 				53C6052A12F1F006003C6895 /* Intro Screen */,
-				5379DC431219E36C00F426CD /* Chat Tab */,
 				53A1CEC0126D396A006BB76F /* IAP Store */,
 			);
 			name = "View Controllers";
@@ -2475,7 +2440,6 @@
 				5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */,
 				53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */,
 				53ABE1411C60363E00E0E72B /* NewItemViewController.swift */,
-				53ABE1401C60363E00E0E72B /* NewItemViewController.xib */,
 				53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */,
 			);
 			name = "New UI";
@@ -2521,8 +2485,6 @@
 		53F4A070116FF44400BB8411 /* Player */ = {
 			isa = PBXGroup;
 			children = (
-				534050F811E9966C004AEC41 /* LyricsViewController.h */,
-				534050F911E9966C004AEC41 /* LyricsViewController.m */,
 				53F4A071116FF48400BB8411 /* DebugViewController.h */,
 				53F4A072116FF48400BB8411 /* DebugViewController.m */,
 				533C65DB15ABB9F0003EAF29 /* DebugViewController.xib */,
@@ -2851,7 +2813,6 @@
 				53404FFA11E94AA5004AEC41 /* controller-bookmark-on.png in Resources */,
 				53404FFB11E94AA5004AEC41 /* controller-bookmark-on@2x.png in Resources */,
 				5333F01F182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */,
-				53ABE1421C60363E00E0E72B /* NewItemViewController.xib in Resources */,
 				5333F01B182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */,
 				53404FFC11E94AA5004AEC41 /* controller-bookmark.png in Resources */,
 				53404FFD11E94AA5004AEC41 /* controller-bookmark@2x.png in Resources */,
@@ -2974,7 +2935,6 @@
 				5327A5E714DA553B00DEE1B6 /* controller-album.png in Resources */,
 				5327A5EA14DA553B00DEE1B6 /* controller-album@2x.png in Resources */,
 				53C4406814E87F5000A7DC41 /* support-tabbaricon.png in Resources */,
-				5355C81B1A491E3800CBB225 /* ChatViewController.xib in Resources */,
 				53C4406B14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */,
 				53DE598814F19BAF00206529 /* controller-extrabuttons-background.png in Resources */,
 				53DE598B14F19BAF00206529 /* controller-extrabuttons-background@2x.png in Resources */,
@@ -3407,7 +3367,6 @@
 				53BC2740139AF0DD00A825F1 /* home-shuffle@2x.png in Resources */,
 				53BC2742139AF0DD00A825F1 /* controller-stop.png in Resources */,
 				53BC2743139AF0DD00A825F1 /* controller-stop@2x.png in Resources */,
-				53ABE1441C60363E00E0E72B /* NewItemViewController.xib in Resources */,
 				53BC2745139AF0DD00A825F1 /* Default@2x.png in Resources */,
 				53BC2746139AF0DD00A825F1 /* home-quick-random.png in Resources */,
 				D09496DE1C6058BC00781B51 /* (null) in Resources */,
@@ -3554,7 +3513,6 @@
 				53493F3215FC6BD90059492E /* KeychainAccessGroups.plist in Resources */,
 				53493F3A15FC6C3B0059492E /* BassEffectDefaultPresets.plist in Resources */,
 				53649DD7184DA99B00E600EC /* Icon-76@2x.png in Resources */,
-				5355C81D1A491E3800CBB225 /* ChatViewController.xib in Resources */,
 				5349AD061613724D003603AF /* Default-568h@2x.png in Resources */,
 				53B65ABD16533E4800472DBF /* back-tabbaricon.png in Resources */,
 				53B65AC116533E4800472DBF /* back-tabbaricon@2x.png in Resources */,
@@ -3651,7 +3609,6 @@
 				53DCF45D13BFEAD3009160F9 /* controller-bookmark-on.png in Resources */,
 				53DCF45E13BFEAD3009160F9 /* controller-bookmark-on@2x.png in Resources */,
 				5333F020182C5D17003CFB6F /* controller-volumeslider-thumb@2x.png in Resources */,
-				53ABE1431C60363E00E0E72B /* NewItemViewController.xib in Resources */,
 				5333F01C182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */,
 				53DCF45F13BFEAD3009160F9 /* controller-bookmark.png in Resources */,
 				53DCF46013BFEAD3009160F9 /* controller-bookmark@2x.png in Resources */,
@@ -3774,7 +3731,6 @@
 				5327A5E814DA553B00DEE1B6 /* controller-album.png in Resources */,
 				5327A5EB14DA553B00DEE1B6 /* controller-album@2x.png in Resources */,
 				53C4406914E87F5000A7DC41 /* support-tabbaricon.png in Resources */,
-				5355C81C1A491E3800CBB225 /* ChatViewController.xib in Resources */,
 				53C4406C14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */,
 				53DE598914F19BAF00206529 /* controller-extrabuttons-background.png in Resources */,
 				53DE598C14F19BAF00206529 /* controller-extrabuttons-background@2x.png in Resources */,
@@ -4023,9 +3979,7 @@
 				D0EA476219DE41510083CE05 /* ISMSPlayerView.m in Sources */,
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
 				5398F27811DA627500007870 /* HelpTabViewController.m in Sources */,
-				534050FB11E9966C004AEC41 /* LyricsViewController.m in Sources */,
 				530AEF201A40DA200012CC10 /* ItemTableViewCell.swift in Sources */,
-				5379DC4F1219E48800F426CD /* ChatUITableViewCell.swift in Sources */,
 				53BB7ECA121B8D8F00BEE7E8 /* CustomUITextView.m in Sources */,
 				53ABE16B1C61AAC000E0E72B /* ModalAlbumArtViewController.swift in Sources */,
 				5327F58512B95D2900735119 /* StoreViewController.swift in Sources */,
@@ -4040,7 +3994,6 @@
 				533728771C6578B300942D39 /* AppDelegate.swift in Sources */,
 				5353B839134D4D6C005C589E /* PagingScrollView.m in Sources */,
 				535142651A4664A400674DE2 /* CustomUITableView.swift in Sources */,
-				5331C58D1A3EA63A00458859 /* ChatViewController.swift in Sources */,
 				536585811478920D00FE57A5 /* EqualizerViewController.m in Sources */,
 				5365859314789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696531810DA8700997C7B /* FXBlurView.m in Sources */,
@@ -4081,14 +4034,11 @@
 				530F639B1A3FC78C006D7666 /* Defines.swift in Sources */,
 				53159E9B156F69D0001B0268 /* SettingsTabViewController.m in Sources */,
 				53159E9C156F69D0001B0268 /* HelpTabViewController.m in Sources */,
-				53159E9D156F69D0001B0268 /* LyricsViewController.m in Sources */,
-				53159E9E156F69D0001B0268 /* ChatUITableViewCell.swift in Sources */,
 				53159EA1156F69D0001B0268 /* CustomUITextView.m in Sources */,
 				535696561810DA8700997C7B /* FXBlurView.m in Sources */,
 				53159EB6156F69D0001B0268 /* StoreViewController.swift in Sources */,
 				53159EB7156F69D0001B0268 /* StoreUITableViewCell.swift in Sources */,
 				53159EC3156F69D0001B0268 /* IntroViewController.m in Sources */,
-				5331C5901A3EA63A00458859 /* ChatViewController.swift in Sources */,
 				53159EC4156F69D0001B0268 /* CustomUIAlertView.swift in Sources */,
 				53159EC5156F69D0001B0268 /* OBSlider.m in Sources */,
 				53159ED3156F69D0001B0268 /* DDSocialDialog.m in Sources */,
@@ -4142,8 +4092,6 @@
 				D0EA476419DE41510083CE05 /* ISMSPlayerView.m in Sources */,
 				53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */,
 				53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */,
-				53BC27E5139AF0DD00A825F1 /* LyricsViewController.m in Sources */,
-				53BC27F8139AF0DD00A825F1 /* ChatUITableViewCell.swift in Sources */,
 				53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */,
 				53ABE16D1C61AAC000E0E72B /* ModalAlbumArtViewController.swift in Sources */,
 				53BC281D139AF0DD00A825F1 /* StoreViewController.swift in Sources */,
@@ -4158,7 +4106,6 @@
 				533728791C6578B300942D39 /* AppDelegate.swift in Sources */,
 				53BC283E139AF0DD00A825F1 /* PagingScrollView.m in Sources */,
 				535142671A4664A400674DE2 /* CustomUITableView.swift in Sources */,
-				5331C58F1A3EA63A00458859 /* ChatViewController.swift in Sources */,
 				536585831478920D00FE57A5 /* EqualizerViewController.m in Sources */,
 				5365859514789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696551810DA8700997C7B /* FXBlurView.m in Sources */,
@@ -4207,8 +4154,6 @@
 				D0EA476319DE41510083CE05 /* ISMSPlayerView.m in Sources */,
 				53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */,
 				53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */,
-				53DCF54613BFEAD3009160F9 /* LyricsViewController.m in Sources */,
-				53DCF55913BFEAD3009160F9 /* ChatUITableViewCell.swift in Sources */,
 				53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */,
 				53ABE16C1C61AAC000E0E72B /* ModalAlbumArtViewController.swift in Sources */,
 				53DCF57E13BFEAD3009160F9 /* StoreViewController.swift in Sources */,
@@ -4223,7 +4168,6 @@
 				533728781C6578B300942D39 /* AppDelegate.swift in Sources */,
 				53DCF59F13BFEAD3009160F9 /* PagingScrollView.m in Sources */,
 				535142661A4664A400674DE2 /* CustomUITableView.swift in Sources */,
-				5331C58E1A3EA63A00458859 /* ChatViewController.swift in Sources */,
 				536585821478920D00FE57A5 /* EqualizerViewController.m in Sources */,
 				5365859414789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696541810DA8700997C7B /* FXBlurView.m in Sources */,

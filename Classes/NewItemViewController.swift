@@ -23,18 +23,9 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     private var reloading: Bool = false
     private var sectionIndexes: [SectionIndex]?
     
-    @IBOutlet var albumInfoView: UIView?
-    @IBOutlet var albumInfoArtHolderView: UIView?
-    @IBOutlet var albumInfoArtView: AsynchronousImageView?
-    @IBOutlet var albumInfoLabelHolderView: UIView?
-    @IBOutlet var albumInfoArtistLabel: UILabel?
-    @IBOutlet var albumInfoAlbumLabel: UILabel?
-    @IBOutlet var albumInfoTrackCountLabel: UILabel?
-    @IBOutlet var albumInfoDurationLabel: UILabel?
-    
     init(viewModel: NewItemViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: "NewItemViewController", bundle: nil)
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -51,13 +42,14 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
         self.edgesForExtendedLayout = UIRectEdge.None
         self.automaticallyAdjustsScrollViewInsets = false
         
-        albumInfoArtView?.delegate = self
-        
         viewModel.delegate = self
-        if viewModel.loadModelsFromCache() {
-            _addHeaderAndIndex()
-        } else {
+        if !viewModel.loadModelsFromCache() {
             viewModel.loadModelsFromWeb(nil)
+        }
+        
+        self.tableView.tableHeaderView = nil
+        if self.tableView.tableFooterView == nil {
+            self.tableView.tableFooterView = UIView()
         }
     }
     
@@ -70,7 +62,7 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
         
         self.tableView.reloadData()
         
-        _registerForNotifications()
+        registerForNotifications()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -78,23 +70,23 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
         
         viewModel.cancelLoad()
         
-        _unregisterForNotifications()
+        unregisterForNotifications()
     }
     
     deinit {
-        _unregisterForNotifications()
+        unregisterForNotifications()
     }
     
     // MARK: - Notifications - 
     
-    private func _registerForNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NewItemViewController.currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NewItemViewController.songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
+    private func registerForNotifications() {
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(NewItemViewController.currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(NewItemViewController.songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
     }
     
-    private func _unregisterForNotifications() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: ISMSNotification_SongPlaybackStarted, object: nil)
+    private func unregisterForNotifications() {
+        NSNotificationCenter.removeObserverOnMainThread(self, name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NSNotificationCenter.removeObserverOnMainThread(self, name: ISMSNotification_SongPlaybackStarted, object: nil)
     }
     
     func currentPlaylistIndexChanged(notification: NSNotification?) {
@@ -118,78 +110,14 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
         }
     }
     
-    private func _dataSourceDidFinishLoadingNewData() {
+    private func dataSourceDidFinishLoadingNewData() {
         reloading = false
         self.refreshControl?.endRefreshing()
     }
     
     func cancelLoad() {
         viewModel.cancelLoad()
-        self._dataSourceDidFinishLoadingNewData()
-    }
-    
-    private func _addHeaderAndIndex() {
-        let foldersCount = viewModel.folders.count
-        let artistsCount = viewModel.artists.count
-        let songsCount = viewModel.songs.count
-        
-        if (songsCount == 0 && foldersCount == 0) || artistsCount > 0 {
-            self.tableView.tableHeaderView = nil;
-            
-        } else if songsCount > 0 {
-            if self.tableView.tableHeaderView == nil {
-                let headerHeight = albumInfoView!.height
-                let headerFrame = CGRectMake(0, 0, 320, headerHeight)
-                let headerView = UIView(frame: headerFrame)
-                
-                albumInfoArtView!.isLarge = true
-                
-                headerView.addSubview(albumInfoView!)
-                
-                self.tableView.tableHeaderView = headerView
-            }
-            
-            switch viewModel.rootItem {
-            case let folder as ISMSFolder:
-                albumInfoArtView!.coverArtId = folder.coverArtId?.stringValue
-                albumInfoArtistLabel!.text = folder.name
-                //albumInfoAlbumLabel!.text = _album!.title
-                albumInfoDurationLabel!.text = NSString.formatTime(Double(viewModel.songsDuration))
-                albumInfoTrackCountLabel!.text = pluralizedString(count: songsCount, singularNoun: "Track")
-            default:
-                break
-            }
-            
-            if self.tableView.tableFooterView == nil {
-                self.tableView.tableFooterView = UIView()
-            }
-        } else {
-            self.tableView.tableHeaderView = nil
-            if self.tableView.tableFooterView == nil {
-                self.tableView.tableFooterView = UIView()
-            }
-        }
-    }
-    
-    // MARK: - Actions -
-    
-    @IBAction func a_expandCoverArt(sender: AnyObject?) {
-        var modalArtViewController: ModalAlbumArtViewController?
-        
-        switch viewModel.rootItem {
-        case let folder as ISMSFolder:
-            modalArtViewController = ModalAlbumArtViewController(title: folder.name, subtitle: nil, coverArtId: folder.coverArtId?.stringValue, numberOfTracks: viewModel.songs.count, albumLength: 0)
-        default:
-            break
-        }
-        
-        if let controller = modalArtViewController {
-            if IS_IPAD() {
-                iSubAppDelegate.sharedInstance().ipadRootViewController.presentViewController(controller, animated: true, completion: nil)
-            } else {
-                self.presentViewController(controller, animated: true, completion: nil)
-            }
-        }
+        dataSourceDidFinishLoadingNewData()
     }
     
     // MARK: - Table View Delegate -
@@ -382,9 +310,8 @@ extension NewItemViewController : NewItemViewModelDelegate {
     
     func itemsChanged() {
         self.tableView.reloadData()
-        _addHeaderAndIndex()
         
-        _dataSourceDidFinishLoadingNewData()
+        dataSourceDidFinishLoadingNewData()
     }
     
     func loadingError(error: String) {
@@ -395,6 +322,6 @@ extension NewItemViewController : NewItemViewModelDelegate {
         
         ViewObjectsSingleton.sharedInstance().hideLoadingScreen()
         
-        _dataSourceDidFinishLoadingNewData()
+        dataSourceDidFinishLoadingNewData()
     }
 }
