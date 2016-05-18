@@ -103,7 +103,7 @@ class DraggableTableView: UITableView {
                     // Handle multi delete touching
                     if self.editing && point.x < 40.0 && NSDate().timeIntervalSinceDate(self.lastDeleteToggle) > 0.25 {
                         self.lastDeleteToggle = NSDate()
-                        if let itemCell = cell as? NewItemTableViewCell {
+                        if let itemCell = cell as? ItemTableViewCell {
                             itemCell.toggleDelete()
                         }
                     }

@@ -1,5 +1,5 @@
 //
-//  NewItemTableViewCell.swift
+//  ItemTableViewCell.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 12/16/14.
@@ -12,19 +12,19 @@ import libSub
 import Foundation
 import UIKit
 
-@objc public protocol NewItemTableViewCellDelegate {
-    optional func tableCellDeleteButtonPressed(cell: NewItemTableViewCell)
-    optional func tableCellDeleteToggled(cell: NewItemTableViewCell, markedForDelete: Bool)
+@objc public protocol ItemTableViewCellDelegate {
+    optional func tableCellDeleteButtonPressed(cell: ItemTableViewCell)
+    optional func tableCellDeleteToggled(cell: ItemTableViewCell, markedForDelete: Bool)
 }
 
-public class NewItemTableViewCell : UITableViewCell {
+public class ItemTableViewCell : UITableViewCell {
     
     // Disabled for now until optimized
     let shouldRepositionLabels = false
     
     let viewObjects = ViewObjectsSingleton.sharedInstance()
     
-    public weak var delegate: NewItemTableViewCellDelegate?
+    public weak var delegate: ItemTableViewCellDelegate?
     public var associatedObject: AnyObject?
     
     public var indexShowing = false
@@ -340,7 +340,7 @@ public class NewItemTableViewCell : UITableViewCell {
     }
 }
 
-extension NewItemTableViewCell: DraggableCell {
+extension ItemTableViewCell: DraggableCell {
     var draggable: Bool {
         get {
             return true

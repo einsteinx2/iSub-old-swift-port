@@ -140,7 +140,7 @@ class DraggableTableViewController: UITableViewController {
         // Show the delete toggle for already visible cells
         UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseIn, animations: {
             for cell in self.tableView.visibleCells {
-                if let cell = cell as? NewItemTableViewCell {
+                if let cell = cell as? ItemTableViewCell {
                     cell.showDeleteCheckbox()
                 }
             }
@@ -150,7 +150,7 @@ class DraggableTableViewController: UITableViewController {
     func hideDeleteToggles() {
         // Hide the delete toggle for already visible cells
         for cell in self.tableView.visibleCells {
-            if let cell = cell as? NewItemTableViewCell {
+            if let cell = cell as? ItemTableViewCell {
                 cell.hideDeleteCheckbox()
             }
         }
@@ -158,12 +158,12 @@ class DraggableTableViewController: UITableViewController {
     
     func markCellAsPlayingAtIndexPath(indexPath: NSIndexPath) {
         for cell in self.tableView.visibleCells {
-            if let cell = cell as? NewItemTableViewCell {
+            if let cell = cell as? ItemTableViewCell {
                 cell.playing = false
             }
         }
         
-        if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? NewItemTableViewCell {
+        if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? ItemTableViewCell {
             cell.playing = true
         }
     }

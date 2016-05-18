@@ -10,7 +10,7 @@ import libSub
 import Foundation
 import UIKit
 
-class NewItemViewController: DraggableTableViewController, AsynchronousImageViewDelegate {
+class ItemViewController: DraggableTableViewController, AsynchronousImageViewDelegate {
     
     private let reuseIdentifier = "Item Cell"
     private let foldersSectionIndex   = 0
@@ -19,11 +19,11 @@ class NewItemViewController: DraggableTableViewController, AsynchronousImageView
     private let songsSectionIndex     = 3
     private let playlistsSectionIndex = 4
     
-    private let viewModel: NewItemViewModel
+    private let viewModel: ItemViewModel
     private var reloading: Bool = false
     private var sectionIndexes: [SectionIndex]?
     
-    init(viewModel: NewItemViewModel) {
+    init(viewModel: ItemViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -54,7 +54,7 @@ class NewItemViewController: DraggableTableViewController, AsynchronousImageView
     }
     
     override func customizeTableView(tableView: UITableView!) {
-        tableView.registerClass(NewItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.registerClass(ItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -91,8 +91,8 @@ class NewItemViewController: DraggableTableViewController, AsynchronousImageView
     // MARK: - Notifications - 
     
     private func registerForNotifications() {
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(NewItemViewController.currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(NewItemViewController.songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(ItemViewController.currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(ItemViewController.songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
     }
     
     private func unregisterForNotifications() {
@@ -190,7 +190,7 @@ class NewItemViewController: DraggableTableViewController, AsynchronousImageView
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! NewItemTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! ItemTableViewCell
         cell.alwaysShowSubtitle = true
         //cell.delegate = self
         
@@ -289,24 +289,24 @@ class NewItemViewController: DraggableTableViewController, AsynchronousImageView
                 folderLoader.folderId = folder.folderId
                 folderLoader.mediaFolderId = folder.mediaFolderId
                 
-                let viewModel = NewItemViewModel(loader: folderLoader)
-                let viewController = NewItemViewController(viewModel: viewModel)
+                let viewModel = ItemViewModel(loader: folderLoader)
+                let viewController = ItemViewController(viewModel: viewModel)
                 self.pushViewControllerCustom(viewController)
             case artistsSectionIndex:
                 let artist = self.viewModel.artists[indexPath.row]
                 let artistLoader = ISMSArtistLoader()
                 artistLoader.artistId = artist.artistId
                 
-                let viewModel = NewItemViewModel(loader: artistLoader)
-                let viewController = NewItemViewController(viewModel: viewModel)
+                let viewModel = ItemViewModel(loader: artistLoader)
+                let viewController = ItemViewController(viewModel: viewModel)
                 self.pushViewControllerCustom(viewController)
             case albumsSectionIndex:
                 let album = self.viewModel.albums[indexPath.row]
                 let albumLoader = ISMSAlbumLoader()
                 albumLoader.albumId = album.albumId
                 
-                let viewModel = NewItemViewModel(loader: albumLoader)
-                let viewController = NewItemViewController(viewModel: viewModel)
+                let viewModel = ItemViewModel(loader: albumLoader)
+                let viewController = ItemViewController(viewModel: viewModel)
                 self.pushViewControllerCustom(viewController)
             case songsSectionIndex:
                 // TODO: Implement a way to just switch play index when we're playing from the same array to save time
@@ -329,7 +329,7 @@ class NewItemViewController: DraggableTableViewController, AsynchronousImageView
     }
 }
 
-extension NewItemViewController : NewItemViewModelDelegate {
+extension ItemViewController : ItemViewModelDelegate {
     
     func itemsChanged() {
         self.tableView.reloadData()

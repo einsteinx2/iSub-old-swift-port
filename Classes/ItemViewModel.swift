@@ -1,5 +1,5 @@
 //
-//  NewItemViewModel.swift
+//  ItemViewModel.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 2/1/16.
@@ -9,18 +9,18 @@
 import libSub
 import Foundation
 
-protocol NewItemViewModelDelegate {
+protocol ItemViewModelDelegate {
     func itemsChanged()
     func loadingError(error: String)
 }
 
 typealias LoadModelsCompletion = (success: Bool, error: NSError?) -> Void
 
-class NewItemViewModel : NSObject {
+class ItemViewModel : NSObject {
     
     private let loader: ISMSItemLoader
     
-    var delegate: NewItemViewModelDelegate?
+    var delegate: ItemViewModelDelegate?
     
     var topLevelController = false
     

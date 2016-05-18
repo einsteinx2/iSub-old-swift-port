@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, NewItemViewController, SidePanelController, ISMSServer;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, ItemViewController, SidePanelController, ISMSServer;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 

@@ -108,7 +108,7 @@ class PlayQueueViewController: UIViewController {
         tableView.dataSource = self
         tableView.backgroundColor = UIColor.clearColor()
         tableView.separatorColor = UIColor.clearColor()
-        tableView.registerClass(NewItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.registerClass(ItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.view.addSubview(tableView)
         tableView.snp_makeConstraints { make in
             make.top.equalTo(nowPlayingView.snp_bottom)
@@ -177,7 +177,7 @@ extension PlayQueueViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! NewItemTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! ItemTableViewCell
         cell.alwaysShowSubtitle = true
         cell.accessoryType = UITableViewCellAccessoryType.None
         

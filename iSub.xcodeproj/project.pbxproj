@@ -697,15 +697,15 @@
 		53ABE13D1C60341300E0E72B /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */; };
 		53ABE13E1C60341300E0E72B /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */; };
 		53ABE13F1C60341300E0E72B /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */; };
-		53ABE1451C60363E00E0E72B /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* NewItemViewController.swift */; };
-		53ABE1461C60363E00E0E72B /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* NewItemViewController.swift */; };
-		53ABE1471C60363E00E0E72B /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* NewItemViewController.swift */; };
-		53ABE1491C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */; };
-		53ABE14A1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */; };
-		53ABE14B1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */; };
-		53ABE14D1C60490F00E0E72B /* NewItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */; };
-		53ABE14E1C60490F00E0E72B /* NewItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */; };
-		53ABE14F1C60490F00E0E72B /* NewItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */; };
+		53ABE1451C60363E00E0E72B /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* ItemViewController.swift */; };
+		53ABE1461C60363E00E0E72B /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* ItemViewController.swift */; };
+		53ABE1471C60363E00E0E72B /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1411C60363E00E0E72B /* ItemViewController.swift */; };
+		53ABE1491C60376B00E0E72B /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1481C60376B00E0E72B /* ItemTableViewCell.swift */; };
+		53ABE14A1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1481C60376B00E0E72B /* ItemTableViewCell.swift */; };
+		53ABE14B1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE1481C60376B00E0E72B /* ItemTableViewCell.swift */; };
+		53ABE14D1C60490F00E0E72B /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE14C1C60490F00E0E72B /* ItemViewModel.swift */; };
+		53ABE14E1C60490F00E0E72B /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE14C1C60490F00E0E72B /* ItemViewModel.swift */; };
+		53ABE14F1C60490F00E0E72B /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE14C1C60490F00E0E72B /* ItemViewModel.swift */; };
 		53ABE1681C61AAC000E0E72B /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE1661C61AAC000E0E72B /* ModalAlbumArtViewController.xib */; };
 		53ABE1691C61AAC000E0E72B /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE1661C61AAC000E0E72B /* ModalAlbumArtViewController.xib */; };
 		53ABE16A1C61AAC000E0E72B /* ModalAlbumArtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53ABE1661C61AAC000E0E72B /* ModalAlbumArtViewController.xib */; };
@@ -1598,9 +1598,9 @@
 		53AAF1E711DAA1BC00447FF7 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Images/App Icons/Icon@2x.png"; sourceTree = "<group>"; };
 		53AAF1EB11DAA21600447FF7 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Images/App Icons/Icon-72.png"; sourceTree = "<group>"; };
 		53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMenuViewController.swift; sourceTree = "<group>"; };
-		53ABE1411C60363E00E0E72B /* NewItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
-		53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemTableViewCell.swift; sourceTree = "<group>"; };
-		53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemViewModel.swift; sourceTree = "<group>"; };
+		53ABE1411C60363E00E0E72B /* ItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
+		53ABE1481C60376B00E0E72B /* ItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
+		53ABE14C1C60490F00E0E72B /* ItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewModel.swift; sourceTree = "<group>"; };
 		53ABE1661C61AAC000E0E72B /* ModalAlbumArtViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModalAlbumArtViewController.xib; sourceTree = "<group>"; };
 		53ABE1671C61AAC000E0E72B /* ModalAlbumArtViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalAlbumArtViewController.swift; sourceTree = "<group>"; };
 		53ABE4EE1166538500197877 /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = Images/Other/gear.png; sourceTree = "<group>"; };
@@ -2415,9 +2415,9 @@
 				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
 				53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */,
 				5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */,
-				53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */,
-				53ABE1411C60363E00E0E72B /* NewItemViewController.swift */,
-				53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */,
+				53ABE14C1C60490F00E0E72B /* ItemViewModel.swift */,
+				53ABE1411C60363E00E0E72B /* ItemViewController.swift */,
+				53ABE1481C60376B00E0E72B /* ItemTableViewCell.swift */,
 				534FC4FD1CEC014800126751 /* DraggableTableViewController.swift */,
 			);
 			name = "New UI";
@@ -3956,7 +3956,7 @@
 				53ABE16B1C61AAC000E0E72B /* ModalAlbumArtViewController.swift in Sources */,
 				5327F58512B95D2900735119 /* StoreViewController.swift in Sources */,
 				53AAB77A12B98699007EA08B /* StoreTableViewCell.swift in Sources */,
-				53ABE1491C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */,
+				53ABE1491C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
 				532D9B43131AE19700FD8CA7 /* CustomUIAlertView.swift in Sources */,
 				53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */,
@@ -3971,11 +3971,11 @@
 				5365859314789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696531810DA8700997C7B /* FXBlurView.m in Sources */,
 				53A2BE24147DF09800E44822 /* EqualizerPointView.m in Sources */,
-				53ABE1451C60363E00E0E72B /* NewItemViewController.swift in Sources */,
+				53ABE1451C60363E00E0E72B /* ItemViewController.swift in Sources */,
 				5306236D14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				5304FC2D14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3014F2F0D100A2AD42 /* MenuViewController.m in Sources */,
-				53ABE14D1C60490F00E0E72B /* NewItemViewModel.swift in Sources */,
+				53ABE14D1C60490F00E0E72B /* ItemViewModel.swift in Sources */,
 				5304FC3614F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3C14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
@@ -4064,7 +4064,7 @@
 				53ABE16D1C61AAC000E0E72B /* ModalAlbumArtViewController.swift in Sources */,
 				53BC281D139AF0DD00A825F1 /* StoreViewController.swift in Sources */,
 				53BC281E139AF0DD00A825F1 /* StoreTableViewCell.swift in Sources */,
-				53ABE14B1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */,
+				53ABE14B1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
 				53BC282B139AF0DD00A825F1 /* CustomUIAlertView.swift in Sources */,
 				53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */,
@@ -4079,11 +4079,11 @@
 				5365859514789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696551810DA8700997C7B /* FXBlurView.m in Sources */,
 				53A2BE26147DF09800E44822 /* EqualizerPointView.m in Sources */,
-				53ABE1471C60363E00E0E72B /* NewItemViewController.swift in Sources */,
+				53ABE1471C60363E00E0E72B /* ItemViewController.swift in Sources */,
 				5306236F14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				5304FC2F14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3214F2F0D100A2AD42 /* MenuViewController.m in Sources */,
-				53ABE14F1C60490F00E0E72B /* NewItemViewModel.swift in Sources */,
+				53ABE14F1C60490F00E0E72B /* ItemViewModel.swift in Sources */,
 				5304FC3814F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3E14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
@@ -4124,7 +4124,7 @@
 				53ABE16C1C61AAC000E0E72B /* ModalAlbumArtViewController.swift in Sources */,
 				53DCF57E13BFEAD3009160F9 /* StoreViewController.swift in Sources */,
 				53DCF57F13BFEAD3009160F9 /* StoreTableViewCell.swift in Sources */,
-				53ABE14A1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */,
+				53ABE14A1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */,
 				53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.swift in Sources */,
 				53CBB2D31C683E09009DE52A /* CancelBlocks.swift in Sources */,
@@ -4139,11 +4139,11 @@
 				5365859414789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696541810DA8700997C7B /* FXBlurView.m in Sources */,
 				53A2BE25147DF09800E44822 /* EqualizerPointView.m in Sources */,
-				53ABE1461C60363E00E0E72B /* NewItemViewController.swift in Sources */,
+				53ABE1461C60363E00E0E72B /* ItemViewController.swift in Sources */,
 				5306236E14D3295300D320A8 /* EqualizerPathView.m in Sources */,
 				5304FC2E14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3114F2F0D100A2AD42 /* MenuViewController.m in Sources */,
-				53ABE14E1C60490F00E0E72B /* NewItemViewModel.swift in Sources */,
+				53ABE14E1C60490F00E0E72B /* ItemViewModel.swift in Sources */,
 				5304FC3714F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3D14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,

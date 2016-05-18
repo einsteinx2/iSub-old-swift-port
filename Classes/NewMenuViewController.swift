@@ -44,9 +44,9 @@ class NewMenuViewController: UITableViewController {
     private func showFolders(menuItem: MenuItem) {
         if menuItem.navController == nil {
             let loader = ISMSRootFoldersLoader()
-            let viewModel = NewItemViewModel(loader: loader)
+            let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
-            let viewController = NewItemViewController(viewModel: viewModel)
+            let viewController = ItemViewController(viewModel: viewModel)
             let navController = UINavigationController(rootViewController: viewController)
             navController.navigationBar.barStyle = .Black
             menuItem.navController = navController
@@ -58,9 +58,9 @@ class NewMenuViewController: UITableViewController {
     private func showArtists(menuItem: MenuItem) {
         if menuItem.navController == nil {
             let loader = ISMSRootArtistsLoader()
-            let viewModel = NewItemViewModel(loader: loader)
+            let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
-            let viewController = NewItemViewController(viewModel: viewModel)
+            let viewController = ItemViewController(viewModel: viewModel)
             let navController = UINavigationController(rootViewController: viewController)
             navController.navigationBar.barStyle = .Black
             menuItem.navController = navController
