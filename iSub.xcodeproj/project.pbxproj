@@ -76,12 +76,6 @@
 		530A5F9115167CBA0081A83A /* playing-cell-icon-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8C15167CBA0081A83A /* playing-cell-icon-white@2x.png */; };
 		530A5F9215167CBA0081A83A /* playing-cell-icon-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8C15167CBA0081A83A /* playing-cell-icon-white@2x.png */; };
 		530AD58E116913AC00AD2540 /* now-playing.png in Resources */ = {isa = PBXBuildFile; fileRef = 530AD58D116913AC00AD2540 /* now-playing.png */; };
-		530AEF201A40DA200012CC10 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */; };
-		530AEF2D1A40E2C60012CC10 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */; };
-		530AEF2E1A40E2C70012CC10 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */; };
-		530AEF301A40E7AE0012CC10 /* CellOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */; };
-		530AEF311A40E7AE0012CC10 /* CellOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */; };
-		530AEF321A40E7AE0012CC10 /* CellOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */; };
 		530B95E811E8E5C3002EA08E /* selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B95E711E8E5C3002EA08E /* selected@2x.png */; };
 		530B95EC11E8E7B7002EA08E /* unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B95EB11E8E7B7002EA08E /* unselected@2x.png */; };
 		530B960311E8E99C002EA08E /* play-all-note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960211E8E99C002EA08E /* play-all-note@2x.png */; };
@@ -338,7 +332,6 @@
 		53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
 		53159E6E156F69D0001B0268 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
-		53159E75156F69D0001B0268 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53159E7D156F69D0001B0268 /* DebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A072116FF48400BB8411 /* DebugViewController.m */; };
 		53159E8B156F69D0001B0268 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B5298911AD9B79005776B5 /* LoadingScreen.m */; };
 		53159E8F156F69D0001B0268 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
@@ -346,7 +339,7 @@
 		53159E9C156F69D0001B0268 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
 		53159EA1156F69D0001B0268 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53159EB6156F69D0001B0268 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.swift */; };
-		53159EB7156F69D0001B0268 /* StoreUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */; };
+		53159EB7156F69D0001B0268 /* StoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreTableViewCell.swift */; };
 		53159EC3156F69D0001B0268 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C6052C12F1F01E003C6895 /* IntroViewController.m */; };
 		53159EC4156F69D0001B0268 /* CustomUIAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */; };
 		53159EC5156F69D0001B0268 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
@@ -476,10 +469,6 @@
 		533C65A715ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
 		533C65A815ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
 		533C65A915ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
-		533C65AD15ABB9C6003EAF29 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */; };
-		533C65AE15ABB9C6003EAF29 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */; };
-		533C65AF15ABB9C6003EAF29 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */; };
-		533C65B015ABB9C6003EAF29 /* ServerListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */; };
 		533C65BB15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */; };
 		533C65BC15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */; };
 		533C65BD15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */; };
@@ -558,13 +547,15 @@
 		5349F15116E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */; };
 		5349F15216E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */; };
 		534E443F1155AD01000B4134 /* default-album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 534E443E1155AD01000B4134 /* default-album-art-small.png */; };
-		53500EC118064EED00D0A490 /* CustomUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53500EC018064EED00D0A490 /* CustomUITableViewController.m */; };
-		53500EC218064EED00D0A490 /* CustomUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53500EC018064EED00D0A490 /* CustomUITableViewController.m */; };
-		53500EC318064EED00D0A490 /* CustomUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53500EC018064EED00D0A490 /* CustomUITableViewController.m */; };
-		53500EC418064EED00D0A490 /* CustomUITableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53500EC018064EED00D0A490 /* CustomUITableViewController.m */; };
-		535142651A4664A400674DE2 /* CustomUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535142641A4664A400674DE2 /* CustomUITableView.swift */; };
-		535142661A4664A400674DE2 /* CustomUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535142641A4664A400674DE2 /* CustomUITableView.swift */; };
-		535142671A4664A400674DE2 /* CustomUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535142641A4664A400674DE2 /* CustomUITableView.swift */; };
+		534FC4FE1CEC014800126751 /* DraggableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FC4FD1CEC014800126751 /* DraggableTableViewController.swift */; };
+		534FC4FF1CEC014800126751 /* DraggableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FC4FD1CEC014800126751 /* DraggableTableViewController.swift */; };
+		534FC5001CEC014800126751 /* DraggableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FC4FD1CEC014800126751 /* DraggableTableViewController.swift */; };
+		534FC5021CEC08F300126751 /* ServerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FC5011CEC08F300126751 /* ServerListViewController.swift */; };
+		534FC5031CEC08F300126751 /* ServerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FC5011CEC08F300126751 /* ServerListViewController.swift */; };
+		534FC5041CEC08F300126751 /* ServerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FC5011CEC08F300126751 /* ServerListViewController.swift */; };
+		535142651A4664A400674DE2 /* DraggableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535142641A4664A400674DE2 /* DraggableTableView.swift */; };
+		535142661A4664A400674DE2 /* DraggableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535142641A4664A400674DE2 /* DraggableTableView.swift */; };
+		535142671A4664A400674DE2 /* DraggableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535142641A4664A400674DE2 /* DraggableTableView.swift */; };
 		5353B839134D4D6C005C589E /* PagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5353B838134D4D6C005C589E /* PagingScrollView.m */; };
 		5353B83C134D8019005C589E /* upload-playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83A134D8019005C589E /* upload-playlist.png */; };
 		5353B83D134D8019005C589E /* upload-playlist@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5353B83B134D8019005C589E /* upload-playlist@2x.png */; };
@@ -599,7 +590,6 @@
 		535CB48C12E2664700389DA1 /* server-button-ubuntu.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48812E2664700389DA1 /* server-button-ubuntu.png */; };
 		535CB48D12E2664700389DA1 /* server-button-ubuntu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */; };
 		535CB58412E27A5400389DA1 /* default-album-art-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB58312E27A5400389DA1 /* default-album-art-ipad.png */; };
-		53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53649DCD184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
 		53649DCE184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
 		53649DCF184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
@@ -690,7 +680,7 @@
 		53A2BE29147DF14300E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53AA300411461A04003E57E3 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AA300311461A04003E57E3 /* background.png */; };
-		53AAB77A12B98699007EA08B /* StoreUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */; };
+		53AAB77A12B98699007EA08B /* StoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreTableViewCell.swift */; };
 		53AAF18911DA8D7500447FF7 /* albums-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18811DA8D7500447FF7 /* albums-tabbaricon@2x.png */; };
 		53AAF19311DA90D800447FF7 /* artists-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18C11DA90D800447FF7 /* artists-tabbaricon@2x.png */; };
 		53AAF19411DA90D800447FF7 /* bookmarks-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF18D11DA90D800447FF7 /* bookmarks-tabbaricon@2x.png */; };
@@ -941,7 +931,6 @@
 		53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
 		53BC27A5139AF0DD00A825F1 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
-		53BC27AE139AF0DD00A825F1 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53BC27BA139AF0DD00A825F1 /* DebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A072116FF48400BB8411 /* DebugViewController.m */; };
 		53BC27CC139AF0DD00A825F1 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B5298911AD9B79005776B5 /* LoadingScreen.m */; };
 		53BC27D6139AF0DD00A825F1 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
@@ -949,7 +938,7 @@
 		53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
 		53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53BC281D139AF0DD00A825F1 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.swift */; };
-		53BC281E139AF0DD00A825F1 /* StoreUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */; };
+		53BC281E139AF0DD00A825F1 /* StoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreTableViewCell.swift */; };
 		53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C6052C12F1F01E003C6895 /* IntroViewController.m */; };
 		53BC282B139AF0DD00A825F1 /* CustomUIAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */; };
 		53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
@@ -1246,7 +1235,6 @@
 		53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
 		53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 533A2D06113C61CA00B3A376 /* AsynchronousImageView.m */; };
 		53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
-		53DCF50F13BFEAD3009160F9 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53614AC8116432DA0088ABC0 /* ServerListViewController.m */; };
 		53DCF51B13BFEAD3009160F9 /* DebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F4A072116FF48400BB8411 /* DebugViewController.m */; };
 		53DCF52D13BFEAD3009160F9 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B5298911AD9B79005776B5 /* LoadingScreen.m */; };
 		53DCF53713BFEAD3009160F9 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
@@ -1254,7 +1242,7 @@
 		53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F27611DA627500007870 /* HelpTabViewController.m */; };
 		53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53BB7EC9121B8D8F00BEE7E8 /* CustomUITextView.m */; };
 		53DCF57E13BFEAD3009160F9 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F58312B95D2900735119 /* StoreViewController.swift */; };
-		53DCF57F13BFEAD3009160F9 /* StoreUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */; };
+		53DCF57F13BFEAD3009160F9 /* StoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AAB77912B98699007EA08B /* StoreTableViewCell.swift */; };
 		53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53C6052C12F1F01E003C6895 /* IntroViewController.m */; };
 		53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */; };
 		53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
@@ -1408,8 +1396,6 @@
 		530A5F8B15167CBA0081A83A /* playing-cell-icon-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon-white.png"; path = "Images/Other/playing-cell-icon-white.png"; sourceTree = "<group>"; };
 		530A5F8C15167CBA0081A83A /* playing-cell-icon-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon-white@2x.png"; path = "Images/Other/playing-cell-icon-white@2x.png"; sourceTree = "<group>"; };
 		530AD58D116913AC00AD2540 /* now-playing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "now-playing.png"; path = "Images/Other/now-playing.png"; sourceTree = "<group>"; };
-		530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
-		530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellOverlay.swift; sourceTree = "<group>"; };
 		530B95E711E8E5C3002EA08E /* selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "selected@2x.png"; path = "Images/Other/selected@2x.png"; sourceTree = "<group>"; };
 		530B95EB11E8E7B7002EA08E /* unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "unselected@2x.png"; path = "Images/Other/unselected@2x.png"; sourceTree = "<group>"; };
 		530B960211E8E99C002EA08E /* play-all-note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "play-all-note@2x.png"; path = "Images/Other/play-all-note@2x.png"; sourceTree = "<group>"; };
@@ -1463,7 +1449,6 @@
 		533A2D81113C963300B3A376 /* controller-play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play.png"; path = "Images/Player Icons/controller-play.png"; sourceTree = "<group>"; };
 		533A2D82113C963300B3A376 /* controller-previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-previous.png"; path = "Images/Player Icons/controller-previous.png"; sourceTree = "<group>"; };
 		533C65AB15ABB9BD003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IntroViewController.xib; sourceTree = "<group>"; };
-		533C65B215ABB9C6003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ServerListViewController.xib; sourceTree = "<group>"; };
 		533C65C015ABB9CC003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SubsonicServerEditViewController.xib; sourceTree = "<group>"; };
 		533C65D315ABB9D6003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SettingsTabViewController.xib; sourceTree = "<group>"; };
 		533C65DA15ABB9F0003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DebugViewController.xib; sourceTree = "<group>"; };
@@ -1505,9 +1490,9 @@
 		5349F14D16E9458B00E56582 /* IDTwitterAccountChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IDTwitterAccountChooserViewController.h; path = Classes/IDTwitterAccountChooserViewController.h; sourceTree = "<group>"; };
 		5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IDTwitterAccountChooserViewController.m; path = Classes/IDTwitterAccountChooserViewController.m; sourceTree = "<group>"; };
 		534E443E1155AD01000B4134 /* default-album-art-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small.png"; path = "Images/Other/default-album-art-small.png"; sourceTree = "<group>"; };
-		53500EBF18064EED00D0A490 /* CustomUITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUITableViewController.h; sourceTree = "<group>"; };
-		53500EC018064EED00D0A490 /* CustomUITableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUITableViewController.m; sourceTree = "<group>"; };
-		535142641A4664A400674DE2 /* CustomUITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUITableView.swift; sourceTree = "<group>"; };
+		534FC4FD1CEC014800126751 /* DraggableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableTableViewController.swift; sourceTree = "<group>"; };
+		534FC5011CEC08F300126751 /* ServerListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerListViewController.swift; sourceTree = "<group>"; };
+		535142641A4664A400674DE2 /* DraggableTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableTableView.swift; sourceTree = "<group>"; };
 		5353B837134D4D6C005C589E /* PagingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagingScrollView.h; sourceTree = "<group>"; };
 		5353B838134D4D6C005C589E /* PagingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PagingScrollView.m; sourceTree = "<group>"; };
 		5353B83A134D8019005C589E /* upload-playlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "upload-playlist.png"; path = "Images/Other/upload-playlist.png"; sourceTree = "<group>"; };
@@ -1543,8 +1528,6 @@
 		535CB48812E2664700389DA1 /* server-button-ubuntu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "server-button-ubuntu.png"; path = "Images/Other/server-button-ubuntu.png"; sourceTree = "<group>"; };
 		535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "server-button-ubuntu@2x.png"; path = "Images/Other/server-button-ubuntu@2x.png"; sourceTree = "<group>"; };
 		535CB58312E27A5400389DA1 /* default-album-art-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-ipad.png"; path = "Images/Other/default-album-art-ipad.png"; sourceTree = "<group>"; };
-		53614AC7116432DA0088ABC0 /* ServerListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerListViewController.h; sourceTree = "<group>"; };
-		53614AC8116432DA0088ABC0 /* ServerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerListViewController.m; sourceTree = "<group>"; };
 		53649DCC184DA90600E600EC /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-120.png"; path = "Images/App Icons/Icon-120.png"; sourceTree = "<group>"; };
 		53649DD0184DA99B00E600EC /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Images/App Icons/Icon-76.png"; sourceTree = "<group>"; };
 		53649DD1184DA99B00E600EC /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Images/App Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
@@ -1600,7 +1583,7 @@
 		53A2BE23147DF09800E44822 /* EqualizerPointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EqualizerPointView.m; sourceTree = "<group>"; };
 		53A2BE27147DF13600E44822 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		53AA300311461A04003E57E3 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Images/Other/background.png; sourceTree = "<group>"; };
-		53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreUITableViewCell.swift; sourceTree = "<group>"; };
+		53AAB77912B98699007EA08B /* StoreTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreTableViewCell.swift; sourceTree = "<group>"; };
 		53AAF18811DA8D7500447FF7 /* albums-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "albums-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/albums-tabbaricon@2x.png"; sourceTree = "<group>"; };
 		53AAF18C11DA90D800447FF7 /* artists-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "artists-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/artists-tabbaricon@2x.png"; sourceTree = "<group>"; };
 		53AAF18D11DA90D800447FF7 /* bookmarks-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bookmarks-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/bookmarks-tabbaricon@2x.png"; sourceTree = "<group>"; };
@@ -2114,9 +2097,7 @@
 				5398F26A11DA61DA00007870 /* SettingsTabViewController.h */,
 				5398F26B11DA61DA00007870 /* SettingsTabViewController.m */,
 				533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */,
-				53614AC7116432DA0088ABC0 /* ServerListViewController.h */,
-				53614AC8116432DA0088ABC0 /* ServerListViewController.m */,
-				533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */,
+				534FC5011CEC08F300126751 /* ServerListViewController.swift */,
 				53CED25C113E2FF100B09699 /* SubsonicServerEditViewController.h */,
 				53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */,
 				533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */,
@@ -2130,12 +2111,6 @@
 		533A207B12887EA300539BAE /* Custom Table View */ = {
 			isa = PBXGroup;
 			children = (
-				53500EBF18064EED00D0A490 /* CustomUITableViewController.h */,
-				53500EC018064EED00D0A490 /* CustomUITableViewController.m */,
-				535142641A4664A400674DE2 /* CustomUITableView.swift */,
-				530AEF1F1A40DA200012CC10 /* ItemTableViewCell.swift */,
-				530AEF2F1A40E7AE0012CC10 /* CellOverlay.swift */,
-				53AAB77912B98699007EA08B /* StoreUITableViewCell.swift */,
 			);
 			name = "Custom Table View";
 			sourceTree = "<group>";
@@ -2434,6 +2409,8 @@
 		53ABE1361C6033F100E0E72B /* New UI */ = {
 			isa = PBXGroup;
 			children = (
+				535142641A4664A400674DE2 /* DraggableTableView.swift */,
+				53AAB77912B98699007EA08B /* StoreTableViewCell.swift */,
 				5333D10E1C654B5900DC19F4 /* SidePanelController.swift */,
 				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
 				53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */,
@@ -2441,6 +2418,7 @@
 				53ABE14C1C60490F00E0E72B /* NewItemViewModel.swift */,
 				53ABE1411C60363E00E0E72B /* NewItemViewController.swift */,
 				53ABE1481C60376B00E0E72B /* NewItemTableViewCell.swift */,
+				534FC4FD1CEC014800126751 /* DraggableTableViewController.swift */,
 			);
 			name = "New UI";
 			sourceTree = "<group>";
@@ -2746,7 +2724,6 @@
 				5305C2061157F4F800BC78F0 /* Default.png in Resources */,
 				53F0CD8211589F0A00A665CD /* progress-label-background.png in Resources */,
 				539799791163084200F41D8B /* loading-screen-image.png in Resources */,
-				533C65AD15ABB9C6003EAF29 /* ServerListViewController.xib in Resources */,
 				53ABE4EF1166538500197877 /* gear.png in Resources */,
 				53ABE50E1166584900197877 /* artists-tabbaricon.png in Resources */,
 				53ABE519116658C700197877 /* playlists-tabbaricon.png in Resources */,
@@ -3014,7 +2991,6 @@
 				53159D4D156F69D0001B0268 /* Default.png in Resources */,
 				53159D4E156F69D0001B0268 /* progress-label-background.png in Resources */,
 				53159D50156F69D0001B0268 /* loading-screen-image.png in Resources */,
-				533C65B015ABB9C6003EAF29 /* ServerListViewController.xib in Resources */,
 				53159D54156F69D0001B0268 /* gear.png in Resources */,
 				53159D55156F69D0001B0268 /* artists-tabbaricon.png in Resources */,
 				53159D56156F69D0001B0268 /* playlists-tabbaricon.png in Resources */,
@@ -3276,7 +3252,6 @@
 				53BC26B4139AF0DD00A825F1 /* Default.png in Resources */,
 				53BC26B5139AF0DD00A825F1 /* progress-label-background.png in Resources */,
 				53BC26B7139AF0DD00A825F1 /* loading-screen-image.png in Resources */,
-				533C65AF15ABB9C6003EAF29 /* ServerListViewController.xib in Resources */,
 				53BC26BC139AF0DD00A825F1 /* gear.png in Resources */,
 				53BC26BD139AF0DD00A825F1 /* artists-tabbaricon.png in Resources */,
 				53BC26BE139AF0DD00A825F1 /* playlists-tabbaricon.png in Resources */,
@@ -3542,7 +3517,6 @@
 				53DCF41113BFEAD3009160F9 /* Default.png in Resources */,
 				53DCF41213BFEAD3009160F9 /* progress-label-background.png in Resources */,
 				53DCF41413BFEAD3009160F9 /* loading-screen-image.png in Resources */,
-				533C65AE15ABB9C6003EAF29 /* ServerListViewController.xib in Resources */,
 				53DCF41913BFEAD3009160F9 /* gear.png in Resources */,
 				53DCF41A13BFEAD3009160F9 /* artists-tabbaricon.png in Resources */,
 				53DCF41B13BFEAD3009160F9 /* playlists-tabbaricon.png in Resources */,
@@ -3967,10 +3941,9 @@
 				D0EA476C19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53BCC51B181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				53ABE13D1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
-				53614ACA116432DA0088ABC0 /* ServerListViewController.m in Sources */,
 				53F4A074116FF48400BB8411 /* DebugViewController.m in Sources */,
-				53500EC118064EED00D0A490 /* CustomUITableViewController.m in Sources */,
 				530F63981A3FC78C006D7666 /* Defines.swift in Sources */,
+				534FC4FE1CEC014800126751 /* DraggableTableViewController.swift in Sources */,
 				537E6C1E181208A200127E29 /* CustomUITabBarController.m in Sources */,
 				53B5298A11AD9B79005776B5 /* LoadingScreen.m in Sources */,
 				530BB65E1A61AA9A00FBC005 /* HelperFunctions.swift in Sources */,
@@ -3979,21 +3952,21 @@
 				D0EA476219DE41510083CE05 /* ISMSPlayerView.m in Sources */,
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
 				5398F27811DA627500007870 /* HelpTabViewController.m in Sources */,
-				530AEF201A40DA200012CC10 /* ItemTableViewCell.swift in Sources */,
 				53BB7ECA121B8D8F00BEE7E8 /* CustomUITextView.m in Sources */,
 				53ABE16B1C61AAC000E0E72B /* ModalAlbumArtViewController.swift in Sources */,
 				5327F58512B95D2900735119 /* StoreViewController.swift in Sources */,
-				53AAB77A12B98699007EA08B /* StoreUITableViewCell.swift in Sources */,
+				53AAB77A12B98699007EA08B /* StoreTableViewCell.swift in Sources */,
 				53ABE1491C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
 				532D9B43131AE19700FD8CA7 /* CustomUIAlertView.swift in Sources */,
 				53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */,
+				534FC5021CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				5324C6C613345D75004E6C79 /* OBSlider.m in Sources */,
 				535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */,
 				535B7255134CEE1E003E0E1C /* DDSocialLoginDialog.m in Sources */,
 				533728771C6578B300942D39 /* AppDelegate.swift in Sources */,
 				5353B839134D4D6C005C589E /* PagingScrollView.m in Sources */,
-				535142651A4664A400674DE2 /* CustomUITableView.swift in Sources */,
+				535142651A4664A400674DE2 /* DraggableTableView.swift in Sources */,
 				536585811478920D00FE57A5 /* EqualizerViewController.m in Sources */,
 				5365859314789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696531810DA8700997C7B /* FXBlurView.m in Sources */,
@@ -4003,7 +3976,6 @@
 				5304FC2D14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3014F2F0D100A2AD42 /* MenuViewController.m in Sources */,
 				53ABE14D1C60490F00E0E72B /* NewItemViewModel.swift in Sources */,
-				530AEF301A40E7AE0012CC10 /* CellOverlay.swift in Sources */,
 				5304FC3614F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3C14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
@@ -4026,7 +3998,6 @@
 				53159E6E156F69D0001B0268 /* AsynchronousImageView.m in Sources */,
 				53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */,
 				53BCC51E181387B300442E86 /* CustomUINavigationController.m in Sources */,
-				53159E75156F69D0001B0268 /* ServerListViewController.m in Sources */,
 				53159E7D156F69D0001B0268 /* DebugViewController.m in Sources */,
 				537E6C21181208A200127E29 /* CustomUITabBarController.m in Sources */,
 				53159E8B156F69D0001B0268 /* LoadingScreen.m in Sources */,
@@ -4037,14 +4008,13 @@
 				53159EA1156F69D0001B0268 /* CustomUITextView.m in Sources */,
 				535696561810DA8700997C7B /* FXBlurView.m in Sources */,
 				53159EB6156F69D0001B0268 /* StoreViewController.swift in Sources */,
-				53159EB7156F69D0001B0268 /* StoreUITableViewCell.swift in Sources */,
+				53159EB7156F69D0001B0268 /* StoreTableViewCell.swift in Sources */,
 				53159EC3156F69D0001B0268 /* IntroViewController.m in Sources */,
 				53159EC4156F69D0001B0268 /* CustomUIAlertView.swift in Sources */,
 				53159EC5156F69D0001B0268 /* OBSlider.m in Sources */,
 				53159ED3156F69D0001B0268 /* DDSocialDialog.m in Sources */,
 				53159ED4156F69D0001B0268 /* DDSocialLoginDialog.m in Sources */,
 				53159ED7156F69D0001B0268 /* PagingScrollView.m in Sources */,
-				53500EC418064EED00D0A490 /* CustomUITableViewController.m in Sources */,
 				53159EFC156F69D0001B0268 /* EqualizerViewController.m in Sources */,
 				53159EFD156F69D0001B0268 /* EqualizerView.m in Sources */,
 				53159F02156F69D0001B0268 /* EqualizerPointView.m in Sources */,
@@ -4079,15 +4049,13 @@
 				D0EA476E19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53BCC51D181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				53ABE13F1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
-				53BC27AE139AF0DD00A825F1 /* ServerListViewController.m in Sources */,
 				53BC27BA139AF0DD00A825F1 /* DebugViewController.m in Sources */,
-				53500EC318064EED00D0A490 /* CustomUITableViewController.m in Sources */,
 				530F639A1A3FC78C006D7666 /* Defines.swift in Sources */,
+				534FC5001CEC014800126751 /* DraggableTableViewController.swift in Sources */,
 				537E6C20181208A200127E29 /* CustomUITabBarController.m in Sources */,
 				53BC27CC139AF0DD00A825F1 /* LoadingScreen.m in Sources */,
 				530BB6601A61AA9A00FBC005 /* HelperFunctions.swift in Sources */,
 				53BC27D6139AF0DD00A825F1 /* UAApplication.m in Sources */,
-				530AEF2E1A40E2C70012CC10 /* ItemTableViewCell.swift in Sources */,
 				D0F7918D19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */,
 				D0EA476419DE41510083CE05 /* ISMSPlayerView.m in Sources */,
 				53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */,
@@ -4095,17 +4063,18 @@
 				53BC27FC139AF0DD00A825F1 /* CustomUITextView.m in Sources */,
 				53ABE16D1C61AAC000E0E72B /* ModalAlbumArtViewController.swift in Sources */,
 				53BC281D139AF0DD00A825F1 /* StoreViewController.swift in Sources */,
-				53BC281E139AF0DD00A825F1 /* StoreUITableViewCell.swift in Sources */,
+				53BC281E139AF0DD00A825F1 /* StoreTableViewCell.swift in Sources */,
 				53ABE14B1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */,
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
 				53BC282B139AF0DD00A825F1 /* CustomUIAlertView.swift in Sources */,
 				53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */,
+				534FC5041CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */,
 				53BC283A139AF0DD00A825F1 /* DDSocialDialog.m in Sources */,
 				53BC283B139AF0DD00A825F1 /* DDSocialLoginDialog.m in Sources */,
 				533728791C6578B300942D39 /* AppDelegate.swift in Sources */,
 				53BC283E139AF0DD00A825F1 /* PagingScrollView.m in Sources */,
-				535142671A4664A400674DE2 /* CustomUITableView.swift in Sources */,
+				535142671A4664A400674DE2 /* DraggableTableView.swift in Sources */,
 				536585831478920D00FE57A5 /* EqualizerViewController.m in Sources */,
 				5365859514789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696551810DA8700997C7B /* FXBlurView.m in Sources */,
@@ -4115,7 +4084,6 @@
 				5304FC2F14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3214F2F0D100A2AD42 /* MenuViewController.m in Sources */,
 				53ABE14F1C60490F00E0E72B /* NewItemViewModel.swift in Sources */,
-				530AEF321A40E7AE0012CC10 /* CellOverlay.swift in Sources */,
 				5304FC3814F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3E14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
@@ -4141,15 +4109,13 @@
 				D0EA476D19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53BCC51C181387B300442E86 /* CustomUINavigationController.m in Sources */,
 				53ABE13E1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
-				53DCF50F13BFEAD3009160F9 /* ServerListViewController.m in Sources */,
 				53DCF51B13BFEAD3009160F9 /* DebugViewController.m in Sources */,
-				53500EC218064EED00D0A490 /* CustomUITableViewController.m in Sources */,
 				530F63991A3FC78C006D7666 /* Defines.swift in Sources */,
+				534FC4FF1CEC014800126751 /* DraggableTableViewController.swift in Sources */,
 				537E6C1F181208A200127E29 /* CustomUITabBarController.m in Sources */,
 				53DCF52D13BFEAD3009160F9 /* LoadingScreen.m in Sources */,
 				530BB65F1A61AA9A00FBC005 /* HelperFunctions.swift in Sources */,
 				53DCF53713BFEAD3009160F9 /* UAApplication.m in Sources */,
-				530AEF2D1A40E2C60012CC10 /* ItemTableViewCell.swift in Sources */,
 				D0F7918C19DE4DFC008032A3 /* ISMSScrubberView.m in Sources */,
 				D0EA476319DE41510083CE05 /* ISMSPlayerView.m in Sources */,
 				53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */,
@@ -4157,17 +4123,18 @@
 				53DCF55D13BFEAD3009160F9 /* CustomUITextView.m in Sources */,
 				53ABE16C1C61AAC000E0E72B /* ModalAlbumArtViewController.swift in Sources */,
 				53DCF57E13BFEAD3009160F9 /* StoreViewController.swift in Sources */,
-				53DCF57F13BFEAD3009160F9 /* StoreUITableViewCell.swift in Sources */,
+				53DCF57F13BFEAD3009160F9 /* StoreTableViewCell.swift in Sources */,
 				53ABE14A1C60376B00E0E72B /* NewItemTableViewCell.swift in Sources */,
 				53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */,
 				53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.swift in Sources */,
 				53CBB2D31C683E09009DE52A /* CancelBlocks.swift in Sources */,
+				534FC5031CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */,
 				53DCF59B13BFEAD3009160F9 /* DDSocialDialog.m in Sources */,
 				53DCF59C13BFEAD3009160F9 /* DDSocialLoginDialog.m in Sources */,
 				533728781C6578B300942D39 /* AppDelegate.swift in Sources */,
 				53DCF59F13BFEAD3009160F9 /* PagingScrollView.m in Sources */,
-				535142661A4664A400674DE2 /* CustomUITableView.swift in Sources */,
+				535142661A4664A400674DE2 /* DraggableTableView.swift in Sources */,
 				536585821478920D00FE57A5 /* EqualizerViewController.m in Sources */,
 				5365859414789ADA00FE57A5 /* EqualizerView.m in Sources */,
 				535696541810DA8700997C7B /* FXBlurView.m in Sources */,
@@ -4177,7 +4144,6 @@
 				5304FC2E14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5304FC3114F2F0D100A2AD42 /* MenuViewController.m in Sources */,
 				53ABE14E1C60490F00E0E72B /* NewItemViewModel.swift in Sources */,
-				530AEF311A40E7AE0012CC10 /* CellOverlay.swift in Sources */,
 				5304FC3714F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5304FC3D14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
@@ -4201,14 +4167,6 @@
 				533C65AB15ABB9BD003EAF29 /* en */,
 			);
 			name = IntroViewController.xib;
-			sourceTree = "<group>";
-		};
-		533C65B315ABB9C6003EAF29 /* ServerListViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				533C65B215ABB9C6003EAF29 /* en */,
-			);
-			name = ServerListViewController.xib;
 			sourceTree = "<group>";
 		};
 		533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */ = {

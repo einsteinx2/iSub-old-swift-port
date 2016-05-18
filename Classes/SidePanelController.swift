@@ -40,6 +40,46 @@ class SidePanelController: JASidePanelController {
         self.leftPanel = menu
         self.rightPanel = PlayQueueViewController(viewModel: PlayQueueViewModel())
         menu.showDefaultViewController()
+        
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+    }
+    
+    @objc private func draggingBegan(notification: NSNotification) {
+        self.allowLeftSwipe = false
+        self.allowRightSwipe = false
+    }
+    
+    @objc private func draggingMoved(notification: NSNotification) {
+        if let location = notification.userInfo?[DraggableTableView.Notifications.locationKey] as? NSValue {
+            let point = location.CGPointValue()
+            
+            if point.x > self.view.frame.width - 50 && self.state != JASidePanelRightVisible {
+                self.showRightPanelAnimated(true)
+            } else if point.x < 80 && self.state == JASidePanelRightVisible {
+                self.showCenterPanelAnimated(true)
+            }
+        }
+    }
+    
+    @objc private func draggingEnded(notification: NSNotification) {
+        if self.state == JASidePanelRightVisible {
+            self.showCenterPanelAnimated(true)
+        }
+        
+        self.allowLeftSwipe = true
+        self.allowRightSwipe = true
+    }
+    
+    @objc private func draggingCanceled(notification: NSNotification) {
+        if self.state == JASidePanelRightVisible {
+            self.showCenterPanelAnimated(true)
+        }
+        
+        self.allowLeftSwipe = true
+        self.allowRightSwipe = true
     }
     
 //    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {

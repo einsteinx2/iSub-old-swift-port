@@ -1,5 +1,5 @@
 //
-//  StoreUITableViewCell.swift
+//  StoreTableViewCell.swift
 //  iSub
 //
 //  Created by Ben Baron on 3/20/10.
@@ -8,7 +8,7 @@
 
 import MKStoreKit
 
-public class StoreUITableViewCell : UITableViewCell
+public class StoreTableViewCell : UITableViewCell
 {
     public var product: SKProduct? {
         didSet {

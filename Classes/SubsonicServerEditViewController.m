@@ -15,7 +15,7 @@
 #define kBadUserTag 2
 #define kBadPassTag 3
 
-@interface SubsonicServerEditViewController() <UIAlertViewDelegate>
+@interface SubsonicServerEditViewController() <UIAlertViewDelegate, ISMSLoaderDelegate>
 @property (nonatomic, strong) IBOutlet UITextField *urlField;
 @property (nonatomic, strong) IBOutlet UITextField *usernameField;
 @property (nonatomic, strong) IBOutlet UITextField *passwordField;

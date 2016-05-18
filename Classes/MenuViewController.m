@@ -13,7 +13,6 @@
 #import "StackScrollViewController.h"
 #import "MenuTableViewCell.h"
 #import "UIViewController+PushViewControllerCustom.h"
-#import "ServerListViewController.h"
 
 @interface MenuTableItem : NSObject
 @property (nonatomic, strong) UIImage *image;

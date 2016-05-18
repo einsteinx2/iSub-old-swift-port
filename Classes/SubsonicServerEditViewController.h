@@ -6,11 +6,10 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-#import "ISMSLoaderDelegate.h"
 #import "ServerEditDelegate.h"
 
 @class ServerTypeViewController, ISMSServer;
-@interface SubsonicServerEditViewController : UIViewController <ISMSLoaderDelegate>
+@interface SubsonicServerEditViewController : UIViewController
 
 @property (nullable, nonatomic, weak) id<ServerEditDelegate> delegate;
 

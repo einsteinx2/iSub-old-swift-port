@@ -10,7 +10,7 @@ import libSub
 import Foundation
 import UIKit
 
-class NewItemViewController: CustomUITableViewController, AsynchronousImageViewDelegate {
+class NewItemViewController: DraggableTableViewController, AsynchronousImageViewDelegate {
     
     private let reuseIdentifier = "Item Cell"
     private let foldersSectionIndex   = 0
@@ -54,7 +54,7 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     }
     
     override func customizeTableView(tableView: UITableView!) {
-        tableView.registerClass(NewItemUITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.registerClass(NewItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -179,7 +179,7 @@ class NewItemViewController: CustomUITableViewController, AsynchronousImageViewD
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! NewItemUITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! NewItemTableViewCell
         cell.alwaysShowSubtitle = true
         //cell.delegate = self
         

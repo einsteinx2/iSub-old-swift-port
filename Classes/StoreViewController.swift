@@ -11,45 +11,45 @@ import Foundation
 import UIKit
 import MKStoreKit
 
-public class StoreViewController : CustomUITableViewController {
+class StoreViewController : DraggableTableViewController {
     
-    private lazy var _appDelegate = iSubAppDelegate.sharedInstance()
-    private let _settings = SavedSettings.sharedInstance()
-    private let _viewObjects = ViewObjectsSingleton.sharedInstance()
+    private let appDelegate = iSubAppDelegate.sharedInstance()
+    private let settings = SavedSettings.sharedInstance()
+    private let viewObjects = ViewObjectsSingleton.sharedInstance()
     
-    private let _reuseIdentifier = "Store Cell"
+    private let reuseIdentifier = "Store Cell"
     
-    private let _storeManager: MKStoreManager = MKStoreManager.sharedManager()
-    private var _storeItems: NSMutableArray! = MKStoreManager.sharedManager().purchasableObjects
-    private var _checkProductsTimer: NSTimer?
+    private let storeManager = MKStoreManager.sharedManager()
+    private var storeItems = MKStoreManager.sharedManager().purchasableObjects
+    private var checkProductsTimer: NSTimer?
     
     // MARK: - Rotation -
     
-    public override func shouldAutorotate() -> Bool {
-        if _settings.isRotationLockEnabled && UIDevice.currentDevice().orientation != UIDeviceOrientation.Portrait {
+    override func shouldAutorotate() -> Bool {
+        if settings.isRotationLockEnabled && UIDevice.currentDevice().orientation != .Portrait {
             return false
         }
     
         return true
     }
     
-    public override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
         self.tableView.reloadData()
     }
     
     // MARK: - LifeCycle -
     
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StoreViewController._storePurchaseComplete(_:)), name: ISMSNotification_StorePurchaseComplete, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StoreViewController.storePurchaseComplete), name: ISMSNotification_StorePurchaseComplete, object: nil)
 
-        if _storeItems.count == 0 {
-            _viewObjects.showAlbumLoadingScreen(_appDelegate.window, sender: self)
-            self._checkProductsTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(StoreViewController.a_checkProducts), userInfo: nil, repeats: true)
-            self.a_checkProducts(nil)
+        if storeItems.count == 0 {
+            viewObjects.showAlbumLoadingScreen(appDelegate.window, sender: self)
+            checkProductsTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(StoreViewController.checkProducts), userInfo: nil, repeats: true)
+            checkProducts()
         } else {
-            self._organizeList()
+            organizeList()
             self.tableView.reloadData()
         }
     }
@@ -60,22 +60,22 @@ public class StoreViewController : CustomUITableViewController {
     
     // MARK: - Notifications -
     
-    func _storePurchaseComplete(notification: NSNotification?) {
+    @objc private func storePurchaseComplete() {
         self.tableView.reloadData()
     }
     
     // MARK: - Actions -
     
-    func a_checkProducts(sender: AnyObject?) {
-        _storeItems = _storeManager.purchasableObjects
+    func checkProducts() {
+        storeItems = storeManager.purchasableObjects
     
-        if _storeItems.count > 0 {
-            _checkProductsTimer?.invalidate()
-            _checkProductsTimer = nil
+        if storeItems.count > 0 {
+            checkProductsTimer?.invalidate()
+            checkProductsTimer = nil
     
-            _viewObjects.hideLoadingScreen()
+            viewObjects.hideLoadingScreen()
     
-            self._organizeList()
+            organizeList()
             
             self.tableView.reloadData()
         }
@@ -83,19 +83,19 @@ public class StoreViewController : CustomUITableViewController {
     
     // MARK: - Loading -
     
-    public func cancelLoad() {
-        _checkProductsTimer?.invalidate()
-        _checkProductsTimer = nil
+    func cancelLoad() {
+        checkProductsTimer?.invalidate()
+        checkProductsTimer = nil
         
-        _viewObjects.hideLoadingScreen()
+        viewObjects.hideLoadingScreen()
     }
 
-    func _organizeList() {
+    func organizeList() {
         // Place purchased products at the the end of the list
         let sorted: NSMutableArray = []
         let purchased: NSMutableArray = []
         
-        for item in _storeItems {
+        for item in storeItems {
             if MKStoreManager.isFeaturePurchased(item.productIdentifier) {
                 purchased.addObject(item)
             } else {
@@ -105,27 +105,26 @@ public class StoreViewController : CustomUITableViewController {
         
         sorted.addObjectsFromArray(purchased as [AnyObject])
         
-        _storeItems = sorted
+        storeItems = sorted
     }
 }
 
 // MARK: - Table view data source
 
 extension StoreViewController {
-    
-    public override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return indexPath.row == 0 ? 75.0 : 150.0
     }
     
-    public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
-    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return _storeItems.count + 1
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return storeItems.count + 1
     }
     
-    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "NoReuse")
             cell.textLabel?.text = "Restore previous purchases"
@@ -133,23 +132,23 @@ extension StoreViewController {
             return cell
         } else {
             let adjustedRow = indexPath.row - 1
-            let cell = StoreUITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "NoReuse")
-            cell.product = (_storeItems[adjustedRow] as! SKProduct)
+            let cell = StoreTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "NoReuse")
+            cell.product = (storeItems[adjustedRow] as! SKProduct)
             
             return cell
         }
     }
     
-    public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
-            _storeManager.restorePreviousTransactionsOnComplete(nil, onError: nil)
+            storeManager.restorePreviousTransactionsOnComplete(nil, onError: nil)
         } else {
             let adjustedRow = indexPath.row - 1
-            let product: SKProduct = _storeItems[adjustedRow] as! SKProduct
+            let product: SKProduct = storeItems[adjustedRow] as! SKProduct
             let identifier: String = product.productIdentifier
     
             if !MKStoreManager.isFeaturePurchased(identifier) {
-                _storeManager.buyFeature(identifier, onComplete: nil, onCancelled: nil)
+                storeManager.buyFeature(identifier, onComplete: nil, onCancelled: nil)
                 
                 self.navigationController?.popToRootViewControllerAnimated(true)
             }

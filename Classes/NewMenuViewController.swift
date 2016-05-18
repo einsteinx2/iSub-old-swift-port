@@ -69,7 +69,7 @@ class NewMenuViewController: UITableViewController {
 
     private func showSettings(menuItem: MenuItem) {
         if menuItem.navController == nil {
-            let viewController = ServerListViewController(nibName: "ServerListViewController", bundle: nil)
+            let viewController = ServerListViewController()
             let navController = UINavigationController(rootViewController: viewController)
             navController.navigationBar.barStyle = .Black
             menuItem.navController = navController
