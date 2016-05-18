@@ -96,10 +96,10 @@ class DraggableTableViewController: UITableViewController {
     }
 
     func setupLeftBarButton() -> UIBarButtonItem {
-        return UIBarButtonItem(title: "Menu",
+        return UIBarButtonItem(title: "Back",
                                style: .Plain,
                                target: self,
-                               action: #selector(DraggableTableViewController.showMenu))
+                               action: #selector(DraggableTableViewController.popViewController))
     }
 
     func setupRightBarButton() -> UIBarButtonItem? {
@@ -169,6 +169,10 @@ class DraggableTableViewController: UITableViewController {
     }
     
     // MARK - Actions -
+    
+    func popViewController() {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
     
     func showMenu() {
         self.sidePanelController?.showLeftPanelAnimated(true)

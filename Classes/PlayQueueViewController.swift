@@ -25,11 +25,31 @@ class PlayQueueViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.viewModel.delegate = self
+        
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(PlayQueueViewController.draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(PlayQueueViewController.draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(PlayQueueViewController.draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
+        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(PlayQueueViewController.draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("NSCoding not supported")
     }
+    
+    deinit {
+        NSNotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingBegan, object: nil)
+        NSNotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingMoved, object: nil)
+        NSNotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingEnded, object: nil)
+        NSNotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+    }
+    
+    ///////////
+    
+    func clearPlayQueue() {
+        PlayQueue.sharedInstance.reset()
+    }
+    
+    ///////////
 
     override func loadView() {
         self.view = UIView()
@@ -42,6 +62,16 @@ class PlayQueueViewController: UIViewController {
             make.leading.equalTo(self.view)
             make.trailing.equalTo(self.view)
             make.height.equalTo(60)
+        }
+        
+        let button = UIButton()
+        button.addTarget(self, action: #selector(PlayQueueViewController.clearPlayQueue), forControlEvents: .TouchUpInside)
+        self.view.addSubview(button)
+        button.snp_makeConstraints { make in
+            make.top.equalTo(nowPlayingView)
+            make.leading.equalTo(nowPlayingView)
+            make.trailing.equalTo(nowPlayingView)
+            make.height.equalTo(nowPlayingView)
         }
         
         nowPlayingView.addSubview(nowPlayingArtView)
@@ -100,6 +130,33 @@ class PlayQueueViewController: UIViewController {
             nowPlayingSongLabel.text = ""
             nowPlayingArtistLabel.text = ""
         }
+    }
+    
+    // MARK - Drag and Drop -
+    
+    @objc private func draggingBegan(notification: NSNotification) {
+        
+    }
+    
+    @objc private func draggingMoved(notification: NSNotification) {
+        
+    }
+    
+    @objc private func draggingEnded(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            if let song = userInfo[DraggableTableView.Notifications.itemKey] as? ISMSSong, location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
+                let point = location.CGPointValue()
+                let localPoint = self.view.convertPoint(point, fromView: nil)
+                print("point: \(point)  localPoint: \(localPoint)  self.view.bounds: \(self.view.bounds)  containsPoint: \(self.view.bounds.contains(localPoint))")
+                if self.view.bounds.contains(localPoint) {
+                    Playlist.playQueue.addSong(song: song)
+                }
+            }
+        }
+    }
+    
+    @objc private func draggingCanceled(notification: NSNotification) {
+        
     }
 }
 

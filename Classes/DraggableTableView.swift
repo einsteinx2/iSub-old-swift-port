@@ -11,7 +11,15 @@ import Foundation
 import UIKit
 import QuartzCore
 
-@objc protocol DraggableCell {
+@objc protocol View {
+    // Must be a UIView or at least act like one
+    var layer: CALayer { get }
+    var frame: CGRect { get }
+    var bounds: CGRect { get }
+    var superview: UIView? { get }
+}
+
+@objc protocol DraggableCell: View {
     var draggable: Bool { get }
     var dragItem: ISMSItem? { get }
 }
@@ -123,9 +131,9 @@ class DraggableTableView: UITableView {
         })
     }
     
-    private func imageFromView(view: UIView) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0)
-        view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+    private func imageFromCell(cell: DraggableCell) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(cell.bounds.size, cell.layer.opaque, 0.0)
+        cell.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
@@ -139,7 +147,8 @@ class DraggableTableView: UITableView {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.allowsSelection = false
         self.scrollEnabled = true
-    
+        dragCell = nil
+        
         // Handle long press
         if let touch = touches.first {
             let point = touch.locationInView(self)
@@ -148,7 +157,6 @@ class DraggableTableView: UITableView {
                 let cell = self.cellForRowAtIndexPath(indexPath)
                 if let draggableView = cell as? DraggableCell {
                     if draggableView.draggable {
-                        dragCell = draggableView
                         dragImageOffset = touch.locationInView(cell)
                         
                         var userInfo = [String: AnyObject]()
@@ -157,6 +165,7 @@ class DraggableTableView: UITableView {
                         if let dragItem = draggableView.dragItem {
                             userInfo[Notifications.itemKey] = dragItem
                         }
+                        userInfo["draggableCell"] = cell
                         
                         longPressTimer = NSTimer.scheduledTimerWithTimeInterval(longPressDelay, target: self, selector: #selector(DraggableTableView.longPressFired(_:)), userInfo: userInfo, repeats: false);
                     }
@@ -168,12 +177,13 @@ class DraggableTableView: UITableView {
     }
     
     @objc private func longPressFired(notification: NSNotification) {
-        if let dragCell = dragCell as? UITableViewCell, userInfo = notification.userInfo {
+        if let userInfo = notification.userInfo, cell = userInfo["draggableCell"] as? DraggableCell {
             self.scrollEnabled = false
+            dragCell = cell
             
-            let image = imageFromView(dragCell)
+            let image = imageFromCell(cell)
             dragImageView = UIImageView(image: image)
-            dragImageView!.frame.origin = dragImageSuperview.convertPoint(dragCell.frame.origin, fromView: dragCell.superview)
+            dragImageView!.frame.origin = dragImageSuperview.convertPoint(cell.frame.origin, fromView: cell.superview)
             dragImageView!.layer.shadowRadius = 6.0
             dragImageView!.layer.shadowOpacity = 0.0
             dragImageView!.layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -225,15 +235,15 @@ class DraggableTableView: UITableView {
         cancelLongPress()
         
         if let touch = touches.first {
-            let point = touch.locationInView(dragImageSuperview)
-            
             if let dragCell = dragCell {
+                let point = touch.locationInView(dragImageSuperview)
                 let userInfo = Notifications.userInfo(location: NSValue(CGPoint: point - dragImageOffset), item: dragCell.dragItem)
                 NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingEnded, userInfo: userInfo)
                 
                 dragImageView?.removeFromSuperview()
             } else {
-                // Select the cell if this was a touch not a swipe or tap and hold
+                // Select the cell if this was not a long press
+                let point = touch.locationInView(self)
                 if (self.editing && Float(point.x) > 40.0) || !self.editing {
                     let indexPath: NSIndexPath? = self.indexPathForRowAtPoint(point)
                     

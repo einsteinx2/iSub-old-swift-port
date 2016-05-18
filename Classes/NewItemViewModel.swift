@@ -18,9 +18,11 @@ typealias LoadModelsCompletion = (success: Bool, error: NSError?) -> Void
 
 class NewItemViewModel : NSObject {
     
-    private let _loader: ISMSItemLoader
+    private let loader: ISMSItemLoader
     
     var delegate: NewItemViewModelDelegate?
+    
+    var topLevelController = false
     
     private(set) var rootItem: ISMSItem?
     
@@ -35,12 +37,12 @@ class NewItemViewModel : NSObject {
     private(set) var sectionIndexes = [SectionIndex]()
     
     init(loader: ISMSItemLoader) {
-        _loader = loader
-        rootItem = loader.associatedObject as? ISMSItem
+        self.loader = loader
+        self.rootItem = loader.associatedObject as? ISMSItem
     }
     
     func loadModelsFromCache() -> Bool {
-        let success = _loader.loadModelsFromCache()
+        let success = loader.loadModelsFromCache()
         if (success) {
             self.processModels()
         }
@@ -49,7 +51,7 @@ class NewItemViewModel : NSObject {
     }
     
     func loadModelsFromWeb(completion: LoadModelsCompletion?) {
-        _loader.callbackBlock = { success, error, loader in
+        loader.callbackBlock = { success, error, loader in
             if success {
                 self.processModels()
                 self.delegate?.itemsChanged()
@@ -59,51 +61,51 @@ class NewItemViewModel : NSObject {
             }
         }
         
-        _loader.startLoad()
+        loader.startLoad()
     }
     
     func processModels() {
         // Reset models
-        self.folders.removeAll()
-        self.artists.removeAll()
-        self.albums.removeAll()
-        self.songs.removeAll()
-        self.playlists.removeAll()
+        folders.removeAll()
+        artists.removeAll()
+        albums.removeAll()
+        songs.removeAll()
+        playlists.removeAll()
         
-        guard let items = _loader.items else {
+        guard let items = loader.items else {
             // No models to process
             return;
         }
         
         for item in items {
             switch item {
-            case is ISMSFolder:   self.folders.append(item as! ISMSFolder)
-            case is ISMSArtist:   self.artists.append(item as! ISMSArtist)
-            case is ISMSAlbum:    self.albums.append(item as! ISMSAlbum)
-            case is ISMSSong:     self.songs.append(item as! ISMSSong)
-            case is Playlist: self.playlists.append(item as! Playlist)
+            case is ISMSFolder:   folders.append(item as! ISMSFolder)
+            case is ISMSArtist:   artists.append(item as! ISMSArtist)
+            case is ISMSAlbum:    albums.append(item as! ISMSAlbum)
+            case is ISMSSong:     songs.append(item as! ISMSSong)
+            case is Playlist:     playlists.append(item as! Playlist)
             default: assertionFailure("WHY YOU NO ITEM?")
             }
         }
         
         var duration = 0
-        for song in self.songs {
+        for song in songs {
             if let songDuration = song.duration {
                 duration = duration + Int(songDuration)
             }
         }
-        self.songsDuration = duration
+        songsDuration = duration
         
-        if self.songs.count == 0 {
-            if self.folders.count > 20 {
-                self.sectionIndexes = sectionIndexesForItems(self.folders)
+        if songs.count == 0 {
+            if folders.count > 20 {
+                sectionIndexes = sectionIndexesForItems(folders)
             } else if self.artists.count > 20 {
-                self.sectionIndexes = sectionIndexesForItems(self.artists)
+                sectionIndexes = sectionIndexesForItems(artists)
             }
         }
     }
     
     func cancelLoad() {
-        _loader.cancelLoad()
+        loader.cancelLoad()
     }
 }

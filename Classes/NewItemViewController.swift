@@ -77,6 +77,17 @@ class NewItemViewController: DraggableTableViewController, AsynchronousImageView
         unregisterForNotifications()
     }
     
+    override func setupLeftBarButton() -> UIBarButtonItem {
+        if viewModel.topLevelController {
+            return UIBarButtonItem(title: "Menu",
+                                   style: .Plain,
+                                   target: self,
+                                   action: #selector(DraggableTableViewController.showMenu))
+        } else {
+            return super.setupLeftBarButton()
+        }
+    }
+    
     // MARK: - Notifications - 
     
     private func registerForNotifications() {
