@@ -58,6 +58,9 @@ class PlayQueueViewModel: NSObject {
             } else {
                 songs = ArraySlice<ISMSSong>()
             }
+        } else {
+            currentSong = nil
+            songs = ArraySlice<ISMSSong>()
         }
         
         delegate?.itemsChanged()
@@ -72,5 +75,10 @@ class PlayQueueViewModel: NSObject {
     func playSongAtTableViewIndex(index: Int) {
         let startIndex = songs.startIndex
         PlayQueue.sharedInstance.playSongAtIndex(startIndex + index)
+    }
+    
+    func insertSongAtTableViewIndex(index: Int, song: ISMSSong) {
+        let startIndex = songs.startIndex
+        playlist.insertSong(song: song, index: startIndex + index)
     }
 }

@@ -46,6 +46,8 @@ public class ItemTableViewCell : UITableViewCell {
     public var alwaysShowCoverArt = false
     public var alwaysShowSubtitle = false
     
+    public var cellHeight: CGFloat = 50.0
+    
     public var coverArtId: String? {
         didSet {
             coverArtView.coverArtId = coverArtId
@@ -113,6 +115,7 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
     
+    private let containerView = UIView()
     private let coverArtView = AsynchronousImageView()
     private let trackNumberLabel = UILabel()
     private let headerTitleLabel = UILabel()
@@ -124,29 +127,45 @@ public class ItemTableViewCell : UITableViewCell {
     
     // MARK: - Lifecycle -
     
+    override public var backgroundColor: UIColor? {
+        get {
+            return containerView.backgroundColor
+        }
+        set {
+            containerView.backgroundColor = newValue
+        }
+    }
+    
     private func commonInit() {
-        self.addSubview(deleteToggleImageView)
+        super.backgroundColor = UIColor.clearColor()
+        
+        containerView.backgroundColor = UIColor.whiteColor()
+        containerView.autoresizingMask = [.FlexibleWidth, .FlexibleBottomMargin]
+        self.contentView.addSubview(containerView)
+        
         deleteToggleImageView.alpha = 0.0
+        containerView.addSubview(deleteToggleImageView)
+        
         
         coverArtView.isLarge = false
-        self.contentView.addSubview(coverArtView)
+        containerView.addSubview(coverArtView)
         
         trackNumberLabel.backgroundColor = UIColor.clearColor()
         trackNumberLabel.textAlignment = NSTextAlignment.Center
         trackNumberLabel.font = ISMSBoldFont(22)
         trackNumberLabel.adjustsFontSizeToFitWidth = true
         trackNumberLabel.minimumScaleFactor = 16.0 / trackNumberLabel.font.pointSize
-        self.contentView.addSubview(trackNumberLabel)
+        containerView.addSubview(trackNumberLabel)
         
         nowPlayingImageView.hidden = true
-        self.contentView.addSubview(nowPlayingImageView)
+        containerView.addSubview(nowPlayingImageView)
         
         headerTitleLabel.textAlignment = NSTextAlignment.Center
         headerTitleLabel.backgroundColor = UIColor.blackColor()
         headerTitleLabel.alpha = 0.65
         headerTitleLabel.font = ISMSBoldFont(10)
         headerTitleLabel.textColor = UIColor.whiteColor()
-        self.contentView.addSubview(headerTitleLabel)
+        containerView.addSubview(headerTitleLabel)
         
         titlesScrollView.frame = CGRectMake(35, 0, 235, 50)
         titlesScrollView.autoresizingMask = UIViewAutoresizing.FlexibleWidth
@@ -154,7 +173,7 @@ public class ItemTableViewCell : UITableViewCell {
         titlesScrollView.showsHorizontalScrollIndicator = false
         titlesScrollView.userInteractionEnabled = false
         titlesScrollView.decelerationRate = UIScrollViewDecelerationRateFast
-        self.contentView.addSubview(titlesScrollView)
+        containerView.addSubview(titlesScrollView)
         
         titleLabel.backgroundColor = UIColor.clearColor()
         titleLabel.textAlignment = NSTextAlignment.Left
@@ -174,7 +193,7 @@ public class ItemTableViewCell : UITableViewCell {
         durationLabel.adjustsFontSizeToFitWidth = true
         durationLabel.minimumScaleFactor = 12.0 / durationLabel.font.pointSize
         durationLabel.textColor = UIColor.grayColor()
-        self.contentView.addSubview(durationLabel)
+        containerView.addSubview(durationLabel)
     }
     
     public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -190,8 +209,10 @@ public class ItemTableViewCell : UITableViewCell {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
+        containerView.frame = CGRect(x: 0, y: 0, width: self.width, height: cellHeight)
+        
         let oldFrame = deleteToggleImageView.frame
-        let newY = (self.frame.size.height / 2.0) - (oldFrame.size.height / 2.0)
+        let newY = (cellHeight / 2.0) - (oldFrame.size.height / 2.0)
         deleteToggleImageView.frame = CGRectMake(5.0, newY, oldFrame.size.width, oldFrame.size.height)
         
         repositionLabels()
@@ -260,7 +281,6 @@ public class ItemTableViewCell : UITableViewCell {
     func repositionLabels() {
         
         let cellWidth: CGFloat = self.frame.size.width
-        let cellHeight: CGFloat = self.frame.size.height
         let spacer: CGFloat = 2.0
         
         coverArtView.hidden = true
@@ -275,7 +295,7 @@ public class ItemTableViewCell : UITableViewCell {
             scrollViewFrame.size.width -= 27.0
         }
         
-        if let _ = headerTitle {
+        if headerTitle != nil {
             headerTitleLabel.hidden = false
             
             let height: CGFloat = 20.0

@@ -160,7 +160,7 @@ class DraggableTableView: UITableView {
                         dragImageOffset = touch.locationInView(cell)
                         
                         var userInfo = [String: AnyObject]()
-                        let location = touch.locationInView(dragImageSuperview)
+                        let location = touch.locationInView(nil)
                         userInfo[Notifications.locationKey] = NSValue(CGPoint: location)
                         if let dragItem = draggableView.dragItem {
                             userInfo[Notifications.itemKey] = dragItem
@@ -218,10 +218,11 @@ class DraggableTableView: UITableView {
         cancelLongPress()
         
         if let dragImageView = dragImageView, dragCell = dragCell, touch = touches.first {
-            let point = touch.locationInView(dragImageSuperview)
-            dragImageView.frame.origin = point - dragImageOffset
+            let superviewPoint = touch.locationInView(dragImageSuperview)
+            dragImageView.frame.origin = superviewPoint - dragImageOffset
             
-            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: point), item: dragCell.dragItem)
+            let windowPoint = touch.locationInView(nil)
+            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), item: dragCell.dragItem)
             NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingMoved, userInfo: userInfo)
         }
         
@@ -236,8 +237,8 @@ class DraggableTableView: UITableView {
         
         if let touch = touches.first {
             if let dragCell = dragCell {
-                let point = touch.locationInView(dragImageSuperview)
-                let userInfo = Notifications.userInfo(location: NSValue(CGPoint: point - dragImageOffset), item: dragCell.dragItem)
+                let windowPoint = touch.locationInView(nil)
+                let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), item: dragCell.dragItem)
                 NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingEnded, userInfo: userInfo)
                 
                 dragImageView?.removeFromSuperview()
@@ -267,12 +268,12 @@ class DraggableTableView: UITableView {
         cancelLongPress()
         
         if let dragCell = dragCell {
-            var point = CGPointZero
+            var windowPoint = CGPointZero
             if let touch = touches?.first {
-                point = touch.locationInView(dragImageSuperview) - dragImageOffset
+                windowPoint = touch.locationInView(nil)
             }
             
-            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: point), item: dragCell.dragItem)
+            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), item: dragCell.dragItem)
             NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingCanceled, userInfo: userInfo)
             
             dragImageView?.removeFromSuperview()

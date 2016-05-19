@@ -53,7 +53,7 @@ class ItemViewController: DraggableTableViewController, AsynchronousImageViewDel
         }
     }
     
-    override func customizeTableView(tableView: UITableView!) {
+    override func customizeTableView(tableView: UITableView) {
         tableView.registerClass(ItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
@@ -192,7 +192,7 @@ class ItemViewController: DraggableTableViewController, AsynchronousImageViewDel
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! ItemTableViewCell
         cell.alwaysShowSubtitle = true
-        //cell.delegate = self
+        cell.cellHeight = self.tableView(tableView, heightForRowAtIndexPath: indexPath)
         
         switch indexPath.section {
         case foldersSectionIndex:
@@ -204,7 +204,7 @@ class ItemViewController: DraggableTableViewController, AsynchronousImageViewDel
             
             let folder = viewModel.folders[indexPath.row]
             cell.associatedObject = folder
-            cell.coverArtId = folder.coverArtId?.stringValue
+            cell.coverArtId = folder.coverArtId
             cell.title = folder.name
             
             break

@@ -17,6 +17,8 @@ class PlayQueueViewController: UIViewController {
     let nowPlayingArtistLabel = UILabel()
     let tableView = UITableView()
     
+    var hoverRow = -1
+    
     private let viewModel: PlayQueueViewModel
     private let reuseIdentifier = "Item Cell"
     
@@ -107,7 +109,7 @@ class PlayQueueViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = UIColor.clearColor()
-        tableView.separatorColor = UIColor.clearColor()
+        tableView.separatorColor = UIColor.blackColor()
         tableView.registerClass(ItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.view.addSubview(tableView)
         tableView.snp_makeConstraints { make in
@@ -122,7 +124,7 @@ class PlayQueueViewController: UIViewController {
     
     func updateNowPlayingView() {
         if let song = viewModel.currentSong {
-            nowPlayingArtView.coverArtId = song.coverArtId?.stringValue
+            nowPlayingArtView.coverArtId = song.coverArtId
             nowPlayingSongLabel.text = song.title
             nowPlayingArtistLabel.text = song.artist?.name
         } else {
@@ -139,7 +141,28 @@ class PlayQueueViewController: UIViewController {
     }
     
     @objc private func draggingMoved(notification: NSNotification) {
-        
+        if let userInfo = notification.userInfo {
+            if let _ = userInfo[DraggableTableView.Notifications.itemKey] as? ISMSSong, location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
+                var point = location.CGPointValue()
+                // Treat hovers over the top portion of the cell as the previous cell
+                point.y -= (ISMSNormalize(ISMSSongCellHeight) / 2.0)
+                let tablePoint = tableView.convertPoint(point, fromView: nil)
+                
+                let indexPath = tableView.indexPathForRowAtPoint(tablePoint)
+                var row = -1
+                if let indexPath = indexPath {
+                    row = indexPath.row
+                }
+                
+                if hoverRow != row {
+                    hoverRow = row
+                    
+                    // Reload cell heights
+                    tableView.beginUpdates()
+                    tableView.endUpdates()
+                }
+            }
+        }
     }
     
     @objc private func draggingEnded(notification: NSNotification) {
@@ -149,14 +172,16 @@ class PlayQueueViewController: UIViewController {
                 let localPoint = self.view.convertPoint(point, fromView: nil)
                 print("point: \(point)  localPoint: \(localPoint)  self.view.bounds: \(self.view.bounds)  containsPoint: \(self.view.bounds.contains(localPoint))")
                 if self.view.bounds.contains(localPoint) {
-                    Playlist.playQueue.addSong(song: song)
+                    viewModel.insertSongAtTableViewIndex(hoverRow + 1, song: song)
                 }
             }
         }
+        
+        hoverRow = -1
     }
     
     @objc private func draggingCanceled(notification: NSNotification) {
-        
+        hoverRow = -1
     }
 }
 
@@ -179,7 +204,8 @@ extension PlayQueueViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! ItemTableViewCell
         cell.alwaysShowSubtitle = true
-        cell.accessoryType = UITableViewCellAccessoryType.None
+        cell.cellHeight = ISMSNormalize(ISMSSongCellHeight)
+        cell.accessoryType = .None
         
         let song = viewModel.songForTableViewIndex(indexPath.row)
         cell.indexPath = indexPath
@@ -203,7 +229,11 @@ extension PlayQueueViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return ISMSNormalize(ISMSSongCellHeight)
+        var height = ISMSNormalize(ISMSSongCellHeight)
+        if indexPath.row == hoverRow {
+            height *= 2
+        }
+        return height
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
