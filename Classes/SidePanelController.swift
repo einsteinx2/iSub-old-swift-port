@@ -15,7 +15,7 @@ import JASidePanels
 //private var kvoContext = 0
 
 class SidePanelController: JASidePanelController {
-
+        
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }

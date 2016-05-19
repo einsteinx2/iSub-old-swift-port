@@ -397,6 +397,9 @@
 		5315A3F5156F7064001B0268 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5327F52412B955F100735119 /* StoreKit.framework */; };
 		5315A3F6156F7064001B0268 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
 		53191DF01167CFDC00E1C08A /* current-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 53191DEF1167CFDC00E1C08A /* current-server.png */; };
+		532300181CEE73F700B8C651 /* DroppableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532300171CEE73F700B8C651 /* DroppableCell.swift */; };
+		532300191CEE750B00B8C651 /* DroppableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532300171CEE73F700B8C651 /* DroppableCell.swift */; };
+		5323001A1CEE750B00B8C651 /* DroppableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532300171CEE73F700B8C651 /* DroppableCell.swift */; };
 		5324C6C613345D75004E6C79 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
 		5327A5D314DA1E4400DEE1B6 /* controller-extras.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D114DA1E4400DEE1B6 /* controller-extras.png */; };
 		5327A5D414DA1E4400DEE1B6 /* controller-extras.png in Resources */ = {isa = PBXBuildFile; fileRef = 5327A5D114DA1E4400DEE1B6 /* controller-extras.png */; };
@@ -1414,6 +1417,7 @@
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5315A405156F7064001B0268 /* iSub Unit Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Unit Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
+		532300171CEE73F700B8C651 /* DroppableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DroppableCell.swift; sourceTree = "<group>"; };
 		5324C6C413345D75004E6C79 /* OBSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OBSlider.h; path = Classes/OBSlider.h; sourceTree = "<group>"; };
 		5324C6C513345D75004E6C79 /* OBSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OBSlider.m; path = Classes/OBSlider.m; sourceTree = "<group>"; };
 		5327A5D114DA1E4400DEE1B6 /* controller-extras.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras.png"; path = "Images/Player Icons/controller-extras.png"; sourceTree = "<group>"; };
@@ -1940,7 +1944,6 @@
 				53ABE1361C6033F100E0E72B /* New UI */,
 				536F9D7D119783D4002E526A /* Main */,
 				539797F01162CE4B00F41D8B /* View Controllers */,
-				533F651F16054282000098E1 /* Custom UI Objects */,
 				536C97A416619845005A73C6 /* 3rd Party UI Components */,
 			);
 			path = Classes;
@@ -2194,6 +2197,7 @@
 		539797F01162CE4B00F41D8B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				533F651F16054282000098E1 /* Custom UI Objects */,
 				53ABE1661C61AAC000E0E72B /* ModalAlbumArtViewController.xib */,
 				53ABE1671C61AAC000E0E72B /* ModalAlbumArtViewController.swift */,
 				D0EA475919DE412C0083CE05 /* New player */,
@@ -2410,6 +2414,7 @@
 			isa = PBXGroup;
 			children = (
 				535142641A4664A400674DE2 /* DraggableTableView.swift */,
+				532300171CEE73F700B8C651 /* DroppableCell.swift */,
 				53AAB77912B98699007EA08B /* StoreTableViewCell.swift */,
 				5333D10E1C654B5900DC19F4 /* SidePanelController.swift */,
 				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
@@ -3937,6 +3942,7 @@
 				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
 				533A2D07113C61CA00B3A376 /* AsynchronousImageView.m in Sources */,
 				53F74C511A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
+				532300181CEE73F700B8C651 /* DroppableCell.swift in Sources */,
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
 				D0EA476C19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53BCC51B181387B300442E86 /* CustomUINavigationController.m in Sources */,
@@ -4045,6 +4051,7 @@
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
 				53BC27A5139AF0DD00A825F1 /* AsynchronousImageView.m in Sources */,
 				53F74C531A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
+				5323001A1CEE750B00B8C651 /* DroppableCell.swift in Sources */,
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
 				D0EA476E19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53BCC51D181387B300442E86 /* CustomUINavigationController.m in Sources */,
@@ -4105,6 +4112,7 @@
 				53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */,
 				53DCF50613BFEAD3009160F9 /* AsynchronousImageView.m in Sources */,
 				53F74C521A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
+				532300191CEE750B00B8C651 /* DroppableCell.swift in Sources */,
 				53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */,
 				D0EA476D19DE449A0083CE05 /* UIView+AutoLayout.m in Sources */,
 				53BCC51C181387B300442E86 /* CustomUINavigationController.m in Sources */,

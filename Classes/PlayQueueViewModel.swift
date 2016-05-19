@@ -16,14 +16,13 @@ protocol PlayQueueViewModelDelegate {
 class PlayQueueViewModel: NSObject {
     
     var delegate: PlayQueueViewModelDelegate?
-    
-    private let playlist = Playlist.playQueue
-    private var songs = ArraySlice<ISMSSong>()
-    
-    private(set) var currentSong: ISMSSong?
-    var numberOfTableViewRows: Int {
+    var numberOfRows: Int {
         return songs.count
     }
+    
+    private var songs = [ISMSSong]()
+    private(set) var currentIndex: Int = -1
+    private(set) var currentSong: ISMSSong?
     
     override init() {
         super.init()
@@ -37,7 +36,7 @@ class PlayQueueViewModel: NSObject {
     
     @objc private func playlistChanged(notification: NSNotification) {
         if let userInfo = notification.userInfo, playlistId = userInfo[Playlist.Notifications.playlistIdKey] as? Int {
-            if playlistId == playlist.playlistId {
+            if playlistId == Playlist.playQueuePlaylistId {
                 reloadSongs()
             }
         }
@@ -48,37 +47,22 @@ class PlayQueueViewModel: NSObject {
     }
     
     private func reloadSongs() {
-        var allSongs = self.playlist.songs
-        let allSongsCount = allSongs.count
-        let currentIndex = PlayQueue.sharedInstance.currentIndex
-        if allSongsCount > currentIndex {
-            currentSong = allSongs[currentIndex]
-            if allSongsCount > currentIndex + 1 {
-                songs = allSongs[currentIndex + 1...allSongsCount - 1]
-            } else {
-                songs = ArraySlice<ISMSSong>()
-            }
-        } else {
-            currentSong = nil
-            songs = ArraySlice<ISMSSong>()
-        }
-        
+        let playQueue = PlayQueue.sharedInstance
+        songs = playQueue.songs
+        currentSong = playQueue.currentSong
+        currentIndex = playQueue.currentIndex
         delegate?.itemsChanged()
     }
     
-    func songForTableViewIndex(index: Int) -> ISMSSong {
-        let startIndex = songs.startIndex
-        let song = songs[startIndex + index]
-        return song
+    func songAtIndex(index: Int) -> ISMSSong {
+        return songs[index]
     }
     
-    func playSongAtTableViewIndex(index: Int) {
-        let startIndex = songs.startIndex
-        PlayQueue.sharedInstance.playSongAtIndex(startIndex + index)
+    func playSongAtIndex(index: Int) {
+        PlayQueue.sharedInstance.playSongAtIndex(index)
     }
     
-    func insertSongAtTableViewIndex(index: Int, song: ISMSSong) {
-        let startIndex = songs.startIndex
-        playlist.insertSong(song: song, index: startIndex + index)
+    func insertSongAtIndex(index: Int, song: ISMSSong) {
+        PlayQueue.sharedInstance.playlist.insertSong(song: song, index: index)
     }
 }

@@ -12,43 +12,41 @@ import libSub
 import Foundation
 import UIKit
 
-@objc public protocol ItemTableViewCellDelegate {
+@objc protocol ItemTableViewCellDelegate {
     optional func tableCellDeleteButtonPressed(cell: ItemTableViewCell)
     optional func tableCellDeleteToggled(cell: ItemTableViewCell, markedForDelete: Bool)
 }
 
-public class ItemTableViewCell : UITableViewCell {
+class ItemTableViewCell: DroppableCell {
     
     // Disabled for now until optimized
     let shouldRepositionLabels = false
     
     let viewObjects = ViewObjectsSingleton.sharedInstance()
     
-    public weak var delegate: ItemTableViewCellDelegate?
-    public var associatedObject: AnyObject?
+    weak var delegate: ItemTableViewCellDelegate?
+    var associatedObject: AnyObject?
     
-    public var indexShowing = false
+    var indexShowing = false
     
-    public var indexPath: NSIndexPath?
+    var indexPath: NSIndexPath?
     
-    public var searching = false
+    var searching = false
     
-    public let deleteToggleImageView = UIImageView(image: UIImage(named: "unselected"))
+    let deleteToggleImageView = UIImageView(image: UIImage(named: "unselected"))
     
-    public var markedForDelete = false {
+    var markedForDelete = false {
         didSet {
             updateDeleteCheckboxImage()
         }
     }
     
-    public var showDeleteButton = false
+    var showDeleteButton = false
     
-    public var alwaysShowCoverArt = false
-    public var alwaysShowSubtitle = false
+    var alwaysShowCoverArt = false
+    var alwaysShowSubtitle = false
     
-    public var cellHeight: CGFloat = 50.0
-    
-    public var coverArtId: String? {
+    var coverArtId: String? {
         didSet {
             coverArtView.coverArtId = coverArtId
             if shouldRepositionLabels {
@@ -57,7 +55,7 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
 
-    public var trackNumber: NSNumber? {
+    var trackNumber: NSNumber? {
         didSet {
             if let trackNumber = trackNumber {
                 trackNumberLabel.text = "\(trackNumber)"
@@ -68,7 +66,7 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
     
-    public var headerTitle: String? {
+    var headerTitle: String? {
         didSet {
             headerTitleLabel.text = headerTitle
             if shouldRepositionLabels {
@@ -77,7 +75,7 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
     
-    public var title: String? {
+    var title: String? {
         didSet {
             titleLabel.text = title
             if shouldRepositionLabels {
@@ -86,7 +84,7 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
     
-    public var subTitle: String? {
+    var subTitle: String? {
         didSet {
             subTitleLabel.text = subTitle
             if shouldRepositionLabels {
@@ -95,7 +93,7 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
     
-    public var duration: NSNumber? {
+    var duration: NSNumber? {
         didSet {
             if let duration = duration {
                 durationLabel.text = NSString.formatTime(duration.doubleValue)
@@ -106,7 +104,7 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
     
-    public var playing: Bool = false {
+    var playing: Bool = false {
         didSet {
             nowPlayingImageView.hidden = !playing
             if trackNumber != nil {
@@ -115,7 +113,6 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
     
-    private let containerView = UIView()
     private let coverArtView = AsynchronousImageView()
     private let trackNumberLabel = UILabel()
     private let headerTitleLabel = UILabel()
@@ -127,25 +124,9 @@ public class ItemTableViewCell : UITableViewCell {
     
     // MARK: - Lifecycle -
     
-    override public var backgroundColor: UIColor? {
-        get {
-            return containerView.backgroundColor
-        }
-        set {
-            containerView.backgroundColor = newValue
-        }
-    }
-    
     private func commonInit() {
-        super.backgroundColor = UIColor.clearColor()
-        
-        containerView.backgroundColor = UIColor.whiteColor()
-        containerView.autoresizingMask = [.FlexibleWidth, .FlexibleBottomMargin]
-        self.contentView.addSubview(containerView)
-        
         deleteToggleImageView.alpha = 0.0
         containerView.addSubview(deleteToggleImageView)
-        
         
         coverArtView.isLarge = false
         containerView.addSubview(coverArtView)
@@ -196,20 +177,18 @@ public class ItemTableViewCell : UITableViewCell {
         containerView.addSubview(durationLabel)
     }
     
-    public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         commonInit()
     }
 
-    public required init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
     }
     
-    public override func layoutSubviews() {
+    override func layoutSubviews() {
         super.layoutSubviews()
-        
-        containerView.frame = CGRect(x: 0, y: 0, width: self.width, height: cellHeight)
         
         let oldFrame = deleteToggleImageView.frame
         let newY = (cellHeight / 2.0) - (oldFrame.size.height / 2.0)
@@ -220,7 +199,7 @@ public class ItemTableViewCell : UITableViewCell {
     
     // MARK: - Public -
 
-    public func scrollLabels() {
+    func scrollLabels() {
         let titleWidth = titleLabel.frame.size.width
         let subTitleWidth = subTitleLabel.frame.size.width
         let scrollViewWidth = titlesScrollView.frame.size.width
@@ -240,12 +219,12 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
 
-    public func showDeleteCheckbox() {
+    func showDeleteCheckbox() {
         // Use alpha to allow animation
         deleteToggleImageView.alpha = 1.0;
     }
     
-    public func hideDeleteCheckbox() {
+    func hideDeleteCheckbox() {
         deleteToggleImageView.alpha = 0.0;
     }
     
@@ -258,7 +237,7 @@ public class ItemTableViewCell : UITableViewCell {
         }
     }
     
-    public func toggleDelete() {
+    func toggleDelete() {
         if indexPath != nil {
             markedForDelete = !markedForDelete
             
