@@ -29,7 +29,6 @@
 #import "ISMSLoaderDelegate.h"
 #import "EX2Reachability.h"
 #import <HockeySDK/HockeySDK.h>
-#import "CustomUITabBarController.h"
 #import <JASidePanels/JASidePanelController.h>
 
 #import <MessageUI/MessageUI.h>
@@ -286,6 +285,11 @@
 	// have internet access or if the host url entered was wrong.
     if (!settingsS.isOfflineMode) 
 	{
+        if (self.statusLoader)
+        {
+            [self.statusLoader cancelLoad];
+        }
+        
         ISMSServer *currentServer = settingsS.currentServer;
         self.statusLoader = [[ISMSStatusLoader alloc] initWithUrl:currentServer.url username:currentServer.username password:currentServer.password];
         __weak iSubAppDelegate *weakSelf = self;
@@ -1435,58 +1439,14 @@
     [ISMSPlaylist createPlaylist:@"Play Queue" playlistId:[ISMSPlaylist playQueuePlaylistId] serverId:server.serverId];
     [ISMSPlaylist createPlaylist:@"Download Queue" playlistId:[ISMSPlaylist downloadQueuePlaylistId] serverId:server.serverId];
     [ISMSPlaylist createPlaylist:@"Downloaded Songs" playlistId:[ISMSPlaylist downloadedSongsPlaylistId] serverId:server.serverId];
+    
+    // Cancel any caching
+    [streamManagerS removeAllStreams];
+    
+    // Reset UI
+    [(NewMenuViewController *)self.sidePanelController.leftPanel resetMenuItems];
 
-    // TODO: Reimplement for new UI
-//    if (self == [[self.navigationController viewControllers] objectAtIndexSafe:0] && !IS_IPAD())
-//    {
-//        [self.navigationController.view removeFromSuperview];
-//    }
-//    else
-//    {
-//        [self.navigationController popToRootViewControllerAnimated:YES];
-//        
-//        if ([appDelegateS.wifiReach currentReachabilityStatus] == NotReachable)
-//            return;
-//        
-//        // Cancel any caching
-//        [streamManagerS removeAllStreams];
-//        
-//        // Stop any playing song and remove old tab bar controller from window
-//        [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"recover"];
-//        [[NSUserDefaults standardUserDefaults] synchronize];
-//        [[PlayQueue sharedInstance] stop];
-//        settingsS.isJukeboxEnabled = NO;
-//        
-//        // TODO: Redo with new UI
-//        //		if (settingsS.isOfflineMode)
-//        //		{
-//        //			settingsS.isOfflineMode = NO;
-//        //
-//        //			if (IS_IPAD())
-//        //			{
-//        //				[appDelegateS.ipadRootViewController.menuViewController toggleOfflineMode];
-//        //			}
-//        //			else
-//        //			{
-//        //                appDelegateS.window.rootViewController = appDelegateS.mainTabBarController;
-//        //				[viewObjectsS orderMainTabBarController];
-//        //			}
-//        //		}
-//        
-//        // Reset the databases
-//        [databaseS closeAllDatabases];
-//        
-//        [databaseS setupDatabases];
-//        
-//        // Reset the tabs
-//        // TODO: Redo with new UI
-//        //		if (!IS_IPAD())
-//        //			[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
-//        
-//        appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
-//        
-//        [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerSwitched];
-//    }
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerSwitched];
 }
 
 @end

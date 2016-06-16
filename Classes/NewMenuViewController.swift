@@ -36,6 +36,15 @@ class NewMenuViewController: UITableViewController {
         self.tableView.separatorStyle = .None
     }
     
+    // Dispose of any existing controllers
+    func resetMenuItems() {
+        for menuItem in menuItems {
+            menuItem.navController = nil
+        }
+        
+        showDefaultViewController()
+    }
+    
     func showDefaultViewController() {
         let defaultMenuItem = menuItems[0]
         defaultMenuItem.function(self)(defaultMenuItem)
