@@ -17,11 +17,13 @@ import QuartzCore
     var frame: CGRect { get }
     var bounds: CGRect { get }
     var superview: UIView? { get }
+    var alpha: CGFloat { get set }
 }
 
 @objc protocol DraggableCell: View {
     var draggable: Bool { get }
     var dragItem: ISMSItem? { get }
+    var indexPath: NSIndexPath? { get }
 }
 
 private func +(left: CGPoint, right: CGPoint) -> CGPoint {
@@ -40,15 +42,15 @@ class DraggableTableView: UITableView {
         static let draggingEnded    = "draggingEnded"
         static let draggingCanceled = "draggingCanceled"
         
-        static let locationKey = "locationKey"
-        static let itemKey     = "itemKey"
+        static let locationKey            = "locationKey"
+        static let dragCellKey            = "dragCellKey"
+        static let dragSourceTableViewKey = "dragSourceTableViewKey"
         
-        static func userInfo(location location: NSValue, item: ISMSItem?) -> [String: AnyObject] {
+        static func userInfo(location location: NSValue, dragSourceTableView: UITableView, dragCell: DraggableCell) -> [String: AnyObject] {
             var userInfo = [String: AnyObject]()
+            userInfo[dragSourceTableViewKey] = dragSourceTableView
             userInfo[locationKey] = location
-            if let item = item {
-                userInfo[itemKey] = item
-            }
+            userInfo[dragCellKey] = dragCell
             return userInfo
         }
     }
@@ -63,6 +65,7 @@ class DraggableTableView: UITableView {
     
     var longPressTimer: NSTimer?
     var dragCell: DraggableCell?
+    var dragCellAlpha: CGFloat = 1.0
     var dragImageView: UIImageView?
     var dragImageOffset = CGPointZero
     var dragImageSuperview: UIView {
@@ -136,7 +139,7 @@ class DraggableTableView: UITableView {
         cell.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return image
+        return image!
     }
     
     private func cancelLongPress() {
@@ -155,17 +158,12 @@ class DraggableTableView: UITableView {
             let indexPath = self.indexPathForRowAtPoint(point)
             if let indexPath = indexPath {
                 let cell = self.cellForRowAtIndexPath(indexPath)
-                if let draggableView = cell as? DraggableCell {
-                    if draggableView.draggable {
+                if let draggableCell = cell as? DraggableCell {
+                    if draggableCell.draggable {
                         dragImageOffset = touch.locationInView(cell)
                         
-                        var userInfo = [String: AnyObject]()
-                        let location = touch.locationInView(nil)
-                        userInfo[Notifications.locationKey] = NSValue(CGPoint: location)
-                        if let dragItem = draggableView.dragItem {
-                            userInfo[Notifications.itemKey] = dragItem
-                        }
-                        userInfo["draggableCell"] = cell
+                        let location = NSValue(CGPoint: touch.locationInView(nil))
+                        let userInfo = Notifications.userInfo(location: location, dragSourceTableView: self, dragCell: draggableCell)
                         
                         longPressTimer = NSTimer.scheduledTimerWithTimeInterval(longPressDelay, target: self, selector: #selector(DraggableTableView.longPressFired(_:)), userInfo: userInfo, repeats: false);
                     }
@@ -177,9 +175,10 @@ class DraggableTableView: UITableView {
     }
     
     @objc private func longPressFired(notification: NSNotification) {
-        if let userInfo = notification.userInfo, cell = userInfo["draggableCell"] as? DraggableCell {
+        if let userInfo = notification.userInfo, cell = userInfo[Notifications.dragCellKey] as? DraggableCell {
             self.scrollEnabled = false
             dragCell = cell
+            dragCellAlpha = cell.alpha
             
             let image = imageFromCell(cell)
             dragImageView = UIImageView(image: image)
@@ -197,12 +196,16 @@ class DraggableTableView: UITableView {
             dragImageView!.layer.addAnimation(shadowAnimation, forKey: "shadowOpacity")
             dragImageView!.layer.shadowOpacity = 0.3
             
-            // Animate the cell location to be slightly off
+            
             UIView.animateWithDuration(0.1) {
+                // Animate the cell location to be slightly off
                 var origin = self.dragImageView!.frame.origin
                 origin.x += 2
                 origin.y -= 2
                 self.dragImageView!.frame.origin = origin
+                
+                // Dim the cell in the table
+                cell.alpha = 0.6
             }
             
             // Match the animation so movement is smooth
@@ -222,7 +225,7 @@ class DraggableTableView: UITableView {
             dragImageView.frame.origin = superviewPoint - dragImageOffset
             
             let windowPoint = touch.locationInView(nil)
-            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), item: dragCell.dragItem)
+            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
             NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingMoved, userInfo: userInfo)
         }
         
@@ -238,10 +241,15 @@ class DraggableTableView: UITableView {
         if let touch = touches.first {
             if let dragCell = dragCell {
                 let windowPoint = touch.locationInView(nil)
-                let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), item: dragCell.dragItem)
+                let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
                 NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingEnded, userInfo: userInfo)
                 
                 dragImageView?.removeFromSuperview()
+                
+                UIView.animateWithDuration(0.1) {
+                    // Undo the cell dimming
+                    dragCell.alpha = self.dragCellAlpha
+                }
             } else {
                 // Select the cell if this was not a long press
                 let point = touch.locationInView(self)
@@ -273,7 +281,7 @@ class DraggableTableView: UITableView {
                 windowPoint = touch.locationInView(nil)
             }
             
-            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), item: dragCell.dragItem)
+            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
             NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingCanceled, userInfo: userInfo)
             
             dragImageView?.removeFromSuperview()

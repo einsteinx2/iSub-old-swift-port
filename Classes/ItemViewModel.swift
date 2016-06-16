@@ -51,17 +51,19 @@ class ItemViewModel : NSObject {
     }
     
     func loadModelsFromWeb(completion: LoadModelsCompletion?) {
-        loader.callbackBlock = { success, error, loader in
-            if success {
-                self.processModels()
-                self.delegate?.itemsChanged()
-            } else {
-                let errorString = error == nil ? "Unknown error" : error!.localizedDescription
-                self.delegate?.loadingError(errorString)
+        if loader.loaderState != .Loading {
+            loader.callbackBlock = { success, error, loader in
+                if success {
+                    self.processModels()
+                    self.delegate?.itemsChanged()
+                } else {
+                    let errorString = error == nil ? "Unknown error" : error!.localizedDescription
+                    self.delegate?.loadingError(errorString)
+                }
             }
+            
+            loader.startLoad()
         }
-        
-        loader.startLoad()
     }
     
     func processModels() {

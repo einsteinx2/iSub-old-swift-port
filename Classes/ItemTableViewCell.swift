@@ -128,7 +128,7 @@ class ItemTableViewCell: DroppableCell {
         deleteToggleImageView.alpha = 0.0
         containerView.addSubview(deleteToggleImageView)
         
-        coverArtView.isLarge = false
+        coverArtView.large = false
         containerView.addSubview(coverArtView)
         
         trackNumberLabel.backgroundColor = UIColor.clearColor()

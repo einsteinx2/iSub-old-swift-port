@@ -8,6 +8,7 @@
 
 import UIKit
 import JASidePanels
+import libSub
 
 // KVO context pointer
 // Set up non-zero-sized storage. We don't intend to mutate this variable,
@@ -69,7 +70,7 @@ class SidePanelController: JASidePanelController {
     @objc private func draggingEnded(notification: NSNotification) {
         if self.state == JASidePanelRightVisible {
             EX2Dispatch.runInMainThreadAfterDelay(0.3) {
-                self.showCenterPanelAnimated(true)
+                //self.showCenterPanelAnimated(true)
             }
         }
         

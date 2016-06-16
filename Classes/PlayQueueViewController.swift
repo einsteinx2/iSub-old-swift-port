@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import JASidePanels
+import libSub
 
 class PlayQueueViewController: DraggableTableViewController {
 
@@ -43,11 +44,6 @@ class PlayQueueViewController: DraggableTableViewController {
         NSNotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingEnded, object: nil)
         NSNotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingCanceled, object: nil)
     }
-
-    override func loadView() {
-        super.loadView()
-        self.view.backgroundColor = UIColor.blackColor()
-    }
     
     // MARK - Drag and Drop -
     
@@ -57,7 +53,9 @@ class PlayQueueViewController: DraggableTableViewController {
     
     @objc private func draggingMoved(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            if let _ = userInfo[DraggableTableView.Notifications.itemKey] as? ISMSSong, location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
+            if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell where dragCell.dragItem is ISMSSong,
+               let location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
+                
                 var point = location.CGPointValue()
                 // Treat hovers over the top portion of the cell as the previous cell
                 point.y -= (ISMSNormalize(ISMSSongCellHeight) / 2.0)
@@ -81,24 +79,46 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     @objc private func draggingEnded(notification: NSNotification) {
+        var reloadTable = true
+        
         if visible, let userInfo = notification.userInfo {
-            if let song = userInfo[DraggableTableView.Notifications.itemKey] as? ISMSSong, location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
+            if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell,
+                   song = dragCell.dragItem as? ISMSSong,
+                   dragSourceTableView = userInfo[DraggableTableView.Notifications.dragSourceTableViewKey] as? UITableView,
+                   location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
+                
                 let point = location.CGPointValue()
                 let localPoint = self.view.convertPoint(point, fromView: nil)
                 if self.view.bounds.contains(localPoint) {
-                    viewModel.insertSongAtIndex(hoverRow + 1, song: song)
+                    if dragSourceTableView === self.tableView, let fromIndex = dragCell.indexPath?.row {
+                        let toIndex = hoverRow + 1
+                        if fromIndex != toIndex {
+                            viewModel.moveSong(fromIndex: fromIndex, toIndex: toIndex)
+                            reloadTable = false
+                        }
+                    } else {
+                        viewModel.insertSongAtIndex(hoverRow + 1, song: song)
+                        reloadTable = false
+                    }
                 }
             }
         }
         
+        if reloadTable {
+            self.tableView.reloadData()
+        }
         hoverRow = -1
     }
     
     @objc private func draggingCanceled(notification: NSNotification) {
+        self.tableView.reloadData()
         hoverRow = -1
     }
     
     override func customizeTableView(tableView: UITableView) {
+        // Move under the status bar
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 20))
+        
         tableView.backgroundColor = UIColor.clearColor()
         tableView.separatorColor = UIColor.blackColor()
         tableView.registerClass(ItemTableViewCell.self, forCellReuseIdentifier: itemReuseIdentifier)
