@@ -15,6 +15,4 @@
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 
-#import "UIView+AutoLayout.h"
-
 #endif

@@ -1,13 +1,13 @@
 PODS:
-  - Flurry-iOS-SDK (7.5.1):
-    - Flurry-iOS-SDK/FlurrySDK (= 7.5.1)
-  - Flurry-iOS-SDK/FlurrySDK (7.5.1)
-  - FMDB (2.6):
-    - FMDB/standard (= 2.6)
-  - FMDB/standard (2.6)
-  - HockeySDK (3.8.5):
-    - HockeySDK/AllFeaturesLib (= 3.8.5)
-  - HockeySDK/AllFeaturesLib (3.8.5)
+  - Flurry-iOS-SDK (7.6.4):
+    - Flurry-iOS-SDK/FlurrySDK (= 7.6.4)
+  - Flurry-iOS-SDK/FlurrySDK (7.6.4)
+  - FMDB (2.6.2):
+    - FMDB/standard (= 2.6.2)
+  - FMDB/standard (2.6.2)
+  - HockeySDK (4.0.1):
+    - HockeySDK/AllFeaturesLib (= 4.0.1)
+  - HockeySDK/AllFeaturesLib (4.0.1)
   - JASidePanels (1.3.2)
   - libSub (0.0.1):
     - Flurry-iOS-SDK
@@ -46,9 +46,9 @@ EXTERNAL SOURCES:
     :path: Frameworks/libSub/libSub.podspec
 
 SPEC CHECKSUMS:
-  Flurry-iOS-SDK: c0c162b6be03b259ca51fd91a026e6b8fb5ae97e
-  FMDB: c1968bab3ab0aed38f66cb778ae1e7fa9a652b6e
-  HockeySDK: dd11a2b9da3372fd025643bee5bc10c8c613d169
+  Flurry-iOS-SDK: 9da972687d3af9f48038dcd86eae9cad3acca456
+  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
+  HockeySDK: 1b69a82782f6a3d4a1c0b1f04dca4bca83fc8c82
   JASidePanels: c8f5b130e18d51ee3de988d1c1fad2f88e0b0d21
   libSub: 9fea7a3493385b5d2874839aa095e2842b0f74a3
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
@@ -60,4 +60,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: f5f2a4979b541141b4250af9d60f071c143ebc76
 
-COCOAPODS: 1.0.0.beta.3
+COCOAPODS: 1.0.1
