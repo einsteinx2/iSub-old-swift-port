@@ -10,7 +10,7 @@ import libSub
 import Foundation
 import UIKit
 
-class ItemViewController: DraggableTableViewController, AsynchronousImageViewDelegate {
+class ItemViewController: DraggableTableViewController {
     
     private let reuseIdentifier = "Item Cell"
     private let foldersSectionIndex   = 0
@@ -68,12 +68,12 @@ class ItemViewController: DraggableTableViewController, AsynchronousImageViewDel
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        viewModel.cancelLoad()
-        
         unregisterForNotifications()
     }
     
     deinit {
+        viewModel.cancelLoad()
+        
         unregisterForNotifications()
     }
     
