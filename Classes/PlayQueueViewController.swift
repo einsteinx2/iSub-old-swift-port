@@ -228,13 +228,15 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
     func itemsChanged() {
         self.tableView.reloadData()
         
-        let indexPath = NSIndexPath(forRow: self.viewModel.currentIndex, inSection: 0)
-        if visible {
-            EX2Dispatch.runInMainThreadAfterDelay(0.5) {
+        if viewModel.currentIndex > 0 && viewModel.currentIndex < viewModel.numberOfRows {
+            let indexPath = NSIndexPath(forRow: self.viewModel.currentIndex, inSection: 0)
+            if visible {
+                EX2Dispatch.runInMainThreadAfterDelay(0.3) {
+                    self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: self.visible)
+                }
+            } else {
                 self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: self.visible)
             }
-        } else {
-            self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: self.visible)
         }
     }
 }
