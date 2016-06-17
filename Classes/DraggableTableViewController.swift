@@ -12,6 +12,10 @@ import libSub
 
 class DraggableTableViewController: UITableViewController {
     
+    var draggableTableView: DraggableTableView {
+        return self.tableView as! DraggableTableView
+    }
+    
     // MARK: - Rotation -
     
     override func shouldAutorotate() -> Bool {

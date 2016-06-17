@@ -19,6 +19,12 @@ import UIKit
 
 class ItemTableViewCell: DroppableCell {
     
+    var indexPath: NSIndexPath? {
+        get {
+            return self.tableView?.indexPathForCell(self)
+        }
+    }
+    
     // Disabled for now until optimized
     let shouldRepositionLabels = false
     
@@ -28,8 +34,6 @@ class ItemTableViewCell: DroppableCell {
     var associatedObject: AnyObject?
     
     var indexShowing = false
-    
-    var indexPath: NSIndexPath?
     
     var searching = false
     

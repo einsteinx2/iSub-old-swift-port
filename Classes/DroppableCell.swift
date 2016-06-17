@@ -8,6 +8,7 @@
 
 import UIKit
 
+// Cell that expands to allow dropping underneath it
 class DroppableCell: UITableViewCell {
     
     let containerView = UIView()

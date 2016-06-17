@@ -27,7 +27,7 @@ class PlayQueueViewModel: NSObject {
     override init() {
         super.init()
         
-        reloadSongs()
+        reloadSongs(notifyDelegate: false)
         
         // Rather than loading the songs list all the time,
         NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(PlayQueueViewModel.playlistChanged(_:)), name: Playlist.Notifications.playlistChanged, object: nil)
@@ -37,21 +37,24 @@ class PlayQueueViewModel: NSObject {
     @objc private func playlistChanged(notification: NSNotification) {
         if let userInfo = notification.userInfo, playlistId = userInfo[Playlist.Notifications.playlistIdKey] as? Int {
             if playlistId == Playlist.playQueuePlaylistId {
-                reloadSongs()
+                reloadSongs(notifyDelegate: true)
             }
         }
     }
     
     @objc private func playQueueIndexChanged(notification: NSNotification) {
-        reloadSongs()
+        reloadSongs(notifyDelegate: true)
     }
     
-    private func reloadSongs() {
+    private func reloadSongs(notifyDelegate notifyDelegate: Bool) {
         let playQueue = PlayQueue.sharedInstance
         songs = playQueue.songs
         currentSong = playQueue.currentSong
         currentIndex = playQueue.currentIndex
-        delegate?.itemsChanged()
+        
+        if notifyDelegate {
+            delegate?.itemsChanged()
+        }
     }
     
     func songAtIndex(index: Int) -> ISMSSong {
@@ -67,6 +70,7 @@ class PlayQueueViewModel: NSObject {
     }
     
     func moveSong(fromIndex fromIndex: Int, toIndex: Int) {
-        PlayQueue.sharedInstance.playlist.moveSong(fromIndex: fromIndex, toIndex: toIndex)
+        PlayQueue.sharedInstance.moveSong(fromIndex: fromIndex, toIndex: toIndex)
+        reloadSongs(notifyDelegate: false)
     }
 }

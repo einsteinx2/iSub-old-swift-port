@@ -236,7 +236,6 @@ class ItemViewController: DraggableTableViewController {
             cell.accessoryType = UITableViewCellAccessoryType.None
             
             let song = viewModel.songs[indexPath.row]
-            cell.indexPath = indexPath
             cell.associatedObject = song
             cell.coverArtId = nil
             cell.trackNumber = song.trackNumber

@@ -21,6 +21,7 @@ import QuartzCore
 }
 
 @objc protocol DraggableCell: View {
+    var containerView: UIView { get }
     var draggable: Bool { get }
     var dragItem: ISMSItem? { get }
     var indexPath: NSIndexPath? { get }
@@ -64,6 +65,7 @@ class DraggableTableView: UITableView {
     var lastDeleteToggle = NSDate()
     
     var longPressTimer: NSTimer?
+    var dragIndexPath: NSIndexPath?
     var dragCell: DraggableCell?
     var dragCellAlpha: CGFloat = 1.0
     var dragImageView: UIImageView?
@@ -151,6 +153,7 @@ class DraggableTableView: UITableView {
         self.allowsSelection = false
         self.scrollEnabled = true
         dragCell = nil
+        dragIndexPath = nil
         
         // Handle long press
         if let touch = touches.first {
@@ -177,8 +180,9 @@ class DraggableTableView: UITableView {
     @objc private func longPressFired(notification: NSNotification) {
         if let userInfo = notification.userInfo, cell = userInfo[Notifications.dragCellKey] as? DraggableCell {
             self.scrollEnabled = false
+            dragIndexPath = cell.indexPath
             dragCell = cell
-            dragCellAlpha = cell.alpha
+            dragCellAlpha = cell.containerView.alpha
             
             let image = imageFromCell(cell)
             dragImageView = UIImageView(image: image)
@@ -205,7 +209,7 @@ class DraggableTableView: UITableView {
                 self.dragImageView!.frame.origin = origin
                 
                 // Dim the cell in the table
-                cell.alpha = 0.6
+                cell.containerView.alpha = 0.6
             }
             
             // Match the animation so movement is smooth
@@ -248,7 +252,7 @@ class DraggableTableView: UITableView {
                 
                 UIView.animateWithDuration(0.1) {
                     // Undo the cell dimming
-                    dragCell.alpha = self.dragCellAlpha
+                    dragCell.containerView.alpha = self.dragCellAlpha
                 }
             } else {
                 // Select the cell if this was not a long press

@@ -18,6 +18,7 @@ class PlayQueueViewController: DraggableTableViewController {
     private let viewModel: PlayQueueViewModel
     private let currentItemReuseIdentifier = "Current Item Cell"
     private let itemReuseIdentifier = "Item Cell"
+    private var internallyDragging = false
     private var visible: Bool {
         return self.sidePanelController.state == JASidePanelRightVisible
     }
@@ -48,13 +49,17 @@ class PlayQueueViewController: DraggableTableViewController {
     // MARK - Drag and Drop -
     
     @objc private func draggingBegan(notification: NSNotification) {
-        
+        if let userInfo = notification.userInfo, dragSourceTableView = userInfo[DraggableTableView.Notifications.dragSourceTableViewKey] as? UITableView {
+            internallyDragging = (dragSourceTableView == self.tableView)
+        } else {
+            internallyDragging = false
+        }
     }
     
     @objc private func draggingMoved(notification: NSNotification) {
         if let userInfo = notification.userInfo {
             if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell where dragCell.dragItem is ISMSSong,
-               let location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
+                let location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
                 
                 var point = location.CGPointValue()
                 // Treat hovers over the top portion of the cell as the previous cell
@@ -84,21 +89,44 @@ class PlayQueueViewController: DraggableTableViewController {
         if visible, let userInfo = notification.userInfo {
             if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell,
                    song = dragCell.dragItem as? ISMSSong,
-                   dragSourceTableView = userInfo[DraggableTableView.Notifications.dragSourceTableViewKey] as? UITableView,
                    location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
                 
                 let point = location.CGPointValue()
                 let localPoint = self.view.convertPoint(point, fromView: nil)
                 if self.view.bounds.contains(localPoint) {
-                    if dragSourceTableView === self.tableView, let fromIndex = dragCell.indexPath?.row {
-                        let toIndex = hoverRow + 1
-                        if fromIndex != toIndex {
-                            viewModel.moveSong(fromIndex: fromIndex, toIndex: toIndex)
-                            reloadTable = false
+                    if internallyDragging, let fromIndex = dragCell.indexPath?.row {
+                        if fromIndex != hoverRow {
+                            let toIndex = hoverRow + 1
+                            if fromIndex != toIndex {
+                                viewModel.moveSong(fromIndex: fromIndex, toIndex: toIndex)
+                                
+                                // TODO: Try and get this to animate well, too many issues right now
+//                                reloadTable = false
+//
+//                                // Close the hover row
+//                                let hoverIndexPath = NSIndexPath(forRow: self.hoverRow, inSection: 0)
+//                                self.hoverRow = -1
+//                                self.tableView.reloadRowsAtIndexPaths([hoverIndexPath], withRowAnimation: .None)
+//                                
+//                                // Move the rows by first dropping in the new row without animation, 
+//                                // then animating out the old row
+//                                self.tableView.beginUpdates()
+//                                let fromIndexPath = NSIndexPath(forRow: fromIndex, inSection: 0)
+//                                let toIndexForInsert = (fromIndex < toIndex) ? toIndex - 1 : toIndex
+//                                let toIndexPath = NSIndexPath(forRow: toIndexForInsert, inSection: 0)
+////                                self.tableView.insertRowsAtIndexPaths([toIndexPath], withRowAnimation: .None)
+////                                self.tableView.deleteRowsAtIndexPaths([fromIndexPath], withRowAnimation: .Left)
+//                                self.tableView.moveRowAtIndexPath(fromIndexPath, toIndexPath: toIndexPath)
+//                                self.tableView.endUpdates()
+//                                
+//                                // Reload the original moved row if we're moving down the playlist or it won't update
+//                                if fromIndex < toIndex {
+//                                    //self.tableView.reloadRowsAtIndexPaths([fromIndexPath], withRowAnimation: .None)
+//                                }
+                            }
                         }
-                    } else {
+                    } else if !internallyDragging {
                         viewModel.insertSongAtIndex(hoverRow + 1, song: song)
-                        reloadTable = false
                     }
                 }
             }
@@ -119,6 +147,12 @@ class PlayQueueViewController: DraggableTableViewController {
         // Move under the status bar
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 20))
         
+        // Allow the player to always move to the top
+        // TODO: Adjust this so that it never lets you move the player higher than the screen if 
+        // there are not more rows
+        let appHeight = UIScreen.mainScreen().applicationFrame.height
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: appHeight - 40))
+        
         tableView.backgroundColor = UIColor.clearColor()
         tableView.separatorColor = UIColor.blackColor()
         tableView.registerClass(ItemTableViewCell.self, forCellReuseIdentifier: itemReuseIdentifier)
@@ -134,12 +168,14 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        Swift.print("cellForRow \(indexPath.row)  song: \(viewModel.songAtIndex(indexPath.row).title)")
         let row = indexPath.row
         if row == viewModel.currentIndex, let cell = tableView.dequeueReusableCellWithIdentifier(currentItemReuseIdentifier, forIndexPath: indexPath) as? CurrentItemCell {
             cell.cellHeight = 60.0
             cell.accessoryType = .None
             cell.indexPath = indexPath
             cell.associatedObject = viewModel.songAtIndex(indexPath.row)
+            
             return cell
         } else if let cell = tableView.dequeueReusableCellWithIdentifier(itemReuseIdentifier, forIndexPath: indexPath) as? ItemTableViewCell {
             cell.alwaysShowSubtitle = true
@@ -147,22 +183,19 @@ class PlayQueueViewController: DraggableTableViewController {
             cell.accessoryType = .None
             
             let song = viewModel.songAtIndex(indexPath.row)
-            cell.indexPath = indexPath
             cell.associatedObject = song
             cell.coverArtId = nil
-            cell.trackNumber = song.trackNumber
             cell.title = song.title
             cell.subTitle = song.artist?.name
             cell.duration = song.duration
-            // TODO: Readd this with new data model
+            // TODO: Read this with new data model
             //cell.playing = song.isCurrentPlayingSong()
             
+            cell.backgroundView = UIView()
             if song.isFullyCached {
-                cell.backgroundView = UIView()
                 cell.backgroundView!.backgroundColor = ViewObjectsSingleton.sharedInstance().currentLightColor()
-            } else {
-                cell.backgroundView = UIView()
             }
+            
             return cell
         }
         
@@ -173,6 +206,14 @@ class PlayQueueViewController: DraggableTableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         var height = indexPath.row == viewModel.currentIndex ? 60.0 : ISMSNormalize(ISMSSongCellHeight)
         if indexPath.row == hoverRow {
+            // Don't visualize moves that are not possible
+            if internallyDragging, let draggedIndexPath = self.draggableTableView.dragIndexPath {
+                if hoverRow == draggedIndexPath.row || hoverRow == draggedIndexPath.row - 1 {
+                    return height
+                }
+            }
+            
+            // Otherwise expand it
             height += ISMSNormalize(ISMSSongCellHeight)
         }
         return height
