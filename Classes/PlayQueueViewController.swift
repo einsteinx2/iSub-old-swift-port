@@ -144,14 +144,11 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     override func customizeTableView(tableView: UITableView) {
-        // Move under the status bar
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 20))
-        
         // Allow the player to always move to the top
         // TODO: Adjust this so that it never lets you move the player higher than the screen if 
         // there are not more rows
         let appHeight = UIScreen.mainScreen().applicationFrame.height
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: appHeight - 40))
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: appHeight - 60))
         
         tableView.backgroundColor = UIColor.clearColor()
         tableView.separatorColor = UIColor.blackColor()

@@ -632,6 +632,9 @@
 		538A1CD41D12BCE000999E7F /* AsynchronousImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */; };
 		538A1CD51D12BCE300999E7F /* AsynchronousImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */; };
 		538A1CD61D12BCE400999E7F /* AsynchronousImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */; };
+		538A1CD91D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */; };
+		538A1CDA1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */; };
+		538A1CDB1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */; };
 		538C01B012C3DCC40061545B /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
 		538C01B112C3DCC40061545B /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
@@ -1475,6 +1478,8 @@
 		5388A42A1198AD840049BA9E /* selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected.png; path = Images/Other/selected.png; sourceTree = "<group>"; };
 		5388A42B1198AD840049BA9E /* unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unselected.png; path = Images/Other/unselected.png; sourceTree = "<group>"; };
 		538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsynchronousImageView.swift; sourceTree = "<group>"; };
+		538A1CD71D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+FixedHeightWhenStatusBarHidden.h"; sourceTree = "<group>"; };
+		538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+FixedHeightWhenStatusBarHidden.m"; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
 		538C01AF12C3DCC40061545B /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Images/Other/back@2x.png"; sourceTree = "<group>"; };
 		5392A1C11C90EB7B00ADE09E /* ServerEditDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerEditDelegate.h; sourceTree = "<group>"; };
@@ -2038,6 +2043,8 @@
 				5324C6C513345D75004E6C79 /* OBSlider.m */,
 				5349F14D16E9458B00E56582 /* IDTwitterAccountChooserViewController.h */,
 				5349F14E16E9458B00E56582 /* IDTwitterAccountChooserViewController.m */,
+				538A1CD71D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.h */,
+				538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */,
 			);
 			name = "3rd Party UI Components";
 			path = ..;
@@ -3738,6 +3745,7 @@
 				53ABE1491C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
 				532D9B43131AE19700FD8CA7 /* CustomUIAlertView.swift in Sources */,
+				538A1CD91D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				534FC5021CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				5324C6C613345D75004E6C79 /* OBSlider.m in Sources */,
@@ -3817,6 +3825,7 @@
 				53ABE14B1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
 				53BC282B139AF0DD00A825F1 /* CustomUIAlertView.swift in Sources */,
+				538A1CDB1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				534FC5041CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */,
@@ -3861,6 +3870,7 @@
 				53ABE14A1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */,
 				53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.swift in Sources */,
+				538A1CDA1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D31C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				534FC5031CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */,

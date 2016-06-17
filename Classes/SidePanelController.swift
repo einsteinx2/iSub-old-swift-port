@@ -13,7 +13,7 @@ import libSub
 // KVO context pointer
 // Set up non-zero-sized storage. We don't intend to mutate this variable,
 // but it needs to be `var` so we can pass its address in as UnsafeMutablePointer.
-//private var kvoContext = 0
+private var kvoContext = 0
 
 class SidePanelController: JASidePanelController {
         
@@ -29,7 +29,7 @@ class SidePanelController: JASidePanelController {
         super.viewDidLoad()
         
         // Setup KVO to hide and show the status bar when opening the side panels
-        //self.addObserver(self, forKeyPath: "state", options: .New, context: &kvoContext)
+        self.addObserver(self, forKeyPath: "state", options: .New, context: &kvoContext)
         
         // TODO: Look into custom side panel animations
         //self.pushesSidePanels = true
@@ -48,6 +48,10 @@ class SidePanelController: JASidePanelController {
         NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)
         NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
         NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+    }
+    
+    deinit {
+        self.removeObserver(self, forKeyPath: "state", context: &kvoContext)
     }
     
     @objc private func draggingBegan(notification: NSNotification) {
@@ -87,22 +91,18 @@ class SidePanelController: JASidePanelController {
         self.allowRightSwipe = true
     }
     
-//    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-//        if context == &kvoContext {
-//            switch self.state {
-//            case JASidePanelCenterVisible:
-//                UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Slide)
-//            case JASidePanelLeftVisible, JASidePanelRightVisible:
-//                UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
-//            default:
-//                break
-//            }
-//        } else {
-//            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
-//        }
-//    }
-//    
-//    deinit {
-//        self.removeObserver(self, forKeyPath: "state", context: &kvoContext)
-//    }
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if context == &kvoContext {
+            switch self.state {
+            case JASidePanelCenterVisible:
+                UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
+            case JASidePanelLeftVisible, JASidePanelRightVisible:
+                UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .None)
+            default:
+                break
+            }
+        } else {
+            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+        }
+    }
 }

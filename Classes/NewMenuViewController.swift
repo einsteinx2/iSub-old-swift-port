@@ -27,12 +27,15 @@ class NewMenuViewController: UITableViewController {
                              MenuItem(name: "Artists", function: showArtists),
                              MenuItem(name: "Settings", function: showSettings)];
     
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.blackColor()
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
         self.tableView.separatorStyle = .None
     }
     
@@ -58,6 +61,7 @@ class NewMenuViewController: UITableViewController {
             let viewController = ItemViewController(viewModel: viewModel)
             let navController = UINavigationController(rootViewController: viewController)
             navController.navigationBar.barStyle = .Black
+            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
             menuItem.navController = navController
         }
         
@@ -72,6 +76,7 @@ class NewMenuViewController: UITableViewController {
             let viewController = ItemViewController(viewModel: viewModel)
             let navController = UINavigationController(rootViewController: viewController)
             navController.navigationBar.barStyle = .Black
+            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
             menuItem.navController = navController
         }
         
@@ -83,6 +88,7 @@ class NewMenuViewController: UITableViewController {
             let viewController = ServerListViewController()
             let navController = UINavigationController(rootViewController: viewController)
             navController.navigationBar.barStyle = .Black
+            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
             menuItem.navController = navController
         }
         
