@@ -7,10 +7,11 @@
 //
 
 #import "iSubAppDelegate.h"
+#import "UAApplication.h"
 
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([iSubAppDelegate class]));
+        return UIApplicationMain(argc, argv, NSStringFromClass([UAApplication class]), NSStringFromClass([iSubAppDelegate class]));
     }
 }
