@@ -635,6 +635,9 @@
 		538A1CD91D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */; };
 		538A1CDA1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */; };
 		538A1CDB1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */; };
+		538A1CDD1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */; };
+		538A1CDE1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */; };
+		538A1CDF1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */; };
 		538C01B012C3DCC40061545B /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
 		538C01B112C3DCC40061545B /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
@@ -1230,6 +1233,9 @@
 		53DE59A314F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
 		53DE59A414F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
 		53DE59A514F1A7B000206529 /* controller-forw30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53DE599314F1A7B000206529 /* controller-forw30@2x.png */; };
+		53E7BC131D15751900FD8613 /* MiniPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */; };
+		53E7BC141D15751900FD8613 /* MiniPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */; };
+		53E7BC151D15751900FD8613 /* MiniPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */; };
 		53EB4AA61405FE1B00CBA075 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EB4AA51405FE1B00CBA075 /* libz.dylib */; };
 		53EB4AA71405FE2F00CBA075 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EB4AA51405FE1B00CBA075 /* libz.dylib */; };
 		53EB4AA81405FE3200CBA075 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EB4AA51405FE1B00CBA075 /* libz.dylib */; };
@@ -1480,6 +1486,7 @@
 		538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsynchronousImageView.swift; sourceTree = "<group>"; };
 		538A1CD71D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+FixedHeightWhenStatusBarHidden.h"; sourceTree = "<group>"; };
 		538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+FixedHeightWhenStatusBarHidden.m"; sourceTree = "<group>"; };
+		538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterPanelContainerViewController.swift; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
 		538C01AF12C3DCC40061545B /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Images/Other/back@2x.png"; sourceTree = "<group>"; };
 		5392A1C11C90EB7B00ADE09E /* ServerEditDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerEditDelegate.h; sourceTree = "<group>"; };
@@ -1607,6 +1614,7 @@
 		53DE599114F1A7B000206529 /* controller-extras-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-extras-on@2x.png"; path = "Images/Player Icons/controller-extras-on@2x.png"; sourceTree = "<group>"; };
 		53DE599214F1A7B000206529 /* controller-forw30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30.png"; path = "Images/Player Icons/controller-forw30.png"; sourceTree = "<group>"; };
 		53DE599314F1A7B000206529 /* controller-forw30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-forw30@2x.png"; path = "Images/Player Icons/controller-forw30@2x.png"; sourceTree = "<group>"; };
+		53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiniPlayerViewController.swift; sourceTree = "<group>"; };
 		53EB4AA51405FE1B00CBA075 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		53F0CD8111589F0A00A665CD /* progress-label-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "progress-label-background.png"; path = "Images/Other/progress-label-background.png"; sourceTree = "<group>"; };
 		53F1412015FD550C004D00D5 /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = buildnumber.xcconfig; path = Other/buildnumber.xcconfig; sourceTree = "<group>"; };
@@ -2013,6 +2021,8 @@
 			children = (
 				5333D10E1C654B5900DC19F4 /* SidePanelController.swift */,
 				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
+				538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */,
+				53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */,
 				5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */,
 				53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */,
 				53ABE1411C60363E00E0E72B /* ItemViewController.swift */,
@@ -3742,11 +3752,13 @@
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
 				5398F27811DA627500007870 /* HelpTabViewController.m in Sources */,
 				5327F58512B95D2900735119 /* StoreViewController.swift in Sources */,
+				538A1CDD1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
 				53ABE1491C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
 				532D9B43131AE19700FD8CA7 /* CustomUIAlertView.swift in Sources */,
 				538A1CD91D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */,
+				53E7BC131D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
 				534FC5021CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				5324C6C613345D75004E6C79 /* OBSlider.m in Sources */,
 				535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */,
@@ -3822,11 +3834,13 @@
 				53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */,
 				53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */,
 				53BC281D139AF0DD00A825F1 /* StoreViewController.swift in Sources */,
+				538A1CDF1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
 				53ABE14B1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
 				53BC282B139AF0DD00A825F1 /* CustomUIAlertView.swift in Sources */,
 				538A1CDB1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */,
+				53E7BC151D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
 				534FC5041CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */,
 				53BC283A139AF0DD00A825F1 /* DDSocialDialog.m in Sources */,
@@ -3867,11 +3881,13 @@
 				53DCF54313BFEAD3009160F9 /* SettingsTabViewController.m in Sources */,
 				53DCF54413BFEAD3009160F9 /* HelpTabViewController.m in Sources */,
 				53DCF57E13BFEAD3009160F9 /* StoreViewController.swift in Sources */,
+				538A1CDE1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
 				53ABE14A1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */,
 				53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.swift in Sources */,
 				538A1CDA1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D31C683E09009DE52A /* CancelBlocks.swift in Sources */,
+				53E7BC141D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
 				534FC5031CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */,
 				53DCF59B13BFEAD3009160F9 /* DDSocialDialog.m in Sources */,

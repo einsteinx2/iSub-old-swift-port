@@ -27,10 +27,8 @@ class NewMenuViewController: UITableViewController {
                              MenuItem(name: "Artists", function: showArtists),
                              MenuItem(name: "Settings", function: showSettings)];
     
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
-    
+    private let centerController = CenterPanelContainerViewController()
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.blackColor()
@@ -49,6 +47,8 @@ class NewMenuViewController: UITableViewController {
     }
     
     func showDefaultViewController() {
+        self.sidePanelController.centerPanel = centerController
+        
         let defaultMenuItem = menuItems[0]
         defaultMenuItem.function(self)(defaultMenuItem)
     }
@@ -65,7 +65,7 @@ class NewMenuViewController: UITableViewController {
             menuItem.navController = navController
         }
         
-        self.sidePanelController!.centerPanel = menuItem.navController
+        centerController.contentController = menuItem.navController
     }
     
     private func showArtists(menuItem: MenuItem) {
@@ -80,7 +80,7 @@ class NewMenuViewController: UITableViewController {
             menuItem.navController = navController
         }
         
-        self.sidePanelController!.centerPanel = menuItem.navController
+        centerController.contentController = menuItem.navController
     }
 
     private func showSettings(menuItem: MenuItem) {
@@ -92,7 +92,7 @@ class NewMenuViewController: UITableViewController {
             menuItem.navController = navController
         }
         
-        self.sidePanelController!.centerPanel = menuItem.navController
+        centerController.contentController = menuItem.navController
     }
     
     func showSettings() {
@@ -127,5 +127,8 @@ class NewMenuViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let menuItem = self.menuItems[indexPath.row]
         menuItem.function(self)(menuItem)
+        EX2Dispatch.runInMainThreadAfterDelay(0.2) {
+            self.sidePanelController.showCenterPanelAnimated(true)
+        }
     }
 }

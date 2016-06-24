@@ -240,7 +240,7 @@ class ItemViewController: DraggableTableViewController {
             cell.coverArtId = nil
             cell.trackNumber = song.trackNumber
             cell.title = song.title
-            cell.subTitle = song.artist?.name
+            cell.subTitle = song.artistDisplayName
             cell.duration = song.duration
             // TODO: Readd this with new data model
             //cell.playing = song.isCurrentPlayingSong()

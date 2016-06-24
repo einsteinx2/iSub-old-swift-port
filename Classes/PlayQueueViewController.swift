@@ -183,7 +183,7 @@ class PlayQueueViewController: DraggableTableViewController {
             cell.associatedObject = song
             cell.coverArtId = nil
             cell.title = song.title
-            cell.subTitle = song.artist?.name
+            cell.subTitle = song.artistDisplayName
             cell.duration = song.duration
             // TODO: Read this with new data model
             //cell.playing = song.isCurrentPlayingSong()
@@ -245,7 +245,7 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
             if let song = associatedObject as? ISMSSong {
                 coverArtView.coverArtId = song.coverArtId
                 songLabel.text = song.title
-                artistLabel.text = song.artist?.name
+                artistLabel.text = song.artistDisplayName
             }
         }
     }
@@ -265,20 +265,18 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
             make.width.equalTo(60)
         }
         
-        songLabel.font = UIFont.systemFontOfSize(14)
-        songLabel.textColor = UIColor.blackColor()
-        songLabel.textAlignment = .Center
+        songLabel.font = .systemFontOfSize(15)
+        songLabel.textColor = .blackColor()
         containerView.addSubview(songLabel)
         songLabel.snp_makeConstraints { make in
             make.top.equalTo(containerView)
             make.leading.equalTo(coverArtView.snp_trailing).offset(5)
             make.trailing.equalTo(containerView).inset(5)
-            make.height.equalTo(40)
+            make.height.equalTo(30)
         }
         
-        artistLabel.font = UIFont.systemFontOfSize(10)
-        artistLabel.textColor = UIColor.grayColor()
-        artistLabel.textAlignment = .Center
+        artistLabel.font = .systemFontOfSize(13)
+        artistLabel.textColor = .darkGrayColor()
         containerView.addSubview(artistLabel)
         artistLabel.snp_makeConstraints { make in
             make.top.equalTo(songLabel.snp_bottom)
