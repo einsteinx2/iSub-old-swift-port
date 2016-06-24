@@ -66,11 +66,12 @@ class PlayQueueViewModel: NSObject {
     }
     
     func insertSongAtIndex(index: Int, song: ISMSSong) {
-        PlayQueue.sharedInstance.playlist.insertSong(song: song, index: index)
+        PlayQueue.sharedInstance.insertSong(song: song, index: index, notify: false)
+        reloadSongs(notifyDelegate: false)
     }
     
     func moveSong(fromIndex fromIndex: Int, toIndex: Int) {
-        PlayQueue.sharedInstance.moveSong(fromIndex: fromIndex, toIndex: toIndex)
+        PlayQueue.sharedInstance.moveSong(fromIndex: fromIndex, toIndex: toIndex, notify: false)
         reloadSongs(notifyDelegate: false)
     }
 }

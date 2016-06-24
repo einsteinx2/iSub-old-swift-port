@@ -60,11 +60,11 @@ class DraggableTableView: UITableView {
     let VertSwipeDragMax = 80.0
     
     let cellEnableDelay = 1.0
-    let longPressDelay = 0.25
+    let longPressDelay = 0.33
     
     var lastDeleteToggle = NSDate()
     
-    var longPressTimer: NSTimer?
+    var longPressTimer: dispatch_source_t?
     var dragIndexPath: NSIndexPath?
     var dragCell: DraggableCell?
     var dragCellAlpha: CGFloat = 1.0
@@ -145,7 +145,9 @@ class DraggableTableView: UITableView {
     }
     
     private func cancelLongPress() {
-        longPressTimer?.invalidate();
+        if let longPressTimer = longPressTimer {
+            dispatch_source_cancel(longPressTimer)
+        }
         longPressTimer = nil
     }
     
@@ -168,7 +170,14 @@ class DraggableTableView: UITableView {
                         let location = NSValue(CGPoint: touch.locationInView(nil))
                         let userInfo = Notifications.userInfo(location: location, dragSourceTableView: self, dragCell: draggableCell)
                         
-                        longPressTimer = NSTimer.scheduledTimerWithTimeInterval(longPressDelay, target: self, selector: #selector(DraggableTableView.longPressFired(_:)), userInfo: userInfo, repeats: false);
+                        //NSRunLoop.mainRunLoop().addTimer(longPressTimer!, forMode: NSRunLoopCommonModes)
+                        longPressTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+                        dispatch_source_set_timer(longPressTimer!, DISPATCH_TIME_NOW, UInt64(longPressDelay * Double(NSEC_PER_SEC)), UInt64(0.25 * Double(NSEC_PER_SEC)));
+                        dispatch_source_set_event_handler(longPressTimer!) {
+                            self.longPressFired(userInfo)
+                            print("timer fired")
+                        }
+                        dispatch_resume(longPressTimer!)
                     }
                 }
             }
@@ -177,8 +186,8 @@ class DraggableTableView: UITableView {
         super.touchesBegan(touches, withEvent: event)
     }
     
-    @objc private func longPressFired(notification: NSNotification) {
-        if let userInfo = notification.userInfo, cell = userInfo[Notifications.dragCellKey] as? DraggableCell {
+    @objc private func longPressFired(userInfo: [NSObject: AnyObject]) {
+        if let cell = userInfo[Notifications.dragCellKey] as? DraggableCell {
             self.scrollEnabled = false
             dragIndexPath = cell.indexPath
             dragCell = cell
@@ -273,7 +282,7 @@ class DraggableTableView: UITableView {
         super.touchesEnded(touches, withEvent: event)
     }
     
-    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+    override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.allowsSelection = true
         self.scrollEnabled = true
         
@@ -281,7 +290,7 @@ class DraggableTableView: UITableView {
         
         if let dragCell = dragCell {
             var windowPoint = CGPointZero
-            if let touch = touches?.first {
+            if let touch = touches.first {
                 windowPoint = touch.locationInView(nil)
             }
             

@@ -63,9 +63,9 @@ class SidePanelController: JASidePanelController {
         if let location = notification.userInfo?[DraggableTableView.Notifications.locationKey] as? NSValue {
             let point = location.CGPointValue()
             
-            if point.x > self.view.frame.width - 100 && self.state != JASidePanelRightVisible {
+            if point.x > self.view.frame.width - 50 && self.state != JASidePanelRightVisible {
                 self.showRightPanelAnimated(true)
-            } else if point.x < 80 && self.state == JASidePanelRightVisible {
+            } else if point.x < 50 && self.state == JASidePanelRightVisible {
                 self.showCenterPanelAnimated(true)
             }
         }

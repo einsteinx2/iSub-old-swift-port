@@ -346,7 +346,7 @@ class ItemTableViewCell: DroppableCell {
 extension ItemTableViewCell: DraggableCell {
     var draggable: Bool {
         get {
-            return true
+            return associatedObject is ISMSSong
         }
     }
     
