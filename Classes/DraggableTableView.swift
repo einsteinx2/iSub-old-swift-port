@@ -282,7 +282,7 @@ class DraggableTableView: UITableView {
         super.touchesEnded(touches, withEvent: event)
     }
     
-    override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
         self.allowsSelection = true
         self.scrollEnabled = true
         
@@ -290,7 +290,7 @@ class DraggableTableView: UITableView {
         
         if let dragCell = dragCell {
             var windowPoint = CGPointZero
-            if let touch = touches.first {
+            if let touch = touches?.first {
                 windowPoint = touch.locationInView(nil)
             }
             
