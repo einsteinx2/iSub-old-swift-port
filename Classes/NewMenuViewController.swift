@@ -56,7 +56,7 @@ class NewMenuViewController: UITableViewController {
     
     fileprivate func showFolders(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
-            let loader = ISMSRootFoldersLoader()
+            let loader = RootFoldersLoader()
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
             let viewController = ItemViewController(viewModel: viewModel)

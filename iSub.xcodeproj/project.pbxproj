@@ -739,11 +739,6 @@
 		5358DD2C1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
 		5358DD2D1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
 		5358DD2E1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
-		5358DD341E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */; };
-		5358DD351E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */; };
-		5358DD361E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */; };
-		5358DD371E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */; };
-		5358DD381E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */; };
 		5358DD391E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
 		5358DD3A1E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
 		5358DD3B1E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
@@ -1604,6 +1599,11 @@
 		535B65FA1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */; };
 		535B65FB1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */; };
 		535B65FC1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */; };
+		535B661E1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B661D1E0C6A7C00B6F374 /* RootFoldersLoader.swift */; };
+		535B661F1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B661D1E0C6A7C00B6F374 /* RootFoldersLoader.swift */; };
+		535B66201E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B661D1E0C6A7C00B6F374 /* RootFoldersLoader.swift */; };
+		535B66211E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B661D1E0C6A7C00B6F374 /* RootFoldersLoader.swift */; };
+		535B66221E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B661D1E0C6A7C00B6F374 /* RootFoldersLoader.swift */; };
 		535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		535B7255134CEE1E003E0E1C /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
 		535B7274134D0900003E0E1C /* controller-bookmark-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726D134D0900003E0E1C /* controller-bookmark-ipad.png */; };
@@ -2827,8 +2827,6 @@
 		5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSPlaylistsLoader.m; sourceTree = "<group>"; };
 		5358DC3A1E0B78470024A0D4 /* ISMSRecursiveItemLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSRecursiveItemLoader.h; sourceTree = "<group>"; };
 		5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSRecursiveItemLoader.m; sourceTree = "<group>"; };
-		5358DC3E1E0B78470024A0D4 /* ISMSRootFoldersLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSRootFoldersLoader.h; sourceTree = "<group>"; };
-		5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSRootFoldersLoader.m; sourceTree = "<group>"; };
 		5358DC401E0B78470024A0D4 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusLoader.swift; sourceTree = "<group>"; };
 		5358DC421E0B78470024A0D4 /* ISMSCoverArtLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSCoverArtLoader.h; sourceTree = "<group>"; };
 		5358DC431E0B78470024A0D4 /* ISMSCoverArtLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSCoverArtLoader.m; sourceTree = "<group>"; };
@@ -3180,6 +3178,7 @@
 		5358E1D11E0B79210024A0D4 /* SwiftyStoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyStoreKit.framework; path = Carthage/Build/iOS/SwiftyStoreKit.framework; sourceTree = "<group>"; };
 		535A8899113F62DD00979783 /* default-album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art.png"; path = "Images/Other/default-album-art.png"; sourceTree = "<group>"; };
 		535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootAlbumsLoader.swift; sourceTree = "<group>"; };
+		535B661D1E0C6A7C00B6F374 /* RootFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootFoldersLoader.swift; sourceTree = "<group>"; };
 		535B7250134CEE1E003E0E1C /* DDSocialDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSocialDialog.h; sourceTree = "<group>"; };
 		535B7251134CEE1E003E0E1C /* DDSocialDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDSocialDialog.m; sourceTree = "<group>"; };
 		535B7252134CEE1E003E0E1C /* DDSocialLoginDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSocialLoginDialog.h; sourceTree = "<group>"; };
@@ -3738,7 +3737,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* Classes */ = {
+		080E96DDFE201D6D7F000001 /* iSub */ = {
 			isa = PBXGroup;
 			children = (
 				536F9D7D119783D4002E526A /* Main */,
@@ -3746,6 +3745,7 @@
 				539797F01162CE4B00F41D8B /* Old UI */,
 				536C97A416619845005A73C6 /* 3rd Party UI Components */,
 			);
+			name = iSub;
 			path = Classes;
 			sourceTree = "<group>";
 		};
@@ -3767,7 +3767,7 @@
 				536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */,
 				53CBB2D11C683E09009DE52A /* CancelBlocks.swift */,
 				5358DBE31E0B78470024A0D4 /* libSub */,
-				080E96DDFE201D6D7F000001 /* Classes */,
+				080E96DDFE201D6D7F000001 /* iSub */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -4137,8 +4137,7 @@
 				5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */,
 				536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */,
 				535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */,
-				5358DC3E1E0B78470024A0D4 /* ISMSRootFoldersLoader.h */,
-				5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */,
+				535B661D1E0C6A7C00B6F374 /* RootFoldersLoader.swift */,
 				5358DC401E0B78470024A0D4 /* StatusLoader.swift */,
 			);
 			path = "New Model";
@@ -6609,7 +6608,6 @@
 				5358E0551E0B789A0024A0D4 /* NSURL+QueryParameterDictionary.m in Sources */,
 				5358DF921E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
 				5358E1541E0B789A0024A0D4 /* EX2NavigationController.m in Sources */,
-				5358DD341E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */,
 				53835D4D1E0B7F9F0077B53D /* MKSKProduct.m in Sources */,
 				5358E0E11E0B789A0024A0D4 /* EX2ActionBlock.m in Sources */,
 				5358E14A1E0B789A0024A0D4 /* EX2InfinitePagingScrollView.m in Sources */,
@@ -6681,6 +6679,7 @@
 				5358DD611E0B78480024A0D4 /* NSMutableURLRequest+SUS.m in Sources */,
 				5358E0321E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358DCBC1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
+				535B661E1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				53835C5A1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E0D21E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
 				53835D351E0B7E9A0077B53D /* TBXML+Compression.m in Sources */,
@@ -6882,6 +6881,7 @@
 				5358E13E1E0B789A0024A0D4 /* EX2Dispatch.m in Sources */,
 				5358DCCE1E0B78470024A0D4 /* Playlist.swift in Sources */,
 				53159EB6156F69D0001B0268 /* StoreViewController.swift in Sources */,
+				535B66211E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				5358E1201E0B789A0024A0D4 /* RNDecryptor.m in Sources */,
 				53159EC3156F69D0001B0268 /* IntroViewController.m in Sources */,
 				5358DFD11E0B789A0024A0D4 /* NSData+Hash.m in Sources */,
@@ -6943,7 +6943,6 @@
 				5358DFF91E0B789A0024A0D4 /* NSObject+UserInfo.m in Sources */,
 				53835CEB1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				533C5EE31E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
-				5358DD371E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */,
 				5358DCB01E0B78470024A0D4 /* ISMSArtist.m in Sources */,
 				5358DF861E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53159F19156F69D0001B0268 /* iPadRootViewController.m in Sources */,
@@ -7237,12 +7236,12 @@
 				5358E0BD1E0B789A0024A0D4 /* UITableView+Shadows.m in Sources */,
 				5358DD0B1E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				5358E0091E0B789A0024A0D4 /* NSOrderedSet+Safe.m in Sources */,
+				535B66221E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				5358E0F91E0B789A0024A0D4 /* EX2Language.m in Sources */,
 				5358E08B1E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
 				53835D391E0B7E9A0077B53D /* TBXML+Compression.m in Sources */,
 				5358DFEB1E0B789A0024A0D4 /* NSNull+CleanString.m in Sources */,
 				5358DF821E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
-				5358DD381E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */,
 				5358DFA01E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				5358DFF51E0B789A0024A0D4 /* NSObject+ListMethods.m in Sources */,
 				5358E09F1E0B789A0024A0D4 /* UIImage+CustomStretch.m in Sources */,
@@ -7399,7 +7398,6 @@
 				5358E0571E0B789A0024A0D4 /* NSURL+QueryParameterDictionary.m in Sources */,
 				5358DF941E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
 				5358E1561E0B789A0024A0D4 /* EX2NavigationController.m in Sources */,
-				5358DD361E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */,
 				53835D4F1E0B7F9F0077B53D /* MKSKProduct.m in Sources */,
 				5358E0E31E0B789A0024A0D4 /* EX2ActionBlock.m in Sources */,
 				5358E14C1E0B789A0024A0D4 /* EX2InfinitePagingScrollView.m in Sources */,
@@ -7471,6 +7469,7 @@
 				5358DD631E0B78480024A0D4 /* NSMutableURLRequest+SUS.m in Sources */,
 				5358E0341E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358DCBE1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
+				535B66201E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				53835C5C1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E0D41E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
 				53835D371E0B7E9A0077B53D /* TBXML+Compression.m in Sources */,
@@ -7682,7 +7681,6 @@
 				5358E0561E0B789A0024A0D4 /* NSURL+QueryParameterDictionary.m in Sources */,
 				5358DF931E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
 				5358E1551E0B789A0024A0D4 /* EX2NavigationController.m in Sources */,
-				5358DD351E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */,
 				53835D4E1E0B7F9F0077B53D /* MKSKProduct.m in Sources */,
 				5358E0E21E0B789A0024A0D4 /* EX2ActionBlock.m in Sources */,
 				5358E14B1E0B789A0024A0D4 /* EX2InfinitePagingScrollView.m in Sources */,
@@ -7754,6 +7752,7 @@
 				5358DD621E0B78480024A0D4 /* NSMutableURLRequest+SUS.m in Sources */,
 				5358E0331E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358DCBD1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
+				535B661F1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				53835C5B1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E0D31E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
 				53835D361E0B7E9A0077B53D /* TBXML+Compression.m in Sources */,
