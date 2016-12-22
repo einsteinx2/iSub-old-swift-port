@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   entitlements-simulator.plist
+   iSub
+
+   Created by Benjamin Baron on 12/22/16.
+   Copyright (c) 2016 Ben Baron. All rights reserved.
+-->
+<plist version="1.0">
+    <dict>
+        <key>get-task-allow</key>
+        <true/>
+    </dict>
+</plist>

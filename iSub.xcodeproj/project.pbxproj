@@ -1661,6 +1661,11 @@
 		536E29191E0B94790097C2F6 /* libSystem.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 536E29141E0B94570097C2F6 /* libSystem.tbd */; };
 		536E291A1E0B94810097C2F6 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 536E29121E0B94500097C2F6 /* libxml2.tbd */; };
 		536E291B1E0B94870097C2F6 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 536E29101E0B94490097C2F6 /* libz.tbd */; };
+		536E29231E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
+		536E29241E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
+		536E29251E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
+		536E29261E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
+		536E29271E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
@@ -3214,6 +3219,7 @@
 		536E29101E0B94490097C2F6 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		536E29121E0B94500097C2F6 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		536E29141E0B94570097C2F6 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
+		536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "entitlements-simulator.plist"; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537E9A0814F323EE006CB0BC /* UIViewController+PushViewControllerCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PushViewControllerCustom.h"; sourceTree = "<group>"; };
 		537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PushViewControllerCustom.m"; sourceTree = "<group>"; };
@@ -3753,6 +3759,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */,
 				53CBB2D11C683E09009DE52A /* CancelBlocks.swift */,
 				5358DBE31E0B78470024A0D4 /* libSub */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -5364,6 +5371,7 @@
 				536D624411444E4600DFCE56 /* Icon.png in Resources */,
 				53AA300411461A04003E57E3 /* background.png in Resources */,
 				534E443F1155AD01000B4134 /* default-album-art-small.png in Resources */,
+				536E29231E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */,
 				53649DD2184DA99B00E600EC /* Icon-76.png in Resources */,
 				5305C2061157F4F800BC78F0 /* Default.png in Resources */,
 				53F0CD8211589F0A00A665CD /* progress-label-background.png in Resources */,
@@ -5724,6 +5732,7 @@
 				53159DC3156F69D0001B0268 /* home-quick-ipad.png in Resources */,
 				53159DC4156F69D0001B0268 /* home-quick.png in Resources */,
 				5358E1891E0B789B0024A0D4 /* table-fade-top.png in Resources */,
+				536E29261E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */,
 				53159DC5156F69D0001B0268 /* home-quick@2x.png in Resources */,
 				53159DC6156F69D0001B0268 /* home-settings-ipad.png in Resources */,
 				53159DC7156F69D0001B0268 /* home-settings.png in Resources */,
@@ -5879,6 +5888,7 @@
 				D09496D61C6058BC00781B51 /* (null) in Resources */,
 				5358E1761E0B789B0024A0D4 /* EX2TabBarController.xib in Resources */,
 				53835D671E0B80140077B53D /* MKStoreKitConfigs.plist in Resources */,
+				536E29271E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */,
 				5358E1621E0B789A0024A0D4 /* EX2NotificationBar.xib in Resources */,
 				5358E1851E0B789B0024A0D4 /* table-fade-bottom@2x.png in Resources */,
 				D09496DB1C6058BC00781B51 /* (null) in Resources */,
@@ -5977,6 +5987,7 @@
 				53BC2702139AF0DD00A825F1 /* controller-bookmark.png in Resources */,
 				53BC2703139AF0DD00A825F1 /* controller-bookmark@2x.png in Resources */,
 				53BC270C139AF0DD00A825F1 /* comment-write.png in Resources */,
+				536E29251E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */,
 				53BC270D139AF0DD00A825F1 /* comment-write-pressed.png in Resources */,
 				53BC270E139AF0DD00A825F1 /* chat-tabbaricon.png in Resources */,
 				53BC270F139AF0DD00A825F1 /* chat-tabbaricon@2x.png in Resources */,
@@ -6178,6 +6189,7 @@
 				53DCF40E13BFEAD3009160F9 /* Icon.png in Resources */,
 				53DCF40F13BFEAD3009160F9 /* background.png in Resources */,
 				53DCF41013BFEAD3009160F9 /* default-album-art-small.png in Resources */,
+				536E29241E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */,
 				53649DD3184DA99B00E600EC /* Icon-76.png in Resources */,
 				53DCF41113BFEAD3009160F9 /* Default.png in Resources */,
 				53DCF41213BFEAD3009160F9 /* progress-label-background.png in Resources */,
@@ -7854,8 +7866,6 @@
 				CLANG_ANALYZER_OBJC_UNUSED_IVARS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -7885,8 +7895,6 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isub;
 				PRODUCT_NAME = iSub;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
@@ -7902,8 +7910,6 @@
 				CLANG_ANALYZER_OBJC_UNUSED_IVARS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -7931,8 +7937,6 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isub;
 				PRODUCT_NAME = iSub;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ab58f1fb-b624-4505-8426-473c254b3583";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0.1;
@@ -7955,8 +7959,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -8014,8 +8017,6 @@
 				CLANG_ANALYZER_OBJC_UNUSED_IVARS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -8045,8 +8046,6 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isub;
 				PRODUCT_NAME = iSub;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "393f3605-1bb4-4ffa-9ced-481dd2b699c5";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
@@ -8348,8 +8347,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8383,8 +8380,6 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
@@ -8403,8 +8398,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron (7596YH3S97)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8438,9 +8431,6 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c55d206f-318f-41a2-b9a8-75945e5ae6b6";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
@@ -8459,8 +8449,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8492,8 +8480,6 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0.1;
@@ -8509,8 +8495,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -8543,8 +8527,6 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isublite;
 				PRODUCT_NAME = "iSub Lite";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
@@ -8559,8 +8541,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -8593,7 +8573,6 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isublite;
 				PRODUCT_NAME = "iSub Lite";
-				PROVISIONING_PROFILE = "72229d33-adcb-4f2d-aa96-0d27ced62c56";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
@@ -8608,8 +8587,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -8640,8 +8617,6 @@
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isublite;
 				PRODUCT_NAME = "iSub Lite";
-				PROVISIONING_PROFILE = "c07ae6c0-72aa-452a-b8f7-c8cd4a55d596";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c07ae6c0-72aa-452a-b8f7-c8cd4a55d596";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0.1;
@@ -8664,8 +8639,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Baron (T2FQV5U2DH)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Benjamin Baron (T2FQV5U2DH)";
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = "entitlements-simulator.plist";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -8730,8 +8705,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Benjamin Baron";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Benjamin Baron";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Frameworks\"";
