@@ -24,8 +24,9 @@ class NewMenuViewController: UITableViewController {
     
     fileprivate let reuseIdentifier = "Menu Cell"
     fileprivate let menuItems = [MenuItem(name: "Folders", function: showFolders),
-                             MenuItem(name: "Artists", function: showArtists),
-                             MenuItem(name: "Settings", function: showSettings)];
+                                 MenuItem(name: "Artists", function: showArtists),
+                                 MenuItem(name: "Albums", function: showAlbums),
+                                 MenuItem(name: "Settings", function: showSettings)];
     
     fileprivate let centerController = CenterPanelContainerViewController()
         
@@ -70,7 +71,22 @@ class NewMenuViewController: UITableViewController {
     
     fileprivate func showArtists(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
-            let loader = ISMSRootArtistsLoader()
+            let loader = RootArtistsLoader()
+            let viewModel = ItemViewModel(loader: loader)
+            viewModel.topLevelController = true
+            let viewController = ItemViewController(viewModel: viewModel)
+            let navController = UINavigationController(rootViewController: viewController)
+            navController.navigationBar.barStyle = .black
+            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
+            menuItem.navController = navController
+        }
+        
+        centerController.contentController = menuItem.navController
+    }
+    
+    fileprivate func showAlbums(_ menuItem: MenuItem) {
+        if menuItem.navController == nil {
+            let loader = RootAlbumsLoader()
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
             let viewController = ItemViewController(viewModel: viewModel)

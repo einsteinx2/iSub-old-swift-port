@@ -35,6 +35,9 @@
 #import <libxml/xpath.h>
 #import <libxml/xpathInternals.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullability-completeness"
+
 @interface RXMLDocHolder : NSObject {
     xmlDocPtr doc_;
 }
@@ -94,20 +97,22 @@
 - (NSArray *)children:(NSString *)tag inNamespace:(NSString *)ns;
 - (NSArray *)childrenWithRootXPath:(NSString *)xpath;
 
-- (void)iterate:(NSString *)query usingBlock:(void (^)(RXMLElement *))blk;
-- (void)iterateWithRootXPath:(NSString *)xpath usingBlock:(void (^)(RXMLElement *))blk;
-- (void)iterateElements:(NSArray *)elements usingBlock:(void (^)(RXMLElement *))blk;
+#pragma clang diagnostic pop
 
-@property (nonatomic, strong) RXMLDocHolder *xmlDoc;
-@property (nonatomic, readonly) NSString *tag;
-@property (nonatomic, readonly) NSString *text;
-@property (nonatomic, readonly) NSString *xml;
-@property (nonatomic, readonly) NSString *innerXml;
+- (void)iterate:(nonnull NSString *)query usingBlock:(nonnull void (^)(RXMLElement * _Nonnull))blk;
+- (void)iterateWithRootXPath:(nonnull NSString *)xpath usingBlock:(nonnull void (^)(RXMLElement * _Nonnull))blk;
+- (void)iterateElements:(nonnull NSArray *)elements usingBlock:(nonnull void (^)(RXMLElement * _Nonnull))blk;
+
+@property (nonatomic, strong) RXMLDocHolder * _Nullable xmlDoc;
+@property (nonatomic, readonly) NSString * _Nonnull tag;
+@property (nonatomic, readonly) NSString * _Nonnull text;
+@property (nonatomic, readonly) NSString * _Nonnull xml;
+@property (nonatomic, readonly) NSString * _Nonnull innerXml;
 @property (nonatomic, readonly) NSInteger textAsInt;
 @property (nonatomic, readonly) double textAsDouble;
 @property (nonatomic, readonly) BOOL isValid;
 
 @end
 
-typedef void (^RXMLBlock)(RXMLElement *element);
+typedef void (^RXMLBlock)(RXMLElement *_Nonnull element);
 

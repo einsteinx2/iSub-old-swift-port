@@ -739,11 +739,6 @@
 		5358DD2C1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
 		5358DD2D1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
 		5358DD2E1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
-		5358DD2F1E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3D1E0B78470024A0D4 /* ISMSRootArtistsLoader.m */; };
-		5358DD301E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3D1E0B78470024A0D4 /* ISMSRootArtistsLoader.m */; };
-		5358DD311E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3D1E0B78470024A0D4 /* ISMSRootArtistsLoader.m */; };
-		5358DD321E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3D1E0B78470024A0D4 /* ISMSRootArtistsLoader.m */; };
-		5358DD331E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3D1E0B78470024A0D4 /* ISMSRootArtistsLoader.m */; };
 		5358DD341E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */; };
 		5358DD351E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */; };
 		5358DD361E0B78480024A0D4 /* ISMSRootFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */; };
@@ -1604,6 +1599,11 @@
 		5358E1F31E0B792C0024A0D4 /* SwiftyStoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5358E1D11E0B79210024A0D4 /* SwiftyStoreKit.framework */; };
 		5358E1F41E0B792C0024A0D4 /* SwiftyStoreKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5358E1D11E0B79210024A0D4 /* SwiftyStoreKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		535A889A113F62DD00979783 /* default-album-art.png in Resources */ = {isa = PBXBuildFile; fileRef = 535A8899113F62DD00979783 /* default-album-art.png */; };
+		535B65F81E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */; };
+		535B65F91E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */; };
+		535B65FA1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */; };
+		535B65FB1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */; };
+		535B65FC1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */; };
 		535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7251134CEE1E003E0E1C /* DDSocialDialog.m */; };
 		535B7255134CEE1E003E0E1C /* DDSocialLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 535B7253134CEE1E003E0E1C /* DDSocialLoginDialog.m */; };
 		535B7274134D0900003E0E1C /* controller-bookmark-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B726D134D0900003E0E1C /* controller-bookmark-ipad.png */; };
@@ -1666,6 +1666,11 @@
 		536E29251E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
 		536E29261E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
 		536E29271E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
+		536E29301E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */; };
+		536E29311E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */; };
+		536E29321E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */; };
+		536E29331E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */; };
+		536E29341E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
@@ -2822,8 +2827,6 @@
 		5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSPlaylistsLoader.m; sourceTree = "<group>"; };
 		5358DC3A1E0B78470024A0D4 /* ISMSRecursiveItemLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSRecursiveItemLoader.h; sourceTree = "<group>"; };
 		5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSRecursiveItemLoader.m; sourceTree = "<group>"; };
-		5358DC3C1E0B78470024A0D4 /* ISMSRootArtistsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSRootArtistsLoader.h; sourceTree = "<group>"; };
-		5358DC3D1E0B78470024A0D4 /* ISMSRootArtistsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSRootArtistsLoader.m; sourceTree = "<group>"; };
 		5358DC3E1E0B78470024A0D4 /* ISMSRootFoldersLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSRootFoldersLoader.h; sourceTree = "<group>"; };
 		5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSRootFoldersLoader.m; sourceTree = "<group>"; };
 		5358DC401E0B78470024A0D4 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusLoader.swift; sourceTree = "<group>"; };
@@ -3176,6 +3179,7 @@
 		5358E1D01E0B79210024A0D4 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		5358E1D11E0B79210024A0D4 /* SwiftyStoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyStoreKit.framework; path = Carthage/Build/iOS/SwiftyStoreKit.framework; sourceTree = "<group>"; };
 		535A8899113F62DD00979783 /* default-album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art.png"; path = "Images/Other/default-album-art.png"; sourceTree = "<group>"; };
+		535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootAlbumsLoader.swift; sourceTree = "<group>"; };
 		535B7250134CEE1E003E0E1C /* DDSocialDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSocialDialog.h; sourceTree = "<group>"; };
 		535B7251134CEE1E003E0E1C /* DDSocialDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDSocialDialog.m; sourceTree = "<group>"; };
 		535B7252134CEE1E003E0E1C /* DDSocialLoginDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSocialLoginDialog.h; sourceTree = "<group>"; };
@@ -3220,6 +3224,7 @@
 		536E29121E0B94500097C2F6 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		536E29141E0B94570097C2F6 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
 		536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "entitlements-simulator.plist"; sourceTree = "<group>"; };
+		536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootArtistsLoader.swift; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537E9A0814F323EE006CB0BC /* UIViewController+PushViewControllerCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PushViewControllerCustom.h"; sourceTree = "<group>"; };
 		537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PushViewControllerCustom.m"; sourceTree = "<group>"; };
@@ -3918,8 +3923,8 @@
 			isa = PBXGroup;
 			children = (
 				5333D10E1C654B5900DC19F4 /* SidePanelController.swift */,
-				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
 				538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */,
+				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
 				53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */,
 				5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */,
 				53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */,
@@ -4059,14 +4064,14 @@
 		5358DC121E0B78470024A0D4 /* Server Loading */ = {
 			isa = PBXGroup;
 			children = (
+				5358DC251E0B78470024A0D4 /* Loaders */,
+				5358DC171E0B78470024A0D4 /* ISMSStreamManager */,
 				5358DC131E0B78470024A0D4 /* HLSProxyConnection.h */,
 				5358DC141E0B78470024A0D4 /* HLSProxyConnection.m */,
 				5358DC151E0B78470024A0D4 /* HLSProxyResponse.h */,
 				5358DC161E0B78470024A0D4 /* HLSProxyResponse.m */,
-				5358DC171E0B78470024A0D4 /* ISMSStreamManager */,
 				5358DC231E0B78470024A0D4 /* ISMSUpdateChecker.h */,
 				5358DC241E0B78470024A0D4 /* ISMSUpdateChecker.m */,
-				5358DC251E0B78470024A0D4 /* Loaders */,
 				5358DC4E1E0B78470024A0D4 /* NSMutableURLRequest+PMS.h */,
 				5358DC4F1E0B78470024A0D4 /* NSMutableURLRequest+PMS.m */,
 				5358DC501E0B78470024A0D4 /* NSMutableURLRequest+SUS.h */,
@@ -4130,8 +4135,8 @@
 				5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */,
 				5358DC3A1E0B78470024A0D4 /* ISMSRecursiveItemLoader.h */,
 				5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */,
-				5358DC3C1E0B78470024A0D4 /* ISMSRootArtistsLoader.h */,
-				5358DC3D1E0B78470024A0D4 /* ISMSRootArtistsLoader.m */,
+				536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */,
+				535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */,
 				5358DC3E1E0B78470024A0D4 /* ISMSRootFoldersLoader.h */,
 				5358DC3F1E0B78470024A0D4 /* ISMSRootFoldersLoader.m */,
 				5358DC401E0B78470024A0D4 /* StatusLoader.swift */,
@@ -6618,7 +6623,6 @@
 				5358E01E1E0B789A0024A0D4 /* NSString+FileSize.m in Sources */,
 				535142651A4664A400674DE2 /* DraggableTableView.swift in Sources */,
 				5358E0FA1E0B789A0024A0D4 /* EX2NetworkIndicator.m in Sources */,
-				5358DD2F1E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */,
 				5358DCDA1E0B78470024A0D4 /* LibSub.m in Sources */,
 				5358DC801E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				5358E06E1E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
@@ -6667,6 +6671,7 @@
 				5358E0461E0B789A0024A0D4 /* NSString+TrimmingAdditions.m in Sources */,
 				5358E0DC1E0B789A0024A0D4 /* UIWebView+HideShadows.m in Sources */,
 				53835D3A1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */,
+				535B65F81E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				533C5ED11E0B8DFC00802FB1 /* String.swift in Sources */,
 				5358E1271E0B789A0024A0D4 /* RNOpenSSLCryptor.m in Sources */,
 				53835CA21E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
@@ -6698,6 +6703,7 @@
 				53CD9DB51C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				5358DCD01E0B78470024A0D4 /* SectionIndex.swift in Sources */,
 				5358E0E61E0B789A0024A0D4 /* EX2ActionQueue.m in Sources */,
+				536E29301E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
 				537E9A3114F43F43006CB0BC /* StackContainerView.m in Sources */,
 				5358DD7F1E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				53835CA71E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
@@ -6826,6 +6832,7 @@
 				5358E0031E0B789A0024A0D4 /* NSOrderedSet+FirstObject.m in Sources */,
 				5358E0121E0B789A0024A0D4 /* NSString+Clean.m in Sources */,
 				53835CFA1E0B7D6D0077B53D /* ZKLog.m in Sources */,
+				535B65FB1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				5358DD461E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */,
 				5358DD411E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */,
 				5358E1391E0B789A0024A0D4 /* EX2Kit.m in Sources */,
@@ -6843,7 +6850,6 @@
 				5358DCC41E0B78470024A0D4 /* ISMSMediaFolder.m in Sources */,
 				5358E1111E0B789A0024A0D4 /* RNCryptor.m in Sources */,
 				5358DCD31E0B78470024A0D4 /* SectionIndex.swift in Sources */,
-				5358DD321E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */,
 				5358DDA01E0B78480024A0D4 /* FMDatabasePoolAdditions.m in Sources */,
 				5358DF311E0B789A0024A0D4 /* HTTPConnection.m in Sources */,
 				53835CCD1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
@@ -6900,6 +6906,7 @@
 				5358DF681E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */,
 				5358E0941E0B789A0024A0D4 /* UIImage+Color.m in Sources */,
 				5358E0AD1E0B789A0024A0D4 /* UIImage+Tint.m in Sources */,
+				536E29331E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
 				53835CC31E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				5358DD8C1E0B78480024A0D4 /* PlayQueue.swift in Sources */,
 				53835CAF1E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
@@ -7095,6 +7102,7 @@
 				53835C9C1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				5358DD1A1E0B78470024A0D4 /* ISMSArtistLoader.m in Sources */,
 				5358DF0F1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */,
+				536E29341E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
 				5358E1031E0B789A0024A0D4 /* EX2Reachability.m in Sources */,
 				5358E05E1E0B789A0024A0D4 /* NSURL+SkipBackupAttribute.m in Sources */,
 				5358DD061E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */,
@@ -7145,6 +7153,7 @@
 				5358DF8C1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				5358DF231E0B78990024A0D4 /* DDNumber.m in Sources */,
 				5358DDB01E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
+				535B65FC1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				5358DFB91E0B789A0024A0D4 /* NSArray+Reverse.m in Sources */,
 				5358E0F41E0B789A0024A0D4 /* EX2FileEncryptor.m in Sources */,
 				53835C4A1E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */,
@@ -7242,7 +7251,6 @@
 				5358DCF21E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */,
 				53835C541E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */,
 				5358DFBE1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
-				5358DD331E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */,
 				5358E1351E0B789A0024A0D4 /* RNOpenSSLEncryptor.m in Sources */,
 				530F639C1A3FC78C006D7666 /* Defines.swift in Sources */,
 				5358DCBB1E0B78470024A0D4 /* ISMSFolder.m in Sources */,
@@ -7405,7 +7413,6 @@
 				5358E0201E0B789A0024A0D4 /* NSString+FileSize.m in Sources */,
 				535142671A4664A400674DE2 /* DraggableTableView.swift in Sources */,
 				5358E0FC1E0B789A0024A0D4 /* EX2NetworkIndicator.m in Sources */,
-				5358DD311E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */,
 				5358DCDC1E0B78470024A0D4 /* LibSub.m in Sources */,
 				5358DC821E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				5358E0701E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
@@ -7454,6 +7461,7 @@
 				5358E0481E0B789A0024A0D4 /* NSString+TrimmingAdditions.m in Sources */,
 				5358E0DE1E0B789A0024A0D4 /* UIWebView+HideShadows.m in Sources */,
 				53835D3C1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */,
+				535B65FA1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				533C5ED31E0B8DFC00802FB1 /* String.swift in Sources */,
 				5358E1291E0B789A0024A0D4 /* RNOpenSSLCryptor.m in Sources */,
 				53835CA41E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
@@ -7485,6 +7493,7 @@
 				53CD9DB71C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				5358DCD21E0B78470024A0D4 /* SectionIndex.swift in Sources */,
 				5358E0E81E0B789A0024A0D4 /* EX2ActionQueue.m in Sources */,
+				536E29321E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
 				537E9A3314F43F43006CB0BC /* StackContainerView.m in Sources */,
 				5358DD811E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				53835CA91E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
@@ -7687,7 +7696,6 @@
 				5358E01F1E0B789A0024A0D4 /* NSString+FileSize.m in Sources */,
 				535142661A4664A400674DE2 /* DraggableTableView.swift in Sources */,
 				5358E0FB1E0B789A0024A0D4 /* EX2NetworkIndicator.m in Sources */,
-				5358DD301E0B78480024A0D4 /* ISMSRootArtistsLoader.m in Sources */,
 				5358DCDB1E0B78470024A0D4 /* LibSub.m in Sources */,
 				5358DC811E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				5358E06F1E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
@@ -7736,6 +7744,7 @@
 				5358E0471E0B789A0024A0D4 /* NSString+TrimmingAdditions.m in Sources */,
 				5358E0DD1E0B789A0024A0D4 /* UIWebView+HideShadows.m in Sources */,
 				53835D3B1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */,
+				535B65F91E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				533C5ED21E0B8DFC00802FB1 /* String.swift in Sources */,
 				5358E1281E0B789A0024A0D4 /* RNOpenSSLCryptor.m in Sources */,
 				53835CA31E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
@@ -7767,6 +7776,7 @@
 				53CD9DB61C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				5358DCD11E0B78470024A0D4 /* SectionIndex.swift in Sources */,
 				5358E0E71E0B789A0024A0D4 /* EX2ActionQueue.m in Sources */,
+				536E29311E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
 				537E9A3214F43F43006CB0BC /* StackContainerView.m in Sources */,
 				5358DD801E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				53835CA81E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
