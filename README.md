@@ -1,10 +1,10 @@
 # \#iSUBFOREVER - iSub is back!
 
 ### How to build
-0. Install Cocoapods: `sudo gem install cocoapods`
-1. Clone submodules: `git submodule update --init --recursive`
-2. Install pod dependencies: `pod install`
-3. Run the **iSub Beta** target. Ensure that you use **iSub.xcworkspace** instead of iSub.xcodeproj.
+0. Clone the repository
+1. Install Carthage: `brew install carthage` or `https://github.com/Carthage/Carthage/releases`
+2. Update Carthage frameworks: `carthage update --platform ios`
+3. Run the **iSub Beta** target.
 
 ### Contributing
 1. Fork the repo
