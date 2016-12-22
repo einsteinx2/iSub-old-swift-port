@@ -179,8 +179,12 @@
     if (self.showIntro)
     {
         self.showIntro = NO;
-        IntroViewController *vc = [[IntroViewController alloc] init];
-        [self.sidePanelController presentViewController:vc animated:NO completion:nil];
+        
+        // Fixes unbalanced transition warning
+        [EX2Dispatch runInMainThreadAfterDelay:0.1 block:^{
+            IntroViewController *vc = [[IntroViewController alloc] init];
+            [self.sidePanelController presentViewController:vc animated:NO completion:nil];
+        }];
     }
     
     [self checkServer];

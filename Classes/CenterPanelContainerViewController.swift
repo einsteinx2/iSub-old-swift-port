@@ -32,27 +32,27 @@ class CenterPanelContainerViewController: UIViewController {
     override func loadView() {
         self.view = UIView()
         
+        let hideMiniPlayer = (PlayQueue.sharedInstance.currentSong == nil)
+        
         self.view.addSubview(contentView)
         contentView.snp.makeConstraints { make in
-            make.width.equalTo(self.view)
-            make.top.equalTo(self.view)
-            make.bottom.equalTo(self.view).offset(-50)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview().offset(hideMiniPlayer ? 0 : -50)
         }
         
         self.view.addSubview(miniPlayer.view)
         miniPlayer.view.snp.makeConstraints { make in
             make.height.equalTo(50)
-            make.width.equalTo(self.view)
-            make.bottom.equalTo(self.view).offset(0)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview().offset(hideMiniPlayer ? 50 : 0)
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if PlayQueue.sharedInstance.currentSong == nil {
-            hideMiniPlayer(animated: false)
-        }
         
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(CenterPanelContainerViewController.indexChanged), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
     }
@@ -106,10 +106,10 @@ class CenterPanelContainerViewController: UIViewController {
     }
     
     fileprivate func updateConstraintOffsets(contentViewOffset: Float, miniPlayerOffset: Float, animated: Bool) {
-        contentView.snp.updateConstraints { make in make.bottom.equalTo(self.view).offset(contentViewOffset) }
+        contentView.snp.updateConstraints { make in make.bottom.equalToSuperview().offset(contentViewOffset) }
         contentView.setNeedsLayout()
         
-        miniPlayer.view.snp.updateConstraints { make in make.bottom.equalTo(self.view).offset(miniPlayerOffset) }
+        miniPlayer.view.snp.updateConstraints { make in make.bottom.equalToSuperview().offset(miniPlayerOffset) }
         miniPlayer.view.setNeedsLayout()
         
         if animated {

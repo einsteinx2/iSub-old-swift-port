@@ -21,10 +21,10 @@ class MiniPlayerViewController: UIViewController {
         
         self.view.addSubview(coverArtView)
         coverArtView.snp.makeConstraints { make in
-            make.left.equalTo(self.view)
-            make.top.equalTo(self.view)
-            make.bottom.equalTo(self.view)
-            make.width.equalTo(coverArtView.snp.height)
+            make.left.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.equalTo(self.view.snp.height)
         }
         
         playButton.setTitleColor(.black, for: UIControlState())
@@ -32,10 +32,10 @@ class MiniPlayerViewController: UIViewController {
         playButton.addTarget(self, action: #selector(MiniPlayerViewController.playPause), for: .touchUpInside)
         self.view.addSubview(playButton)
         playButton.snp.makeConstraints { make in
-            make.right.equalTo(self.view)
-            make.top.equalTo(self.view)
-            make.bottom.equalTo(self.view)
-            make.width.equalTo(playButton.snp.height)
+            make.right.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.equalTo(self.view.snp.height)
         }
         
         spinner.hidesWhenStopped = true
@@ -51,8 +51,8 @@ class MiniPlayerViewController: UIViewController {
         titleLabel.snp.makeConstraints { make in
             make.left.equalTo(coverArtView.snp.right).offset(5)
             make.right.equalTo(playButton.snp.left).offset(5)
-            make.top.equalTo(self.view).offset(5)
-            make.height.equalTo(self.view).dividedBy(2)
+            make.top.equalToSuperview().offset(5)
+            make.height.equalToSuperview().dividedBy(2)
         }
         
         artistLabel.textColor = .darkGray
@@ -62,7 +62,7 @@ class MiniPlayerViewController: UIViewController {
             make.left.equalTo(titleLabel)
             make.right.equalTo(titleLabel)
             make.top.equalTo(titleLabel.snp.bottom)
-            make.bottom.equalTo(self.view).offset(-5)
+            make.bottom.equalToSuperview().offset(-5)
         }
         
         updatePlayButton()
