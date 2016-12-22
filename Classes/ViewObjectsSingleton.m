@@ -46,7 +46,7 @@ static NSTimeInterval const kDelay = .5;
 {
     if (self.isLoadingScreenShowing)
     {
-        self.HUD.labelText = message ? message : self.HUD.labelText;
+        self.HUD.label.text = message ? message : self.HUD.label.text;
         return;
     }
     
@@ -64,8 +64,8 @@ static NSTimeInterval const kDelay = .5;
     self.HUD = [[MBProgressHUD alloc] initWithView:view];
     [appDelegateS.window addSubview:self.HUD];
     self.HUD.delegate = self;
-    self.HUD.labelText = message ? message : @"Loading";
-    [self.HUD show:YES];
+    self.HUD.label.text = message ? message : @"Loading";
+    [self.HUD showAnimated:YES];
 }
 
 - (void)showAlbumLoadingScreenOnMainWindowNotification:(NSNotification *)notification
@@ -107,9 +107,9 @@ static NSTimeInterval const kDelay = .5;
     
     [appDelegateS.window addSubview:self.HUD];
     self.HUD.delegate = self;
-    self.HUD.labelText = @"Loading";
-    self.HUD.detailsLabelText = @"tap to cancel";
-    [self.HUD show:YES];
+    self.HUD.label.text = @"Loading";
+    self.HUD.detailsLabel.text = @"tap to cancel";
+    [self.HUD showAnimated:YES];
 }
 	
 - (void)hideLoadingScreen
@@ -121,7 +121,7 @@ static NSTimeInterval const kDelay = .5;
 	
 	self.isLoadingScreenShowing = NO;
 	
-	[self.HUD hide:YES];
+	[self.HUD hideAnimated:YES];
 }
 
 - (UIColor *)currentDarkColor

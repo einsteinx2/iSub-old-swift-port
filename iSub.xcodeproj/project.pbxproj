@@ -455,8 +455,8 @@
 		533C5EDB1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED81E0B91CD00802FB1 /* NSData+MKBase64.m */; };
 		533C5EDC1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED81E0B91CD00802FB1 /* NSData+MKBase64.m */; };
 		533C5EDD1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED81E0B91CD00802FB1 /* NSData+MKBase64.m */; };
-		533C5EDE1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED81E0B91CD00802FB1 /* NSData+MKBase64.m */; };
-		533C5EDF1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED81E0B91CD00802FB1 /* NSData+MKBase64.m */; };
+		533C5EDE1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED81E0B91CD00802FB1 /* NSData+MKBase64.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		533C5EDF1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED81E0B91CD00802FB1 /* NSData+MKBase64.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		533C5EE01E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5EDA1E0B91CD00802FB1 /* SFHFKeychainUtils.m */; };
 		533C5EE11E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5EDA1E0B91CD00802FB1 /* SFHFKeychainUtils.m */; };
 		533C5EE21E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 533C5EDA1E0B91CD00802FB1 /* SFHFKeychainUtils.m */; };
@@ -869,11 +869,11 @@
 		5358DDB81E0B78480024A0D4 /* NSError+ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC761E0B78470024A0D4 /* NSError+ISMSError.m */; };
 		5358DDB91E0B78480024A0D4 /* NSError+ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC761E0B78470024A0D4 /* NSError+ISMSError.m */; };
 		5358DDBA1E0B78480024A0D4 /* NSError+ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC761E0B78470024A0D4 /* NSError+ISMSError.m */; };
-		5358DDBB1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; };
-		5358DDBC1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; };
-		5358DDBD1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; };
-		5358DDBE1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; };
-		5358DDBF1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; };
+		5358DDBB1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DDBC1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DDBD1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DDBE1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DDBF1E0B78480024A0D4 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC771E0B78470024A0D4 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5358DDC01E0B78480024A0D4 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC7A1E0B78470024A0D4 /* Utils.swift */; };
 		5358DDC11E0B78480024A0D4 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC7A1E0B78470024A0D4 /* Utils.swift */; };
 		5358DDC21E0B78480024A0D4 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC7A1E0B78470024A0D4 /* Utils.swift */; };
@@ -919,11 +919,11 @@
 		5358DF2B1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */; };
 		5358DF2C1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */; };
 		5358DF2D1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */; };
-		5358DF2E1E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; };
-		5358DF2F1E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; };
-		5358DF301E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; };
-		5358DF311E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; };
-		5358DF321E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; };
+		5358DF2E1E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DF2F1E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DF301E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DF311E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DF321E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5358DF331E0B789A0024A0D4 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */; };
 		5358DF341E0B789A0024A0D4 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */; };
 		5358DF351E0B789A0024A0D4 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */; };
@@ -979,11 +979,11 @@
 		5358DF671E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */; };
 		5358DF681E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */; };
 		5358DF691E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */; };
-		5358DF6A1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; };
-		5358DF6B1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; };
-		5358DF6C1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; };
-		5358DF6D1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; };
-		5358DF6E1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; };
+		5358DF6A1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DF6B1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DF6C1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DF6D1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		5358DF6E1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5358DF6F1E0B789A0024A0D4 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDFC1E0B78990024A0D4 /* CLIColor.m */; };
 		5358DF701E0B789A0024A0D4 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDFC1E0B78990024A0D4 /* CLIColor.m */; };
 		5358DF711E0B789A0024A0D4 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDFC1E0B78990024A0D4 /* CLIColor.m */; };
@@ -1449,11 +1449,6 @@
 		5358E13D1E0B789A0024A0D4 /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED01E0B78990024A0D4 /* EX2Dispatch.m */; };
 		5358E13E1E0B789A0024A0D4 /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED01E0B78990024A0D4 /* EX2Dispatch.m */; };
 		5358E13F1E0B789A0024A0D4 /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED01E0B78990024A0D4 /* EX2Dispatch.m */; };
-		5358E1401E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED41E0B78990024A0D4 /* EX2FlatSegmentedControl.m */; };
-		5358E1411E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED41E0B78990024A0D4 /* EX2FlatSegmentedControl.m */; };
-		5358E1421E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED41E0B78990024A0D4 /* EX2FlatSegmentedControl.m */; };
-		5358E1431E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED41E0B78990024A0D4 /* EX2FlatSegmentedControl.m */; };
-		5358E1441E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED41E0B78990024A0D4 /* EX2FlatSegmentedControl.m */; };
 		5358E1451E0B789A0024A0D4 /* EX2GlowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED61E0B78990024A0D4 /* EX2GlowButton.m */; };
 		5358E1461E0B789A0024A0D4 /* EX2GlowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED61E0B78990024A0D4 /* EX2GlowButton.m */; };
 		5358E1471E0B789A0024A0D4 /* EX2GlowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DED61E0B78990024A0D4 /* EX2GlowButton.m */; };
@@ -1885,11 +1880,11 @@
 		53835D2B1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53835D0A1E0B7DD50077B53D /* FMDatabaseVariadic.swift */; };
 		53835D2C1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53835D0A1E0B7DD50077B53D /* FMDatabaseVariadic.swift */; };
 		53835D2D1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53835D0A1E0B7DD50077B53D /* FMDatabaseVariadic.swift */; };
-		53835D351E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; };
-		53835D361E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; };
-		53835D371E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; };
-		53835D381E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; };
-		53835D391E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; };
+		53835D351E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D361E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D371E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D381E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D391E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		53835D3A1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */; };
 		53835D3B1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */; };
 		53835D3C1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */; };
@@ -1900,21 +1895,21 @@
 		53835D411E0B7E9A0077B53D /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D341E0B7E9A0077B53D /* TBXML.m */; };
 		53835D421E0B7E9A0077B53D /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D341E0B7E9A0077B53D /* TBXML.m */; };
 		53835D431E0B7E9A0077B53D /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D341E0B7E9A0077B53D /* TBXML.m */; };
-		53835D4D1E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; };
-		53835D4E1E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; };
-		53835D4F1E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; };
-		53835D501E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; };
+		53835D4D1E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D4E1E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D4F1E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D501E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		53835D511E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; };
-		53835D521E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D481E0B7F9F0077B53D /* MKSKSubscriptionProduct.m */; };
-		53835D531E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D481E0B7F9F0077B53D /* MKSKSubscriptionProduct.m */; };
-		53835D541E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D481E0B7F9F0077B53D /* MKSKSubscriptionProduct.m */; };
+		53835D521E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D481E0B7F9F0077B53D /* MKSKSubscriptionProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D531E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D481E0B7F9F0077B53D /* MKSKSubscriptionProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D541E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D481E0B7F9F0077B53D /* MKSKSubscriptionProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		53835D551E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D481E0B7F9F0077B53D /* MKSKSubscriptionProduct.m */; };
-		53835D561E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D481E0B7F9F0077B53D /* MKSKSubscriptionProduct.m */; };
-		53835D571E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; };
-		53835D581E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; };
-		53835D591E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; };
-		53835D5A1E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; };
-		53835D5B1E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; };
+		53835D561E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D481E0B7F9F0077B53D /* MKSKSubscriptionProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D571E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D581E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D591E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D5A1E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		53835D5B1E0B7F9F0077B53D /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D4A1E0B7F9F0077B53D /* MKStoreManager.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		53835D631E0B80140077B53D /* MKStoreKitConfigs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53835D621E0B80140077B53D /* MKStoreKitConfigs.plist */; };
 		53835D641E0B80140077B53D /* MKStoreKitConfigs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53835D621E0B80140077B53D /* MKStoreKitConfigs.plist */; };
 		53835D651E0B80140077B53D /* MKStoreKitConfigs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53835D621E0B80140077B53D /* MKStoreKitConfigs.plist */; };
@@ -3125,8 +3120,6 @@
 		5358DECF1E0B78990024A0D4 /* EX2Dispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2Dispatch.h; sourceTree = "<group>"; };
 		5358DED01E0B78990024A0D4 /* EX2Dispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2Dispatch.m; sourceTree = "<group>"; };
 		5358DED11E0B78990024A0D4 /* EX2Static.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2Static.h; sourceTree = "<group>"; };
-		5358DED31E0B78990024A0D4 /* EX2FlatSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2FlatSegmentedControl.h; sourceTree = "<group>"; };
-		5358DED41E0B78990024A0D4 /* EX2FlatSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2FlatSegmentedControl.m; sourceTree = "<group>"; };
 		5358DED51E0B78990024A0D4 /* EX2GlowButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2GlowButton.h; sourceTree = "<group>"; };
 		5358DED61E0B78990024A0D4 /* EX2GlowButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2GlowButton.m; sourceTree = "<group>"; };
 		5358DED71E0B78990024A0D4 /* EX2InfinitePagingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2InfinitePagingScrollView.h; sourceTree = "<group>"; };
@@ -4646,8 +4639,6 @@
 		5358DED21E0B78990024A0D4 /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
-				5358DED31E0B78990024A0D4 /* EX2FlatSegmentedControl.h */,
-				5358DED41E0B78990024A0D4 /* EX2FlatSegmentedControl.m */,
 				5358DED51E0B78990024A0D4 /* EX2GlowButton.h */,
 				5358DED61E0B78990024A0D4 /* EX2GlowButton.m */,
 				5358DED71E0B78990024A0D4 /* EX2InfinitePagingScrollView.h */,
@@ -6689,7 +6680,6 @@
 				5358DD481E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */,
 				5358DD931E0B78480024A0D4 /* SocialSingleton.m in Sources */,
 				53835C5F1E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
-				5358E1401E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */,
 				5358DDC01E0B78480024A0D4 /* Utils.swift in Sources */,
 				5358DF241E0B78990024A0D4 /* DDRange.m in Sources */,
 				5358DFBA1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
@@ -6949,7 +6939,6 @@
 				5358DDA51E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
 				53835CDC1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358E08A1E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
-				5358E1431E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */,
 				53159F1B156F69D0001B0268 /* StackScrollViewController.m in Sources */,
 				5358DD0A1E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				5358DF4F1E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */,
@@ -7127,7 +7116,6 @@
 				5358DFD71E0B789A0024A0D4 /* NSDate+UTC.m in Sources */,
 				5358E0401E0B789A0024A0D4 /* NSString+SHA1.m in Sources */,
 				53835CB01E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
-				5358E1441E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */,
 				5358DDA61E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
 				5358DF371E0B789A0024A0D4 /* HTTPMessage.m in Sources */,
 				5358DF5A1E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */,
@@ -7479,7 +7467,6 @@
 				5358DD4A1E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */,
 				5358DD951E0B78480024A0D4 /* SocialSingleton.m in Sources */,
 				53835C611E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
-				5358E1421E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */,
 				5358DDC21E0B78480024A0D4 /* Utils.swift in Sources */,
 				5358DF261E0B78990024A0D4 /* DDRange.m in Sources */,
 				5358DFBC1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
@@ -7762,7 +7749,6 @@
 				5358DD491E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */,
 				5358DD941E0B78480024A0D4 /* SocialSingleton.m in Sources */,
 				53835C601E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
-				5358E1411E0B789A0024A0D4 /* EX2FlatSegmentedControl.m in Sources */,
 				5358DDC11E0B78480024A0D4 /* Utils.swift in Sources */,
 				5358DF251E0B78990024A0D4 /* DDRange.m in Sources */,
 				5358DFBB1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
