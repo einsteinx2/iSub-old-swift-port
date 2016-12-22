@@ -6,7 +6,6 @@
 //  Copyright © 2016 Ben Baron. All rights reserved.
 //
 
-import libSub
 import UIKit
 
 private class MenuItem {

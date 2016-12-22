@@ -8,7 +8,6 @@
 
 // TODO: Load default cover art image or cached cover art image if available
 
-import libSub
 import Foundation
 import UIKit
 

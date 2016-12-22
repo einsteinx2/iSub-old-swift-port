@@ -105,7 +105,7 @@
                                                  name:@"UIDeviceBatteryStateDidChangeNotification" object:[UIDevice currentDevice]];
 	[self batteryStateChanged:nil];
 		
-	[self loadFlurryAnalytics];
+	//[self loadFlurryAnalytics];
 	[self loadHockeyApp];
 		
 	[self loadInAppPurchaseStore];
@@ -330,7 +330,7 @@
 
 #pragma mark -
 
-- (void)loadFlurryAnalytics
+/*- (void)loadFlurryAnalytics
 {
 	BOOL isSessionStarted = NO;
 #if IS_RELEASE()
@@ -361,7 +361,7 @@
 																		  [device platform], @"HardwareVersion", nil];
 		[Flurry logEvent:@"DeviceInfo" withParameters:params];
 	}
-}
+}*/
 
 - (void)loadHockeyApp
 {
@@ -700,7 +700,7 @@
 	
     settingsS.isJukeboxEnabled = NO;
     appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
-    [Flurry logEvent:@"JukeboxDisabled"];
+    //[Flurry logEvent:@"JukeboxDisabled"];
     
 	settingsS.isOfflineMode = YES;
 		

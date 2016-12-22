@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import libSub
 
 class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate, ServerEditDelegate {
     private let headerView = UIView()

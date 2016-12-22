@@ -6,10 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
-import libSub
 import Foundation
 import UIKit
-import MKStoreKit
 
 class StoreViewController : DraggableTableViewController {
     

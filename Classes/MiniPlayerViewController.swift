@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import libSub
 
 class MiniPlayerViewController: UIViewController {
     let coverArtView = AsynchronousImageView()

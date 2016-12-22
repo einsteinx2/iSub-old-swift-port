@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import libSub
 
 @objc protocol AsynchronousImageViewDelegate {
     func asyncImageViewFinishedLoading(asyncImageView: AsynchronousImageView)

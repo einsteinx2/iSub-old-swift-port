@@ -4,6 +4,8 @@
 
 #import <HockeySDK/HockeySDK.h>
 
+#import "LibSub.h"
+#import "MKStoreManager.h"
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"
 #import "IntroViewController.h"

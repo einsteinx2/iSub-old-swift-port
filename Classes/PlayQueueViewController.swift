@@ -8,8 +8,6 @@
 
 import UIKit
 import SnapKit
-import JASidePanels
-import libSub
 
 class PlayQueueViewController: DraggableTableViewController {
 

@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import JASidePanels
-import libSub
 
 // KVO context pointer
 // Set up non-zero-sized storage. We don't intend to mutate this variable,
