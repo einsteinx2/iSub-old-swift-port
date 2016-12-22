@@ -45,5 +45,5 @@
 #define OWN_SERVER nil
 #define REVIEW_ALLOWED 0
 
-#warning Shared Secret Missing Ignore this warning if you don't use auto-renewable subscriptions
+//#warning Shared Secret Missing Ignore this warning if you don't use auto-renewable subscriptions
 #define kSharedSecret @"<FILL IN YOUR SHARED SECRET HERE>"

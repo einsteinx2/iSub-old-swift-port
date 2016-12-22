@@ -15,11 +15,11 @@ private var kvoContext = 0
 
 class SidePanelController: JASidePanelController {
         
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
-    }
+//    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+//        return .lightContent
+//    }
     
-    override func stylePanel(panel: UIView!) {
+    override func stylePanel(_ panel: UIView!) {
         // Intentionally empty to prevent rounded corners on panels
     }
     
@@ -27,7 +27,7 @@ class SidePanelController: JASidePanelController {
         super.viewDidLoad()
         
         // Setup KVO to hide and show the status bar when opening the side panels
-        self.addObserver(self, forKeyPath: "state", options: .New, context: &kvoContext)
+        self.addObserver(self, forKeyPath: "state", options: .new, context: &kvoContext)
         
         // TODO: Look into custom side panel animations
         //self.pushesSidePanels = true
@@ -42,36 +42,36 @@ class SidePanelController: JASidePanelController {
         self.rightPanel = PlayQueueViewController(viewModel: PlayQueueViewModel())
         menu.showDefaultViewController()
         
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(SidePanelController.draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(SidePanelController.draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(SidePanelController.draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(SidePanelController.draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(SidePanelController.draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
     }
     
     deinit {
         self.removeObserver(self, forKeyPath: "state", context: &kvoContext)
     }
     
-    @objc private func draggingBegan(notification: NSNotification) {
+    @objc fileprivate func draggingBegan(_ notification: Notification) {
         self.allowLeftSwipe = false
         self.allowRightSwipe = false
     }
     
-    @objc private func draggingMoved(notification: NSNotification) {
+    @objc fileprivate func draggingMoved(_ notification: Notification) {
         if let location = notification.userInfo?[DraggableTableView.Notifications.locationKey] as? NSValue {
-            let point = location.CGPointValue()
+            let point = location.cgPointValue
             
             if point.x > self.view.frame.width - 50 && self.state != JASidePanelRightVisible {
-                self.showRightPanelAnimated(true)
+                self.showRightPanel(animated: true)
             } else if point.x < 50 && self.state == JASidePanelRightVisible {
-                self.showCenterPanelAnimated(true)
+                self.showCenterPanel(animated: true)
             }
         }
     }
     
-    @objc private func draggingEnded(notification: NSNotification) {
+    @objc fileprivate func draggingEnded(_ notification: Notification) {
         if self.state == JASidePanelRightVisible {
-            EX2Dispatch.runInMainThreadAfterDelay(0.3) {
+            EX2Dispatch.runInMainThread(afterDelay: 0.3) {
                 //self.showCenterPanelAnimated(true)
             }
         }
@@ -80,27 +80,27 @@ class SidePanelController: JASidePanelController {
         self.allowRightSwipe = true
     }
     
-    @objc private func draggingCanceled(notification: NSNotification) {
+    @objc fileprivate func draggingCanceled(_ notification: Notification) {
         if self.state == JASidePanelRightVisible {
-            self.showCenterPanelAnimated(true)
+            self.showCenterPanel(animated: true)
         }
         
         self.allowLeftSwipe = true
         self.allowRightSwipe = true
     }
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &kvoContext {
             switch self.state {
             case JASidePanelCenterVisible:
-                UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .None)
+                UIApplication.shared.setStatusBarHidden(false, with: .none)
             case JASidePanelLeftVisible, JASidePanelRightVisible:
-                UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .None)
+                UIApplication.shared.setStatusBarHidden(true, with: .none)
             default:
                 break
             }
         } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 }

@@ -9,6 +9,7 @@
 #import "UAApplication.h"
 #import "Imports.h"
 #import "CocoaLumberjack.h"
+#import "iSub-Swift.h"
 
 static const int ddLogLevel = DDLogLevelDebug;
 

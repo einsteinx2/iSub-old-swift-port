@@ -13,6 +13,9 @@
 #import "HelpTabViewController.h"
 #import "SettingsTabViewController.h"
 #import "SubsonicServerEditViewController.h"
+#import "JASidePanelController.h"
+#import "UIViewController+JASidePanel.h"
+#import "SFHFKeychainUtils.h"
 
 #import "UIViewController+PushViewControllerCustom.h"
 #import "UINavigationBar+FixedHeightWhenStatusBarHidden.h"

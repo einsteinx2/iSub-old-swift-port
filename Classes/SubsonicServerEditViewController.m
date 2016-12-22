@@ -8,6 +8,7 @@
 
 #import "SubsonicServerEditViewController.h"
 #import "Imports.h"
+#import "iSub-Swift.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 
@@ -39,7 +40,7 @@
 
 #pragma mark - Lifecycle
 
-- (instancetype) initWithServer:(ISMSServer *)server
+- (instancetype) initWithServer:(Server *)server
 {
     if (self = [super initWithNibName:@"SubsonicServerEditViewController" bundle:nil])
     {
@@ -244,12 +245,12 @@
     else
     {
         // Create new database entry
-        self.server = [[ISMSServer alloc] initWithType:ServerTypeSubsonic
-                                                   url:statusLoader.url
-                                              username:statusLoader.username
-                                           lastQueryId:@""
-                                                  uuid:@""
-                                              password:statusLoader.password];
+        self.server = [[Server alloc] initWithType:ServerTypeSubsonic
+                                               url:statusLoader.url
+                                          username:statusLoader.username
+                                       lastQueryId:@""
+                                              uuid:@""
+                                          password:statusLoader.password];
     }
     
     [self.delegate serverEdited:self.server];
@@ -258,7 +259,7 @@
     if (IS_IPAD())
         [appDelegateS.ipadRootViewController.menuViewController showHome];
     
-    [appDelegateS switchServer:self.server redirectUrl:self.redirectUrl];
+    [appDelegateS switchServerTo:self.server redirectUrl:self.redirectUrl];
 }
 
 #pragma mark - UITextField Delegate -

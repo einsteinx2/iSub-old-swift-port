@@ -23,11 +23,11 @@ class DroppableCell: UITableViewCell {
         }
     }
     
-    private func commonInit() {
-        super.backgroundColor = .clearColor()
+    fileprivate func commonInit() {
+        super.backgroundColor = .clear
         
-        containerView.backgroundColor = .whiteColor()
-        containerView.autoresizingMask = [.FlexibleWidth, .FlexibleBottomMargin]
+        containerView.backgroundColor = .white
+        containerView.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
         self.contentView.addSubview(containerView)
     }
     

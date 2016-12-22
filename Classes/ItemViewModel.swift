@@ -10,30 +10,30 @@ import Foundation
 
 protocol ItemViewModelDelegate {
     func itemsChanged()
-    func loadingError(error: String)
+    func loadingError(_ error: String)
 }
 
-typealias LoadModelsCompletion = (success: Bool, error: NSError?) -> Void
+typealias LoadModelsCompletion = (_ success: Bool, _ error: NSError?) -> Void
 
 class ItemViewModel : NSObject {
     
-    private let loader: ISMSItemLoader
+    fileprivate let loader: ISMSItemLoader
     
     var delegate: ItemViewModelDelegate?
     
     var topLevelController = false
     
-    private(set) var rootItem: ISMSItem?
+    fileprivate(set) var rootItem: ISMSItem?
     
-    private(set) var items = [ISMSItem]()
-    private(set) var folders = [ISMSFolder]()
-    private(set) var artists = [ISMSArtist]()
-    private(set) var albums = [ISMSAlbum]()
-    private(set) var songs = [ISMSSong]()
-    private(set) var playlists = [Playlist]()
+    fileprivate(set) var items = [ISMSItem]()
+    fileprivate(set) var folders = [ISMSFolder]()
+    fileprivate(set) var artists = [ISMSArtist]()
+    fileprivate(set) var albums = [ISMSAlbum]()
+    fileprivate(set) var songs = [ISMSSong]()
+    fileprivate(set) var playlists = [Playlist]()
     
-    private(set) var songsDuration = 0
-    private(set) var sectionIndexes = [SectionIndex]()
+    fileprivate(set) var songsDuration = 0
+    fileprivate(set) var sectionIndexes = [SectionIndex]()
     
     init(loader: ISMSItemLoader) {
         self.loader = loader
@@ -49,8 +49,8 @@ class ItemViewModel : NSObject {
         return success
     }
     
-    func loadModelsFromWeb(completion: LoadModelsCompletion?) {
-        if loader.loaderState != .Loading {
+    func loadModelsFromWeb(_ completion: LoadModelsCompletion?) {
+        if loader.loaderState != .loading {
             loader.callbackBlock = { success, error, loader in
                 if success {
                     self.processModels()
@@ -99,9 +99,9 @@ class ItemViewModel : NSObject {
         
         if songs.count == 0 {
             if folders.count > 20 {
-                sectionIndexes = sectionIndexesForItems(folders)
+                sectionIndexes = SectionIndex.sectionIndexesForItems(folders)
             } else if self.artists.count > 20 {
-                sectionIndexes = sectionIndexesForItems(artists)
+                sectionIndexes = SectionIndex.sectionIndexesForItems(artists)
             }
         }
     }

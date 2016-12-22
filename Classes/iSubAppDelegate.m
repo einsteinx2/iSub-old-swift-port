@@ -29,7 +29,7 @@
 #import "ISMSLoaderDelegate.h"
 #import "EX2Reachability.h"
 #import <HockeySDK/HockeySDK.h>
-#import <JASidePanels/JASidePanelController.h>
+#import "JASidePanelController.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -290,7 +290,7 @@
             [self.statusLoader cancelLoad];
         }
         
-        ISMSServer *currentServer = settingsS.currentServer;
+        Server *currentServer = settingsS.currentServer;
         self.statusLoader = [[ISMSStatusLoader alloc] initWithUrl:currentServer.url username:currentServer.username password:currentServer.password];
         __weak iSubAppDelegate *weakSelf = self;
         self.statusLoader.callbackBlock = ^(BOOL success,  NSError * error, ISMSLoader * loader) {
@@ -1325,7 +1325,7 @@
         {
             [self playSubsonicVideo:aSong bitrates:settingsS.currentVideoBitrates];
         }
-        else if (serverType == ServerTypeiSubServer || serverType == ServerTypeWaveBox)
+        else if (serverType == ServerTypeISubServer || serverType == ServerTypeWaveBox)
         {
             [self playWaveBoxVideo:aSong bitrates:settingsS.currentVideoBitrates];
         }
@@ -1429,7 +1429,7 @@
     }
 }
 
-- (void)switchServer:(ISMSServer *)server redirectUrl:(NSString *)redirectUrl
+- (void)switchServerTo:(Server *)server redirectUrl:(NSString *)redirectUrl
 {
     // Update the variables
     settingsS.currentServerId = server.serverId;

@@ -8,9 +8,9 @@
 
 import UIKit
 
-public class CustomUIAlertView : UIAlertView {
+open class CustomUIAlertView : UIAlertView {
     
-    public override func show() {
+    open override func show() {
         if SavedSettings.sharedInstance().isPopupsEnabled {
             super.show()
         }

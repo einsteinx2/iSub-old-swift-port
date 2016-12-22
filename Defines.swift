@@ -11,32 +11,32 @@ import UIKit
 
 func IS_IPAD() -> Bool
 {
-    return UIDevice.currentDevice().userInterfaceIdiom == .Pad
+    return UIDevice.current.userInterfaceIdiom == .pad
 }
 
-func ISMSRegularFont(size: CGFloat) -> UIFont
+func ISMSRegularFont(_ size: CGFloat) -> UIFont
 {
     return UIFont(name: "HelveticaNeue", size: size)!
 }
 
-func ISMSBoldFont(size: CGFloat) -> UIFont
+func ISMSBoldFont(_ size: CGFloat) -> UIFont
 {
     return UIFont(name: "HelveticaNeue-Bold", size: size)!
 }
 
 private let BaseWidth : CGFloat = 320
-func ISMSNormalize(value: CGFloat, multiplier: CGFloat = 1, maxDelta: CGFloat = 1024) -> CGFloat {
-    if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
+func ISMSNormalize(_ value: CGFloat, multiplier: CGFloat = 1, maxDelta: CGFloat = 1024) -> CGFloat {
+    if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
         return value
     }
     
-    let screenWidth = UIScreen.mainScreen().bounds.size.width
+    let screenWidth = UIScreen.main.bounds.size.width
     let percent = (screenWidth - BaseWidth)/screenWidth
     let normalizedValue = value * (1 + percent) * multiplier
     return min(normalizedValue, value + maxDelta) //capped by a max value if needed
 }
 
-func BytesForSecondsAtBitrate(seconds: Int, bitrate: Int) -> Int {
+func BytesForSecondsAtBitrate(_ seconds: Int, bitrate: Int) -> Int {
     return (bitrate / 8) * 1024 * seconds
 }
 

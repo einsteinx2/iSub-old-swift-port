@@ -8,14 +8,14 @@
 
 #import "ServerEditDelegate.h"
 
-@class ServerTypeViewController, ISMSServer;
+@class ServerTypeViewController, Server;
 @interface SubsonicServerEditViewController : UIViewController
 
 @property (nullable, nonatomic, weak) id<ServerEditDelegate> delegate;
 
-@property (nullable, nonatomic, strong) ISMSServer *server;
+@property (nullable, nonatomic, strong) Server *server;
 @property (nullable, nonatomic, copy) NSString *redirectUrl;
 
-- (nonnull instancetype)initWithServer:(nullable ISMSServer *)server;
+- (nonnull instancetype)initWithServer:(nullable Server *)server;
 
 @end

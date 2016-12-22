@@ -9,8 +9,8 @@
 import UIKit
 
 @objc protocol AsynchronousImageViewDelegate {
-    func asyncImageViewFinishedLoading(asyncImageView: AsynchronousImageView)
-    func asyncImageViewLoadingFailed(asyncImageView: AsynchronousImageView, error: NSError)
+    func asyncImageViewFinishedLoading(_ asyncImageView: AsynchronousImageView)
+    func asyncImageViewLoadingFailed(_ asyncImageView: AsynchronousImageView, error: Error)
 }
 
 class AsynchronousImageView: UIImageView, ISMSLoaderDelegate {
@@ -24,10 +24,10 @@ class AsynchronousImageView: UIImageView, ISMSLoaderDelegate {
     var coverArtDAO: SUSCoverArtDAO?
     var large = false
     
-    private var activityIndicator: UIActivityIndicatorView?
+    fileprivate var activityIndicator: UIActivityIndicatorView?
     
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
     }
     
     init(frame: CGRect, coverArtId: String, large: Bool, delegate: AsynchronousImageViewDelegate) {
@@ -42,7 +42,7 @@ class AsynchronousImageView: UIImageView, ISMSLoaderDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func reloadCoverArt() {
+    fileprivate func reloadCoverArt() {
         // Make sure old activity indicator is gone
         activityIndicator?.removeFromSuperview()
         activityIndicator = nil;
@@ -53,15 +53,15 @@ class AsynchronousImageView: UIImageView, ISMSLoaderDelegate {
         }
         coverArtDAO = nil
         
-        self.image = SUSCoverArtDAO.defaultCoverArtImageForSize(large)
+        self.image = SUSCoverArtDAO.defaultCoverArtImage(forSize: large)
         
         if let coverArtId = coverArtId {
             coverArtDAO = SUSCoverArtDAO(delegate: self, coverArtId: coverArtId, isLarge: large)
             if coverArtDAO!.isCoverArtCached {
                 self.image = coverArtDAO!.coverArtImage()
             } else if large {
-                activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-                activityIndicator!.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin, .FlexibleTopMargin, .FlexibleBottomMargin]
+                activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+                activityIndicator!.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
                 activityIndicator!.center = CGPoint(x: self.width / 2.0, y: self.height / 2.0)
                 self.addSubview(activityIndicator!)
                 activityIndicator?.startAnimating()
@@ -74,7 +74,7 @@ class AsynchronousImageView: UIImageView, ISMSLoaderDelegate {
     // MARK: - Loading Delegate -
     //
     
-    func loadingFinished(theLoader: ISMSLoader!) {
+    func loadingFinished(_ theLoader: ISMSLoader) {
         activityIndicator?.removeFromSuperview()
         activityIndicator = nil
         
@@ -86,7 +86,7 @@ class AsynchronousImageView: UIImageView, ISMSLoaderDelegate {
         }
     }
     
-    func loadingFailed(theLoader: ISMSLoader!, withError error: NSError!) {
+    public func loadingFailed(_ theLoader: ISMSLoader, withError error: Error) {
         activityIndicator?.removeFromSuperview()
         activityIndicator = nil
         
@@ -100,29 +100,29 @@ class AsynchronousImageView: UIImageView, ISMSLoaderDelegate {
     // MARK: - Touch Handling -
     //
     
-    @objc private func oneTap() {
+    @objc fileprivate func oneTap() {
         
     }
     
-    @objc private func twoTaps() {
+    @objc fileprivate func twoTaps() {
         
     }
     
-    @objc private func threeTaps() {
+    @objc fileprivate func threeTaps() {
         
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             switch touch.tapCount {
             case 1:
-                self.performSelector(#selector(AsynchronousImageView.oneTap), withObject: nil, afterDelay: 0.5)
+                self.perform(#selector(AsynchronousImageView.oneTap), with: nil, afterDelay: 0.5)
             case 2:
-                NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AsynchronousImageView.oneTap), object: nil)
-                self.performSelector(#selector(AsynchronousImageView.twoTaps), withObject: nil, afterDelay: 0.5)
+                NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(AsynchronousImageView.oneTap), object: nil)
+                self.perform(#selector(AsynchronousImageView.twoTaps), with: nil, afterDelay: 0.5)
             case 3:
-                NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AsynchronousImageView.twoTaps), object: nil)
-                self.performSelector(#selector(AsynchronousImageView.threeTaps), withObject: nil, afterDelay: 0.5)
+                NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(AsynchronousImageView.twoTaps), object: nil)
+                self.perform(#selector(AsynchronousImageView.threeTaps), with: nil, afterDelay: 0.5)
             default:
                 break
             }

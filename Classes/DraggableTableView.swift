@@ -23,7 +23,7 @@ import QuartzCore
     var containerView: UIView { get }
     var draggable: Bool { get }
     var dragItem: ISMSItem? { get }
-    var indexPath: NSIndexPath? { get }
+    var indexPath: IndexPath? { get }
 }
 
 private func +(left: CGPoint, right: CGPoint) -> CGPoint {
@@ -46,7 +46,7 @@ class DraggableTableView: UITableView {
         static let dragCellKey            = "dragCellKey"
         static let dragSourceTableViewKey = "dragSourceTableViewKey"
         
-        static func userInfo(location location: NSValue, dragSourceTableView: UITableView, dragCell: DraggableCell) -> [String: AnyObject] {
+        static func userInfo(location: NSValue, dragSourceTableView: UITableView, dragCell: DraggableCell) -> [String: AnyObject] {
             var userInfo = [String: AnyObject]()
             userInfo[dragSourceTableViewKey] = dragSourceTableView
             userInfo[locationKey] = location
@@ -59,16 +59,16 @@ class DraggableTableView: UITableView {
     let VertSwipeDragMax = 80.0
     
     let cellEnableDelay = 1.0
-    let longPressDelay = 0.33
+    let longPressDelay = 330 //ms
     
-    var lastDeleteToggle = NSDate()
+    var lastDeleteToggle = Date()
     
-    var longPressTimer: dispatch_source_t?
-    var dragIndexPath: NSIndexPath?
+    var longPressTimer: DispatchSourceTimer?
+    var dragIndexPath: IndexPath?
     var dragCell: DraggableCell?
     var dragCellAlpha: CGFloat = 1.0
     var dragImageView: UIImageView?
-    var dragImageOffset = CGPointZero
+    var dragImageOffset = CGPoint.zero
     var dragImageSuperview: UIView {
         get {
             // Use the top level view so we can go between controllers
@@ -76,9 +76,9 @@ class DraggableTableView: UITableView {
         }
     }
     
-    private func setup() {
-        self.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
-        self.sectionIndexBackgroundColor = UIColor.clearColor()
+    fileprivate func setup() {
+        self.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+        self.sectionIndexBackgroundColor = UIColor.clear
     }
     
     override init(frame: CGRect, style: UITableViewStyle) {
@@ -93,20 +93,20 @@ class DraggableTableView: UITableView {
     
     // MARK: - Touch Gestures Interception -
     
-    override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // Don't try anything when the tableview is moving and do not catch if touch is far right (potential index control)
-        if !self.decelerating && point.x < 290 {
+        if !self.isDecelerating && point.x < 290 {
             
             // Find the cell
-            if let indexPath = self.indexPathForRowAtPoint(point) {
+            if let indexPath = self.indexPathForRow(at: point) {
                 
-                if let cell = self.cellForRowAtIndexPath(indexPath) {
+                if let cell = self.cellForRow(at: indexPath) {
                     
                     // TODO: Move multi delete touch handling to ItemUITableViewCell
                     
                     // Handle multi delete touching
-                    if self.editing && point.x < 40.0 && NSDate().timeIntervalSinceDate(self.lastDeleteToggle) > 0.25 {
-                        self.lastDeleteToggle = NSDate()
+                    if self.isEditing && point.x < 40.0 && Date().timeIntervalSince(self.lastDeleteToggle) > 0.25 {
+                        self.lastDeleteToggle = Date()
                         if let itemCell = cell as? ItemTableViewCell {
                             itemCell.toggleDelete()
                         }
@@ -115,86 +115,85 @@ class DraggableTableView: UITableView {
             }
         }
         
-        return super.hitTest(point, withEvent: event)
+        return super.hitTest(point, with: event)
     }
     
-    override func touchesShouldCancelInContentView(view: UIView) -> Bool {
+    override func touchesShouldCancel(in view: UIView) -> Bool {
         return true
     }
     
-    override func touchesShouldBegin(touches: Set<UITouch>, withEvent event: UIEvent?, inContentView view: UIView) -> Bool {
+    override func touchesShouldBegin(_ touches: Set<UITouch>, with event: UIEvent?, in view: UIView) -> Bool {
         return true
     }
     
     // MARK: - Touch gestures for custom cell view -
     
-    private func disableCellsTemporarily() {
+    fileprivate func disableCellsTemporarily() {
         self.allowsSelection = false
-        EX2Dispatch.runInMainThreadAfterDelay(cellEnableDelay, block: {
+        EX2Dispatch.runInMainThread(afterDelay: cellEnableDelay, block: {
             self.allowsSelection = true
         })
     }
     
-    private func imageFromCell(cell: DraggableCell) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(cell.bounds.size, cell.layer.opaque, 0.0)
-        cell.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+    fileprivate func imageFromCell(_ cell: DraggableCell) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(cell.bounds.size, cell.layer.isOpaque, 0.0)
+        cell.layer.render(in: UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image!
     }
     
-    private func cancelLongPress() {
+    fileprivate func cancelLongPress() {
         if let longPressTimer = longPressTimer {
-            dispatch_source_cancel(longPressTimer)
+            longPressTimer.cancel()
         }
         longPressTimer = nil
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.allowsSelection = false
-        self.scrollEnabled = true
+        self.isScrollEnabled = true
         dragCell = nil
         dragIndexPath = nil
         
         // Handle long press
         if let touch = touches.first {
-            let point = touch.locationInView(self)
-            let indexPath = self.indexPathForRowAtPoint(point)
+            let point = touch.location(in: self)
+            let indexPath = self.indexPathForRow(at: point)
             if let indexPath = indexPath {
-                let cell = self.cellForRowAtIndexPath(indexPath)
+                let cell = self.cellForRow(at: indexPath)
                 if let draggableCell = cell as? DraggableCell {
                     if draggableCell.draggable {
-                        dragImageOffset = touch.locationInView(cell)
+                        dragImageOffset = touch.location(in: cell)
                         
-                        let location = NSValue(CGPoint: touch.locationInView(nil))
+                        let location = NSValue(cgPoint: touch.location(in: nil))
                         let userInfo = Notifications.userInfo(location: location, dragSourceTableView: self, dragCell: draggableCell)
                         
-                        //NSRunLoop.mainRunLoop().addTimer(longPressTimer!, forMode: NSRunLoopCommonModes)
-                        longPressTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-                        dispatch_source_set_timer(longPressTimer!, DISPATCH_TIME_NOW, UInt64(longPressDelay * Double(NSEC_PER_SEC)), UInt64(0.25 * Double(NSEC_PER_SEC)));
-                        dispatch_source_set_event_handler(longPressTimer!) {
+                        longPressTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+                        longPressTimer!.scheduleRepeating(wallDeadline: .now(), interval: .milliseconds(longPressDelay), leeway: .milliseconds(250))
+                        longPressTimer!.setEventHandler {
                             self.longPressFired(userInfo)
                             print("timer fired")
                         }
-                        dispatch_resume(longPressTimer!)
+                        longPressTimer!.resume()
                     }
                 }
             }
         }
         
-        super.touchesBegan(touches, withEvent: event)
+        super.touchesBegan(touches, with: event)
     }
     
-    @objc private func longPressFired(userInfo: [NSObject: AnyObject]) {
+    @objc fileprivate func longPressFired(_ userInfo: [AnyHashable: Any]) {
         if let cell = userInfo[Notifications.dragCellKey] as? DraggableCell {
-            self.scrollEnabled = false
+            self.isScrollEnabled = false
             dragIndexPath = cell.indexPath
             dragCell = cell
             dragCellAlpha = cell.containerView.alpha
             
             let image = imageFromCell(cell)
             dragImageView = UIImageView(image: image)
-            dragImageView!.frame.origin = dragImageSuperview.convertPoint(cell.frame.origin, fromView: cell.superview)
+            dragImageView!.frame.origin = dragImageSuperview.convert(cell.frame.origin, from: cell.superview)
             dragImageView!.layer.shadowRadius = 6.0
             dragImageView!.layer.shadowOpacity = 0.0
             dragImageView!.layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -205,11 +204,11 @@ class DraggableTableView: UITableView {
             shadowAnimation.fromValue = 0.0
             shadowAnimation.toValue = 0.3
             shadowAnimation.duration = 0.1
-            dragImageView!.layer.addAnimation(shadowAnimation, forKey: "shadowOpacity")
+            dragImageView!.layer.add(shadowAnimation, forKey: "shadowOpacity")
             dragImageView!.layer.shadowOpacity = 0.3
             
             
-            UIView.animateWithDuration(0.1) {
+            UIView.animate(withDuration: 0.1, animations: {
                 // Animate the cell location to be slightly off
                 var origin = self.dragImageView!.frame.origin
                 origin.x += 2
@@ -218,87 +217,87 @@ class DraggableTableView: UITableView {
                 
                 // Dim the cell in the table
                 cell.containerView.alpha = 0.6
-            }
+            }) 
             
             // Match the animation so movement is smooth
             dragImageOffset.x -= 2
             dragImageOffset.y += 2
             
-            NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingBegan, userInfo: userInfo)
+            NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingBegan, userInfo: userInfo)
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Cancel the tap and hold if user moves finger
         cancelLongPress()
         
-        if let dragImageView = dragImageView, dragCell = dragCell, touch = touches.first {
-            let superviewPoint = touch.locationInView(dragImageSuperview)
+        if let dragImageView = dragImageView, let dragCell = dragCell, let touch = touches.first {
+            let superviewPoint = touch.location(in: dragImageSuperview)
             dragImageView.frame.origin = superviewPoint - dragImageOffset
             
-            let windowPoint = touch.locationInView(nil)
-            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
-            NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingMoved, userInfo: userInfo)
+            let windowPoint = touch.location(in: nil)
+            let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
+            NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingMoved, userInfo: userInfo)
         }
         
-        super.touchesMoved(touches, withEvent: event)
+        super.touchesMoved(touches, with: event)
     }
 
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.allowsSelection = true
-        self.scrollEnabled = true
+        self.isScrollEnabled = true
         
         cancelLongPress()
         
         if let touch = touches.first {
             if let dragCell = dragCell {
-                let windowPoint = touch.locationInView(nil)
-                let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
-                NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingEnded, userInfo: userInfo)
+                let windowPoint = touch.location(in: nil)
+                let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
+                NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingEnded, userInfo: userInfo)
                 
                 dragImageView?.removeFromSuperview()
                 
-                UIView.animateWithDuration(0.1) {
+                UIView.animate(withDuration: 0.1, animations: {
                     // Undo the cell dimming
                     dragCell.containerView.alpha = self.dragCellAlpha
-                }
+                }) 
             } else {
                 // Select the cell if this was not a long press
-                let point = touch.locationInView(self)
-                if (self.editing && Float(point.x) > 40.0) || !self.editing {
-                    let indexPath: NSIndexPath? = self.indexPathForRowAtPoint(point)
+                let point = touch.location(in: self)
+                if (self.isEditing && Float(point.x) > 40.0) || !self.isEditing {
+                    let indexPath: IndexPath? = self.indexPathForRow(at: point)
                     
                     if indexPath != nil {
-                        self.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+                        self.selectRow(at: indexPath, animated: false, scrollPosition: .none)
                         if let delegate: UITableViewDelegate = self.delegate {
-                            delegate.tableView?(self, didSelectRowAtIndexPath: indexPath!)
+                            delegate.tableView?(self, didSelectRowAt: indexPath!)
                         }
                     }
                 }
             }
         }
         
-        super.touchesEnded(touches, withEvent: event)
+        super.touchesEnded(touches, with: event)
     }
     
-    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+    override func touchesCancelled(_ touches: Set<UITouch>?, with event: UIEvent?) {
         self.allowsSelection = true
-        self.scrollEnabled = true
+        self.isScrollEnabled = true
         
         cancelLongPress()
         
         if let dragCell = dragCell {
-            var windowPoint = CGPointZero
+            var windowPoint = CGPoint.zero
             if let touch = touches?.first {
-                windowPoint = touch.locationInView(nil)
+                windowPoint = touch.location(in: nil)
             }
             
-            let userInfo = Notifications.userInfo(location: NSValue(CGPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
-            NSNotificationCenter.postNotificationToMainThreadWithName(Notifications.draggingCanceled, userInfo: userInfo)
+            let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
+            NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingCanceled, userInfo: userInfo)
             
             dragImageView?.removeFromSuperview()
         }
         
-        super.touchesCancelled(touches, withEvent: event)
+        super.touchesCancelled(touches!, with: event)
     }
 }

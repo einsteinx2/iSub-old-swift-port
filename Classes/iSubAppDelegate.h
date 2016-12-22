@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, ItemViewController, SidePanelController, ISMSServer;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, ItemViewController, SidePanelController, Server;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 
@@ -48,7 +48,7 @@
 - (void)enterOnlineModeForce;
 - (void)enterOfflineModeForce;
 
-- (void)loadFlurryAnalytics;
+//- (void)loadFlurryAnalytics;
 - (void)loadHockeyApp;
 - (void)loadInAppPurchaseStore;
 
@@ -64,7 +64,7 @@
 
 - (void)checkWaveBoxRelease;
 
-- (void)switchServer:(ISMSServer *)server redirectUrl:(NSString *)redirectionUrl;
+- (void)switchServerTo:(Server *)server redirectUrl:(NSString *)redirectionUrl;
 
 
 @end

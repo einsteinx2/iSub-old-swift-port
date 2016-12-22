@@ -16,8 +16,8 @@ class DraggableTableViewController: UITableViewController {
     
     // MARK: - Rotation -
     
-    override func shouldAutorotate() -> Bool {
-        if SavedSettings.sharedInstance().isRotationLockEnabled && UIDevice.currentDevice().orientation != .Portrait {
+    override var shouldAutorotate : Bool {
+        if SavedSettings.sharedInstance().isRotationLockEnabled && UIDevice.current.orientation != .portrait {
             return false
         }
         
@@ -37,12 +37,12 @@ class DraggableTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.barStyle = .Black
-        self.edgesForExtendedLayout = .None
+        self.navigationController?.navigationBar.barStyle = .black
+        self.edgesForExtendedLayout = UIRectEdge()
         
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(DraggableTableViewController.jukeboxToggled(_:)), name: ISMSNotification_JukeboxEnabled, object: nil)
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(DraggableTableViewController.jukeboxToggled(_:)), name: ISMSNotification_JukeboxDisabled, object: nil)
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(DraggableTableViewController.setupLeftBarButton), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(DraggableTableViewController.jukeboxToggled(_:)), name: ISMSNotification_JukeboxEnabled, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(DraggableTableViewController.jukeboxToggled(_:)), name: ISMSNotification_JukeboxDisabled, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(DraggableTableViewController.setupLeftBarButton), name: NSNotification.Name.UIApplicationDidBecomeActive.rawValue, object: nil)
         
         setupRefreshControl()
         
@@ -58,7 +58,7 @@ class DraggableTableViewController: UITableViewController {
         customizeTableView(tableView)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         updateBackgroundColor()
@@ -68,20 +68,20 @@ class DraggableTableViewController: UITableViewController {
     }
     
     deinit {
-        NSNotificationCenter.removeObserverOnMainThread(self, name: ISMSNotification_JukeboxEnabled, object: nil)
-        NSNotificationCenter.removeObserverOnMainThread(self, name: ISMSNotification_JukeboxDisabled, object: nil)
-        NSNotificationCenter.removeObserverOnMainThread(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_JukeboxEnabled, object: nil)
+        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_JukeboxDisabled, object: nil)
+        NotificationCenter.removeObserver(onMainThread: self, name: NSNotification.Name.UIApplicationDidBecomeActive.rawValue, object: nil)
     }
     
     // MARK: - Private -
     
-    private func updateBackgroundColor() {
+    fileprivate func updateBackgroundColor() {
         self.view.backgroundColor = SavedSettings.sharedInstance().isJukeboxEnabled ? ViewObjectsSingleton.sharedInstance().jukeboxColor : ViewObjectsSingleton.sharedInstance().windowColor
     }
     
     // MARK: Notifications
     
-    @objc private func jukeboxToggled(notification: NSNotification) {
+    @objc fileprivate func jukeboxToggled(_ notification: Notification) {
         self.updateBackgroundColor()
     }
     
@@ -94,13 +94,13 @@ class DraggableTableViewController: UITableViewController {
         return nil
     }
     
-    func customizeTableView(tableView: UITableView) {
+    func customizeTableView(_ tableView: UITableView) {
         
     }
 
     func setupLeftBarButton() -> UIBarButtonItem {
         return UIBarButtonItem(title: "Back",
-                               style: .Plain,
+                               style: .plain,
                                target: self,
                                action: #selector(DraggableTableViewController.popViewController))
     }
@@ -108,7 +108,7 @@ class DraggableTableViewController: UITableViewController {
     func setupRightBarButton() -> UIBarButtonItem? {
         if !IS_IPAD() {
             return UIBarButtonItem(image: UIImage(named: "now-playing"),
-                                   style: .Plain,
+                                   style: .plain,
                                    target: self,
                                    action: #selector(DraggableTableViewController.showPlayQueue))
         } else {
@@ -125,10 +125,10 @@ class DraggableTableViewController: UITableViewController {
     func setupRefreshControl() {
         if shouldSetupRefreshControl() && self.refreshControl == nil {
             let refreshControl = UIRefreshControl()
-            let tintColor = UIColor.whiteColor()
+            let tintColor = UIColor.white
             refreshControl.attributedTitle = NSAttributedString(string: "Pull down to reload...", attributes: [NSForegroundColorAttributeName: tintColor])
             refreshControl.tintColor = tintColor
-            refreshControl.addTarget(self, action: #selector(DraggableTableViewController.didPullToRefresh), forControlEvents: .ValueChanged)
+            refreshControl.addTarget(self, action: #selector(DraggableTableViewController.didPullToRefresh), for: .valueChanged)
             self.refreshControl = refreshControl
         }
     }
@@ -141,7 +141,7 @@ class DraggableTableViewController: UITableViewController {
     
     func showDeleteToggles() {
         // Show the delete toggle for already visible cells
-        UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseIn, animations: {
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseIn, animations: {
             for cell in self.tableView.visibleCells {
                 if let cell = cell as? ItemTableViewCell {
                     cell.showDeleteCheckbox()
@@ -159,14 +159,14 @@ class DraggableTableViewController: UITableViewController {
         }
     }
     
-    func markCellAsPlayingAtIndexPath(indexPath: NSIndexPath) {
+    func markCellAsPlayingAtIndexPath(_ indexPath: IndexPath) {
         for cell in self.tableView.visibleCells {
             if let cell = cell as? ItemTableViewCell {
                 cell.playing = false
             }
         }
         
-        if let cell = self.tableView.cellForRowAtIndexPath(indexPath) as? ItemTableViewCell {
+        if let cell = self.tableView.cellForRow(at: indexPath) as? ItemTableViewCell {
             cell.playing = true
         }
     }
@@ -174,27 +174,27 @@ class DraggableTableViewController: UITableViewController {
     // MARK - Actions -
     
     func popViewController() {
-        self.navigationController?.popViewControllerAnimated(true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func showMenu() {
-        self.sidePanelController?.showLeftPanelAnimated(true)
+        self.sidePanelController?.showLeftPanel(animated: true)
     }
     
     func showPlayQueue() {
-        self.sidePanelController?.showRightPanelAnimated(true)
+        self.sidePanelController?.showRightPanel(animated: true)
     }
     
     // MARK - Table View Delegate -
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // Remove seperator inset
-        cell.separatorInset = UIEdgeInsetsZero
+        cell.separatorInset = UIEdgeInsets.zero
         
         // Prevent the cell from inheriting the Table View's margin settings
         cell.preservesSuperviewLayoutMargins = false
         
         // Explictly set the cell's layout margins
-        cell.layoutMargins = UIEdgeInsetsZero
+        cell.layoutMargins = UIEdgeInsets.zero
     }
 }

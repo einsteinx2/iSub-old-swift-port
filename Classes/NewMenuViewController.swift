@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import Async
 
 private class MenuItem {
     let name: String
-    let function: NewMenuViewController -> (MenuItem) -> Void
+    let function: (NewMenuViewController) -> (MenuItem) -> Void
     var navController: UINavigationController?
     
-    init(name: String, function: NewMenuViewController -> (MenuItem) -> Void) {
+    init(name: String, function: @escaping (NewMenuViewController) -> (MenuItem) -> Void) {
         self.name = name
         self.function = function
     }
@@ -21,19 +22,19 @@ private class MenuItem {
 
 class NewMenuViewController: UITableViewController {
     
-    private let reuseIdentifier = "Menu Cell"
-    private let menuItems = [MenuItem(name: "Folders", function: showFolders),
+    fileprivate let reuseIdentifier = "Menu Cell"
+    fileprivate let menuItems = [MenuItem(name: "Folders", function: showFolders),
                              MenuItem(name: "Artists", function: showArtists),
                              MenuItem(name: "Settings", function: showSettings)];
     
-    private let centerController = CenterPanelContainerViewController()
+    fileprivate let centerController = CenterPanelContainerViewController()
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.blackColor()
+        self.view.backgroundColor = UIColor.black
         
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        self.tableView.separatorStyle = .None
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.separatorStyle = .none
     }
     
     // Dispose of any existing controllers
@@ -52,14 +53,14 @@ class NewMenuViewController: UITableViewController {
         defaultMenuItem.function(self)(defaultMenuItem)
     }
     
-    private func showFolders(menuItem: MenuItem) {
+    fileprivate func showFolders(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
             let loader = ISMSRootFoldersLoader()
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
             let viewController = ItemViewController(viewModel: viewModel)
             let navController = UINavigationController(rootViewController: viewController)
-            navController.navigationBar.barStyle = .Black
+            navController.navigationBar.barStyle = .black
             navController.navigationBar.fixedHeightWhenStatusBarHidden = true
             menuItem.navController = navController
         }
@@ -67,14 +68,14 @@ class NewMenuViewController: UITableViewController {
         centerController.contentController = menuItem.navController
     }
     
-    private func showArtists(menuItem: MenuItem) {
+    fileprivate func showArtists(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
             let loader = ISMSRootArtistsLoader()
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
             let viewController = ItemViewController(viewModel: viewModel)
             let navController = UINavigationController(rootViewController: viewController)
-            navController.navigationBar.barStyle = .Black
+            navController.navigationBar.barStyle = .black
             navController.navigationBar.fixedHeightWhenStatusBarHidden = true
             menuItem.navController = navController
         }
@@ -82,11 +83,11 @@ class NewMenuViewController: UITableViewController {
         centerController.contentController = menuItem.navController
     }
 
-    private func showSettings(menuItem: MenuItem) {
+    fileprivate func showSettings(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
             let viewController = ServerListViewController()
             let navController = UINavigationController(rootViewController: viewController)
-            navController.navigationBar.barStyle = .Black
+            navController.navigationBar.barStyle = .black
             navController.navigationBar.fixedHeightWhenStatusBarHidden = true
             menuItem.navController = navController
         }
@@ -100,18 +101,18 @@ class NewMenuViewController: UITableViewController {
     
     // MARK: - Table View Delegate -
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menuItems.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier, forIndexPath: indexPath)
-        cell.backgroundColor = UIColor.clearColor()
-        cell.textLabel?.textColor = UIColor.whiteColor()
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: self.reuseIdentifier, for: indexPath)
+        cell.backgroundColor = UIColor.clear
+        cell.textLabel?.textColor = UIColor.white
         
         let menuItem = self.menuItems[indexPath.row]
         cell.textLabel?.text = menuItem.name
@@ -119,15 +120,15 @@ class NewMenuViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let menuItem = self.menuItems[indexPath.row]
         menuItem.function(self)(menuItem)
-        EX2Dispatch.runInMainThreadAfterDelay(0.2) {
-            self.sidePanelController.showCenterPanelAnimated(true)
+        Async.main(after: 0.2) {
+            self.sidePanelController.showCenterPanel(animated: true)
         }
     }
 }

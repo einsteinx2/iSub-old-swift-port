@@ -11,16 +11,16 @@ import UIKit
 
 class ItemViewController: DraggableTableViewController {
     
-    private let reuseIdentifier = "Item Cell"
-    private let foldersSectionIndex   = 0
-    private let artistsSectionIndex   = 1
-    private let albumsSectionIndex    = 2
-    private let songsSectionIndex     = 3
-    private let playlistsSectionIndex = 4
+    fileprivate let reuseIdentifier = "Item Cell"
+    fileprivate let foldersSectionIndex   = 0
+    fileprivate let artistsSectionIndex   = 1
+    fileprivate let albumsSectionIndex    = 2
+    fileprivate let songsSectionIndex     = 3
+    fileprivate let playlistsSectionIndex = 4
     
-    private let viewModel: ItemViewModel
-    private var reloading: Bool = false
-    private var sectionIndexes: [SectionIndex]?
+    fileprivate let viewModel: ItemViewModel
+    fileprivate var reloading: Bool = false
+    fileprivate var sectionIndexes: [SectionIndex]?
     
     init(viewModel: ItemViewModel) {
         self.viewModel = viewModel
@@ -31,14 +31,14 @@ class ItemViewController: DraggableTableViewController {
         fatalError("NSCoding not supported")
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.edgesForExtendedLayout = UIRectEdge.None
+        self.edgesForExtendedLayout = UIRectEdge()
         self.automaticallyAdjustsScrollViewInsets = false
         
         viewModel.delegate = self
@@ -52,11 +52,11 @@ class ItemViewController: DraggableTableViewController {
         }
     }
     
-    override func customizeTableView(tableView: UITableView) {
-        tableView.registerClass(ItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+    override func customizeTableView(_ tableView: UITableView) {
+        tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.tableView.reloadData()
@@ -64,7 +64,7 @@ class ItemViewController: DraggableTableViewController {
         registerForNotifications()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         unregisterForNotifications()
@@ -79,7 +79,7 @@ class ItemViewController: DraggableTableViewController {
     override func setupLeftBarButton() -> UIBarButtonItem {
         if viewModel.topLevelController {
             return UIBarButtonItem(title: "Menu",
-                                   style: .Plain,
+                                   style: .plain,
                                    target: self,
                                    action: #selector(DraggableTableViewController.showMenu))
         } else {
@@ -89,21 +89,21 @@ class ItemViewController: DraggableTableViewController {
     
     // MARK: - Notifications - 
     
-    private func registerForNotifications() {
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(ItemViewController.currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
-        NSNotificationCenter.addObserverOnMainThread(self, selector: #selector(ItemViewController.songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
+    fileprivate func registerForNotifications() {
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(ItemViewController.currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(ItemViewController.songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
     }
     
-    private func unregisterForNotifications() {
-        NSNotificationCenter.removeObserverOnMainThread(self, name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
-        NSNotificationCenter.removeObserverOnMainThread(self, name: ISMSNotification_SongPlaybackStarted, object: nil)
+    fileprivate func unregisterForNotifications() {
+        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_SongPlaybackStarted, object: nil)
     }
     
-    func currentPlaylistIndexChanged(notification: NSNotification?) {
+    func currentPlaylistIndexChanged(_ notification: Notification?) {
         self.tableView.reloadData()
     }
     
-    func songPlaybackStarted(notification: NSNotification?) {
+    func songPlaybackStarted(_ notification: Notification?) {
         self.tableView.reloadData()
     }
     
@@ -120,7 +120,7 @@ class ItemViewController: DraggableTableViewController {
         }
     }
     
-    private func dataSourceDidFinishLoadingNewData() {
+    fileprivate func dataSourceDidFinishLoadingNewData() {
         reloading = false
         self.refreshControl?.endRefreshing()
     }
@@ -132,7 +132,7 @@ class ItemViewController: DraggableTableViewController {
     
     // MARK: - Table View Delegate -
     
-    override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         var titles: [String] = []
         
         if let sectionIndexes = sectionIndexes {
@@ -144,7 +144,7 @@ class ItemViewController: DraggableTableViewController {
         return titles;
     }
     
-    override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
+    override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         if let sectionIndexes = sectionIndexes {
             let row = sectionIndexes[index].firstIndex
             
@@ -161,19 +161,19 @@ class ItemViewController: DraggableTableViewController {
             }
             
             if section >= 0 {
-                let indexPath = NSIndexPath(forRow: row, inSection: section)
-                tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+                let indexPath = IndexPath(row: row, section: section)
+                tableView.scrollToRow(at: indexPath, at: UITableViewScrollPosition.top, animated: false)
             }
         }
         
         return -1;
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 5
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var count: Int? = nil
         
         switch section {
@@ -188,14 +188,14 @@ class ItemViewController: DraggableTableViewController {
         return count == nil ? 0 : count!
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! ItemTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ItemTableViewCell
         cell.alwaysShowSubtitle = true
-        cell.cellHeight = self.tableView(tableView, heightForRowAtIndexPath: indexPath)
+        cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
         
         switch indexPath.section {
         case foldersSectionIndex:
-            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.alwaysShowCoverArt = true
             if sectionIndexes != nil {
                 cell.indexShowing = true
@@ -208,7 +208,7 @@ class ItemViewController: DraggableTableViewController {
             
             break
         case artistsSectionIndex:
-            cell.accessoryType = UITableViewCellAccessoryType.None
+            cell.accessoryType = UITableViewCellAccessoryType.none
             if sectionIndexes != nil {
                 cell.indexShowing = true
             }
@@ -220,7 +220,7 @@ class ItemViewController: DraggableTableViewController {
             
             break
         case albumsSectionIndex:
-            cell.accessoryType = UITableViewCellAccessoryType.None
+            cell.accessoryType = UITableViewCellAccessoryType.none
             if sectionIndexes != nil {
                 cell.indexShowing = true
             }
@@ -232,7 +232,7 @@ class ItemViewController: DraggableTableViewController {
             
             break
         case songsSectionIndex:
-            cell.accessoryType = UITableViewCellAccessoryType.None
+            cell.accessoryType = UITableViewCellAccessoryType.none
             
             let song = viewModel.songs[indexPath.row]
             cell.associatedObject = song
@@ -259,7 +259,7 @@ class ItemViewController: DraggableTableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var height: CGFloat = 0
         
         switch indexPath.section {
@@ -278,7 +278,7 @@ class ItemViewController: DraggableTableViewController {
         return ISMSNormalize(height)
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if ViewObjectsSingleton.sharedInstance().isCellEnabled {
             switch indexPath.section {
             case foldersSectionIndex:
@@ -289,7 +289,7 @@ class ItemViewController: DraggableTableViewController {
                 
                 let viewModel = ItemViewModel(loader: folderLoader)
                 let viewController = ItemViewController(viewModel: viewModel)
-                self.pushViewControllerCustom(viewController)
+                self.pushCustom(viewController)
             case artistsSectionIndex:
                 let artist = self.viewModel.artists[indexPath.row]
                 let artistLoader = ISMSArtistLoader()
@@ -297,7 +297,7 @@ class ItemViewController: DraggableTableViewController {
                 
                 let viewModel = ItemViewModel(loader: artistLoader)
                 let viewController = ItemViewController(viewModel: viewModel)
-                self.pushViewControllerCustom(viewController)
+                self.pushCustom(viewController)
             case albumsSectionIndex:
                 let album = self.viewModel.albums[indexPath.row]
                 let albumLoader = ISMSAlbumLoader()
@@ -305,14 +305,14 @@ class ItemViewController: DraggableTableViewController {
                 
                 let viewModel = ItemViewModel(loader: albumLoader)
                 let viewController = ItemViewController(viewModel: viewModel)
-                self.pushViewControllerCustom(viewController)
+                self.pushCustom(viewController)
             case songsSectionIndex:
                 // TODO: Implement a way to just switch play index when we're playing from the same array to save time
                 //playAll(songs: viewModel.songs, playIndex: indexPath.row)
                 PlayQueue.sharedInstance.playSongs(viewModel.songs, playIndex: indexPath.row)
                 
                 let song = viewModel.songs[indexPath.row] as ISMSSong
-                if song.contentType?.basicType == ISMSBasicContentType.Audio {
+                if song.contentType?.basicType == ISMSBasicContentType.audio {
                     self.showPlayer()
                 }
                 break
@@ -322,7 +322,7 @@ class ItemViewController: DraggableTableViewController {
         }
         else
         {
-            self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
+            self.tableView.deselectRow(at: indexPath, animated: false)
         }
     }
 }
@@ -335,7 +335,7 @@ extension ItemViewController : ItemViewModelDelegate {
         dataSourceDidFinishLoadingNewData()
     }
     
-    func loadingError(error: String) {
+    func loadingError(_ error: String) {
         let message = "There was an error loading the folder.\n\nError \(error)"
         
         let alert = CustomUIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "OK")

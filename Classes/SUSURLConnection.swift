@@ -8,21 +8,21 @@
 
 import Foundation
 
-@objc public class SUSURLConnection: NSObject, NSURLConnectionDataDelegate {
+@objc open class SUSURLConnection: NSObject, NSURLConnectionDataDelegate {
     
-    public let action: String
-    public let parameters: Dictionary<String, String>?
-    public let userInfo: Dictionary<String, AnyObject>?
+    open let action: String
+    open let parameters: Dictionary<String, String>?
+    open let userInfo: Dictionary<String, AnyObject>?
     
-    private var _request: NSMutableURLRequest
-    private var _connection: NSURLConnection?
-    private var _receivedData: NSMutableData?
+    fileprivate var _request: NSMutableURLRequest
+    fileprivate var _connection: NSURLConnection?
+    fileprivate var _receivedData: NSMutableData?
     
-    private let _receivedDataHandler: ((data: NSData) -> ())?
-    private let _successHandler: (data: NSData?, userInfo: Dictionary<String, AnyObject>?) -> ()
-    private let _failureHandler: (error: NSError) -> ()
+    fileprivate let _receivedDataHandler: ((_ data: Data) -> ())?
+    fileprivate let _successHandler: (_ data: Data?, _ userInfo: Dictionary<String, AnyObject>?) -> ()
+    fileprivate let _failureHandler: (_ error: NSError) -> ()
     
-    public init(action: String, parameters: Dictionary<String, String>?, userInfo: Dictionary<String, AnyObject>?, receivedData: ((data: NSData) -> ())?, success:(data: NSData?, userInfo: Dictionary<String, AnyObject>?) -> (), failure:(error: NSError) -> ())
+    public init(action: String, parameters: Dictionary<String, String>?, userInfo: Dictionary<String, AnyObject>?, receivedData: ((_ data: Data) -> ())?, success:@escaping (_ data: Data?, _ userInfo: Dictionary<String, AnyObject>?) -> (), failure:@escaping (_ error: NSError) -> ())
     {
         self.action = action
         self.parameters = parameters
@@ -32,11 +32,11 @@ import Foundation
         self._successHandler = success
         self._failureHandler = failure
         
-        self._request = NSMutableURLRequest(SUSAction: action, parameters: parameters)
+        self._request = NSMutableURLRequest(susAction: action, parameters: parameters)
         
         super.init()
         
-        if let connection = NSURLConnection(request: self._request, delegate: self) {
+        if let connection = NSURLConnection(request: self._request as URLRequest, delegate: self) {
             self._connection = connection
             
             if self._receivedDataHandler == nil {
@@ -46,18 +46,18 @@ import Foundation
             self._connection?.start()
         } else {
             let code: Int = Int(ISMSErrorCode_CouldNotCreateConnection)
-            self._failureHandler(error: NSError(ISMSCode: code))
+            self._failureHandler(NSError(ismsCode: code))
         }
     }
     
-    public convenience init(action: String, parameters: Dictionary<String, String>?, userInfo: Dictionary<String, AnyObject>?, success:(data: NSData?, userInfo: Dictionary<String, AnyObject>?) -> (), failure:(error: NSError) -> ())
+    public convenience init(action: String, parameters: Dictionary<String, String>?, userInfo: Dictionary<String, AnyObject>?, success:@escaping (_ data: Data?, _ userInfo: Dictionary<String, AnyObject>?) -> (), failure:@escaping (_ error: NSError) -> ())
     {
         self.init(action: action, parameters: parameters, userInfo: userInfo, receivedData: nil, success: success, failure: failure)
     }
     
     // MARK: - Connection Delegate -
     
-    public func connection(connection: NSURLConnection, canAuthenticateAgainstProtectionSpace protectionSpace: NSURLProtectionSpace) -> Bool {
+    open func connection(_ connection: NSURLConnection, canAuthenticateAgainstProtectionSpace protectionSpace: URLProtectionSpace) -> Bool {
         if protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
             return true
         }
@@ -65,38 +65,38 @@ import Foundation
         return false
     }
     
-    public func connection(connection: NSURLConnection, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge) {
+    open func connection(_ connection: NSURLConnection, didReceive challenge: URLAuthenticationChallenge) {
         guard let sender = challenge.sender, let serverTrust = challenge.protectionSpace.serverTrust else {
             return
         }
         
         if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
-            sender.useCredential(NSURLCredential(forTrust: serverTrust), forAuthenticationChallenge: challenge)
+            sender.use(URLCredential(trust: serverTrust), for: challenge)
         }
         
-        sender.continueWithoutCredentialForAuthenticationChallenge(challenge)
+        sender.continueWithoutCredential(for: challenge)
 
     }
     
-    public func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
+    open func connection(_ connection: NSURLConnection, didReceive response: URLResponse) {
         if self._receivedDataHandler == nil {
             self._receivedData?.length = 0
         }
     }
     
-    public func connection(connection: NSURLConnection, didReceiveData data: NSData) {
+    open func connection(_ connection: NSURLConnection, didReceive data: Data) {
         if let receivedDataHandler = self._receivedDataHandler {
-            receivedDataHandler(data: data)
+            receivedDataHandler(data)
         } else {
-            self._receivedData?.appendData(data)
+            self._receivedData?.append(data)
         }
     }
     
-    public func connection(connection: NSURLConnection, didFailWithError error: NSError) {
-        self._failureHandler(error: error)
+    open func connection(_ connection: NSURLConnection, didFailWithError error: Error) {
+        self._failureHandler(error as NSError)
     }
     
-    public func connectionDidFinishLoading(connection: NSURLConnection) {
-        self._successHandler(data: self._receivedData, userInfo: self.userInfo)
+    open func connectionDidFinishLoading(_ connection: NSURLConnection) {
+        self._successHandler(self._receivedData as Data?, self.userInfo)
     }
 }

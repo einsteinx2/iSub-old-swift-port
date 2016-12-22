@@ -16,13 +16,7 @@
 	[request setURL:url];
 	[request setHTTPMethod:@"GET"];
     
-    
-#ifndef ARC_ENABLED
-    return [request autorelease];
-#else
     return request;
-#endif
-    
 }
 
 + (NSMutableURLRequest*) tbxmlPostRequestWithURL:(NSURL*)url parameters:(NSDictionary*)parameters {
@@ -43,12 +37,7 @@
 	[request setValue:postLength forHTTPHeaderField:@"Content-Length"];
 	[request setHTTPBody:postData];
 
-#ifndef ARC_ENABLED
-    [params release];
-    return [request autorelease];
-#else
     return request;
-#endif
 }
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Ben Baron. All rights reserved.
 //
 
-@class ISMSServer;
+@class Server;
 @protocol ServerEditDelegate <NSObject>
-- (void)serverEdited:(ISMSServer *)server;
+- (void)serverEdited:(Server *)server;
 @end
