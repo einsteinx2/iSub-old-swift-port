@@ -24,10 +24,6 @@ LOG_LEVEL_ISUB_DEFAULT
 // Singleton object
 static AudioEngine *sharedInstance = nil;
 
-#ifdef IOS
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-
 - (void)beginInterruption
 {
     DDLogVerbose(@"[AudioEngine] audio session begin interruption");
@@ -93,9 +89,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         return;
     }
 }
-
-#pragma clang diagnostic pop
-#endif
 
 - (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index
 {

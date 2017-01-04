@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Einstein Times Two Software. All rights reserved.
 //
 
+/*
 #import "HLSProxyConnection.h"
 #import "LibSub.h"
 #import "iSub-Swift.h"
@@ -30,3 +31,4 @@ static const int ddLogLevel = DDLogLevelError;
 }
 
 @end
+*/

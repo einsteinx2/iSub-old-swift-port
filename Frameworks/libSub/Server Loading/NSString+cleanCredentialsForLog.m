@@ -26,7 +26,7 @@
     // Replace basic auth header string
     NSString *authStr = [NSString stringWithFormat:@"%@:%@", settingsS.username, password];
     NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
-    NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];*/
+    NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64Encoded]];*/
     return self;
 }
 

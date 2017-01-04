@@ -15,26 +15,13 @@
 #import "ISMSStreamHandler.h"
 #import "ISMSURLConnectionStreamHandler.h"
 #import "ISMSCFNetworkStreamHandler.h"
+#import "RXMLElement.h"
 
 LOG_LEVEL_ISUB_DEBUG
 
 #define maxNumOfReconnects 5
 
 @implementation ISMSCacheQueueManager
-
-#pragma mark - Lyric Loader Delegate
-
-- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
-{
-	//DLog(@"theLoader: %@", theLoader);
-	theLoader.delegate = nil;
-}
-
-- (void)loadingFinished:(ISMSLoader *)theLoader
-{
-	//DLog(@"theLoader: %@", theLoader);
-	theLoader.delegate = nil;
-}
 
 #pragma mark Download Methods
 
@@ -252,22 +239,15 @@ LOG_LEVEL_ISUB_DEBUG
 		BOOL isLicenseIssue = NO;
 		// Verify that it's a license issue
 		NSData *receivedData = [NSData dataWithContentsOfFile:handler.filePath];
-		NSError *error;
-		TBXML *tbxml = [[TBXML alloc] initWithXMLData:receivedData error:&error];
-		if (!error)
-		{
-			TBXMLElement *root = tbxml.rootXMLElement;
-			
-			TBXMLElement *error = [TBXML childElementNamed:@"error" parentElement:root];
-			if (error)
-			{
-				NSString *code = [TBXML valueOfAttributeNamed:@"code" forElement:error];
-				//NSString *message = [TBXML valueOfAttributeNamed:@"message" forElement:error];
-				if ([code isEqualToString:@"60"])
-				{
-					isLicenseIssue = YES;
-				}
-			}
+        RXMLElement *root = [[RXMLElement alloc] initFromXMLData:receivedData];
+        if (root.isValid) {
+            RXMLElement *error = [root child:@"error"];
+            if (error.isValid) {
+                NSString *code = [error attribute:@"code"];
+                if ([code isEqualToString:@"60"]) {
+                    isLicenseIssue = YES;
+                }
+            }
 		}
 		
 		if (isLicenseIssue)

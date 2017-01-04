@@ -662,16 +662,6 @@
 		5358DCDC1E0B78470024A0D4 /* LibSub.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC111E0B78470024A0D4 /* LibSub.m */; };
 		5358DCDD1E0B78470024A0D4 /* LibSub.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC111E0B78470024A0D4 /* LibSub.m */; };
 		5358DCDE1E0B78470024A0D4 /* LibSub.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC111E0B78470024A0D4 /* LibSub.m */; };
-		5358DCDF1E0B78470024A0D4 /* HLSProxyConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC141E0B78470024A0D4 /* HLSProxyConnection.m */; };
-		5358DCE01E0B78470024A0D4 /* HLSProxyConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC141E0B78470024A0D4 /* HLSProxyConnection.m */; };
-		5358DCE11E0B78470024A0D4 /* HLSProxyConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC141E0B78470024A0D4 /* HLSProxyConnection.m */; };
-		5358DCE21E0B78470024A0D4 /* HLSProxyConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC141E0B78470024A0D4 /* HLSProxyConnection.m */; };
-		5358DCE31E0B78470024A0D4 /* HLSProxyConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC141E0B78470024A0D4 /* HLSProxyConnection.m */; };
-		5358DCE41E0B78470024A0D4 /* HLSProxyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC161E0B78470024A0D4 /* HLSProxyResponse.m */; };
-		5358DCE51E0B78470024A0D4 /* HLSProxyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC161E0B78470024A0D4 /* HLSProxyResponse.m */; };
-		5358DCE61E0B78470024A0D4 /* HLSProxyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC161E0B78470024A0D4 /* HLSProxyResponse.m */; };
-		5358DCE71E0B78470024A0D4 /* HLSProxyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC161E0B78470024A0D4 /* HLSProxyResponse.m */; };
-		5358DCE81E0B78470024A0D4 /* HLSProxyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC161E0B78470024A0D4 /* HLSProxyResponse.m */; };
 		5358DCE91E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
 		5358DCEA1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
 		5358DCEB1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
@@ -807,111 +797,6 @@
 		5358DDC21E0B78480024A0D4 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC7A1E0B78470024A0D4 /* Utils.swift */; };
 		5358DDC31E0B78480024A0D4 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC7A1E0B78470024A0D4 /* Utils.swift */; };
 		5358DDC41E0B78480024A0D4 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC7A1E0B78470024A0D4 /* Utils.swift */; };
-		5358DF061E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDC91E0B78990024A0D4 /* GCDAsyncSocket.m */; };
-		5358DF071E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDC91E0B78990024A0D4 /* GCDAsyncSocket.m */; };
-		5358DF081E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDC91E0B78990024A0D4 /* GCDAsyncSocket.m */; };
-		5358DF091E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDC91E0B78990024A0D4 /* GCDAsyncSocket.m */; };
-		5358DF0A1E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDC91E0B78990024A0D4 /* GCDAsyncSocket.m */; };
-		5358DF0B1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCB1E0B78990024A0D4 /* GCDAsyncUdpSocket.m */; };
-		5358DF0C1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCB1E0B78990024A0D4 /* GCDAsyncUdpSocket.m */; };
-		5358DF0D1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCB1E0B78990024A0D4 /* GCDAsyncUdpSocket.m */; };
-		5358DF0E1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCB1E0B78990024A0D4 /* GCDAsyncUdpSocket.m */; };
-		5358DF0F1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCB1E0B78990024A0D4 /* GCDAsyncUdpSocket.m */; };
-		5358DF101E0B78990024A0D4 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCE1E0B78990024A0D4 /* AsyncSocket.m */; };
-		5358DF111E0B78990024A0D4 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCE1E0B78990024A0D4 /* AsyncSocket.m */; };
-		5358DF121E0B78990024A0D4 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCE1E0B78990024A0D4 /* AsyncSocket.m */; };
-		5358DF131E0B78990024A0D4 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCE1E0B78990024A0D4 /* AsyncSocket.m */; };
-		5358DF141E0B78990024A0D4 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDCE1E0B78990024A0D4 /* AsyncSocket.m */; };
-		5358DF151E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD01E0B78990024A0D4 /* AsyncUdpSocket.m */; };
-		5358DF161E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD01E0B78990024A0D4 /* AsyncUdpSocket.m */; };
-		5358DF171E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD01E0B78990024A0D4 /* AsyncUdpSocket.m */; };
-		5358DF181E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD01E0B78990024A0D4 /* AsyncUdpSocket.m */; };
-		5358DF191E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD01E0B78990024A0D4 /* AsyncUdpSocket.m */; };
-		5358DF1A1E0B78990024A0D4 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD41E0B78990024A0D4 /* DDData.m */; };
-		5358DF1B1E0B78990024A0D4 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD41E0B78990024A0D4 /* DDData.m */; };
-		5358DF1C1E0B78990024A0D4 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD41E0B78990024A0D4 /* DDData.m */; };
-		5358DF1D1E0B78990024A0D4 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD41E0B78990024A0D4 /* DDData.m */; };
-		5358DF1E1E0B78990024A0D4 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD41E0B78990024A0D4 /* DDData.m */; };
-		5358DF1F1E0B78990024A0D4 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD61E0B78990024A0D4 /* DDNumber.m */; };
-		5358DF201E0B78990024A0D4 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD61E0B78990024A0D4 /* DDNumber.m */; };
-		5358DF211E0B78990024A0D4 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD61E0B78990024A0D4 /* DDNumber.m */; };
-		5358DF221E0B78990024A0D4 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD61E0B78990024A0D4 /* DDNumber.m */; };
-		5358DF231E0B78990024A0D4 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD61E0B78990024A0D4 /* DDNumber.m */; };
-		5358DF241E0B78990024A0D4 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD81E0B78990024A0D4 /* DDRange.m */; };
-		5358DF251E0B78990024A0D4 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD81E0B78990024A0D4 /* DDRange.m */; };
-		5358DF261E0B78990024A0D4 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD81E0B78990024A0D4 /* DDRange.m */; };
-		5358DF271E0B78990024A0D4 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD81E0B78990024A0D4 /* DDRange.m */; };
-		5358DF281E0B78990024A0D4 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDD81E0B78990024A0D4 /* DDRange.m */; };
-		5358DF291E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */; };
-		5358DF2A1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */; };
-		5358DF2B1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */; };
-		5358DF2C1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */; };
-		5358DF2D1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */; };
-		5358DF2E1E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5358DF2F1E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5358DF301E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5358DF311E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5358DF321E0B789A0024A0D4 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5358DF331E0B789A0024A0D4 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */; };
-		5358DF341E0B789A0024A0D4 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */; };
-		5358DF351E0B789A0024A0D4 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */; };
-		5358DF361E0B789A0024A0D4 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */; };
-		5358DF371E0B789A0024A0D4 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */; };
-		5358DF381E0B789A0024A0D4 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE21E0B78990024A0D4 /* HTTPServer.m */; };
-		5358DF391E0B789A0024A0D4 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE21E0B78990024A0D4 /* HTTPServer.m */; };
-		5358DF3A1E0B789A0024A0D4 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE21E0B78990024A0D4 /* HTTPServer.m */; };
-		5358DF3B1E0B789A0024A0D4 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE21E0B78990024A0D4 /* HTTPServer.m */; };
-		5358DF3C1E0B789A0024A0D4 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE21E0B78990024A0D4 /* HTTPServer.m */; };
-		5358DF3D1E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE51E0B78990024A0D4 /* MultipartFormDataParser.m */; };
-		5358DF3E1E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE51E0B78990024A0D4 /* MultipartFormDataParser.m */; };
-		5358DF3F1E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE51E0B78990024A0D4 /* MultipartFormDataParser.m */; };
-		5358DF401E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE51E0B78990024A0D4 /* MultipartFormDataParser.m */; };
-		5358DF411E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE51E0B78990024A0D4 /* MultipartFormDataParser.m */; };
-		5358DF421E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE71E0B78990024A0D4 /* MultipartMessageHeader.m */; };
-		5358DF431E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE71E0B78990024A0D4 /* MultipartMessageHeader.m */; };
-		5358DF441E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE71E0B78990024A0D4 /* MultipartMessageHeader.m */; };
-		5358DF451E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE71E0B78990024A0D4 /* MultipartMessageHeader.m */; };
-		5358DF461E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE71E0B78990024A0D4 /* MultipartMessageHeader.m */; };
-		5358DF471E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE91E0B78990024A0D4 /* MultipartMessageHeaderField.m */; };
-		5358DF481E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE91E0B78990024A0D4 /* MultipartMessageHeaderField.m */; };
-		5358DF491E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE91E0B78990024A0D4 /* MultipartMessageHeaderField.m */; };
-		5358DF4A1E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE91E0B78990024A0D4 /* MultipartMessageHeaderField.m */; };
-		5358DF4B1E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDE91E0B78990024A0D4 /* MultipartMessageHeaderField.m */; };
-		5358DF4C1E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEC1E0B78990024A0D4 /* HTTPAsyncFileResponse.m */; };
-		5358DF4D1E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEC1E0B78990024A0D4 /* HTTPAsyncFileResponse.m */; };
-		5358DF4E1E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEC1E0B78990024A0D4 /* HTTPAsyncFileResponse.m */; };
-		5358DF4F1E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEC1E0B78990024A0D4 /* HTTPAsyncFileResponse.m */; };
-		5358DF501E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEC1E0B78990024A0D4 /* HTTPAsyncFileResponse.m */; };
-		5358DF511E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEE1E0B78990024A0D4 /* HTTPDataResponse.m */; };
-		5358DF521E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEE1E0B78990024A0D4 /* HTTPDataResponse.m */; };
-		5358DF531E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEE1E0B78990024A0D4 /* HTTPDataResponse.m */; };
-		5358DF541E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEE1E0B78990024A0D4 /* HTTPDataResponse.m */; };
-		5358DF551E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDEE1E0B78990024A0D4 /* HTTPDataResponse.m */; };
-		5358DF561E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF01E0B78990024A0D4 /* HTTPDynamicFileResponse.m */; };
-		5358DF571E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF01E0B78990024A0D4 /* HTTPDynamicFileResponse.m */; };
-		5358DF581E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF01E0B78990024A0D4 /* HTTPDynamicFileResponse.m */; };
-		5358DF591E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF01E0B78990024A0D4 /* HTTPDynamicFileResponse.m */; };
-		5358DF5A1E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF01E0B78990024A0D4 /* HTTPDynamicFileResponse.m */; };
-		5358DF5B1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF21E0B78990024A0D4 /* HTTPErrorResponse.m */; };
-		5358DF5C1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF21E0B78990024A0D4 /* HTTPErrorResponse.m */; };
-		5358DF5D1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF21E0B78990024A0D4 /* HTTPErrorResponse.m */; };
-		5358DF5E1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF21E0B78990024A0D4 /* HTTPErrorResponse.m */; };
-		5358DF5F1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF21E0B78990024A0D4 /* HTTPErrorResponse.m */; };
-		5358DF601E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF41E0B78990024A0D4 /* HTTPFileResponse.m */; };
-		5358DF611E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF41E0B78990024A0D4 /* HTTPFileResponse.m */; };
-		5358DF621E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF41E0B78990024A0D4 /* HTTPFileResponse.m */; };
-		5358DF631E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF41E0B78990024A0D4 /* HTTPFileResponse.m */; };
-		5358DF641E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF41E0B78990024A0D4 /* HTTPFileResponse.m */; };
-		5358DF651E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */; };
-		5358DF661E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */; };
-		5358DF671E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */; };
-		5358DF681E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */; };
-		5358DF691E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */; };
-		5358DF6A1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5358DF6B1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5358DF6C1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5358DF6D1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5358DF6E1E0B789A0024A0D4 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDF81E0B78990024A0D4 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5358DF6F1E0B789A0024A0D4 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDFC1E0B78990024A0D4 /* CLIColor.m */; };
 		5358DF701E0B789A0024A0D4 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDFC1E0B78990024A0D4 /* CLIColor.m */; };
 		5358DF711E0B789A0024A0D4 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDFC1E0B78990024A0D4 /* CLIColor.m */; };
@@ -1643,66 +1528,6 @@
 		537EF7BB182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B4182B2F2200968FE0 /* controller-slider-thumb@2x.png */; };
 		537EF7BC182B2F2200968FE0 /* controller-slider-thumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 537EF7B4182B2F2200968FE0 /* controller-slider-thumb@2x.png */; };
 		537FCC5412F8F7F400F1D996 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 537FCC5312F8F7F400F1D996 /* iTunesArtwork */; };
-		53835C321E0B7CE70077B53D /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1A1E0B7CE70077B53D /* NSObject+SBJson.m */; };
-		53835C331E0B7CE70077B53D /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1A1E0B7CE70077B53D /* NSObject+SBJson.m */; };
-		53835C341E0B7CE70077B53D /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1A1E0B7CE70077B53D /* NSObject+SBJson.m */; };
-		53835C351E0B7CE70077B53D /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1A1E0B7CE70077B53D /* NSObject+SBJson.m */; };
-		53835C361E0B7CE70077B53D /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1A1E0B7CE70077B53D /* NSObject+SBJson.m */; };
-		53835C371E0B7CE70077B53D /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1D1E0B7CE70077B53D /* SBJsonParser.m */; };
-		53835C381E0B7CE70077B53D /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1D1E0B7CE70077B53D /* SBJsonParser.m */; };
-		53835C391E0B7CE70077B53D /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1D1E0B7CE70077B53D /* SBJsonParser.m */; };
-		53835C3A1E0B7CE70077B53D /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1D1E0B7CE70077B53D /* SBJsonParser.m */; };
-		53835C3B1E0B7CE70077B53D /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1D1E0B7CE70077B53D /* SBJsonParser.m */; };
-		53835C3C1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1F1E0B7CE70077B53D /* SBJsonStreamParser.m */; };
-		53835C3D1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1F1E0B7CE70077B53D /* SBJsonStreamParser.m */; };
-		53835C3E1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1F1E0B7CE70077B53D /* SBJsonStreamParser.m */; };
-		53835C3F1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1F1E0B7CE70077B53D /* SBJsonStreamParser.m */; };
-		53835C401E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C1F1E0B7CE70077B53D /* SBJsonStreamParser.m */; };
-		53835C411E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C211E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m */; };
-		53835C421E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C211E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m */; };
-		53835C431E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C211E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m */; };
-		53835C441E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C211E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m */; };
-		53835C451E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C211E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m */; };
-		53835C461E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C231E0B7CE70077B53D /* SBJsonStreamParserAdapter.m */; };
-		53835C471E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C231E0B7CE70077B53D /* SBJsonStreamParserAdapter.m */; };
-		53835C481E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C231E0B7CE70077B53D /* SBJsonStreamParserAdapter.m */; };
-		53835C491E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C231E0B7CE70077B53D /* SBJsonStreamParserAdapter.m */; };
-		53835C4A1E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C231E0B7CE70077B53D /* SBJsonStreamParserAdapter.m */; };
-		53835C4B1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C251E0B7CE70077B53D /* SBJsonStreamParserState.m */; };
-		53835C4C1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C251E0B7CE70077B53D /* SBJsonStreamParserState.m */; };
-		53835C4D1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C251E0B7CE70077B53D /* SBJsonStreamParserState.m */; };
-		53835C4E1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C251E0B7CE70077B53D /* SBJsonStreamParserState.m */; };
-		53835C4F1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C251E0B7CE70077B53D /* SBJsonStreamParserState.m */; };
-		53835C501E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C271E0B7CE70077B53D /* SBJsonStreamWriter.m */; };
-		53835C511E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C271E0B7CE70077B53D /* SBJsonStreamWriter.m */; };
-		53835C521E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C271E0B7CE70077B53D /* SBJsonStreamWriter.m */; };
-		53835C531E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C271E0B7CE70077B53D /* SBJsonStreamWriter.m */; };
-		53835C541E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C271E0B7CE70077B53D /* SBJsonStreamWriter.m */; };
-		53835C551E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C291E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m */; };
-		53835C561E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C291E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m */; };
-		53835C571E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C291E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m */; };
-		53835C581E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C291E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m */; };
-		53835C591E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C291E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m */; };
-		53835C5A1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2B1E0B7CE70077B53D /* SBJsonStreamWriterState.m */; };
-		53835C5B1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2B1E0B7CE70077B53D /* SBJsonStreamWriterState.m */; };
-		53835C5C1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2B1E0B7CE70077B53D /* SBJsonStreamWriterState.m */; };
-		53835C5D1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2B1E0B7CE70077B53D /* SBJsonStreamWriterState.m */; };
-		53835C5E1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2B1E0B7CE70077B53D /* SBJsonStreamWriterState.m */; };
-		53835C5F1E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2D1E0B7CE70077B53D /* SBJsonTokeniser.m */; };
-		53835C601E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2D1E0B7CE70077B53D /* SBJsonTokeniser.m */; };
-		53835C611E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2D1E0B7CE70077B53D /* SBJsonTokeniser.m */; };
-		53835C621E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2D1E0B7CE70077B53D /* SBJsonTokeniser.m */; };
-		53835C631E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2D1E0B7CE70077B53D /* SBJsonTokeniser.m */; };
-		53835C641E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2F1E0B7CE70077B53D /* SBJsonUTF8Stream.m */; };
-		53835C651E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2F1E0B7CE70077B53D /* SBJsonUTF8Stream.m */; };
-		53835C661E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2F1E0B7CE70077B53D /* SBJsonUTF8Stream.m */; };
-		53835C671E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2F1E0B7CE70077B53D /* SBJsonUTF8Stream.m */; };
-		53835C681E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C2F1E0B7CE70077B53D /* SBJsonUTF8Stream.m */; };
-		53835C691E0B7CE70077B53D /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C311E0B7CE70077B53D /* SBJsonWriter.m */; };
-		53835C6A1E0B7CE70077B53D /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C311E0B7CE70077B53D /* SBJsonWriter.m */; };
-		53835C6B1E0B7CE70077B53D /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C311E0B7CE70077B53D /* SBJsonWriter.m */; };
-		53835C6C1E0B7CE70077B53D /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C311E0B7CE70077B53D /* SBJsonWriter.m */; };
-		53835C6D1E0B7CE70077B53D /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C311E0B7CE70077B53D /* SBJsonWriter.m */; };
 		53835C981E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */; };
 		53835C991E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */; };
 		53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */; };
@@ -1828,21 +1653,6 @@
 		53835D2B1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53835D0A1E0B7DD50077B53D /* FMDatabaseVariadic.swift */; };
 		53835D2C1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53835D0A1E0B7DD50077B53D /* FMDatabaseVariadic.swift */; };
 		53835D2D1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53835D0A1E0B7DD50077B53D /* FMDatabaseVariadic.swift */; };
-		53835D351E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		53835D361E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		53835D371E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		53835D381E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		53835D391E0B7E9A0077B53D /* TBXML+Compression.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D301E0B7E9A0077B53D /* TBXML+Compression.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		53835D3A1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */; };
-		53835D3B1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */; };
-		53835D3C1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */; };
-		53835D3D1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */; };
-		53835D3E1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */; };
-		53835D3F1E0B7E9A0077B53D /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D341E0B7E9A0077B53D /* TBXML.m */; };
-		53835D401E0B7E9A0077B53D /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D341E0B7E9A0077B53D /* TBXML.m */; };
-		53835D411E0B7E9A0077B53D /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D341E0B7E9A0077B53D /* TBXML.m */; };
-		53835D421E0B7E9A0077B53D /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D341E0B7E9A0077B53D /* TBXML.m */; };
-		53835D431E0B7E9A0077B53D /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D341E0B7E9A0077B53D /* TBXML.m */; };
 		53835D4D1E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		53835D4E1E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		53835D4F1E0B7F9F0077B53D /* MKSKProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835D461E0B7F9F0077B53D /* MKSKProduct.m */; settings = {COMPILER_FLAGS = "-w"; }; };
@@ -2813,51 +2623,6 @@
 		5358DC781E0B78470024A0D4 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		5358DC791E0B78470024A0D4 /* SUSErrorDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSErrorDomain.h; sourceTree = "<group>"; };
 		5358DC7A1E0B78470024A0D4 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		5358DDC61E0B78990024A0D4 /* CocoaAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaAsyncSocket.h; sourceTree = "<group>"; };
-		5358DDC81E0B78990024A0D4 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
-		5358DDC91E0B78990024A0D4 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
-		5358DDCA1E0B78990024A0D4 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
-		5358DDCB1E0B78990024A0D4 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
-		5358DDCD1E0B78990024A0D4 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
-		5358DDCE1E0B78990024A0D4 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
-		5358DDCF1E0B78990024A0D4 /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
-		5358DDD01E0B78990024A0D4 /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUdpSocket.m; sourceTree = "<group>"; };
-		5358DDD31E0B78990024A0D4 /* DDData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDData.h; sourceTree = "<group>"; };
-		5358DDD41E0B78990024A0D4 /* DDData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDData.m; sourceTree = "<group>"; };
-		5358DDD51E0B78990024A0D4 /* DDNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDNumber.h; sourceTree = "<group>"; };
-		5358DDD61E0B78990024A0D4 /* DDNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDNumber.m; sourceTree = "<group>"; };
-		5358DDD71E0B78990024A0D4 /* DDRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDRange.h; sourceTree = "<group>"; };
-		5358DDD81E0B78990024A0D4 /* DDRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDRange.m; sourceTree = "<group>"; };
-		5358DDD91E0B78990024A0D4 /* HTTPAuthenticationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPAuthenticationRequest.h; sourceTree = "<group>"; };
-		5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPAuthenticationRequest.m; sourceTree = "<group>"; };
-		5358DDDB1E0B78990024A0D4 /* HTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPConnection.h; sourceTree = "<group>"; };
-		5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPConnection.m; sourceTree = "<group>"; };
-		5358DDDD1E0B78990024A0D4 /* HTTPLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPLogging.h; sourceTree = "<group>"; };
-		5358DDDE1E0B78990024A0D4 /* HTTPMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPMessage.h; sourceTree = "<group>"; };
-		5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPMessage.m; sourceTree = "<group>"; };
-		5358DDE01E0B78990024A0D4 /* HTTPResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPResponse.h; sourceTree = "<group>"; };
-		5358DDE11E0B78990024A0D4 /* HTTPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPServer.h; sourceTree = "<group>"; };
-		5358DDE21E0B78990024A0D4 /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
-		5358DDE41E0B78990024A0D4 /* MultipartFormDataParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipartFormDataParser.h; sourceTree = "<group>"; };
-		5358DDE51E0B78990024A0D4 /* MultipartFormDataParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultipartFormDataParser.m; sourceTree = "<group>"; };
-		5358DDE61E0B78990024A0D4 /* MultipartMessageHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipartMessageHeader.h; sourceTree = "<group>"; };
-		5358DDE71E0B78990024A0D4 /* MultipartMessageHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultipartMessageHeader.m; sourceTree = "<group>"; };
-		5358DDE81E0B78990024A0D4 /* MultipartMessageHeaderField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipartMessageHeaderField.h; sourceTree = "<group>"; };
-		5358DDE91E0B78990024A0D4 /* MultipartMessageHeaderField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultipartMessageHeaderField.m; sourceTree = "<group>"; };
-		5358DDEB1E0B78990024A0D4 /* HTTPAsyncFileResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPAsyncFileResponse.h; sourceTree = "<group>"; };
-		5358DDEC1E0B78990024A0D4 /* HTTPAsyncFileResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPAsyncFileResponse.m; sourceTree = "<group>"; };
-		5358DDED1E0B78990024A0D4 /* HTTPDataResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPDataResponse.h; sourceTree = "<group>"; };
-		5358DDEE1E0B78990024A0D4 /* HTTPDataResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPDataResponse.m; sourceTree = "<group>"; };
-		5358DDEF1E0B78990024A0D4 /* HTTPDynamicFileResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPDynamicFileResponse.h; sourceTree = "<group>"; };
-		5358DDF01E0B78990024A0D4 /* HTTPDynamicFileResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPDynamicFileResponse.m; sourceTree = "<group>"; };
-		5358DDF11E0B78990024A0D4 /* HTTPErrorResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPErrorResponse.h; sourceTree = "<group>"; };
-		5358DDF21E0B78990024A0D4 /* HTTPErrorResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPErrorResponse.m; sourceTree = "<group>"; };
-		5358DDF31E0B78990024A0D4 /* HTTPFileResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPFileResponse.h; sourceTree = "<group>"; };
-		5358DDF41E0B78990024A0D4 /* HTTPFileResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPFileResponse.m; sourceTree = "<group>"; };
-		5358DDF51E0B78990024A0D4 /* HTTPRedirectResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPRedirectResponse.h; sourceTree = "<group>"; };
-		5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPRedirectResponse.m; sourceTree = "<group>"; };
-		5358DDF71E0B78990024A0D4 /* WebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket.h; sourceTree = "<group>"; };
-		5358DDF81E0B78990024A0D4 /* WebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket.m; sourceTree = "<group>"; };
 		5358DDFB1E0B78990024A0D4 /* CLIColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLIColor.h; sourceTree = "<group>"; };
 		5358DDFC1E0B78990024A0D4 /* CLIColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLIColor.m; sourceTree = "<group>"; };
 		5358DDFD1E0B78990024A0D4 /* CocoaLumberjack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaLumberjack.h; sourceTree = "<group>"; };
@@ -3172,31 +2937,6 @@
 		537EF7B3182B2F2200968FE0 /* controller-slider-thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-slider-thumb.png"; path = "Images/Player Icons/controller-slider-thumb.png"; sourceTree = "<group>"; };
 		537EF7B4182B2F2200968FE0 /* controller-slider-thumb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-slider-thumb@2x.png"; path = "Images/Player Icons/controller-slider-thumb@2x.png"; sourceTree = "<group>"; };
 		537FCC5312F8F7F400F1D996 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = "Images/App Icons/iTunesArtwork"; sourceTree = "<group>"; };
-		53835C191E0B7CE70077B53D /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJson.h"; sourceTree = "<group>"; };
-		53835C1A1E0B7CE70077B53D /* NSObject+SBJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJson.m"; sourceTree = "<group>"; };
-		53835C1B1E0B7CE70077B53D /* SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson.h; sourceTree = "<group>"; };
-		53835C1C1E0B7CE70077B53D /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
-		53835C1D1E0B7CE70077B53D /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
-		53835C1E1E0B7CE70077B53D /* SBJsonStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParser.h; sourceTree = "<group>"; };
-		53835C1F1E0B7CE70077B53D /* SBJsonStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParser.m; sourceTree = "<group>"; };
-		53835C201E0B7CE70077B53D /* SBJsonStreamParserAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserAccumulator.h; sourceTree = "<group>"; };
-		53835C211E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserAccumulator.m; sourceTree = "<group>"; };
-		53835C221E0B7CE70077B53D /* SBJsonStreamParserAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserAdapter.h; sourceTree = "<group>"; };
-		53835C231E0B7CE70077B53D /* SBJsonStreamParserAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserAdapter.m; sourceTree = "<group>"; };
-		53835C241E0B7CE70077B53D /* SBJsonStreamParserState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserState.h; sourceTree = "<group>"; };
-		53835C251E0B7CE70077B53D /* SBJsonStreamParserState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserState.m; sourceTree = "<group>"; };
-		53835C261E0B7CE70077B53D /* SBJsonStreamWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriter.h; sourceTree = "<group>"; };
-		53835C271E0B7CE70077B53D /* SBJsonStreamWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriter.m; sourceTree = "<group>"; };
-		53835C281E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriterAccumulator.h; sourceTree = "<group>"; };
-		53835C291E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriterAccumulator.m; sourceTree = "<group>"; };
-		53835C2A1E0B7CE70077B53D /* SBJsonStreamWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriterState.h; sourceTree = "<group>"; };
-		53835C2B1E0B7CE70077B53D /* SBJsonStreamWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriterState.m; sourceTree = "<group>"; };
-		53835C2C1E0B7CE70077B53D /* SBJsonTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonTokeniser.h; sourceTree = "<group>"; };
-		53835C2D1E0B7CE70077B53D /* SBJsonTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonTokeniser.m; sourceTree = "<group>"; };
-		53835C2E1E0B7CE70077B53D /* SBJsonUTF8Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonUTF8Stream.h; sourceTree = "<group>"; };
-		53835C2F1E0B7CE70077B53D /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
-		53835C301E0B7CE70077B53D /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
-		53835C311E0B7CE70077B53D /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		53835C6F1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GMAppleDouble+ZKAdditions.h"; sourceTree = "<group>"; };
 		53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GMAppleDouble+ZKAdditions.m"; sourceTree = "<group>"; };
 		53835C731E0B7D6D0077B53D /* GMAppleDouble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMAppleDouble.h; sourceTree = "<group>"; };
@@ -3247,12 +2987,6 @@
 		53835D071E0B7DD50077B53D /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		53835D091E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDatabaseAdditionsVariadic.swift; sourceTree = "<group>"; };
 		53835D0A1E0B7DD50077B53D /* FMDatabaseVariadic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDatabaseVariadic.swift; sourceTree = "<group>"; };
-		53835D2F1E0B7E9A0077B53D /* TBXML+Compression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBXML+Compression.h"; sourceTree = "<group>"; };
-		53835D301E0B7E9A0077B53D /* TBXML+Compression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TBXML+Compression.m"; sourceTree = "<group>"; };
-		53835D311E0B7E9A0077B53D /* TBXML+HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBXML+HTTP.h"; sourceTree = "<group>"; };
-		53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TBXML+HTTP.m"; sourceTree = "<group>"; };
-		53835D331E0B7E9A0077B53D /* TBXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBXML.h; sourceTree = "<group>"; };
-		53835D341E0B7E9A0077B53D /* TBXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBXML.m; sourceTree = "<group>"; };
 		53835D451E0B7F9F0077B53D /* MKSKProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKSKProduct.h; sourceTree = "<group>"; };
 		53835D461E0B7F9F0077B53D /* MKSKProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKSKProduct.m; sourceTree = "<group>"; };
 		53835D471E0B7F9F0077B53D /* MKSKSubscriptionProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKSKSubscriptionProduct.h; sourceTree = "<group>"; };
@@ -3766,11 +3500,7 @@
 				5358DE161E0B78990024A0D4 /* EX2Kit */,
 				53835CFC1E0B7DD50077B53D /* fmdb */,
 				53835D441E0B7F9F0077B53D /* MKStoreKit */,
-				53835D2E1E0B7E9A0077B53D /* TBXML */,
 				53835C6E1E0B7D6D0077B53D /* ZipKit */,
-				53835C181E0B7CE70077B53D /* SBJson */,
-				5358DDC51E0B78990024A0D4 /* CocoaAsyncSocket */,
-				5358DDD11E0B78990024A0D4 /* CocoaHTTPServer */,
 				5358DDF91E0B78990024A0D4 /* CocoaLumberjack */,
 				5358DEED1E0B78990024A0D4 /* libBASS */,
 				5358DF031E0B78990024A0D4 /* RaptureXML */,
@@ -4136,107 +3866,6 @@
 				5358DC7A1E0B78470024A0D4 /* Utils.swift */,
 			);
 			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		5358DDC51E0B78990024A0D4 /* CocoaAsyncSocket */ = {
-			isa = PBXGroup;
-			children = (
-				5358DDC61E0B78990024A0D4 /* CocoaAsyncSocket.h */,
-				5358DDC71E0B78990024A0D4 /* GCD */,
-				5358DDCC1E0B78990024A0D4 /* RunLoop */,
-			);
-			name = CocoaAsyncSocket;
-			path = Frameworks/CocoaAsyncSocket;
-			sourceTree = "<group>";
-		};
-		5358DDC71E0B78990024A0D4 /* GCD */ = {
-			isa = PBXGroup;
-			children = (
-				5358DDC81E0B78990024A0D4 /* GCDAsyncSocket.h */,
-				5358DDC91E0B78990024A0D4 /* GCDAsyncSocket.m */,
-				5358DDCA1E0B78990024A0D4 /* GCDAsyncUdpSocket.h */,
-				5358DDCB1E0B78990024A0D4 /* GCDAsyncUdpSocket.m */,
-			);
-			path = GCD;
-			sourceTree = "<group>";
-		};
-		5358DDCC1E0B78990024A0D4 /* RunLoop */ = {
-			isa = PBXGroup;
-			children = (
-				5358DDCD1E0B78990024A0D4 /* AsyncSocket.h */,
-				5358DDCE1E0B78990024A0D4 /* AsyncSocket.m */,
-				5358DDCF1E0B78990024A0D4 /* AsyncUdpSocket.h */,
-				5358DDD01E0B78990024A0D4 /* AsyncUdpSocket.m */,
-			);
-			path = RunLoop;
-			sourceTree = "<group>";
-		};
-		5358DDD11E0B78990024A0D4 /* CocoaHTTPServer */ = {
-			isa = PBXGroup;
-			children = (
-				5358DDD21E0B78990024A0D4 /* Categories */,
-				5358DDD91E0B78990024A0D4 /* HTTPAuthenticationRequest.h */,
-				5358DDDA1E0B78990024A0D4 /* HTTPAuthenticationRequest.m */,
-				5358DDDB1E0B78990024A0D4 /* HTTPConnection.h */,
-				5358DDDC1E0B78990024A0D4 /* HTTPConnection.m */,
-				5358DDDD1E0B78990024A0D4 /* HTTPLogging.h */,
-				5358DDDE1E0B78990024A0D4 /* HTTPMessage.h */,
-				5358DDDF1E0B78990024A0D4 /* HTTPMessage.m */,
-				5358DDE01E0B78990024A0D4 /* HTTPResponse.h */,
-				5358DDE11E0B78990024A0D4 /* HTTPServer.h */,
-				5358DDE21E0B78990024A0D4 /* HTTPServer.m */,
-				5358DDE31E0B78990024A0D4 /* Mime */,
-				5358DDEA1E0B78990024A0D4 /* Responses */,
-				5358DDF71E0B78990024A0D4 /* WebSocket.h */,
-				5358DDF81E0B78990024A0D4 /* WebSocket.m */,
-			);
-			name = CocoaHTTPServer;
-			path = Frameworks/CocoaHTTPServer;
-			sourceTree = "<group>";
-		};
-		5358DDD21E0B78990024A0D4 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				5358DDD31E0B78990024A0D4 /* DDData.h */,
-				5358DDD41E0B78990024A0D4 /* DDData.m */,
-				5358DDD51E0B78990024A0D4 /* DDNumber.h */,
-				5358DDD61E0B78990024A0D4 /* DDNumber.m */,
-				5358DDD71E0B78990024A0D4 /* DDRange.h */,
-				5358DDD81E0B78990024A0D4 /* DDRange.m */,
-			);
-			path = Categories;
-			sourceTree = "<group>";
-		};
-		5358DDE31E0B78990024A0D4 /* Mime */ = {
-			isa = PBXGroup;
-			children = (
-				5358DDE41E0B78990024A0D4 /* MultipartFormDataParser.h */,
-				5358DDE51E0B78990024A0D4 /* MultipartFormDataParser.m */,
-				5358DDE61E0B78990024A0D4 /* MultipartMessageHeader.h */,
-				5358DDE71E0B78990024A0D4 /* MultipartMessageHeader.m */,
-				5358DDE81E0B78990024A0D4 /* MultipartMessageHeaderField.h */,
-				5358DDE91E0B78990024A0D4 /* MultipartMessageHeaderField.m */,
-			);
-			path = Mime;
-			sourceTree = "<group>";
-		};
-		5358DDEA1E0B78990024A0D4 /* Responses */ = {
-			isa = PBXGroup;
-			children = (
-				5358DDEB1E0B78990024A0D4 /* HTTPAsyncFileResponse.h */,
-				5358DDEC1E0B78990024A0D4 /* HTTPAsyncFileResponse.m */,
-				5358DDED1E0B78990024A0D4 /* HTTPDataResponse.h */,
-				5358DDEE1E0B78990024A0D4 /* HTTPDataResponse.m */,
-				5358DDEF1E0B78990024A0D4 /* HTTPDynamicFileResponse.h */,
-				5358DDF01E0B78990024A0D4 /* HTTPDynamicFileResponse.m */,
-				5358DDF11E0B78990024A0D4 /* HTTPErrorResponse.h */,
-				5358DDF21E0B78990024A0D4 /* HTTPErrorResponse.m */,
-				5358DDF31E0B78990024A0D4 /* HTTPFileResponse.h */,
-				5358DDF41E0B78990024A0D4 /* HTTPFileResponse.m */,
-				5358DDF51E0B78990024A0D4 /* HTTPRedirectResponse.h */,
-				5358DDF61E0B78990024A0D4 /* HTTPRedirectResponse.m */,
-			);
-			path = Responses;
 			sourceTree = "<group>";
 		};
 		5358DDF91E0B78990024A0D4 /* CocoaLumberjack */ = {
@@ -4688,39 +4317,6 @@
 			name = Main;
 			sourceTree = "<group>";
 		};
-		53835C181E0B7CE70077B53D /* SBJson */ = {
-			isa = PBXGroup;
-			children = (
-				53835C191E0B7CE70077B53D /* NSObject+SBJson.h */,
-				53835C1A1E0B7CE70077B53D /* NSObject+SBJson.m */,
-				53835C1B1E0B7CE70077B53D /* SBJson.h */,
-				53835C1C1E0B7CE70077B53D /* SBJsonParser.h */,
-				53835C1D1E0B7CE70077B53D /* SBJsonParser.m */,
-				53835C1E1E0B7CE70077B53D /* SBJsonStreamParser.h */,
-				53835C1F1E0B7CE70077B53D /* SBJsonStreamParser.m */,
-				53835C201E0B7CE70077B53D /* SBJsonStreamParserAccumulator.h */,
-				53835C211E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m */,
-				53835C221E0B7CE70077B53D /* SBJsonStreamParserAdapter.h */,
-				53835C231E0B7CE70077B53D /* SBJsonStreamParserAdapter.m */,
-				53835C241E0B7CE70077B53D /* SBJsonStreamParserState.h */,
-				53835C251E0B7CE70077B53D /* SBJsonStreamParserState.m */,
-				53835C261E0B7CE70077B53D /* SBJsonStreamWriter.h */,
-				53835C271E0B7CE70077B53D /* SBJsonStreamWriter.m */,
-				53835C281E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.h */,
-				53835C291E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m */,
-				53835C2A1E0B7CE70077B53D /* SBJsonStreamWriterState.h */,
-				53835C2B1E0B7CE70077B53D /* SBJsonStreamWriterState.m */,
-				53835C2C1E0B7CE70077B53D /* SBJsonTokeniser.h */,
-				53835C2D1E0B7CE70077B53D /* SBJsonTokeniser.m */,
-				53835C2E1E0B7CE70077B53D /* SBJsonUTF8Stream.h */,
-				53835C2F1E0B7CE70077B53D /* SBJsonUTF8Stream.m */,
-				53835C301E0B7CE70077B53D /* SBJsonWriter.h */,
-				53835C311E0B7CE70077B53D /* SBJsonWriter.m */,
-			);
-			name = SBJson;
-			path = Frameworks/SBJson;
-			sourceTree = "<group>";
-		};
 		53835C6E1E0B7D6D0077B53D /* ZipKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -4801,20 +4397,6 @@
 				53835D0A1E0B7DD50077B53D /* FMDatabaseVariadic.swift */,
 			);
 			path = "Swift extensions";
-			sourceTree = "<group>";
-		};
-		53835D2E1E0B7E9A0077B53D /* TBXML */ = {
-			isa = PBXGroup;
-			children = (
-				53835D2F1E0B7E9A0077B53D /* TBXML+Compression.h */,
-				53835D301E0B7E9A0077B53D /* TBXML+Compression.m */,
-				53835D311E0B7E9A0077B53D /* TBXML+HTTP.h */,
-				53835D321E0B7E9A0077B53D /* TBXML+HTTP.m */,
-				53835D331E0B7E9A0077B53D /* TBXML.h */,
-				53835D341E0B7E9A0077B53D /* TBXML.m */,
-			);
-			name = TBXML;
-			path = Frameworks/TBXML;
 			sourceTree = "<group>";
 		};
 		53835D441E0B7F9F0077B53D /* MKStoreKit */ = {
@@ -6400,34 +5982,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5358DF471E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */,
-				5358DF061E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */,
-				5358DF4C1E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */,
 				53835CB61E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBB1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				5358E0281E0B789A0024A0D4 /* NSString+HasValue.m in Sources */,
-				5358DF331E0B789A0024A0D4 /* HTTPMessage.m in Sources */,
 				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
 				53F74C511A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
 				533C5EDB1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */,
 				532300181CEE73F700B8C651 /* DroppableCell.swift in Sources */,
 				5358E0051E0B789A0024A0D4 /* NSOrderedSet+Safe.m in Sources */,
 				5358DCE91E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
-				5358DF3D1E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */,
 				5358DFB01E0B789A0024A0D4 /* NSArray+Plist.m in Sources */,
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
-				5358DCE41E0B78470024A0D4 /* HLSProxyResponse.m in Sources */,
 				538B4D001E1D77AC00847152 /* FolderLoader.swift in Sources */,
 				53835CD91E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358E0A51E0B789A0024A0D4 /* UIImage+RoundedImage.m in Sources */,
 				5358E05F1E0B789A0024A0D4 /* NSMutableOrderedSet+Safe.m in Sources */,
 				5358DF791E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				53ABE13D1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
-				5358DF291E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */,
 				530F63981A3FC78C006D7666 /* Defines.swift in Sources */,
-				5358DF101E0B78990024A0D4 /* AsyncSocket.m in Sources */,
-				53835C3C1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 				5358E0FF1E0B789A0024A0D4 /* EX2Reachability.m in Sources */,
 				538B4D0C1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				5358E03C1E0B789A0024A0D4 /* NSString+SHA1.m in Sources */,
@@ -6459,37 +6032,29 @@
 				5358E00F1E0B789A0024A0D4 /* NSString+Clean.m in Sources */,
 				5358E1C71E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358E0871E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
-				53835C691E0B7CE70077B53D /* SBJsonWriter.m in Sources */,
 				5358DF881E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				5358E09B1E0B789A0024A0D4 /* UIImage+CustomStretch.m in Sources */,
-				53835D3F1E0B7E9A0077B53D /* TBXML.m in Sources */,
 				53835D1F1E0B7DD50077B53D /* FMResultSet.m in Sources */,
 				5358DFE71E0B789A0024A0D4 /* NSNull+CleanString.m in Sources */,
-				5358DF151E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */,
 				538A1CDD1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
 				5358E0961E0B789A0024A0D4 /* UIImage+Cropping.m in Sources */,
 				5358E13B1E0B789A0024A0D4 /* EX2Dispatch.m in Sources */,
 				5358DF741E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
 				5358DD5C1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
 				5358DF971E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
-				5358DF6A1E0B789A0024A0D4 /* WebSocket.m in Sources */,
 				5358E0371E0B789A0024A0D4 /* NSString+rfcEncode.m in Sources */,
 				53ABE1491C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53835D571E0B7F9F0077B53D /* MKStoreManager.m in Sources */,
-				53835C371E0B7CE70077B53D /* SBJsonParser.m in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
-				5358DF5B1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */,
 				53835D291E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
 				532D9B43131AE19700FD8CA7 /* CustomUIAlertView.swift in Sources */,
 				538A1CD91D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				5358E0EB1E0B789A0024A0D4 /* EX2FileDecryptor.m in Sources */,
 				5358E1221E0B789A0024A0D4 /* RNEncryptor.m in Sources */,
-				53835C461E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */,
 				5358E0641E0B789A0024A0D4 /* CALayer+ImageFromLayer.m in Sources */,
 				5358DFC91E0B789A0024A0D4 /* NSData+Gzip.m in Sources */,
 				53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				53E7BC131D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
-				53835C641E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */,
 				5358DD891E0B78480024A0D4 /* PlayQueue.swift in Sources */,
 				534FC5021CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				5324C6C613345D75004E6C79 /* OBSlider.m in Sources */,
@@ -6526,7 +6091,6 @@
 				5358E14A1E0B789A0024A0D4 /* EX2InfinitePagingScrollView.m in Sources */,
 				5358DF6F1E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				5358DFD81E0B789A0024A0D4 /* NSFileHandle+Hash.m in Sources */,
-				53835C501E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */,
 				5358DCD51E0B78470024A0D4 /* Server.swift in Sources */,
 				5358DC8F1E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				53835CB11E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
@@ -6538,9 +6102,7 @@
 				5358DCDA1E0B78470024A0D4 /* LibSub.m in Sources */,
 				5358DC801E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				5358E06E1E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
-				5358DF0B1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */,
 				5358DDB11E0B78480024A0D4 /* ISMSNotificationNames.m in Sources */,
-				5358DF421E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */,
 				53ABE1451C60363E00E0E72B /* ItemViewController.swift in Sources */,
 				5358E05A1E0B789A0024A0D4 /* NSURL+SkipBackupAttribute.m in Sources */,
 				5358DBDE1E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
@@ -6561,24 +6123,20 @@
 				5358DFF61E0B789A0024A0D4 /* NSObject+UserInfo.m in Sources */,
 				5358DD701E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				5358E0BE1E0B789A0024A0D4 /* UITableViewCell+TableView.m in Sources */,
-				53835C551E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */,
 				5358DFAB1E0B789A0024A0D4 /* NSArray+FirstObject.m in Sources */,
 				53835CF71E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				5358DC851E0B78470024A0D4 /* BassStream.m in Sources */,
 				533C5EE01E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
-				5358DF1F1E0B78990024A0D4 /* DDNumber.m in Sources */,
 				5358E0411E0B789A0024A0D4 /* NSString+time.m in Sources */,
 				5304FC3614F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5358DFEC1E0B789A0024A0D4 /* NSNumber+CleanString.m in Sources */,
 				5358DCB71E0B78470024A0D4 /* ISMSFolder.m in Sources */,
 				5358E0A01E0B789A0024A0D4 /* UIImage+Reflection.m in Sources */,
-				5358DF1A1E0B78990024A0D4 /* DDData.m in Sources */,
 				5358E1041E0B789A0024A0D4 /* EX2RingBuffer.m in Sources */,
 				5358DFC41E0B789A0024A0D4 /* NSData+AES128.m in Sources */,
 				5358DFB51E0B789A0024A0D4 /* NSArray+Reverse.m in Sources */,
 				5358E0461E0B789A0024A0D4 /* NSString+TrimmingAdditions.m in Sources */,
 				5358E0DC1E0B789A0024A0D4 /* UIWebView+HideShadows.m in Sources */,
-				53835D3A1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */,
 				535B65F81E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				533C5ED11E0B8DFC00802FB1 /* String.swift in Sources */,
 				5358E1271E0B789A0024A0D4 /* RNOpenSSLCryptor.m in Sources */,
@@ -6593,9 +6151,7 @@
 				5358DCBC1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
 				538B4D1A1E1DA77600847152 /* CachedImageView.swift in Sources */,
 				535B661E1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
-				53835C5A1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E0D21E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
-				53835D351E0B7E9A0077B53D /* TBXML+Compression.m in Sources */,
 				5358E0AF1E0B789A0024A0D4 /* UIImageView+ImageAnimated.m in Sources */,
 				5358DDBB1E0B78480024A0D4 /* sqlite3.c in Sources */,
 				5358DCF31E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */,
@@ -6606,9 +6162,7 @@
 				537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
 				53835D1A1E0B7DD50077B53D /* FMDatabaseQueue.m in Sources */,
 				5358DD931E0B78480024A0D4 /* SocialSingleton.m in Sources */,
-				53835C5F1E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
 				5358DDC01E0B78480024A0D4 /* Utils.swift in Sources */,
-				5358DF241E0B78990024A0D4 /* DDRange.m in Sources */,
 				5358DFBA1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
 				53CD9DB51C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				5358DCD01E0B78470024A0D4 /* SectionIndex.swift in Sources */,
@@ -6619,31 +6173,26 @@
 				5358DD7F1E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				53835CA71E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				53835CF21E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
-				53835C4B1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */,
 				5358DF8D1E0B789A0024A0D4 /* DDLog.m in Sources */,
 				53835CD41E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				5358E0B91E0B789A0024A0D4 /* UITableView+Shadows.m in Sources */,
 				5358E0F51E0B789A0024A0D4 /* EX2Language.m in Sources */,
 				53835CC01E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				5358DCEE1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */,
-				5358DF561E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */,
 				5358E0C81E0B789A0024A0D4 /* UIView+SetNeedsLayoutSafe.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
 				5358DD8E1E0B78480024A0D4 /* SavedSettings.m in Sources */,
 				5358DCB21E0B78470024A0D4 /* ISMSContentType.m in Sources */,
 				53835CCA1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DFCE1E0B789A0024A0D4 /* NSData+Hash.m in Sources */,
-				5358DF2E1E0B789A0024A0D4 /* HTTPConnection.m in Sources */,
 				5358DDB61E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
 				5358E0781E0B789A0024A0D4 /* UIButton+StretchBackground.m in Sources */,
 				5358DF9C1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				538B4D041E1D7E2300847152 /* MediaFoldersLoader.swift in Sources */,
 				5358E1091E0B789A0024A0D4 /* EX2SimpleConnectionQueue.m in Sources */,
-				53835C411E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */,
 				5358DF7E1E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				5333D10B1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
 				5358E1591E0B789A0024A0D4 /* EX2NotificationBar.m in Sources */,
-				53835C321E0B7CE70077B53D /* NSObject+SBJson.m in Sources */,
 				53835CED1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				53835D241E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				53835CE81E0B7D6D0077B53D /* ZKDefs.m in Sources */,
@@ -6651,15 +6200,10 @@
 				5358E12C1E0B789A0024A0D4 /* RNOpenSSLDecryptor.m in Sources */,
 				5358DFDD1E0B789A0024A0D4 /* NSMutableDictionary+Safe.m in Sources */,
 				5358E11D1E0B789A0024A0D4 /* RNDecryptor.m in Sources */,
-				5358DCDF1E0B78470024A0D4 /* HLSProxyConnection.m in Sources */,
 				5358E1361E0B789A0024A0D4 /* EX2Kit.m in Sources */,
-				5358DF651E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */,
 				5358DD071E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				5358DD841E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
-				5358DF511E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */,
 				5358DFFB1E0B789A0024A0D4 /* NSOrderedSet+FilterBlock.m in Sources */,
-				5358DF381E0B789A0024A0D4 /* HTTPServer.m in Sources */,
-				5358DF601E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */,
 				5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				5358DDAC1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
@@ -6678,10 +6222,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5358E12A1E0B789A0024A0D4 /* RNOpenSSLCryptor.m in Sources */,
-				53835C4E1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */,
 				53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */,
 				5358E10C1E0B789A0024A0D4 /* EX2SimpleConnectionQueue.m in Sources */,
-				5358DF631E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */,
 				5358DFF41E0B789A0024A0D4 /* NSObject+ListMethods.m in Sources */,
 				5358E0531E0B789A0024A0D4 /* NSString+Validation.m in Sources */,
 				5358DFAE1E0B789A0024A0D4 /* NSArray+FirstObject.m in Sources */,
@@ -6692,11 +6234,9 @@
 				5358DDBE1E0B78480024A0D4 /* sqlite3.c in Sources */,
 				5358E0C11E0B789A0024A0D4 /* UITableViewCell+TableView.m in Sources */,
 				5358E0A31E0B789A0024A0D4 /* UIImage+Reflection.m in Sources */,
-				53835C621E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
 				53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */,
 				5358DFCC1E0B789A0024A0D4 /* NSData+Gzip.m in Sources */,
 				5358DCF61E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */,
-				53835C6C1E0B7CE70077B53D /* SBJsonWriter.m in Sources */,
 				5358DDC31E0B78480024A0D4 /* Utils.swift in Sources */,
 				5358DDAF1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				5358DFEA1E0B789A0024A0D4 /* NSNull+CleanString.m in Sources */,
@@ -6713,7 +6253,6 @@
 				5358DD961E0B78480024A0D4 /* SocialSingleton.m in Sources */,
 				53159E8F156F69D0001B0268 /* UAApplication.m in Sources */,
 				5358DD641E0B78480024A0D4 /* NSMutableURLRequest+SUS.m in Sources */,
-				53835C3A1E0B7CE70077B53D /* SBJsonParser.m in Sources */,
 				53835D551E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */,
 				5358E0DA1E0B789A0024A0D4 /* UIViewController+Tools.m in Sources */,
 				530F639B1A3FC78C006D7666 /* Defines.swift in Sources */,
@@ -6724,14 +6263,12 @@
 				53159E9B156F69D0001B0268 /* SettingsTabViewController.m in Sources */,
 				5358DC7E1E0B78470024A0D4 /* AudioEngine.m in Sources */,
 				5358DCBF1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
-				5358DF451E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */,
 				5358E07B1E0B789A0024A0D4 /* UIButton+StretchBackground.m in Sources */,
 				5358E15C1E0B789A0024A0D4 /* EX2NotificationBar.m in Sources */,
 				5358E0EE1E0B789A0024A0D4 /* EX2FileDecryptor.m in Sources */,
 				5358E0A81E0B789A0024A0D4 /* UIImage+RoundedImage.m in Sources */,
 				5358E17A1E0B789B0024A0D4 /* SnappySlider.m in Sources */,
 				5358E03F1E0B789A0024A0D4 /* NSString+SHA1.m in Sources */,
-				5358DCE21E0B78470024A0D4 /* HLSProxyConnection.m in Sources */,
 				5358DFDB1E0B789A0024A0D4 /* NSFileHandle+Hash.m in Sources */,
 				5358E0081E0B789A0024A0D4 /* NSOrderedSet+Safe.m in Sources */,
 				5358DDB41E0B78480024A0D4 /* ISMSNotificationNames.m in Sources */,
@@ -6740,25 +6277,17 @@
 				53835CFA1E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				535B65FB1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				5358E1391E0B789A0024A0D4 /* EX2Kit.m in Sources */,
-				5358DCE71E0B78470024A0D4 /* HLSProxyResponse.m in Sources */,
 				5358E0B21E0B789A0024A0D4 /* UIImageView+ImageAnimated.m in Sources */,
-				5358DF5E1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */,
 				5358E1341E0B789A0024A0D4 /* RNOpenSSLEncryptor.m in Sources */,
-				5358DF131E0B78990024A0D4 /* AsyncSocket.m in Sources */,
 				5358DBE11E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
-				53835D421E0B7E9A0077B53D /* TBXML.m in Sources */,
 				5358DFB31E0B789A0024A0D4 /* NSArray+Plist.m in Sources */,
-				5358DF401E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */,
 				5358DCC41E0B78470024A0D4 /* ISMSMediaFolder.m in Sources */,
 				5358E1111E0B789A0024A0D4 /* RNCryptor.m in Sources */,
 				5358DCD31E0B78470024A0D4 /* SectionIndex.swift in Sources */,
 				5358DDA01E0B78480024A0D4 /* FMDatabasePoolAdditions.m in Sources */,
-				5358DF311E0B789A0024A0D4 /* HTTPConnection.m in Sources */,
 				53835CCD1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DBDC1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
-				53835C351E0B7CE70077B53D /* NSObject+SBJson.m in Sources */,
 				5358E0581E0B789A0024A0D4 /* NSURL+QueryParameterDictionary.m in Sources */,
-				53835C671E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */,
 				5358DFB81E0B789A0024A0D4 /* NSArray+Reverse.m in Sources */,
 				5358E02B1E0B789A0024A0D4 /* NSString+HasValue.m in Sources */,
 				53835CAA1E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
@@ -6777,7 +6306,6 @@
 				5358E1571E0B789A0024A0D4 /* EX2NavigationController.m in Sources */,
 				5358DFEF1E0B789A0024A0D4 /* NSNumber+CleanString.m in Sources */,
 				5358DD781E0B78480024A0D4 /* SearchXMLParser.m in Sources */,
-				5358DF591E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */,
 				533C5EDE1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */,
 				5358E13E1E0B789A0024A0D4 /* EX2Dispatch.m in Sources */,
 				5358DCCE1E0B78470024A0D4 /* Playlist.swift in Sources */,
@@ -6786,8 +6314,6 @@
 				5358E1201E0B789A0024A0D4 /* RNDecryptor.m in Sources */,
 				53159EC3156F69D0001B0268 /* IntroViewController.m in Sources */,
 				5358DFD11E0B789A0024A0D4 /* NSData+Hash.m in Sources */,
-				5358DF0E1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */,
-				5358DF221E0B78990024A0D4 /* DDNumber.m in Sources */,
 				5358DD731E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				5358DFFE1E0B789A0024A0D4 /* NSOrderedSet+FilterBlock.m in Sources */,
 				5358E1161E0B789A0024A0D4 /* RNCryptorEngine.m in Sources */,
@@ -6801,10 +6327,8 @@
 				5358DFA41E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				53835D501E0B7F9F0077B53D /* MKSKProduct.m in Sources */,
 				5358DC971E0B78470024A0D4 /* BassEffectValue.m in Sources */,
-				5358DF361E0B789A0024A0D4 /* HTTPMessage.m in Sources */,
 				5358DC881E0B78470024A0D4 /* BassStream.m in Sources */,
 				5358E0F81E0B789A0024A0D4 /* EX2Language.m in Sources */,
-				5358DF681E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */,
 				5358E0941E0B789A0024A0D4 /* UIImage+Color.m in Sources */,
 				5358E0AD1E0B789A0024A0D4 /* UIImage+Tint.m in Sources */,
 				536E29331E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
@@ -6816,26 +6340,21 @@
 				5358DCC91E0B78470024A0D4 /* ISMSSong.m in Sources */,
 				5358E1CA1E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358E0211E0B789A0024A0D4 /* NSString+FileSize.m in Sources */,
-				5358DF541E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */,
 				5358E01C1E0B789A0024A0D4 /* NSString+cStringUTF8.m in Sources */,
 				5358DD871E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
 				5358E0B71E0B789A0024A0D4 /* UIImageView+Reflection.m in Sources */,
 				53835CF51E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
 				53835D0E1E0B7DD50077B53D /* FMDatabase.m in Sources */,
-				5358DF4A1E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */,
-				53835C5D1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				53835C9B1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				5358DD5F1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
 				5358DCAB1E0B78470024A0D4 /* ISMSAlbum.m in Sources */,
 				5358DFE01E0B789A0024A0D4 /* NSMutableDictionary+Safe.m in Sources */,
-				5358DF2C1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */,
 				53159ED4156F69D0001B0268 /* DDSocialLoginDialog.m in Sources */,
 				5358E1481E0B789A0024A0D4 /* EX2GlowButton.m in Sources */,
 				5358E1661E0B789B0024A0D4 /* EX2SlidingNotification.m in Sources */,
 				5358DFBD1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
 				5358DCEC1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
 				5358E0D01E0B789A0024A0D4 /* UIView+Tools.m in Sources */,
-				53835C441E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */,
 				5358DFD61E0B789A0024A0D4 /* NSDate+UTC.m in Sources */,
 				5358DF811E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				5358DCBA1E0B78470024A0D4 /* ISMSFolder.m in Sources */,
@@ -6852,32 +6371,24 @@
 				5358E08F1E0B789A0024A0D4 /* UIDevice+Software.m in Sources */,
 				5358DF951E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
 				5358E0761E0B789A0024A0D4 /* UIButton+Colors.m in Sources */,
-				5358DF271E0B78990024A0D4 /* DDRange.m in Sources */,
 				5358DDA51E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
 				53835CDC1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358E08A1E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
 				53159F1B156F69D0001B0268 /* StackScrollViewController.m in Sources */,
 				5358DD0A1E0B78470024A0D4 /* ISMSLoader.m in Sources */,
-				5358DF4F1E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */,
-				5358DF091E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */,
 				5358DD6E1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */,
 				5358DD821E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				5358E1521E0B789A0024A0D4 /* EX2LargerTouchScrollView.m in Sources */,
 				5358E0CB1E0B789A0024A0D4 /* UIView+SetNeedsLayoutSafe.m in Sources */,
 				5358E0671E0B789A0024A0D4 /* CALayer+ImageFromLayer.m in Sources */,
-				5358DF181E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */,
-				5358DF3B1E0B789A0024A0D4 /* HTTPServer.m in Sources */,
 				5358E0441E0B789A0024A0D4 /* NSString+time.m in Sources */,
 				53159F1C156F69D0001B0268 /* MenuTableViewCell.m in Sources */,
 				5358DF8B1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				5358E1071E0B789A0024A0D4 /* EX2RingBuffer.m in Sources */,
 				53835D131E0B7DD50077B53D /* FMDatabaseAdditions.m in Sources */,
-				53835C531E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */,
-				53835D381E0B7E9A0077B53D /* TBXML+Compression.m in Sources */,
 				5358E06C1E0B789A0024A0D4 /* CALayer+SublayerWithName.m in Sources */,
 				5358DD051E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */,
 				53835CB41E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
-				53835D3D1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */,
 				5358DC831E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				53159F1D156F69D0001B0268 /* UIViewController+PushViewControllerCustom.m in Sources */,
 				53159F1E156F69D0001B0268 /* StackContainerView.m in Sources */,
@@ -6885,12 +6396,10 @@
 				53835CE61E0B7D6D0077B53D /* ZKDataArchive.m in Sources */,
 				53835D5A1E0B7F9F0077B53D /* MKStoreManager.m in Sources */,
 				5358DCDD1E0B78470024A0D4 /* LibSub.m in Sources */,
-				5358DF6D1E0B789A0024A0D4 /* WebSocket.m in Sources */,
 				536C995016619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				533C5ED41E0B8DFC00802FB1 /* String.swift in Sources */,
 				53835D221E0B7DD50077B53D /* FMResultSet.m in Sources */,
 				5358E1251E0B789A0024A0D4 /* RNEncryptor.m in Sources */,
-				5358DF1D1E0B78990024A0D4 /* DDData.m in Sources */,
 				5358DFE51E0B789A0024A0D4 /* NSNotificationCenter+MainThread.m in Sources */,
 				5358DD001E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				5358DF9F1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
@@ -6906,9 +6415,7 @@
 				53835CB91E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				5358E0BC1E0B789A0024A0D4 /* UITableView+Shadows.m in Sources */,
 				5358DF9A1E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
-				53835C581E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */,
 				53835CD21E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
-				53835C491E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */,
 				5349F15216E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 				5358E0711E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
 				5358E12F1E0B789A0024A0D4 /* RNOpenSSLDecryptor.m in Sources */,
@@ -6919,7 +6426,6 @@
 				5358DF721E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				5358E09E1E0B789A0024A0D4 /* UIImage+CustomStretch.m in Sources */,
 				5358DCD81E0B78470024A0D4 /* Server.swift in Sources */,
-				53835C3F1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6930,33 +6436,23 @@
 				5358E0EF1E0B789A0024A0D4 /* EX2FileDecryptor.m in Sources */,
 				5358E04A1E0B789A0024A0D4 /* NSString+TrimmingAdditions.m in Sources */,
 				53835D2D1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
-				53835C631E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
-				53835C361E0B7CE70077B53D /* NSObject+SBJson.m in Sources */,
-				5358DF5F1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */,
 				5358E0361E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358E04F1E0B789A0024A0D4 /* NSString+URLEncode.m in Sources */,
 				53835CD31E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
-				5358DF461E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */,
 				5358E17B1E0B789B0024A0D4 /* SnappySlider.m in Sources */,
 				5358DF9B1E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				5358DFD21E0B789A0024A0D4 /* NSData+Hash.m in Sources */,
 				5358DFE61E0B789A0024A0D4 /* NSNotificationCenter+MainThread.m in Sources */,
 				5358DD6F1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */,
-				53835C451E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */,
 				5358DF871E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				5358E1531E0B789A0024A0D4 /* EX2LargerTouchScrollView.m in Sources */,
 				53835CCE1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
-				5358DF2D1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */,
 				5358E06D1E0B789A0024A0D4 /* CALayer+SublayerWithName.m in Sources */,
 				5358E02C1E0B789A0024A0D4 /* NSString+HasValue.m in Sources */,
 				533C5EE41E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
 				5358E0771E0B789A0024A0D4 /* UIButton+Colors.m in Sources */,
-				5358DF191E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */,
-				5358DCE31E0B78470024A0D4 /* HLSProxyConnection.m in Sources */,
-				5358DF4B1E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */,
 				5358E0311E0B789A0024A0D4 /* NSString+hex.m in Sources */,
 				53835CBA1E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
-				53835C6D1E0B7CE70077B53D /* SBJsonWriter.m in Sources */,
 				5358E0131E0B789A0024A0D4 /* NSString+Clean.m in Sources */,
 				5358DCA21E0B78470024A0D4 /* BassParamEqValue.m in Sources */,
 				5358DCAC1E0B78470024A0D4 /* ISMSAlbum.m in Sources */,
@@ -6975,10 +6471,8 @@
 				5358DFAF1E0B789A0024A0D4 /* NSArray+FirstObject.m in Sources */,
 				5358DDBF1E0B78480024A0D4 /* sqlite3.c in Sources */,
 				5358E0861E0B789A0024A0D4 /* UIColor+ColorWithInt.m in Sources */,
-				5358DF3C1E0B789A0024A0D4 /* HTTPServer.m in Sources */,
 				5358DF961E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
 				5358DFF01E0B789A0024A0D4 /* NSNumber+CleanString.m in Sources */,
-				5358DF281E0B78990024A0D4 /* DDRange.m in Sources */,
 				5358DDA11E0B78480024A0D4 /* FMDatabasePoolAdditions.m in Sources */,
 				5358E1261E0B789A0024A0D4 /* RNEncryptor.m in Sources */,
 				5358DFFF1E0B789A0024A0D4 /* NSOrderedSet+FilterBlock.m in Sources */,
@@ -6993,7 +6487,6 @@
 				53835CE21E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
 				5358DCC51E0B78470024A0D4 /* ISMSMediaFolder.m in Sources */,
 				53835C9C1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
-				5358DF0F1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */,
 				536E29341E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
 				5358E1031E0B789A0024A0D4 /* EX2Reachability.m in Sources */,
 				5358E05E1E0B789A0024A0D4 /* NSURL+SkipBackupAttribute.m in Sources */,
@@ -7003,15 +6496,12 @@
 				5358E1671E0B789B0024A0D4 /* EX2SlidingNotification.m in Sources */,
 				5358DCD91E0B78470024A0D4 /* Server.swift in Sources */,
 				533C5ED51E0B8DFC00802FB1 /* String.swift in Sources */,
-				53835C401E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 				5358E0951E0B789A0024A0D4 /* UIImage+Color.m in Sources */,
 				5358DF731E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				5358E0B31E0B789A0024A0D4 /* UIImageView+ImageAnimated.m in Sources */,
 				5358E00E1E0B789A0024A0D4 /* GTMNSString+HTML.m in Sources */,
 				5358DC891E0B78470024A0D4 /* BassStream.m in Sources */,
-				53835C4F1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */,
 				5358E0631E0B789A0024A0D4 /* NSMutableOrderedSet+Safe.m in Sources */,
-				5358DF0A1E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */,
 				5358DFE11E0B789A0024A0D4 /* NSMutableDictionary+Safe.m in Sources */,
 				5358E1301E0B789A0024A0D4 /* RNOpenSSLDecryptor.m in Sources */,
 				5358E0271E0B789A0024A0D4 /* NSString+Gzip.m in Sources */,
@@ -7019,43 +6509,33 @@
 				5358E1711E0B789B0024A0D4 /* EX2TabBarController.m in Sources */,
 				5358E0181E0B789A0024A0D4 /* NSString+compareWithoutIndefiniteArticles.m in Sources */,
 				5358DDB51E0B78480024A0D4 /* ISMSNotificationNames.m in Sources */,
-				5358DF411E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */,
 				5358DFD71E0B789A0024A0D4 /* NSDate+UTC.m in Sources */,
 				5358E0401E0B789A0024A0D4 /* NSString+SHA1.m in Sources */,
 				53835CB01E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
 				5358DDA61E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
-				5358DF371E0B789A0024A0D4 /* HTTPMessage.m in Sources */,
-				5358DF5A1E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */,
 				5358DC7F1E0B78470024A0D4 /* AudioEngine.m in Sources */,
 				53835D141E0B7DD50077B53D /* FMDatabaseAdditions.m in Sources */,
 				5358DD881E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
 				5358E0EA1E0B789A0024A0D4 /* EX2ActionQueue.m in Sources */,
 				5358DCF71E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */,
-				5358DCE81E0B78470024A0D4 /* HLSProxyResponse.m in Sources */,
 				5358E1581E0B789A0024A0D4 /* EX2NavigationController.m in Sources */,
 				5358E0451E0B789A0024A0D4 /* NSString+time.m in Sources */,
 				5358E13F1E0B789A0024A0D4 /* EX2Dispatch.m in Sources */,
 				5358DC841E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				5358DD3D1E0B78480024A0D4 /* StatusLoader.swift in Sources */,
 				5358DF8C1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
-				5358DF231E0B78990024A0D4 /* DDNumber.m in Sources */,
 				5358DDB01E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				535B65FC1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				5358DFB91E0B789A0024A0D4 /* NSArray+Reverse.m in Sources */,
 				5358E0F41E0B789A0024A0D4 /* EX2FileEncryptor.m in Sources */,
-				53835C4A1E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */,
 				5358DD921E0B78480024A0D4 /* SavedSettings.m in Sources */,
 				5358E0A41E0B789A0024A0D4 /* UIImage+Reflection.m in Sources */,
 				5358E15D1E0B789A0024A0D4 /* EX2NotificationBar.m in Sources */,
-				53835C3B1E0B7CE70077B53D /* SBJsonParser.m in Sources */,
-				5358DF551E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */,
 				53835D561E0B7F9F0077B53D /* MKSKSubscriptionProduct.m in Sources */,
-				5358DF141E0B78990024A0D4 /* AsyncSocket.m in Sources */,
 				5358DCFC1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
 				5358DDC41E0B78480024A0D4 /* Utils.swift in Sources */,
 				5358E1CB1E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				53835CAB1E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
-				53835D431E0B7E9A0077B53D /* TBXML.m in Sources */,
 				5358E0681E0B789A0024A0D4 /* CALayer+ImageFromLayer.m in Sources */,
 				5358DFAA1E0B789A0024A0D4 /* NSArray+FilterBlock.m in Sources */,
 				5358E0811E0B789A0024A0D4 /* UIColor+ColorWithHex.m in Sources */,
@@ -7064,7 +6544,6 @@
 				53835D231E0B7DD50077B53D /* FMResultSet.m in Sources */,
 				5358E0D61E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
 				5358E10D1E0B789A0024A0D4 /* EX2SimpleConnectionQueue.m in Sources */,
-				5358DF1E1E0B78990024A0D4 /* DDData.m in Sources */,
 				53835CBF1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				5358DFCD1E0B789A0024A0D4 /* NSData+Gzip.m in Sources */,
 				5358DD971E0B78480024A0D4 /* SocialSingleton.m in Sources */,
@@ -7073,7 +6552,6 @@
 				53835D0F1E0B7DD50077B53D /* FMDatabase.m in Sources */,
 				5358DC9D1E0B78470024A0D4 /* BassEqualizer.m in Sources */,
 				5358E1491E0B789A0024A0D4 /* EX2GlowButton.m in Sources */,
-				53835C591E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */,
 				5358DCD41E0B78470024A0D4 /* SectionIndex.swift in Sources */,
 				5358DD8D1E0B78480024A0D4 /* PlayQueue.swift in Sources */,
 				53835CFB1E0B7D6D0077B53D /* ZKLog.m in Sources */,
@@ -7082,12 +6560,10 @@
 				5358E1211E0B789A0024A0D4 /* RNDecryptor.m in Sources */,
 				5358DC981E0B78470024A0D4 /* BassEffectValue.m in Sources */,
 				5358E0E51E0B789A0024A0D4 /* EX2ActionBlock.m in Sources */,
-				5358DF501E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */,
 				5358E0721E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
 				5358DBE21E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				53835CF11E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				5358DF7D1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
-				5358DF691E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */,
 				53835CEC1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358E0591E0B789A0024A0D4 /* NSURL+QueryParameterDictionary.m in Sources */,
 				5358E0CC1E0B789A0024A0D4 /* UIView+SetNeedsLayoutSafe.m in Sources */,
@@ -7098,9 +6574,7 @@
 				5358E1081E0B789A0024A0D4 /* EX2RingBuffer.m in Sources */,
 				5358DF911E0B789A0024A0D4 /* DDLog.m in Sources */,
 				5358E0541E0B789A0024A0D4 /* NSString+Validation.m in Sources */,
-				53835C681E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */,
 				5358E0E01E0B789A0024A0D4 /* UIWebView+HideShadows.m in Sources */,
-				53835C5E1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E1171E0B789A0024A0D4 /* RNCryptorEngine.m in Sources */,
 				5358DCC01E0B78470024A0D4 /* ISMSGenre.m in Sources */,
 				5358DBDD1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
@@ -7108,9 +6582,7 @@
 				5358E0AE1E0B789A0024A0D4 /* UIImage+Tint.m in Sources */,
 				53835CA61E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
 				5358DFC31E0B789A0024A0D4 /* NSMutableArray+Safe.m in Sources */,
-				5358DF6E1E0B789A0024A0D4 /* WebSocket.m in Sources */,
 				5358E03B1E0B789A0024A0D4 /* NSString+rfcEncode.m in Sources */,
-				5358DF321E0B789A0024A0D4 /* HTTPConnection.m in Sources */,
 				5358DDBA1E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
 				53835D5B1E0B7F9F0077B53D /* MKStoreManager.m in Sources */,
 				5358E0A91E0B789A0024A0D4 /* UIImage+RoundedImage.m in Sources */,
@@ -7124,7 +6596,6 @@
 				535B66221E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				5358E0F91E0B789A0024A0D4 /* EX2Language.m in Sources */,
 				5358E08B1E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
-				53835D391E0B7E9A0077B53D /* TBXML+Compression.m in Sources */,
 				5358DFEB1E0B789A0024A0D4 /* NSNull+CleanString.m in Sources */,
 				5358DF821E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				5358DFA01E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
@@ -7133,7 +6604,6 @@
 				5358E12B1E0B789A0024A0D4 /* RNOpenSSLCryptor.m in Sources */,
 				5358DD831E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				5358DCF21E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */,
-				53835C541E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */,
 				5358DFBE1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
 				5358E1351E0B789A0024A0D4 /* RNOpenSSLEncryptor.m in Sources */,
 				530F639C1A3FC78C006D7666 /* Defines.swift in Sources */,
@@ -7145,10 +6615,8 @@
 				5358E0221E0B789A0024A0D4 /* NSString+FileSize.m in Sources */,
 				5358DD741E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				5358E1121E0B789A0024A0D4 /* RNCryptor.m in Sources */,
-				53835D3E1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */,
 				5358DD6A1E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */,
 				5358DD011E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
-				5358DF641E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */,
 				5358DCCF1E0B78470024A0D4 /* Playlist.swift in Sources */,
 				53835D281E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 			);
@@ -7158,34 +6626,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5358DF491E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */,
-				5358DF081E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */,
-				5358DF4E1E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */,
 				53835CB81E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBD1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				5358E02A1E0B789A0024A0D4 /* NSString+HasValue.m in Sources */,
-				5358DF351E0B789A0024A0D4 /* HTTPMessage.m in Sources */,
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
 				53F74C531A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
 				533C5EDD1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */,
 				5323001A1CEE750B00B8C651 /* DroppableCell.swift in Sources */,
 				5358E0071E0B789A0024A0D4 /* NSOrderedSet+Safe.m in Sources */,
 				5358DCEB1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
-				5358DF3F1E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */,
 				5358DFB21E0B789A0024A0D4 /* NSArray+Plist.m in Sources */,
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
-				5358DCE61E0B78470024A0D4 /* HLSProxyResponse.m in Sources */,
 				538B4D021E1D77AC00847152 /* FolderLoader.swift in Sources */,
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358E0A71E0B789A0024A0D4 /* UIImage+RoundedImage.m in Sources */,
 				5358E0611E0B789A0024A0D4 /* NSMutableOrderedSet+Safe.m in Sources */,
 				5358DF7B1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				53ABE13F1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
-				5358DF2B1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */,
 				530F639A1A3FC78C006D7666 /* Defines.swift in Sources */,
-				5358DF121E0B78990024A0D4 /* AsyncSocket.m in Sources */,
-				53835C3E1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 				5358E1011E0B789A0024A0D4 /* EX2Reachability.m in Sources */,
 				538B4D0E1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				5358E03E1E0B789A0024A0D4 /* NSString+SHA1.m in Sources */,
@@ -7217,37 +6676,29 @@
 				5358E0111E0B789A0024A0D4 /* NSString+Clean.m in Sources */,
 				5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358E0891E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
-				53835C6B1E0B7CE70077B53D /* SBJsonWriter.m in Sources */,
 				5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				5358E09D1E0B789A0024A0D4 /* UIImage+CustomStretch.m in Sources */,
-				53835D411E0B7E9A0077B53D /* TBXML.m in Sources */,
 				53835D211E0B7DD50077B53D /* FMResultSet.m in Sources */,
 				5358DFE91E0B789A0024A0D4 /* NSNull+CleanString.m in Sources */,
-				5358DF171E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */,
 				538A1CDF1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
 				5358E0981E0B789A0024A0D4 /* UIImage+Cropping.m in Sources */,
 				5358E13D1E0B789A0024A0D4 /* EX2Dispatch.m in Sources */,
 				5358DF761E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
 				5358DD5E1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
 				5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
-				5358DF6C1E0B789A0024A0D4 /* WebSocket.m in Sources */,
 				5358E0391E0B789A0024A0D4 /* NSString+rfcEncode.m in Sources */,
 				53ABE14B1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53835D591E0B7F9F0077B53D /* MKStoreManager.m in Sources */,
-				53835C391E0B7CE70077B53D /* SBJsonParser.m in Sources */,
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
-				5358DF5D1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */,
 				53835D2B1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
 				53BC282B139AF0DD00A825F1 /* CustomUIAlertView.swift in Sources */,
 				538A1CDB1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				5358E0ED1E0B789A0024A0D4 /* EX2FileDecryptor.m in Sources */,
 				5358E1241E0B789A0024A0D4 /* RNEncryptor.m in Sources */,
-				53835C481E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */,
 				5358E0661E0B789A0024A0D4 /* CALayer+ImageFromLayer.m in Sources */,
 				5358DFCB1E0B789A0024A0D4 /* NSData+Gzip.m in Sources */,
 				53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				53E7BC151D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
-				53835C661E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */,
 				5358DD8B1E0B78480024A0D4 /* PlayQueue.swift in Sources */,
 				534FC5041CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */,
@@ -7284,7 +6735,6 @@
 				5358E14C1E0B789A0024A0D4 /* EX2InfinitePagingScrollView.m in Sources */,
 				5358DF711E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				5358DFDA1E0B789A0024A0D4 /* NSFileHandle+Hash.m in Sources */,
-				53835C521E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */,
 				5358DCD71E0B78470024A0D4 /* Server.swift in Sources */,
 				5358DC911E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				53835CB31E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
@@ -7296,9 +6746,7 @@
 				5358DCDC1E0B78470024A0D4 /* LibSub.m in Sources */,
 				5358DC821E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				5358E0701E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
-				5358DF0D1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */,
 				5358DDB31E0B78480024A0D4 /* ISMSNotificationNames.m in Sources */,
-				5358DF441E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */,
 				53ABE1471C60363E00E0E72B /* ItemViewController.swift in Sources */,
 				5358E05C1E0B789A0024A0D4 /* NSURL+SkipBackupAttribute.m in Sources */,
 				5358DBE01E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
@@ -7319,24 +6767,20 @@
 				5358DFF81E0B789A0024A0D4 /* NSObject+UserInfo.m in Sources */,
 				5358DD721E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				5358E0C01E0B789A0024A0D4 /* UITableViewCell+TableView.m in Sources */,
-				53835C571E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */,
 				5358DFAD1E0B789A0024A0D4 /* NSArray+FirstObject.m in Sources */,
 				53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				5358DC871E0B78470024A0D4 /* BassStream.m in Sources */,
 				533C5EE21E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
-				5358DF211E0B78990024A0D4 /* DDNumber.m in Sources */,
 				5358E0431E0B789A0024A0D4 /* NSString+time.m in Sources */,
 				5304FC3814F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5358DFEE1E0B789A0024A0D4 /* NSNumber+CleanString.m in Sources */,
 				5358DCB91E0B78470024A0D4 /* ISMSFolder.m in Sources */,
 				5358E0A21E0B789A0024A0D4 /* UIImage+Reflection.m in Sources */,
-				5358DF1C1E0B78990024A0D4 /* DDData.m in Sources */,
 				5358E1061E0B789A0024A0D4 /* EX2RingBuffer.m in Sources */,
 				5358DFC61E0B789A0024A0D4 /* NSData+AES128.m in Sources */,
 				5358DFB71E0B789A0024A0D4 /* NSArray+Reverse.m in Sources */,
 				5358E0481E0B789A0024A0D4 /* NSString+TrimmingAdditions.m in Sources */,
 				5358E0DE1E0B789A0024A0D4 /* UIWebView+HideShadows.m in Sources */,
-				53835D3C1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */,
 				535B65FA1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				533C5ED31E0B8DFC00802FB1 /* String.swift in Sources */,
 				5358E1291E0B789A0024A0D4 /* RNOpenSSLCryptor.m in Sources */,
@@ -7351,9 +6795,7 @@
 				5358DCBE1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
 				538B4D1C1E1DA77600847152 /* CachedImageView.swift in Sources */,
 				535B66201E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
-				53835C5C1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E0D41E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
-				53835D371E0B7E9A0077B53D /* TBXML+Compression.m in Sources */,
 				5358E0B11E0B789A0024A0D4 /* UIImageView+ImageAnimated.m in Sources */,
 				5358DDBD1E0B78480024A0D4 /* sqlite3.c in Sources */,
 				5358DCF51E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */,
@@ -7364,9 +6806,7 @@
 				537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
 				53835D1C1E0B7DD50077B53D /* FMDatabaseQueue.m in Sources */,
 				5358DD951E0B78480024A0D4 /* SocialSingleton.m in Sources */,
-				53835C611E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
 				5358DDC21E0B78480024A0D4 /* Utils.swift in Sources */,
-				5358DF261E0B78990024A0D4 /* DDRange.m in Sources */,
 				5358DFBC1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
 				53CD9DB71C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				5358DCD21E0B78470024A0D4 /* SectionIndex.swift in Sources */,
@@ -7377,31 +6817,26 @@
 				5358DD811E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				53835CA91E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				53835CF41E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
-				53835C4D1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */,
 				5358DF8F1E0B789A0024A0D4 /* DDLog.m in Sources */,
 				53835CD61E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				5358E0BB1E0B789A0024A0D4 /* UITableView+Shadows.m in Sources */,
 				5358E0F71E0B789A0024A0D4 /* EX2Language.m in Sources */,
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				5358DCF01E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */,
-				5358DF581E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */,
 				5358E0CA1E0B789A0024A0D4 /* UIView+SetNeedsLayoutSafe.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,
 				5358DD901E0B78480024A0D4 /* SavedSettings.m in Sources */,
 				5358DCB41E0B78470024A0D4 /* ISMSContentType.m in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DFD01E0B789A0024A0D4 /* NSData+Hash.m in Sources */,
-				5358DF301E0B789A0024A0D4 /* HTTPConnection.m in Sources */,
 				5358DDB81E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
 				5358E07A1E0B789A0024A0D4 /* UIButton+StretchBackground.m in Sources */,
 				5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				538B4D061E1D7E2300847152 /* MediaFoldersLoader.swift in Sources */,
 				5358E10B1E0B789A0024A0D4 /* EX2SimpleConnectionQueue.m in Sources */,
-				53835C431E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */,
 				5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				5333D10D1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
 				5358E15B1E0B789A0024A0D4 /* EX2NotificationBar.m in Sources */,
-				53835C341E0B7CE70077B53D /* NSObject+SBJson.m in Sources */,
 				53835CEF1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				53835D261E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				53835CEA1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
@@ -7409,15 +6844,10 @@
 				5358E12E1E0B789A0024A0D4 /* RNOpenSSLDecryptor.m in Sources */,
 				5358DFDF1E0B789A0024A0D4 /* NSMutableDictionary+Safe.m in Sources */,
 				5358E11F1E0B789A0024A0D4 /* RNDecryptor.m in Sources */,
-				5358DCE11E0B78470024A0D4 /* HLSProxyConnection.m in Sources */,
 				5358E1381E0B789A0024A0D4 /* EX2Kit.m in Sources */,
-				5358DF671E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */,
 				5358DD091E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				5358DD861E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
-				5358DF531E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */,
 				5358DFFD1E0B789A0024A0D4 /* NSOrderedSet+FilterBlock.m in Sources */,
-				5358DF3A1E0B789A0024A0D4 /* HTTPServer.m in Sources */,
-				5358DF621E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */,
 				5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				5358DDAE1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
@@ -7435,34 +6865,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5358DF481E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */,
-				5358DF071E0B78990024A0D4 /* GCDAsyncSocket.m in Sources */,
-				5358DF4D1E0B789A0024A0D4 /* HTTPAsyncFileResponse.m in Sources */,
 				53835CB71E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBC1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				5358DBDA1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				5358E0291E0B789A0024A0D4 /* NSString+HasValue.m in Sources */,
-				5358DF341E0B789A0024A0D4 /* HTTPMessage.m in Sources */,
 				53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */,
 				53F74C521A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
 				533C5EDC1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */,
 				532300191CEE750B00B8C651 /* DroppableCell.swift in Sources */,
 				5358E0061E0B789A0024A0D4 /* NSOrderedSet+Safe.m in Sources */,
 				5358DCEA1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
-				5358DF3E1E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */,
 				5358DFB11E0B789A0024A0D4 /* NSArray+Plist.m in Sources */,
 				53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */,
-				5358DCE51E0B78470024A0D4 /* HLSProxyResponse.m in Sources */,
 				538B4D011E1D77AC00847152 /* FolderLoader.swift in Sources */,
 				53835CDA1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358E0A61E0B789A0024A0D4 /* UIImage+RoundedImage.m in Sources */,
 				5358E0601E0B789A0024A0D4 /* NSMutableOrderedSet+Safe.m in Sources */,
 				5358DF7A1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				53ABE13E1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
-				5358DF2A1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */,
 				530F63991A3FC78C006D7666 /* Defines.swift in Sources */,
-				5358DF111E0B78990024A0D4 /* AsyncSocket.m in Sources */,
-				53835C3D1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 				5358E1001E0B789A0024A0D4 /* EX2Reachability.m in Sources */,
 				538B4D0D1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				5358E03D1E0B789A0024A0D4 /* NSString+SHA1.m in Sources */,
@@ -7494,37 +6915,29 @@
 				5358E0101E0B789A0024A0D4 /* NSString+Clean.m in Sources */,
 				5358E1C81E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358E0881E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
-				53835C6A1E0B7CE70077B53D /* SBJsonWriter.m in Sources */,
 				5358DF891E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				5358E09C1E0B789A0024A0D4 /* UIImage+CustomStretch.m in Sources */,
-				53835D401E0B7E9A0077B53D /* TBXML.m in Sources */,
 				53835D201E0B7DD50077B53D /* FMResultSet.m in Sources */,
 				5358DFE81E0B789A0024A0D4 /* NSNull+CleanString.m in Sources */,
-				5358DF161E0B78990024A0D4 /* AsyncUdpSocket.m in Sources */,
 				538A1CDE1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
 				5358E0971E0B789A0024A0D4 /* UIImage+Cropping.m in Sources */,
 				5358E13C1E0B789A0024A0D4 /* EX2Dispatch.m in Sources */,
 				5358DF751E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
 				5358DD5D1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
 				5358DF981E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
-				5358DF6B1E0B789A0024A0D4 /* WebSocket.m in Sources */,
 				5358E0381E0B789A0024A0D4 /* NSString+rfcEncode.m in Sources */,
 				53ABE14A1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53835D581E0B7F9F0077B53D /* MKStoreManager.m in Sources */,
-				53835C381E0B7CE70077B53D /* SBJsonParser.m in Sources */,
 				53DCF58B13BFEAD3009160F9 /* IntroViewController.m in Sources */,
-				5358DF5C1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */,
 				53835D2A1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
 				53DCF58C13BFEAD3009160F9 /* CustomUIAlertView.swift in Sources */,
 				538A1CDA1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				5358E0EC1E0B789A0024A0D4 /* EX2FileDecryptor.m in Sources */,
 				5358E1231E0B789A0024A0D4 /* RNEncryptor.m in Sources */,
-				53835C471E0B7CE70077B53D /* SBJsonStreamParserAdapter.m in Sources */,
 				5358E0651E0B789A0024A0D4 /* CALayer+ImageFromLayer.m in Sources */,
 				5358DFCA1E0B789A0024A0D4 /* NSData+Gzip.m in Sources */,
 				53CBB2D31C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				53E7BC141D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
-				53835C651E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */,
 				5358DD8A1E0B78480024A0D4 /* PlayQueue.swift in Sources */,
 				534FC5031CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53DCF58D13BFEAD3009160F9 /* OBSlider.m in Sources */,
@@ -7561,7 +6974,6 @@
 				5358E14B1E0B789A0024A0D4 /* EX2InfinitePagingScrollView.m in Sources */,
 				5358DF701E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				5358DFD91E0B789A0024A0D4 /* NSFileHandle+Hash.m in Sources */,
-				53835C511E0B7CE70077B53D /* SBJsonStreamWriter.m in Sources */,
 				5358DCD61E0B78470024A0D4 /* Server.swift in Sources */,
 				5358DC901E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				53835CB21E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
@@ -7573,9 +6985,7 @@
 				5358DCDB1E0B78470024A0D4 /* LibSub.m in Sources */,
 				5358DC811E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				5358E06F1E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
-				5358DF0C1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */,
 				5358DDB21E0B78480024A0D4 /* ISMSNotificationNames.m in Sources */,
-				5358DF431E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */,
 				53ABE1461C60363E00E0E72B /* ItemViewController.swift in Sources */,
 				5358E05B1E0B789A0024A0D4 /* NSURL+SkipBackupAttribute.m in Sources */,
 				5358DBDF1E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
@@ -7596,24 +7006,20 @@
 				5358DFF71E0B789A0024A0D4 /* NSObject+UserInfo.m in Sources */,
 				5358DD711E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				5358E0BF1E0B789A0024A0D4 /* UITableViewCell+TableView.m in Sources */,
-				53835C561E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */,
 				5358DFAC1E0B789A0024A0D4 /* NSArray+FirstObject.m in Sources */,
 				53835CF81E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				5358DC861E0B78470024A0D4 /* BassStream.m in Sources */,
 				533C5EE11E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
-				5358DF201E0B78990024A0D4 /* DDNumber.m in Sources */,
 				5358E0421E0B789A0024A0D4 /* NSString+time.m in Sources */,
 				5304FC3714F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
 				5358DFED1E0B789A0024A0D4 /* NSNumber+CleanString.m in Sources */,
 				5358DCB81E0B78470024A0D4 /* ISMSFolder.m in Sources */,
 				5358E0A11E0B789A0024A0D4 /* UIImage+Reflection.m in Sources */,
-				5358DF1B1E0B78990024A0D4 /* DDData.m in Sources */,
 				5358E1051E0B789A0024A0D4 /* EX2RingBuffer.m in Sources */,
 				5358DFC51E0B789A0024A0D4 /* NSData+AES128.m in Sources */,
 				5358DFB61E0B789A0024A0D4 /* NSArray+Reverse.m in Sources */,
 				5358E0471E0B789A0024A0D4 /* NSString+TrimmingAdditions.m in Sources */,
 				5358E0DD1E0B789A0024A0D4 /* UIWebView+HideShadows.m in Sources */,
-				53835D3B1E0B7E9A0077B53D /* TBXML+HTTP.m in Sources */,
 				535B65F91E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
 				533C5ED21E0B8DFC00802FB1 /* String.swift in Sources */,
 				5358E1281E0B789A0024A0D4 /* RNOpenSSLCryptor.m in Sources */,
@@ -7628,9 +7034,7 @@
 				5358DCBD1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
 				538B4D1B1E1DA77600847152 /* CachedImageView.swift in Sources */,
 				535B661F1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
-				53835C5B1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E0D31E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
-				53835D361E0B7E9A0077B53D /* TBXML+Compression.m in Sources */,
 				5358E0B01E0B789A0024A0D4 /* UIImageView+ImageAnimated.m in Sources */,
 				5358DDBC1E0B78480024A0D4 /* sqlite3.c in Sources */,
 				5358DCF41E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */,
@@ -7641,9 +7045,7 @@
 				537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
 				53835D1B1E0B7DD50077B53D /* FMDatabaseQueue.m in Sources */,
 				5358DD941E0B78480024A0D4 /* SocialSingleton.m in Sources */,
-				53835C601E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
 				5358DDC11E0B78480024A0D4 /* Utils.swift in Sources */,
-				5358DF251E0B78990024A0D4 /* DDRange.m in Sources */,
 				5358DFBB1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
 				53CD9DB61C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				5358DCD11E0B78470024A0D4 /* SectionIndex.swift in Sources */,
@@ -7654,31 +7056,26 @@
 				5358DD801E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				53835CA81E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				53835CF31E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
-				53835C4C1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */,
 				5358DF8E1E0B789A0024A0D4 /* DDLog.m in Sources */,
 				53835CD51E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				5358E0BA1E0B789A0024A0D4 /* UITableView+Shadows.m in Sources */,
 				5358E0F61E0B789A0024A0D4 /* EX2Language.m in Sources */,
 				53835CC11E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				5358DCEF1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */,
-				5358DF571E0B789A0024A0D4 /* HTTPDynamicFileResponse.m in Sources */,
 				5358E0C91E0B789A0024A0D4 /* UIView+SetNeedsLayoutSafe.m in Sources */,
 				53493F2815FC6AC40059492E /* main.m in Sources */,
 				5358DD8F1E0B78480024A0D4 /* SavedSettings.m in Sources */,
 				5358DCB31E0B78470024A0D4 /* ISMSContentType.m in Sources */,
 				53835CCB1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DFCF1E0B789A0024A0D4 /* NSData+Hash.m in Sources */,
-				5358DF2F1E0B789A0024A0D4 /* HTTPConnection.m in Sources */,
 				5358DDB71E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
 				5358E0791E0B789A0024A0D4 /* UIButton+StretchBackground.m in Sources */,
 				5358DF9D1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				538B4D051E1D7E2300847152 /* MediaFoldersLoader.swift in Sources */,
 				5358E10A1E0B789A0024A0D4 /* EX2SimpleConnectionQueue.m in Sources */,
-				53835C421E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */,
 				5358DF7F1E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				5333D10C1C65433800DC19F4 /* PlayQueueViewController.swift in Sources */,
 				5358E15A1E0B789A0024A0D4 /* EX2NotificationBar.m in Sources */,
-				53835C331E0B7CE70077B53D /* NSObject+SBJson.m in Sources */,
 				53835CEE1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				53835D251E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				53835CE91E0B7D6D0077B53D /* ZKDefs.m in Sources */,
@@ -7686,15 +7083,10 @@
 				5358E12D1E0B789A0024A0D4 /* RNOpenSSLDecryptor.m in Sources */,
 				5358DFDE1E0B789A0024A0D4 /* NSMutableDictionary+Safe.m in Sources */,
 				5358E11E1E0B789A0024A0D4 /* RNDecryptor.m in Sources */,
-				5358DCE01E0B78470024A0D4 /* HLSProxyConnection.m in Sources */,
 				5358E1371E0B789A0024A0D4 /* EX2Kit.m in Sources */,
-				5358DF661E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */,
 				5358DD081E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				5358DD851E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
-				5358DF521E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */,
 				5358DFFC1E0B789A0024A0D4 /* NSOrderedSet+FilterBlock.m in Sources */,
-				5358DF391E0B789A0024A0D4 /* HTTPServer.m in Sources */,
-				5358DF611E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */,
 				5333D1101C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				5358DDAD1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				536C994E16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,

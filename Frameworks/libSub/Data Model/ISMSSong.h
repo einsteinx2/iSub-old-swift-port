@@ -7,7 +7,6 @@
 //
 
 #import "ISMSPersistedModel.h"
-#import "TBXML.h"
 #import <CoreGraphics/CGBase.h>
 
 @class ISMSFolder, ISMSArtist, ISMSAlbum, ISMSGenre, ISMSContentType, RXMLElement;

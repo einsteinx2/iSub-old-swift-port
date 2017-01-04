@@ -9,7 +9,6 @@
 #import "NSMutableURLRequest+PMS.h"
 #import "LibSub.h"
 #import "iSub-Swift.h"
-#import "TBXML+Compression.h"
 
 @implementation NSMutableURLRequest (PMS)
 
@@ -118,7 +117,7 @@
         Server *currentServer = settingsS.currentServer;
 		NSString *authStr = [NSString stringWithFormat:@"%@:%@", currentServer.username, currentServer.password];
 		NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
-		NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodingWithLineLength:0]];
+		NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64EncodedStringWithOptions:0]];
 		[request setValue:authValue forHTTPHeaderField:@"Authorization"];
 	}
 	

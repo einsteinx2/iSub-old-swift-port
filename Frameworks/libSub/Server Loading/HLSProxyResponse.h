@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Einstein Times Two Software. All rights reserved.
 //
 
+/*
 #import "HTTPResponse.h"
 
 @class HTTPConnection;
@@ -17,3 +18,4 @@
 - (void)startProxyDownload:(NSURL *)url;
 
 @end
+*/

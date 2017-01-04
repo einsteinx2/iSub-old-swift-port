@@ -22,7 +22,6 @@
 #import "MKStoreManager.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "UIViewController+PushViewControllerCustom.h"
-#import "HTTPServer.h"
 #import "HLSProxyConnection.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
@@ -203,6 +202,7 @@
 
 - (void)startHLSProxy
 {
+    /*
     self.hlsProxyServer = [[HTTPServer alloc] init];
     self.hlsProxyServer.connectionClass = [HLSProxyConnection class];
     
@@ -213,6 +213,7 @@
 	{
 		//DDLogError(@"Error starting HLS proxy server: %@", error);
 	}
+    */
 }
 
 // TODO: Audit all this and test. Seems to duplicate code in UAApplication
@@ -1125,6 +1126,7 @@
 
 - (void)checkWaveBoxRelease
 {
+    /*
     if (!settingsS.isStopCheckingWaveboxRelease && !settingsS.isWaveBoxAlertShowing)
     {
         [EX2Dispatch runInBackgroundAsync:^
@@ -1154,7 +1156,7 @@
                  }
              }
          }];
-    }
+    }*/
 }
 
 #pragma mark -
@@ -1351,6 +1353,7 @@
 
 - (void)playSubsonicVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates
 {
+    /*
     [[PlayQueue sharedInstance] stop];
     
     if (!aSong.itemId || !bitrates)
@@ -1371,6 +1374,7 @@
     self.moviePlayer.contentURL = [NSURL URLWithString:urlString];
     //[moviePlayer prepareToPlay];
     [self.moviePlayer play];
+     */
 }
 
 - (void)playWaveBoxVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates

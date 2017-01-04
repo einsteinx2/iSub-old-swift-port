@@ -6,23 +6,6 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-typedef NS_ENUM(NSInteger, ISMSLoaderType)
-{
-    ISMSLoaderType_Generic = 0,
-    ISMSLoaderType_RootFolders,
-    ISMSLoaderType_SubFolders,
-    ISMSLoaderType_AllSongs,
-    ISMSLoaderType_Chat,
-    ISMSLoaderType_Lyrics,
-    ISMSLoaderType_CoverArt,
-    ISMSLoaderType_ServerPlaylist,
-	ISMSLoaderType_NowPlaying,
-    ISMSLoaderType_Status,
-    ISMSLoaderType_Login,
-    ISMSLoaderType_HLS,
-    ISMSLoaderType_QuickAlbums
-};
-
 @class ISMSLoader;
 @protocol ISMSLoaderDelegate <NSObject>
 

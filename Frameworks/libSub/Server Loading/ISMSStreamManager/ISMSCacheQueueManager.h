@@ -12,7 +12,7 @@
 #define cacheQueueManagerS ((ISMSCacheQueueManager *)[ISMSCacheQueueManager sharedInstance])
 
 @class ISMSSong, ISMSStreamHandler;
-@interface ISMSCacheQueueManager : NSObject <ISMSLoaderDelegate, ISMSStreamHandlerDelegate>
+@interface ISMSCacheQueueManager : NSObject <ISMSStreamHandlerDelegate>
 
 @property BOOL isQueueDownloading;
 @property (copy) ISMSSong *currentQueuedSong;
