@@ -42,7 +42,7 @@ static NSArray *_ignoredArticles = nil;
     return self;
 }
 
-- (instancetype)initWithFolderId:(NSInteger)folderId serverId:(NSInteger)serverId
+- (instancetype)initWithFolderId:(NSInteger)folderId serverId:(NSInteger)serverId loadSubmodels:(BOOL)loadSubmodels
 {
     if (self = [super init])
     {
@@ -61,6 +61,10 @@ static NSArray *_ignoredArticles = nil;
             }
             [r close];
         }];
+        
+        if (foundRecord && loadSubmodels) {
+            [self reloadSubmodels];
+        }
         
         return foundRecord ? self : nil;
     }
@@ -192,7 +196,7 @@ static NSArray *_ignoredArticles = nil;
 
 - (instancetype)initWithItemId:(NSInteger)itemId serverId:(NSInteger)serverId
 {
-    return [self initWithFolderId:itemId serverId:serverId];
+    return [self initWithFolderId:itemId serverId:serverId loadSubmodels:NO];
 }
 
 - (NSNumber *)itemId

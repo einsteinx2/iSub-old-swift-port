@@ -17,14 +17,14 @@
 
 @implementation ISMSArtist
 
-- (instancetype)initWithArtistId:(NSInteger)artistId serverId:(NSInteger)serverId
+- (instancetype)initWithArtistId:(NSInteger)artistId serverId:(NSInteger)serverId loadSubmodels:(BOOL)loadSubmodels
 {
     if (self = [super init])
     {
         __block BOOL foundRecord = NO;
         
         [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-            NSString *query = @"SELECT artistId, name, albumCount "
+            NSString *query = @"SELECT artistId, serverId, name, albumCount "
                               @"FROM artists "
                               @"WHERE artistId = ? AND serverId = ?";
             
@@ -36,6 +36,10 @@
             }
             [r close];
         }];
+        
+        if (foundRecord && loadSubmodels) {
+            [self reloadSubmodels];
+        }
         
         return foundRecord ? self : nil;
     }
@@ -189,7 +193,7 @@
 
 - (instancetype)initWithItemId:(NSInteger)itemId serverId:(NSInteger)serverId
 {
-    return [self initWithArtistId:itemId serverId:serverId];
+    return [self initWithArtistId:itemId serverId:serverId loadSubmodels:NO];
 }
 
 - (NSNumber *)itemId
@@ -230,8 +234,9 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     ISMSArtist *anArtist = [[ISMSArtist alloc] init];
-    anArtist.artistId    = [self.artistId copy];
-    anArtist.name        = [self.name copy];
+    anArtist.artistId    = self.artistId;
+    anArtist.serverId    = self.serverId;
+    anArtist.name        = self.name;
     anArtist.albumCount  = self.albumCount;
     
     return anArtist;

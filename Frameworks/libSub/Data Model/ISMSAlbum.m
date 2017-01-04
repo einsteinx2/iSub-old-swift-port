@@ -45,7 +45,7 @@
         _name = [[element attribute:@"name"] cleanString];
         _songCount = @([[element attribute:@"songCount"] integerValue]);
         _duration = @([[element attribute:@"duration"] integerValue]);
-        _year = @([[element attribute:@"duration"] integerValue]);
+        _year = @([[element attribute:@"year"] integerValue]);
         
         NSString *createdString = [element attribute:@"created"];
         if (createdString.length > 0) {
@@ -64,7 +64,7 @@
     return self;
 }
 
-- (instancetype)initWithAlbumId:(NSInteger)albumId serverId:(NSInteger)serverId
+- (instancetype)initWithAlbumId:(NSInteger)albumId serverId:(NSInteger)serverId loadSubmodels:(BOOL)loadSubmodels
 {
     if (self = [super init])
     {
@@ -81,7 +81,7 @@
             [r close];
         }];
         
-        if (foundRecord)
+        if (foundRecord && loadSubmodels)
         {
             // Preload all submodels
             [self reloadSubmodels];
@@ -99,11 +99,12 @@
     _serverId   = N2n([resultSet objectForColumnIndex:1]);
     _artistId   = N2n([resultSet objectForColumnIndex:2]);
     _genreId    = N2n([resultSet objectForColumnIndex:3]);
-    _name       = N2n([resultSet objectForColumnIndex:4]);
-    _coverArtId = N2n([resultSet objectForColumnIndex:5]);
-    _name       = N2n([resultSet objectForColumnIndex:6]);
-    _songCount  = N2n([resultSet objectForColumnIndex:7]);
+    _coverArtId = N2n([resultSet objectForColumnIndex:4]);
+    _name       = N2n([resultSet objectForColumnIndex:5]);
+    _songCount  = N2n([resultSet objectForColumnIndex:6]);
+    _duration   = N2n([resultSet objectForColumnIndex:7]);
     _year       = N2n([resultSet objectForColumnIndex:8]);
+    _created    = N2n([resultSet objectForColumnIndex:9]);
 }
 
 - (NSString *)description
@@ -192,7 +193,7 @@
 
 - (instancetype)initWithItemId:(NSInteger)itemId serverId:(NSInteger)serverId
 {
-    return [self initWithAlbumId:itemId serverId:serverId];
+    return [self initWithAlbumId:itemId serverId:serverId loadSubmodels:NO];
 }
 
 - (NSNumber *)itemId
@@ -262,7 +263,7 @@
         _artist = nil;
         if (self.artistId)
         {
-            _artist = [[ISMSArtist alloc] initWithArtistId:self.artistId.integerValue serverId:self.serverId.integerValue];
+            _artist = [[ISMSArtist alloc] initWithArtistId:self.artistId.integerValue serverId:self.serverId.integerValue  loadSubmodels:NO];
         }
         
         _genre = nil;

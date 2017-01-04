@@ -92,7 +92,7 @@
     {
         if (!_associatedObject)
         {
-            _associatedObject = [[ISMSAlbum alloc] initWithAlbumId:self.albumId.integerValue serverId:settingsS.currentServerId];
+            _associatedObject = [[ISMSAlbum alloc] initWithAlbumId:self.albumId.integerValue serverId:settingsS.currentServerId loadSubmodels:NO];
         }
         
         return _associatedObject;

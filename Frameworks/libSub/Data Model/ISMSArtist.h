@@ -22,7 +22,7 @@
 + (nonnull NSArray<ISMSArtist*> *)allArtistsWithServerId:(nullable NSNumber *)serverId;
 + (BOOL)deleteAllArtistsWithServerId:(nullable NSNumber *)serverId;
 
-- (nullable instancetype)initWithArtistId:(NSInteger)artistId serverId:(NSInteger)serverId;
+- (nullable instancetype)initWithArtistId:(NSInteger)artistId serverId:(NSInteger)serverId loadSubmodels:(BOOL)loadSubmodels;
 - (nonnull instancetype)initWithRXMLElement:(nonnull RXMLElement *)element serverId:(NSInteger)serverId;
 
 @end

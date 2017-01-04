@@ -23,7 +23,6 @@
 
 #import "ISMSMediaFoldersLoader.h"
 #import "ISMSFolderLoader.h"
-#import "ISMSArtistLoader.h"
 #import "ISMSAlbumLoader.h"
 
 #endif

@@ -128,7 +128,7 @@
     {
         if (!_associatedObject)
         {
-            _associatedObject = [[ISMSFolder alloc] initWithFolderId:self.folderId.integerValue serverId:settingsS.currentServerId];
+            _associatedObject = [[ISMSFolder alloc] initWithFolderId:self.folderId.integerValue serverId:settingsS.currentServerId loadSubmodels:NO];
         }
         
         return _associatedObject;

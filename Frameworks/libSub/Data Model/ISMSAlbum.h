@@ -30,7 +30,7 @@
 
 @property (nonnull, strong, readonly) NSArray<ISMSSong*> *songs;
 
-- (nullable instancetype)initWithAlbumId:(NSInteger)albumId serverId:(NSInteger)serverId;
+- (nullable instancetype)initWithAlbumId:(NSInteger)albumId serverId:(NSInteger)serverId loadSubmodels:(BOOL)loadSubmodels;
 
 - (nonnull instancetype)initWithRXMLElement:(nonnull RXMLElement *)element serverId:(NSInteger)serverId;
 

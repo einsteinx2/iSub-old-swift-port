@@ -26,7 +26,7 @@
 - (nonnull instancetype)initWithRXMLElement:(nonnull RXMLElement *)element serverId:(NSInteger)serverId mediaFolderId:(NSInteger)mediaFolderId;
 
 // Returns an instance if it exists in the db, otherwise nil
-- (nullable instancetype)initWithFolderId:(NSInteger)folderId serverId:(NSInteger)serverId;
+- (nullable instancetype)initWithFolderId:(NSInteger)folderId serverId:(NSInteger)serverId loadSubmodels:(BOOL)loadSubmodels;
 
 + (nonnull NSArray<ISMSFolder*> *)foldersInFolder:(NSInteger)folderId serverId:(NSInteger)serverId;
 

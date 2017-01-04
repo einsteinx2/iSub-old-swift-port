@@ -292,12 +292,12 @@ class ItemViewController: DraggableTableViewController {
                 self.pushCustom(viewController)
             case artistsSectionIndex:
                 let artist = self.viewModel.artists[indexPath.row]
-                let artistLoader = ISMSArtistLoader()
-                artistLoader.artistId = artist.artistId
-                
-                let viewModel = ItemViewModel(loader: artistLoader)
-                let viewController = ItemViewController(viewModel: viewModel)
-                self.pushCustom(viewController)
+                if let artistId = artist.artistId as? Int {
+                    let artistLoader = ArtistLoader(artistId: artistId)
+                    let viewModel = ItemViewModel(loader: artistLoader)
+                    let viewController = ItemViewController(viewModel: viewModel)
+                    self.pushCustom(viewController)
+                }
             case albumsSectionIndex:
                 let album = self.viewModel.albums[indexPath.row]
                 let albumLoader = ISMSAlbumLoader()

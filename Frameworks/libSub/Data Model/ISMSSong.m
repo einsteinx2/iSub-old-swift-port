@@ -204,7 +204,7 @@
     {
         if (!_folder && self.folderId)
         {
-            _folder = [[ISMSFolder alloc] initWithFolderId:self.folderId.integerValue serverId:self.serverId.integerValue];
+            _folder = [[ISMSFolder alloc] initWithFolderId:self.folderId.integerValue serverId:self.serverId.integerValue  loadSubmodels:NO];
         }
         
         return _folder;
@@ -217,7 +217,7 @@
     {
         if (!_artist && self.artistId)
         {
-            _artist = [[ISMSArtist alloc] initWithArtistId:self.artistId.integerValue serverId:self.serverId.integerValue];
+            _artist = [[ISMSArtist alloc] initWithArtistId:self.artistId.integerValue serverId:self.serverId.integerValue  loadSubmodels:NO];
         }
         
         return _artist;
@@ -230,7 +230,7 @@
     {
         if (!_album && self.albumId)
         {
-            _album = [[ISMSAlbum alloc] initWithAlbumId:self.albumId.integerValue serverId:self.serverId.integerValue];
+            _album = [[ISMSAlbum alloc] initWithAlbumId:self.albumId.integerValue serverId:self.serverId.integerValue  loadSubmodels:NO];
         }
         
         return _album;
@@ -358,19 +358,19 @@
         _folder = nil;
         if (self.folderId)
         {
-            _folder = [[ISMSFolder alloc] initWithFolderId:self.folderId.integerValue serverId:self.serverId.integerValue];
+            _folder = [[ISMSFolder alloc] initWithFolderId:self.folderId.integerValue serverId:self.serverId.integerValue loadSubmodels:NO];
         }
         
         _artist = nil;
         if (self.artistId)
         {
-            _artist = [[ISMSArtist alloc] initWithArtistId:self.artistId.integerValue serverId:self.serverId.integerValue];
+            _artist = [[ISMSArtist alloc] initWithArtistId:self.artistId.integerValue serverId:self.serverId.integerValue loadSubmodels:NO];
         }
         
         _album = nil;
         if (self.albumId)
         {
-            _album = [[ISMSAlbum alloc] initWithAlbumId:self.albumId.integerValue serverId:self.serverId.integerValue];
+            _album = [[ISMSAlbum alloc] initWithAlbumId:self.albumId.integerValue serverId:self.serverId.integerValue loadSubmodels:NO];
         }
         
         _genre = nil;
@@ -495,12 +495,13 @@
         {
             ISMSSong *song = [[ISMSSong alloc] init];
             [song _assignPropertiesFromResultSet:result];
-            [song reloadSubmodels];
             [songs addObject:song];
         }
         [result close];
     }];
     
+    [songs makeObjectsPerformSelector:@selector(reloadSubmodels)];
+
     return songs;
 }
 
@@ -515,11 +516,12 @@
         {
             ISMSSong *song = [[ISMSSong alloc] init];
             [song _assignPropertiesFromResultSet:result];
-            [song reloadSubmodels];
             [songs addObject:song];
         }
         [result close];
     }];
+    
+    [songs makeObjectsPerformSelector:@selector(reloadSubmodels)];
     
     return songs;
 }
@@ -535,11 +537,12 @@
         {
             ISMSSong *song = [[ISMSSong alloc] init];
             [song _assignPropertiesFromResultSet:result];
-            [song reloadSubmodels];
             [songs addObject:song];
         }
         [result close];
     }];
+    
+    [songs makeObjectsPerformSelector:@selector(reloadSubmodels)];
     
     return songs;
 }
