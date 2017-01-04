@@ -7867,7 +7867,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isub;
 				PRODUCT_NAME = iSub;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
 			};
 			name = Debug;
@@ -7909,7 +7908,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isub;
 				PRODUCT_NAME = iSub;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0.1;
 			};
 			name = Release;
@@ -7973,6 +7971,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Classes/iSub-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 2.3;
 				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8018,7 +8017,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isub;
 				PRODUCT_NAME = iSub;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
 			};
 			name = AdHoc;
@@ -8352,7 +8350,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -8403,7 +8400,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -8452,7 +8448,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0.1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -8499,7 +8494,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isublite;
 				PRODUCT_NAME = "iSub Lite";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
 			};
 			name = Debug;
@@ -8545,7 +8539,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isublite;
 				PRODUCT_NAME = "iSub Lite";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
 			};
 			name = AdHoc;
@@ -8589,7 +8582,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isublite;
 				PRODUCT_NAME = "iSub Lite";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0.1;
 			};
 			name = Release;
@@ -8647,13 +8639,14 @@
 					"-all_load",
 					"-ObjC",
 				);
-				OTHER_SWIFT_FLAGS = "-D DebugBuild";
+				OTHER_SWIFT_FLAGS = "-D DebugBuild -Onone";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_MODULE_NAME = iSub;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Classes/iSub-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 2.3;
 				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8717,6 +8710,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Classes/iSub-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 2.3;
 				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
