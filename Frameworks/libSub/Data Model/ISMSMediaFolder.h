@@ -8,13 +8,14 @@
 
 #import "ISMSPersistedModel.h"
 
-@class ISMSFolder;
+@class ISMSFolder, RXMLElement;
 @interface ISMSMediaFolder : NSObject <ISMSPersistedModel, NSCoding, NSCopying>
 
 @property (nullable, strong) NSNumber *mediaFolderId;
 @property (nullable, strong) NSNumber *serverId;
 @property (nullable, copy) NSString *name;
 
+- (nonnull instancetype)initWithRXMLElement:(nonnull RXMLElement *)element serverId:(NSInteger)serverId;
 - (nullable instancetype)initWithMediaFolderId:(NSInteger)mediaFolderId serverId:(NSInteger)serverId;
 
 - (nonnull NSArray<ISMSFolder*> *)rootFolders;

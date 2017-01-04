@@ -8,14 +8,16 @@
 
 import Foundation
 
-class RootFoldersLoader: ISMSAbstractItemLoader {
+class RootFoldersLoader: ISMSLoader, ItemLoader {
     var mediaFolderId: Int?
     
     var ignoredArticles = [String]()
     var folders = [ISMSFolder]()
     var songs = [ISMSSong]()
     
-    override var items: [ISMSItem]? {
+    var associatedObject: Any?
+    
+    var items: [ISMSItem] {
         return folders as [ISMSItem] + songs as [ISMSItem]
     }
     
@@ -28,7 +30,7 @@ class RootFoldersLoader: ISMSAbstractItemLoader {
     }
     
     override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData! as Data), root.isValid else {
+        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
             let error = NSError(ismsCode: ISMSErrorCode_NotXML)
             self.informDelegateLoadingFailed(error)
             return
@@ -71,7 +73,7 @@ class RootFoldersLoader: ISMSAbstractItemLoader {
         }
     }
     
-    override func persistModels() {
+    func persistModels() {
         // Remove existing root folders
         let serverId = SavedSettings.sharedInstance().currentServerId
         let mediaFolder = ISMSMediaFolder(mediaFolderId: mediaFolderId ?? 0, serverId: serverId)
@@ -82,7 +84,7 @@ class RootFoldersLoader: ISMSAbstractItemLoader {
         songs.forEach({$0.replace()})
     }
     
-    override func loadModelsFromCache() -> Bool {
+    func loadModelsFromCache() -> Bool {
         let serverId = SavedSettings.sharedInstance().currentServerId
         if let mediaFolderId = mediaFolderId, let mediaFolder = ISMSMediaFolder(mediaFolderId: mediaFolderId, serverId: serverId) {
             folders = mediaFolder.rootFolders()

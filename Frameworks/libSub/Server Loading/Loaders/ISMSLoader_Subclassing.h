@@ -11,7 +11,7 @@
 @property (nullable, nonatomic, strong) NSURLConnection *connection;
 @property (nullable, nonatomic, strong) NSURLRequest *request;
 @property (nullable, nonatomic, strong) NSURLResponse *response;
-@property (nullable, nonatomic, strong) NSMutableData *receivedData;
+@property (nonnull, nonatomic, strong) NSData *receivedData;
 
 // Override this to run setup during init
 - (void)setup;

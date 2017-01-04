@@ -1,5 +1,5 @@
 //
-//  ArtistLoader.swift
+//  MediaFoldersLoader.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 1/4/17.
@@ -8,23 +8,17 @@
 
 import Foundation
 
-class ArtistLoader: ISMSLoader, ItemLoader {
-    let artistId: Int
+class MediaFoldersLoader: ISMSLoader, ItemLoader {
+    var mediaFolders = [ISMSMediaFolder]()
     
-    var albums = [ISMSAlbum]()
+    var associatedObject: Any?
     
     var items: [ISMSItem] {
-        return albums
-    }
-    
-    init(artistId: Int) {
-        self.artistId = artistId
-        super.init()
+        return mediaFolders
     }
     
     override func createRequest() -> URLRequest? {
-        let parameters = ["id": "\(artistId)"]
-        return NSMutableURLRequest(susAction: "getArtist", parameters: parameters) as URLRequest
+        return NSMutableURLRequest(susAction: "getMusicFolders", parameters: nil) as URLRequest
     }
     
     override func processResponse() {
@@ -39,14 +33,14 @@ class ArtistLoader: ISMSLoader, ItemLoader {
             let message = error.attribute("message")
             self.subsonicErrorCode(Int(code) ?? -1, message: message)
         } else {
-            var albumsTemp = [ISMSAlbum]()
+            var mediaFoldersTemp = [ISMSMediaFolder]()
             
             let serverId = SavedSettings.sharedInstance().currentServerId
-            root.iterate("artist.album") { album in
-                let anAlbum = ISMSAlbum(rxmlElement: album, serverId: serverId)
-                albumsTemp.append(anAlbum)
+            root.iterate("musicFolders.musicFolder") { musicFolder in
+                let aMediaFolder = ISMSMediaFolder(rxmlElement: musicFolder, serverId: serverId)
+                mediaFoldersTemp.append(aMediaFolder)
             }
-            albums = albumsTemp
+            mediaFolders = mediaFoldersTemp
             
             self.persistModels()
             
@@ -55,17 +49,14 @@ class ArtistLoader: ISMSLoader, ItemLoader {
     }
     
     func persistModels() {
-        // Save the new albums
-        albums.forEach({$0.replace()})
+        let serverId = SavedSettings.sharedInstance().currentServerId
+        ISMSMediaFolder.deleteAllMediaFolders(withServerId: serverId as NSNumber)
+        mediaFolders.forEach({$0.replace()})
     }
     
     func loadModelsFromCache() -> Bool {
         let serverId = SavedSettings.sharedInstance().currentServerId
-        albums = ISMSAlbum.albums(inArtist: self.artistId, serverId: serverId)
-        return albums.count > 0
-    }
-    
-    var associatedObject: Any? {
-        return ISMSArtist(artistId: artistId, serverId: SavedSettings.sharedInstance().currentServerId, loadSubmodels: false)
+        mediaFolders = ISMSMediaFolder.allMediaFolders(withServerId: serverId as NSNumber)
+        return mediaFolders.count > 0
     }
 }

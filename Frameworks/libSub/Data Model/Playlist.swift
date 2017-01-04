@@ -89,6 +89,15 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
             return nil
         }
     }
+    
+    public init(rxmlElement element: RXMLElement, serverId: Int) {
+        let playlistIdString = element.attribute("id") ?? ""
+        self.playlistId = Int(playlistIdString) ?? -1
+        self.playlistServerId = serverId
+        self.name = element.attribute("name") ?? ""
+        
+        super.init()
+    }
 
     public init(_ result: FMResultSet) {
         self.playlistId = result.long(forColumnIndex: 0)

@@ -5,7 +5,9 @@
 //  Created by Ben Baron on 1/16/11.
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
-#import "ISMSAbstractItemLoader.h"
+
+/*
+#import "ISMSItemLoader.h"
 
 typedef NS_ENUM(NSInteger, ISMSRecursiveItemLoaderMode)
 {
@@ -13,7 +15,7 @@ typedef NS_ENUM(NSInteger, ISMSRecursiveItemLoaderMode)
     ISMSRecursiveItemLoaderModeAlbum = 2
 };
 
-@interface ISMSRecursiveItemLoader : ISMSAbstractItemLoader
+@interface ISMSRecursiveItemLoader : ISMSLoader
 
 @property ISMSRecursiveItemLoaderMode mode;
 @property (strong) NSNumber *rootCollectionId;
@@ -22,3 +24,4 @@ typedef NS_ENUM(NSInteger, ISMSRecursiveItemLoaderMode)
 @property (readonly) BOOL isCancelled;
 
 @end
+*/

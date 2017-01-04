@@ -11,6 +11,20 @@
 
 @implementation ISMSMediaFolder
 
+- (instancetype)initWithRXMLElement:(RXMLElement *)element serverId:(NSInteger)serverId
+{
+    if (self = [super init])
+    {
+        self.mediaFolderId = @([[element attribute:@"id"] integerValue]);
+        self.serverId = @(serverId);
+        NSString *nameString = [element attribute:@"name"];
+        if (nameString)
+            self.name = [nameString cleanString];
+    }
+    
+    return self;
+}
+
 - (instancetype)initWithItemId:(NSInteger)itemId serverId:(NSInteger)serverId
 {
     return [self initWithMediaFolderId:itemId serverId:serverId];

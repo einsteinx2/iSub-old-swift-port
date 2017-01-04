@@ -18,7 +18,9 @@
 @property (strong) ISMSCoverArtLoader *selfRef;
 @end
 
-@implementation ISMSCoverArtLoader
+@implementation ISMSCoverArtLoader {
+    NSMutableData *_receivedDataTemp;
+}
 
 static NSMutableArray *loadingImageNames;
 static NSObject *syncObject;
@@ -184,7 +186,7 @@ static void initialize_navigationBarImages()
 						self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 						if (self.connection)
 						{
-							self.receivedData = [NSMutableData data];
+							_receivedDataTemp = [NSMutableData data];
                             
                             [loadingImageNames addObject:self.coverArtId];
 						}
@@ -234,12 +236,12 @@ static void initialize_navigationBarImages()
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	[self.receivedData setLength:0];
+	[_receivedDataTemp setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-    [self.receivedData appendData:incrementalData];
+    [_receivedDataTemp appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
@@ -249,7 +251,8 @@ static void initialize_navigationBarImages()
         [loadingImageNames removeObject:self.coverArtId];
     }
     
-	self.receivedData = nil;
+    _receivedDataTemp = nil;
+    self.receivedData = [NSData data];
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
@@ -268,9 +271,9 @@ static void initialize_navigationBarImages()
     
 	// Check to see if the data is a valid image. If so, use it; if not, use the default image.
 #ifdef IOS
-	if([UIImage imageWithData:self.receivedData])
+	if([UIImage imageWithData:_receivedDataTemp])
 #else
-    if([[NSImage alloc] initWithData:self.receivedData])
+    if([[NSImage alloc] initWithData:_receivedDataTemp])
 #endif
 	{
         DLog(@"art loading completed for: %@", self.coverArtId);
@@ -288,8 +291,9 @@ static void initialize_navigationBarImages()
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CoverArtFinishedInternal object:[self.coverArtId copy]];
     }
 
-	self.receivedData = nil;
+	self.receivedData = _receivedDataTemp;
 	self.connection = nil;
+    _receivedDataTemp = nil;
 	
 	self.selfRef = nil;
 }

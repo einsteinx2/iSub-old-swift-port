@@ -14,13 +14,13 @@ import Foundation
     open let parameters: Dictionary<String, String>?
     open let userInfo: Dictionary<String, AnyObject>?
     
-    fileprivate var _request: NSMutableURLRequest
-    fileprivate var _connection: NSURLConnection?
-    fileprivate var _receivedData: NSMutableData?
+    fileprivate var request: NSMutableURLRequest
+    fileprivate var connection: NSURLConnection?
+    fileprivate var receivedData: NSMutableData?
     
-    fileprivate let _receivedDataHandler: ((_ data: Data) -> ())?
-    fileprivate let _successHandler: (_ data: Data?, _ userInfo: Dictionary<String, AnyObject>?) -> ()
-    fileprivate let _failureHandler: (_ error: NSError) -> ()
+    fileprivate let receivedDataHandler: ((_ data: Data) -> ())?
+    fileprivate let successHandler: (_ data: Data?, _ userInfo: Dictionary<String, AnyObject>?) -> ()
+    fileprivate let failureHandler: (_ error: NSError) -> ()
     
     public init(action: String, parameters: Dictionary<String, String>?, userInfo: Dictionary<String, AnyObject>?, receivedData: ((_ data: Data) -> ())?, success:@escaping (_ data: Data?, _ userInfo: Dictionary<String, AnyObject>?) -> (), failure:@escaping (_ error: NSError) -> ())
     {
@@ -28,25 +28,25 @@ import Foundation
         self.parameters = parameters
         self.userInfo = userInfo
         
-        self._receivedDataHandler = receivedData
-        self._successHandler = success
-        self._failureHandler = failure
+        self.receivedDataHandler = receivedData
+        self.successHandler = success
+        self.failureHandler = failure
         
-        self._request = NSMutableURLRequest(susAction: action, parameters: parameters)
+        self.request = NSMutableURLRequest(susAction: action, parameters: parameters)
         
         super.init()
         
-        if let connection = NSURLConnection(request: self._request as URLRequest, delegate: self) {
-            self._connection = connection
+        if let connection = NSURLConnection(request: self.request as URLRequest, delegate: self) {
+            self.connection = connection
             
-            if self._receivedDataHandler == nil {
-                self._receivedData = NSMutableData()
+            if self.receivedDataHandler == nil {
+                self.receivedData = NSMutableData()
             }
             
-            self._connection?.start()
+            connection.start()
         } else {
             let code: Int = Int(ISMSErrorCode_CouldNotCreateConnection)
-            self._failureHandler(NSError(ismsCode: code))
+            self.failureHandler(NSError(ismsCode: code))
         }
     }
     
@@ -79,24 +79,24 @@ import Foundation
     }
     
     open func connection(_ connection: NSURLConnection, didReceive response: URLResponse) {
-        if self._receivedDataHandler == nil {
-            self._receivedData?.length = 0
+        if receivedDataHandler == nil {
+            receivedData?.length = 0
         }
     }
     
     open func connection(_ connection: NSURLConnection, didReceive data: Data) {
-        if let receivedDataHandler = self._receivedDataHandler {
+        if let receivedDataHandler = receivedDataHandler {
             receivedDataHandler(data)
         } else {
-            self._receivedData?.append(data)
+            receivedData?.append(data)
         }
     }
     
     open func connection(_ connection: NSURLConnection, didFailWithError error: Error) {
-        self._failureHandler(error as NSError)
+        failureHandler(error as NSError)
     }
     
     open func connectionDidFinishLoading(_ connection: NSURLConnection) {
-        self._successHandler(self._receivedData as Data?, self.userInfo)
+        successHandler(receivedData as Data?, self.userInfo)
     }
 }

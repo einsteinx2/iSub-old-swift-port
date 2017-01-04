@@ -24,14 +24,17 @@
 @property (nullable, nonatomic, strong) NSURLConnection *connection;
 @property (nullable, nonatomic, strong) NSURLRequest *request;
 @property (nullable, nonatomic, strong) NSURLResponse *response;
-@property (nullable, nonatomic, strong) NSMutableData *receivedData;
+@property (nonnull, nonatomic, strong) NSData *receivedData;
 @end
 
-@implementation ISMSLoader
+@implementation ISMSLoader {
+    NSMutableData *_receivedDataTemp;
+}
 
 - (void)setup
 {
-    
+    // Marked as nonnull so initialize immediately
+    _receivedData = [NSData data];
 }
 
 - (id)init
@@ -87,8 +90,7 @@
         if (self.connection)
         {
             // Create the NSMutableData to hold the received data.
-            // receivedData is an instance variable declared elsewhere.
-            self.receivedData = [NSMutableData data];
+            _receivedDataTemp = [NSMutableData data];
             
             self.loaderState = ISMSLoaderState_Loading;
             
@@ -121,7 +123,8 @@
         // Clean up connection objects
         [self.connection cancel];
         self.connection = nil;
-        self.receivedData = nil;
+        self.receivedData = [NSData data];
+        _receivedDataTemp = nil;
         
         self.loaderState = ISMSLoaderState_Canceled;
         
@@ -249,17 +252,18 @@
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     self.response = response;
-	[self.receivedData setLength:0];
+	[_receivedDataTemp setLength:0];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
 {
-    [self.receivedData appendData:incrementalData];
+    [_receivedDataTemp appendData:incrementalData];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
 {
-	self.receivedData = nil;
+	_receivedDataTemp = nil;
+    self.receivedData = [NSData data];
 	self.connection = nil;
 	
 	// Inform the delegate that loading failed
@@ -268,12 +272,14 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
 {
+    self.receivedData = _receivedDataTemp;
+    
     //DLog(@"loader type: %li response:\n%@", self.type, [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding]);
 	[self processResponse];
 	
 	// Clean up the connection
-	self.connection = nil;
-	self.receivedData = nil;
+    self.connection = nil;
+	_receivedDataTemp = nil;
 }
 
 @end

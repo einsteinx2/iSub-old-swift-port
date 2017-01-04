@@ -8,11 +8,13 @@
 
 import Foundation
 
-class RootArtistsLoader: ISMSAbstractItemLoader {
+class RootArtistsLoader: ISMSLoader, ItemLoader {
     var artists = [ISMSArtist]()
     var ignoredArticles = [String]()
     
-    override var items: [ISMSItem]? {
+    var associatedObject: Any?
+    
+    var items: [ISMSItem] {
         return artists
     }
     
@@ -21,7 +23,7 @@ class RootArtistsLoader: ISMSAbstractItemLoader {
     }
     
     override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData! as Data), root.isValid else {
+        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
             let error = NSError(ismsCode: ISMSErrorCode_NotXML)
             self.informDelegateLoadingFailed(error)
             return
@@ -35,12 +37,10 @@ class RootArtistsLoader: ISMSAbstractItemLoader {
             var artistsTemp = [ISMSArtist]()
             
             let serverId = SavedSettings.sharedInstance().currentServerId
-            root.iterate("artists.index") { index in
-                index.iterate("artist") { artist in
-                    if artist.attribute("name") != ".AppleDouble" {
-                        let anArtist = ISMSArtist(rxmlElement: artist, serverId: serverId)
-                        artistsTemp.append(anArtist)
-                    }
+            root.iterate("artists.index.artist") { artist in
+                if artist.attribute("name") != ".AppleDouble" {
+                    let anArtist = ISMSArtist(rxmlElement: artist, serverId: serverId)
+                    artistsTemp.append(anArtist)
                 }
             }
             
@@ -55,7 +55,7 @@ class RootArtistsLoader: ISMSAbstractItemLoader {
         }
     }
     
-    override func persistModels() {
+    func persistModels() {
         // Remove existing artists
         let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
         ISMSArtist.deleteAllArtists(withServerId: serverId)
@@ -64,7 +64,7 @@ class RootArtistsLoader: ISMSAbstractItemLoader {
         artists.forEach({$0.insert()})
     }
     
-    override func loadModelsFromCache() -> Bool {
+    func loadModelsFromCache() -> Bool {
         let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
         let artistsTemp = ISMSArtist.allArtists(withServerId: serverId)
         if artistsTemp.count > 0 {

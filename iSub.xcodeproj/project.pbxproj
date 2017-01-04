@@ -707,31 +707,6 @@
 		5358DD091E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
 		5358DD0A1E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
 		5358DD0B1E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
-		5358DD0C1E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC2E1E0B78470024A0D4 /* ISMSAbstractItemLoader.m */; };
-		5358DD0D1E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC2E1E0B78470024A0D4 /* ISMSAbstractItemLoader.m */; };
-		5358DD0E1E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC2E1E0B78470024A0D4 /* ISMSAbstractItemLoader.m */; };
-		5358DD0F1E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC2E1E0B78470024A0D4 /* ISMSAbstractItemLoader.m */; };
-		5358DD101E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC2E1E0B78470024A0D4 /* ISMSAbstractItemLoader.m */; };
-		5358DD111E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC301E0B78470024A0D4 /* ISMSAlbumLoader.m */; };
-		5358DD121E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC301E0B78470024A0D4 /* ISMSAlbumLoader.m */; };
-		5358DD131E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC301E0B78470024A0D4 /* ISMSAlbumLoader.m */; };
-		5358DD141E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC301E0B78470024A0D4 /* ISMSAlbumLoader.m */; };
-		5358DD151E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC301E0B78470024A0D4 /* ISMSAlbumLoader.m */; };
-		5358DD1B1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC341E0B78470024A0D4 /* ISMSFolderLoader.m */; };
-		5358DD1C1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC341E0B78470024A0D4 /* ISMSFolderLoader.m */; };
-		5358DD1D1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC341E0B78470024A0D4 /* ISMSFolderLoader.m */; };
-		5358DD1E1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC341E0B78470024A0D4 /* ISMSFolderLoader.m */; };
-		5358DD1F1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC341E0B78470024A0D4 /* ISMSFolderLoader.m */; };
-		5358DD201E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC371E0B78470024A0D4 /* ISMSMediaFoldersLoader.m */; };
-		5358DD211E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC371E0B78470024A0D4 /* ISMSMediaFoldersLoader.m */; };
-		5358DD221E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC371E0B78470024A0D4 /* ISMSMediaFoldersLoader.m */; };
-		5358DD231E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC371E0B78470024A0D4 /* ISMSMediaFoldersLoader.m */; };
-		5358DD241E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC371E0B78470024A0D4 /* ISMSMediaFoldersLoader.m */; };
-		5358DD251E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */; };
-		5358DD261E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */; };
-		5358DD271E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */; };
-		5358DD281E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */; };
-		5358DD291E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */; };
 		5358DD2A1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
 		5358DD2B1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
 		5358DD2C1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
@@ -1943,6 +1918,21 @@
 		538A1CDD1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */; };
 		538A1CDE1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */; };
 		538A1CDF1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */; };
+		538B4CFC1E1D764600847152 /* AlbumLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4CFB1E1D764600847152 /* AlbumLoader.swift */; };
+		538B4CFD1E1D764600847152 /* AlbumLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4CFB1E1D764600847152 /* AlbumLoader.swift */; };
+		538B4CFE1E1D764600847152 /* AlbumLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4CFB1E1D764600847152 /* AlbumLoader.swift */; };
+		538B4D001E1D77AC00847152 /* FolderLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4CFF1E1D77AC00847152 /* FolderLoader.swift */; };
+		538B4D011E1D77AC00847152 /* FolderLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4CFF1E1D77AC00847152 /* FolderLoader.swift */; };
+		538B4D021E1D77AC00847152 /* FolderLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4CFF1E1D77AC00847152 /* FolderLoader.swift */; };
+		538B4D041E1D7E2300847152 /* MediaFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D031E1D7E2300847152 /* MediaFoldersLoader.swift */; };
+		538B4D051E1D7E2300847152 /* MediaFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D031E1D7E2300847152 /* MediaFoldersLoader.swift */; };
+		538B4D061E1D7E2300847152 /* MediaFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D031E1D7E2300847152 /* MediaFoldersLoader.swift */; };
+		538B4D081E1D80B400847152 /* RootPlaylistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D071E1D80B400847152 /* RootPlaylistsLoader.swift */; };
+		538B4D091E1D80B400847152 /* RootPlaylistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D071E1D80B400847152 /* RootPlaylistsLoader.swift */; };
+		538B4D0A1E1D80B400847152 /* RootPlaylistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D071E1D80B400847152 /* RootPlaylistsLoader.swift */; };
+		538B4D0C1E1D83B300847152 /* ItemLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D0B1E1D83B300847152 /* ItemLoader.swift */; };
+		538B4D0D1E1D83B300847152 /* ItemLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D0B1E1D83B300847152 /* ItemLoader.swift */; };
+		538B4D0E1E1D83B300847152 /* ItemLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D0B1E1D83B300847152 /* ItemLoader.swift */; };
 		538C01B012C3DCC40061545B /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
 		538C01B112C3DCC40061545B /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
@@ -2811,19 +2801,8 @@
 		5358DC291E0B78470024A0D4 /* ISMSLoaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaderDelegate.h; sourceTree = "<group>"; };
 		5358DC2A1E0B78470024A0D4 /* ISMSLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaderManager.h; sourceTree = "<group>"; };
 		5358DC2B1E0B78470024A0D4 /* ISMSLoaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaders.h; sourceTree = "<group>"; };
-		5358DC2D1E0B78470024A0D4 /* ISMSAbstractItemLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSAbstractItemLoader.h; sourceTree = "<group>"; };
-		5358DC2E1E0B78470024A0D4 /* ISMSAbstractItemLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSAbstractItemLoader.m; sourceTree = "<group>"; };
-		5358DC2F1E0B78470024A0D4 /* ISMSAlbumLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSAlbumLoader.h; sourceTree = "<group>"; };
-		5358DC301E0B78470024A0D4 /* ISMSAlbumLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSAlbumLoader.m; sourceTree = "<group>"; };
-		5358DC331E0B78470024A0D4 /* ISMSFolderLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSFolderLoader.h; sourceTree = "<group>"; };
-		5358DC341E0B78470024A0D4 /* ISMSFolderLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSFolderLoader.m; sourceTree = "<group>"; };
-		5358DC351E0B78470024A0D4 /* ISMSItemLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSItemLoader.h; sourceTree = "<group>"; };
-		5358DC361E0B78470024A0D4 /* ISMSMediaFoldersLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSMediaFoldersLoader.h; sourceTree = "<group>"; };
-		5358DC371E0B78470024A0D4 /* ISMSMediaFoldersLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSMediaFoldersLoader.m; sourceTree = "<group>"; };
-		5358DC381E0B78470024A0D4 /* ISMSPlaylistsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSPlaylistsLoader.h; sourceTree = "<group>"; };
-		5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSPlaylistsLoader.m; sourceTree = "<group>"; };
-		5358DC3A1E0B78470024A0D4 /* ISMSRecursiveItemLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSRecursiveItemLoader.h; sourceTree = "<group>"; };
-		5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSRecursiveItemLoader.m; sourceTree = "<group>"; };
+		5358DC3A1E0B78470024A0D4 /* ISMSRecursiveItemLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISMSRecursiveItemLoader.h; path = "../New Model/ISMSRecursiveItemLoader.h"; sourceTree = "<group>"; };
+		5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ISMSRecursiveItemLoader.m; path = "../New Model/ISMSRecursiveItemLoader.m"; sourceTree = "<group>"; };
 		5358DC401E0B78470024A0D4 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusLoader.swift; sourceTree = "<group>"; };
 		5358DC421E0B78470024A0D4 /* ISMSCoverArtLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSCoverArtLoader.h; sourceTree = "<group>"; };
 		5358DC431E0B78470024A0D4 /* ISMSCoverArtLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSCoverArtLoader.m; sourceTree = "<group>"; };
@@ -3332,6 +3311,11 @@
 		538A1CD71D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+FixedHeightWhenStatusBarHidden.h"; sourceTree = "<group>"; };
 		538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+FixedHeightWhenStatusBarHidden.m"; sourceTree = "<group>"; };
 		538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterPanelContainerViewController.swift; sourceTree = "<group>"; };
+		538B4CFB1E1D764600847152 /* AlbumLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumLoader.swift; sourceTree = "<group>"; };
+		538B4CFF1E1D77AC00847152 /* FolderLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderLoader.swift; sourceTree = "<group>"; };
+		538B4D031E1D7E2300847152 /* MediaFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaFoldersLoader.swift; sourceTree = "<group>"; };
+		538B4D071E1D80B400847152 /* RootPlaylistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootPlaylistsLoader.swift; sourceTree = "<group>"; };
+		538B4D0B1E1D83B300847152 /* ItemLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemLoader.swift; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
 		538C01AF12C3DCC40061545B /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Images/Other/back@2x.png"; sourceTree = "<group>"; };
 		5392A1C11C90EB7B00ADE09E /* ServerEditDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerEditDelegate.h; sourceTree = "<group>"; };
@@ -4117,23 +4101,15 @@
 		5358DC2C1E0B78470024A0D4 /* New Model */ = {
 			isa = PBXGroup;
 			children = (
-				5358DC2D1E0B78470024A0D4 /* ISMSAbstractItemLoader.h */,
-				5358DC2E1E0B78470024A0D4 /* ISMSAbstractItemLoader.m */,
-				5358DC2F1E0B78470024A0D4 /* ISMSAlbumLoader.h */,
-				5358DC301E0B78470024A0D4 /* ISMSAlbumLoader.m */,
-				5358DC331E0B78470024A0D4 /* ISMSFolderLoader.h */,
-				5358DC341E0B78470024A0D4 /* ISMSFolderLoader.m */,
-				5358DC351E0B78470024A0D4 /* ISMSItemLoader.h */,
-				5358DC361E0B78470024A0D4 /* ISMSMediaFoldersLoader.h */,
-				5358DC371E0B78470024A0D4 /* ISMSMediaFoldersLoader.m */,
-				5358DC381E0B78470024A0D4 /* ISMSPlaylistsLoader.h */,
-				5358DC391E0B78470024A0D4 /* ISMSPlaylistsLoader.m */,
-				5358DC3A1E0B78470024A0D4 /* ISMSRecursiveItemLoader.h */,
-				5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */,
+				538B4D0B1E1D83B300847152 /* ItemLoader.swift */,
+				538B4D031E1D7E2300847152 /* MediaFoldersLoader.swift */,
 				536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */,
 				535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */,
 				535B661D1E0C6A7C00B6F374 /* RootFoldersLoader.swift */,
+				538B4D071E1D80B400847152 /* RootPlaylistsLoader.swift */,
 				5334FEB41E1D661300925434 /* ArtistLoader.swift */,
+				538B4CFB1E1D764600847152 /* AlbumLoader.swift */,
+				538B4CFF1E1D77AC00847152 /* FolderLoader.swift */,
 				5358DC401E0B78470024A0D4 /* StatusLoader.swift */,
 			);
 			path = "New Model";
@@ -4154,6 +4130,8 @@
 				5358DC4B1E0B78470024A0D4 /* ISMSServerShuffleLoader.m */,
 				5358DC4C1E0B78470024A0D4 /* SUSCoverArtDAO.h */,
 				5358DC4D1E0B78470024A0D4 /* SUSCoverArtDAO.m */,
+				5358DC3A1E0B78470024A0D4 /* ISMSRecursiveItemLoader.h */,
+				5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */,
 			);
 			path = "Old Model";
 			sourceTree = "<group>";
@@ -6486,13 +6464,11 @@
 				53835CB61E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBB1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
-				5358DD201E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */,
 				5358E0281E0B789A0024A0D4 /* NSString+HasValue.m in Sources */,
 				5358DF331E0B789A0024A0D4 /* HTTPMessage.m in Sources */,
 				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
 				53F74C511A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
 				533C5EDB1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */,
-				5358DD251E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */,
 				532300181CEE73F700B8C651 /* DroppableCell.swift in Sources */,
 				5358E0051E0B789A0024A0D4 /* NSOrderedSet+Safe.m in Sources */,
 				5358DCE91E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
@@ -6500,6 +6476,7 @@
 				5358DFB01E0B789A0024A0D4 /* NSArray+Plist.m in Sources */,
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
 				5358DCE41E0B78470024A0D4 /* HLSProxyResponse.m in Sources */,
+				538B4D001E1D77AC00847152 /* FolderLoader.swift in Sources */,
 				53835CD91E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358E0A51E0B789A0024A0D4 /* UIImage+RoundedImage.m in Sources */,
 				5358E05F1E0B789A0024A0D4 /* NSMutableOrderedSet+Safe.m in Sources */,
@@ -6510,6 +6487,7 @@
 				5358DF101E0B78990024A0D4 /* AsyncSocket.m in Sources */,
 				53835C3C1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 				5358E0FF1E0B789A0024A0D4 /* EX2Reachability.m in Sources */,
+				538B4D0C1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				5358E03C1E0B789A0024A0D4 /* NSString+SHA1.m in Sources */,
 				5358DFE21E0B789A0024A0D4 /* NSNotificationCenter+MainThread.m in Sources */,
 				534FC4FE1CEC014800126751 /* DraggableTableViewController.swift in Sources */,
@@ -6537,10 +6515,8 @@
 				5327F58512B95D2900735119 /* StoreViewController.swift in Sources */,
 				5358E0C31E0B789A0024A0D4 /* UIView+Glow.m in Sources */,
 				5358E00F1E0B789A0024A0D4 /* NSString+Clean.m in Sources */,
-				5358DD0C1E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */,
 				5358E1C71E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358E0871E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
-				5358DD1B1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */,
 				53835C691E0B7CE70077B53D /* SBJsonWriter.m in Sources */,
 				5358DF881E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				5358E09B1E0B789A0024A0D4 /* UIImage+CustomStretch.m in Sources */,
@@ -6673,6 +6649,7 @@
 				5334FEB51E1D661300925434 /* ArtistLoader.swift in Sources */,
 				5358E16D1E0B789B0024A0D4 /* EX2TabBarController.m in Sources */,
 				5358DD611E0B78480024A0D4 /* NSMutableURLRequest+SUS.m in Sources */,
+				538B4CFC1E1D764600847152 /* AlbumLoader.swift in Sources */,
 				5358E0321E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358DCBC1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
 				535B661E1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
@@ -6697,6 +6674,7 @@
 				5358DFBA1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
 				53CD9DB51C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				5358DCD01E0B78470024A0D4 /* SectionIndex.swift in Sources */,
+				538B4D081E1D80B400847152 /* RootPlaylistsLoader.swift in Sources */,
 				5358E0E61E0B789A0024A0D4 /* EX2ActionQueue.m in Sources */,
 				536E29301E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
 				537E9A3114F43F43006CB0BC /* StackContainerView.m in Sources */,
@@ -6719,9 +6697,9 @@
 				5358DFCE1E0B789A0024A0D4 /* NSData+Hash.m in Sources */,
 				5358DF2E1E0B789A0024A0D4 /* HTTPConnection.m in Sources */,
 				5358DDB61E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
-				5358DD111E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */,
 				5358E0781E0B789A0024A0D4 /* UIButton+StretchBackground.m in Sources */,
 				5358DF9C1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
+				538B4D041E1D7E2300847152 /* MediaFoldersLoader.swift in Sources */,
 				5358E1091E0B789A0024A0D4 /* EX2SimpleConnectionQueue.m in Sources */,
 				53835C411E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */,
 				5358DF7E1E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
@@ -6795,7 +6773,6 @@
 				5358E11B1E0B789A0024A0D4 /* RNCryptorOld.m in Sources */,
 				5358DD691E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */,
 				5358E0851E0B789A0024A0D4 /* UIColor+ColorWithInt.m in Sources */,
-				5358DD141E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */,
 				5358E0E91E0B789A0024A0D4 /* EX2ActionQueue.m in Sources */,
 				5358DFC21E0B789A0024A0D4 /* NSMutableArray+Safe.m in Sources */,
 				53835CF01E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
@@ -6835,7 +6812,6 @@
 				5358E0B21E0B789A0024A0D4 /* UIImageView+ImageAnimated.m in Sources */,
 				5358DF5E1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */,
 				5358E1341E0B789A0024A0D4 /* RNOpenSSLEncryptor.m in Sources */,
-				5358DD231E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */,
 				5358DF131E0B78990024A0D4 /* AsyncSocket.m in Sources */,
 				5358DBE11E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				53835D421E0B7E9A0077B53D /* TBXML.m in Sources */,
@@ -6859,9 +6835,7 @@
 				5358E0621E0B789A0024A0D4 /* NSMutableOrderedSet+Safe.m in Sources */,
 				5358DFC71E0B789A0024A0D4 /* NSData+AES128.m in Sources */,
 				5358DDB91E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
-				5358DD1E1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */,
 				5358E04E1E0B789A0024A0D4 /* NSString+URLEncode.m in Sources */,
-				5358DD0F1E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */,
 				5358DD911E0B78480024A0D4 /* SavedSettings.m in Sources */,
 				5358DC9C1E0B78470024A0D4 /* BassEqualizer.m in Sources */,
 				53159E9C156F69D0001B0268 /* HelpTabViewController.m in Sources */,
@@ -6920,7 +6894,6 @@
 				53835D0E1E0B7DD50077B53D /* FMDatabase.m in Sources */,
 				5358DF4A1E0B789A0024A0D4 /* MultipartMessageHeaderField.m in Sources */,
 				53835C5D1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
-				5358DD281E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */,
 				53835C9B1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				5358DD5F1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
 				5358DCAB1E0B78470024A0D4 /* ISMSAlbum.m in Sources */,
@@ -7045,7 +7018,6 @@
 				5358DF871E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				5358E1531E0B789A0024A0D4 /* EX2LargerTouchScrollView.m in Sources */,
 				53835CCE1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
-				5358DD1F1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */,
 				5358DF2D1E0B789A0024A0D4 /* HTTPAuthenticationRequest.m in Sources */,
 				5358E06D1E0B789A0024A0D4 /* CALayer+SublayerWithName.m in Sources */,
 				5358E02C1E0B789A0024A0D4 /* NSString+HasValue.m in Sources */,
@@ -7069,7 +7041,6 @@
 				5358E0901E0B789A0024A0D4 /* UIDevice+Software.m in Sources */,
 				5358E09A1E0B789A0024A0D4 /* UIImage+Cropping.m in Sources */,
 				53835CD81E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
-				5358DD101E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */,
 				5358E0C21E0B789A0024A0D4 /* UITableViewCell+TableView.m in Sources */,
 				5358DCB11E0B78470024A0D4 /* ISMSArtist.m in Sources */,
 				5358DCCA1E0B78470024A0D4 /* ISMSSong.m in Sources */,
@@ -7105,13 +7076,11 @@
 				5358E1671E0B789B0024A0D4 /* EX2SlidingNotification.m in Sources */,
 				5358DCD91E0B78470024A0D4 /* Server.swift in Sources */,
 				533C5ED51E0B8DFC00802FB1 /* String.swift in Sources */,
-				5358DD291E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */,
 				5358DD511E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */,
 				53835C401E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 				5358E0951E0B789A0024A0D4 /* UIImage+Color.m in Sources */,
 				5358DD471E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */,
 				5358DF731E0B789A0024A0D4 /* CLIColor.m in Sources */,
-				5358DD241E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */,
 				5358E0B31E0B789A0024A0D4 /* UIImageView+ImageAnimated.m in Sources */,
 				5358E00E1E0B789A0024A0D4 /* GTMNSString+HTML.m in Sources */,
 				5358DC891E0B78470024A0D4 /* BassStream.m in Sources */,
@@ -7209,7 +7178,6 @@
 				53835C681E0B7CE70077B53D /* SBJsonUTF8Stream.m in Sources */,
 				5358E0E01E0B789A0024A0D4 /* UIWebView+HideShadows.m in Sources */,
 				53835C5E1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
-				5358DD151E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */,
 				5358E1171E0B789A0024A0D4 /* RNCryptorEngine.m in Sources */,
 				5358DCC01E0B78470024A0D4 /* ISMSGenre.m in Sources */,
 				5358DBDD1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
@@ -7274,13 +7242,11 @@
 				53835CB81E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBD1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
-				5358DD221E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */,
 				5358E02A1E0B789A0024A0D4 /* NSString+HasValue.m in Sources */,
 				5358DF351E0B789A0024A0D4 /* HTTPMessage.m in Sources */,
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
 				53F74C531A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
 				533C5EDD1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */,
-				5358DD271E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */,
 				5323001A1CEE750B00B8C651 /* DroppableCell.swift in Sources */,
 				5358E0071E0B789A0024A0D4 /* NSOrderedSet+Safe.m in Sources */,
 				5358DCEB1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
@@ -7288,6 +7254,7 @@
 				5358DFB21E0B789A0024A0D4 /* NSArray+Plist.m in Sources */,
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
 				5358DCE61E0B78470024A0D4 /* HLSProxyResponse.m in Sources */,
+				538B4D021E1D77AC00847152 /* FolderLoader.swift in Sources */,
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358E0A71E0B789A0024A0D4 /* UIImage+RoundedImage.m in Sources */,
 				5358E0611E0B789A0024A0D4 /* NSMutableOrderedSet+Safe.m in Sources */,
@@ -7298,6 +7265,7 @@
 				5358DF121E0B78990024A0D4 /* AsyncSocket.m in Sources */,
 				53835C3E1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 				5358E1011E0B789A0024A0D4 /* EX2Reachability.m in Sources */,
+				538B4D0E1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				5358E03E1E0B789A0024A0D4 /* NSString+SHA1.m in Sources */,
 				5358DFE41E0B789A0024A0D4 /* NSNotificationCenter+MainThread.m in Sources */,
 				534FC5001CEC014800126751 /* DraggableTableViewController.swift in Sources */,
@@ -7325,10 +7293,8 @@
 				53BC281D139AF0DD00A825F1 /* StoreViewController.swift in Sources */,
 				5358E0C51E0B789A0024A0D4 /* UIView+Glow.m in Sources */,
 				5358E0111E0B789A0024A0D4 /* NSString+Clean.m in Sources */,
-				5358DD0E1E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */,
 				5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358E0891E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
-				5358DD1D1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */,
 				53835C6B1E0B7CE70077B53D /* SBJsonWriter.m in Sources */,
 				5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				5358E09D1E0B789A0024A0D4 /* UIImage+CustomStretch.m in Sources */,
@@ -7461,6 +7427,7 @@
 				5334FEB71E1D661300925434 /* ArtistLoader.swift in Sources */,
 				5358E16F1E0B789B0024A0D4 /* EX2TabBarController.m in Sources */,
 				5358DD631E0B78480024A0D4 /* NSMutableURLRequest+SUS.m in Sources */,
+				538B4CFE1E1D764600847152 /* AlbumLoader.swift in Sources */,
 				5358E0341E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358DCBE1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
 				535B66201E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
@@ -7485,6 +7452,7 @@
 				5358DFBC1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
 				53CD9DB71C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				5358DCD21E0B78470024A0D4 /* SectionIndex.swift in Sources */,
+				538B4D0A1E1D80B400847152 /* RootPlaylistsLoader.swift in Sources */,
 				5358E0E81E0B789A0024A0D4 /* EX2ActionQueue.m in Sources */,
 				536E29321E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
 				537E9A3314F43F43006CB0BC /* StackContainerView.m in Sources */,
@@ -7507,9 +7475,9 @@
 				5358DFD01E0B789A0024A0D4 /* NSData+Hash.m in Sources */,
 				5358DF301E0B789A0024A0D4 /* HTTPConnection.m in Sources */,
 				5358DDB81E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
-				5358DD131E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */,
 				5358E07A1E0B789A0024A0D4 /* UIButton+StretchBackground.m in Sources */,
 				5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
+				538B4D061E1D7E2300847152 /* MediaFoldersLoader.swift in Sources */,
 				5358E10B1E0B789A0024A0D4 /* EX2SimpleConnectionQueue.m in Sources */,
 				53835C431E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */,
 				5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
@@ -7557,13 +7525,11 @@
 				53835CB71E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBC1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				5358DBDA1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
-				5358DD211E0B78480024A0D4 /* ISMSMediaFoldersLoader.m in Sources */,
 				5358E0291E0B789A0024A0D4 /* NSString+HasValue.m in Sources */,
 				5358DF341E0B789A0024A0D4 /* HTTPMessage.m in Sources */,
 				53DCF4FD13BFEAD3009160F9 /* iSubAppDelegate.m in Sources */,
 				53F74C521A464D0F0026A1E7 /* SUSURLConnection.swift in Sources */,
 				533C5EDC1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */,
-				5358DD261E0B78480024A0D4 /* ISMSPlaylistsLoader.m in Sources */,
 				532300191CEE750B00B8C651 /* DroppableCell.swift in Sources */,
 				5358E0061E0B789A0024A0D4 /* NSOrderedSet+Safe.m in Sources */,
 				5358DCEA1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
@@ -7571,6 +7537,7 @@
 				5358DFB11E0B789A0024A0D4 /* NSArray+Plist.m in Sources */,
 				53DCF50813BFEAD3009160F9 /* SubsonicServerEditViewController.m in Sources */,
 				5358DCE51E0B78470024A0D4 /* HLSProxyResponse.m in Sources */,
+				538B4D011E1D77AC00847152 /* FolderLoader.swift in Sources */,
 				53835CDA1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358E0A61E0B789A0024A0D4 /* UIImage+RoundedImage.m in Sources */,
 				5358E0601E0B789A0024A0D4 /* NSMutableOrderedSet+Safe.m in Sources */,
@@ -7581,6 +7548,7 @@
 				5358DF111E0B78990024A0D4 /* AsyncSocket.m in Sources */,
 				53835C3D1E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 				5358E1001E0B789A0024A0D4 /* EX2Reachability.m in Sources */,
+				538B4D0D1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				5358E03D1E0B789A0024A0D4 /* NSString+SHA1.m in Sources */,
 				5358DFE31E0B789A0024A0D4 /* NSNotificationCenter+MainThread.m in Sources */,
 				534FC4FF1CEC014800126751 /* DraggableTableViewController.swift in Sources */,
@@ -7608,10 +7576,8 @@
 				53DCF57E13BFEAD3009160F9 /* StoreViewController.swift in Sources */,
 				5358E0C41E0B789A0024A0D4 /* UIView+Glow.m in Sources */,
 				5358E0101E0B789A0024A0D4 /* NSString+Clean.m in Sources */,
-				5358DD0D1E0B78470024A0D4 /* ISMSAbstractItemLoader.m in Sources */,
 				5358E1C81E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358E0881E0B789A0024A0D4 /* UIDevice+Hardware.m in Sources */,
-				5358DD1C1E0B78480024A0D4 /* ISMSFolderLoader.m in Sources */,
 				53835C6A1E0B7CE70077B53D /* SBJsonWriter.m in Sources */,
 				5358DF891E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				5358E09C1E0B789A0024A0D4 /* UIImage+CustomStretch.m in Sources */,
@@ -7744,6 +7710,7 @@
 				5334FEB61E1D661300925434 /* ArtistLoader.swift in Sources */,
 				5358E16E1E0B789B0024A0D4 /* EX2TabBarController.m in Sources */,
 				5358DD621E0B78480024A0D4 /* NSMutableURLRequest+SUS.m in Sources */,
+				538B4CFD1E1D764600847152 /* AlbumLoader.swift in Sources */,
 				5358E0331E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358DCBD1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
 				535B661F1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
@@ -7768,6 +7735,7 @@
 				5358DFBB1E0B789A0024A0D4 /* NSArray+Safe.m in Sources */,
 				53CD9DB61C7680AF00A75438 /* PlayQueueViewModel.swift in Sources */,
 				5358DCD11E0B78470024A0D4 /* SectionIndex.swift in Sources */,
+				538B4D091E1D80B400847152 /* RootPlaylistsLoader.swift in Sources */,
 				5358E0E71E0B789A0024A0D4 /* EX2ActionQueue.m in Sources */,
 				536E29311E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */,
 				537E9A3214F43F43006CB0BC /* StackContainerView.m in Sources */,
@@ -7790,9 +7758,9 @@
 				5358DFCF1E0B789A0024A0D4 /* NSData+Hash.m in Sources */,
 				5358DF2F1E0B789A0024A0D4 /* HTTPConnection.m in Sources */,
 				5358DDB71E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
-				5358DD121E0B78470024A0D4 /* ISMSAlbumLoader.m in Sources */,
 				5358E0791E0B789A0024A0D4 /* UIButton+StretchBackground.m in Sources */,
 				5358DF9D1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
+				538B4D051E1D7E2300847152 /* MediaFoldersLoader.swift in Sources */,
 				5358E10A1E0B789A0024A0D4 /* EX2SimpleConnectionQueue.m in Sources */,
 				53835C421E0B7CE70077B53D /* SBJsonStreamParserAccumulator.m in Sources */,
 				5358DF7F1E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,

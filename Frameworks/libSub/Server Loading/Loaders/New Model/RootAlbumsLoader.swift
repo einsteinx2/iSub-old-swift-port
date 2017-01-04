@@ -8,10 +8,12 @@
 
 import Foundation
 
-class RootAlbumsLoader: ISMSAbstractItemLoader {
+class RootAlbumsLoader: ISMSLoader, ItemLoader {
     var albums = [ISMSAlbum]()
     
-    override var items: [ISMSItem]? {
+    var associatedObject: Any?
+    
+    var items: [ISMSItem] {
         return albums
     }
     
@@ -21,7 +23,7 @@ class RootAlbumsLoader: ISMSAbstractItemLoader {
     }
     
     override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData! as Data), root.isValid else {
+        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
             let error = NSError(ismsCode: ISMSErrorCode_NotXML)
             self.informDelegateLoadingFailed(error)
             return
@@ -48,7 +50,7 @@ class RootAlbumsLoader: ISMSAbstractItemLoader {
         }
     }
     
-    override func persistModels() {
+    func persistModels() {
         // Remove existing artists
         let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
         ISMSAlbum.deleteAllAlbums(withServerId: serverId)
@@ -57,7 +59,7 @@ class RootAlbumsLoader: ISMSAbstractItemLoader {
         albums.forEach({$0.insert()})
     }
     
-    override func loadModelsFromCache() -> Bool {
+    func loadModelsFromCache() -> Bool {
         let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
         let albumsTemp = ISMSAlbum.allAlbums(withServerId: serverId)
         if albumsTemp.count > 0 {

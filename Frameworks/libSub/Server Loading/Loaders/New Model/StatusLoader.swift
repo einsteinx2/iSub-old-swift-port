@@ -44,7 +44,7 @@ open class StatusLoader: ISMSLoader {
     }
     
     open override func processResponse() {
-        let root = RXMLElement(fromXMLData: self.receivedData as Data!)
+        let root = RXMLElement(fromXMLData: self.receivedData)
         
         if !(root?.isValid)! {
             let error = NSError(ismsCode: ISMSErrorCode_NotXML)

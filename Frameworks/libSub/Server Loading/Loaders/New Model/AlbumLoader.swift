@@ -1,5 +1,5 @@
 //
-//  ArtistLoader.swift
+//  AlbumLoader.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 1/4/17.
@@ -8,23 +8,23 @@
 
 import Foundation
 
-class ArtistLoader: ISMSLoader, ItemLoader {
-    let artistId: Int
+class AlbumLoader: ISMSLoader, ItemLoader {
+    let albumId: Int
     
-    var albums = [ISMSAlbum]()
+    var songs = [ISMSSong]()
     
     var items: [ISMSItem] {
-        return albums
+        return songs
     }
     
-    init(artistId: Int) {
-        self.artistId = artistId
+    init(albumId: Int) {
+        self.albumId = albumId
         super.init()
     }
     
     override func createRequest() -> URLRequest? {
-        let parameters = ["id": "\(artistId)"]
-        return NSMutableURLRequest(susAction: "getArtist", parameters: parameters) as URLRequest
+        let parameters = ["id": "\(albumId)"]
+        return NSMutableURLRequest(susAction: "getAlbum", parameters: parameters) as URLRequest
     }
     
     override func processResponse() {
@@ -39,14 +39,14 @@ class ArtistLoader: ISMSLoader, ItemLoader {
             let message = error.attribute("message")
             self.subsonicErrorCode(Int(code) ?? -1, message: message)
         } else {
-            var albumsTemp = [ISMSAlbum]()
+            var songsTemp = [ISMSSong]()
             
             let serverId = SavedSettings.sharedInstance().currentServerId
-            root.iterate("artist.album") { album in
-                let anAlbum = ISMSAlbum(rxmlElement: album, serverId: serverId)
-                albumsTemp.append(anAlbum)
+            root.iterate("album.song") { song in
+                let aSong = ISMSSong(rxmlElement: song, serverId: serverId)
+                songsTemp.append(aSong)
             }
-            albums = albumsTemp
+            songs = songsTemp
             
             self.persistModels()
             
@@ -55,17 +55,20 @@ class ArtistLoader: ISMSLoader, ItemLoader {
     }
     
     func persistModels() {
-        // Save the new albums
-        albums.forEach({$0.replace()})
+        // Save the new songs
+        songs.forEach({$0.replace()})
     }
     
     func loadModelsFromCache() -> Bool {
-        let serverId = SavedSettings.sharedInstance().currentServerId
-        albums = ISMSAlbum.albums(inArtist: self.artistId, serverId: serverId)
-        return albums.count > 0
+        if let album = associatedObject as? ISMSAlbum {
+            album.reloadSubmodels()
+            songs = album.songs
+            return songs.count > 0
+        }
+        return false
     }
     
     var associatedObject: Any? {
-        return ISMSArtist(artistId: artistId, serverId: SavedSettings.sharedInstance().currentServerId, loadSubmodels: false)
+        return ISMSAlbum(albumId: albumId, serverId: SavedSettings.sharedInstance().currentServerId, loadSubmodels: false)
     }
 }

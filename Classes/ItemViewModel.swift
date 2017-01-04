@@ -17,7 +17,7 @@ typealias LoadModelsCompletion = (_ success: Bool, _ error: NSError?) -> Void
 
 class ItemViewModel : NSObject {
     
-    fileprivate let loader: ISMSItemLoader
+    fileprivate var loader: ItemLoader
     
     var delegate: ItemViewModelDelegate?
     
@@ -35,7 +35,7 @@ class ItemViewModel : NSObject {
     fileprivate(set) var songsDuration = 0
     fileprivate(set) var sectionIndexes = [SectionIndex]()
     
-    init(loader: ISMSItemLoader) {
+    init(loader: ItemLoader) {
         self.loader = loader
         self.rootItem = loader.associatedObject as? ISMSItem
     }
@@ -73,10 +73,7 @@ class ItemViewModel : NSObject {
         songs.removeAll()
         playlists.removeAll()
         
-        guard let items = loader.items else {
-            // No models to process
-            return;
-        }
+        items = loader.items
         
         for item in items {
             switch item {
