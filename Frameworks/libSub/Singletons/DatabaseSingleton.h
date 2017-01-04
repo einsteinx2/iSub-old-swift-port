@@ -24,10 +24,6 @@
 // Read from the FMDatabase concurrently on any thread.
 @property (nonnull, strong) FMDatabasePool *songModelReadDbPool;
 
-@property (nonnull, strong) FMDatabaseQueue *coverArtCacheDb540Queue;
-@property (nonnull, strong) FMDatabaseQueue *coverArtCacheDb320Queue;
-@property (nonnull, strong) FMDatabaseQueue *coverArtCacheDb60Queue;
-
 @property (nonnull, strong) FMDatabaseQueue *bookmarksDbQueue;
 
 @property (nonnull, strong) ISMSQueueAllLoader *queueAll;
@@ -38,7 +34,6 @@
 
 - (void)setupDatabases;
 - (void)closeAllDatabases;
-- (void)resetCoverArtCache;
 - (void)resetFolderCache;
 
 - (nonnull NSArray *)ignoredArticles;

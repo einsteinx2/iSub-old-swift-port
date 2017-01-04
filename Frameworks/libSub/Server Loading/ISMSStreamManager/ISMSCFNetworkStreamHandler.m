@@ -135,7 +135,7 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 			NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%ld", (long)self.maxBitrateSetting];
 			[parameters setObject:n2N(maxBitRate) forKey:@"maxBitRate"];
 		}
-		request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters byteOffset:self.byteOffset];
+        request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters fragment:nil byteOffset:self.byteOffset];
 	}
 	else if (serverType == ServerTypeISubServer || serverType == ServerTypeWaveBox)
 	{

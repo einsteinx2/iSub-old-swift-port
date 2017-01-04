@@ -707,46 +707,11 @@
 		5358DD091E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
 		5358DD0A1E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
 		5358DD0B1E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
-		5358DD2A1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
-		5358DD2B1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
-		5358DD2C1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
-		5358DD2D1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
-		5358DD2E1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */; };
 		5358DD391E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
 		5358DD3A1E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
 		5358DD3B1E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
 		5358DD3C1E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
 		5358DD3D1E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
-		5358DD3E1E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC431E0B78470024A0D4 /* ISMSCoverArtLoader.m */; };
-		5358DD3F1E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC431E0B78470024A0D4 /* ISMSCoverArtLoader.m */; };
-		5358DD401E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC431E0B78470024A0D4 /* ISMSCoverArtLoader.m */; };
-		5358DD411E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC431E0B78470024A0D4 /* ISMSCoverArtLoader.m */; };
-		5358DD421E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC431E0B78470024A0D4 /* ISMSCoverArtLoader.m */; };
-		5358DD431E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC451E0B78470024A0D4 /* ISMSNowPlayingLoader.m */; };
-		5358DD441E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC451E0B78470024A0D4 /* ISMSNowPlayingLoader.m */; };
-		5358DD451E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC451E0B78470024A0D4 /* ISMSNowPlayingLoader.m */; };
-		5358DD461E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC451E0B78470024A0D4 /* ISMSNowPlayingLoader.m */; };
-		5358DD471E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC451E0B78470024A0D4 /* ISMSNowPlayingLoader.m */; };
-		5358DD481E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC471E0B78470024A0D4 /* ISMSQuickAlbumsLoader.m */; };
-		5358DD491E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC471E0B78470024A0D4 /* ISMSQuickAlbumsLoader.m */; };
-		5358DD4A1E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC471E0B78470024A0D4 /* ISMSQuickAlbumsLoader.m */; };
-		5358DD4B1E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC471E0B78470024A0D4 /* ISMSQuickAlbumsLoader.m */; };
-		5358DD4C1E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC471E0B78470024A0D4 /* ISMSQuickAlbumsLoader.m */; };
-		5358DD4D1E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC491E0B78470024A0D4 /* ISMSScrobbleLoader.m */; };
-		5358DD4E1E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC491E0B78470024A0D4 /* ISMSScrobbleLoader.m */; };
-		5358DD4F1E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC491E0B78470024A0D4 /* ISMSScrobbleLoader.m */; };
-		5358DD501E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC491E0B78470024A0D4 /* ISMSScrobbleLoader.m */; };
-		5358DD511E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC491E0B78470024A0D4 /* ISMSScrobbleLoader.m */; };
-		5358DD521E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4B1E0B78470024A0D4 /* ISMSServerShuffleLoader.m */; };
-		5358DD531E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4B1E0B78470024A0D4 /* ISMSServerShuffleLoader.m */; };
-		5358DD541E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4B1E0B78470024A0D4 /* ISMSServerShuffleLoader.m */; };
-		5358DD551E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4B1E0B78470024A0D4 /* ISMSServerShuffleLoader.m */; };
-		5358DD561E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4B1E0B78470024A0D4 /* ISMSServerShuffleLoader.m */; };
-		5358DD571E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4D1E0B78470024A0D4 /* SUSCoverArtDAO.m */; };
-		5358DD581E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4D1E0B78470024A0D4 /* SUSCoverArtDAO.m */; };
-		5358DD591E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4D1E0B78470024A0D4 /* SUSCoverArtDAO.m */; };
-		5358DD5A1E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4D1E0B78470024A0D4 /* SUSCoverArtDAO.m */; };
-		5358DD5B1E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4D1E0B78470024A0D4 /* SUSCoverArtDAO.m */; };
 		5358DD5C1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4F1E0B78470024A0D4 /* NSMutableURLRequest+PMS.m */; };
 		5358DD5D1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4F1E0B78470024A0D4 /* NSMutableURLRequest+PMS.m */; };
 		5358DD5E1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC4F1E0B78470024A0D4 /* NSMutableURLRequest+PMS.m */; };
@@ -1909,9 +1874,6 @@
 		538725F417CC19CA00CE92F1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538725F117CC19B200CE92F1 /* CoreTelephony.framework */; };
 		5388A42C1198AD840049BA9E /* selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42A1198AD840049BA9E /* selected.png */; };
 		5388A42D1198AD840049BA9E /* unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42B1198AD840049BA9E /* unselected.png */; };
-		538A1CD41D12BCE000999E7F /* AsynchronousImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */; };
-		538A1CD51D12BCE300999E7F /* AsynchronousImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */; };
-		538A1CD61D12BCE400999E7F /* AsynchronousImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */; };
 		538A1CD91D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */; };
 		538A1CDA1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */; };
 		538A1CDB1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */; };
@@ -1933,6 +1895,16 @@
 		538B4D0C1E1D83B300847152 /* ItemLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D0B1E1D83B300847152 /* ItemLoader.swift */; };
 		538B4D0D1E1D83B300847152 /* ItemLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D0B1E1D83B300847152 /* ItemLoader.swift */; };
 		538B4D0E1E1D83B300847152 /* ItemLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D0B1E1D83B300847152 /* ItemLoader.swift */; };
+		538B4D101E1DA68B00847152 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538B4D0F1E1DA68B00847152 /* Nuke.framework */; };
+		538B4D111E1DA68B00847152 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538B4D0F1E1DA68B00847152 /* Nuke.framework */; };
+		538B4D121E1DA68B00847152 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538B4D0F1E1DA68B00847152 /* Nuke.framework */; };
+		538B4D141E1DA69300847152 /* Nuke.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 538B4D0F1E1DA68B00847152 /* Nuke.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		538B4D1A1E1DA77600847152 /* CachedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D191E1DA77600847152 /* CachedImageView.swift */; };
+		538B4D1B1E1DA77600847152 /* CachedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D191E1DA77600847152 /* CachedImageView.swift */; };
+		538B4D1C1E1DA77600847152 /* CachedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D191E1DA77600847152 /* CachedImageView.swift */; };
+		538B4D221E1DAE0800847152 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D211E1DAE0800847152 /* CachedImage.swift */; };
+		538B4D231E1DAE0800847152 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D211E1DAE0800847152 /* CachedImage.swift */; };
+		538B4D241E1DAE0800847152 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538B4D211E1DAE0800847152 /* CachedImage.swift */; };
 		538C01B012C3DCC40061545B /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
 		538C01B112C3DCC40061545B /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
@@ -2589,6 +2561,7 @@
 				5358E1EE1E0B792C0024A0D4 /* MBProgressHUD.framework in Embed Frameworks */,
 				5358E1F41E0B792C0024A0D4 /* SwiftyStoreKit.framework in Embed Frameworks */,
 				5358E1EC1E0B792C0024A0D4 /* HockeySDK.framework in Embed Frameworks */,
+				538B4D141E1DA69300847152 /* Nuke.framework in Embed Frameworks */,
 				5358E1F21E0B792C0024A0D4 /* SnapKit.framework in Embed Frameworks */,
 				53835D6F1E0B81C00077B53D /* Async.framework in Embed Frameworks */,
 			);
@@ -2800,22 +2773,7 @@
 		5358DC281E0B78470024A0D4 /* ISMSLoader_Subclassing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoader_Subclassing.h; sourceTree = "<group>"; };
 		5358DC291E0B78470024A0D4 /* ISMSLoaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaderDelegate.h; sourceTree = "<group>"; };
 		5358DC2A1E0B78470024A0D4 /* ISMSLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaderManager.h; sourceTree = "<group>"; };
-		5358DC2B1E0B78470024A0D4 /* ISMSLoaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaders.h; sourceTree = "<group>"; };
-		5358DC3A1E0B78470024A0D4 /* ISMSRecursiveItemLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISMSRecursiveItemLoader.h; path = "../New Model/ISMSRecursiveItemLoader.h"; sourceTree = "<group>"; };
-		5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ISMSRecursiveItemLoader.m; path = "../New Model/ISMSRecursiveItemLoader.m"; sourceTree = "<group>"; };
 		5358DC401E0B78470024A0D4 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusLoader.swift; sourceTree = "<group>"; };
-		5358DC421E0B78470024A0D4 /* ISMSCoverArtLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSCoverArtLoader.h; sourceTree = "<group>"; };
-		5358DC431E0B78470024A0D4 /* ISMSCoverArtLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSCoverArtLoader.m; sourceTree = "<group>"; };
-		5358DC441E0B78470024A0D4 /* ISMSNowPlayingLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSNowPlayingLoader.h; sourceTree = "<group>"; };
-		5358DC451E0B78470024A0D4 /* ISMSNowPlayingLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSNowPlayingLoader.m; sourceTree = "<group>"; };
-		5358DC461E0B78470024A0D4 /* ISMSQuickAlbumsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSQuickAlbumsLoader.h; sourceTree = "<group>"; };
-		5358DC471E0B78470024A0D4 /* ISMSQuickAlbumsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSQuickAlbumsLoader.m; sourceTree = "<group>"; };
-		5358DC481E0B78470024A0D4 /* ISMSScrobbleLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSScrobbleLoader.h; sourceTree = "<group>"; };
-		5358DC491E0B78470024A0D4 /* ISMSScrobbleLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSScrobbleLoader.m; sourceTree = "<group>"; };
-		5358DC4A1E0B78470024A0D4 /* ISMSServerShuffleLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSServerShuffleLoader.h; sourceTree = "<group>"; };
-		5358DC4B1E0B78470024A0D4 /* ISMSServerShuffleLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSServerShuffleLoader.m; sourceTree = "<group>"; };
-		5358DC4C1E0B78470024A0D4 /* SUSCoverArtDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSCoverArtDAO.h; sourceTree = "<group>"; };
-		5358DC4D1E0B78470024A0D4 /* SUSCoverArtDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUSCoverArtDAO.m; sourceTree = "<group>"; };
 		5358DC4E1E0B78470024A0D4 /* NSMutableURLRequest+PMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableURLRequest+PMS.h"; sourceTree = "<group>"; };
 		5358DC4F1E0B78470024A0D4 /* NSMutableURLRequest+PMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableURLRequest+PMS.m"; sourceTree = "<group>"; };
 		5358DC501E0B78470024A0D4 /* NSMutableURLRequest+SUS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableURLRequest+SUS.h"; sourceTree = "<group>"; };
@@ -3307,7 +3265,6 @@
 		538725F117CC19B200CE92F1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		5388A42A1198AD840049BA9E /* selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected.png; path = Images/Other/selected.png; sourceTree = "<group>"; };
 		5388A42B1198AD840049BA9E /* unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unselected.png; path = Images/Other/unselected.png; sourceTree = "<group>"; };
-		538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsynchronousImageView.swift; sourceTree = "<group>"; };
 		538A1CD71D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+FixedHeightWhenStatusBarHidden.h"; sourceTree = "<group>"; };
 		538A1CD81D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+FixedHeightWhenStatusBarHidden.m"; sourceTree = "<group>"; };
 		538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterPanelContainerViewController.swift; sourceTree = "<group>"; };
@@ -3316,6 +3273,9 @@
 		538B4D031E1D7E2300847152 /* MediaFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaFoldersLoader.swift; sourceTree = "<group>"; };
 		538B4D071E1D80B400847152 /* RootPlaylistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootPlaylistsLoader.swift; sourceTree = "<group>"; };
 		538B4D0B1E1D83B300847152 /* ItemLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemLoader.swift; sourceTree = "<group>"; };
+		538B4D0F1E1DA68B00847152 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
+		538B4D191E1DA77600847152 /* CachedImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImageView.swift; sourceTree = "<group>"; };
+		538B4D211E1DAE0800847152 /* CachedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImage.swift; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
 		538C01AF12C3DCC40061545B /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Images/Other/back@2x.png"; sourceTree = "<group>"; };
 		5392A1C11C90EB7B00ADE09E /* ServerEditDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerEditDelegate.h; sourceTree = "<group>"; };
@@ -3511,6 +3471,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				5358E1A91E0B789B0024A0D4 /* libbassdsd.a in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
+				538B4D101E1DA68B00847152 /* Nuke.framework in Frameworks */,
 				53F675D8113B092C00822059 /* MediaPlayer.framework in Frameworks */,
 				5358E1B81E0B789B0024A0D4 /* libbassopus.a in Frameworks */,
 				5358E1AE1E0B789B0024A0D4 /* libbassflac.a in Frameworks */,
@@ -3644,6 +3605,7 @@
 				53BC2852139AF0DD00A825F1 /* CoreGraphics.framework in Frameworks */,
 				5358E1EB1E0B792C0024A0D4 /* HockeySDK.framework in Frameworks */,
 				5358E1AB1E0B789B0024A0D4 /* libbassdsd.a in Frameworks */,
+				538B4D121E1DA68B00847152 /* Nuke.framework in Frameworks */,
 				53BC2853139AF0DD00A825F1 /* MediaPlayer.framework in Frameworks */,
 				53BC2854139AF0DD00A825F1 /* CFNetwork.framework in Frameworks */,
 				5358E1BA1E0B789B0024A0D4 /* libbassopus.a in Frameworks */,
@@ -3695,6 +3657,7 @@
 				53DCF5B413BFEAD3009160F9 /* MediaPlayer.framework in Frameworks */,
 				5358E1AA1E0B789B0024A0D4 /* libbassdsd.a in Frameworks */,
 				53DCF5B513BFEAD3009160F9 /* CFNetwork.framework in Frameworks */,
+				538B4D111E1DA68B00847152 /* Nuke.framework in Frameworks */,
 				53DCF5B613BFEAD3009160F9 /* QuartzCore.framework in Frameworks */,
 				5358E1B91E0B789B0024A0D4 /* libbassopus.a in Frameworks */,
 				5358E1AF1E0B789B0024A0D4 /* libbassflac.a in Frameworks */,
@@ -3752,10 +3715,6 @@
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
-				536E29141E0B94570097C2F6 /* libSystem.tbd */,
-				536E29121E0B94500097C2F6 /* libxml2.tbd */,
-				536E29101E0B94490097C2F6 /* libz.tbd */,
-				536E290C1E0B942E0097C2F6 /* libiconv.tbd */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = CustomTemplate;
@@ -3841,6 +3800,10 @@
 				53D9D24916DEF843002F55F7 /* AdSupport.framework */,
 				53D9D24716DEF83E002F55F7 /* Accounts.framework */,
 				53D9D24516DEF839002F55F7 /* Social.framework */,
+				536E29141E0B94570097C2F6 /* libSystem.tbd */,
+				536E29121E0B94500097C2F6 /* libxml2.tbd */,
+				536E29101E0B94490097C2F6 /* libz.tbd */,
+				536E290C1E0B942E0097C2F6 /* libiconv.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3895,7 +3858,7 @@
 				535142641A4664A400674DE2 /* DraggableTableView.swift */,
 				532300171CEE73F700B8C651 /* DroppableCell.swift */,
 				532D9B42131AE19700FD8CA7 /* CustomUIAlertView.swift */,
-				538A1CD31D12BCE000999E7F /* AsynchronousImageView.swift */,
+				538B4D191E1DA77600847152 /* CachedImageView.swift */,
 			);
 			name = Reusable;
 			sourceTree = "<group>";
@@ -4038,6 +4001,7 @@
 				5358DC0D1E0B78470024A0D4 /* Playlist.swift */,
 				5358DC0E1E0B78470024A0D4 /* SectionIndex.swift */,
 				5358DC0F1E0B78470024A0D4 /* Server.swift */,
+				538B4D211E1DAE0800847152 /* CachedImage.swift */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -4091,9 +4055,7 @@
 				5358DC281E0B78470024A0D4 /* ISMSLoader_Subclassing.h */,
 				5358DC291E0B78470024A0D4 /* ISMSLoaderDelegate.h */,
 				5358DC2A1E0B78470024A0D4 /* ISMSLoaderManager.h */,
-				5358DC2B1E0B78470024A0D4 /* ISMSLoaders.h */,
 				5358DC2C1E0B78470024A0D4 /* New Model */,
-				5358DC411E0B78470024A0D4 /* Old Model */,
 			);
 			path = Loaders;
 			sourceTree = "<group>";
@@ -4113,27 +4075,6 @@
 				5358DC401E0B78470024A0D4 /* StatusLoader.swift */,
 			);
 			path = "New Model";
-			sourceTree = "<group>";
-		};
-		5358DC411E0B78470024A0D4 /* Old Model */ = {
-			isa = PBXGroup;
-			children = (
-				5358DC421E0B78470024A0D4 /* ISMSCoverArtLoader.h */,
-				5358DC431E0B78470024A0D4 /* ISMSCoverArtLoader.m */,
-				5358DC441E0B78470024A0D4 /* ISMSNowPlayingLoader.h */,
-				5358DC451E0B78470024A0D4 /* ISMSNowPlayingLoader.m */,
-				5358DC461E0B78470024A0D4 /* ISMSQuickAlbumsLoader.h */,
-				5358DC471E0B78470024A0D4 /* ISMSQuickAlbumsLoader.m */,
-				5358DC481E0B78470024A0D4 /* ISMSScrobbleLoader.h */,
-				5358DC491E0B78470024A0D4 /* ISMSScrobbleLoader.m */,
-				5358DC4A1E0B78470024A0D4 /* ISMSServerShuffleLoader.h */,
-				5358DC4B1E0B78470024A0D4 /* ISMSServerShuffleLoader.m */,
-				5358DC4C1E0B78470024A0D4 /* SUSCoverArtDAO.h */,
-				5358DC4D1E0B78470024A0D4 /* SUSCoverArtDAO.m */,
-				5358DC3A1E0B78470024A0D4 /* ISMSRecursiveItemLoader.h */,
-				5358DC3B1E0B78470024A0D4 /* ISMSRecursiveItemLoader.m */,
-			);
-			path = "Old Model";
 			sourceTree = "<group>";
 		};
 		5358DC541E0B78470024A0D4 /* NSURLConnectionDelegates */ = {
@@ -4698,6 +4639,7 @@
 				5358E1CE1E0B79210024A0D4 /* MBProgressHUD.framework */,
 				5358E1D01E0B79210024A0D4 /* SnapKit.framework */,
 				5358E1D11E0B79210024A0D4 /* SwiftyStoreKit.framework */,
+				538B4D0F1E1DA68B00847152 /* Nuke.framework */,
 			);
 			name = Carthage;
 			sourceTree = "<group>";
@@ -5289,7 +5231,7 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftMigration = 0720;
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Ben Baron";
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
@@ -6589,6 +6531,7 @@
 				5358DC8F1E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				53835CB11E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				5358DC9E1E0B78470024A0D4 /* BassParamEqValue.m in Sources */,
+				538B4D221E1DAE0800847152 /* CachedImage.swift in Sources */,
 				5358E01E1E0B789A0024A0D4 /* NSString+FileSize.m in Sources */,
 				535142651A4664A400674DE2 /* DraggableTableView.swift in Sources */,
 				5358E0FA1E0B789A0024A0D4 /* EX2NetworkIndicator.m in Sources */,
@@ -6597,7 +6540,6 @@
 				5358E06E1E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
 				5358DF0B1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */,
 				5358DDB11E0B78480024A0D4 /* ISMSNotificationNames.m in Sources */,
-				5358DD431E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */,
 				5358DF421E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */,
 				53ABE1451C60363E00E0E72B /* ItemViewController.swift in Sources */,
 				5358E05A1E0B789A0024A0D4 /* NSURL+SkipBackupAttribute.m in Sources */,
@@ -6622,14 +6564,11 @@
 				53835C551E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */,
 				5358DFAB1E0B789A0024A0D4 /* NSArray+FirstObject.m in Sources */,
 				53835CF71E0B7D6D0077B53D /* ZKLog.m in Sources */,
-				5358DD2A1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */,
 				5358DC851E0B78470024A0D4 /* BassStream.m in Sources */,
-				538A1CD41D12BCE000999E7F /* AsynchronousImageView.swift in Sources */,
 				533C5EE01E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
 				5358DF1F1E0B78990024A0D4 /* DDNumber.m in Sources */,
 				5358E0411E0B789A0024A0D4 /* NSString+time.m in Sources */,
 				5304FC3614F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
-				5358DD571E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */,
 				5358DFEC1E0B789A0024A0D4 /* NSNumber+CleanString.m in Sources */,
 				5358DCB71E0B78470024A0D4 /* ISMSFolder.m in Sources */,
 				5358E0A01E0B789A0024A0D4 /* UIImage+Reflection.m in Sources */,
@@ -6652,6 +6591,7 @@
 				538B4CFC1E1D764600847152 /* AlbumLoader.swift in Sources */,
 				5358E0321E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358DCBC1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
+				538B4D1A1E1DA77600847152 /* CachedImageView.swift in Sources */,
 				535B661E1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				53835C5A1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E0D21E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
@@ -6664,9 +6604,7 @@
 				5304FC3C14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				5358E0F01E0B789A0024A0D4 /* EX2FileEncryptor.m in Sources */,
 				537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
-				5358DD3E1E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */,
 				53835D1A1E0B7DD50077B53D /* FMDatabaseQueue.m in Sources */,
-				5358DD481E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */,
 				5358DD931E0B78480024A0D4 /* SocialSingleton.m in Sources */,
 				53835C5F1E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
 				5358DDC01E0B78480024A0D4 /* Utils.swift in Sources */,
@@ -6707,7 +6645,6 @@
 				5358E1591E0B789A0024A0D4 /* EX2NotificationBar.m in Sources */,
 				53835C321E0B7CE70077B53D /* NSObject+SBJson.m in Sources */,
 				53835CED1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
-				5358DD521E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */,
 				53835D241E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				53835CE81E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCF81E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
@@ -6724,7 +6661,6 @@
 				5358DF381E0B789A0024A0D4 /* HTTPServer.m in Sources */,
 				5358DF601E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */,
 				5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */,
-				5358DD4D1E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */,
 				5358DDAC1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5358DC8A1E0B78470024A0D4 /* BassWrapper.m in Sources */,
@@ -6741,8 +6677,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5358DD2D1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */,
-				5358DD551E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */,
 				5358E12A1E0B789A0024A0D4 /* RNOpenSSLCryptor.m in Sources */,
 				53835C4E1E0B7CE70077B53D /* SBJsonStreamParserState.m in Sources */,
 				53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */,
@@ -6805,8 +6739,6 @@
 				5358E0121E0B789A0024A0D4 /* NSString+Clean.m in Sources */,
 				53835CFA1E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				535B65FB1E0BD45000B6F374 /* RootAlbumsLoader.swift in Sources */,
-				5358DD461E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */,
-				5358DD411E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */,
 				5358E1391E0B789A0024A0D4 /* EX2Kit.m in Sources */,
 				5358DCE71E0B78470024A0D4 /* HLSProxyResponse.m in Sources */,
 				5358E0B21E0B789A0024A0D4 /* UIImageView+ImageAnimated.m in Sources */,
@@ -6817,7 +6749,6 @@
 				53835D421E0B7E9A0077B53D /* TBXML.m in Sources */,
 				5358DFB31E0B789A0024A0D4 /* NSArray+Plist.m in Sources */,
 				5358DF401E0B789A0024A0D4 /* MultipartFormDataParser.m in Sources */,
-				5358DD501E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */,
 				5358DCC41E0B78470024A0D4 /* ISMSMediaFolder.m in Sources */,
 				5358E1111E0B789A0024A0D4 /* RNCryptor.m in Sources */,
 				5358DCD31E0B78470024A0D4 /* SectionIndex.swift in Sources */,
@@ -6888,7 +6819,6 @@
 				5358DF541E0B789A0024A0D4 /* HTTPDataResponse.m in Sources */,
 				5358E01C1E0B789A0024A0D4 /* NSString+cStringUTF8.m in Sources */,
 				5358DD871E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
-				5358DD4B1E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */,
 				5358E0B71E0B789A0024A0D4 /* UIImageView+Reflection.m in Sources */,
 				53835CF51E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
 				53835D0E1E0B7DD50077B53D /* FMDatabase.m in Sources */,
@@ -6956,7 +6886,6 @@
 				53835D5A1E0B7F9F0077B53D /* MKStoreManager.m in Sources */,
 				5358DCDD1E0B78470024A0D4 /* LibSub.m in Sources */,
 				5358DF6D1E0B789A0024A0D4 /* WebSocket.m in Sources */,
-				5358DD5A1E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */,
 				536C995016619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				533C5ED41E0B8DFC00802FB1 /* String.swift in Sources */,
 				53835D221E0B7DD50077B53D /* FMResultSet.m in Sources */,
@@ -7003,7 +6932,6 @@
 				53835D2D1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
 				53835C631E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
 				53835C361E0B7CE70077B53D /* NSObject+SBJson.m in Sources */,
-				5358DD5B1E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */,
 				5358DF5F1E0B789A0024A0D4 /* HTTPErrorResponse.m in Sources */,
 				5358E0361E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358E04F1E0B789A0024A0D4 /* NSString+URLEncode.m in Sources */,
@@ -7070,16 +6998,13 @@
 				5358E1031E0B789A0024A0D4 /* EX2Reachability.m in Sources */,
 				5358E05E1E0B789A0024A0D4 /* NSURL+SkipBackupAttribute.m in Sources */,
 				5358DD061E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */,
-				5358DD2E1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */,
 				5358DFA51E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				5358E14E1E0B789A0024A0D4 /* EX2InfinitePagingScrollView.m in Sources */,
 				5358E1671E0B789B0024A0D4 /* EX2SlidingNotification.m in Sources */,
 				5358DCD91E0B78470024A0D4 /* Server.swift in Sources */,
 				533C5ED51E0B8DFC00802FB1 /* String.swift in Sources */,
-				5358DD511E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */,
 				53835C401E0B7CE70077B53D /* SBJsonStreamParser.m in Sources */,
 				5358E0951E0B789A0024A0D4 /* UIImage+Color.m in Sources */,
-				5358DD471E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */,
 				5358DF731E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				5358E0B31E0B789A0024A0D4 /* UIImageView+ImageAnimated.m in Sources */,
 				5358E00E1E0B789A0024A0D4 /* GTMNSString+HTML.m in Sources */,
@@ -7134,7 +7059,6 @@
 				5358E0681E0B789A0024A0D4 /* CALayer+ImageFromLayer.m in Sources */,
 				5358DFAA1E0B789A0024A0D4 /* NSArray+FilterBlock.m in Sources */,
 				5358E0811E0B789A0024A0D4 /* UIColor+ColorWithHex.m in Sources */,
-				5358DD561E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */,
 				5358DC931E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				5358E0DB1E0B789A0024A0D4 /* UIViewController+Tools.m in Sources */,
 				53835D231E0B7DD50077B53D /* FMResultSet.m in Sources */,
@@ -7163,7 +7087,6 @@
 				5358DBE21E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				53835CF11E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				5358DF7D1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
-				5358DD4C1E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */,
 				5358DF691E0B789A0024A0D4 /* HTTPRedirectResponse.m in Sources */,
 				53835CEC1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358E0591E0B789A0024A0D4 /* NSURL+QueryParameterDictionary.m in Sources */,
@@ -7228,7 +7151,6 @@
 				5358DF641E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */,
 				5358DCCF1E0B78470024A0D4 /* Playlist.swift in Sources */,
 				53835D281E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
-				5358DD421E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7367,6 +7289,7 @@
 				5358DC911E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				53835CB31E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				5358DCA01E0B78470024A0D4 /* BassParamEqValue.m in Sources */,
+				538B4D241E1DAE0800847152 /* CachedImage.swift in Sources */,
 				5358E0201E0B789A0024A0D4 /* NSString+FileSize.m in Sources */,
 				535142671A4664A400674DE2 /* DraggableTableView.swift in Sources */,
 				5358E0FC1E0B789A0024A0D4 /* EX2NetworkIndicator.m in Sources */,
@@ -7375,7 +7298,6 @@
 				5358E0701E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
 				5358DF0D1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */,
 				5358DDB31E0B78480024A0D4 /* ISMSNotificationNames.m in Sources */,
-				5358DD451E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */,
 				5358DF441E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */,
 				53ABE1471C60363E00E0E72B /* ItemViewController.swift in Sources */,
 				5358E05C1E0B789A0024A0D4 /* NSURL+SkipBackupAttribute.m in Sources */,
@@ -7400,14 +7322,11 @@
 				53835C571E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */,
 				5358DFAD1E0B789A0024A0D4 /* NSArray+FirstObject.m in Sources */,
 				53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */,
-				5358DD2C1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */,
 				5358DC871E0B78470024A0D4 /* BassStream.m in Sources */,
-				538A1CD61D12BCE400999E7F /* AsynchronousImageView.swift in Sources */,
 				533C5EE21E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
 				5358DF211E0B78990024A0D4 /* DDNumber.m in Sources */,
 				5358E0431E0B789A0024A0D4 /* NSString+time.m in Sources */,
 				5304FC3814F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
-				5358DD591E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */,
 				5358DFEE1E0B789A0024A0D4 /* NSNumber+CleanString.m in Sources */,
 				5358DCB91E0B78470024A0D4 /* ISMSFolder.m in Sources */,
 				5358E0A21E0B789A0024A0D4 /* UIImage+Reflection.m in Sources */,
@@ -7430,6 +7349,7 @@
 				538B4CFE1E1D764600847152 /* AlbumLoader.swift in Sources */,
 				5358E0341E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358DCBE1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
+				538B4D1C1E1DA77600847152 /* CachedImageView.swift in Sources */,
 				535B66201E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				53835C5C1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E0D41E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
@@ -7442,9 +7362,7 @@
 				5304FC3E14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				5358E0F21E0B789A0024A0D4 /* EX2FileEncryptor.m in Sources */,
 				537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
-				5358DD401E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */,
 				53835D1C1E0B7DD50077B53D /* FMDatabaseQueue.m in Sources */,
-				5358DD4A1E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */,
 				5358DD951E0B78480024A0D4 /* SocialSingleton.m in Sources */,
 				53835C611E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
 				5358DDC21E0B78480024A0D4 /* Utils.swift in Sources */,
@@ -7485,7 +7403,6 @@
 				5358E15B1E0B789A0024A0D4 /* EX2NotificationBar.m in Sources */,
 				53835C341E0B7CE70077B53D /* NSObject+SBJson.m in Sources */,
 				53835CEF1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
-				5358DD541E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */,
 				53835D261E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				53835CEA1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCFA1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
@@ -7502,7 +7419,6 @@
 				5358DF3A1E0B789A0024A0D4 /* HTTPServer.m in Sources */,
 				5358DF621E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */,
 				5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */,
-				5358DD4F1E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */,
 				5358DDAE1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5358DC8C1E0B78470024A0D4 /* BassWrapper.m in Sources */,
@@ -7650,6 +7566,7 @@
 				5358DC901E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				53835CB21E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				5358DC9F1E0B78470024A0D4 /* BassParamEqValue.m in Sources */,
+				538B4D231E1DAE0800847152 /* CachedImage.swift in Sources */,
 				5358E01F1E0B789A0024A0D4 /* NSString+FileSize.m in Sources */,
 				535142661A4664A400674DE2 /* DraggableTableView.swift in Sources */,
 				5358E0FB1E0B789A0024A0D4 /* EX2NetworkIndicator.m in Sources */,
@@ -7658,7 +7575,6 @@
 				5358E06F1E0B789A0024A0D4 /* UIBezierPath+Smoothing.m in Sources */,
 				5358DF0C1E0B78990024A0D4 /* GCDAsyncUdpSocket.m in Sources */,
 				5358DDB21E0B78480024A0D4 /* ISMSNotificationNames.m in Sources */,
-				5358DD441E0B78480024A0D4 /* ISMSNowPlayingLoader.m in Sources */,
 				5358DF431E0B789A0024A0D4 /* MultipartMessageHeader.m in Sources */,
 				53ABE1461C60363E00E0E72B /* ItemViewController.swift in Sources */,
 				5358E05B1E0B789A0024A0D4 /* NSURL+SkipBackupAttribute.m in Sources */,
@@ -7683,14 +7599,11 @@
 				53835C561E0B7CE70077B53D /* SBJsonStreamWriterAccumulator.m in Sources */,
 				5358DFAC1E0B789A0024A0D4 /* NSArray+FirstObject.m in Sources */,
 				53835CF81E0B7D6D0077B53D /* ZKLog.m in Sources */,
-				5358DD2B1E0B78480024A0D4 /* ISMSRecursiveItemLoader.m in Sources */,
 				5358DC861E0B78470024A0D4 /* BassStream.m in Sources */,
-				538A1CD51D12BCE300999E7F /* AsynchronousImageView.swift in Sources */,
 				533C5EE11E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
 				5358DF201E0B78990024A0D4 /* DDNumber.m in Sources */,
 				5358E0421E0B789A0024A0D4 /* NSString+time.m in Sources */,
 				5304FC3714F2F0D100A2AD42 /* StackScrollViewController.m in Sources */,
-				5358DD581E0B78480024A0D4 /* SUSCoverArtDAO.m in Sources */,
 				5358DFED1E0B789A0024A0D4 /* NSNumber+CleanString.m in Sources */,
 				5358DCB81E0B78470024A0D4 /* ISMSFolder.m in Sources */,
 				5358E0A11E0B789A0024A0D4 /* UIImage+Reflection.m in Sources */,
@@ -7713,6 +7626,7 @@
 				538B4CFD1E1D764600847152 /* AlbumLoader.swift in Sources */,
 				5358E0331E0B789A0024A0D4 /* NSString+md5.m in Sources */,
 				5358DCBD1E0B78470024A0D4 /* ISMSGenre.m in Sources */,
+				538B4D1B1E1DA77600847152 /* CachedImageView.swift in Sources */,
 				535B661F1E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				53835C5B1E0B7CE70077B53D /* SBJsonStreamWriterState.m in Sources */,
 				5358E0D31E0B789A0024A0D4 /* UIViewController+IsVisible.m in Sources */,
@@ -7725,9 +7639,7 @@
 				5304FC3D14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				5358E0F11E0B789A0024A0D4 /* EX2FileEncryptor.m in Sources */,
 				537E9A0B14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
-				5358DD3F1E0B78480024A0D4 /* ISMSCoverArtLoader.m in Sources */,
 				53835D1B1E0B7DD50077B53D /* FMDatabaseQueue.m in Sources */,
-				5358DD491E0B78480024A0D4 /* ISMSQuickAlbumsLoader.m in Sources */,
 				5358DD941E0B78480024A0D4 /* SocialSingleton.m in Sources */,
 				53835C601E0B7CE70077B53D /* SBJsonTokeniser.m in Sources */,
 				5358DDC11E0B78480024A0D4 /* Utils.swift in Sources */,
@@ -7768,7 +7680,6 @@
 				5358E15A1E0B789A0024A0D4 /* EX2NotificationBar.m in Sources */,
 				53835C331E0B7CE70077B53D /* NSObject+SBJson.m in Sources */,
 				53835CEE1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
-				5358DD531E0B78480024A0D4 /* ISMSServerShuffleLoader.m in Sources */,
 				53835D251E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				53835CE91E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCF91E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
@@ -7785,7 +7696,6 @@
 				5358DF391E0B789A0024A0D4 /* HTTPServer.m in Sources */,
 				5358DF611E0B789A0024A0D4 /* HTTPFileResponse.m in Sources */,
 				5333D1101C654B5900DC19F4 /* SidePanelController.swift in Sources */,
-				5358DD4E1E0B78480024A0D4 /* ISMSScrobbleLoader.m in Sources */,
 				5358DDAD1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				536C994E16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5358DC8B1E0B78470024A0D4 /* BassWrapper.m in Sources */,
@@ -7954,7 +7864,7 @@
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",
@@ -8629,7 +8539,7 @@
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",
@@ -8693,7 +8603,7 @@
 					"\"$(SRCROOT)/Frameworks/HockeySDK/Classes\"",
 					"\"$(SDK_DIR)\"/usr/include/libxml2",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Classes\"",
 					"\"$(SRCROOT)\"",

@@ -1,5 +1,6 @@
 github "duemunk/Async" "2.0.1"
 github "bitstadium/HockeySDK-iOS" "4.1.3"
 github "jdg/MBProgressHUD" "1.0.0"
-github "SnapKit/SnapKit" "3.1.1"
+github "kean/Nuke" "4.1.2"
+github "SnapKit/SnapKit" "3.1.2"
 github "bizz84/SwiftyStoreKit" "0.6.1"

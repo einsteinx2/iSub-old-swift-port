@@ -142,52 +142,6 @@
     [ISMSPlaylist createPlaylist:@"Download Queue" playlistId:[ISMSPlaylist downloadQueuePlaylistId] serverId:settingsS.currentServerId];
     [ISMSPlaylist createPlaylist:@"Downloaded Songs" playlistId:[ISMSPlaylist downloadedSongsPlaylistId] serverId:settingsS.currentServerId];
 	
-    // TODO: Stop storing image files in fucking databases
-	// Setup music player cover art cache database
-	if (IS_IPAD())
-	{
-		// Only load large album art DB if this is an iPad
-		path = [self.databaseFolderPath stringByAppendingPathComponent:@"coverArtCache540.db"];
-		self.coverArtCacheDb540Queue = [FMDatabaseQueue databaseQueueWithPath:path];
-		[self.coverArtCacheDb540Queue inDatabase:^(FMDatabase *db) 
-		{
-			[db executeUpdate:@"PRAGMA cache_size = 1"];
-			
-			if (![db tableExists:@"coverArtCache"]) 
-			{
-				[db executeUpdate:@"CREATE TABLE coverArtCache (coverArtId TEXT PRIMARY KEY, serverId INTEGER, data BLOB)"];
-			}
-		}];
-	}
-	else
-	{
-		// Only load small album art DB if this is not an iPad
-        path = [self.databaseFolderPath stringByAppendingPathComponent:@"coverArtCache320.db"];
-		self.coverArtCacheDb320Queue = [FMDatabaseQueue databaseQueueWithPath:path];
-		[self.coverArtCacheDb320Queue inDatabase:^(FMDatabase *db) 
-		{
-			[db executeUpdate:@"PRAGMA cache_size = 1"];
-			
-			if (![db tableExists:@"coverArtCache"]) 
-			{
-				[db executeUpdate:@"CREATE TABLE coverArtCache (coverArtId TEXT PRIMARY KEY, serverId INTEGER, data BLOB)"];
-			}
-		}];
-	}
-	
-	// Setup album cell cover art cache database
-    path = [self.databaseFolderPath stringByAppendingPathComponent:@"coverArtCache60.db"];
-	self.coverArtCacheDb60Queue = [FMDatabaseQueue databaseQueueWithPath:path];
-	[self.coverArtCacheDb60Queue inDatabase:^(FMDatabase *db) 
-	{
-		[db executeUpdate:@"PRAGMA cache_size = 1"];
-		
-		if (![db tableExists:@"coverArtCache"])
-		{
-			[db executeUpdate:@"CREATE TABLE coverArtCache (coverArtId TEXT PRIMARY KEY, serverId INTEGER, data BLOB)"];
-		}
-	}];
-	
 	// Setup the bookmarks database
 	path = [self.databaseFolderPath stringByAppendingPathComponent:@"bookmarks.db"];
 	
@@ -229,29 +183,7 @@
 {
     [self.songModelReadDbPool releaseAllDatabases];
     [self.songModelWritesDbQueue close];
-	[self.coverArtCacheDb540Queue close];
-	[self.coverArtCacheDb320Queue close];
-	[self.coverArtCacheDb60Queue close];
 	[self.bookmarksDbQueue close];
-}
-
-- (void)resetCoverArtCache
-{	
-	// Clear the table cell cover art	
-	[self.coverArtCacheDb60Queue inDatabase:^(FMDatabase *db)
-	{
-		[db executeUpdate:@"DROP TABLE IF EXISTS coverArtCache"];
-		[db executeUpdate:@"CREATE TABLE coverArtCache (coverArtId TEXT PRIMARY KEY, serverId INTEGER, data BLOB)"];
-	}];
-	
-	
-	// Clear the player cover art
-	FMDatabaseQueue *dbQueue = IS_IPAD() ? self.coverArtCacheDb540Queue : self.coverArtCacheDb320Queue;
-	[dbQueue inDatabase:^(FMDatabase *db)
-	{
-		[db executeUpdate:@"DROP TABLE IF EXISTS coverArtCache"];
-		[db executeUpdate:@"CREATE TABLE coverArtCache (coverArtId TEXT PRIMARY KEY, serverId INTEGER, data BLOB)"];
-	}];
 }
 
 - (void)resetFolderCache

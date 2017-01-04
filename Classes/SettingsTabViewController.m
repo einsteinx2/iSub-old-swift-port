@@ -538,9 +538,10 @@
 
 - (void)resetAlbumArtCache
 {
-	[databaseS resetCoverArtCache];
-	[viewObjectsS hideLoadingScreen];
-	[self popFoldersTab];
+    // TODO: Reimplement
+//	[databaseS resetCoverArtCache];
+//	[viewObjectsS hideLoadingScreen];
+//	[self popFoldersTab];
 }
 
 - (void)popFoldersTab

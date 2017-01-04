@@ -9,6 +9,7 @@
 import Foundation
 import MediaPlayer
 import Async
+import Nuke
 
 @objc public enum RepeatMode: Int {
     case normal
@@ -351,6 +352,10 @@ import Async
     // MARK: - Lock Screen -
     //
     
+    fileprivate var defaultItemArtwork: MPMediaItemArtwork = {
+        MPMediaItemArtwork(image: CachedImage.default(forSize: .player))
+    }()
+    
     fileprivate var lockScreenUpdateTimer: Timer?
     open func updateLockScreenInfo() {
         #if os(iOS)
@@ -377,9 +382,9 @@ import Async
                 trackInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0 as AnyObject?
                 
                 if SavedSettings.sharedInstance().isLockScreenArtEnabled {
-                    if let coverArtId = song.coverArtId {
-                        let artDataModel = SUSCoverArtDAO(delegate: nil, coverArtId: coverArtId, isLarge: true)
-                        trackInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: (artDataModel?.coverArtImage())!)
+                    trackInfo[MPMediaItemPropertyArtwork] = defaultItemArtwork
+                    if let coverArtId = song.coverArtId, let image = CachedImage.cached(coverArtId: coverArtId, size: .player) {
+                        trackInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
                     }
                 }
                 

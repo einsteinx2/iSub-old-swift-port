@@ -241,14 +241,18 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
     var associatedObject: AnyObject? {
         didSet {
             if let song = associatedObject as? ISMSSong {
-                coverArtView.coverArtId = song.coverArtId
+                if let coverArtId = song.coverArtId {
+                    coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
+                } else {
+                    coverArtView.setDefaultImage(forSize: .cell)
+                }
                 songLabel.text = song.title
                 artistLabel.text = song.artistDisplayName
             }
         }
     }
     
-    let coverArtView = AsynchronousImageView()
+    let coverArtView = CachedImageView()
     let songLabel = UILabel()
     let artistLabel = UILabel()
     

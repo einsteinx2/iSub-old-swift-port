@@ -111,7 +111,7 @@ LOG_LEVEL_ISUB_DEFAULT
 		if (![lastCachedSong isEqualToSong:currentSong])
 		{
 			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
-			NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters byteOffset:0];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters fragment:nil byteOffset:0];
 			NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
             if (conn)
             {
@@ -148,18 +148,19 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)scrobbleSong:(ISMSSong*)aSong isSubmission:(BOOL)isSubmission
 {
-	if (settingsS.isScrobbleEnabled && !settingsS.isOfflineMode)
-    {
-		ISMSScrobbleLoader *loader = [[ISMSScrobbleLoader alloc] initWithCallbackBlock:^(BOOL success, NSError *error, ISMSLoader *loader)
-        {
-            ALog(@"Scrobble successfully completed for song: %@", aSong.title);
-        }];
-        
-        loader.aSong = aSong;
-        loader.isSubmission = isSubmission;
-        
-        [loader startLoad];
-	}
+    // TODO: Reimplement
+//	if (settingsS.isScrobbleEnabled && !settingsS.isOfflineMode)
+//    {
+//		ISMSScrobbleLoader *loader = [[ISMSScrobbleLoader alloc] initWithCallbackBlock:^(BOOL success, NSError *error, ISMSLoader *loader)
+//        {
+//            ALog(@"Scrobble successfully completed for song: %@", aSong.title);
+//        }];
+//        
+//        loader.aSong = aSong;
+//        loader.isSubmission = isSubmission;
+//        
+//        [loader startLoad];
+//	}
 }
 
 #pragma mark Subsonic chache notification hack and Last.fm scrobbling connection delegate

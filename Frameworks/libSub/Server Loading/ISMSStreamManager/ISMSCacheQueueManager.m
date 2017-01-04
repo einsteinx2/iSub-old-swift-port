@@ -11,7 +11,6 @@
 #import "iSub-Swift.h"
 #import "ISMSLoader.h"
 #import "DatabaseSingleton.h"
-#import "ISMSCoverArtLoader.h"
 #import "ISMSStreamManager.h"
 #import "ISMSStreamHandler.h"
 #import "ISMSURLConnectionStreamHandler.h"
@@ -123,19 +122,20 @@ LOG_LEVEL_ISUB_DEBUG
 	self.isQueueDownloading = YES;
 	
 	// Download the art
-	if (self.currentQueuedSong.coverArtId)
-	{
-		NSString *coverArtId = self.currentQueuedSong.coverArtId;
-		ISMSCoverArtLoader *playerArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self 
-																		coverArtId:coverArtId
-																		   isLarge:YES];
-		[playerArt downloadArtIfNotExists];
-		
-		ISMSCoverArtLoader *tableArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self
-																	   coverArtId:coverArtId 
-																		  isLarge:NO];
-		[tableArt downloadArtIfNotExists];
-	}
+    // TODO: Extend functionality of the CachedImage class to facilitate this when writing the caching stuff
+//	if (self.currentQueuedSong.coverArtId)
+//	{
+//		NSString *coverArtId = self.currentQueuedSong.coverArtId;
+//		ISMSCoverArtLoader *playerArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self 
+//																		coverArtId:coverArtId
+//																		   isLarge:YES];
+//		[playerArt downloadArtIfNotExists];
+//		
+//		ISMSCoverArtLoader *tableArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self
+//																	   coverArtId:coverArtId 
+//																		  isLarge:NO];
+//		[tableArt downloadArtIfNotExists];
+//	}
 	
 	// Create the stream handler
 	ISMSStreamHandler *handler = [streamManagerS handlerForSong:self.currentQueuedSong];

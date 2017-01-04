@@ -11,7 +11,6 @@
 #import "iSub-Swift.h"
 #import "ISMSStreamHandler.h"
 #import "ISMSCFNetworkStreamHandler.h"
-#import "ISMSCoverArtLoader.h"
 #import "ISMSCacheQueueManager.h"
 
 LOG_LEVEL_ISUB_DEBUG
@@ -435,18 +434,19 @@ LOG_LEVEL_ISUB_DEBUG
 			[self startHandler:handler];
 		}
 		
-		// Also download the album art
+		// Preheat cover art
 		if (song.coverArtId)
 		{
-			ISMSCoverArtLoader *playerArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:YES];
-			[playerArt downloadArtIfNotExists];
-			//if (![playerArt downloadArtIfNotExists])
-			//	;
-			
-			ISMSCoverArtLoader *tableArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:NO];
-			[tableArt downloadArtIfNotExists];
-			//if (![tableArt downloadArtIfNotExists])
-			//	;
+            // TODO: Reimplement this using CachedImage
+//			ISMSCoverArtLoader *playerArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:YES];
+//			[playerArt downloadArtIfNotExists];
+//			//if (![playerArt downloadArtIfNotExists])
+//			//	;
+//			
+//			ISMSCoverArtLoader *tableArt = [[ISMSCoverArtLoader alloc] initWithDelegate:self coverArtId:song.coverArtId isLarge:NO];
+//			[tableArt downloadArtIfNotExists];
+//			//if (![tableArt downloadArtIfNotExists])
+//			//	;
 		}
 	}
 	

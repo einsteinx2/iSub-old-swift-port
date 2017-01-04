@@ -40,7 +40,7 @@ open class StatusLoader: ISMSLoader {
     }
     
     open override func createRequest() -> URLRequest? {
-        return NSMutableURLRequest(susAction: "ping", urlString:self.url, username:self.username, password:self.password, parameters: nil) as URLRequest?
+        return NSMutableURLRequest(susAction: "ping", urlString: url, username: username, password: password, parameters: nil, fragment: nil, byteOffset: 0) as URLRequest?        
     }
     
     open override func processResponse() {

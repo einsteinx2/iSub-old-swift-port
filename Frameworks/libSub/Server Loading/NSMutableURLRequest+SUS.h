@@ -10,9 +10,9 @@
 
 @interface NSMutableURLRequest (SUS)
 
-+ (nonnull NSMutableURLRequest *)requestWithSUSAction:(nonnull NSString *)action urlString:(nonnull NSString *)url username:(nonnull NSString *)user password:(nonnull NSString *)pass parameters:(nullable NSDictionary *)parameters byteOffset:(NSUInteger)offset;
-+ (nonnull NSMutableURLRequest *)requestWithSUSAction:(nonnull NSString *)action urlString:(nonnull NSString *)url username:(nonnull NSString *)user password:(nonnull NSString *)pass parameters:(nullable NSDictionary *)parameters;
-+ (nonnull NSMutableURLRequest *)requestWithSUSAction:(nonnull NSString *)action parameters:(nullable NSDictionary *)parameters byteOffset:(NSUInteger)offset;
++ (nonnull NSMutableURLRequest *)requestWithSUSAction:(nonnull NSString *)action urlString:(nonnull NSString *)url username:(nonnull NSString *)user password:(nonnull NSString *)pass parameters:(nullable NSDictionary *)parameters fragment:(nullable NSString *)fragment byteOffset:(NSUInteger)offset;
++ (nonnull NSMutableURLRequest *)requestWithSUSAction:(nonnull NSString *)action parameters:(nullable NSDictionary *)parameters fragment:(nullable NSString *)fragment byteOffset:(NSUInteger)offset;
++ (nonnull NSMutableURLRequest *)requestWithSUSAction:(nonnull NSString *)action parameters:(nullable NSDictionary *)parameters fragment:(nullable NSString *)fragment;
 + (nonnull NSMutableURLRequest *)requestWithSUSAction:(nonnull NSString *)action parameters:(nullable NSDictionary *)parameters;
 
 @end

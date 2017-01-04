@@ -51,7 +51,12 @@ class ItemTableViewCell: DroppableCell {
     
     var coverArtId: String? {
         didSet {
-            coverArtView.coverArtId = coverArtId
+            if let coverArtId = coverArtId {
+                coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
+            } else {
+                coverArtView.setDefaultImage(forSize: .cell)
+            }
+            
             if shouldRepositionLabels {
                 repositionLabels()
             }
@@ -116,7 +121,7 @@ class ItemTableViewCell: DroppableCell {
         }
     }
     
-    fileprivate let coverArtView = AsynchronousImageView()
+    fileprivate let coverArtView = CachedImageView()
     fileprivate let trackNumberLabel = UILabel()
     fileprivate let headerTitleLabel = UILabel()
     fileprivate let titlesScrollView = UIScrollView()
@@ -131,7 +136,6 @@ class ItemTableViewCell: DroppableCell {
         deleteToggleImageView.alpha = 0.0
         containerView.addSubview(deleteToggleImageView)
         
-        coverArtView.large = false
         containerView.addSubview(coverArtView)
         
         trackNumberLabel.backgroundColor = UIColor.clear

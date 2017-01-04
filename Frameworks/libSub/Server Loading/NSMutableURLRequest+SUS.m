@@ -37,11 +37,14 @@ static NSSet *setOfVersions = nil;
     setOfVersions = [[NSSet alloc] initWithObjects:ver1_0_0, ver1_2_0, ver1_3_0, ver1_4_0, ver1_5_0, ver1_6_0, ver1_8_0, ver1_14_0, nil];
 }
 
-+ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters fragment:(NSString *)fragment byteOffset:(NSUInteger)offset
 {
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@/rest/%@.view", url, action];
     if ([action isEqualToString:@"hls"])
         urlString = [NSMutableString stringWithFormat:@"%@/rest/%@.m3u8", url, action];
+    if (fragment.hasValue) {
+        [urlString appendFormat:@"#%@", fragment];
+    }
     
 	NSString *username = [user URLEncodeString];
     
@@ -156,12 +159,7 @@ static NSSet *setOfVersions = nil;
     return request;
 }
 
-+ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters
-{
-	return [NSMutableURLRequest requestWithSUSAction:action urlString:url username:user password:pass parameters:nil byteOffset:0];
-}
-
-+ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action parameters:(NSDictionary *)parameters byteOffset:(NSUInteger)offset
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action parameters:(NSDictionary *)parameters fragment:(NSString *)fragment byteOffset:(NSUInteger)offset
 {
 	NSString *urlString = settingsS.currentServer.url;
 	if (settingsS.redirectUrlString)
@@ -173,17 +171,23 @@ static NSSet *setOfVersions = nil;
 //DLog(@"username: %@   password: %@", settingsS.username, settingsS.password);
 	
     Server *currentServer = settingsS.currentServer;
-	return [NSMutableURLRequest requestWithSUSAction:action 
-										urlString:urlString 
-											username:currentServer.username
-											password:currentServer.password
-									   parameters:parameters 
-										  byteOffset:offset];
+    return [NSMutableURLRequest requestWithSUSAction:action
+                                           urlString:urlString
+                                            username:currentServer.username
+                                            password:currentServer.password
+                                          parameters:parameters
+                                            fragment: fragment
+                                          byteOffset:offset];
+}
+
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action parameters:(NSDictionary *)parameters fragment:(NSString *)fragment
+{
+    return [NSMutableURLRequest requestWithSUSAction:action parameters:parameters fragment:fragment byteOffset:0];
 }
 
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action parameters:(NSDictionary *)parameters
 {
-	return [NSMutableURLRequest requestWithSUSAction:action parameters:parameters byteOffset:0];
+	return [NSMutableURLRequest requestWithSUSAction:action parameters:parameters fragment:nil byteOffset:0];
 }
 
 @end

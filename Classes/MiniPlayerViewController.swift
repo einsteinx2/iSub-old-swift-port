@@ -9,7 +9,7 @@
 import UIKit
 
 class MiniPlayerViewController: UIViewController {
-    let coverArtView = AsynchronousImageView()
+    let coverArtView = CachedImageView()
     let titleLabel = UILabel()
     let artistLabel = UILabel()
     let playButton = UIButton(type: .custom)
@@ -96,7 +96,11 @@ class MiniPlayerViewController: UIViewController {
     
     @objc fileprivate func updateCurrentSong() {
         let currentSong = PlayQueue.sharedInstance.currentDisplaySong
-        coverArtView.coverArtId = currentSong?.coverArtId
+        if let coverArtId = currentSong?.coverArtId {
+            coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
+        } else {
+            coverArtView.setDefaultImage(forSize: .cell)
+        }
         titleLabel.text = currentSong?.title
         artistLabel.text = currentSong?.artistDisplayName
     }

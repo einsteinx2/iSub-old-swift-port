@@ -90,7 +90,7 @@ LOG_LEVEL_ISUB_DEFAULT
 			NSString *maxBitRate = [[NSString alloc] initWithFormat:@"%ld", (long)self.maxBitrateSetting];
 			[parameters setObject:n2N(maxBitRate) forKey:@"maxBitRate"];
 		}
-		self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters byteOffset:self.byteOffset];
+        self.request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters fragment:nil byteOffset:self.byteOffset];
 	}
 	else if (serverType == ServerTypeISubServer || serverType == ServerTypeWaveBox)
 	{
