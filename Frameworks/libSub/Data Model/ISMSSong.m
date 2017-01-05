@@ -558,7 +558,7 @@
 - (NSString *)localPath
 {
     NSString *fileName = self.path.md5;
-    return self.path ? [[SavedSettings songCachePath] stringByAppendingPathComponent:self.path] : nil;
+    return fileName ? [[SavedSettings songCachePath] stringByAppendingPathComponent:fileName] : nil;
 }
 
 - (NSString *)localTempPath

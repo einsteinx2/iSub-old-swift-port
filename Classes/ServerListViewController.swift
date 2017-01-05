@@ -276,20 +276,16 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
     }
     
     public func loadingFailed(_ theLoader: ISMSLoader, withError error: Error) {
-        let alert: UIAlertView?
+        let message: String
         if (error as NSError).code == ISMSErrorCode_IncorrectCredentials {
-            alert = UIAlertView(title: "Server Unavailable",
-                                message: "Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code \((error as NSError).code):\n\(error.localizedDescription)",
-                                delegate: nil,
-                                cancelButtonTitle: "OK")
+            message = "Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code \((error as NSError).code):\n\(error.localizedDescription)"
         } else {
-            alert = UIAlertView(title: "Server Unavailable",
-                                message: "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code \((error as NSError).code):\n\((error as NSError).description)",
-                                delegate: nil,
-                                cancelButtonTitle: "OK")
+            message = "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code \((error as NSError).code):\n\((error as NSError).description)"
         }
-        alert!.tag = 3
-        alert!.show()
+        
+        let alert = UIAlertController(title: "Server Unavailable", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
         
         ViewObjectsSingleton.sharedInstance().hideLoadingScreen()
     }
