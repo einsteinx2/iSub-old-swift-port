@@ -14,6 +14,17 @@ class DroppableCell: UITableViewCell {
     let containerView = UIView()
     var cellHeight: CGFloat = 50.0
     
+    var tableView: UITableView? {
+        var view = self.superview
+        while view != nil {
+            if let tableView = view as? UITableView {
+                return tableView
+            }
+            view = view?.superview
+        }
+        return nil
+    }
+    
     override var backgroundColor: UIColor? {
         get {
             return containerView.backgroundColor

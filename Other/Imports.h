@@ -10,7 +10,8 @@
 #define iSub_Imports_h
 
 #import "Defines.h"
-#import "LibSub.h"
+#import "libSubImports.h"
+#import "libSubDefines.h"
 
 #import "iSubAppDelegate.h"
 #import "ViewObjectsSingleton.h"

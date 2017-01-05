@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, ItemViewController, SidePanelController, Server;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, ItemViewController, SidePanelController, Server, NetworkStatus;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 
@@ -30,7 +30,7 @@
 
 // Network connectivity objects and variables
 //
-@property (strong) EX2Reachability *wifiReach;
+@property (strong) NetworkStatus *networkStatus;
 @property (readonly) BOOL isWifi;
 
 // Multitasking stuff
@@ -52,7 +52,7 @@
 - (void)loadHockeyApp;
 - (void)loadInAppPurchaseStore;
 
-- (void)reachabilityChanged:(NSNotification *)note;
+- (void)reachabilityChanged;
 
 - (void)showSettings;
 

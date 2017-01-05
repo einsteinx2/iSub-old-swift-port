@@ -7,7 +7,7 @@
 //
 
 #import "ISMSURLConnectionStreamHandler.h"
-#import "LibSub.h"
+#import "Imports.h"
 #import "iSub-Swift.h"
 #import "DatabaseSingleton.h"
 #import "NSMutableURLRequest+SUS.h"
@@ -340,7 +340,7 @@ LOG_LEVEL_ISUB_DEFAULT
                 NSTimeInterval delay = 0.0;
                 
 #ifdef IOS
-                double maxBytesPerInterval = [self.class maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:![LibSub isWifi]];
+                double maxBytesPerInterval = [self.class maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:![appDelegateS isWifi]];
 #else
                 double maxBytesPerInterval = [self.class maxBytesPerIntervalForBitrate:(double)self.bitrate is3G:NO];
 #endif

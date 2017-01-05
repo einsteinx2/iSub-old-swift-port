@@ -7,7 +7,6 @@
 //
 
 #import "JukeboxSingleton.h"
-#import "LibSub.h"
 #import "iSub-Swift.h"
 #import "JukeboxConnectionDelegate.h"
 #import "NSMutableURLRequest+SUS.h"

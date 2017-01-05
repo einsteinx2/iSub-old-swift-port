@@ -10,7 +10,6 @@
 #import "Imports.h"
 #import "iSub-Swift.h"
 #import <CoreFoundation/CoreFoundation.h>
-#import <SystemConfiguration/SCNetworkReachability.h>
 #import <netinet/in.h>
 #import <netdb.h>
 #import <arpa/inet.h>
@@ -26,7 +25,6 @@
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
 #import "ISMSLoaderDelegate.h"
-#import "EX2Reachability.h"
 #import <HockeySDK/HockeySDK.h>
 #import "JASidePanelController.h"
 
@@ -92,11 +90,10 @@
 	[DDLog addLogger:fileLogger];
 	
 	// Setup network reachability notifications
-	self.wifiReach = [EX2Reachability reachabilityForLocalWiFi];
-	[self.wifiReach startNotifier];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:)
-                                                 name:EX2ReachabilityNotification_ReachabilityChanged object:nil];
-	[self.wifiReach currentReachabilityStatus];
+    self.networkStatus = [[NetworkStatus alloc] init];
+	[self.networkStatus startMonitoring];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged)
+                                                 name:ISMSNotification_ReachabilityChanged object:nil];
 	
 	// Check battery state and register for notifications
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
@@ -152,8 +149,7 @@
     self.sidePanelController = (id)self.window.rootViewController;
     
     // Handle offline mode
-    NetworkStatus netStatus = self.wifiReach.currentReachabilityStatus;
-    if (settingsS.isForceOfflineMode || netStatus == NotReachable || (netStatus == ReachableViaWWAN && settingsS.isDisableUsageOver3G))
+    if (settingsS.isForceOfflineMode || !self.networkStatus.isReachable || (!self.networkStatus.isReachableWifi && settingsS.isDisableUsageOver3G))
     {
         settingsS.isOfflineMode = YES;
     }
@@ -741,8 +737,9 @@
 
 - (void)enterOnlineModeForce
 {
-	if ([self.wifiReach currentReachabilityStatus] == NotReachable)
-		return;
+    if (!self.networkStatus.isReachable) {
+        return;
+    }
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOnlineMode];
 		
@@ -775,75 +772,58 @@
 	[[PlayQueue sharedInstance] updateLockScreenInfo];
 }
 
-- (void)reachabilityChangedInternal:(EX2Reachability *)curReach
-{	
-	if ([curReach currentReachabilityStatus] == NotReachable)
-	{
-		//Change over to offline mode
-		if (!settingsS.isOfflineMode)
-		{
+- (void)reachabilityChanged
+{
+	if (settingsS.isForceOfflineMode)
+		return;
+	
+    if (!self.networkStatus.isReachable)
+    {
+        //Change over to offline mode
+        if (!settingsS.isOfflineMode)
+        {
             //DDLogVerbose(@"Reachability changed to NotReachable, prompting to go to offline mode");
-			[self enterOfflineMode];
-		}
-	}
-    else if ([curReach currentReachabilityStatus] == ReachableViaWWAN && settingsS.isDisableUsageOver3G)
+            [self enterOfflineMode];
+        }
+    }
+    else if (!self.networkStatus.isReachableWifi && settingsS.isDisableUsageOver3G)
     {
         if (!settingsS.isOfflineMode)
-		{            
-			[self enterOfflineModeForce];
+        {
+            [self enterOfflineModeForce];
             
-            [[EX2SlidingNotification slidingNotificationOnMainWindowWithMessage:@"You have chosen to disable usage over cellular in settings and are no longer on Wifi. Entering offline mode." image:nil] showAndHideSlidingNotification];
-		}
+            // TODO: Use a different mechanism
+            //[[EX2SlidingNotification slidingNotificationOnMainWindowWithMessage:@"You have chosen to disable usage over cellular in settings and are no longer on Wifi. Entering offline mode." image:nil] showAndHideSlidingNotification];
+        }
     }
-	else
-	{
-		[self checkServer];
-		
-		if (settingsS.isOfflineMode)
-		{
-			[self enterOnlineMode];
-		}
-		else
-		{
-            if ([curReach currentReachabilityStatus] == ReachableViaWiFi || settingsS.isManualCachingOnWWANEnabled)
+    else
+    {
+        [self checkServer];
+        
+        if (settingsS.isOfflineMode)
+        {
+            [self enterOnlineMode];
+        }
+        else
+        {
+            if (self.networkStatus.isReachableWifi || settingsS.isManualCachingOnWWANEnabled)
             {
                 if (!cacheQueueManagerS.isQueueDownloading)
                 {
                     [cacheQueueManagerS startDownloadQueue];
                 }
             }
-			else
+            else
             {
                 [cacheQueueManagerS stopDownloadQueue];
             }
-		}
-	}
-}
-
-
-- (void)reachabilityChanged: (NSNotification *)note
-{
-	if (settingsS.isForceOfflineMode)
-		return;
-	
-	if ([note.object isKindOfClass:[EX2Reachability class]])
-	{
-		// Cancel any previous requests
-		[EX2Dispatch cancelTimerBlockWithName:@"Reachability Changed"];
-		
-		// Perform the actual check in two seconds to make sure it's the last message received
-		// this prevents a bug where the status changes from wifi to not reachable, but first it receives
-		// some messages saying it's still on wifi, then gets the not reachable messages
-		[EX2Dispatch timerInMainQueueAfterDelay:6.0 withName:@"Reachability Changed" repeats:NO performBlock:
-		 ^{
-			 [self reachabilityChangedInternal:note.object];
-		 }];
-	}
+        }
+    }
 }
 
 - (BOOL)isWifi
 {
-	if ([self.wifiReach currentReachabilityStatus] == ReachableViaWiFi)
+	if (self.networkStatus.isReachableWifi)
 		return YES;
 	else
 		return NO;

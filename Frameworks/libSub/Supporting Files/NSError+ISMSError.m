@@ -7,7 +7,7 @@
 //
 
 #import "NSError+ISMSError.h"
-#import "LibSub.h"
+#import "Imports.h"
 
 @implementation NSError (ISMSError)
 

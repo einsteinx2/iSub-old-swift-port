@@ -7,7 +7,6 @@
 //
 
 #import "NSMutableURLRequest+PMS.h"
-#import "LibSub.h"
 #import "iSub-Swift.h"
 
 @implementation NSMutableURLRequest (PMS)

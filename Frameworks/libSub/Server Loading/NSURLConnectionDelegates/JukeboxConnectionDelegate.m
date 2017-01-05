@@ -7,8 +7,8 @@
 //
 
 #import "JukeboxConnectionDelegate.h"
-#import "LibSub.h"
 #import "JukeboxXMLParser.h"
+#import "libSubImports.h"
 
 @implementation JukeboxConnectionDelegate
 

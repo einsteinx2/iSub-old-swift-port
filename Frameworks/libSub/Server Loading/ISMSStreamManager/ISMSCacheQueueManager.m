@@ -7,7 +7,6 @@
 //
 
 #import "ISMSCacheQueueManager.h"
-#import "LibSub.h"
 #import "iSub-Swift.h"
 #import "ISMSLoader.h"
 #import "DatabaseSingleton.h"
@@ -52,7 +51,7 @@ LOG_LEVEL_ISUB_DEBUG
 	// Check if there's another queued song and that were are on Wifi
 	self.currentQueuedSong = self.currentQueuedSongInDb;
 #ifdef IOS
-	if (!self.currentQueuedSong || (![LibSub isWifi] && !settingsS.isManualCachingOnWWANEnabled) || settingsS.isOfflineMode)
+	if (!self.currentQueuedSong || (![appDelegateS isWifi] && !settingsS.isManualCachingOnWWANEnabled) || settingsS.isOfflineMode)
 #else
     if (!self.currentQueuedSong || settingsS.isOfflineMode)
 #endif
@@ -206,7 +205,8 @@ LOG_LEVEL_ISUB_DEBUG
 	else
 	{
 #ifdef IOS
-		[[EX2SlidingNotification slidingNotificationOnTopViewWithMessage:NSLocalizedString(@"Song failed to download", @"Download manager, download failed message") image:nil] showAndHideSlidingNotification];
+        // TODO: Use a different mechanism
+		//[[EX2SlidingNotification slidingNotificationOnTopViewWithMessage:NSLocalizedString(@"Song failed to download", @"Download manager, download failed message") image:nil] showAndHideSlidingNotification];
 #endif
 		
 		// Tried max number of times so remove

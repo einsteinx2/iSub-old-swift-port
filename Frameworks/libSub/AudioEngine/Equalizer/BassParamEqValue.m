@@ -7,7 +7,6 @@
 //
 
 #import "BassParamEqValue.h"
-#import "LibSub.h"
 
 @implementation BassParamEqValue
 

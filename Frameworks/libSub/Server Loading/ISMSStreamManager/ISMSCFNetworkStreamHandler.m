@@ -7,7 +7,6 @@
 //
 
 #import "ISMSCFNetworkStreamHandler.h"
-#import "LibSub.h"
 #import "iSub-Swift.h"
 #import "BassGaplessPlayer.h"
 #import "NSMutableURLRequest+SUS.h"
@@ -444,7 +443,7 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
                         NSTimeInterval delay = 0.0;
                         
 #ifdef IOS
-                        BOOL isWifi = [LibSub isWifi] || self.delegate == cacheQueueManagerS;
+                        BOOL isWifi = [appDelegateS isWifi] || self.delegate == cacheQueueManagerS;
 #else
                         BOOL isWifi = YES;
 #endif

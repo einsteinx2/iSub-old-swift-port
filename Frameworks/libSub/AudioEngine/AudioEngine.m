@@ -7,7 +7,6 @@
 //
 
 #import "AudioEngine.h"
-#import "LibSub.h"
 #import "iSub-Swift.h"
 #import "BassParamEqValue.h"
 #import <AudioToolbox/AudioToolbox.h>

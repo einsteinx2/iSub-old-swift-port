@@ -7,7 +7,7 @@
 //
 
 #import "BassVisualizer.h"
-#import "LibSub.h"
+#import "EX2Macros.h"
 
 @interface BassVisualizer()
 {

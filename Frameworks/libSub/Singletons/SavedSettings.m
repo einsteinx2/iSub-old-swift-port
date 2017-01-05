@@ -7,7 +7,6 @@
 //
 
 #import "SavedSettings.h"
-#import "LibSub.h"
 #import "iSub-Swift.h"
 #import "BassGaplessPlayer.h"
 
@@ -691,7 +690,7 @@
 	@synchronized(self)
 	{
 #ifdef IOS
-		switch ([LibSub isWifi] ? self.maxBitrateWifi : self.maxBitrate3G)
+		switch ([appDelegateS isWifi] ? self.maxBitrateWifi : self.maxBitrate3G)
 #else
         switch (self.maxBitrateWifi)
 #endif
@@ -747,7 +746,7 @@
     @synchronized(self)
 	{
 #ifdef IOS
-		switch ([LibSub isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
+		switch ([appDelegateS isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
 #else
         switch (self.maxVideoBitrateWifi)
 #endif
@@ -768,7 +767,7 @@
 	@synchronized(self)
 	{
 #ifdef IOS
-		switch ([LibSub isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
+		switch ([appDelegateS isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
 #else
         switch (self.maxVideoBitrateWifi)
 #endif		
@@ -873,7 +872,7 @@
 		[_userDefaults synchronize];
         
 #ifdef IOS
-        if (![LibSub isWifi])
+        if (![appDelegateS isWifi])
 #else
         if (YES)
 #endif

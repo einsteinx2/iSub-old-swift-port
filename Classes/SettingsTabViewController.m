@@ -508,12 +508,12 @@
         {
             settingsS.isDisableUsageOver3G = self.disableCellUsageSwitch.on;
             
-            if (!settingsS.isOfflineMode && settingsS.isDisableUsageOver3G && ![LibSub isWifi])
+            if (!settingsS.isOfflineMode && settingsS.isDisableUsageOver3G && ![appDelegateS isWifi])
             {
                 // We're on 3G and we just disabled use on 3G, so go offline
                 [appDelegateS enterOfflineModeForce];
             }
-            else if (settingsS.isOfflineMode && !settingsS.isDisableUsageOver3G && ![LibSub isWifi])
+            else if (settingsS.isOfflineMode && !settingsS.isDisableUsageOver3G && ![appDelegateS isWifi])
             {
                 // We're on 3G and we just enabled use on 3G, so go online if we're offline
                 [appDelegateS enterOfflineModeForce];

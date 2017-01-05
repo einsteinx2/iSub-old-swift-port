@@ -7,7 +7,6 @@
 //
 
 #import "ISMSSong.h"
-#import "LibSub.h"
 #import "iSub-Swift.h"
 #import "ISMSFolder.h"
 #import "ISMSArtist.h"
@@ -559,7 +558,7 @@
 - (NSString *)localPath
 {
     NSString *fileName = self.path.md5;
-    return fileName ? [[SavedSettings songCachePath] stringByAppendingPathComponent:fileName] : nil;
+    return self.path ? [[SavedSettings songCachePath] stringByAppendingPathComponent:self.path] : nil;
 }
 
 - (NSString *)localTempPath
@@ -589,7 +588,7 @@
     // Asked question here: http://stackoverflow.com/questions/10289536/sigsegv-segv-accerr-crash-in-nsfileattributes-dealloc-when-autoreleasepool-is-dr
     // Still waiting for an answer on what the crash could be, so this is my temporary "solution"
     struct stat st;
-    stat(self.currentPath.cStringUTF8, &st);
+    stat([self.currentPath cStringUsingEncoding:NSUTF8StringEncoding], &st);
     return st.st_size;
     
     //return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.currentPath error:NULL] fileSize];

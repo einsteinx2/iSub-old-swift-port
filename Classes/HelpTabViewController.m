@@ -8,6 +8,7 @@
 
 #import "HelpTabViewController.h"
 #import "Imports.h"
+#import "iSub-Swift.h"
 
 @implementation HelpTabViewController
 
@@ -26,7 +27,7 @@
 {
     [super viewDidLoad];
 		
-	if ([appDelegateS.wifiReach currentReachabilityStatus] == NotReachable)
+	if (!appDelegateS.networkStatus.isReachable)
 	{		
 		NSString* embedHTML = @"\
 		<html><head>\

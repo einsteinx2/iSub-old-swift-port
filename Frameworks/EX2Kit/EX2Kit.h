@@ -1,29 +1,31 @@
 //
 //  EX2Kit.h
-//  EX2Kit
+//  iSub
 //
-//  Created by Ben Baron on 6/14/12.
-//  Copyright (c) 2012 Ben Baron. All rights reserved.
+//  Created by Benjamin Baron on 1/4/17.
+//  Copyright © 2017 Ben Baron. All rights reserved.
 //
-
-#ifndef EX2Kit_EX2Kit_h
-#define EX2Kit_EX2Kit_h
 
 #import "EX2Macros.h"
-#import "EX2Categories.h"
-#import "EX2Static.h"
-#import "EX2Components.h"
 
-#ifdef IOS
-#import "EX2UIComponents.h"
-#endif
+#import "UIView+Tools.h"
+#import "NSNotificationCenter+MainThread.h"
+#import "NSString+time.h"
+#import "NSString+CompareWithoutIndefiniteArticles.h"
+#import "NSArray+Safe.h"
+#import "NSMutableArray+Safe.h"
+#import "NSURL+SkipBackupAttribute.h"
+#import "NSURL+QueryParameterDictionary.h"
+#import "NSObject+UserInfo.h"
+#import "NSString+FileSize.h"
+#import "NSString+URLEncode.h"
+#import "NSString+Clean.h"
+#import "NSString+MD5.h"
+#import "NSString+HasValue.h"
+#import "GTMDefines.h"
+#import "GTMNSString+HTML.h"
 
-#import "CocoaLumberjack.h"
-
-@interface EX2Kit : NSObject
-
-+ (NSBundle *)resourceBundle;
-
-@end
-
-#endif
+#import "EX2Dispatch.h"
+#import "EX2NetworkIndicator.h"
+#import "EX2RingBuffer.h"
+#import "EX2SimpleConnectionQueue.h"

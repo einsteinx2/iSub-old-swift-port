@@ -7,7 +7,7 @@
 //
 
 #import "ISMSContentType.h"
-#import "LibSub.h"
+#import "Imports.h"
 
 @implementation ISMSContentType
 

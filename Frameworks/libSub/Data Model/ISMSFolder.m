@@ -7,7 +7,7 @@
 //
 
 #import "ISMSFolder.h"
-#import "LibSub.h"
+#import "Imports.h"
 
 static NSArray *_ignoredArticles = nil;
 

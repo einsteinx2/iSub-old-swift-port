@@ -7,9 +7,9 @@
 //
 
 #import "BassEffectDAO.h"
-#import "LibSub.h"
 #import "BassEffectValue.h"
 #import "BassParamEqValue.h"
+#import "Imports.h"
 
 @implementation BassEffectDAO
 

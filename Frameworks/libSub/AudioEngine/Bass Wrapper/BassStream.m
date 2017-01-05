@@ -7,7 +7,6 @@
 //
 
 #import "BassStream.h"
-#import "LibSub.h"
 #import "ISMSSong.h"
 
 @implementation BassStream

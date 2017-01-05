@@ -7,8 +7,8 @@
 //
 
 #import "NSMutableURLRequest+SUS.h"
-#import "LibSub.h"
 #import "iSub-Swift.h"
+#import "Imports.h"
 
 @implementation NSMutableURLRequest (SUS)
 

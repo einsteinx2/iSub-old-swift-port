@@ -11,9 +11,9 @@
 
 #define ISMSJukeboxTimeout 60.0
 
-#define ISMSHeaderColor [UIColor colorWithRedInt:200 greenInt:200 blueInt:206 alpha:1]
-#define ISMSHeaderTextColor [UIColor colorWithRedInt:77 greenInt:77 blueInt:77 alpha:1]
-#define ISMSHeaderButtonColor [UIColor colorWithRedInt:0 greenInt:122 blueInt:255 alpha:1]
+#define ISMSHeaderColor [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:206.0/255.0 alpha:1]
+#define ISMSHeaderTextColor [UIColor colorWithRed:77.0/255.0 green:77.0/255.0 blue:77.0/255.0 alpha:1]
+#define ISMSHeaderButtonColor [UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1]
 
 #define ISMSRegularFont(value) [UIFont fontWithName:@"HelveticaNeue" size:value]
 #define ISMSBoldFont(value) [UIFont fontWithName:@"HelveticaNeue-Bold" size:value]
@@ -22,7 +22,7 @@
 #define ISMSAlbumFont ISMSRegularFont(16)
 #define ISMSSongFont ISMSRegularFont(16)
 
-#define ISMSiPadBackgroundColor [UIColor colorWithRedInt:200 greenInt:200 blueInt:206 alpha:1]
+#define ISMSiPadBackgroundColor [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:206.0/255.0 alpha:1]
 #define ISMSiPadCornerRadius 5.
 
 #define ISMSBaseWidth 320.0

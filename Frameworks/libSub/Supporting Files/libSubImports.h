@@ -12,11 +12,11 @@
 #import "libSubDefines.h"
 
 // Frameworks
+#import "EX2Kit.h"
 #import "ZipKit.h"
 #import "CocoaLumberjack.h"
 #import "FMDatabaseQueueAdditions.h"
 #import "FMDatabasePoolAdditions.h"
-#import "EX2Kit.h"
 
 // Singletons
 #import "AudioEngine.h"
@@ -44,7 +44,6 @@
 #import "DDDispatchQueueLogFormatter.h"
 #import "DDLog+LOGV.h"
 #import "DDMultiFormatter.h"
-#import "GTMDefines.h"
 #import "HLSProxyResponse.h"
 #import "ISMSCFNetworkStreamHandler.h"
 #import "ISMSLoader_Subclassing.h"
