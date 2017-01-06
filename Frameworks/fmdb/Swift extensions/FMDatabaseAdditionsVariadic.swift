@@ -51,6 +51,10 @@ extension FMDatabase {
     ///
     /// - returns:       This returns integer value if value is found. Returns nil if column is NULL or upon error.
     
+    func intOptionalForQuery(_ sql: String, _ values: Any...) -> Int32? {
+        return valueForQuery(sql, values: values) { $0.int(forColumnIndex: 0) }
+    }
+    
     func intForQuery(_ sql: String, _ values: Any...) -> Int32 {
         return valueForQuery(sql, values: values) { $0.int(forColumnIndex: 0) } ?? 0
     }
@@ -62,6 +66,10 @@ extension FMDatabase {
     /// - parameter values:             The values to be bound to the ? placeholders
     ///
     /// - returns:                      This returns long value if value is found. Returns nil if column is NULL or upon error.
+    
+    func longOptionalForQuery(_ sql: String, _ values: Any...) -> Int? {
+        return valueForQuery(sql, values: values) { $0.long(forColumnIndex: 0) }
+    }
     
     func longForQuery(_ sql: String, _ values: Any...) -> Int {
         return valueForQuery(sql, values: values) { $0.long(forColumnIndex: 0) } ?? 0
@@ -75,6 +83,10 @@ extension FMDatabase {
     ///
     /// - returns:                      This returns Bool value if value is found. Returns nil if column is NULL or upon error.
     
+    func boolOptionalForQuery(_ sql: String, _ values: Any...) -> Bool? {
+        return valueForQuery(sql, values: values) { $0.bool(forColumnIndex: 0) }
+    }
+    
     func boolForQuery(_ sql: String, _ values: Any...) -> Bool {
         return valueForQuery(sql, values: values) { $0.bool(forColumnIndex: 0) } ?? false
     }
@@ -86,6 +98,10 @@ extension FMDatabase {
     /// - parameter values:             The values to be bound to the ? placeholders
     ///
     /// - returns:                      This returns Double value if value is found. Returns nil if column is NULL or upon error.
+    
+    func doubleOptionalForQuery(_ sql: String, _ values: Any...) -> Double? {
+        return valueForQuery(sql, values: values) { $0.double(forColumnIndex: 0) }
+    }
     
     func doubleForQuery(_ sql: String, _ values: Any...) -> Double {
         return valueForQuery(sql, values: values) { $0.double(forColumnIndex: 0) } ?? 0.0

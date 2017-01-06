@@ -39,13 +39,16 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         // SELECT COUNT(*) is O(n) while selecting the max rowId is O(1)
         // Since songIndex is our primary key field, it's an alias
         // for rowId. So SELECT MAX instead of SELECT COUNT here.
-        var maxId: Int? = nil
+        var maxId: Int?
         DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
             let query = "SELECT MAX(songIndex) FROM \(self.tableName)"
-            maxId = db.longForQuery(query)
+            maxId = db.longOptionalForQuery(query)
         }
         
-        return maxId == nil ? 0 : maxId! + 1
+        if let maxId = maxId {
+            return maxId + 1
+        }
+        return 0
     }
     
     // Special Playlists
@@ -160,7 +163,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         var index: Int?
         DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
             let query = "SELECT songIndex FROM \(self.tableName) WHERE songId = ?"
-            index = db.longForQuery(query, songId)
+            index = db.longOptionalForQuery(query, songId)
         }
         return index
     }
@@ -169,7 +172,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         var songId: Int?
         DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
             let query = "SELECT songId FROM \(self.tableName) WHERE songIndex = ?"
-            songId = db.longForQuery(query, index)
+            songId = db.longOptionalForQuery(query, index)
         }
         
         if let songId = songId {
