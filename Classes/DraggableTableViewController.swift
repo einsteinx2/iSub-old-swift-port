@@ -85,7 +85,7 @@ class DraggableTableViewController: UITableViewController {
         return UIBarButtonItem(title: "Back",
                                style: .plain,
                                target: self,
-                               action: #selector(DraggableTableViewController.popViewController))
+                               action: #selector(popViewController))
     }
 
     func setupRightBarButton() -> UIBarButtonItem? {
@@ -93,7 +93,7 @@ class DraggableTableViewController: UITableViewController {
             return UIBarButtonItem(image: UIImage(named: "now-playing"),
                                    style: .plain,
                                    target: self,
-                                   action: #selector(DraggableTableViewController.showPlayQueue))
+                                   action: #selector(showPlayQueue))
         } else {
             return nil
         }

@@ -42,9 +42,12 @@ class SidePanelController: JASidePanelController {
         self.addObserver(self, forKeyPath: "state", options: .new, context: &kvoContext)
         
         // TODO: Look into custom side panel animations
-        //self.pushesSidePanels = true
+        self.pushesSidePanels = true
+        self.bounceOnSidePanelOpen = false
         
         self.panningLimitedToTopViewController = false
+        self.panningRightLimitedToTopViewController = false
+        self.panningLeftLimitedToTopViewController = true
         
         self.shouldResizeLeftPanel = true
         self.shouldResizeRightPanel = true

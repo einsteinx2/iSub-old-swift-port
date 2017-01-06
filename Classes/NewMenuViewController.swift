@@ -60,9 +60,10 @@ class NewMenuViewController: UITableViewController {
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
             let viewController = ItemViewController(viewModel: viewModel)
-            let navController = UINavigationController(rootViewController: viewController)
+            let navController = NavigationStack(rootViewController: viewController)
             navController.navigationBar.barStyle = .black
             navController.navigationBar.fixedHeightWhenStatusBarHidden = true
+            navController.interactivePopGestureRecognizer?.delegate = viewController
             menuItem.navController = navController
         }
         
@@ -75,9 +76,10 @@ class NewMenuViewController: UITableViewController {
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
             let viewController = ItemViewController(viewModel: viewModel)
-            let navController = UINavigationController(rootViewController: viewController)
+            let navController = NavigationStack(rootViewController: viewController)
             navController.navigationBar.barStyle = .black
             navController.navigationBar.fixedHeightWhenStatusBarHidden = true
+            navController.interactivePopGestureRecognizer?.delegate = viewController
             menuItem.navController = navController
         }
         
@@ -90,9 +92,10 @@ class NewMenuViewController: UITableViewController {
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
             let viewController = ItemViewController(viewModel: viewModel)
-            let navController = UINavigationController(rootViewController: viewController)
+            let navController = NavigationStack(rootViewController: viewController)
             navController.navigationBar.barStyle = .black
             navController.navigationBar.fixedHeightWhenStatusBarHidden = true
+            navController.interactivePopGestureRecognizer?.delegate = viewController
             menuItem.navController = navController
         }
         
@@ -102,9 +105,10 @@ class NewMenuViewController: UITableViewController {
     fileprivate func showSettings(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
             let viewController = ServerListViewController()
-            let navController = UINavigationController(rootViewController: viewController)
+            let navController = NavigationStack(rootViewController: viewController)
             navController.navigationBar.barStyle = .black
             navController.navigationBar.fixedHeightWhenStatusBarHidden = true
+            navController.interactivePopGestureRecognizer?.delegate = viewController
             menuItem.navController = navController
         }
         
@@ -146,5 +150,31 @@ class NewMenuViewController: UITableViewController {
         Async.main(after: 0.2) {
             self.sidePanelController.showCenterPanel(animated: true)
         }
+    }
+}
+
+
+// MARK: - Navigation Stack -
+fileprivate func sharedGestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer, self: UIViewController) -> Bool {
+    if self.navigationController?.viewControllers.count == 2 {
+        return true
+    }
+    
+    if let navigationController = self.navigationController as? NavigationStack {
+        navigationController.showControllers()
+    }
+    
+    return false
+}
+
+extension ItemViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return sharedGestureRecognizerShouldBegin(gestureRecognizer, self: self)
+    }
+}
+
+extension ServerListViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return sharedGestureRecognizerShouldBegin(gestureRecognizer, self: self)
     }
 }

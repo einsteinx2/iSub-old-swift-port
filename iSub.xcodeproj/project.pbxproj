@@ -395,6 +395,15 @@
 		533A2D84113C963300B3A376 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
 		533A2D85113C963300B3A376 /* controller-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D81113C963300B3A376 /* controller-play.png */; };
 		533A2D86113C963300B3A376 /* controller-previous.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D82113C963300B3A376 /* controller-previous.png */; };
+		533B69C71E20544F001FF3BF /* NavigationStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 533B69C61E20544F001FF3BF /* NavigationStack.framework */; };
+		533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
+		533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
+		533B69D61E206031001FF3BF /* CollectionStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D01E206031001FF3BF /* CollectionStackViewController.swift */; };
+		533B69D71E206031001FF3BF /* CollectionStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D01E206031001FF3BF /* CollectionStackViewController.swift */; };
+		533B69D81E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */; };
+		533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */; };
+		533B69DA1E206031001FF3BF /* NavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D31E206031001FF3BF /* NavigationStack.swift */; };
+		533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D31E206031001FF3BF /* NavigationStack.swift */; };
 		533C5ED11E0B8DFC00802FB1 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED01E0B8DFC00802FB1 /* String.swift */; };
 		533C5ED31E0B8DFC00802FB1 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED01E0B8DFC00802FB1 /* String.swift */; };
 		533C5ED41E0B8DFC00802FB1 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533C5ED01E0B8DFC00802FB1 /* String.swift */; };
@@ -1463,6 +1472,11 @@
 		533A2D80113C963300B3A376 /* controller-pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause.png"; path = "Images/Player Icons/controller-pause.png"; sourceTree = "<group>"; };
 		533A2D81113C963300B3A376 /* controller-play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play.png"; path = "Images/Player Icons/controller-play.png"; sourceTree = "<group>"; };
 		533A2D82113C963300B3A376 /* controller-previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-previous.png"; path = "Images/Player Icons/controller-previous.png"; sourceTree = "<group>"; };
+		533B69C61E20544F001FF3BF /* NavigationStack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NavigationStack.framework; path = Carthage/Build/iOS/NavigationStack.framework; sourceTree = "<group>"; };
+		533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackCell.swift; sourceTree = "<group>"; };
+		533B69D01E206031001FF3BF /* CollectionStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionStackViewController.swift; sourceTree = "<group>"; };
+		533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackFlowLayout.swift; sourceTree = "<group>"; };
+		533B69D31E206031001FF3BF /* NavigationStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationStack.swift; sourceTree = "<group>"; };
 		533C5ED01E0B8DFC00802FB1 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = String.swift; path = Frameworks/libSub/Extensions/String.swift; sourceTree = "<group>"; };
 		533C65AB15ABB9BD003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IntroViewController.xib; sourceTree = "<group>"; };
 		533C65C015ABB9CC003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SubsonicServerEditViewController.xib; sourceTree = "<group>"; };
@@ -2022,6 +2036,7 @@
 				536D620B1144495400DFCE56 /* SystemConfiguration.framework in Frameworks */,
 				53544D8A1187DED400B63DB9 /* CoreLocation.framework in Frameworks */,
 				5354914B11B03FC900928E0F /* MobileCoreServices.framework in Frameworks */,
+				533B69C71E20544F001FF3BF /* NavigationStack.framework in Frameworks */,
 				5358E19F1E0B789B0024A0D4 /* libbass_mpc.a in Frameworks */,
 				53D59A6E1E1DC9CE00071ABD /* Reachability.framework in Frameworks */,
 				5358E1951E0B789B0024A0D4 /* libbass_ape.a in Frameworks */,
@@ -2245,6 +2260,7 @@
 				5358DBD41E0B780E0024A0D4 /* JASidePanels */,
 				53D59A241E1DC33700071ABD /* EX2Kit */,
 				53CE503C1E20194100E5DC68 /* BCCKeychain */,
+				533B69CC1E206031001FF3BF /* NavigationStack */,
 				5311C3311A3510F800054941 /* QuickLook.framework */,
 				5311C32E1A3510A500054941 /* AssetsLibrary.framework */,
 				538725F117CC19B200CE92F1 /* CoreTelephony.framework */,
@@ -2345,6 +2361,42 @@
 				53ABE1481C60376B00E0E72B /* ItemTableViewCell.swift */,
 			);
 			name = Specific;
+			sourceTree = "<group>";
+		};
+		533B69CC1E206031001FF3BF /* NavigationStack */ = {
+			isa = PBXGroup;
+			children = (
+				533B69CD1E206031001FF3BF /* CollectionView */,
+				533B69D31E206031001FF3BF /* NavigationStack.swift */,
+			);
+			name = NavigationStack;
+			path = Frameworks/NavigationStack;
+			sourceTree = "<group>";
+		};
+		533B69CD1E206031001FF3BF /* CollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				533B69CE1E206031001FF3BF /* Cell */,
+				533B69D01E206031001FF3BF /* CollectionStackViewController.swift */,
+				533B69D11E206031001FF3BF /* FlowLayout */,
+			);
+			path = CollectionView;
+			sourceTree = "<group>";
+		};
+		533B69CE1E206031001FF3BF /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		533B69D11E206031001FF3BF /* FlowLayout */ = {
+			isa = PBXGroup;
+			children = (
+				533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */,
+			);
+			path = FlowLayout;
 			sourceTree = "<group>";
 		};
 		533C5ECF1E0B8DD100802FB1 /* Extensions */ = {
@@ -2660,6 +2712,7 @@
 		5358E1CC1E0B78F80024A0D4 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
+				533B69C61E20544F001FF3BF /* NavigationStack.framework */,
 				53835D681E0B81B80077B53D /* Async.framework */,
 				5358E1CD1E0B79210024A0D4 /* HockeySDK.framework */,
 				5358E1CE1E0B79210024A0D4 /* MBProgressHUD.framework */,
@@ -4091,6 +4144,7 @@
 				532300181CEE73F700B8C651 /* DroppableCell.swift in Sources */,
 				5358DCE91E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
+				533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
 				53D59A401E1DC3BA00071ABD /* UIView+Tools.m in Sources */,
 				538B4D001E1D77AC00847152 /* FolderLoader.swift in Sources */,
@@ -4106,6 +4160,7 @@
 				53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */,
 				5358DD7A1E0B78480024A0D4 /* CacheSingleton.m in Sources */,
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
+				533B69D81E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */,
 				5358DCFD1E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
@@ -4127,6 +4182,7 @@
 				538A1CD91D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				53E7BC131D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
+				533B69D61E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				5358DD891E0B78480024A0D4 /* PlayQueue.swift in Sources */,
 				534FC5021CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				5324C6C613345D75004E6C79 /* OBSlider.m in Sources */,
@@ -4221,6 +4277,7 @@
 				5358DCF81E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
 				5358DD071E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */,
+				533B69DA1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				5358DDAC1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
@@ -4450,6 +4507,7 @@
 				5323001A1CEE750B00B8C651 /* DroppableCell.swift in Sources */,
 				5358DCEB1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
+				533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
 				53D59A421E1DC3BA00071ABD /* UIView+Tools.m in Sources */,
 				538B4D021E1D77AC00847152 /* FolderLoader.swift in Sources */,
@@ -4465,6 +4523,7 @@
 				53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */,
 				5358DD7C1E0B78480024A0D4 /* CacheSingleton.m in Sources */,
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
+				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				53BC27D6139AF0DD00A825F1 /* UAApplication.m in Sources */,
 				5358DCFF1E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */,
@@ -4486,6 +4545,7 @@
 				538A1CDB1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				53E7BC151D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
+				533B69D71E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				5358DD8B1E0B78480024A0D4 /* PlayQueue.swift in Sources */,
 				534FC5041CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */,
@@ -4580,6 +4640,7 @@
 				5358DCFA1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
 				5358DD091E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */,
+				533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				5358DDAE1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,

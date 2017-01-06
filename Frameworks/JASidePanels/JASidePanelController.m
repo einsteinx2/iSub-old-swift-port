@@ -64,6 +64,8 @@ static char ja_kvoContext;
 @synthesize bounceDuration = _bounceDuration;
 @synthesize bouncePercentage = _bouncePercentage;
 @synthesize panningLimitedToTopViewController = _panningLimitedToTopViewController;
+@synthesize panningLeftLimitedToTopViewController = _panningLeftLimitedToTopViewController;
+@synthesize panningRightLimitedToTopViewController = _panningRightLimitedToTopViewController;
 @synthesize recognizesPanGesture = _recognizesPanGesture;
 @synthesize canUnloadRightPanel = _canUnloadRightPanel;
 @synthesize canUnloadLeftPanel = _canUnloadLeftPanel;
@@ -139,6 +141,8 @@ static char ja_kvoContext;
     self.bounceDuration = 0.1f;
     self.bouncePercentage = 0.075f;
     self.panningLimitedToTopViewController = YES;
+    self.panningLeftLimitedToTopViewController = YES;
+    self.panningRightLimitedToTopViewController = YES;
     self.recognizesPanGesture = YES;
     self.allowLeftOverpan = YES;
     self.allowRightOverpan = YES;
@@ -456,11 +460,11 @@ static char ja_kvoContext;
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
         CGPoint translate = [pan translationInView:self.centerPanelContainer];
         // determine if right swipe is allowed
-        if (translate.x < 0 && ! self.allowRightSwipe) {
+        if (translate.x < 0 && (!self.allowRightSwipe || (self.panningRightLimitedToTopViewController && ![self _isOnTopLevelViewController:self.centerPanel]))) {
             return NO;
         }
         // determine if left swipe is allowed
-        if (translate.x > 0 && ! self.allowLeftSwipe) {
+        if (translate.x > 0 && (!self.allowLeftSwipe || (self.panningLeftLimitedToTopViewController && ![self _isOnTopLevelViewController:self.centerPanel]))) {
             return NO;
         }
         BOOL possible = translate.x != 0 && ((fabs(translate.y) / fabs(translate.x)) < 1.0f);
@@ -643,6 +647,14 @@ static char ja_kvoContext;
 }
 
 - (BOOL)_isOnTopLevelViewController:(UIViewController *)root {
+    // Check if the root controller has a navigation controller as a child controller
+    for (UIViewController *child in root.childViewControllers) {
+        if ([child isKindOfClass:[UINavigationController class]]) {
+            root = child;
+            break;
+        }
+    }
+    
     if ([root isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav = (UINavigationController *)root;
         return [nav.viewControllers count] == 1;
@@ -650,6 +662,7 @@ static char ja_kvoContext;
         UITabBarController *tab = (UITabBarController *)root;
         return [self _isOnTopLevelViewController:tab.selectedViewController];
     }
+    
     return root != nil;
 }
 

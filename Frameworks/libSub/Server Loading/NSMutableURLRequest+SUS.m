@@ -129,7 +129,7 @@
     // Turn off request caching
     [request setValue:@"no-cache" forHTTPHeaderField:@"Cache-Control"];
 	
-	DLog(@"request: %@", request);
+	//DLog(@"request: %@", request);
     
     return request;
 }
