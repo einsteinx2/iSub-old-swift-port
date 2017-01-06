@@ -13,7 +13,7 @@ class CenterPanelContainerViewController: UIViewController {
     
     fileprivate let contentView = UIView()
     fileprivate let miniPlayer = MiniPlayerViewController()
-    fileprivate var miniPlayerShowing = true
+    fileprivate var miniPlayerShowing = false
     
     var contentController: UIViewController? {
         willSet {
@@ -32,14 +32,14 @@ class CenterPanelContainerViewController: UIViewController {
     override func loadView() {
         self.view = UIView()
         
-        let hideMiniPlayer = (PlayQueue.sharedInstance.currentSong == nil)
+        miniPlayerShowing = (PlayQueue.sharedInstance.currentSong != nil)
         
         self.view.addSubview(contentView)
         contentView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.top.equalToSuperview()
-            make.bottom.equalToSuperview().offset(hideMiniPlayer ? 0 : -50)
+            make.height.equalToSuperview().offset(miniPlayerShowing ? -50 : 0)
         }
         
         self.view.addSubview(miniPlayer.view)
@@ -47,7 +47,7 @@ class CenterPanelContainerViewController: UIViewController {
             make.height.equalTo(50)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.bottom.equalToSuperview().offset(hideMiniPlayer ? 50 : 0)
+            make.bottom.equalToSuperview().offset(miniPlayerShowing ? 0: 50)
         }
     }
     
@@ -81,10 +81,10 @@ class CenterPanelContainerViewController: UIViewController {
                 self.addChildViewController(newController)
                 contentView.addSubview(newController.view)
                 newController.view.snp.makeConstraints { make in
-                    make.width.equalTo(contentView)
-                    make.height.equalTo(contentView)
-                    make.leading.equalTo(contentView)
-                    make.trailing.equalTo(contentView)
+                    make.top.equalTo(contentView)
+                    make.bottom.equalTo(contentView)
+                    make.left.equalTo(contentView)
+                    make.right.equalTo(contentView)
                 }
                 newController.didMove(toParentViewController: self)
             }
@@ -106,20 +106,20 @@ class CenterPanelContainerViewController: UIViewController {
     }
     
     fileprivate func updateConstraintOffsets(contentViewOffset: Float, miniPlayerOffset: Float, animated: Bool) {
-        contentView.snp.updateConstraints { make in make.bottom.equalToSuperview().offset(contentViewOffset) }
-        contentView.setNeedsLayout()
+        contentView.snp.updateConstraints { make in
+            make.height.equalToSuperview().offset(contentViewOffset)
+        }
         
-        miniPlayer.view.snp.updateConstraints { make in make.bottom.equalToSuperview().offset(miniPlayerOffset) }
-        miniPlayer.view.setNeedsLayout()
-        
+        miniPlayer.view.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().offset(miniPlayerOffset)
+        }
+
         if animated {
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
-                self.contentView.layoutIfNeeded()
-                self.miniPlayer.view.layoutIfNeeded()
+                self.view.layoutIfNeeded()
             }, completion: nil)
         } else {
-            contentView.layoutIfNeeded()
-            miniPlayer.view.layoutIfNeeded()
+            self.view.layoutIfNeeded()
         }
     }
     
