@@ -44,6 +44,32 @@ class PlayQueueViewController: DraggableTableViewController {
         NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingCanceled, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        scrollCurrentSongToTop()
+    }
+    
+    fileprivate func scrollCurrentSongToTop() {
+        let currentIndex = self.viewModel.currentIndex
+        if currentIndex >= 0 {
+            let indexPath = IndexPath(row: self.viewModel.currentIndex, section: 0)
+            
+            //let rect = self.tableView.rectForRow(at: indexPath)
+            //let offset = CGPoint(x: 0, y: rect.origin.y - self.tableView.contentInset.top)
+            if visible {
+                EX2Dispatch.runInMainThread(afterDelay: 0.3) {
+                    //self.tableView.setContentOffset(offset, animated: true)
+                    
+                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                }
+            } else {
+                //self.tableView.setContentOffset(offset, animated: false)
+                self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+            }
+        }
+    }
+    
     // MARK - Drag and Drop -
     
     @objc fileprivate func draggingBegan(_ notification: Notification) {
@@ -223,16 +249,23 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
     func itemsChanged() {
         self.tableView.reloadData()
         
-        if viewModel.currentIndex > 0 && viewModel.currentIndex < viewModel.numberOfRows {
-            let indexPath = IndexPath(row: self.viewModel.currentIndex, section: 0)
-            if visible {
-                EX2Dispatch.runInMainThread(afterDelay: 0.3) {
-                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: self.visible)
-                }
-            } else {
-                self.tableView.scrollToRow(at: indexPath, at: .top, animated: self.visible)
-            }
-        }
+        scrollCurrentSongToTop()
+//        
+//        if viewModel.currentIndex > 0 && viewModel.currentIndex < viewModel.numberOfRows {
+//            let indexPath = IndexPath(row: self.viewModel.currentIndex, section: 0)
+//            let rect = self.tableView.rectForRow(at: indexPath)
+//            let offset = CGPoint(x: 0, y: rect.origin.y - self.tableView.contentInset.top)
+//            if visible {
+//                EX2Dispatch.runInMainThread(afterDelay: 0.3) {
+//                    self.tableView.setContentOffset(offset, animated: true)
+//                    
+//                    //self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+//                }
+//            } else {
+//                self.tableView.setContentOffset(offset, animated: false)
+//                //self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+//            }
+//        }
     }
 }
 

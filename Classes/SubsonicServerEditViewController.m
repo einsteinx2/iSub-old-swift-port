@@ -28,6 +28,11 @@
 
 @implementation SubsonicServerEditViewController
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 #pragma mark - Rotation
 
 - (BOOL)shouldAutorotate

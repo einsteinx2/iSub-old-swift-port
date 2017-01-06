@@ -14,9 +14,9 @@
 @implementation IntroViewController
 @synthesize introVideo, testServer, ownServer, sunkenLogo;
 
-- (BOOL)prefersStatusBarHidden
+- (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return YES;
+    return UIStatusBarStyleLightContent;
 }
 
 - (BOOL)shouldAutorotate

@@ -205,10 +205,8 @@ class ItemViewController: DraggableTableViewController {
             cell.associatedObject = folder
             cell.coverArtId = folder.coverArtId
             cell.title = folder.name
-            
-            break
         case artistsSectionIndex:
-            cell.accessoryType = UITableViewCellAccessoryType.none
+            cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             if sectionIndexes != nil {
                 cell.indexShowing = true
             }
@@ -217,10 +215,9 @@ class ItemViewController: DraggableTableViewController {
             cell.associatedObject = artist
             cell.coverArtId = nil
             cell.title = artist.name
-            
-            break
         case albumsSectionIndex:
-            cell.accessoryType = UITableViewCellAccessoryType.none
+            cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            cell.alwaysShowCoverArt = true
             if sectionIndexes != nil {
                 cell.indexShowing = true
             }
@@ -229,8 +226,6 @@ class ItemViewController: DraggableTableViewController {
             cell.associatedObject = album
             cell.coverArtId = album.coverArtId
             cell.title = album.name
-            
-            break
         case songsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.none
             
@@ -241,17 +236,7 @@ class ItemViewController: DraggableTableViewController {
             cell.title = song.title
             cell.subTitle = song.artistDisplayName
             cell.duration = song.duration
-            // TODO: Readd this with new data model
-            //cell.playing = song.isCurrentPlayingSong()
-            
-            if song.isFullyCached {
-                cell.backgroundView = UIView()
-                cell.backgroundView!.backgroundColor = ViewObjectsSingleton.sharedInstance().currentLightColor()
-            } else {
-                cell.backgroundView = UIView()
-            }
-
-            break
+            cell.playing = (song == PlayQueue.sharedInstance.currentDisplaySong)
         default:
             break
         }

@@ -59,7 +59,7 @@ import Nuke
     open var repeatMode = RepeatMode.normal
     open var shuffleMode = ShuffleMode.normal { didSet { /* TODO: Do something */ } }
     
-    open fileprivate(set) var currentIndex = 0 { didSet { updateLockScreenInfo(); notifyPlayQueueIndexChanged() } }
+    open fileprivate(set) var currentIndex = -1 { didSet { updateLockScreenInfo(); notifyPlayQueueIndexChanged() } }
     open var previousIndex: Int { return indexAtOffset(-1, fromIndex: currentIndex) }
     open var nextIndex: Int { return indexAtOffset(1, fromIndex: currentIndex) }
     open var currentDisplaySong: ISMSSong? { return currentSong ?? previousSong }

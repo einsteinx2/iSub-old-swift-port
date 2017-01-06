@@ -14,10 +14,12 @@ import UIKit
 private var kvoContext = 0
 
 class SidePanelController: JASidePanelController {
-        
-//    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-//        return .lightContent
-//    }
+    
+    // MARK: - Status Bar -
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     override var prefersStatusBarHidden: Bool {
         return hideStatusBar
@@ -25,13 +27,13 @@ class SidePanelController: JASidePanelController {
     
     fileprivate var hideStatusBar: Bool = false {
         didSet {
-            self.setNeedsStatusBarAppearanceUpdate()
+            UIView.animate(withDuration: 0.2) {
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
         }
     }
     
-    override func stylePanel(_ panel: UIView!) {
-        // Intentionally empty to prevent rounded corners on panels
-    }
+    // MARK: - Lifecycle -
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,19 +54,50 @@ class SidePanelController: JASidePanelController {
         self.rightPanel = PlayQueueViewController(viewModel: PlayQueueViewModel())
         menu.showDefaultViewController()
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(SidePanelController.draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(SidePanelController.draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(SidePanelController.draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(SidePanelController.draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
     }
     
     deinit {
         self.removeObserver(self, forKeyPath: "state", context: &kvoContext)
     }
     
+    // MARK: - Side Panels -
+    
+    override func stylePanel(_ panel: UIView!) {
+        // Intentionally empty to prevent rounded corners on panels
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let shouldBegin = super.gestureRecognizerShouldBegin(gestureRecognizer)
+        if shouldBegin {
+            hideStatusBar = true
+        }
+        return shouldBegin
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if context == &kvoContext {
+            switch state {
+            case JASidePanelCenterVisible:
+                hideStatusBar = false
+            case JASidePanelLeftVisible, JASidePanelRightVisible:
+                hideStatusBar = true
+            default:
+                break
+            }
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
+    
+    // MARK: - Draggable TableView -
+    
     @objc fileprivate func draggingBegan(_ notification: Notification) {
-        self.allowLeftSwipe = false
-        self.allowRightSwipe = false
+        allowLeftSwipe = false
+        allowRightSwipe = false
     }
     
     @objc fileprivate func draggingMoved(_ notification: Notification) {
@@ -86,31 +119,16 @@ class SidePanelController: JASidePanelController {
             }
         }
         
-        self.allowLeftSwipe = true
-        self.allowRightSwipe = true
+        allowLeftSwipe = true
+        allowRightSwipe = true
     }
     
     @objc fileprivate func draggingCanceled(_ notification: Notification) {
-        if self.state == JASidePanelRightVisible {
-            self.showCenterPanel(animated: true)
+        if state == JASidePanelRightVisible {
+            showCenterPanel(animated: true)
         }
         
-        self.allowLeftSwipe = true
-        self.allowRightSwipe = true
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if context == &kvoContext {
-            switch self.state {
-            case JASidePanelCenterVisible:
-                hideStatusBar = false
-            case JASidePanelLeftVisible, JASidePanelRightVisible:
-                hideStatusBar = true
-            default:
-                break
-            }
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
+        allowLeftSwipe = true
+        allowRightSwipe = true
     }
 }
