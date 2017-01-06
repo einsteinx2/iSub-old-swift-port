@@ -145,7 +145,7 @@ class PlayQueueViewController: DraggableTableViewController {
         // Allow the player to always move to the top
         // TODO: Adjust this so that it never lets you move the player higher than the screen if 
         // there are not more rows
-        let appHeight = UIScreen.main.applicationFrame.height
+        let appHeight = UIScreen.main.bounds.height
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: appHeight - 60))
         
         tableView.backgroundColor = UIColor.clear

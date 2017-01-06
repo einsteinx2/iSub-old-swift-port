@@ -19,6 +19,16 @@ class SidePanelController: JASidePanelController {
 //        return .lightContent
 //    }
     
+    override var prefersStatusBarHidden: Bool {
+        return hideStatusBar
+    }
+    
+    fileprivate var hideStatusBar: Bool = false {
+        didSet {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
     override func stylePanel(_ panel: UIView!) {
         // Intentionally empty to prevent rounded corners on panels
     }
@@ -93,9 +103,9 @@ class SidePanelController: JASidePanelController {
         if context == &kvoContext {
             switch self.state {
             case JASidePanelCenterVisible:
-                UIApplication.shared.setStatusBarHidden(false, with: .none)
+                hideStatusBar = false
             case JASidePanelLeftVisible, JASidePanelRightVisible:
-                UIApplication.shared.setStatusBarHidden(true, with: .none)
+                hideStatusBar = true
             default:
                 break
             }

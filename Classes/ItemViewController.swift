@@ -337,8 +337,9 @@ extension ItemViewController : ItemViewModelDelegate {
     func loadingError(_ error: String) {
         let message = "There was an error loading the folder.\n\nError \(error)"
         
-        let alert = CustomUIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "OK")
-        alert.show()
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
         
         ViewObjectsSingleton.sharedInstance().hideLoadingScreen()
         

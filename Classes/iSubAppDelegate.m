@@ -605,7 +605,7 @@
 	{
 		viewObjectsS.isNoNetworkAlertShowing = YES;
 		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Server unavailable, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Server unavailable, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
 		[alert show];
 	}
@@ -618,7 +618,7 @@
 	{
 		viewObjectsS.isOnlineModeAlertShowing = YES;
 		
-		CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
 		[alert show];
 	}
@@ -1129,44 +1129,6 @@
 		return [NSString stringWithFormat:@"%@/rest/%@?u=%@&p=%@&v=1.1.0&c=iSub&id=", urlString, action, [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
 }*/
-
-
-#pragma mark -
-#pragma mark Store Manager delegate
-#pragma mark -
-
-/*- (void)productFetchComplete
- {
- CustomUIAlertView *alert = [[CustomUIAlertView alloc] initWithTitle:@"Store" message:@"Product fetch complete" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
- [alert show];
- [alert release];
- }*/
-
-- (void)productPurchased:(NSString *)productId
-{
-	NSString *message = nil;
-	if ([productId isEqualToString:kFeatureAllId])
-		message = @"You may now use all of the iSub features.";
-	else if ([productId isEqualToString:kFeaturePlaylistsId])
-		message = @"You may now use the playlist feature.";
-	else if ([productId isEqualToString:kFeatureCacheId])
-		message = @"You may now use the song caching feature.";
-	else if ([productId isEqualToString:kFeatureVideoId])
-		message = @"You may now stream videos.";
-	else
-		message = @"";
-	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase Successful!" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-	[alert show];
-	
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_StorePurchaseComplete];
-}
-
-- (void)transactionCanceled
-{
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Store" message:@"Transaction canceled. Try again." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-	[alert show];
-}
 
 #pragma mark - Movie Playing
 
