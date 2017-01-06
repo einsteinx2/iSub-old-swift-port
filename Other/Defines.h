@@ -9,8 +9,6 @@
 #ifndef iSub_Defines_h
 #define iSub_Defines_h
 
-#define ISMSJukeboxTimeout 60.0
-
 #define ISMSHeaderColor [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:206.0/255.0 alpha:1]
 #define ISMSHeaderTextColor [UIColor colorWithRed:77.0/255.0 green:77.0/255.0 blue:77.0/255.0 alpha:1]
 #define ISMSHeaderButtonColor [UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1]

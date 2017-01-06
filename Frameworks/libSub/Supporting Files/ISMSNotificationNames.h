@@ -63,11 +63,6 @@ extern NSString * const ISMSNotification_BassFreed;
 
 extern NSString * const ISMSNotification_LargeSongInfoToggle;
 
-extern NSString * const ISMSNotification_JukeboxEnabled;
-extern NSString * const ISMSNotification_JukeboxDisabled;
-
-extern NSString * const ISMSNotification_JukeboxSongInfo;
-
 extern NSString * const ISMSNotification_PlayVideo;
 extern NSString * const ISMSNotification_RemoveMoviePlayer;
 

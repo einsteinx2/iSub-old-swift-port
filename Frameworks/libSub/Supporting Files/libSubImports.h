@@ -24,7 +24,6 @@
 #import "CacheSingleton.h"
 #import "DatabaseSingleton.h"
 #import "SocialSingleton.h"
-#import "JukeboxSingleton.h"
 #import "ISMSStreamManager.h"
 #import "ISMSCacheQueueManager.h"
 
@@ -49,12 +48,9 @@
 #import "ISMSLoader_Subclassing.h"
 #import "ISMSURLConnectionStreamHandler.h"
 #import "ISMSUpdateChecker.h"
-#import "JukeboxConnectionDelegate.h"
-#import "JukeboxXMLParser.h"
 #import "NSMutableURLRequest+PMS.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSString+cleanCredentialsForLog.h"
-#import "SearchXMLParser.h"
 #import "sqlite3.h"
 #import "RXMLElement.h"
 

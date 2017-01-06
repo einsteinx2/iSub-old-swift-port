@@ -115,8 +115,6 @@
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(showPlayer) name:ISMSNotification_ShowPlayer object:nil];
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(playVideoNotification:) name:ISMSNotification_PlayVideo object:nil];
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(removeMoviePlayer) name:ISMSNotification_RemoveMoviePlayer object:nil];
-    [NSNotificationCenter addObserverOnMainThread:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxDisabled object:nil];
-    [NSNotificationCenter addObserverOnMainThread:self selector:@selector(jukeboxToggled) name:ISMSNotification_JukeboxEnabled object:nil];
     
     [self startHLSProxy];
     
@@ -185,15 +183,6 @@
     [self checkServer];
     
     [self checkWaveBoxRelease];
-}
-
-- (void)jukeboxToggled
-{
-    // Change the background color when jukebox is on
-    if (settingsS.isJukeboxEnabled)
-        appDelegateS.window.backgroundColor = viewObjectsS.jukeboxColor;
-    else
-        appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
 }
 
 - (void)startHLSProxy
@@ -517,7 +506,6 @@
         [SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
         
         //DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
-        //DLog(@"is kFeatureJukeboxId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureJukeboxId]);
         //DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
         //DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
     }
@@ -699,9 +687,7 @@
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOfflineMode];
 	
-    settingsS.isJukeboxEnabled = NO;
     appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
-    //[Flurry logEvent:@"JukeboxDisabled"];
     
 	settingsS.isOfflineMode = YES;
 		

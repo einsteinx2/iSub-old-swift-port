@@ -71,7 +71,6 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 @property float scrobblePercent;
 @property BOOL isScrobbleEnabled;
 @property BOOL isRotationLockEnabled;
-@property BOOL isJukeboxEnabled;
 @property BOOL isScreenSleepEnabled;
 @property BOOL isPopupsEnabled;
 @property BOOL isUpdateCheckEnabled;

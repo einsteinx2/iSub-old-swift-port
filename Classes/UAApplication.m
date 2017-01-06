@@ -61,34 +61,16 @@ static const int ddLogLevel = DDLogLevelDebug;
 - (void)playPauseStop
 {
 	DDLogVerbose(@"[UAApplication] playPauseStop called");
-	if (settingsS.isJukeboxEnabled)
-	{
-		DDLogVerbose(@"[UAApplication] playPauseStop jukebox is enabled");
-		if (jukeboxS.jukeboxIsPlaying)
-		{
-			DDLogVerbose(@"[UAApplication] jukebox is playing, playPauseStop jukeboxStop called");
-			[jukeboxS jukeboxStop];
-		}
-		else
-		{
-			DDLogVerbose(@"[UAApplication] jukebox NOT playing, playPauseStop jukeboxPlay called");
-			[jukeboxS jukeboxPlay];
-		}
-	}
-	else
-	{
-		DDLogVerbose(@"[UAApplication] playPauseStop jukebox NOT enabled");
-        if ([PlayQueue sharedInstance].isStarted)
-		{
-			DDLogVerbose(@"[UAApplication] audio engine player exists, playPauseStop [[PlayQueue sharedInstance] playPause] called");
-			[[PlayQueue sharedInstance] playPause];
-		}
-		else
-		{
-			DDLogVerbose(@"[UAApplication] audio engine player doesn't exist, playPauseStop [musicS playSongAtPosition:playlistS.currentIndex] called");
-			[[PlayQueue sharedInstance] playSongAtIndex:[PlayQueue sharedInstance].currentIndex];
-		}
-	}
+    if ([PlayQueue sharedInstance].isStarted)
+    {
+        DDLogVerbose(@"[UAApplication] audio engine player exists, playPauseStop [[PlayQueue sharedInstance] playPause] called");
+        [[PlayQueue sharedInstance] playPause];
+    }
+    else
+    {
+        DDLogVerbose(@"[UAApplication] audio engine player doesn't exist, playPauseStop [musicS playSongAtPosition:playlistS.currentIndex] called");
+        [[PlayQueue sharedInstance] playSongAtIndex:[PlayQueue sharedInstance].currentIndex];
+    }
 }
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event 

@@ -485,9 +485,6 @@ LOG_LEVEL_ISUB_DEBUG
 
 - (void)fillStreamQueue:(BOOL)isStartDownload
 {	
-	if (settingsS.isJukeboxEnabled)
-		return;
-	
 	NSUInteger numStreamsToQueue = 1;
 	if (settingsS.isSongCachingEnabled && settingsS.isNextSongCacheEnabled)
 	{

@@ -191,7 +191,6 @@ static NSTimeInterval const kDelay = .5;
 	_darkNormal = ISMSHeaderColor;
 
 	_windowColor = [UIColor colorWithWhite:.3 alpha:1];
-	_jukeboxColor = [UIColor colorWithRed:140.0/255.0 green:0.0 blue:0.0 alpha:1.0];
 	
 	_isCellEnabled = YES;
 	

@@ -40,8 +40,6 @@ func BytesForSecondsAtBitrate(_ seconds: Int, bitrate: Int) -> Int {
     return (bitrate / 8) * 1024 * seconds
 }
 
-let ISMSJukeboxTimeout = 60.0
-
 let ISMSHeaderColor = UIColor(red: 200.0/255.0, green: 200.0/255.0, blue: 206.0/255.0, alpha: 1.0)
 let ISMSHeaderTextColor = UIColor(red: 77.0/255.0, green: 77.0/255.0, blue: 77.0/255.0, alpha: 1.0)
 let ISMSHeaderButtonColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)

@@ -22,7 +22,6 @@ typedef NS_ENUM(NSInteger, ISMSBassVisualType)
 };
 
 #define ISMSLoadingTimeout 240.0
-#define ISMSJukeboxTimeout 60.0
 #define ISMSServerCheckTimeout 15.0
 
 #define kFeaturePlaylistsId @"com.einsteinx2.isublite.playlistUnlock"

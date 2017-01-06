@@ -40,8 +40,6 @@ class DraggableTableViewController: UITableViewController {
         self.navigationController?.navigationBar.barStyle = .black
         self.edgesForExtendedLayout = UIRectEdge()
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(DraggableTableViewController.jukeboxToggled(_:)), name: ISMSNotification_JukeboxEnabled, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(DraggableTableViewController.jukeboxToggled(_:)), name: ISMSNotification_JukeboxDisabled, object: nil)
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(DraggableTableViewController.setupLeftBarButton), name: NSNotification.Name.UIApplicationDidBecomeActive.rawValue, object: nil)
         
         setupRefreshControl()
@@ -61,28 +59,13 @@ class DraggableTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        updateBackgroundColor()
-        
+        self.view.backgroundColor = ViewObjectsSingleton.sharedInstance().windowColor
         self.navigationItem.leftBarButtonItem = setupLeftBarButton()
         self.navigationItem.rightBarButtonItem = setupRightBarButton()
     }
     
     deinit {
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_JukeboxEnabled, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_JukeboxDisabled, object: nil)
         NotificationCenter.removeObserver(onMainThread: self, name: NSNotification.Name.UIApplicationDidBecomeActive.rawValue, object: nil)
-    }
-    
-    // MARK: - Private -
-    
-    fileprivate func updateBackgroundColor() {
-        self.view.backgroundColor = SavedSettings.sharedInstance().isJukeboxEnabled ? ViewObjectsSingleton.sharedInstance().jukeboxColor : ViewObjectsSingleton.sharedInstance().windowColor
-    }
-    
-    // MARK: Notifications
-    
-    @objc fileprivate func jukeboxToggled(_ notification: Notification) {
-        self.updateBackgroundColor()
     }
     
     // MARK: - UI -

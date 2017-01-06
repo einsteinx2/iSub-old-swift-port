@@ -24,7 +24,6 @@
     NSString *_sessionId;
     
     BOOL _isPopupsEnabled;
-    BOOL _isJukeboxEnabled;
     BOOL _isScreenSleepEnabled;
     float _gainMultiplier;
     BOOL _isPartialCacheNextSong;
@@ -77,10 +76,7 @@
 
 - (void)loadState
 {	
-	if (self.isJukeboxEnabled)
-		_isPlaying = NO;
-	else
-		_isPlaying = [_userDefaults boolForKey:@"isPlaying"];
+	_isPlaying = [_userDefaults boolForKey:@"isPlaying"];
 		
 	_shuffleMode = (ShuffleMode)[_userDefaults integerForKey:@"shuffleMode"];
 	[PlayQueue sharedInstance].shuffleMode = _shuffleMode;
@@ -123,10 +119,7 @@
 		
 		if ([PlayQueue sharedInstance].isPlaying != _isPlaying)
 		{
-			if (self.isJukeboxEnabled)
-				_isPlaying = NO;
-			else
-				_isPlaying = [PlayQueue sharedInstance].isPlaying;
+			_isPlaying = [PlayQueue sharedInstance].isPlaying;
 			
 			[_userDefaults setBool:_isPlaying forKey:@"isPlaying"];
 			isDefaultsDirty = YES;
@@ -329,7 +322,6 @@
 		[_userDefaults setBool:NO forKey:@"enableScrobblingSetting"];
 		[_userDefaults setBool:NO forKey:@"disablePopupsSetting"];
 		[_userDefaults setBool:NO forKey:@"lockRotationSetting"];
-		[_userDefaults setBool:NO forKey:@"isJukeboxEnabled"];
 		[_userDefaults setBool:YES forKey:@"isScreenSleepEnabled"];
 		[_userDefaults setBool:YES forKey:@"isPopupsEnabled"];
 		[_userDefaults setBool:NO forKey:@"checkUpdatesSetting"];
@@ -394,7 +386,6 @@
 
 - (void)memCacheDefaults
 {
-	_isJukeboxEnabled = [_userDefaults boolForKey:@"isJukeboxEnabled"];
 	_isScreenSleepEnabled = [_userDefaults boolForKey:@"isScreenSleepEnabled"];
 	_isPopupsEnabled = [_userDefaults boolForKey:@"isPopupsEnabled"];
 	_gainMultiplier = [_userDefaults floatForKey:@"gainMultiplier"];
@@ -1137,24 +1128,6 @@
 	@synchronized(self)
 	{
 		[_userDefaults setBool:isRotationLockEnabled forKey:@"lockRotationSetting"];
-		[_userDefaults synchronize];
-	}
-}
-
-- (BOOL)isJukeboxEnabled
-{
-	@synchronized(self)
-	{
-		return _isJukeboxEnabled;
-	}
-}
-
-- (void)setIsJukeboxEnabled:(BOOL)enabled
-{
-	@synchronized(self)
-	{
-		_isJukeboxEnabled = enabled;
-		[_userDefaults setBool:enabled forKey:@"isJukeboxEnabled"];
 		[_userDefaults synchronize];
 	}
 }

@@ -9,7 +9,6 @@
 #import "DatabaseSingleton.h"
 #import "iSub-Swift.h"
 #import "ISMSStreamManager.h"
-#import "JukeboxSingleton.h"
 
 @implementation DatabaseSingleton
 

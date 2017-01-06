@@ -64,11 +64,6 @@ NSString * const ISMSNotification_BassFreed = @"ISMSNotification_BassFreed";
 
 NSString * const ISMSNotification_LargeSongInfoToggle = @"ISMSNotification_LargeSongInfoToggle";
 
-NSString * const ISMSNotification_JukeboxEnabled = @"ISMSNotification_JukeboxEnabled";
-NSString * const ISMSNotification_JukeboxDisabled = @"ISMSNotification_JukeboxDisabled";
-
-NSString * const ISMSNotification_JukeboxSongInfo = @"ISMSNotification_JukeboxSongInfo";
-
 NSString * const ISMSNotification_PlayVideo = @"ISMSNotification_PlayVideo";
 NSString * const ISMSNotification_RemoveMoviePlayer = @"ISMSNotification_RemoveMoviePlayer";
 

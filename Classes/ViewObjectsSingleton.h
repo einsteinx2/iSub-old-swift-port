@@ -71,7 +71,6 @@
 @property (strong) UIColor *lightNormal;
 @property (strong) UIColor *darkNormal;
 @property (strong) UIColor *windowColor;
-@property (strong) UIColor *jukeboxColor;
 
 @property (copy) NSString *currentLoadingFolderId;
 

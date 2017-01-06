@@ -183,12 +183,6 @@
 		53159DB8156F69D0001B0268 /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
 		53159DBB156F69D0001B0268 /* home-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC621297949A007BDC0E /* home-background.png */; };
 		53159DBC156F69D0001B0268 /* home-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC631297949A007BDC0E /* home-background@2x.png */; };
-		53159DBD156F69D0001B0268 /* home-jukebox-off-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC641297949A007BDC0E /* home-jukebox-off-ipad.png */; };
-		53159DBE156F69D0001B0268 /* home-jukebox-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC651297949A007BDC0E /* home-jukebox-off.png */; };
-		53159DBF156F69D0001B0268 /* home-jukebox-off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC661297949A007BDC0E /* home-jukebox-off@2x.png */; };
-		53159DC0156F69D0001B0268 /* home-jukebox-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC671297949A007BDC0E /* home-jukebox-on-ipad.png */; };
-		53159DC1156F69D0001B0268 /* home-jukebox-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC681297949A007BDC0E /* home-jukebox-on.png */; };
-		53159DC2156F69D0001B0268 /* home-jukebox-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC691297949A007BDC0E /* home-jukebox-on@2x.png */; };
 		53159DC3156F69D0001B0268 /* home-quick-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC701297949A007BDC0E /* home-quick-ipad.png */; };
 		53159DC4156F69D0001B0268 /* home-quick.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC711297949A007BDC0E /* home-quick.png */; };
 		53159DC5156F69D0001B0268 /* home-quick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC721297949A007BDC0E /* home-quick@2x.png */; };
@@ -311,8 +305,6 @@
 		53159E4B156F69D0001B0268 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD70150EFF7A008DA51C /* Default-Landscape@2x.png */; };
 		53159E4C156F69D0001B0268 /* Default-Portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD71150EFF7A008DA51C /* Default-Portrait@2x.png */; };
 		53159E4D156F69D0001B0268 /* home-chat-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD78150F00C5008DA51C /* home-chat-ipad@2x.png */; };
-		53159E4E156F69D0001B0268 /* home-jukebox-off-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD79150F00C5008DA51C /* home-jukebox-off-ipad@2x.png */; };
-		53159E4F156F69D0001B0268 /* home-jukebox-on-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7A150F00C5008DA51C /* home-jukebox-on-ipad@2x.png */; };
 		53159E50156F69D0001B0268 /* home-quick-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7D150F00C5008DA51C /* home-quick-ipad@2x.png */; };
 		53159E51156F69D0001B0268 /* home-settings-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7E150F00C5008DA51C /* home-settings-ipad@2x.png */; };
 		53159E52156F69D0001B0268 /* home-shuffle-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7F150F00C5008DA51C /* home-shuffle-ipad@2x.png */; };
@@ -720,21 +712,6 @@
 		5358DD681E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC531E0B78470024A0D4 /* NSString+cleanCredentialsForLog.m */; };
 		5358DD691E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC531E0B78470024A0D4 /* NSString+cleanCredentialsForLog.m */; };
 		5358DD6A1E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC531E0B78470024A0D4 /* NSString+cleanCredentialsForLog.m */; };
-		5358DD6B1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC561E0B78470024A0D4 /* JukeboxConnectionDelegate.m */; };
-		5358DD6C1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC561E0B78470024A0D4 /* JukeboxConnectionDelegate.m */; };
-		5358DD6D1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC561E0B78470024A0D4 /* JukeboxConnectionDelegate.m */; };
-		5358DD6E1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC561E0B78470024A0D4 /* JukeboxConnectionDelegate.m */; };
-		5358DD6F1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC561E0B78470024A0D4 /* JukeboxConnectionDelegate.m */; };
-		5358DD701E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC591E0B78470024A0D4 /* JukeboxXMLParser.m */; };
-		5358DD711E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC591E0B78470024A0D4 /* JukeboxXMLParser.m */; };
-		5358DD721E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC591E0B78470024A0D4 /* JukeboxXMLParser.m */; };
-		5358DD731E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC591E0B78470024A0D4 /* JukeboxXMLParser.m */; };
-		5358DD741E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC591E0B78470024A0D4 /* JukeboxXMLParser.m */; };
-		5358DD751E0B78480024A0D4 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC5B1E0B78470024A0D4 /* SearchXMLParser.m */; };
-		5358DD761E0B78480024A0D4 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC5B1E0B78470024A0D4 /* SearchXMLParser.m */; };
-		5358DD771E0B78480024A0D4 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC5B1E0B78470024A0D4 /* SearchXMLParser.m */; };
-		5358DD781E0B78480024A0D4 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC5B1E0B78470024A0D4 /* SearchXMLParser.m */; };
-		5358DD791E0B78480024A0D4 /* SearchXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC5B1E0B78470024A0D4 /* SearchXMLParser.m */; };
 		5358DD7A1E0B78480024A0D4 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC5E1E0B78470024A0D4 /* CacheSingleton.m */; };
 		5358DD7B1E0B78480024A0D4 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC5E1E0B78470024A0D4 /* CacheSingleton.m */; };
 		5358DD7C1E0B78480024A0D4 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC5E1E0B78470024A0D4 /* CacheSingleton.m */; };
@@ -745,11 +722,6 @@
 		5358DD811E0B78480024A0D4 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC601E0B78470024A0D4 /* DatabaseSingleton.m */; };
 		5358DD821E0B78480024A0D4 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC601E0B78470024A0D4 /* DatabaseSingleton.m */; };
 		5358DD831E0B78480024A0D4 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC601E0B78470024A0D4 /* DatabaseSingleton.m */; };
-		5358DD841E0B78480024A0D4 /* JukeboxSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC621E0B78470024A0D4 /* JukeboxSingleton.m */; };
-		5358DD851E0B78480024A0D4 /* JukeboxSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC621E0B78470024A0D4 /* JukeboxSingleton.m */; };
-		5358DD861E0B78480024A0D4 /* JukeboxSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC621E0B78470024A0D4 /* JukeboxSingleton.m */; };
-		5358DD871E0B78480024A0D4 /* JukeboxSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC621E0B78470024A0D4 /* JukeboxSingleton.m */; };
-		5358DD881E0B78480024A0D4 /* JukeboxSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC621E0B78470024A0D4 /* JukeboxSingleton.m */; };
 		5358DD891E0B78480024A0D4 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC631E0B78470024A0D4 /* PlayQueue.swift */; };
 		5358DD8A1E0B78480024A0D4 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC631E0B78470024A0D4 /* PlayQueue.swift */; };
 		5358DD8B1E0B78480024A0D4 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC631E0B78470024A0D4 /* PlayQueue.swift */; };
@@ -1399,12 +1371,6 @@
 		53BC2726139AF0DD00A825F1 /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
 		53BC272A139AF0DD00A825F1 /* home-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC621297949A007BDC0E /* home-background.png */; };
 		53BC272B139AF0DD00A825F1 /* home-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC631297949A007BDC0E /* home-background@2x.png */; };
-		53BC272C139AF0DD00A825F1 /* home-jukebox-off-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC641297949A007BDC0E /* home-jukebox-off-ipad.png */; };
-		53BC272D139AF0DD00A825F1 /* home-jukebox-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC651297949A007BDC0E /* home-jukebox-off.png */; };
-		53BC272E139AF0DD00A825F1 /* home-jukebox-off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC661297949A007BDC0E /* home-jukebox-off@2x.png */; };
-		53BC272F139AF0DD00A825F1 /* home-jukebox-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC671297949A007BDC0E /* home-jukebox-on-ipad.png */; };
-		53BC2730139AF0DD00A825F1 /* home-jukebox-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC681297949A007BDC0E /* home-jukebox-on.png */; };
-		53BC2731139AF0DD00A825F1 /* home-jukebox-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC691297949A007BDC0E /* home-jukebox-on@2x.png */; };
 		53BC2738139AF0DD00A825F1 /* home-quick-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC701297949A007BDC0E /* home-quick-ipad.png */; };
 		53BC2739139AF0DD00A825F1 /* home-quick.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC711297949A007BDC0E /* home-quick.png */; };
 		53BC273A139AF0DD00A825F1 /* home-quick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC721297949A007BDC0E /* home-quick@2x.png */; };
@@ -1546,12 +1512,6 @@
 		53C7FD80150F00C5008DA51C /* home-chat-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD78150F00C5008DA51C /* home-chat-ipad@2x.png */; };
 		53C7FD81150F00C5008DA51C /* home-chat-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD78150F00C5008DA51C /* home-chat-ipad@2x.png */; };
 		53C7FD82150F00C5008DA51C /* home-chat-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD78150F00C5008DA51C /* home-chat-ipad@2x.png */; };
-		53C7FD83150F00C5008DA51C /* home-jukebox-off-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD79150F00C5008DA51C /* home-jukebox-off-ipad@2x.png */; };
-		53C7FD84150F00C5008DA51C /* home-jukebox-off-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD79150F00C5008DA51C /* home-jukebox-off-ipad@2x.png */; };
-		53C7FD85150F00C5008DA51C /* home-jukebox-off-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD79150F00C5008DA51C /* home-jukebox-off-ipad@2x.png */; };
-		53C7FD86150F00C5008DA51C /* home-jukebox-on-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7A150F00C5008DA51C /* home-jukebox-on-ipad@2x.png */; };
-		53C7FD87150F00C5008DA51C /* home-jukebox-on-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7A150F00C5008DA51C /* home-jukebox-on-ipad@2x.png */; };
-		53C7FD88150F00C5008DA51C /* home-jukebox-on-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7A150F00C5008DA51C /* home-jukebox-on-ipad@2x.png */; };
 		53C7FD8F150F00C5008DA51C /* home-quick-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7D150F00C5008DA51C /* home-quick-ipad@2x.png */; };
 		53C7FD90150F00C5008DA51C /* home-quick-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7D150F00C5008DA51C /* home-quick-ipad@2x.png */; };
 		53C7FD91150F00C5008DA51C /* home-quick-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C7FD7D150F00C5008DA51C /* home-quick-ipad@2x.png */; };
@@ -1745,12 +1705,6 @@
 		53DCF48313BFEAD3009160F9 /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
 		53DCF48713BFEAD3009160F9 /* home-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC621297949A007BDC0E /* home-background.png */; };
 		53DCF48813BFEAD3009160F9 /* home-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC631297949A007BDC0E /* home-background@2x.png */; };
-		53DCF48913BFEAD3009160F9 /* home-jukebox-off-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC641297949A007BDC0E /* home-jukebox-off-ipad.png */; };
-		53DCF48A13BFEAD3009160F9 /* home-jukebox-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC651297949A007BDC0E /* home-jukebox-off.png */; };
-		53DCF48B13BFEAD3009160F9 /* home-jukebox-off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC661297949A007BDC0E /* home-jukebox-off@2x.png */; };
-		53DCF48C13BFEAD3009160F9 /* home-jukebox-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC671297949A007BDC0E /* home-jukebox-on-ipad.png */; };
-		53DCF48D13BFEAD3009160F9 /* home-jukebox-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC681297949A007BDC0E /* home-jukebox-on.png */; };
-		53DCF48E13BFEAD3009160F9 /* home-jukebox-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC691297949A007BDC0E /* home-jukebox-on@2x.png */; };
 		53DCF49513BFEAD3009160F9 /* home-quick-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC701297949A007BDC0E /* home-quick-ipad.png */; };
 		53DCF49613BFEAD3009160F9 /* home-quick.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC711297949A007BDC0E /* home-quick.png */; };
 		53DCF49713BFEAD3009160F9 /* home-quick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC721297949A007BDC0E /* home-quick@2x.png */; };
@@ -1898,12 +1852,6 @@
 		53F8C80B129728F9007BDC0E /* home-background-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C803129728F9007BDC0E /* home-background-ipad.png */; };
 		53F8CC791297949A007BDC0E /* home-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC621297949A007BDC0E /* home-background.png */; };
 		53F8CC7A1297949A007BDC0E /* home-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC631297949A007BDC0E /* home-background@2x.png */; };
-		53F8CC7B1297949A007BDC0E /* home-jukebox-off-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC641297949A007BDC0E /* home-jukebox-off-ipad.png */; };
-		53F8CC7C1297949A007BDC0E /* home-jukebox-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC651297949A007BDC0E /* home-jukebox-off.png */; };
-		53F8CC7D1297949A007BDC0E /* home-jukebox-off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC661297949A007BDC0E /* home-jukebox-off@2x.png */; };
-		53F8CC7E1297949A007BDC0E /* home-jukebox-on-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC671297949A007BDC0E /* home-jukebox-on-ipad.png */; };
-		53F8CC7F1297949A007BDC0E /* home-jukebox-on.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC681297949A007BDC0E /* home-jukebox-on.png */; };
-		53F8CC801297949A007BDC0E /* home-jukebox-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC691297949A007BDC0E /* home-jukebox-on@2x.png */; };
 		53F8CC871297949A007BDC0E /* home-quick-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC701297949A007BDC0E /* home-quick-ipad.png */; };
 		53F8CC881297949A007BDC0E /* home-quick.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC711297949A007BDC0E /* home-quick.png */; };
 		53F8CC891297949A007BDC0E /* home-quick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8CC721297949A007BDC0E /* home-quick@2x.png */; };
@@ -2169,18 +2117,10 @@
 		5358DC511E0B78470024A0D4 /* NSMutableURLRequest+SUS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableURLRequest+SUS.m"; sourceTree = "<group>"; };
 		5358DC521E0B78470024A0D4 /* NSString+cleanCredentialsForLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+cleanCredentialsForLog.h"; sourceTree = "<group>"; };
 		5358DC531E0B78470024A0D4 /* NSString+cleanCredentialsForLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+cleanCredentialsForLog.m"; sourceTree = "<group>"; };
-		5358DC551E0B78470024A0D4 /* JukeboxConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JukeboxConnectionDelegate.h; sourceTree = "<group>"; };
-		5358DC561E0B78470024A0D4 /* JukeboxConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JukeboxConnectionDelegate.m; sourceTree = "<group>"; };
-		5358DC581E0B78470024A0D4 /* JukeboxXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JukeboxXMLParser.h; sourceTree = "<group>"; };
-		5358DC591E0B78470024A0D4 /* JukeboxXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JukeboxXMLParser.m; sourceTree = "<group>"; };
-		5358DC5A1E0B78470024A0D4 /* SearchXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchXMLParser.h; sourceTree = "<group>"; };
-		5358DC5B1E0B78470024A0D4 /* SearchXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchXMLParser.m; sourceTree = "<group>"; };
 		5358DC5D1E0B78470024A0D4 /* CacheSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheSingleton.h; sourceTree = "<group>"; };
 		5358DC5E1E0B78470024A0D4 /* CacheSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheSingleton.m; sourceTree = "<group>"; };
 		5358DC5F1E0B78470024A0D4 /* DatabaseSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseSingleton.h; sourceTree = "<group>"; };
 		5358DC601E0B78470024A0D4 /* DatabaseSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseSingleton.m; sourceTree = "<group>"; };
-		5358DC611E0B78470024A0D4 /* JukeboxSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JukeboxSingleton.h; sourceTree = "<group>"; };
-		5358DC621E0B78470024A0D4 /* JukeboxSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JukeboxSingleton.m; sourceTree = "<group>"; };
 		5358DC631E0B78470024A0D4 /* PlayQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueue.swift; sourceTree = "<group>"; };
 		5358DC641E0B78470024A0D4 /* SavedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedSettings.h; sourceTree = "<group>"; };
 		5358DC651E0B78470024A0D4 /* SavedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedSettings.m; sourceTree = "<group>"; };
@@ -2486,8 +2426,6 @@
 		53C7FD70150EFF7A008DA51C /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x.png"; path = "Images/Other/Default-Landscape@2x.png"; sourceTree = "<group>"; };
 		53C7FD71150EFF7A008DA51C /* Default-Portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x.png"; path = "Images/Other/Default-Portrait@2x.png"; sourceTree = "<group>"; };
 		53C7FD78150F00C5008DA51C /* home-chat-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-chat-ipad@2x.png"; path = "Images/Home Screen/home-chat-ipad@2x.png"; sourceTree = "<group>"; };
-		53C7FD79150F00C5008DA51C /* home-jukebox-off-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-jukebox-off-ipad@2x.png"; path = "Images/Home Screen/home-jukebox-off-ipad@2x.png"; sourceTree = "<group>"; };
-		53C7FD7A150F00C5008DA51C /* home-jukebox-on-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-jukebox-on-ipad@2x.png"; path = "Images/Home Screen/home-jukebox-on-ipad@2x.png"; sourceTree = "<group>"; };
 		53C7FD7D150F00C5008DA51C /* home-quick-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-quick-ipad@2x.png"; path = "Images/Home Screen/home-quick-ipad@2x.png"; sourceTree = "<group>"; };
 		53C7FD7E150F00C5008DA51C /* home-settings-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-settings-ipad@2x.png"; path = "Images/Home Screen/home-settings-ipad@2x.png"; sourceTree = "<group>"; };
 		53C7FD7F150F00C5008DA51C /* home-shuffle-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-shuffle-ipad@2x.png"; path = "Images/Home Screen/home-shuffle-ipad@2x.png"; sourceTree = "<group>"; };
@@ -2566,12 +2504,6 @@
 		53F8C803129728F9007BDC0E /* home-background-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-background-ipad.png"; path = "Images/Home Screen/home-background-ipad.png"; sourceTree = "<group>"; };
 		53F8CC621297949A007BDC0E /* home-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-background.png"; path = "Images/Home Screen/home-background.png"; sourceTree = "<group>"; };
 		53F8CC631297949A007BDC0E /* home-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-background@2x.png"; path = "Images/Home Screen/home-background@2x.png"; sourceTree = "<group>"; };
-		53F8CC641297949A007BDC0E /* home-jukebox-off-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-jukebox-off-ipad.png"; path = "Images/Home Screen/home-jukebox-off-ipad.png"; sourceTree = "<group>"; };
-		53F8CC651297949A007BDC0E /* home-jukebox-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-jukebox-off.png"; path = "Images/Home Screen/home-jukebox-off.png"; sourceTree = "<group>"; };
-		53F8CC661297949A007BDC0E /* home-jukebox-off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-jukebox-off@2x.png"; path = "Images/Home Screen/home-jukebox-off@2x.png"; sourceTree = "<group>"; };
-		53F8CC671297949A007BDC0E /* home-jukebox-on-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-jukebox-on-ipad.png"; path = "Images/Home Screen/home-jukebox-on-ipad.png"; sourceTree = "<group>"; };
-		53F8CC681297949A007BDC0E /* home-jukebox-on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-jukebox-on.png"; path = "Images/Home Screen/home-jukebox-on.png"; sourceTree = "<group>"; };
-		53F8CC691297949A007BDC0E /* home-jukebox-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-jukebox-on@2x.png"; path = "Images/Home Screen/home-jukebox-on@2x.png"; sourceTree = "<group>"; };
 		53F8CC701297949A007BDC0E /* home-quick-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-quick-ipad.png"; path = "Images/Home Screen/home-quick-ipad.png"; sourceTree = "<group>"; };
 		53F8CC711297949A007BDC0E /* home-quick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-quick.png"; path = "Images/Home Screen/home-quick.png"; sourceTree = "<group>"; };
 		53F8CC721297949A007BDC0E /* home-quick@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home-quick@2x.png"; path = "Images/Home Screen/home-quick@2x.png"; sourceTree = "<group>"; };
@@ -3173,8 +3105,6 @@
 				5358DC511E0B78470024A0D4 /* NSMutableURLRequest+SUS.m */,
 				5358DC521E0B78470024A0D4 /* NSString+cleanCredentialsForLog.h */,
 				5358DC531E0B78470024A0D4 /* NSString+cleanCredentialsForLog.m */,
-				5358DC541E0B78470024A0D4 /* NSURLConnectionDelegates */,
-				5358DC571E0B78470024A0D4 /* XML Parsers */,
 			);
 			path = "Server Loading";
 			sourceTree = "<group>";
@@ -3205,12 +3135,12 @@
 				5358DC281E0B78470024A0D4 /* ISMSLoader_Subclassing.h */,
 				5358DC291E0B78470024A0D4 /* ISMSLoaderDelegate.h */,
 				5358DC2A1E0B78470024A0D4 /* ISMSLoaderManager.h */,
-				5358DC2C1E0B78470024A0D4 /* New Model */,
+				5358DC2C1E0B78470024A0D4 /* Item Loaders */,
 			);
 			path = Loaders;
 			sourceTree = "<group>";
 		};
-		5358DC2C1E0B78470024A0D4 /* New Model */ = {
+		5358DC2C1E0B78470024A0D4 /* Item Loaders */ = {
 			isa = PBXGroup;
 			children = (
 				538B4D0B1E1D83B300847152 /* ItemLoader.swift */,
@@ -3224,27 +3154,8 @@
 				538B4CFF1E1D77AC00847152 /* FolderLoader.swift */,
 				5358DC401E0B78470024A0D4 /* StatusLoader.swift */,
 			);
+			name = "Item Loaders";
 			path = "New Model";
-			sourceTree = "<group>";
-		};
-		5358DC541E0B78470024A0D4 /* NSURLConnectionDelegates */ = {
-			isa = PBXGroup;
-			children = (
-				5358DC551E0B78470024A0D4 /* JukeboxConnectionDelegate.h */,
-				5358DC561E0B78470024A0D4 /* JukeboxConnectionDelegate.m */,
-			);
-			path = NSURLConnectionDelegates;
-			sourceTree = "<group>";
-		};
-		5358DC571E0B78470024A0D4 /* XML Parsers */ = {
-			isa = PBXGroup;
-			children = (
-				5358DC581E0B78470024A0D4 /* JukeboxXMLParser.h */,
-				5358DC591E0B78470024A0D4 /* JukeboxXMLParser.m */,
-				5358DC5A1E0B78470024A0D4 /* SearchXMLParser.h */,
-				5358DC5B1E0B78470024A0D4 /* SearchXMLParser.m */,
-			);
-			path = "XML Parsers";
 			sourceTree = "<group>";
 		};
 		5358DC5C1E0B78470024A0D4 /* Singletons */ = {
@@ -3254,8 +3165,6 @@
 				5358DC5E1E0B78470024A0D4 /* CacheSingleton.m */,
 				5358DC5F1E0B78470024A0D4 /* DatabaseSingleton.h */,
 				5358DC601E0B78470024A0D4 /* DatabaseSingleton.m */,
-				5358DC611E0B78470024A0D4 /* JukeboxSingleton.h */,
-				5358DC621E0B78470024A0D4 /* JukeboxSingleton.m */,
 				5358DC631E0B78470024A0D4 /* PlayQueue.swift */,
 				5358DC641E0B78470024A0D4 /* SavedSettings.h */,
 				5358DC651E0B78470024A0D4 /* SavedSettings.m */,
@@ -3842,12 +3751,6 @@
 				53B20E2B12C2A60D00A90DD9 /* home-chat-ipad.png */,
 				53B20E2C12C2A60D00A90DD9 /* home-chat.png */,
 				53B20E2D12C2A60D00A90DD9 /* home-chat@2x.png */,
-				53F8CC641297949A007BDC0E /* home-jukebox-off-ipad.png */,
-				53F8CC651297949A007BDC0E /* home-jukebox-off.png */,
-				53F8CC661297949A007BDC0E /* home-jukebox-off@2x.png */,
-				53F8CC671297949A007BDC0E /* home-jukebox-on-ipad.png */,
-				53F8CC681297949A007BDC0E /* home-jukebox-on.png */,
-				53F8CC691297949A007BDC0E /* home-jukebox-on@2x.png */,
 				53F8CC701297949A007BDC0E /* home-quick-ipad.png */,
 				53F8CC711297949A007BDC0E /* home-quick.png */,
 				53F8CC721297949A007BDC0E /* home-quick@2x.png */,
@@ -3870,8 +3773,6 @@
 				53B20DE512C29A7600A90DD9 /* home-quick-topbar@2x.png */,
 				53B20DE612C29A7600A90DD9 /* home-quick-topbar.png */,
 				53C7FD78150F00C5008DA51C /* home-chat-ipad@2x.png */,
-				53C7FD79150F00C5008DA51C /* home-jukebox-off-ipad@2x.png */,
-				53C7FD7A150F00C5008DA51C /* home-jukebox-on-ipad@2x.png */,
 				53C7FD7D150F00C5008DA51C /* home-quick-ipad@2x.png */,
 				53C7FD7E150F00C5008DA51C /* home-settings-ipad@2x.png */,
 				53C7FD7F150F00C5008DA51C /* home-shuffle-ipad@2x.png */,
@@ -4122,12 +4023,6 @@
 				53F8C80B129728F9007BDC0E /* home-background-ipad.png in Resources */,
 				53F8CC791297949A007BDC0E /* home-background.png in Resources */,
 				53F8CC7A1297949A007BDC0E /* home-background@2x.png in Resources */,
-				53F8CC7B1297949A007BDC0E /* home-jukebox-off-ipad.png in Resources */,
-				53F8CC7C1297949A007BDC0E /* home-jukebox-off.png in Resources */,
-				53F8CC7D1297949A007BDC0E /* home-jukebox-off@2x.png in Resources */,
-				53F8CC7E1297949A007BDC0E /* home-jukebox-on-ipad.png in Resources */,
-				53F8CC7F1297949A007BDC0E /* home-jukebox-on.png in Resources */,
-				53F8CC801297949A007BDC0E /* home-jukebox-on@2x.png in Resources */,
 				53F8CC871297949A007BDC0E /* home-quick-ipad.png in Resources */,
 				53F8CC881297949A007BDC0E /* home-quick.png in Resources */,
 				53F8CC891297949A007BDC0E /* home-quick@2x.png in Resources */,
@@ -4254,8 +4149,6 @@
 				53C7FD72150EFF7A008DA51C /* Default-Landscape@2x.png in Resources */,
 				53C7FD75150EFF7A008DA51C /* Default-Portrait@2x.png in Resources */,
 				53C7FD80150F00C5008DA51C /* home-chat-ipad@2x.png in Resources */,
-				53C7FD83150F00C5008DA51C /* home-jukebox-off-ipad@2x.png in Resources */,
-				53C7FD86150F00C5008DA51C /* home-jukebox-on-ipad@2x.png in Resources */,
 				53C7FD8F150F00C5008DA51C /* home-quick-ipad@2x.png in Resources */,
 				53C7FD92150F00C5008DA51C /* home-settings-ipad@2x.png in Resources */,
 				53C7FD95150F00C5008DA51C /* home-shuffle-ipad@2x.png in Resources */,
@@ -4381,13 +4274,7 @@
 				53159DB8156F69D0001B0268 /* home-background-ipad.png in Resources */,
 				53159DBB156F69D0001B0268 /* home-background.png in Resources */,
 				53159DBC156F69D0001B0268 /* home-background@2x.png in Resources */,
-				53159DBD156F69D0001B0268 /* home-jukebox-off-ipad.png in Resources */,
-				53159DBE156F69D0001B0268 /* home-jukebox-off.png in Resources */,
-				53159DBF156F69D0001B0268 /* home-jukebox-off@2x.png in Resources */,
 				5333F01E182C5D17003CFB6F /* controller-volumeslider-thumb.png in Resources */,
-				53159DC0156F69D0001B0268 /* home-jukebox-on-ipad.png in Resources */,
-				53159DC1156F69D0001B0268 /* home-jukebox-on.png in Resources */,
-				53159DC2156F69D0001B0268 /* home-jukebox-on@2x.png in Resources */,
 				53159DC3156F69D0001B0268 /* home-quick-ipad.png in Resources */,
 				53159DC4156F69D0001B0268 /* home-quick.png in Resources */,
 				536E29261E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */,
@@ -4515,8 +4402,6 @@
 				53159E4B156F69D0001B0268 /* Default-Landscape@2x.png in Resources */,
 				53159E4C156F69D0001B0268 /* Default-Portrait@2x.png in Resources */,
 				53159E4D156F69D0001B0268 /* home-chat-ipad@2x.png in Resources */,
-				53159E4E156F69D0001B0268 /* home-jukebox-off-ipad@2x.png in Resources */,
-				53159E4F156F69D0001B0268 /* home-jukebox-on-ipad@2x.png in Resources */,
 				53159E50156F69D0001B0268 /* home-quick-ipad@2x.png in Resources */,
 				53159E51156F69D0001B0268 /* home-settings-ipad@2x.png in Resources */,
 				53159E52156F69D0001B0268 /* home-shuffle-ipad@2x.png in Resources */,
@@ -4641,12 +4526,6 @@
 				53BC2726139AF0DD00A825F1 /* home-background-ipad.png in Resources */,
 				53BC272A139AF0DD00A825F1 /* home-background.png in Resources */,
 				53BC272B139AF0DD00A825F1 /* home-background@2x.png in Resources */,
-				53BC272C139AF0DD00A825F1 /* home-jukebox-off-ipad.png in Resources */,
-				53BC272D139AF0DD00A825F1 /* home-jukebox-off.png in Resources */,
-				53BC272E139AF0DD00A825F1 /* home-jukebox-off@2x.png in Resources */,
-				53BC272F139AF0DD00A825F1 /* home-jukebox-on-ipad.png in Resources */,
-				53BC2730139AF0DD00A825F1 /* home-jukebox-on.png in Resources */,
-				53BC2731139AF0DD00A825F1 /* home-jukebox-on@2x.png in Resources */,
 				53BC2738139AF0DD00A825F1 /* home-quick-ipad.png in Resources */,
 				53BC2739139AF0DD00A825F1 /* home-quick.png in Resources */,
 				53BC273A139AF0DD00A825F1 /* home-quick@2x.png in Resources */,
@@ -4776,8 +4655,6 @@
 				53C7FD74150EFF7A008DA51C /* Default-Landscape@2x.png in Resources */,
 				53C7FD77150EFF7A008DA51C /* Default-Portrait@2x.png in Resources */,
 				53C7FD82150F00C5008DA51C /* home-chat-ipad@2x.png in Resources */,
-				53C7FD85150F00C5008DA51C /* home-jukebox-off-ipad@2x.png in Resources */,
-				53C7FD88150F00C5008DA51C /* home-jukebox-on-ipad@2x.png in Resources */,
 				53C7FD91150F00C5008DA51C /* home-quick-ipad@2x.png in Resources */,
 				53C7FD94150F00C5008DA51C /* home-settings-ipad@2x.png in Resources */,
 				53C7FD97150F00C5008DA51C /* home-shuffle-ipad@2x.png in Resources */,
@@ -4912,12 +4789,6 @@
 				53DCF48313BFEAD3009160F9 /* home-background-ipad.png in Resources */,
 				53DCF48713BFEAD3009160F9 /* home-background.png in Resources */,
 				53DCF48813BFEAD3009160F9 /* home-background@2x.png in Resources */,
-				53DCF48913BFEAD3009160F9 /* home-jukebox-off-ipad.png in Resources */,
-				53DCF48A13BFEAD3009160F9 /* home-jukebox-off.png in Resources */,
-				53DCF48B13BFEAD3009160F9 /* home-jukebox-off@2x.png in Resources */,
-				53DCF48C13BFEAD3009160F9 /* home-jukebox-on-ipad.png in Resources */,
-				53DCF48D13BFEAD3009160F9 /* home-jukebox-on.png in Resources */,
-				53DCF48E13BFEAD3009160F9 /* home-jukebox-on@2x.png in Resources */,
 				53DCF49513BFEAD3009160F9 /* home-quick-ipad.png in Resources */,
 				53DCF49613BFEAD3009160F9 /* home-quick.png in Resources */,
 				53DCF49713BFEAD3009160F9 /* home-quick@2x.png in Resources */,
@@ -5044,8 +4915,6 @@
 				53C7FD73150EFF7A008DA51C /* Default-Landscape@2x.png in Resources */,
 				53C7FD76150EFF7A008DA51C /* Default-Portrait@2x.png in Resources */,
 				53C7FD81150F00C5008DA51C /* home-chat-ipad@2x.png in Resources */,
-				53C7FD84150F00C5008DA51C /* home-jukebox-off-ipad@2x.png in Resources */,
-				53C7FD87150F00C5008DA51C /* home-jukebox-on-ipad@2x.png in Resources */,
 				53C7FD90150F00C5008DA51C /* home-quick-ipad@2x.png in Resources */,
 				53C7FD93150F00C5008DA51C /* home-settings-ipad@2x.png in Resources */,
 				53C7FD96150F00C5008DA51C /* home-shuffle-ipad@2x.png in Resources */,
@@ -5137,7 +5006,6 @@
 				5358DF831E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */,
 				5358DD7A1E0B78480024A0D4 /* CacheSingleton.m in Sources */,
-				5358DD6B1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */,
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */,
 				5358DCFD1E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
@@ -5204,7 +5072,6 @@
 				5304FC2D14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5358DFA11E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				5358DCC11E0B78470024A0D4 /* ISMSMediaFolder.m in Sources */,
-				5358DD751E0B78480024A0D4 /* SearchXMLParser.m in Sources */,
 				53D59A651E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
 				5358DD9D1E0B78480024A0D4 /* FMDatabasePoolAdditions.m in Sources */,
 				53835CDE1E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
@@ -5212,7 +5079,6 @@
 				53D59A7C1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				5304FC3014F2F0D100A2AD42 /* MenuViewController.m in Sources */,
 				53ABE14D1C60490F00E0E72B /* ItemViewModel.swift in Sources */,
-				5358DD701E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				53835CF71E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				5358DC851E0B78470024A0D4 /* BassStream.m in Sources */,
 				533C5EE01E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
@@ -5262,7 +5128,6 @@
 				53835CE81E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCF81E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
 				5358DD071E0B78470024A0D4 /* ISMSLoader.m in Sources */,
-				5358DD841E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
 				5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
@@ -5319,13 +5184,11 @@
 				5358DC9C1E0B78470024A0D4 /* BassEqualizer.m in Sources */,
 				53159E9C156F69D0001B0268 /* HelpTabViewController.m in Sources */,
 				5358DF901E0B789A0024A0D4 /* DDLog.m in Sources */,
-				5358DD781E0B78480024A0D4 /* SearchXMLParser.m in Sources */,
 				533C5EDE1E0B91CD00802FB1 /* NSData+MKBase64.m in Sources */,
 				5358DCCE1E0B78470024A0D4 /* Playlist.swift in Sources */,
 				53159EB6156F69D0001B0268 /* StoreViewController.swift in Sources */,
 				535B66211E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				53159EC3156F69D0001B0268 /* IntroViewController.m in Sources */,
-				5358DD731E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				53835D1D1E0B7DD50077B53D /* FMDatabaseQueue.m in Sources */,
 				5358DC921E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				53835CD71E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
@@ -5342,7 +5205,6 @@
 				53159ED3156F69D0001B0268 /* DDSocialDialog.m in Sources */,
 				5358DCC91E0B78470024A0D4 /* ISMSSong.m in Sources */,
 				5358E1CA1E0B789B0024A0D4 /* RXMLElement.m in Sources */,
-				5358DD871E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
 				53835CF51E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
 				53835D0E1E0B7DD50077B53D /* FMDatabase.m in Sources */,
 				53835C9B1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
@@ -5364,7 +5226,6 @@
 				53835CDC1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				53159F1B156F69D0001B0268 /* StackScrollViewController.m in Sources */,
 				5358DD0A1E0B78470024A0D4 /* ISMSLoader.m in Sources */,
-				5358DD6E1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */,
 				5358DD821E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				53159F1C156F69D0001B0268 /* MenuTableViewCell.m in Sources */,
 				5358DF8B1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
@@ -5405,7 +5266,6 @@
 				53835D2D1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
 				53835CD31E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
 				5358DF9B1E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
-				5358DD6F1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */,
 				5358DF871E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53835CCE1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				533C5EE41E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
@@ -5422,7 +5282,6 @@
 				5358DF961E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
 				5358DDA11E0B78480024A0D4 /* FMDatabasePoolAdditions.m in Sources */,
 				5358DC8E1E0B78470024A0D4 /* BassWrapper.m in Sources */,
-				5358DD791E0B78480024A0D4 /* SearchXMLParser.m in Sources */,
 				5358DD651E0B78480024A0D4 /* NSMutableURLRequest+SUS.m in Sources */,
 				53835CF61E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
 				53835CE21E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
@@ -5441,7 +5300,6 @@
 				5358DDA61E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
 				5358DC7F1E0B78470024A0D4 /* AudioEngine.m in Sources */,
 				53835D141E0B7DD50077B53D /* FMDatabaseAdditions.m in Sources */,
-				5358DD881E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
 				5358DCF71E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */,
 				5358DC841E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				5358DD3D1E0B78480024A0D4 /* StatusLoader.swift in Sources */,
@@ -5492,7 +5350,6 @@
 				5358DCBB1E0B78470024A0D4 /* ISMSFolder.m in Sources */,
 				53835D191E0B7DD50077B53D /* FMDatabasePool.m in Sources */,
 				53835CB51E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
-				5358DD741E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				5358DD6A1E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */,
 				5358DD011E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				5358DCCF1E0B78470024A0D4 /* Playlist.swift in Sources */,
@@ -5528,7 +5385,6 @@
 				5358DF851E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */,
 				5358DD7C1E0B78480024A0D4 /* CacheSingleton.m in Sources */,
-				5358DD6D1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */,
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				53BC27D6139AF0DD00A825F1 /* UAApplication.m in Sources */,
 				5358DCFF1E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
@@ -5595,7 +5451,6 @@
 				5304FC2F14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5358DFA31E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				5358DCC31E0B78470024A0D4 /* ISMSMediaFolder.m in Sources */,
-				5358DD771E0B78480024A0D4 /* SearchXMLParser.m in Sources */,
 				53D59A671E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
 				5358DD9F1E0B78480024A0D4 /* FMDatabasePoolAdditions.m in Sources */,
 				53835CE01E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
@@ -5603,7 +5458,6 @@
 				53D59A7E1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				5304FC3214F2F0D100A2AD42 /* MenuViewController.m in Sources */,
 				53ABE14F1C60490F00E0E72B /* ItemViewModel.swift in Sources */,
-				5358DD721E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				5358DC871E0B78470024A0D4 /* BassStream.m in Sources */,
 				533C5EE21E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
@@ -5653,7 +5507,6 @@
 				53835CEA1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCFA1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
 				5358DD091E0B78470024A0D4 /* ISMSLoader.m in Sources */,
-				5358DD861E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
 				5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
@@ -5696,7 +5549,6 @@
 				5358DF841E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53D59A301E1DC38500071ABD /* EX2Dispatch.m in Sources */,
 				5358DD7B1E0B78480024A0D4 /* CacheSingleton.m in Sources */,
-				5358DD6C1E0B78480024A0D4 /* JukeboxConnectionDelegate.m in Sources */,
 				53D59A6B1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				53DCF53713BFEAD3009160F9 /* UAApplication.m in Sources */,
 				5358DCFE1E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
@@ -5763,7 +5615,6 @@
 				5304FC2E14F2F0D100A2AD42 /* iPadRootViewController.m in Sources */,
 				5358DFA21E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				5358DCC21E0B78470024A0D4 /* ISMSMediaFolder.m in Sources */,
-				5358DD761E0B78480024A0D4 /* SearchXMLParser.m in Sources */,
 				53D59A661E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
 				5358DD9E1E0B78480024A0D4 /* FMDatabasePoolAdditions.m in Sources */,
 				53835CDF1E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
@@ -5771,7 +5622,6 @@
 				53D59A7D1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				5304FC3114F2F0D100A2AD42 /* MenuViewController.m in Sources */,
 				53ABE14E1C60490F00E0E72B /* ItemViewModel.swift in Sources */,
-				5358DD711E0B78480024A0D4 /* JukeboxXMLParser.m in Sources */,
 				53835CF81E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				5358DC861E0B78470024A0D4 /* BassStream.m in Sources */,
 				533C5EE11E0B91CD00802FB1 /* SFHFKeychainUtils.m in Sources */,
@@ -5821,7 +5671,6 @@
 				53835CE91E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCF91E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
 				5358DD081E0B78470024A0D4 /* ISMSLoader.m in Sources */,
-				5358DD851E0B78480024A0D4 /* JukeboxSingleton.m in Sources */,
 				5333D1101C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				53D59A471E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A391E1DC38500071ABD /* EX2RingBuffer.m in Sources */,

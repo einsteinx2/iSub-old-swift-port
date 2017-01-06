@@ -185,21 +185,12 @@ import Nuke
                 NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_RemoveMoviePlayer)
             }
             
-            if SavedSettings.sharedInstance().isJukeboxEnabled {
-                if currentSong.contentType?.basicType == .video {
-                    // TODO: Use a different mechanism
-                    //EX2SlidingNotification.slidingNotificationOnMainWindow(withMessage: "Cannot play videos in Jukebox mode.", image: nil)
-                } else {
-                    JukeboxSingleton.sharedInstance().jukeboxPlaySong(atPosition: index as NSNumber!)
-                }
+            ISMSStreamManager.sharedInstance().removeAllStreamsExcept(for: currentSong)
+            
+            if currentSong.contentType?.basicType == .video {
+                NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_PlayVideo, userInfo: ["song": currentSong])
             } else {
-                ISMSStreamManager.sharedInstance().removeAllStreamsExcept(for: currentSong)
-                
-                if currentSong.contentType?.basicType == .video {
-                    NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_PlayVideo, userInfo: ["song": currentSong])
-                } else {
-                    startSong()
-                }
+                startSong()
             }
         }
     }

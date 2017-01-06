@@ -331,10 +331,6 @@
 //        #endif
 //    }
 //    
-//    // TODO: Fill in for new UI
-//    func jukeboxToggled() {
-//        
-//    }
 //
 //    func backToReferringApp() {
 //        if let url = self.referringAppUrl {
