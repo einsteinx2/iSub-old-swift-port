@@ -10,10 +10,6 @@
 #import "iSub-Swift.h"
 #import "BassGaplessPlayer.h"
 
-#ifdef IOS
-#import "MKStoreManager.h"
-#endif
-
 @interface SavedSettings ()
 {
     NSUserDefaults *_userDefaults;
@@ -568,41 +564,6 @@
 		[_userDefaults setObject:folderId forKey:[NSString stringWithFormat:@"%@rootFoldersSelectedFolder", _currentServer.url]];
 		[_userDefaults synchronize];
 	}
-}
-
-#pragma mark - Lite Version Properties
-
-// This is necessary because preprocessor macros set in the parent application are not picked up by subprojects during building
-- (BOOL)isLite
-{
-    return [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.einsteinx2.isublite"];
-}
-
-- (BOOL)isPlaylistUnlocked
-{
-#ifdef IOS
-	return (![self isLite] || [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId] || [MKStoreManager isFeaturePurchased:kFeatureAllId]);
-#else
-    return YES;
-#endif
-}
-
-- (BOOL)isCacheUnlocked
-{
-#ifdef IOS
-	return (![self isLite] || [MKStoreManager isFeaturePurchased:kFeatureCacheId] || [MKStoreManager isFeaturePurchased:kFeatureAllId]);
-#else
-    return YES;
-#endif
-}
-
-- (BOOL)isVideoUnlocked
-{
-#ifdef IOS
-	return (![self isLite] || [MKStoreManager isFeaturePurchased:kFeatureVideoId] || [MKStoreManager isFeaturePurchased:kFeatureAllId]);
-#else
-    return YES;
-#endif
 }
 
 #pragma mark - Other Settings

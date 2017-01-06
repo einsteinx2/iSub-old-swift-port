@@ -1,7 +1,6 @@
 github "bitstadium/HockeySDK-iOS"
 github "jdg/MBProgressHUD"
 github "SnapKit/SnapKit"
-github "bizz84/SwiftyStoreKit"
 github "duemunk/Async"
 github "kean/Nuke"
 github "ashleymills/Reachability.swift" "master"

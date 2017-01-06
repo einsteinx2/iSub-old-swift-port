@@ -50,7 +50,6 @@
 
 //- (void)loadFlurryAnalytics;
 - (void)loadHockeyApp;
-- (void)loadInAppPurchaseStore;
 
 - (void)reachabilityChanged;
 

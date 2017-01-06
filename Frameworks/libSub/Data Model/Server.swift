@@ -26,7 +26,7 @@ open class Server: NSObject, NSCopying, NSCoding { //, ISMSPersistedModel {
     open var password: String? {
         get {
             do {
-                return try SFHFKeychainUtils.getPasswordForUsername(self.username, andServiceName: self.url)
+                return try BCCKeychain.getPasswordString(forUsername: username, andServiceName: url)
             } catch {
                 printError(error)
                 return nil
@@ -34,7 +34,11 @@ open class Server: NSObject, NSCopying, NSCoding { //, ISMSPersistedModel {
         }
         set(newValue) {
             do {
-                try SFHFKeychainUtils.storeUsername(self.username, andPassword: newValue, forServiceName: self.url, updateExisting: true)
+                if let newValue = newValue {
+                    try BCCKeychain.storeUsername(username, andPasswordString: newValue, forServiceName: url, updateExisting: true)
+                } else {
+                    try BCCKeychain.deleteItem(forUsername: username, andServiceName: url)
+                }
             } catch {
                 printError(error)
             }

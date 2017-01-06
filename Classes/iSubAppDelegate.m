@@ -14,11 +14,9 @@
 #import <netdb.h>
 #import <arpa/inet.h>
 #import "IntroViewController.h"
-#import "SFHFKeychainUtils.h"
 #import "iPadRootViewController.h"
 #import "MenuViewController.h"
 #import "ISMSUpdateChecker.h"
-#import "MKStoreManager.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "UIViewController+PushViewControllerCustom.h"
 #import "HLSProxyConnection.h"
@@ -103,9 +101,7 @@
 		
 	//[self loadFlurryAnalytics];
 	[self loadHockeyApp];
-		
-	[self loadInAppPurchaseStore];
-    
+		    
     // Check the server status in the background
     if (!settingsS.isOfflineMode)
     {
@@ -459,57 +455,6 @@
         return zipFilePath;
     }
     return nil;
-}
-
-/*- (void)loadCrittercism
-{
-	//if (IS_BETA() && IS_ADHOC() && !IS_LITE())
-	if (1)
-	{
-		[Crittercism initWithAppID:@"4f504545b093157173000017" 
-							andKey:@"4f504545b093157173000017lh4java7"
-						 andSecret:@"trzmcvolbfqgnphhisc8jdvunqy2es5b" 
-			 andMainViewController:nil];
-	}
-	else if (IS_RELEASE())
-	{
-		[Crittercism initWithAppID:@"4f1f9785b093150d5500008c" 
-							andKey:@"4f1f9785b093150d5500008cpu3zoqbu" 
-						 andSecret:@"2ayz0tlckhhu4jjsb8dzxuqmfnexcqkn"
-			 andMainViewController:nil];
-	}
-	[Crittercism sharedInstance].delegate = (id<CrittercismDelegate>)self;
-}
-
-- (void)crittercismDidCrashOnLastLoad
-{
-//DLog(@"App crashed on last load. Do something here.");
-	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no! :(" message:@"It looks like iSub crashed recently!\n\nWell never fear, iSub support is happy to help. \n\nWould you like to send an email to support?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Yes Please", nil];
-	alert.tag = 7;
-	[alert show];
-	[alert release];
-}*/
-
-- (void)loadInAppPurchaseStore
-{
-#if IS_LITE()
-    [MKStoreManager sharedManager];
-    [MKStoreManager setDelegate:self];
-    
-    if (IS_DEBUG())
-    {
-        // Reset features
-        [SFHFKeychainUtils storeUsername:kFeaturePlaylistsId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-        [SFHFKeychainUtils storeUsername:kFeatureCacheId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-        [SFHFKeychainUtils storeUsername:kFeatureVideoId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-        [SFHFKeychainUtils storeUsername:kFeatureAllId andPassword:@"NO" forServiceName:kServiceName updateExisting:YES error:nil];
-        
-        //DLog(@"is kFeaturePlaylistsId enabled: %i", [MKStoreManager isFeaturePurchased:kFeaturePlaylistsId]);
-        //DLog(@"is kFeatureCacheId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureCacheId]);
-        //DLog(@"is kFeatureAllId enabled: %i", [MKStoreManager isFeaturePurchased:kFeatureAllId]);
-    }
-#endif
 }
 
 - (void)startRedirectingLogToFile
