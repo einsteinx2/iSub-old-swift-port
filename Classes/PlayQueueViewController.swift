@@ -94,6 +94,19 @@ class PlayQueueViewController: DraggableTableViewController {
                 var row = -1
                 if let indexPath = indexPath {
                     row = indexPath.row
+                } else {
+                    // If we're at the end of the table, treat it as the last cell
+                    let lastRow = tableView.numberOfRows(inSection: 0) - 1
+                    if lastRow >= 0 {
+                        let lastCellIndexPath = IndexPath(row: lastRow, section: 0)
+                        let lastCellRect = tableView.rectForRow(at: lastCellIndexPath)
+                        if tablePoint.y > lastCellRect.origin.y + lastCellRect.size.height {
+                            row = lastRow
+                        }
+                    } else {
+                        // Empty table
+                        row = 0
+                    }
                 }
                 
                 if hoverRow != row {
@@ -150,7 +163,7 @@ class PlayQueueViewController: DraggableTableViewController {
                             }
                         }
                     } else if !internallyDragging {
-                        viewModel.insertSongAtIndex(hoverRow + 1, song: song)
+                        viewModel.insertSongAtIndex(hoverRow, song: song)
                     }
                 }
             }
