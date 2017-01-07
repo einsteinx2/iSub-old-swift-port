@@ -1349,6 +1349,8 @@
 		53E7BC131D15751900FD8613 /* MiniPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */; };
 		53E7BC151D15751900FD8613 /* MiniPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */; };
 		53F0CD8211589F0A00A665CD /* progress-label-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F0CD8111589F0A00A665CD /* progress-label-background.png */; };
+		53F40B9A1E207D4700E8CB17 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F40B991E207D4700E8CB17 /* PlayerViewController.swift */; };
+		53F40B9B1E207D4700E8CB17 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F40B991E207D4700E8CB17 /* PlayerViewController.swift */; };
 		53F675D8113B092C00822059 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675D7113B092C00822059 /* MediaPlayer.framework */; };
 		53F675DC113B093900822059 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675DB113B093900822059 /* CFNetwork.framework */; };
 		53F675E2113B095900822059 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E1113B095900822059 /* QuartzCore.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -1965,6 +1967,7 @@
 		53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiniPlayerViewController.swift; sourceTree = "<group>"; };
 		53F0CD8111589F0A00A665CD /* progress-label-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "progress-label-background.png"; path = "Images/Other/progress-label-background.png"; sourceTree = "<group>"; };
 		53F1412015FD550C004D00D5 /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = buildnumber.xcconfig; path = Other/buildnumber.xcconfig; sourceTree = "<group>"; };
+		53F40B991E207D4700E8CB17 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		53F675D7113B092C00822059 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		53F675DB113B093900822059 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		53F675E1113B095900822059 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -2354,6 +2357,7 @@
 				538A1CDC1D144C9100999E7F /* CenterPanelContainerViewController.swift */,
 				53ABE13C1C60341300E0E72B /* NewMenuViewController.swift */,
 				53E7BC121D15751900FD8613 /* MiniPlayerViewController.swift */,
+				53F40B991E207D4700E8CB17 /* PlayerViewController.swift */,
 				5333D10A1C65433800DC19F4 /* PlayQueueViewController.swift */,
 				53CD9DB41C7680AF00A75438 /* PlayQueueViewModel.swift */,
 				53ABE1411C60363E00E0E72B /* ItemViewController.swift */,
@@ -4172,6 +4176,7 @@
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
 				5358DDA21E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
 				5358DD661E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */,
+				53F40B9A1E207D4700E8CB17 /* PlayerViewController.swift in Sources */,
 				5398F27811DA627500007870 /* HelpTabViewController.m in Sources */,
 				5358E1C71E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358DF881E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
@@ -4535,6 +4540,7 @@
 				53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */,
 				5358DDA41E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
 				5358DD681E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */,
+				53F40B9B1E207D4700E8CB17 /* PlayerViewController.swift in Sources */,
 				53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */,
 				5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,

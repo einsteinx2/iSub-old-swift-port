@@ -42,6 +42,7 @@ class CenterPanelContainerViewController: UIViewController {
             make.height.equalToSuperview().offset(miniPlayerShowing ? -50 : 0)
         }
         
+        self.addChildViewController(miniPlayer)
         self.view.addSubview(miniPlayer.view)
         miniPlayer.view.snp.makeConstraints { make in
             make.height.equalTo(50)

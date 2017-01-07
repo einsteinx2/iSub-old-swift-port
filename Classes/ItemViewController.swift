@@ -294,11 +294,6 @@ class ItemViewController: DraggableTableViewController {
                 // TODO: Implement a way to just switch play index when we're playing from the same array to save time
                 //playAll(songs: viewModel.songs, playIndex: indexPath.row)
                 PlayQueue.sharedInstance.playSongs(viewModel.songs, playIndex: indexPath.row)
-                
-                let song = viewModel.songs[indexPath.row] as ISMSSong
-                if song.contentType?.basicType == ISMSBasicContentType.audio {
-                    self.showPlayer()
-                }
                 break
             default:
                 break

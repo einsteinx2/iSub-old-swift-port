@@ -953,6 +953,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     if (!self.currentStream)
         return 0;
     
+    // Make sure we're using the right device
+    BASS_SetDevice(ISMS_BassDeviceNumber);
+    
     long long pcmBytePosition = BASS_Mixer_ChannelGetPosition(self.currentStream.stream, BASS_POS_BYTE);
     
     NSInteger chanCount = self.currentStream.channelCount;
@@ -970,6 +973,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     double seconds = BASS_ChannelBytes2Seconds(self.currentStream.stream, self.ringBuffer.totalBytesDrained * sampleRateRatio * chanCount);
     //ALog(@"seconds: %f", seconds);
     //DDLogVerbose(@"progress seconds: %f", seconds);
+    
+    //NSLog(@"pcmBytePosition: %lli  seconds: %f", pcmBytePosition, seconds);
     
     return seconds;
 }
@@ -1129,6 +1134,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	}
 	else
 	{
+        NSLog(@"trying to set position: %lli  current position: %lli", bytes, BASS_Mixer_ChannelGetPosition(userInfo.stream, BASS_POS_BYTE));
 		if (BASS_Mixer_ChannelSetPosition(userInfo.stream, bytes, BASS_POS_BYTE))
 		{
 			self.startByteOffset = bytes;
@@ -1167,6 +1173,15 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     
 	QWORD bytes = BASS_ChannelSeconds2Bytes(self.currentStream.stream, seconds);
 	[self seekToPositionInBytes:bytes fadeVolume:fadeVolume];
+    
+    NSLog(@"Seeking to seconds: %f   bytes: %llu", seconds, bytes);
+
+}
+
+- (void)seekToPositionInPercent:(double)percent fadeVolume:(BOOL)fadeVolume
+{
+    double seconds = self.currentStream.song.duration.doubleValue * percent;
+    [self seekToPositionInSeconds:seconds fadeVolume:fadeVolume];
 }
 
 @end

@@ -68,6 +68,7 @@
 - (void)playPause;
 - (void)seekToPositionInBytes:(QWORD)bytes fadeVolume:(BOOL)fadeVolume;
 - (void)seekToPositionInSeconds:(double)seconds fadeVolume:(BOOL)fadeVolume;
+- (void)seekToPositionInPercent:(double)percent fadeVolume:(BOOL)fadeVolume;
 
 - (BOOL)testStreamForSong:(ISMSSong *)aSong;
 - (BassStream *)prepareStreamForSong:(ISMSSong *)aSong;

@@ -17,6 +17,8 @@ class MiniPlayerViewController: UIViewController {
     let progressView = UIView()
     var progressDisplayLink: CADisplayLink!
     
+    let tapRecognizer = UITapGestureRecognizer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .lightGray
@@ -88,6 +90,9 @@ class MiniPlayerViewController: UIViewController {
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(playbackPaused), name: ISMSNotification_SongPlaybackPaused, object: nil)
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(playbackEnded), name: ISMSNotification_SongPlaybackEnded, object: nil)
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(indexChanged), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        
+        tapRecognizer.addTarget(self, action: #selector(showPlayer))
+        self.view.addGestureRecognizer(tapRecognizer)
     }
     
     deinit {
@@ -150,5 +155,9 @@ class MiniPlayerViewController: UIViewController {
         progressView.snp.updateConstraints { make in
             make.width.equalTo(width)
         }
+    }
+    
+    @objc fileprivate func showPlayer() {
+        self.parent?.present(PlayerViewController(), animated: true, completion: nil)
     }
 }

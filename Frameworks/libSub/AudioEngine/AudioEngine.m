@@ -169,6 +169,11 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self.player seekToPositionInSeconds:seconds fadeVolume:fadeVolume];
 }
 
+- (void)seekToPositionInPercent:(double)percent fadeVolume:(BOOL)fadeVolume
+{
+    [self.player seekToPositionInPercent:percent fadeVolume:fadeVolume];
+}
+
 - (double)progress
 {
     return self.player.progress;
