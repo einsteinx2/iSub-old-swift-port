@@ -14,6 +14,8 @@ class MiniPlayerViewController: UIViewController {
     let artistLabel = UILabel()
     let playButton = UIButton(type: .custom)
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    let progressView = UIView()
+    var progressDisplayLink: CADisplayLink!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +31,7 @@ class MiniPlayerViewController: UIViewController {
         
         playButton.setTitleColor(.black, for: UIControlState())
         playButton.titleLabel?.font = .systemFont(ofSize: 20)
-        playButton.addTarget(self, action: #selector(MiniPlayerViewController.playPause), for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(playPause), for: .touchUpInside)
         self.view.addSubview(playButton)
         playButton.snp.makeConstraints { make in
             make.right.equalToSuperview()
@@ -65,13 +67,27 @@ class MiniPlayerViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-5)
         }
         
+        progressView.backgroundColor = .white
+        self.view.addSubview(progressView)
+        progressView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.width.equalTo(0)
+            make.height.equalTo(3)
+            make.bottom.equalToSuperview()
+        }
+        
+        progressDisplayLink = CADisplayLink(target: self, selector: #selector(updateProgressView))
+        progressDisplayLink.isPaused = true
+        progressDisplayLink.add(to: RunLoop.main, forMode: .defaultRunLoopMode)
+        
         updatePlayButton()
         updateCurrentSong()
+        updateProgressView()
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(MiniPlayerViewController.playbackStarted), name: ISMSNotification_SongPlaybackStarted, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(MiniPlayerViewController.updatePlayButton), name: ISMSNotification_SongPlaybackPaused, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(MiniPlayerViewController.updatePlayButton), name: ISMSNotification_SongPlaybackEnded, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(MiniPlayerViewController.updateCurrentSong), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playbackStarted), name: ISMSNotification_SongPlaybackStarted, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playbackPaused), name: ISMSNotification_SongPlaybackPaused, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playbackEnded), name: ISMSNotification_SongPlaybackEnded, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(indexChanged), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
     }
     
     deinit {
@@ -81,12 +97,35 @@ class MiniPlayerViewController: UIViewController {
         NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
     }
     
+    @objc fileprivate func playPause() {
+        if !AudioEngine.sharedInstance().isStarted() {
+            spinner.startAnimating()
+        }
+        
+        PlayQueue.sharedInstance.playPause()
+    }
+    
     @objc fileprivate func playbackStarted() {
         spinner.stopAnimating()
         updatePlayButton()
+        progressDisplayLink.isPaused = false
     }
     
-    @objc fileprivate func updatePlayButton(_ playing: Bool = AudioEngine.sharedInstance().isPlaying()) {
+    @objc fileprivate func playbackPaused() {
+        updatePlayButton()
+        progressDisplayLink.isPaused = true
+    }
+    
+    @objc fileprivate func playbackEnded() {
+        updatePlayButton()
+        progressDisplayLink.isPaused = true
+    }
+    
+    @objc fileprivate func indexChanged() {
+        updateCurrentSong()
+    }
+    
+    fileprivate func updatePlayButton(_ playing: Bool = AudioEngine.sharedInstance().isPlaying()) {
         if playing {
             playButton.setTitle("| |", for: UIControlState())
         } else {
@@ -94,7 +133,7 @@ class MiniPlayerViewController: UIViewController {
         }
     }
     
-    @objc fileprivate func updateCurrentSong() {
+    fileprivate func updateCurrentSong() {
         let currentSong = PlayQueue.sharedInstance.currentDisplaySong
         if let coverArtId = currentSong?.coverArtId {
             coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
@@ -105,11 +144,11 @@ class MiniPlayerViewController: UIViewController {
         artistLabel.text = currentSong?.artistDisplayName
     }
     
-    @objc fileprivate func playPause() {
-        if !AudioEngine.sharedInstance().isStarted() {
-            spinner.startAnimating()
+    @objc fileprivate func updateProgressView() {
+        let progress = AudioEngine.sharedInstance().progressPercent()
+        let width = self.view.frame.width * CGFloat(progress)
+        progressView.snp.updateConstraints { make in
+            make.width.equalTo(width)
         }
-        
-        PlayQueue.sharedInstance.playPause()
     }
 }

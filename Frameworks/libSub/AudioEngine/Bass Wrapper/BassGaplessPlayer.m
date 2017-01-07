@@ -948,11 +948,11 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	return BASS_StreamGetFilePosition(self.currentStream.stream, BASS_FILEPOS_CURRENT) + self.startByteOffset;
 }
 
-- (double)progress
+- (double)rawProgress
 {
-	if (!self.currentStream)
-		return 0;
-	
+    if (!self.currentStream)
+        return 0;
+    
     long long pcmBytePosition = BASS_Mixer_ChannelGetPosition(self.currentStream.stream, BASS_POS_BYTE);
     
     NSInteger chanCount = self.currentStream.channelCount;
@@ -962,14 +962,24 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     //ALog(@"adjustedPosition: %lli, pcmBytePosition: %lli, self.ringBuffer.filledSpaceLength: %i", realPosition, pcmBytePosition, self.ringBuffer.filledSpaceLength);
     
     double sampleRateRatio = self.currentStream.sampleRate / (double)ISMS_defaultSampleRate;
-	
+    
     //ALog(@"total bytes drained: %lli, seconds: %f, sampleRate: %li, ratio: %f", self.ringBuffer.totalBytesDrained, BASS_ChannelBytes2Seconds(self.currentStream.stream, self.ringBuffer.totalBytesDrained * sampleRateRatio * chanCount), (long)self.currentStream.sampleRate, sampleRateRatio);
     pcmBytePosition = realPosition;
-	pcmBytePosition = pcmBytePosition < 0 ? 0 : pcmBytePosition; 
-	//double seconds = BASS_ChannelBytes2Seconds(self.currentStream.stream, pcmBytePosition);
+    pcmBytePosition = pcmBytePosition < 0 ? 0 : pcmBytePosition;
+    //double seconds = BASS_ChannelBytes2Seconds(self.currentStream.stream, pcmBytePosition);
     double seconds = BASS_ChannelBytes2Seconds(self.currentStream.stream, self.ringBuffer.totalBytesDrained * sampleRateRatio * chanCount);
     //ALog(@"seconds: %f", seconds);
     //DDLogVerbose(@"progress seconds: %f", seconds);
+    
+    return seconds;
+}
+
+- (double)progress
+{
+	if (!self.currentStream)
+		return 0;
+    
+    double seconds = [self rawProgress];
 	if (seconds < 0)
     {
         // Use the previous song (i.e the one still coming out of the speakers), since we're actually finishing it right now
@@ -984,6 +994,23 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     //ALog(@"bytepos: %lld, secs: %f", pcmBytePosition, seconds);
 	
 	return seconds + self.startSecondsOffset;
+}
+
+- (double)progressPercent
+{
+    if (!self.currentStream)
+        return 0;
+    
+    double seconds = [self rawProgress];
+    if (seconds < 0)
+    {
+        double duration = self.previousSongForProgress.duration.doubleValue;
+        seconds = duration + seconds;
+        return seconds / duration;
+    }
+    
+    double duration = self.currentStream.song.duration.doubleValue;
+    return seconds / duration;
 }
 
 - (BassStream *)currentStream

@@ -57,6 +57,7 @@
 - (void)seekToPositionInBytes:(QWORD)bytes fadeVolume:(BOOL)fadeVolume;
 - (void)seekToPositionInSeconds:(double)seconds fadeVolume:(BOOL)fadeVolume;
 - (double)progress;
+- (double)progressPercent;
 
 @end
 

@@ -174,6 +174,11 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     return self.player.progress;
 }
 
+- (double)progressPercent
+{
+    return self.player.progressPercent;
+}
+
 - (BassEqualizer *)equalizer
 {
 	return self.player.equalizer;

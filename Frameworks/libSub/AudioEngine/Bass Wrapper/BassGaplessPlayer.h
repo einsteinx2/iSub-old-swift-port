@@ -39,6 +39,7 @@
 @property (readonly) NSInteger bitRate;
 @property (readonly) QWORD currentByteOffset;
 @property (readonly) double progress;
+@property (readonly) double progressPercent;
 @property (strong) BassStream *waitLoopStream;
 
 @property NSUInteger startByteOffset;
