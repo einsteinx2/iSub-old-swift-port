@@ -51,6 +51,8 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     fileprivate func scrollCurrentSongToTop() {
+        adjustFooter()
+        
         let currentIndex = self.viewModel.currentIndex
         if currentIndex >= 0 {
             let indexPath = IndexPath(row: self.viewModel.currentIndex, section: 0)
@@ -181,16 +183,25 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     override func customizeTableView(_ tableView: UITableView) {
-        // Allow the player to always move to the top
-        // TODO: Adjust this so that it never lets you move the player higher than the screen if 
-        // there are not more rows
-        let appHeight = UIScreen.main.bounds.height
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: appHeight - 60))
-        
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 0))
+        adjustFooter()
         tableView.backgroundColor = UIColor.clear
         tableView.separatorColor = UIColor.black
         tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: itemReuseIdentifier)
         tableView.register(CurrentItemCell.self, forCellReuseIdentifier: currentItemReuseIdentifier)
+    }
+    
+    // TODO: Finish this
+    fileprivate func adjustFooter() {
+        // Keep the footer the correct height to allow the player to sit at the top but no further
+//        let appHeight = UIScreen.main.bounds.height
+//        if var footerView = tableView.tableFooterView {
+//            footerView.frame.height = appHeight -
+//            tableView.tableFooterView = footerView
+//            
+//            //UIView(frame: CGRect(x: 0, y: 0, width: 300, height: appHeight - 60))
+//        }
+//        
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
