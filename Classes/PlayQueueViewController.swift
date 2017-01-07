@@ -54,7 +54,7 @@ class PlayQueueViewController: DraggableTableViewController {
         adjustFooter()
         
         let currentIndex = self.viewModel.currentIndex
-        if currentIndex >= 0 {
+        if currentIndex >= 0 && currentIndex < viewModel.numberOfRows {
             let indexPath = IndexPath(row: self.viewModel.currentIndex, section: 0)
             
             //let rect = self.tableView.rectForRow(at: indexPath)
