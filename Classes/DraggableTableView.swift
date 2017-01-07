@@ -59,7 +59,7 @@ class DraggableTableView: UITableView {
     let VertSwipeDragMax = 80.0
     
     let cellEnableDelay = 1.0
-    let longPressDelay = 330 //ms
+    let longPressDelay = 1000 //ms
     
     var lastDeleteToggle = Date()
     
