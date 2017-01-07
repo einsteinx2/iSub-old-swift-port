@@ -37,10 +37,12 @@ class RootArtistsLoader: ISMSLoader, ItemLoader {
             var artistsTemp = [ISMSArtist]()
             
             let serverId = SavedSettings.sharedInstance().currentServerId
-            root.iterate("artists.index.artist") { artist in
-                if artist.attribute("name") != ".AppleDouble" {
-                    let anArtist = ISMSArtist(rxmlElement: artist, serverId: serverId)
-                    artistsTemp.append(anArtist)
+            root.iterate("artists.index") { index in
+                index.iterate("artist") { artist in
+                    if artist.attribute("name") != ".AppleDouble" {
+                        let anArtist = ISMSArtist(rxmlElement: artist, serverId: serverId)
+                        artistsTemp.append(anArtist)
+                    }
                 }
             }
             
