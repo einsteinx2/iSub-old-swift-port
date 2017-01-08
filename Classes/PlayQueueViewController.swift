@@ -51,10 +51,10 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     fileprivate func scrollCurrentSongToTop() {
-        adjustFooter()
-        
         let currentIndex = self.viewModel.currentIndex
         if currentIndex >= 0 && currentIndex < viewModel.numberOfRows {
+            adjustFooter()
+            
             let indexPath = IndexPath(row: self.viewModel.currentIndex, section: 0)
             
             //let rect = self.tableView.rectForRow(at: indexPath)
@@ -191,17 +191,23 @@ class PlayQueueViewController: DraggableTableViewController {
         tableView.register(CurrentItemCell.self, forCellReuseIdentifier: currentItemReuseIdentifier)
     }
     
-    // TODO: Finish this
     fileprivate func adjustFooter() {
         // Keep the footer the correct height to allow the player to sit at the top but no further
-//        let appHeight = UIScreen.main.bounds.height
-//        if var footerView = tableView.tableFooterView {
-//            footerView.frame.height = appHeight -
-//            tableView.tableFooterView = footerView
-//            
-//            //UIView(frame: CGRect(x: 0, y: 0, width: 300, height: appHeight - 60))
-//        }
-//        
+        let currentSongRect = self.tableView.rectForRow(at: IndexPath(row: self.viewModel.currentIndex, section: 0))
+        let lastRowRect = self.tableView.rectForRow(at: IndexPath(row: viewModel.numberOfRows - 1, section: 0))
+        
+        let tableHeight = lastRowRect.origin.y + lastRowRect.size.height
+        let distanceToEndOfTable = tableHeight - currentSongRect.origin.y
+        
+        var footerHeight = UIScreen.main.bounds.height - distanceToEndOfTable
+        if footerHeight < 0 {
+            footerHeight = 0
+        }
+        
+        if let footerView = tableView.tableFooterView {
+            footerView.frame.size.height = footerHeight
+            tableView.tableFooterView = footerView
+        }
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -213,10 +219,9 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        Swift.print("cellForRow \(indexPath.row)  song: \(viewModel.songAtIndex(indexPath.row).title)")
         let row = indexPath.row
         if row == viewModel.currentIndex, let cell = tableView.dequeueReusableCell(withIdentifier: currentItemReuseIdentifier, for: indexPath) as? CurrentItemCell {
-            cell.cellHeight = 60.0
+            cell.cellHeight = 64.0
             cell.accessoryType = .none
             cell.indexPath = indexPath
             cell.associatedObject = viewModel.songAtIndex(indexPath.row)
@@ -233,8 +238,6 @@ class PlayQueueViewController: DraggableTableViewController {
             cell.title = song.title
             cell.subTitle = song.artistDisplayName
             cell.duration = song.duration
-            // TODO: Read this with new data model
-            //cell.playing = song.isCurrentPlayingSong()
             
             cell.backgroundView = UIView()
             if song.isFullyCached {
