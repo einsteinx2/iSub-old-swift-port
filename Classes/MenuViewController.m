@@ -170,7 +170,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+    if (SavedSettings.si.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
         return NO;
     
     return YES;
@@ -187,7 +187,7 @@
         [_cellContents addObject:[MenuTableItem itemWithImageName:@"back-tabbaricon" text:@"Back"]];
     }
     
-	if (settingsS.isOfflineMode)
+	if (SavedSettings.si.isOfflineMode)
 	{
         [_cellContents addObject:[MenuTableItem itemWithImageName:@"settings-tabbaricon"    text:@"Settings"]];
         [_cellContents addObject:[MenuTableItem itemWithImageName:@"folders-tabbaricon"     text:@"Folders"]];
@@ -206,7 +206,7 @@
         [_cellContents addObject:[MenuTableItem itemWithImageName:@"cache-tabbaricon"       text:@"Cache"]];
         [_cellContents addObject:[MenuTableItem itemWithImageName:@"chat-tabbaricon"        text:@"Chat"]];
 
-		if (settingsS.isSongsTabEnabled)
+		if (SavedSettings.si.isSongsTabEnabled)
 		{
 			_tableView.scrollEnabled = YES;
             [_cellContents addObject:[MenuTableItem itemWithImageName:@"genres-tabbaricon"   text:@"Genres"]];
@@ -313,7 +313,7 @@
 	//
 	UIViewController *controller;
 	
-	if (settingsS.isOfflineMode)
+	if (SavedSettings.si.isOfflineMode)
 	{
 		switch (row) 
 		{

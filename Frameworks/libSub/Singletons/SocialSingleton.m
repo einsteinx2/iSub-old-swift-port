@@ -37,9 +37,9 @@ LOG_LEVEL_ISUB_DEFAULT
 {
     // TODO: I don't think this works anymore
     double progress = [PlayQueue sharedInstance].currentSongProgress;
-    if (!self.playerHasNotifiedSubsonic && progress >= socialS.subsonicDelay)
+    if (!self.playerHasNotifiedSubsonic && progress >= SocialSingleton.si.subsonicDelay)
     {
-        if (settingsS.currentServer.type == ServerTypeSubsonic)
+        if (SavedSettings.si.currentServer.type == ServerTypeSubsonic)
         {
             [EX2Dispatch runInMainThreadAsync:^{
                 [self notifySubsonic];
@@ -49,7 +49,7 @@ LOG_LEVEL_ISUB_DEFAULT
         self.playerHasNotifiedSubsonic = YES;
     }
     
-	if (!self.playerHasTweeted && progress >= socialS.tweetDelay)
+	if (!self.playerHasTweeted && progress >= SocialSingleton.si.tweetDelay)
 	{
 		self.playerHasTweeted = YES;
 		
@@ -58,7 +58,7 @@ LOG_LEVEL_ISUB_DEFAULT
 		}];
 	}
 	
-	if (!self.playerHasScrobbled && progress >= socialS.scrobbleDelay)
+	if (!self.playerHasScrobbled && progress >= SocialSingleton.si.scrobbleDelay)
 	{
 		self.playerHasScrobbled = YES;
 		[EX2Dispatch runInMainThreadAsync:^{
@@ -82,7 +82,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
 	{
-		float scrobblePercent = settingsS.scrobblePercent;
+		float scrobblePercent = SavedSettings.si.scrobblePercent;
 		float duration = [currentSong.duration floatValue];
 		scrobbleDelay = scrobblePercent * duration;
 	}
@@ -102,7 +102,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)notifySubsonic
 {
-	if (!settingsS.isOfflineMode)
+	if (!SavedSettings.si.isOfflineMode)
 	{
 		// If this song wasn't just cached, then notify Subsonic of the playback
 		ISMSSong *lastCachedSong = streamManagerS.lastCachedSong;
@@ -125,7 +125,7 @@ LOG_LEVEL_ISUB_DEFAULT
 - (void)scrobbleSongAsSubmission
 {	
     //DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
-	if (settingsS.isScrobbleEnabled && !settingsS.isOfflineMode)
+	if (SavedSettings.si.isScrobbleEnabled && !SavedSettings.si.isOfflineMode)
 	{
 		ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
 		[self scrobbleSong:currentSong isSubmission:YES];
@@ -137,7 +137,7 @@ LOG_LEVEL_ISUB_DEFAULT
 {
     //DLog(@"Asked to scrobble %@ as playing", playlistS.currentSong.title);
 	// If scrobbling is enabled, send "now playing" call
-	if (settingsS.isScrobbleEnabled && !settingsS.isOfflineMode)
+	if (SavedSettings.si.isScrobbleEnabled && !SavedSettings.si.isOfflineMode)
 	{
 		ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
 		[self scrobbleSong:currentSong isSubmission:NO];
@@ -148,7 +148,7 @@ LOG_LEVEL_ISUB_DEFAULT
 - (void)scrobbleSong:(ISMSSong*)aSong isSubmission:(BOOL)isSubmission
 {
     // TODO: Reimplement
-//	if (settingsS.isScrobbleEnabled && !settingsS.isOfflineMode)
+//	if (SavedSettings.si.isScrobbleEnabled && !SavedSettings.si.isOfflineMode)
 //    {
 //		ISMSScrobbleLoader *loader = [[ISMSScrobbleLoader alloc] initWithCallbackBlock:^(BOOL success, NSError *error, ISMSLoader *loader)
 //        {
@@ -216,7 +216,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	
     //DLog(@"Asked to tweet %@", currentSong.title);
 	
-	if (settingsS.currentTwitterAccount && settingsS.isTwitterEnabled && !settingsS.isOfflineMode)
+	if (SavedSettings.si.currentTwitterAccount && SavedSettings.si.isTwitterEnabled && !SavedSettings.si.isOfflineMode)
 	{
 		if (currentSong.artistDisplayName && currentSong.title)
 		{
@@ -230,7 +230,7 @@ LOG_LEVEL_ISUB_DEFAULT
             TWRequest *request = [[TWRequest alloc] initWithURL:url parameters:@{@"status": tweet} requestMethod:TWRequestMethodPOST];
                         
             ACAccountStore *store = [[ACAccountStore alloc] init];
-            ACAccount *account = [store accountWithIdentifier: settingsS.currentTwitterAccount];
+            ACAccount *account = [store accountWithIdentifier: SavedSettings.si.currentTwitterAccount];
             
             if (account)
             {
@@ -277,7 +277,7 @@ LOG_LEVEL_ISUB_DEFAULT
 #endif
 }
 
-+ (instancetype)sharedInstance
++ (instancetype)si
 {
     static SocialSingleton *sharedInstance = nil;
     static dispatch_once_t once = 0;

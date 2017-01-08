@@ -119,7 +119,7 @@ class PlayerViewController: UIViewController {
         updateCurrentSong()
         updateProgress()
         
-        if AudioEngine.sharedInstance().isPlaying() {
+        if AudioEngine.si().isPlaying() {
             playbackStarted()
         }
         
@@ -144,7 +144,7 @@ class PlayerViewController: UIViewController {
     }
     
     @objc fileprivate func playPause() {
-        if !AudioEngine.sharedInstance().isStarted() {
+        if !AudioEngine.si().isStarted() {
             spinner.startAnimating()
         }
         
@@ -171,7 +171,7 @@ class PlayerViewController: UIViewController {
         updateCurrentSong()
     }
     
-    fileprivate func updatePlayButton(_ playing: Bool = AudioEngine.sharedInstance().isPlaying()) {
+    fileprivate func updatePlayButton(_ playing: Bool = AudioEngine.si().isPlaying()) {
         if playing {
             playButton.setTitle("| |", for: UIControlState())
         } else {
@@ -191,8 +191,8 @@ class PlayerViewController: UIViewController {
     }
     
     @objc fileprivate func updateProgress() {
-        let progress = AudioEngine.sharedInstance().progress()
-        let progressPercent = AudioEngine.sharedInstance().progressPercent()
+        let progress = AudioEngine.si().progress()
+        let progressPercent = AudioEngine.si().progressPercent()
         
         progressSlider.value = Float(progressPercent)
         elapsedLabel.text = NSString.formatTime(progress)
@@ -210,7 +210,7 @@ class PlayerViewController: UIViewController {
     }
     
     @objc fileprivate func progressSliderValueChanged() {
-        AudioEngine.sharedInstance().seekToPosition(inPercent: Double(progressSlider.value), fadeVolume: true)
+        AudioEngine.si().seekToPosition(inPercent: Double(progressSlider.value), fadeVolume: true)
     }
     
     @objc fileprivate func hidePlayer() {

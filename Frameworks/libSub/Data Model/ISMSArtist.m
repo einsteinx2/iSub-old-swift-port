@@ -38,7 +38,7 @@
             return foundRecord;
         };
         
-        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
             if (!runQuery(db, @"artists")) {
                 runQuery(db, @"cachedArtists");
             }
@@ -84,12 +84,12 @@
 
 - (BOOL)hasCachedSongs {
     NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE artistId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, self.artistId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.artistId];
 }
 
 + (BOOL)isPersisted:(NSNumber *)artistId serverId:(NSNumber *)serverId {
     NSString *query = @"SELECT COUNT(*) FROM artists WHERE artistId = ? AND serverId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, artistId, serverId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, artistId, serverId];
 }
 
 - (BOOL)isPersisted {
@@ -98,13 +98,13 @@
 
 - (BOOL)_existsInCache {
     NSString *query = @"SELECT COUNT(*) FROM cachedArtists WHERE artistId = ? AND serverId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, self.artistId, self.serverId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.artistId, self.serverId];
 }
 
 - (BOOL)_insertModel:(BOOL)replace cachedTable:(BOOL)cachedTable
 {
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *insertType = replace ? @"REPLACE" : @"INSERT";
          NSString *table = cachedTable ? @"cachedArtists" : @"artists";
@@ -144,7 +144,7 @@
         return NO;
     
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *query = @"DELETE FROM artists WHERE artistId = ? AND serverId = ?";
          success = [db executeUpdate:query, self.artistId, self.serverId];
@@ -178,7 +178,7 @@
     NSMutableArray *artists = [[NSMutableArray alloc] init];
     NSMutableArray *artistsNumbers = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT * FROM artists";
 
         FMResultSet *r = nil;
@@ -202,15 +202,15 @@
         [r close];
     }];
     
-    NSArray *ignoredArticles = databaseS.ignoredArticles;
+    NSArray *ignoredArticles = DatabaseSingleton.si.ignoredArticles;
     
     // Sort objects without indefinite articles (try to match Subsonic's sorting)
     [artists sortUsingComparator:^NSComparisonResult(ISMSArtist *obj1, ISMSArtist *obj2) {
-        NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        NSString *name1 = [DatabaseSingleton.si name:obj1.name ignoringArticles:ignoredArticles];
         name1 = [name1 stringByReplacingOccurrencesOfString:@" " withString:@""];
         name1 = [name1 stringByReplacingOccurrencesOfString:@"-" withString:@""];
         
-        NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        NSString *name2 = [DatabaseSingleton.si name:obj2.name ignoringArticles:ignoredArticles];
         name2 = [name2 stringByReplacingOccurrencesOfString:@" " withString:@""];
         name2 = [name2 stringByReplacingOccurrencesOfString:@"-" withString:@""];
         
@@ -226,7 +226,7 @@
     NSMutableArray *artists = [[NSMutableArray alloc] init];
     NSMutableArray *artistsNumbers = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT * FROM cachedArtists";
         
         FMResultSet *r = [db executeQuery:query];
@@ -243,15 +243,15 @@
         [r close];
     }];
     
-    NSArray *ignoredArticles = databaseS.ignoredArticles;
+    NSArray *ignoredArticles = DatabaseSingleton.si.ignoredArticles;
     
     // Sort objects without indefinite articles (try to match Subsonic's sorting)
     [artists sortUsingComparator:^NSComparisonResult(ISMSArtist *obj1, ISMSArtist *obj2) {
-        NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        NSString *name1 = [DatabaseSingleton.si name:obj1.name ignoringArticles:ignoredArticles];
         name1 = [name1 stringByReplacingOccurrencesOfString:@" " withString:@""];
         name1 = [name1 stringByReplacingOccurrencesOfString:@"-" withString:@""];
         
-        NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        NSString *name2 = [DatabaseSingleton.si name:obj2.name ignoringArticles:ignoredArticles];
         name2 = [name2 stringByReplacingOccurrencesOfString:@" " withString:@""];
         name2 = [name2 stringByReplacingOccurrencesOfString:@"-" withString:@""];
         
@@ -265,7 +265,7 @@
 + (BOOL)deleteAllArtistsWithServerId:(NSNumber *)serverId
 {
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          if (serverId) {
              NSString *query = @"DELETE FROM artists WHERE serverId = ?";

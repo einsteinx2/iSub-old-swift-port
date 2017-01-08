@@ -230,16 +230,16 @@ static CGPoint CGPointFromString(NSString *string)
 		
 	if (self.type == BassEffectType_ParametricEQ)
 	{
-		[audioEngineS.equalizer removeAllEqualizerValues];
+		[AudioEngine.si.equalizer removeAllEqualizerValues];
 		
 		for (int i = 0; i < [self.selectedPresetValues count]; i++)
 		{
 			BassEffectValue *value = [self valueForIndex:i];
-			[audioEngineS.equalizer addEqualizerValue:BASS_DX8_PARAMEQFromPoint(value.percentX, value.percentY, DEFAULT_BANDWIDTH)];
+			[AudioEngine.si.equalizer addEqualizerValue:BASS_DX8_PARAMEQFromPoint(value.percentX, value.percentY, DEFAULT_BANDWIDTH)];
 		}
 		
-		if (settingsS.isEqualizerOn)
-			[audioEngineS.equalizer toggleEqualizer];
+		if (SavedSettings.si.isEqualizerOn)
+			[AudioEngine.si.equalizer toggleEqualizer];
 	}
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassEffectPresetLoaded];

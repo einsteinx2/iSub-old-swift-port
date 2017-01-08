@@ -209,12 +209,12 @@ LOG_LEVEL_ISUB_DEFAULT
 - (BOOL)toggleEqualizer
 {
     NSLog(@"toggleEqualizer");
-    settingsS.isEqualizerOn = !self.isEqActive;
+    SavedSettings.si.isEqualizerOn = !self.isEqActive;
     
 	if (self.isEqActive)
 	{
 		[self clearEqualizerValues];
-		self.gain = settingsS.gainMultiplier;
+		self.gain = SavedSettings.si.gainMultiplier;
 		return NO;
 	}
 	else
@@ -225,7 +225,7 @@ LOG_LEVEL_ISUB_DEFAULT
             eqValuesTemp = [NSArray arrayWithArray:self.eqValues];
         }
 		[self applyEqualizerValues:eqValuesTemp];
-		self.gain = settingsS.gainMultiplier;
+		self.gain = SavedSettings.si.gainMultiplier;
 		return YES;
 	}
 }
@@ -246,7 +246,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	}
 	
 	self.volumeFx = BASS_ChannelSetFX(self.channel, BASS_FX_BFX_VOLUME, 1);
-    self.gain = settingsS.gainMultiplier;
+    self.gain = SavedSettings.si.gainMultiplier;
 }
 
 - (void)setGain:(float)theGain

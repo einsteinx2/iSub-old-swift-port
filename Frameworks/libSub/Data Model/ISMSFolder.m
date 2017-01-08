@@ -64,7 +64,7 @@ static NSArray *_ignoredArticles = nil;
             return foundRecord;
         };
         
-        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
             if (!runQuery(db, @"folders")) {
                 runQuery(db, @"cachedFolders");
             }
@@ -94,7 +94,7 @@ static NSArray *_ignoredArticles = nil;
 {
     NSMutableArray *ignoredArticles = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         FMResultSet *r = [db executeQuery:@"SELECT name FROM ignoredArticles"];
         while ([r next])
         {
@@ -107,12 +107,12 @@ static NSArray *_ignoredArticles = nil;
 
 - (BOOL)hasCachedSongs {
     NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE folderId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, self.folderId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.folderId];
 }
 
 + (BOOL)isPersisted:(NSNumber *)folderId serverId:(NSNumber *)serverId {
     NSString *query = @"SELECT COUNT(*) FROM folders WHERE folderId = ? AND serverId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, folderId, serverId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, folderId, serverId];
 }
 
 - (BOOL)isPersisted {
@@ -121,13 +121,13 @@ static NSArray *_ignoredArticles = nil;
 
 - (BOOL)_existsInCache {
     NSString *query = @"SELECT COUNT(*) FROM cachedFolders WHERE folderId = ? AND serverId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, self.folderId, self.serverId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.folderId, self.serverId];
 }
 
 - (BOOL)_insertModel:(BOOL)replace cachedTable:(BOOL)cachedTable
 {
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *insertType = replace ? @"REPLACE" : @"INSERT";
          NSString *table = cachedTable ? @"cachedFolders" : @"folders";
@@ -174,7 +174,7 @@ static NSArray *_ignoredArticles = nil;
         return NO;
     
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *query = @"DELETE FROM folders WHERE folderId = ? AND serverId = ?";
          success = [db executeUpdate:query, self.folderId, self.serverId];
@@ -222,7 +222,7 @@ static NSArray *_ignoredArticles = nil;
 {
     NSMutableArray<ISMSFolder*> *folders = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *table = cachedTable ? @"cachedFolders" : @"folders";
         NSString *query = @"SELECT * FROM %@ WHERE parentFolderId = ? AND serverId = ?";
         query = [NSString stringWithFormat:query, table];
@@ -244,7 +244,7 @@ static NSArray *_ignoredArticles = nil;
 {
     NSMutableArray<ISMSFolder*> *folders = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT cf.*, cf.folderId FROM cachedFolders cf "
                           @"WHERE (SELECT COUNT(*) FROM cachedFolders WHERE parentFolderId = cf.folderId) = 0";
         

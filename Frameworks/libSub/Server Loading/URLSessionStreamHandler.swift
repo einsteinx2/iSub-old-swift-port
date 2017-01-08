@@ -49,7 +49,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         if !resume {
             // Clear temp cache if this is a temp file
             if isTempCache {
-                CacheSingleton.sharedInstance().clearTempCache()
+                CacheSingleton.si().clearTempCache()
             }
             
             // Create the file
@@ -59,14 +59,14 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         }
         
         // Mark the new file as no backup
-        if !SavedSettings.sharedInstance().isBackupCacheEnabled {
+        if !SavedSettings.si().isBackupCacheEnabled {
             var fileUrl = URL(fileURLWithPath: filePath)
             fileUrl.isExcludedFromBackup = true
         }
         
         bitrate = song.estimatedBitrate
         if maxBitrateSetting < 0 {
-            maxBitrateSetting = SavedSettings.sharedInstance().currentMaxBitrate
+            maxBitrateSetting = SavedSettings.si().currentMaxBitrate
         }
         
         var parameters = ["id": "\(songId)"]

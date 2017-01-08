@@ -35,7 +35,7 @@ class MediaFoldersLoader: ISMSLoader, ItemLoader {
         } else {
             var mediaFoldersTemp = [ISMSMediaFolder]()
             
-            let serverId = SavedSettings.sharedInstance().currentServerId
+            let serverId = SavedSettings.si().currentServerId
             root.iterate("musicFolders.musicFolder") { musicFolder in
                 let aMediaFolder = ISMSMediaFolder(rxmlElement: musicFolder, serverId: serverId)
                 mediaFoldersTemp.append(aMediaFolder)
@@ -49,13 +49,13 @@ class MediaFoldersLoader: ISMSLoader, ItemLoader {
     }
     
     func persistModels() {
-        let serverId = SavedSettings.sharedInstance().currentServerId
+        let serverId = SavedSettings.si().currentServerId
         ISMSMediaFolder.deleteAllMediaFolders(withServerId: serverId as NSNumber)
         mediaFolders.forEach({$0.replace()})
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.sharedInstance().currentServerId
+        let serverId = SavedSettings.si().currentServerId
         mediaFolders = ISMSMediaFolder.allMediaFolders(withServerId: serverId as NSNumber)
         return mediaFolders.count > 0
     }

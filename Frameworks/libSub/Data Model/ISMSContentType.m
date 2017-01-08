@@ -17,7 +17,7 @@
     {
         __block BOOL foundRecord = NO;
         
-        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
             NSString *query = @"SELECT * FROM contentTypes WHERE contentTypeId = ?";
             FMResultSet *r = [db executeQuery:query, @(contentTypeId)];
             if ([r next])
@@ -40,7 +40,7 @@
     {
         __block BOOL foundRecord = NO;
         
-        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
             NSString *query = @"SELECT * FROM contentTypes WHERE mimeType = ?";
             FMResultSet *r = [db executeQuery:query, mimeType];
             if ([r next])

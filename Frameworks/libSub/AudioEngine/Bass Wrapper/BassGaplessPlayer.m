@@ -531,7 +531,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
                                 if ([[NSThread currentThread] isCancelled])
                                     break;
                                 
-								if (settingsS.isOfflineMode)
+								if (SavedSettings.si.isOfflineMode)
 								{
 									// This is offline mode and the song can not continue to play
 									[self moveToNextSong];
@@ -597,7 +597,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 												else if (theSong.isFullyCached)
 													break;
 												// If we're not in offline mode, stop waiting and try next song
-												else if (settingsS.isOfflineMode)
+												else if (SavedSettings.si.isOfflineMode)
 												{
                                                     // Bail if the thread was canceled
                                                     if ([[NSThread currentThread] isCancelled])
@@ -885,7 +885,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			 }
 			 else if (!userInfo && !aSong.isFullyCached && aSong.localFileSize < ISMS_BassStreamMinFilesizeToFail)
 			 {
-				 if (settingsS.isOfflineMode)
+				 if (SavedSettings.si.isOfflineMode)
 				 {
 					 [self moveToNextSong];
 				 }
@@ -1085,8 +1085,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
             ISMSSong *currentSong = [self.delegate bassSongForIndex:self.currentPlaylistIndex player:self];
             if (currentSong)
             {
-                // ALog(@"startByteOffset: %d, startSecondsOffset: %d", audioEngineS.startByteOffset, audioEngineS.startSecondsOffset);
-                [self.delegate bassRetrySongAtOffsetInBytes:audioEngineS.startByteOffset andSeconds:audioEngineS.startSecondsOffset player:self];
+                // ALog(@"startByteOffset: %d, startSecondsOffset: %d", AudioEngine.si.startByteOffset, AudioEngine.si.startSecondsOffset);
+                [self.delegate bassRetrySongAtOffsetInBytes:AudioEngine.si.startByteOffset andSeconds:AudioEngine.si.startSecondsOffset player:self];
             }
             else
             {

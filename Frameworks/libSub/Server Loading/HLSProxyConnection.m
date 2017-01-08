@@ -19,7 +19,7 @@ static const int ddLogLevel = DDLogLevelError;
 - (NSObject<HTTPResponse> *)httpResponseForMethod:(NSString *)method URI:(NSString *)path
 {
     // Figure out the new URL
-    NSString *urlString = [NSString stringWithFormat:@"%@%@", (settingsS.redirectUrlString ? settingsS.redirectUrlString : settingsS.currentServer.url), path];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@", (SavedSettings.si.redirectUrlString ? SavedSettings.si.redirectUrlString : SavedSettings.si.currentServer.url), path];
     
     // Create the response and tell it to start downloading the chunk
     DDLogVerbose(@"\n\nHTTPProxyConnection: starting proxy connection for %@", urlString);

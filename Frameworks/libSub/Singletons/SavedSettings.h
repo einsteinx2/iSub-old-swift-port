@@ -14,8 +14,6 @@
 #import <Social/Social.h>
 #import "libSubDefines.h"
 
-#define settingsS ((SavedSettings *)[SavedSettings sharedInstance])
-
 typedef NS_ENUM(NSInteger, ISMSCachingType)
 {
 	ISMSCachingType_minSpace = 0,
@@ -120,7 +118,7 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 - (void)loadState;
 - (void)saveState;
 
-+ (nonnull instancetype)sharedInstance;
++ (nonnull instancetype)si;
 
 @end
 

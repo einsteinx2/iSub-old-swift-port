@@ -40,7 +40,7 @@
     {
         __block BOOL foundRecord = NO;
         
-        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
             NSString *query = @"SELECT m.mediaFolderId, m.name "
                               @"FROM mediaFolders AS m "
                               @"WHERE m.mediaFolderId = ? AND serverId = ?";
@@ -64,13 +64,13 @@
 
 - (BOOL)isPersisted {
     NSString *query = @"SELECT COUNT(*) FROM mediaFolders WHERE mediaFolderId = ? AND serverId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, self.mediaFolderId, self.serverId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.mediaFolderId, self.serverId];
 }
 
 - (BOOL)_insertModel:(BOOL)replace
 {
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *insertType = replace ? @"REPLACE" : @"INSERT";
          NSString *query = [insertType stringByAppendingString:@" INTO mediaFolders VALUES (?, ?, ?)"];
@@ -102,7 +102,7 @@
         return NO;
     
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *query = @"DELETE FROM mediaFolders WHERE mediaFolderId = ? AND serverId = ?";
          success = [db executeUpdate:query, self.mediaFolderId, self.serverId];
@@ -114,7 +114,7 @@
 {
     NSMutableArray<ISMSFolder*> *rootFolders = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT f.* "
                           @"FROM mediaFolders AS m "
                           @"JOIN folders AS f ON f.mediaFolderId = m.mediaFolderId "
@@ -136,7 +136,7 @@
 - (BOOL)deleteRootFolders
 {
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *query = @"DELETE FROM folders WHERE mediaFolderId = ? AND serverId = ? AND parentFolderId IS NULL";
          success = [db executeUpdate:query, self.mediaFolderId, self.serverId];
@@ -147,7 +147,7 @@
 + (BOOL)deleteAllMediaFoldersWithServerId:(NSNumber *)serverId
 {
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          if (serverId) {
              NSString *query = @"DELETE FROM mediaFolders WHERE serverId = ?";
@@ -163,12 +163,12 @@
 
 + (NSArray<ISMSFolder*> *)allRootFoldersWithServerId:(NSNumber *)serverId
 {
-    NSArray *ignoredArticles = databaseS.ignoredArticles;
+    NSArray *ignoredArticles = DatabaseSingleton.si.ignoredArticles;
 
     NSMutableArray<ISMSFolder*> *rootFolders = [[NSMutableArray alloc] init];
     NSMutableArray *rootFoldersNumbers = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT * FROM folders WHERE parentFolderId IS NULL";
         
         FMResultSet *r = nil;
@@ -185,7 +185,7 @@
             [folder _assignPropertiesFromResultSet:r];
             
             if (folder.name.length > 0) {
-                NSString *name = [databaseS name:folder.name ignoringArticles:ignoredArticles];
+                NSString *name = [DatabaseSingleton.si name:folder.name ignoringArticles:ignoredArticles];
                 if (isalpha([name characterAtIndex:0])) {
                     [rootFolders addObject:folder];
                 } else {
@@ -198,11 +198,11 @@
     
     // Sort objects without indefinite articles (try to match Subsonic's sorting)
     [rootFolders sortUsingComparator:^NSComparisonResult(ISMSFolder *obj1, ISMSFolder *obj2) {
-        NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        NSString *name1 = [DatabaseSingleton.si name:obj1.name ignoringArticles:ignoredArticles];
         name1 = [name1 stringByReplacingOccurrencesOfString:@" " withString:@""];
         name1 = [name1 stringByReplacingOccurrencesOfString:@"-" withString:@""];
         
-        NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        NSString *name2 = [DatabaseSingleton.si name:obj2.name ignoringArticles:ignoredArticles];
         name2 = [name2 stringByReplacingOccurrencesOfString:@" " withString:@""];
         name2 = [name2 stringByReplacingOccurrencesOfString:@"-" withString:@""];
         
@@ -217,7 +217,7 @@
 {
     NSMutableArray<ISMSMediaFolder*> *mediaFolders = [[NSMutableArray alloc] init];
    
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT mediaFolderId, name "
                           @"FROM mediaFolders";
         

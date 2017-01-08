@@ -35,7 +35,7 @@ class RootPlaylistsLoader: ISMSLoader, ItemLoader {
         } else {
             var playlistsTemp = [Playlist]()
             
-            let serverId = SavedSettings.sharedInstance().currentServerId
+            let serverId = SavedSettings.si().currentServerId
             root.iterate("playlists.playlist") { playlist in
                 let aPlaylist = Playlist(rxmlElement: playlist, serverId: serverId)
                 playlistsTemp.append(aPlaylist)

@@ -127,7 +127,7 @@ static NSTimeInterval const kDelay = .5;
 - (UIColor *)currentDarkColor
 {
 	//switch ([[appDelegateS.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
-	switch(settingsS.cachedSongCellColorType)
+	switch(SavedSettings.si.cachedSongCellColorType)
 	{
 		case 0:
 			return self.darkRed;
@@ -147,7 +147,7 @@ static NSTimeInterval const kDelay = .5;
 - (UIColor *) currentLightColor
 {
 	//switch ([[appDelegateS.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
-	switch(settingsS.cachedSongCellColorType)
+	switch(SavedSettings.si.cachedSongCellColorType)
 	{
 		case 0:
 			return self.lightRed;

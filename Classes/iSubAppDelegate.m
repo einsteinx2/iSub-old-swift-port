@@ -44,7 +44,7 @@
 
 - (BOOL)shouldAutorotate
 {
-    if (settingsS.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
+    if (SavedSettings.si.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
         return NO;
     
     return YES;
@@ -70,12 +70,12 @@
     
     // Make sure the singletons get setup immediately and in the correct order
     // Perfect example of why using singletons is bad practice!
-    [DatabaseSingleton sharedInstance];
-	[AudioEngine sharedInstance];
-	[CacheSingleton sharedInstance];
+    [DatabaseSingleton si];
+	[AudioEngine si];
+	[CacheSingleton si];
     
     // Start the save defaults timer and mem cache initial defaults
-	[settingsS setupSaveState];
+	[SavedSettings.si setupSaveState];
 	
 #if !IS_ADHOC() && !IS_RELEASE()
     // Don't turn on console logging for adhoc or release builds
@@ -103,7 +103,7 @@
 	[self loadHockeyApp];
 		    
     // Check the server status in the background
-    if (!settingsS.isOfflineMode)
+    if (!SavedSettings.si.isOfflineMode)
     {
         [self checkServer];
     }
@@ -117,7 +117,7 @@
     // Recover current state if player was interrupted. Do not resume if we're connected to the test server
     // because music will start playing behind the intro screen.
     [ISMSStreamManager sharedInstance];
-    if (settingsS.isTestServer || !settingsS.isRecover)
+    if (SavedSettings.si.isTestServer || !SavedSettings.si.isRecover)
     {
         [streamManagerS removeAllStreams];
     }
@@ -126,13 +126,13 @@
         ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
         if (currentSong)
         {
-            [[PlayQueue sharedInstance] startSongWithOffsetBytes:settingsS.byteOffset offsetSeconds:settingsS.seekTime];
+            [[PlayQueue sharedInstance] startSongWithOffsetBytes:SavedSettings.si.byteOffset offsetSeconds:SavedSettings.si.seekTime];
         }
         else
         {
             // TODO: Start handling this via PlayQueue
-            audioEngineS.startByteOffset = settingsS.byteOffset;
-            audioEngineS.startSecondsOffset = settingsS.seekTime;
+            AudioEngine.si.startByteOffset = SavedSettings.si.byteOffset;
+            AudioEngine.si.startSecondsOffset = SavedSettings.si.seekTime;
         }
     }
     
@@ -143,15 +143,15 @@
     self.sidePanelController = (id)self.window.rootViewController;
     
     // Handle offline mode
-    if (settingsS.isForceOfflineMode || !self.networkStatus.isReachable || (!self.networkStatus.isReachableWifi && settingsS.isDisableUsageOver3G))
+    if (SavedSettings.si.isForceOfflineMode || !self.networkStatus.isReachable || (!self.networkStatus.isReachableWifi && SavedSettings.si.isDisableUsageOver3G))
     {
-        settingsS.isOfflineMode = YES;
+        SavedSettings.si.isOfflineMode = YES;
     }
     
     // Show intro if necessary
-    if (settingsS.isTestServer)
+    if (SavedSettings.si.isTestServer)
     {
-        if (settingsS.isOfflineMode)
+        if (SavedSettings.si.isOfflineMode)
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert performSelector:@selector(show) withObject:nil afterDelay:1.0];
@@ -269,18 +269,18 @@
 	// if it's not then display an alert and allow user to change settings if they want.
 	// This is in case the user is, for instance, connected to a wifi network but does not 
 	// have internet access or if the host url entered was wrong.
-    if (!settingsS.isOfflineMode) 
+    if (!SavedSettings.si.isOfflineMode) 
 	{
         if (self.statusLoader)
         {
             [self.statusLoader cancelLoad];
         }
         
-        Server *currentServer = settingsS.currentServer;
+        Server *currentServer = SavedSettings.si.currentServer;
         self.statusLoader = [[ISMSStatusLoader alloc] initWithUrl:currentServer.url username:currentServer.username password:currentServer.password];
         __weak iSubAppDelegate *weakSelf = self;
         self.statusLoader.callbackBlock = ^(BOOL success,  NSError * error, ISMSLoader * loader) {
-            settingsS.redirectUrlString = loader.redirectUrlString;
+            SavedSettings.si.redirectUrlString = loader.redirectUrlString;
             
             if (success)
             {
@@ -297,7 +297,7 @@
             }
             else
             {
-                if(!settingsS.isOfflineMode)
+                if(!SavedSettings.si.isOfflineMode)
                 {
                     [weakSelf enterOfflineMode];
                 }
@@ -479,7 +479,7 @@
     }
 	else
 	{
-		if (settingsS.isScreenSleepEnabled)
+		if (SavedSettings.si.isScreenSleepEnabled)
 			[UIApplication sharedApplication].idleTimerDisabled = NO;
 	}
 }
@@ -495,7 +495,7 @@
 {
 	//DLog(@"applicationDidEnterBackground called");
 	
-	[settingsS saveState];
+	[SavedSettings.si saveState];
 	
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	
@@ -586,7 +586,7 @@
 	
 	[[UIApplication sharedApplication] endReceivingRemoteControlEvents];
 	
-	[settingsS saveState];
+	[SavedSettings.si saveState];
 	
 	[[PlayQueue sharedInstance] stop];
 }
@@ -627,14 +627,14 @@
 
 - (void)enterOfflineModeForce
 {
-	if (settingsS.isOfflineMode)
+	if (SavedSettings.si.isOfflineMode)
 		return;
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOfflineMode];
 	
     appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
     
-	settingsS.isOfflineMode = YES;
+	SavedSettings.si.isOfflineMode = YES;
 		
 	[[PlayQueue sharedInstance] stop];
 	
@@ -648,8 +648,8 @@
 //	else
 //		[self.mainTabBarController.view removeFromSuperview];
 	
-//	[databaseS closeAllDatabases];
-//	[databaseS setupDatabases];
+//	[DatabaseSingleton.si closeAllDatabases];
+//	[DatabaseSingleton.si setupDatabases];
 	
     // TODO: Implement offline mode in new UI
 //	if (IS_IPAD())
@@ -674,7 +674,7 @@
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOnlineMode];
 		
-	settingsS.isOfflineMode = NO;
+	SavedSettings.si.isOfflineMode = NO;
 	
 	[[PlayQueue sharedInstance] stop];
 	
@@ -683,8 +683,8 @@
 	//else
 	//	[self.offlineTabBarController.view removeFromSuperview];
 	
-//	[databaseS closeAllDatabases];
-//	[databaseS setupDatabases];
+//	[DatabaseSingleton.si closeAllDatabases];
+//	[DatabaseSingleton.si setupDatabases];
 	[self checkServer];
 	[cacheQueueManagerS startDownloadQueue];
 	
@@ -705,21 +705,21 @@
 
 - (void)reachabilityChanged
 {
-	if (settingsS.isForceOfflineMode)
+	if (SavedSettings.si.isForceOfflineMode)
 		return;
 	
     if (!self.networkStatus.isReachable)
     {
         //Change over to offline mode
-        if (!settingsS.isOfflineMode)
+        if (!SavedSettings.si.isOfflineMode)
         {
             //DDLogVerbose(@"Reachability changed to NotReachable, prompting to go to offline mode");
             [self enterOfflineMode];
         }
     }
-    else if (!self.networkStatus.isReachableWifi && settingsS.isDisableUsageOver3G)
+    else if (!self.networkStatus.isReachableWifi && SavedSettings.si.isDisableUsageOver3G)
     {
-        if (!settingsS.isOfflineMode)
+        if (!SavedSettings.si.isOfflineMode)
         {
             [self enterOfflineModeForce];
             
@@ -731,13 +731,13 @@
     {
         [self checkServer];
         
-        if (settingsS.isOfflineMode)
+        if (SavedSettings.si.isOfflineMode)
         {
             [self enterOnlineMode];
         }
         else
         {
-            if (self.networkStatus.isReachableWifi || settingsS.isManualCachingOnWWANEnabled)
+            if (self.networkStatus.isReachableWifi || SavedSettings.si.isManualCachingOnWWANEnabled)
             {
                 if (!cacheQueueManagerS.isQueueDownloading)
                 {
@@ -850,7 +850,7 @@
 			
 			if (buttonIndex == 1)
 			{
-				if (settingsS.isOfflineMode)
+				if (SavedSettings.si.isOfflineMode)
 				{
 					[self enterOnlineModeForce];
 				}
@@ -867,14 +867,14 @@
 			// Title: @"Update Alerts"
 			if (buttonIndex == 0)
 			{
-				settingsS.isUpdateCheckEnabled = NO;
+				SavedSettings.si.isUpdateCheckEnabled = NO;
 			}
 			else if (buttonIndex == 1)
 			{
-				settingsS.isUpdateCheckEnabled = YES;
+				SavedSettings.si.isUpdateCheckEnabled = YES;
 			}
 			
-			settingsS.isUpdateCheckQuestionAsked = YES;
+			SavedSettings.si.isUpdateCheckQuestionAsked = YES;
 			
 			break;
 		}
@@ -944,7 +944,7 @@
         case 10:
         {            
             // WaveBox Release message
-            settingsS.isStopCheckingWaveboxRelease = YES;
+            SavedSettings.si.isStopCheckingWaveboxRelease = YES;
             if (buttonIndex == 1)
             {
                 // More Info
@@ -1038,7 +1038,7 @@
 - (void)checkWaveBoxRelease
 {
     /*
-    if (!settingsS.isStopCheckingWaveboxRelease && !settingsS.isWaveBoxAlertShowing)
+    if (!SavedSettings.si.isStopCheckingWaveboxRelease && !SavedSettings.si.isWaveBoxAlertShowing)
     {
         [EX2Dispatch runInBackgroundAsync:^
          {
@@ -1052,9 +1052,9 @@
                  NSString *appStoreUrl = dict[@"appStoreUrl"];
                  if (title && message && moreInfoUrl && appStoreUrl)
                  {
-                     if (!settingsS.isWaveBoxAlertShowing)
+                     if (!SavedSettings.si.isWaveBoxAlertShowing)
                      {
-                         settingsS.isWaveBoxAlertShowing = YES;
+                         SavedSettings.si.isWaveBoxAlertShowing = YES;
                          [EX2Dispatch runInMainThreadAsync:^
                           {
                               UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"Not Now" otherButtonTitles:@"More Info", @"Install Now", nil];
@@ -1081,11 +1081,11 @@
     
 	if ([musicS maxBitrateSetting] != 0)
 	{
-		return [NSString stringWithFormat:@"%@/rest/stream.view?maxBitRate=%i&u=%@&p=%@&v=1.2.0&c=iSub&id=", settingsS.urlString, [musicS maxBitrateSetting], [encodedUserName autorelease], [encodedPassword autorelease]];
+		return [NSString stringWithFormat:@"%@/rest/stream.view?maxBitRate=%i&u=%@&p=%@&v=1.2.0&c=iSub&id=", SavedSettings.si.urlString, [musicS maxBitrateSetting], [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
     else
 	{
-		return [NSString stringWithFormat:@"%@/rest/stream.view?u=%@&p=%@&v=1.1.0&c=iSub&id=", settingsS.urlString, [encodedUserName autorelease], [encodedPassword autorelease]];
+		return [NSString stringWithFormat:@"%@/rest/stream.view?u=%@&p=%@&v=1.1.0&c=iSub&id=", SavedSettings.si.urlString, [encodedUserName autorelease], [encodedPassword autorelease]];
 	}
 }*/
 
@@ -1197,14 +1197,14 @@
             [PlayQueue sharedInstance].repeatMode = RepeatModeNormal;
     }
     
-    ServerType serverType = settingsS.currentServer.type;
+    ServerType serverType = SavedSettings.si.currentServer.type;
     if (serverType == ServerTypeSubsonic)
     {
-        [self playSubsonicVideo:aSong bitrates:settingsS.currentVideoBitrates];
+        [self playSubsonicVideo:aSong bitrates:SavedSettings.si.currentVideoBitrates];
     }
     else if (serverType == ServerTypeISubServer || serverType == ServerTypeWaveBox)
     {
-        [self playWaveBoxVideo:aSong bitrates:settingsS.currentVideoBitrates];
+        [self playWaveBoxVideo:aSong bitrates:SavedSettings.si.currentVideoBitrates];
     }
 }
 
@@ -1246,7 +1246,7 @@
     
     NSString *urlString = [NSString stringWithFormat:@"%@?%@", request.URL.absoluteString, [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]];
     
-    //NSString *urlString = [NSString stringWithFormat:@"%@/rest/hls.m3u8?c=iSub&v=1.8.0&u=%@&p=%@&id=%@", settingsS.urlString, [settingsS.username URLEncodeString], [settingsS.password URLEncodeString], aSong.itemId];
+    //NSString *urlString = [NSString stringWithFormat:@"%@/rest/hls.m3u8?c=iSub&v=1.8.0&u=%@&p=%@&id=%@", SavedSettings.si.urlString, [SavedSettings.si.username URLEncodeString], [SavedSettings.si.password URLEncodeString], aSong.itemId];
     DLog(@"urlString: %@", urlString);
     
     [self createMoviePlayer];
@@ -1297,8 +1297,8 @@
 - (void)switchServerTo:(Server *)server redirectUrl:(NSString *)redirectUrl
 {
     // Update the variables
-    settingsS.currentServerId = server.serverId;
-    settingsS.redirectUrlString = redirectUrl;
+    SavedSettings.si.currentServerId = server.serverId;
+    SavedSettings.si.redirectUrlString = redirectUrl;
     
     // Create the playlist table if necessary (does nothing if they exist)
     [ISMSPlaylist createPlaylist:@"Play Queue" playlistId:[ISMSPlaylist playQueuePlaylistId] serverId:server.serverId];

@@ -40,7 +40,7 @@ static AudioEngine *sharedInstance = nil;
 - (void)endInterruptionWithFlags:(NSUInteger)flags
 {
     DDLogVerbose(@"[AudioEngine] audio session interruption ended, isPlaying: %@   isMainThread: %@", NSStringFromBOOL(sharedInstance.player.isPlaying), NSStringFromBOOL([NSThread isMainThread]));
-    if (self.shouldResumeFromInterruption && flags == AVAudioSessionInterruptionFlags_ShouldResume)
+    if (self.shouldResumeFromInterruption && flags == AVAudioSessionInterruptionOptionShouldResume)
     {
         [self.player playPause];
     }
@@ -227,7 +227,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }];
 }
 
-+ (instancetype)sharedInstance
++ (instancetype)si
 {
     static dispatch_once_t once = 0;
     dispatch_once(&once, ^{

@@ -93,8 +93,8 @@
 	_recoverSetting = self.recoverSetting;
     _sessionId = self.sessionId;
 	
-	audioEngineS.startByteOffset = _byteOffset;
-	audioEngineS.startSecondsOffset = _secondsOffset;
+	AudioEngine.si.startByteOffset = _byteOffset;
+	AudioEngine.si.startSecondsOffset = _secondsOffset;
     //DLog(@"startByteOffset: %llu  startSecondsOffset: %f", byteOffset, secondsOffset);
 }
 
@@ -145,9 +145,9 @@
 		}
 		
         // TODO: Stop interacting directly with AudioEngine
-		if (audioEngineS.player.bitRate != _bitRate && audioEngineS.player.bitRate >= 0)
+		if (AudioEngine.si.player.bitRate != _bitRate && AudioEngine.si.player.bitRate >= 0)
 		{
-			_bitRate = audioEngineS.player.bitRate;
+			_bitRate = AudioEngine.si.player.bitRate;
 			[_userDefaults setInteger:_bitRate forKey:@"bitRate"];
 			isDefaultsDirty = YES;
 		}
@@ -160,9 +160,9 @@
 		}
 		
         // TODO: Stop interacting directly with AudioEngine
-		if (_byteOffset != audioEngineS.player.currentByteOffset)
+		if (_byteOffset != AudioEngine.si.player.currentByteOffset)
 		{
-			_byteOffset = audioEngineS.player.currentByteOffset;
+			_byteOffset = AudioEngine.si.player.currentByteOffset;
 			[_userDefaults setObject:@(_byteOffset) forKey:@"byteOffset"];
 			isDefaultsDirty = YES;
 		}
@@ -1577,7 +1577,7 @@
 //DLog(@"urlString: %@", urlString);
 }
 
-+ (instancetype)sharedInstance
++ (instancetype)si
 {
     static SavedSettings *sharedInstance = nil;
     static dispatch_once_t once = 0;

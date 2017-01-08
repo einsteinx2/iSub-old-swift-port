@@ -59,7 +59,7 @@ static NSUInteger _bassOutputBufferLengthMillis = 0;
         [BassWrapper logError];
     }
 	
-	//[audioEngineS startEmptyPlayer];
+	//[AudioEngine.si startEmptyPlayer];
     
 	//[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassInitialized];
 }

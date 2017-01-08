@@ -40,7 +40,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         // Since songIndex is our primary key field, it's an alias
         // for rowId. So SELECT MAX instead of SELECT COUNT here.
         var maxId: Int?
-        DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let query = "SELECT MAX(songIndex) FROM \(self.tableName)"
             maxId = db.longOptionalForQuery(query)
         }
@@ -57,18 +57,18 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     open static let downloadedSongsPlaylistId = NSIntegerMax - 3
     
     open static var playQueue: Playlist {
-        return Playlist(itemId: playQueuePlaylistId, serverId: SavedSettings.sharedInstance().currentServerId)!
+        return Playlist(itemId: playQueuePlaylistId, serverId: SavedSettings.si().currentServerId)!
     }
     open static var downloadQueue: Playlist {
-        return Playlist(itemId: downloadQueuePlaylistId, serverId: SavedSettings.sharedInstance().currentServerId)!
+        return Playlist(itemId: downloadQueuePlaylistId, serverId: SavedSettings.si().currentServerId)!
     }
     open static var downloadedSongs: Playlist {
-        return Playlist(itemId: downloadedSongsPlaylistId, serverId: SavedSettings.sharedInstance().currentServerId)!
+        return Playlist(itemId: downloadedSongsPlaylistId, serverId: SavedSettings.si().currentServerId)!
     }
     
     public required init?(itemId: Int, serverId: Int) {
         var name: String?
-        DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let query = "SELECT name FROM playlists WHERE playlistId = ? AND serverId = ?"
             do {
                 let result = try db.executeQuery(query, itemId, serverId)
@@ -133,7 +133,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     open var songs: [ISMSSong] {
         var songs = [ISMSSong]()
         
-        DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             do {
                 let query = "SELECT songId FROM \(self.tableName)"
                 let result = try db.executeQuery(query)
@@ -152,7 +152,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     open func containsSongId(_ songId: Int) -> Bool {
         var count = 0
-        DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let query = "SELECT COUNT(*) FROM \(self.tableName) WHERE songId = ?"
             count = db.longForQuery(query, songId)
         }
@@ -161,7 +161,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     open func indexOfSongId(_ songId: Int) -> Int? {
         var index: Int?
-        DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let query = "SELECT songIndex FROM \(self.tableName) WHERE songId = ?"
             index = db.longOptionalForQuery(query, songId)
         }
@@ -170,7 +170,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     open func songAtIndex(_ index: Int) -> ISMSSong? {
         var songId: Int?
-        DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let query = "SELECT songId FROM \(self.tableName) WHERE songIndex = ?"
             songId = db.longOptionalForQuery(query, index)
         }
@@ -196,7 +196,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         } else {
             query = "INSERT INTO \(self.tableName) (songId) VALUES (?)"
         }
-        DatabaseSingleton.sharedInstance().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 try db.executeUpdate(query, songId)
             } catch {
@@ -239,7 +239,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     open func insertSong(songId: Int, index: Int, notify: Bool = false) {
         // TODO: See if this can be simplified by using sort by
-        DatabaseSingleton.sharedInstance().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query1 = "UPDATE \(self.tableName) SET songIndex = -songIndex WHERE songIndex >= ?"
                 try db.executeUpdate(query1, index)
@@ -260,7 +260,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     }
     
     open func removeSongAtIndex(_ index: Int, notify: Bool = false) {
-        DatabaseSingleton.sharedInstance().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName) WHERE songIndex = ?"
                 try db.executeUpdate(query1, index)
@@ -323,7 +323,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     }
     
     open func removeAllSongs(_ notify: Bool = false) {
-        DatabaseSingleton.sharedInstance().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName)"
                 try db.executeUpdate(query1)
@@ -355,7 +355,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     open static func createPlaylist(_ name: String, serverId: Int) -> Playlist? {
         var playlistId: Int?
         
-        DatabaseSingleton.sharedInstance().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             // Find the first available playlist id. Local playlists (before being synced) start from NSIntegerMax and count down.
             // So since NSIntegerMax is so huge, look for the lowest ID above NSIntegerMax - 1,000,000 to give room for virtually
             // unlimited local playlists without ever hitting the server playlists which start from 0 and go up.
@@ -390,7 +390,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     open static func createPlaylist(_ name: String, playlistId: Int, serverId: Int) -> Playlist? {
         var success = true
-        DatabaseSingleton.sharedInstance().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let exists = db.longForQuery("SELECT COUNT(*) FROM playlists WHERE playlistId = ? AND serverId = ?", playlistId, serverId) > 0
                 if !exists {

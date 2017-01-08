@@ -41,7 +41,7 @@ class ArtistLoader: ISMSLoader, ItemLoader {
         } else {
             var albumsTemp = [ISMSAlbum]()
             
-            let serverId = SavedSettings.sharedInstance().currentServerId
+            let serverId = SavedSettings.si().currentServerId
             root.iterate("artist.album") { album in
                 let anAlbum = ISMSAlbum(rxmlElement: album, serverId: serverId)
                 albumsTemp.append(anAlbum)
@@ -82,6 +82,6 @@ class ArtistLoader: ISMSLoader, ItemLoader {
     }
     
     var associatedObject: Any? {
-        return ISMSArtist(artistId: artistId, serverId: SavedSettings.sharedInstance().currentServerId, loadSubmodels: false)
+        return ISMSArtist(artistId: artistId, serverId: SavedSettings.si().currentServerId, loadSubmodels: false)
     }
 }

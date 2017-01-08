@@ -15,15 +15,15 @@
     /*NSMutableString *cleanString = [self mutableCopy];
     
     // Replace username
-    NSString *usernameString = [NSString stringWithFormat:@"u=%@", settingsS.username];
+    NSString *usernameString = [NSString stringWithFormat:@"u=%@", SavedSettings.si.username];
     [cleanString replaceOccurrencesOfString:usernameString withString:@"u=XXXX" options:0 range:NSMakeRange(0, cleanString.length)];
     
     // Replace password
-    NSString *passwordString = [NSString stringWithFormat:@"p=%@", settingsS.password];
+    NSString *passwordString = [NSString stringWithFormat:@"p=%@", SavedSettings.si.password];
     [cleanString replaceOccurrencesOfString:passwordString withString:@"p=XXXX" options:0 range:NSMakeRange(0, cleanString.length)];
     
     // Replace basic auth header string
-    NSString *authStr = [NSString stringWithFormat:@"%@:%@", settingsS.username, password];
+    NSString *authStr = [NSString stringWithFormat:@"%@:%@", SavedSettings.si.username, password];
     NSData *authData = [authStr dataUsingEncoding:NSASCIIStringEncoding];
     NSString *authValue = [NSString stringWithFormat:@"Basic %@", [authData base64Encoded]];*/
     return self;

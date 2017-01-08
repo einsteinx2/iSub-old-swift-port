@@ -9,8 +9,6 @@
 #ifndef iSub_SocialSingleton_h
 #define iSub_SocialSingleton_h
 
-#define socialS ((SocialSingleton *)[SocialSingleton sharedInstance])
-
 @class ISMSSong;
 
 @interface SocialSingleton : NSObject
@@ -19,7 +17,7 @@
 @property (readonly) NSTimeInterval subsonicDelay;
 @property (readonly) NSTimeInterval tweetDelay;
 
-+ (instancetype)sharedInstance;
++ (instancetype)si;
 
 - (void)scrobbleSongAsPlaying;
 - (void)scrobbleSongAsSubmission;

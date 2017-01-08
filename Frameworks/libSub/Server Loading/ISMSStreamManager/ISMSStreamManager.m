@@ -484,7 +484,7 @@ LOG_LEVEL_ISUB_DEBUG
 - (void)fillStreamQueue:(BOOL)isStartDownload
 {	
 	NSUInteger numStreamsToQueue = 1;
-	if (settingsS.isSongCachingEnabled && settingsS.isNextSongCacheEnabled)
+	if (SavedSettings.si.isSongCachingEnabled && SavedSettings.si.isNextSongCacheEnabled)
 	{
 		numStreamsToQueue = ISMSNumberOfStreamsToQueue;
 	}
@@ -494,10 +494,10 @@ LOG_LEVEL_ISUB_DEBUG
 		for (int i = 0; i < numStreamsToQueue; i++)
 		{
 			ISMSSong *aSong = [[PlayQueue sharedInstance] songAtIndex:[[PlayQueue sharedInstance] indexAtOffsetFromCurrentIndex:i]];
-			if (aSong && aSong.contentType.basicType == ISMSBasicContentTypeAudio && ![self isSongInQueue:aSong] && ![self.lastTempCachedSong isEqualToSong:aSong] && !aSong.isFullyCached && !settingsS.isOfflineMode && ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
+			if (aSong && aSong.contentType.basicType == ISMSBasicContentTypeAudio && ![self isSongInQueue:aSong] && ![self.lastTempCachedSong isEqualToSong:aSong] && !aSong.isFullyCached && !SavedSettings.si.isOfflineMode && ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
 			{
 				// Queue the song for download
-				[self queueStreamForSong:aSong isTempCache:!settingsS.isSongCachingEnabled isStartDownload:isStartDownload];
+				[self queueStreamForSong:aSong isTempCache:!SavedSettings.si.isSongCachingEnabled isStartDownload:isStartDownload];
 			}
 		}
 		
@@ -512,7 +512,7 @@ LOG_LEVEL_ISUB_DEBUG
 
 - (void)songCachingToggled
 {
-	if (settingsS.isSongCachingEnabled)
+	if (SavedSettings.si.isSongCachingEnabled)
 		[[NSNotificationCenter defaultCenter] addObserver:self 
 												 selector:@selector(fillStreamQueue) 
 													 name:ISMSNotification_SongPlaybackEnded 
@@ -560,7 +560,7 @@ LOG_LEVEL_ISUB_DEBUG
 	if ([handler.song isEqualToSong:currentSong])
 	{
         // TODO: Stop interacting directly with AudioEngine
-		[audioEngineS startSong:currentSong index:[PlayQueue sharedInstance].currentIndex];
+		[AudioEngine.si startSong:currentSong index:[PlayQueue sharedInstance].currentIndex];
 		
 		// Only for temp cached files
 		if (handler.isTempCache)
@@ -569,8 +569,8 @@ LOG_LEVEL_ISUB_DEBUG
 			[EX2Dispatch timerInMainQueueAfterDelay:1.0 withName:@"temp song set byteOffset/seconds" repeats:NO performBlock:^
              {
                  //DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
-                 audioEngineS.player.startByteOffset = handler.byteOffset;
-                 audioEngineS.player.startSecondsOffset = handler.secondsOffset;
+                 AudioEngine.si.player.startByteOffset = handler.byteOffset;
+                 AudioEngine.si.player.startSecondsOffset = handler.secondsOffset;
              }];
 		}
 	}
@@ -738,7 +738,7 @@ LOG_LEVEL_ISUB_DEBUG
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentPlaylistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 	
-	if (settingsS.isSongCachingEnabled)
+	if (SavedSettings.si.isSongCachingEnabled)
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fillStreamQueue) name:ISMSNotification_SongPlaybackEnded object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentPlaylistOrderChanged) name:ISMSNotification_RepeatModeChanged object:nil];

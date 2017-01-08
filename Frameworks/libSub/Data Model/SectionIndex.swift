@@ -35,7 +35,7 @@ open class SectionIndex {
         func ignoredArticles() -> [String] {
             var ignoredArticles = [String]()
             
-            DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
+            DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
                 do {
                     let query = "SELECT name FROM ignoredArticles"
                     let result = try db.executeQuery(query)

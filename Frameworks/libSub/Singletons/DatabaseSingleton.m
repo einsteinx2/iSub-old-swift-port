@@ -161,9 +161,9 @@
     }];
     
     // Create the playlist tables if necessary (does nothing if they exist)
-    [ISMSPlaylist createPlaylist:@"Play Queue" playlistId:[ISMSPlaylist playQueuePlaylistId] serverId:settingsS.currentServerId];
-    [ISMSPlaylist createPlaylist:@"Download Queue" playlistId:[ISMSPlaylist downloadQueuePlaylistId] serverId:settingsS.currentServerId];
-    [ISMSPlaylist createPlaylist:@"Downloaded Songs" playlistId:[ISMSPlaylist downloadedSongsPlaylistId] serverId:settingsS.currentServerId];
+    [ISMSPlaylist createPlaylist:@"Play Queue" playlistId:[ISMSPlaylist playQueuePlaylistId] serverId:SavedSettings.si.currentServerId];
+    [ISMSPlaylist createPlaylist:@"Download Queue" playlistId:[ISMSPlaylist downloadQueuePlaylistId] serverId:SavedSettings.si.currentServerId];
+    [ISMSPlaylist createPlaylist:@"Downloaded Songs" playlistId:[ISMSPlaylist downloadedSongsPlaylistId] serverId:SavedSettings.si.currentServerId];
 	
 	// Setup the bookmarks database
 	path = [self.databaseFolderPath stringByAppendingPathComponent:@"bookmarks.db"];
@@ -319,7 +319,7 @@
 #endif
 }
 
-+ (instancetype)sharedInstance
++ (instancetype)si
 {
     static DatabaseSingleton *sharedInstance = nil;
     static dispatch_once_t once = 0;

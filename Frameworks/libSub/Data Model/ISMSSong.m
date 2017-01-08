@@ -86,7 +86,7 @@
         // Retreive lastPlayed date, if it exists
         if ([self isModelPersisted])
         {
-            [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+            [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
                 NSString *query = @"SELECT lastPlayed FROM songs WHERE songId = ? AND serverId = ?";
                 FMResultSet *result = [db executeQuery:query, self.songId, self.serverId];
                 if ([result next])
@@ -111,7 +111,7 @@
     {
         __block BOOL foundRecord = NO;
         
-        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
             NSString *query = @"SELECT * FROM songs WHERE songId = ? AND serverId = ?";
             FMResultSet *result = [db executeQuery:query, @(songId), @(serverId)];
             if ([result next])
@@ -292,7 +292,7 @@
 {
     _lastPlayed = lastPlayed;
     
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          [db executeUpdate:@"UPDATE songs SET lastPlayed = ?", lastPlayed];
      }];
@@ -314,18 +314,18 @@
 
 - (BOOL)isPersisted {
     NSString *query = @"SELECT COUNT(*) FROM songs WHERE songId = ? AND serverId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
 }
 
 - (BOOL)existsInCache {
     NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE songId = ? AND serverId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
 }
 
 - (BOOL)_insertModel:(BOOL)replace cachedTable:(BOOL)cachedTable
 {
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *insertType = replace ? @"REPLACE" : @"INSERT";
          NSString *table = cachedTable ? @"cachedSongs" : @"songs";
@@ -363,7 +363,7 @@
         return NO;
     
     __block BOOL success = NO;
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *query = @"DELETE FROM songs WHERE songId = ? AND serverId = ?";
          success = [db executeUpdate:query, self.songId, self.serverId];
@@ -382,7 +382,7 @@
         return NO;
     }
     
-    return [databaseS.songModelReadDbPool intForQuery:@"SELECT COUNT(*) FROM songs WHERE songId = ? AND serverId = ?", self.songId, self.serverId] > 0;
+    return [DatabaseSingleton.si.songModelReadDbPool intForQuery:@"SELECT COUNT(*) FROM songs WHERE songId = ? AND serverId = ?", self.songId, self.serverId] > 0;
 }
 
 - (void)reloadSubmodels
@@ -522,7 +522,7 @@
 {
     NSMutableArray<ISMSSong*> *songs = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *table = cachedTable ? @"cachedSongs" : @"songs";
         NSString *query = @"SELECT * FROM %@ WHERE folderId = ? AND serverId = ?";
         query = [NSString stringWithFormat:query, table];
@@ -546,7 +546,7 @@
 {
     NSMutableArray<ISMSSong*> *songs = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *table = cachedTable ? @"cachedSongs" : @"songs";
         NSString *query = @"SELECT * FROM %@ WHERE albumId = ? AND serverId = ?";
         query = [NSString stringWithFormat:query, table];
@@ -570,7 +570,7 @@
 {
     NSMutableArray<ISMSSong*> *songs = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT * FROM songs WHERE mediaFolderId = ? AND serverId = ? AND folderId IS NULL";
         FMResultSet *result = [db executeQuery:query, @(mediaFolderId), @(serverId)];
         while ([result next])
@@ -591,7 +591,7 @@
 {
     NSMutableArray<ISMSSong*> *songs = [[NSMutableArray alloc] init];
     
-    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT * FROM cachedSongs";
         FMResultSet *result = [db executeQuery:query];
         while ([result next])
@@ -652,7 +652,7 @@
 
 - (NSUInteger)estimatedBitrate
 {
-    NSInteger currentMaxBitrate = settingsS.currentMaxBitrate;
+    NSInteger currentMaxBitrate = SavedSettings.si.currentMaxBitrate;
     
     // Default to 128 if there is no bitrate for this song object (should never happen)
     NSUInteger rate = (!self.bitrate || self.bitrate.intValue == 0) ? 128 : self.bitrate.intValue;
@@ -689,12 +689,12 @@
 - (BOOL)isPartiallyCached
 {
     NSString *query = @"SELECT partiallyCached FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
 }
 
 - (void)setIsPartiallyCached:(BOOL)isPartiallyCached
 {
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
         NSString *query = @"INSERT OR REPLACE INTO cachedSongsMetadata (songId, serverId, partiallyCached, fullyCached) VALUES (?, ?, ?, ?)";
         [db executeUpdate:query, self.songId, self.serverId, @YES, @NO];
     }];
@@ -703,12 +703,12 @@
 - (BOOL)isFullyCached
 {
     NSString *query = @"SELECT fullyCached FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?";
-    return [databaseS.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
 }
 
 - (void)setIsFullyCached:(BOOL)isFullyCached
 {
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
         NSString *query = @"INSERT OR REPLACE INTO cachedSongsMetadata (songId, serverId, partiallyCached, fullyCached) VALUES (?, ?, ?, ?)";
         [db executeUpdate:query, self.songId, self.serverId, @NO, @YES];
     }];
@@ -721,7 +721,7 @@
 }
 
 - (void)removeFromCachedSongsTable {
-    [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
+    [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
         NSString *query = @"DELETE FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?";
         [db executeUpdate:query, self.songId, self.serverId];
     }];
@@ -740,7 +740,7 @@
         if ([PlayQueue sharedInstance].isPlaying)
         {
             // TODO: Stop interacting directly with AudioEngine
-            bitrate = [BassWrapper estimateBitrate:audioEngineS.player.currentStream];
+            bitrate = [BassWrapper estimateBitrate:AudioEngine.si.player.currentStream];
         }
         
         CGFloat seconds = [self.duration floatValue];
@@ -751,11 +751,11 @@
             {
                 // This is the current playing song, so see if BASS has an actual bitrate for it
                 // TODO: Stop interacting directly with AudioEngine
-                if (audioEngineS.player.bitRate > 0)
+                if (AudioEngine.si.player.bitRate > 0)
                 {
                     // Bass has a non-zero bitrate, so use that for the calculation
                     // convert to bytes per second, multiply by number of seconds
-                    bitrate = (CGFloat)audioEngineS.player.bitRate;
+                    bitrate = (CGFloat)AudioEngine.si.player.bitRate;
                     seconds = [self.duration floatValue];
                     
                 }

@@ -43,9 +43,9 @@ LOG_LEVEL_ISUB_DEBUG
 	// Check if there's another queued song and that were are on Wifi
 	self.currentQueuedSong = self.currentQueuedSongInDb;
 #ifdef IOS
-	if (!self.currentQueuedSong || (![appDelegateS isWifi] && !settingsS.isManualCachingOnWWANEnabled) || settingsS.isOfflineMode)
+	if (!self.currentQueuedSong || (![appDelegateS isWifi] && !SavedSettings.si.isManualCachingOnWWANEnabled) || SavedSettings.si.isOfflineMode)
 #else
-    if (!self.currentQueuedSong || settingsS.isOfflineMode)
+    if (!self.currentQueuedSong || SavedSettings.si.isOfflineMode)
 #endif
     {
 		return;
@@ -54,7 +54,7 @@ LOG_LEVEL_ISUB_DEBUG
     DDLogVerbose(@"[ISMSCacheQueueManager] starting download queue for: %@", self.currentQueuedSong);
 	
 	// For simplicity sake, just make sure we never go under 25 MB and let the cache check process take care of the rest
-	if (cacheS.freeSpace <= BytesFromMiB(25))
+	if (CacheSingleton.si.freeSpace <= BytesFromMiB(25))
 	{
 		/*[EX2Dispatch runInMainThread:^
 		 {
@@ -143,7 +143,7 @@ LOG_LEVEL_ISUB_DEBUG
 - (void)resumeDownloadQueue:(NSNumber *)byteOffset
 {
 	// Create the request and resume the download
-	if (!settingsS.isOfflineMode)
+	if (!SavedSettings.si.isOfflineMode)
 	{
 		[self.currentStreamHandler start:YES];
 	}

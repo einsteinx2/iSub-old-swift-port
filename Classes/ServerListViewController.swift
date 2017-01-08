@@ -180,7 +180,7 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
         serverType.autoresizingMask = .flexibleLeftMargin;
         cell.contentView.addSubview(serverType)
         
-        if SavedSettings.sharedInstance().currentServer.isEqual(server) {
+        if SavedSettings.si().currentServer.isEqual(server) {
             let currentServerMarker = UIImageView()
             currentServerMarker.image = UIImage(named: "current-server")
             cell.contentView.addSubview(currentServerMarker)
@@ -228,10 +228,10 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         // TODO: Figure out how to implement this using the new data model. Or turn off move support.
         
-        //	NSArray *server = [ settingsS.serverList objectAtIndexSafe:fromIndexPath.row];
-        //	[settingsS.serverList removeObjectAtIndex:fromIndexPath.row];
-        //	[settingsS.serverList insertObject:server atIndex:toIndexPath.row];
-        //	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject: settingsS.serverList] forKey:@"servers"];
+        //	NSArray *server = [ SavedSettings.si.serverList objectAtIndexSafe:fromIndexPath.row];
+        //	[SavedSettings.si.serverList removeObjectAtIndex:fromIndexPath.row];
+        //	[SavedSettings.si.serverList insertObject:server atIndex:toIndexPath.row];
+        //	[[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject: SavedSettings.si.serverList] forKey:@"servers"];
         //	[[NSUserDefaults standardUserDefaults] synchronize];
         //
         //	[self.tableView reloadData];
@@ -242,7 +242,7 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
         {
             // TODO: Automatically switch to the next server. Or if it's the last server, connect to the test server
             //		// Alert user to select new default server if they deleting the default
-            //		if ([ settingsS.urlString isEqualToString:[(Server *)[ settingsS.serverList objectAtIndexSafe:indexPath.row] url]])
+            //		if ([ SavedSettings.si.urlString isEqualToString:[(Server *)[ SavedSettings.si.serverList objectAtIndexSafe:indexPath.row] url]])
             //		{
             //			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //			alert.tag = 4;
@@ -293,8 +293,8 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
     
     func loadingFinished(_ theLoader: ISMSLoader) {
         if let statusLoader = theLoader as? StatusLoader, let server = statusLoader.server {
-            SavedSettings.sharedInstance().currentServerId = server.serverId
-            SavedSettings.sharedInstance().redirectUrlString = redirectUrl
+            SavedSettings.si().currentServerId = server.serverId
+            SavedSettings.si().redirectUrlString = redirectUrl
             
             iSubAppDelegate.sharedInstance().switchServer(to: server, redirectUrl: redirectUrl)
             

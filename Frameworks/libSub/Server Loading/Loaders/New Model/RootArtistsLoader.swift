@@ -36,7 +36,7 @@ class RootArtistsLoader: ISMSLoader, ItemLoader {
         } else {
             var artistsTemp = [ISMSArtist]()
             
-            let serverId = SavedSettings.sharedInstance().currentServerId
+            let serverId = SavedSettings.si().currentServerId
             root.iterate("artists.index") { index in
                 index.iterate("artist") { artist in
                     if artist.attribute("name") != ".AppleDouble" {
@@ -59,7 +59,7 @@ class RootArtistsLoader: ISMSLoader, ItemLoader {
     
     func persistModels() {
         // Remove existing artists
-        let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
+        let serverId = SavedSettings.si().currentServerId as NSNumber
         ISMSArtist.deleteAllArtists(withServerId: serverId)
         
         // Save the new artists
@@ -67,7 +67,7 @@ class RootArtistsLoader: ISMSLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
+        let serverId = SavedSettings.si().currentServerId as NSNumber
         let artistsTemp = ISMSArtist.allArtists(withServerId: serverId)
         if artistsTemp.count > 0 {
             artists = artistsTemp

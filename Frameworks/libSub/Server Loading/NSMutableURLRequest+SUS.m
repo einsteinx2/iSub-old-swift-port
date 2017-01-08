@@ -111,7 +111,7 @@
 	}
 	
 	// Set the HTTP Basic Auth
-	if (settingsS.isBasicAuthEnabled)
+	if (SavedSettings.si.isBasicAuthEnabled)
 	{
 		//DLog(@"using basic auth!");
 		NSString *authStr = [NSString stringWithFormat:@"%@:%@", username, [pass URLEncodeString]];
@@ -136,16 +136,16 @@
 
 + (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action parameters:(NSDictionary *)parameters fragment:(NSString *)fragment byteOffset:(NSUInteger)offset
 {
-	NSString *urlString = settingsS.currentServer.url;
-	if (settingsS.redirectUrlString)
+	NSString *urlString = SavedSettings.si.currentServer.url;
+	if (SavedSettings.si.redirectUrlString)
 	{
 		// The redirect URL has been found, so use it
-		urlString = settingsS.redirectUrlString;
+		urlString = SavedSettings.si.redirectUrlString;
 	}
 	
-//DLog(@"username: %@   password: %@", settingsS.username, settingsS.password);
+//DLog(@"username: %@   password: %@", SavedSettings.si.username, SavedSettings.si.password);
 	
-    Server *currentServer = settingsS.currentServer;
+    Server *currentServer = SavedSettings.si.currentServer;
     return [NSMutableURLRequest requestWithSUSAction:action
                                            urlString:urlString
                                             username:currentServer.username

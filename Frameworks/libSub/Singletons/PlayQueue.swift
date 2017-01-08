@@ -73,7 +73,7 @@ import Nuke
     open var songs: [ISMSSong] { return playlist.songs }
     open var playlist: Playlist { return Playlist.playQueue }
     
-    fileprivate var audioEngine: AudioEngine { return AudioEngine.sharedInstance() }
+    fileprivate var audioEngine: AudioEngine { return AudioEngine.si() }
     
     //
     // MARK: - Play Queue -
@@ -263,7 +263,7 @@ import Nuke
         NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_RemoveMoviePlayer)
         
         if let currentSong = currentSong {
-            let settings = SavedSettings.sharedInstance()
+            let settings = SavedSettings.si()
             let streamManager = ISMSStreamManager.sharedInstance()
             let cacheQueueManager = ISMSCacheQueueManager.sharedInstance()
             let offsetBytes = userInfo["bytes"] as? NSNumber
@@ -373,7 +373,7 @@ import Nuke
                 trackInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioEngine.progress() as AnyObject?
                 trackInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0 as AnyObject?
                 
-                if SavedSettings.sharedInstance().isLockScreenArtEnabled {
+                if SavedSettings.si().isLockScreenArtEnabled {
                     trackInfo[MPMediaItemPropertyArtwork] = defaultItemArtwork
                     if let coverArtId = song.coverArtId, let image = CachedImage.cached(coverArtId: coverArtId, size: .player) {
                         trackInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
@@ -396,7 +396,7 @@ extension PlayQueue: BassGaplessPlayerDelegate {
     
     public func bassFirstStreamStarted(_ player: BassGaplessPlayer) {
         // TODO: Is this the best place for this?
-        SocialSingleton.sharedInstance().playerClearSocial()
+        SocialSingleton.si().playerClearSocial()
     }
     
     public func bassSongEndedCalled(_ player: BassGaplessPlayer) {
@@ -404,12 +404,12 @@ extension PlayQueue: BassGaplessPlayerDelegate {
         currentIndex = nextIndex
         
         // TODO: Is this the best place for this?
-        SocialSingleton.sharedInstance().playerClearSocial()
+        SocialSingleton.si().playerClearSocial()
     }
     
     public func bassFreed(_ player: BassGaplessPlayer) {
         // TODO: Is this the best place for this?
-        SocialSingleton.sharedInstance().playerClearSocial()
+        SocialSingleton.si().playerClearSocial()
     }
 
     public func bassIndex(atOffset offset: Int, from index: Int, player: BassGaplessPlayer) -> Int {
@@ -452,6 +452,6 @@ extension PlayQueue: BassGaplessPlayerDelegate {
     
     public func bassRetrievingOutputData(_ player: BassGaplessPlayer) {
         // TODO: Is this the best place for this?
-        SocialSingleton.sharedInstance().playerHandleSocial()
+        SocialSingleton.si().playerHandleSocial()
     }
 }

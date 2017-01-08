@@ -51,7 +51,7 @@ open class Server: NSObject, NSCopying, NSCoding { //, ISMSPersistedModel {
 
     public init?(itemId: Int) {
         var serverId: Int?, type: Int?, url: String?, username: String?, lastQueryId: String?, uuid: String?
-        DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             do {
                 let query = "SELECT * FROM servers WHERE serverId = ?"
                 let result = try db.executeQuery(query, itemId)
@@ -105,7 +105,7 @@ open class Server: NSObject, NSCopying, NSCoding { //, ISMSPersistedModel {
         
         var success = true
         var serverId = -1
-        DatabaseSingleton.sharedInstance().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query = "INSERT INTO servers VALUES (?, ?, ?, ?, ?, ?)"
                 try db.executeUpdate(query, NSNull(), type.rawValue, url, username, n2N(lastQueryId), n2N(uuid))
@@ -139,7 +139,7 @@ open class Server: NSObject, NSCopying, NSCoding { //, ISMSPersistedModel {
     open static func allServers() -> [Server] {
         var servers = [Server]()
         
-        DatabaseSingleton.sharedInstance().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             do {
                 let query = "SELECT * FROM servers"
                 let result = try db.executeQuery(query)

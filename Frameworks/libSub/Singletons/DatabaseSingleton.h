@@ -9,8 +9,6 @@
 #ifndef iSub_DatabaseSingleton_h
 #define iSub_DatabaseSingleton_h
 
-#define databaseS ((DatabaseSingleton *)[DatabaseSingleton sharedInstance])
-
 @class FMDatabase, FMDatabasePool, FMDatabaseQueue, ISMSArtist, ISMSAlbum, ISMSSong, ISMSQueueAllLoader;
 
 @interface DatabaseSingleton : NSObject 
@@ -28,7 +26,7 @@
 
 @property (nonnull, strong) ISMSQueueAllLoader *queueAll;
 
-+ (nonnull instancetype)sharedInstance;
++ (nonnull instancetype)si;
 + (void) setAllSongsToBackup;
 + (void) setAllSongsToNotBackup;
 

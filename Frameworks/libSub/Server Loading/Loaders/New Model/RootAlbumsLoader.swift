@@ -36,7 +36,7 @@ class RootAlbumsLoader: ISMSLoader, ItemLoader {
         } else {
             var albumsTemp = [ISMSAlbum]()
             
-            let serverId = SavedSettings.sharedInstance().currentServerId
+            let serverId = SavedSettings.si().currentServerId
             root.iterate("albumList2.album") { album in
                 let anAlbum = ISMSAlbum(rxmlElement: album, serverId: serverId)
                 albumsTemp.append(anAlbum)
@@ -52,7 +52,7 @@ class RootAlbumsLoader: ISMSLoader, ItemLoader {
     
     func persistModels() {
         // Remove existing artists
-        let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
+        let serverId = SavedSettings.si().currentServerId as NSNumber
         ISMSAlbum.deleteAllAlbums(withServerId: serverId)
         
         // Save the new artists
@@ -60,7 +60,7 @@ class RootAlbumsLoader: ISMSLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
+        let serverId = SavedSettings.si().currentServerId as NSNumber
         let albumsTemp = ISMSAlbum.allAlbums(withServerId: serverId)
         if albumsTemp.count > 0 {
             albums = albumsTemp

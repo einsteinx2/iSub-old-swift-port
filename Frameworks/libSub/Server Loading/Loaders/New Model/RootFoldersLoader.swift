@@ -44,7 +44,7 @@ class RootFoldersLoader: ISMSLoader, ItemLoader {
             var foldersTemp = [ISMSFolder]()
             var songsTemp = [ISMSSong]()
             
-            let serverId = SavedSettings.sharedInstance().currentServerId
+            let serverId = SavedSettings.si().currentServerId
             root.iterate("indexes.index") { index in
                 index.iterate("artist") { artist in
                     if artist.attribute("name") != ".AppleDouble" {
@@ -75,7 +75,7 @@ class RootFoldersLoader: ISMSLoader, ItemLoader {
     
     func persistModels() {
         // Remove existing root folders
-        let serverId = SavedSettings.sharedInstance().currentServerId
+        let serverId = SavedSettings.si().currentServerId
         let mediaFolder = ISMSMediaFolder(mediaFolderId: mediaFolderId ?? 0, serverId: serverId)
         mediaFolder?.deleteRootFolders()
         
@@ -85,7 +85,7 @@ class RootFoldersLoader: ISMSLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.sharedInstance().currentServerId
+        let serverId = SavedSettings.si().currentServerId
         if let mediaFolderId = mediaFolderId, let mediaFolder = ISMSMediaFolder(mediaFolderId: mediaFolderId, serverId: serverId) {
             folders = mediaFolder.rootFolders()
             songs = ISMSSong.rootSongs(inMediaFolder: mediaFolderId, serverId: serverId)

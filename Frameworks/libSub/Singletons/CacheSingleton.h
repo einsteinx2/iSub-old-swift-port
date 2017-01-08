@@ -9,8 +9,6 @@
 #ifndef iSub_CacheSingleton_h
 #define iSub_CacheSingleton_h
 
-#define cacheS ((CacheSingleton *)[CacheSingleton sharedInstance])
-
 @interface CacheSingleton : NSObject
 
 //@property (retain) NSTimer *cacheCheckTimer;
@@ -20,7 +18,7 @@
 @property (readonly) unsigned long long freeSpace;
 @property (readonly) NSUInteger numberOfCachedSongs;
 
-+ (nonnull instancetype)sharedInstance;
++ (nonnull instancetype)si;
 
 + (void)setAllCachedSongsToBackup;
 + (void)setAllCachedSongsToNotBackup;

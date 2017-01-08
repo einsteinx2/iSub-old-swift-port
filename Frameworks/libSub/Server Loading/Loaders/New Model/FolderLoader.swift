@@ -47,7 +47,7 @@ class FolderLoader: ISMSLoader, ItemLoader {
             var foldersTemp = [ISMSFolder]()
             var songsTemp = [ISMSSong]()
             
-            let serverId = SavedSettings.sharedInstance().currentServerId
+            let serverId = SavedSettings.si().currentServerId
             root.iterate("directory.child") { child in
                 if (child.attribute("isDir") as NSString).boolValue {
                     if child.attribute("title") != ".AppleDouble" {
@@ -145,6 +145,6 @@ class FolderLoader: ISMSLoader, ItemLoader {
     }
     
     var associatedObject: Any? {
-        return ISMSFolder(folderId: folderId, serverId: SavedSettings.sharedInstance().currentServerId, loadSubmodels: false)
+        return ISMSFolder(folderId: folderId, serverId: SavedSettings.si().currentServerId, loadSubmodels: false)
     }
 }

@@ -45,7 +45,7 @@ LOG_LEVEL_ISUB_DEFAULT
 - (NSUInteger)numberOfCachedSongs
 {
     NSString *query = @"SELECT COUNT(*) FROM cachedSongsMetadata WHERE fullyCached = 1";
-    return [databaseS.songModelReadDbPool intForQuery:query];
+    return [DatabaseSingleton.si.songModelReadDbPool intForQuery:query];
     
     //return [[ISMSPlaylist downloadedSongs] songCount];
 }
@@ -56,17 +56,17 @@ LOG_LEVEL_ISUB_DEFAULT
 - (void)adjustCacheSize
 {
 	// Only adjust if the user is using max cache size as option
-	if (settingsS.cachingType == ISMSCachingType_maxSize)
+	if (SavedSettings.si.cachingType == ISMSCachingType_maxSize)
 	{
 		unsigned long long possibleSize = self.freeSpace + self.cacheSize;
-		unsigned long long maxCacheSize = settingsS.maxCacheSize;
+		unsigned long long maxCacheSize = SavedSettings.si.maxCacheSize;
 		
 		NSLog(@"adjustCacheSize:  possibleSize = %llu  maxCacheSize = %llu", possibleSize, maxCacheSize);
 		
 		if (possibleSize < maxCacheSize)
 		{
 			// Set the max cache size to 25MB less than the free space
-			settingsS.maxCacheSize = possibleSize - BytesFromMiB(25);
+			SavedSettings.si.maxCacheSize = possibleSize - BytesFromMiB(25);
 		}
 	}
 }
@@ -76,39 +76,39 @@ LOG_LEVEL_ISUB_DEFAULT
     // TODO rewrite this with new data model
 	/*
     NSString *songMD5 = nil;
-    if (settingsS.cachingType == ISMSCachingType_minSpace)
+    if (SavedSettings.si.cachingType == ISMSCachingType_minSpace)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until free space is more than minFreeSpace
-		while (self.freeSpace < settingsS.minFreeSpace)
+		while (self.freeSpace < SavedSettings.si.minFreeSpace)
 		{
 			@autoreleasepool 
 			{
-				if (settingsS.autoDeleteCacheType == 0)
-					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+				if (SavedSettings.si.autoDeleteCacheType == 0)
+					songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 				else
-					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
+					songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 				//DLog(@"removing %@", songMD5);
 				[ISMSSong removeSongFromCacheDbQueueByMD5:songMD5];	
 			}
 		}
 	}
-	else if (settingsS.cachingType == ISMSCachingType_maxSize)
+	else if (SavedSettings.si.cachingType == ISMSCachingType_maxSize)
 	{
 		// Remove the oldest songs based on either oldest played or oldest cached until cache size is less than maxCacheSize
 		unsigned long long size = self.cacheSize;
-		while (size > settingsS.maxCacheSize)
+		while (size > SavedSettings.si.maxCacheSize)
 		{
 			@autoreleasepool 
 			{
-				if (settingsS.autoDeleteCacheType == 0)
+				if (SavedSettings.si.autoDeleteCacheType == 0)
 				{
-					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+					songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 				}
 				else
 				{
-					songMD5 = [databaseS.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
+					songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 				}
-				//songSize = [databaseS.songCacheDbQueue intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
+				//songSize = [DatabaseSingleton.si.songCacheDbQueue intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
 				ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:songMD5];
 				// Determine the name of the file we are downloading.
 				//DLog(@"currentSongObject.path: %@", currentSongObject.path);
@@ -134,7 +134,7 @@ LOG_LEVEL_ISUB_DEFAULT
 {
     // TODO: Rewrite this with new data model
     /*
-    [databaseS.songCacheDbQueue inDatabase:^(FMDatabase *db)
+    [DatabaseSingleton.si.songCacheDbQueue inDatabase:^(FMDatabase *db)
     {
         unsigned long long size = [[db stringForQuery:@"SELECT sum(size) FROM sizesSongs"] longLongValue];
         
@@ -163,17 +163,17 @@ LOG_LEVEL_ISUB_DEFAULT
 	// Adjust the cache size if needed
 	[self adjustCacheSize];
 	
-	if (settingsS.cachingType == ISMSCachingType_minSpace && settingsS.isSongCachingEnabled)
+	if (SavedSettings.si.cachingType == ISMSCachingType_minSpace && SavedSettings.si.isSongCachingEnabled)
 	{		
 		// Check to see if the free space left is lower than the setting
-		if (self.freeSpace < settingsS.minFreeSpace)
+		if (self.freeSpace < SavedSettings.si.minFreeSpace)
 		{
 			// Check to see if the cache size + free space is still less than minFreeSpace
 			unsigned long long size = self.cacheSize;
-			if (size + self.freeSpace < settingsS.minFreeSpace)
+			if (size + self.freeSpace < SavedSettings.si.minFreeSpace)
 			{
 				// Looks like even removing all of the cache will not be enough so turn off caching
-				settingsS.isSongCachingEnabled = NO;
+				SavedSettings.si.isSongCachingEnabled = NO;
 				
 #ifdef IOS
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"IMPORTANT" message:@"Free space is running low, but even deleting the entire cache will not bring the free space up higher than your minimum setting. Automatic song caching has been turned off.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -183,7 +183,7 @@ LOG_LEVEL_ISUB_DEFAULT
 			else
 			{
 				// Remove the oldest cached songs until freeSpace > minFreeSpace or pop the free space low alert
-				if (settingsS.isAutoDeleteCacheEnabled)
+				if (SavedSettings.si.isAutoDeleteCacheEnabled)
 				{
 					[self removeOldestCachedSongs];
 				}
@@ -198,18 +198,18 @@ LOG_LEVEL_ISUB_DEFAULT
 			}
 		}
 	}
-	else if (settingsS.cachingType == ISMSCachingType_maxSize && settingsS.isSongCachingEnabled)
+	else if (SavedSettings.si.cachingType == ISMSCachingType_maxSize && SavedSettings.si.isSongCachingEnabled)
 	{		
 		// Check to see if the cache size is higher than the max
-		if (self.cacheSize > settingsS.maxCacheSize)
+		if (self.cacheSize > SavedSettings.si.maxCacheSize)
 		{
-			if (settingsS.isAutoDeleteCacheEnabled)
+			if (SavedSettings.si.isAutoDeleteCacheEnabled)
 			{
 				[self removeOldestCachedSongs];
 			}
 			else
 			{
-				settingsS.isSongCachingEnabled = NO;
+				SavedSettings.si.isSongCachingEnabled = NO;
 				
 #ifdef IOS
 				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"The song cache is full. Automatic song caching has been disabled.\n\nYou can re-enable it in the Settings menu (tap the gear, tap Settings at the top)" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -269,7 +269,7 @@ LOG_LEVEL_ISUB_DEFAULT
                 
 #ifdef IOS
                 // Now set all of the files to not be backed up
-                if (!settingsS.isBackupCacheEnabled)
+                if (!SavedSettings.si.isBackupCacheEnabled)
                 {
                     NSArray *cachedSongNames = [defaultManager contentsOfDirectoryAtPath:[SavedSettings songCachePath] error:nil];
                     for (NSString *songName in cachedSongNames)
@@ -327,7 +327,7 @@ LOG_LEVEL_ISUB_DEFAULT
 #endif
 }
 
-+ (instancetype)sharedInstance
++ (instancetype)si
 {
     static CacheSingleton *sharedInstance = nil;
     static dispatch_once_t once = 0;
