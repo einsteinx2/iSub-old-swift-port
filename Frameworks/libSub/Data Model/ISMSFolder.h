@@ -28,7 +28,7 @@
 // Returns an instance if it exists in the db, otherwise nil
 - (nullable instancetype)initWithFolderId:(NSInteger)folderId serverId:(NSInteger)serverId loadSubmodels:(BOOL)loadSubmodels;
 
-+ (NSArray<ISMSFolder*> *)foldersInFolder:(NSInteger)folderId serverId:(NSInteger)serverId cachedTable:(BOOL)cachedTable;
++ (nonnull NSArray<ISMSFolder*> *)foldersInFolder:(NSInteger)folderId serverId:(NSInteger)serverId cachedTable:(BOOL)cachedTable;
 + (nonnull NSArray<ISMSFolder*> *)topLevelCachedFolders;
 
 - (BOOL)hasCachedSongs;

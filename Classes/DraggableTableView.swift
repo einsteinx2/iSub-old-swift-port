@@ -59,11 +59,12 @@ class DraggableTableView: UITableView {
     let VertSwipeDragMax = 80.0
     
     let cellEnableDelay = 1.0
-    let longPressDelay = 1000 //ms
+    let longPressDelay = 150 //ms
     
     var lastDeleteToggle = Date()
     
     var longPressTimer: DispatchSourceTimer?
+    var longPressStartLocation = CGPoint()
     var dragIndexPath: IndexPath?
     var dragCell: DraggableCell?
     var dragCellAlpha: CGFloat = 1.0
@@ -146,8 +147,8 @@ class DraggableTableView: UITableView {
     fileprivate func cancelLongPress() {
         if let longPressTimer = longPressTimer {
             longPressTimer.cancel()
+            self.longPressTimer = nil
         }
-        longPressTimer = nil
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -159,8 +160,9 @@ class DraggableTableView: UITableView {
         // Handle long press
         if let touch = touches.first {
             let point = touch.location(in: self)
-            let indexPath = self.indexPathForRow(at: point)
-            if let indexPath = indexPath {
+            longPressStartLocation = point
+            
+            if let indexPath = self.indexPathForRow(at: point) {
                 let cell = self.cellForRow(at: indexPath)
                 if let draggableCell = cell as? DraggableCell {
                     if draggableCell.draggable {
@@ -170,7 +172,7 @@ class DraggableTableView: UITableView {
                         let userInfo = Notifications.userInfo(location: location, dragSourceTableView: self, dragCell: draggableCell)
                         
                         longPressTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-                        longPressTimer!.scheduleRepeating(wallDeadline: .now(), interval: .milliseconds(longPressDelay), leeway: .milliseconds(250))
+                        longPressTimer!.scheduleOneshot(deadline: .now() + .milliseconds(longPressDelay), leeway: .nanoseconds(0))
                         longPressTimer!.setEventHandler {
                             self.longPressFired(userInfo)
                             print("timer fired")
@@ -184,52 +186,15 @@ class DraggableTableView: UITableView {
         super.touchesBegan(touches, with: event)
     }
     
-    @objc fileprivate func longPressFired(_ userInfo: [AnyHashable: Any]) {
-        if let cell = userInfo[Notifications.dragCellKey] as? DraggableCell {
-            self.isScrollEnabled = false
-            dragIndexPath = cell.indexPath
-            dragCell = cell
-            dragCellAlpha = cell.containerView.alpha
-            
-            let image = imageFromCell(cell)
-            dragImageView = UIImageView(image: image)
-            dragImageView!.frame.origin = dragImageSuperview.convert(cell.frame.origin, from: cell.superview)
-            dragImageView!.layer.shadowRadius = 6.0
-            dragImageView!.layer.shadowOpacity = 0.0
-            dragImageView!.layer.shadowOffset = CGSize(width: 0, height: 2)
-            self.window!.rootViewController!.view.addSubview(dragImageView!)
-            
-            // Animate the shadow opacity so it gives the effect of the cell lifting upwards
-            let shadowAnimation = CABasicAnimation(keyPath: "shadowOpacity")
-            shadowAnimation.fromValue = 0.0
-            shadowAnimation.toValue = 0.3
-            shadowAnimation.duration = 0.1
-            dragImageView!.layer.add(shadowAnimation, forKey: "shadowOpacity")
-            dragImageView!.layer.shadowOpacity = 0.3
-            
-            
-            UIView.animate(withDuration: 0.1, animations: {
-                // Animate the cell location to be slightly off
-                var origin = self.dragImageView!.frame.origin
-                origin.x += 2
-                origin.y -= 2
-                self.dragImageView!.frame.origin = origin
-                
-                // Dim the cell in the table
-                cell.containerView.alpha = 0.6
-            }) 
-            
-            // Match the animation so movement is smooth
-            dragImageOffset.x -= 2
-            dragImageOffset.y += 2
-            
-            NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingBegan, userInfo: userInfo)
-        }
-    }
-    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // Cancel the tap and hold if user moves finger
-        cancelLongPress()
+        // Cancel the tap and hold if user moves finger too far
+        if let touch = touches.first {
+            let point = touch.location(in: self)
+            let distance = hypot(longPressStartLocation.x - point.x, longPressStartLocation.y - point.y)
+            if distance > 5.0 {
+                cancelLongPress()
+            }
+        }
         
         if let dragImageView = dragImageView, let dragCell = dragCell, let touch = touches.first {
             let superviewPoint = touch.location(in: dragImageSuperview)
@@ -299,5 +264,53 @@ class DraggableTableView: UITableView {
         }
         
         super.touchesCancelled(touches!, with: event)
+    }
+    
+    @objc fileprivate func longPressFired(_ userInfo: [AnyHashable: Any]) {
+        if let cell = userInfo[Notifications.dragCellKey] as? DraggableCell {
+            self.isScrollEnabled = false
+            dragIndexPath = cell.indexPath
+            dragCell = cell
+            dragCellAlpha = cell.containerView.alpha
+            
+            let image = imageFromCell(cell)
+            dragImageView = UIImageView(image: image)
+            dragImageView!.frame.origin = dragImageSuperview.convert(cell.frame.origin, from: cell.superview)
+            dragImageView!.layer.shadowRadius = 6.0
+            dragImageView!.layer.shadowOpacity = 0.0
+            dragImageView!.layer.shadowOffset = CGSize(width: 0, height: 2)
+            self.window!.rootViewController!.view.addSubview(dragImageView!)
+            
+            // Animate the shadow opacity so it gives the effect of the cell lifting upwards
+            let shadowAnimation = CABasicAnimation(keyPath: "shadowOpacity")
+            shadowAnimation.fromValue = 0.0
+            shadowAnimation.toValue = 0.3
+            shadowAnimation.duration = 0.1
+            dragImageView!.layer.add(shadowAnimation, forKey: "shadowOpacity")
+            dragImageView!.layer.shadowOpacity = 0.3
+            
+            
+            UIView.animate(withDuration: 0.1, animations: {
+                // Animate the cell location to be slightly off
+                var origin = self.dragImageView!.frame.origin
+                origin.x += 2
+                origin.y -= 2
+                self.dragImageView!.frame.origin = origin
+                
+                // Dim the cell in the table
+                cell.containerView.alpha = 0.6
+            })
+            
+            // Match the animation so movement is smooth
+            dragImageOffset.x -= 2
+            dragImageOffset.y += 2
+            
+            NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingBegan, userInfo: userInfo)
+        }
+    }
+    
+    override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
+        cancelLongPress()
+        super.setContentOffset(contentOffset, animated: animated)
     }
 }
