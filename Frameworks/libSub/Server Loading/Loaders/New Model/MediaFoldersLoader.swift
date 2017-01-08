@@ -54,7 +54,7 @@ class MediaFoldersLoader: ISMSLoader, ItemLoader {
         mediaFolders.forEach({$0.replace()})
     }
     
-    func loadModelsFromCache() -> Bool {
+    func loadModelsFromDatabase() -> Bool {
         let serverId = SavedSettings.sharedInstance().currentServerId
         mediaFolders = ISMSMediaFolder.allMediaFolders(withServerId: serverId as NSNumber)
         return mediaFolders.count > 0

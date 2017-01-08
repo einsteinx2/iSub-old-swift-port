@@ -26,6 +26,7 @@ class NewMenuViewController: UITableViewController {
     fileprivate let menuItems = [MenuItem(name: "Folders", function: showFolders),
                                  MenuItem(name: "Artists", function: showArtists),
                                  MenuItem(name: "Albums", function: showAlbums),
+                                 MenuItem(name: "Downloads", function: showDownloads),
                                  MenuItem(name: "Settings", function: showSettings)];
     
     fileprivate let centerController = CenterPanelContainerViewController()
@@ -101,6 +102,19 @@ class NewMenuViewController: UITableViewController {
         
         centerController.contentController = menuItem.navController
     }
+    
+    fileprivate func showDownloads(_ menuItem: MenuItem) {
+        if menuItem.navController == nil {
+            let viewController = CacheViewController()
+            let navController = NavigationStack(rootViewController: viewController)
+            navController.navigationBar.barStyle = .black
+            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
+            navController.interactivePopGestureRecognizer?.delegate = viewController
+            menuItem.navController = navController
+        }
+        
+        centerController.contentController = menuItem.navController
+    }
 
     fileprivate func showSettings(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
@@ -155,6 +169,7 @@ class NewMenuViewController: UITableViewController {
 
 
 // MARK: - Navigation Stack -
+
 fileprivate func sharedGestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer, self: UIViewController) -> Bool {
     if self.navigationController?.viewControllers.count == 2 {
         return true
@@ -168,6 +183,12 @@ fileprivate func sharedGestureRecognizerShouldBegin(_ gestureRecognizer: UIGestu
 }
 
 extension ItemViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return sharedGestureRecognizerShouldBegin(gestureRecognizer, self: self)
+    }
+}
+
+extension CacheViewController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return sharedGestureRecognizerShouldBegin(gestureRecognizer, self: self)
     }

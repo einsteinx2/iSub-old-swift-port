@@ -23,8 +23,10 @@
     {
         __block BOOL foundRecord = NO;
         
-        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-            NSString *query = @"SELECT * FROM artists WHERE artistId = ? AND serverId = ?";
+        BOOL (^runQuery)(FMDatabase*, NSString*) = ^BOOL(FMDatabase *db, NSString *table) {
+            NSString *query = @"SELECT * FROM %@ WHERE artistId = ? AND serverId = ?";
+            query = [NSString stringWithFormat:query, table];
+
             FMResultSet *result = [db executeQuery:query, @(artistId), @(serverId)];
             if ([result next])
             {
@@ -33,16 +35,12 @@
             }
             [result close];
             
-            // If not found, check the cache table
-            if (!foundRecord) {
-                query = @"SELECT * FROM cachedArtists WHERE artistId = ? AND serverId = ?";
-                FMResultSet *result = [db executeQuery:query, @(artistId), @(serverId)];
-                if ([result next])
-                {
-                    foundRecord = YES;
-                    [self _assignPropertiesFromResultSet:result];
-                }
-                [result close];
+            return foundRecord;
+        };
+        
+        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+            if (!runQuery(db, @"artists")) {
+                runQuery(db, @"cachedArtists");
             }
         }];
         
@@ -61,7 +59,8 @@
     _artistId = N2n([resultSet objectForColumnIndex:0]);
     _serverId = N2n([resultSet objectForColumnIndex:1]);
     _name = N2n([resultSet objectForColumnIndex:2]);
-    _albumCount = N2n([resultSet objectForColumnIndex:3]);
+    _coverArtId = N2n([resultSet objectForColumnIndex:3]);
+    _albumCount = N2n([resultSet objectForColumnIndex:4]);
 }
 
 - (instancetype)initWithRXMLElement:(RXMLElement *)element serverId:(NSInteger)serverId
@@ -71,6 +70,7 @@
         _serverId = @(serverId);
         _artistId = @([[element attribute:@"id"] integerValue]);
         _name = [element attribute:@"name"];
+        _coverArtId = [element attribute:@"coverArt"];
         _albumCount = @([[element attribute:@"albumCount"] integerValue]);
     }
     
@@ -80,6 +80,20 @@
 - (NSString *)description
 {
 	return [NSString stringWithFormat:@"%@: name: %@, serverId: %@, artistId: %@, albumCount: %li", [super description], self.name, self.serverId, self.artistId, (long)self.albumCount];
+}
+
+- (BOOL)hasCachedSongs {
+    NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE artistId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, self.artistId];
+}
+
++ (BOOL)isPersisted:(NSNumber *)artistId serverId:(NSNumber *)serverId {
+    NSString *query = @"SELECT COUNT(*) FROM artists WHERE artistId = ? AND serverId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, artistId, serverId];
+}
+
+- (BOOL)isPersisted {
+    return [self.class isPersisted:self.artistId serverId:self.serverId];
 }
 
 - (BOOL)_existsInCache {
@@ -201,6 +215,41 @@
     return artists;
 }
 
++ (NSArray<ISMSArtist*> *)allCachedArtists
+{
+    NSMutableArray *artists = [[NSMutableArray alloc] init];
+    NSMutableArray *artistsNumbers = [[NSMutableArray alloc] init];
+    
+    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        NSString *query = @"SELECT * FROM cachedArtists";
+        
+        FMResultSet *r = [db executeQuery:query];
+        while ([r next])
+        {
+            ISMSArtist *artist = [[ISMSArtist alloc] init];
+            [artist _assignPropertiesFromResultSet:r];
+            
+            if (artist.name.length > 0 && isnumber([artist.name characterAtIndex:0]))
+                [artistsNumbers addObject:artist];
+            else
+                [artists addObject:artist];
+        }
+        [r close];
+    }];
+    
+    NSArray *ignoredArticles = databaseS.ignoredArticles;
+    
+    // Sort objects without indefinite articles
+    [artists sortUsingComparator:^NSComparisonResult(ISMSArtist *obj1, ISMSArtist *obj2) {
+        NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        return [name1 caseInsensitiveCompare:name2];
+    }];
+    
+    [artists addObjectsFromArray:artistsNumbers];
+    return artists;
+}
+
 + (BOOL)deleteAllArtistsWithServerId:(NSNumber *)serverId
 {
     __block BOOL success = NO;
@@ -241,7 +290,8 @@
     [encoder encodeObject:self.artistId    forKey:@"artistId"];
     [encoder encodeObject:self.serverId    forKey:@"serverId"];
     [encoder encodeObject:self.name        forKey:@"name"];
-    [encoder encodeObject:self.albumCount forKey:@"albumCount"];
+    [encoder encodeObject:self.coverArtId  forKey:@"coverArtId"];
+    [encoder encodeObject:self.albumCount  forKey:@"albumCount"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -251,6 +301,7 @@
         _artistId   = [decoder decodeObjectForKey:@"artistId"];
         _serverId   = [decoder decodeObjectForKey:@"serverId"];
         _name       = [decoder decodeObjectForKey:@"name"];
+        _coverArtId = [decoder decodeObjectForKey:@"coverArtId"];
         _albumCount = [decoder decodeObjectForKey:@"albumCount"];
     }
     
@@ -265,6 +316,7 @@
     anArtist.artistId    = self.artistId;
     anArtist.serverId    = self.serverId;
     anArtist.name        = self.name;
+    anArtist.coverArtId  = self.coverArtId;
     anArtist.albumCount  = self.albumCount;
     
     return anArtist;

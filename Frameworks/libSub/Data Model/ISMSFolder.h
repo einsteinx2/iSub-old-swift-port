@@ -29,5 +29,9 @@
 - (nullable instancetype)initWithFolderId:(NSInteger)folderId serverId:(NSInteger)serverId loadSubmodels:(BOOL)loadSubmodels;
 
 + (nonnull NSArray<ISMSFolder*> *)foldersInFolder:(NSInteger)folderId serverId:(NSInteger)serverId;
++ (nonnull NSArray<ISMSFolder*> *)topLevelCachedFolders;
+
+- (BOOL)hasCachedSongs;
++ (BOOL)isPersisted:(nonnull NSNumber *)folderId serverId:(nonnull NSNumber *)serverId;
 
 @end

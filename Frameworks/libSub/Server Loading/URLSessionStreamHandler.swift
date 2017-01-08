@@ -12,10 +12,10 @@ import Async
 // TODO: Audit all of the Int types to choose the correct ones, need to ensure we support >4GB files for large videos
 
 class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
-    var selfRef: URLSessionStreamHandler?
+    fileprivate var selfRef: URLSessionStreamHandler?
     
-    var session: URLSession?
-    var task: URLSessionDataTask?
+    fileprivate var session: URLSession?
+    fileprivate var task: URLSessionDataTask?
     
     override func start(_ resume: Bool) {
         guard let songId = song.songId else {

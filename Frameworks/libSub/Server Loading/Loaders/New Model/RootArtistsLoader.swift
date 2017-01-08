@@ -66,7 +66,7 @@ class RootArtistsLoader: ISMSLoader, ItemLoader {
         artists.forEach({$0.insert()})
     }
     
-    func loadModelsFromCache() -> Bool {
+    func loadModelsFromDatabase() -> Bool {
         let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
         let artistsTemp = ISMSArtist.allArtists(withServerId: serverId)
         if artistsTemp.count > 0 {

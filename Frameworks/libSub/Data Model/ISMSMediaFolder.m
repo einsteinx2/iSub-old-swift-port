@@ -9,6 +9,10 @@
 #import "ISMSMediaFolder.h"
 #import "Imports.h"
 
+@interface ISMSFolder (Internal)
+- (void)_assignPropertiesFromResultSet:(FMResultSet *)resultSet;
+@end
+
 @implementation ISMSMediaFolder
 
 - (instancetype)initWithRXMLElement:(RXMLElement *)element serverId:(NSInteger)serverId
@@ -56,6 +60,11 @@
     }
     
     return nil;
+}
+
+- (BOOL)isPersisted {
+    NSString *query = @"SELECT COUNT(*) FROM mediaFolders WHERE mediaFolderId = ? AND serverId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, self.mediaFolderId, self.serverId];
 }
 
 - (BOOL)_insertModel:(BOOL)replace
@@ -106,7 +115,7 @@
     NSMutableArray<ISMSFolder*> *rootFolders = [[NSMutableArray alloc] init];
     
     [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-        NSString *query = @"SELECT f.folderId, f.parentFolderId, f.name "
+        NSString *query = @"SELECT f.* "
                           @"FROM mediaFolders AS m "
                           @"JOIN folders AS f ON f.mediaFolderId = m.mediaFolderId "
                           @"WHERE m.mediaFolderId = ? AND f.serverId = ? AND f.parentFolderId IS NULL";
@@ -114,12 +123,7 @@
         while ([r next])
         {
             ISMSFolder *folder = [[ISMSFolder alloc] init];
-            folder.folderId = [r objectForColumnIndex:0];
-            folder.parentFolderId = [r objectForColumnIndex:1];
-            folder.name = [r stringForColumnIndex:2];
-            
-            folder.mediaFolderId = self.mediaFolderId;
-            folder.serverId = self.serverId;
+            [folder _assignPropertiesFromResultSet:r];
             
             [rootFolders addObject:folder];
         }
@@ -163,9 +167,7 @@
     NSMutableArray *rootFoldersNumbers = [[NSMutableArray alloc] init];
     
     [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-        NSString *query = @"SELECT folderId, serverId, parentFolderId, mediaFolderId, name "
-                          @"FROM folders "
-                          @"WHERE parentFolderId IS NULL";
+        NSString *query = @"SELECT * FROM folders WHERE parentFolderId IS NULL";
         
         FMResultSet *r = nil;
         if (serverId) {
@@ -178,11 +180,7 @@
         while ([r next])
         {
             ISMSFolder *folder = [[ISMSFolder alloc] init];
-            folder.folderId = [r objectForColumnIndex:0];
-            folder.serverId = [r objectForColumnIndex:1];
-            folder.parentFolderId = [r objectForColumnIndex:2];
-            folder.mediaFolderId = [r objectForColumnIndex:3];
-            folder.name = [r stringForColumnIndex:4];
+            [folder _assignPropertiesFromResultSet:r];
             
             if (folder.name.length > 0 && isnumber([folder.name characterAtIndex:0]))
                 [rootFoldersNumbers addObject:folder];

@@ -42,7 +42,7 @@ class ItemViewController: DraggableTableViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         
         viewModel.delegate = self
-        if !viewModel.loadModelsFromCache() {
+        if !viewModel.loadModelsFromDatabase() {
             viewModel.loadModelsFromWeb(nil)
         }
         
@@ -75,10 +75,7 @@ class ItemViewController: DraggableTableViewController {
     
     override func setupLeftBarButton() -> UIBarButtonItem {
         if viewModel.topLevelController {
-            return UIBarButtonItem(title: "Menu",
-                                   style: .plain,
-                                   target: self,
-                                   action: #selector(DraggableTableViewController.showMenu))
+            return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(showMenu))
         } else {
             return super.setupLeftBarButton()
         }
@@ -204,13 +201,14 @@ class ItemViewController: DraggableTableViewController {
             cell.title = folder.name
         case artistsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            cell.alwaysShowCoverArt = true
             if sectionIndexes != nil {
                 cell.indexShowing = true
             }
             
             let artist = viewModel.artists[indexPath.row]
             cell.associatedObject = artist
-            cell.coverArtId = nil
+            cell.coverArtId = artist.coverArtId
             cell.title = artist.name
         case albumsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator

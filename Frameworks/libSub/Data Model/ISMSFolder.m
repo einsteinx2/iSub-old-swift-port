@@ -48,9 +48,12 @@ static NSArray *_ignoredArticles = nil;
     {
         __block BOOL foundRecord = NO;
         
-        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-            NSString *query = @"SELECT * FROM folders WHERE folderId = ? AND serverId = ?";
+        BOOL (^runQuery)(FMDatabase*, NSString*) = ^BOOL(FMDatabase *db, NSString *table) {
+            NSString *query = @"SELECT * FROM %@ WHERE folderId = ? AND serverId = ?";
+            query = [NSString stringWithFormat:query, table];
             FMResultSet *result = [db executeQuery:query, @(folderId), @(serverId)];
+            query = [NSString stringWithFormat:query, table];
+
             if ([result next])
             {
                 foundRecord = YES;
@@ -58,16 +61,12 @@ static NSArray *_ignoredArticles = nil;
             }
             [result close];
             
-            // If not found, check the cache table
-            if (!foundRecord) {
-                query = @"SELECT * FROM cachedFolders WHERE folderId = ? AND serverId = ?";
-                result = [db executeQuery:query, @(folderId), @(serverId)];
-                if ([result next])
-                {
-                    foundRecord = YES;
-                    [self _assignPropertiesFromResultSet:result];
-                }
-                [result close];
+            return foundRecord;
+        };
+        
+        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+            if (!runQuery(db, @"folders")) {
+                runQuery(db, @"cachedFolders");
             }
         }];
         
@@ -106,6 +105,20 @@ static NSArray *_ignoredArticles = nil;
     _ignoredArticles = ignoredArticles;
 }
 
+- (BOOL)hasCachedSongs {
+    NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE folderId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, self.folderId];
+}
+
++ (BOOL)isPersisted:(NSNumber *)folderId serverId:(NSNumber *)serverId {
+    NSString *query = @"SELECT COUNT(*) FROM folders WHERE folderId = ? AND serverId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, folderId, serverId];
+}
+
+- (BOOL)isPersisted {
+    return [self.class isPersisted:self.folderId serverId:self.serverId];
+}
+
 - (BOOL)_existsInCache {
     NSString *query = @"SELECT COUNT(*) FROM cachedFolders WHERE folderId = ? AND serverId = ?";
     return [databaseS.songModelReadDbPool boolForQuery:query, self.folderId, self.serverId];
@@ -135,7 +148,15 @@ static NSArray *_ignoredArticles = nil;
 {
     BOOL success = [self _insertModel:YES cachedTable:NO];
     
-    if ([self _existsInCache]) {
+    BOOL songsExistInCache = NO;
+    for (ISMSSong *song in self.songs) {
+        if (song.existsInCache) {
+            songsExistInCache = YES;
+            break;
+        }
+    }
+    
+    if ([self _existsInCache] || songsExistInCache) {
         success = success && [self cacheModel];
     }
     
@@ -205,6 +226,27 @@ static NSArray *_ignoredArticles = nil;
         NSString *query = @"SELECT * FROM folders WHERE parentFolderId = ? AND serverId = ?";
         
         FMResultSet *r = [db executeQuery:query, @(folderId), @(serverId)];
+        while ([r next])
+        {
+            ISMSFolder *folder = [[ISMSFolder alloc] init];
+            [folder _assignPropertiesFromResultSet:r];
+            [folders addObject:folder];
+        }
+        [r close];
+    }];
+    
+    return folders;
+}
+
++ (NSArray<ISMSFolder*> *)topLevelCachedFolders
+{
+    NSMutableArray<ISMSFolder*> *folders = [[NSMutableArray alloc] init];
+    
+    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        NSString *query = @"SELECT cf.*, cf.folderId FROM cachedFolders cf "
+                          @"WHERE (SELECT COUNT(*) FROM cachedFolders WHERE parentFolderId = cf.folderId) = 0";
+        
+        FMResultSet *r = [db executeQuery:query];
         while ([r next])
         {
             ISMSFolder *folder = [[ISMSFolder alloc] init];

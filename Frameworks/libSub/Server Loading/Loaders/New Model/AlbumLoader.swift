@@ -48,6 +48,14 @@ class AlbumLoader: ISMSLoader, ItemLoader {
             }
             songs = songsTemp
             
+            // Persist associated object model if needed
+            if !ISMSAlbum.isPersisted(NSNumber(value: albumId), serverId: NSNumber(value: serverId)) {
+                if let element = root.child("album") {
+                    let album = ISMSAlbum(rxmlElement: element, serverId: serverId)
+                    album.replace()
+                }
+            }
+            
             self.persistModels()
             
             self.informDelegateLoadingFinished()
@@ -57,9 +65,36 @@ class AlbumLoader: ISMSLoader, ItemLoader {
     func persistModels() {
         // Save the new songs
         songs.forEach({$0.replace()})
+        
+        // Add to cache table if needed
+        if let album = associatedObject as? ISMSAlbum, album.hasCachedSongs() {
+            album.cacheModel()
+        }
+        
+        // Make sure all folder records are created if needed
+        let queue = SelfReferencingOperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        
+        var folderIds = Set<Int>()
+        for song in songs {
+            func performOperation(folderId: Int, mediaFolderId: Int) {
+                if !folderIds.contains(folderId) {
+                    folderIds.insert(folderId)
+                    let loader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
+                    let operation = ItemLoaderOperation(loader: loader)
+                    queue.addOperation(operation)
+                }
+            }
+            
+            if let folder = song.folder, let folderId = folder.folderId as? Int, let mediaFolderId = folder.mediaFolderId as? Int, !folder.isPersisted {
+                performOperation(folderId: folderId, mediaFolderId: mediaFolderId)
+            } else if song.folder == nil, let folderId = song.folderId as? Int, let mediaFolderId = song.mediaFolderId as? Int {
+                performOperation(folderId: folderId, mediaFolderId: mediaFolderId)
+            }
+        }
     }
     
-    func loadModelsFromCache() -> Bool {
+    func loadModelsFromDatabase() -> Bool {
         if let album = associatedObject as? ISMSAlbum {
             album.reloadSubmodels()
             songs = album.songs

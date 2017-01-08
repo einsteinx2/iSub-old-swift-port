@@ -70,8 +70,10 @@
     {
         __block BOOL foundRecord = NO;
         
-        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-            NSString *query = @"SELECT * FROM albums WHERE albumId = ? AND serverId = ?";
+        BOOL (^runQuery)(FMDatabase*, NSString*) = ^BOOL(FMDatabase *db, NSString *table) {
+            NSString *query = @"SELECT * FROM %@ WHERE albumId = ? AND serverId = ?";
+            query = [NSString stringWithFormat:query, table];
+            
             FMResultSet *result = [db executeQuery:query, @(albumId), @(serverId)];
             if ([result next])
             {
@@ -80,16 +82,12 @@
             }
             [result close];
             
-            // If not found, check the cache table
-            if (!foundRecord) {
-                query = @"SELECT * FROM cachedAlbums WHERE albumId = ? AND serverId = ?";
-                result = [db executeQuery:query, @(albumId), @(serverId)];
-                if ([result next])
-                {
-                    foundRecord = YES;
-                    [self _assignPropertiesFromResultSet:result];
-                }
-                [result close];
+            return foundRecord;
+        };
+        
+        [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+            if (!runQuery(db, @"albums")) {
+                runQuery(db, @"cachedAlbums");
             }
         }];
         
@@ -182,6 +180,45 @@
     }];
     
     [albums addObjectsFromArray:albumsNumbers];
+    [albums makeObjectsPerformSelector:@selector(reloadSubmodels)];
+    
+    return albums;
+}
+
++ (NSArray<ISMSAlbum*> *)allCachedAlbums
+{
+    NSMutableArray *albums = [[NSMutableArray alloc] init];
+    NSMutableArray *albumsNumbers = [[NSMutableArray alloc] init];
+    
+    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        NSString *query = @"SELECT * FROM cachedAlbums";
+        
+        FMResultSet *r = [db executeQuery:query];
+        while ([r next])
+        {
+            ISMSAlbum *album = [[ISMSAlbum alloc] init];
+            [album _assignPropertiesFromResultSet:r];
+            
+            if (album.name.length > 0 && isnumber([album.name characterAtIndex:0]))
+                [albumsNumbers addObject:album];
+            else
+                [albums addObject:album];
+        }
+        [r close];
+    }];
+    
+    NSArray *ignoredArticles = databaseS.ignoredArticles;
+    
+    // Sort objects without indefinite articles
+    [albums sortUsingComparator:^NSComparisonResult(ISMSArtist *obj1, ISMSArtist *obj2) {
+        NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        return [name1 caseInsensitiveCompare:name2];
+    }];
+    
+    [albums addObjectsFromArray:albumsNumbers];
+    [albums makeObjectsPerformSelector:@selector(reloadSubmodels)];
+    
     return albums;
 }
 
@@ -220,6 +257,20 @@
 
 #pragma mark - ISMSPersistedModel -
 
+- (BOOL)hasCachedSongs {
+    NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE albumId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, self.albumId];
+}
+
++ (BOOL)isPersisted:(NSNumber *)albumId serverId:(NSNumber *)serverId {
+    NSString *query = @"SELECT COUNT(*) FROM albums WHERE albumId = ? AND serverId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, albumId, serverId];
+}
+
+- (BOOL)isPersisted {
+    return [self.class isPersisted:self.albumId serverId:self.serverId];
+}
+
 - (BOOL)_existsInCache {
     NSString *query = @"SELECT COUNT(*) FROM cachedAlbums WHERE albumId = ? AND serverId = ?";
     return [databaseS.songModelReadDbPool boolForQuery:query, self.albumId, self.serverId];
@@ -249,7 +300,15 @@
 {
     BOOL success = [self _insertModel:YES cachedTable:NO];
     
-    if ([self _existsInCache]) {
+    BOOL songsExistInCache = NO;
+    for (ISMSSong *song in self.songs) {
+        if (song.existsInCache) {
+            songsExistInCache = YES;
+            break;
+        }
+    }
+    
+    if ([self _existsInCache] || songsExistInCache) {
         success = success && [self cacheModel];
     }
     

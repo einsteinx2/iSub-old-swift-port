@@ -429,24 +429,29 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     // MARK: - ISMSPersistantItem -
     
+    public var isPersisted: Bool {
+        // TODO: Fill this in
+        fatalError("not implemented yet")
+    }
+    
     open func insert() -> Bool {
         // TODO: Fill this in
-        return false
+        fatalError("not implemented yet")
     }
     
     open func replace() -> Bool {
         // TODO: Fill this in
-        return false
+        fatalError("not implemented yet")
     }
     
     open func cacheModel() -> Bool {
         // Not supported
-        return false
+        fatalError("not implemented yet")
     }
     
     open func delete() -> Bool {
         // TODO: Fill this in
-        return false
+        fatalError("not implemented yet")
     }
     
     open func reloadSubmodels() {

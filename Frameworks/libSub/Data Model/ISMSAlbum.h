@@ -38,5 +38,9 @@
 
 + (nonnull NSArray<ISMSAlbum*> *)allAlbumsWithServerId:(nullable NSNumber *)serverId;
 + (BOOL)deleteAllAlbumsWithServerId:(nullable NSNumber *)serverId;
++ (nonnull NSArray<ISMSAlbum*> *)allCachedAlbums;
+
+- (BOOL)hasCachedSongs;
++ (BOOL)isPersisted:(nonnull NSNumber *)albumId serverId:(nonnull NSNumber *)serverId;
 
 @end

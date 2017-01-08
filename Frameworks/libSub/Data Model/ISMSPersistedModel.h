@@ -10,6 +10,8 @@
 
 @protocol ISMSPersistedModel <ISMSItem>
 
+@property (readonly) BOOL isPersisted;
+
 - (nullable instancetype)initWithItemId:(NSInteger)itemId serverId:(NSInteger)serverId;
 
 - (BOOL)insertModel;

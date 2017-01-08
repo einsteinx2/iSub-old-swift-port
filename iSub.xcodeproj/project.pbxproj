@@ -803,6 +803,26 @@
 		536E29321E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */; };
 		536E29331E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */; };
 		536E29341E0BC9730097C2F6 /* RootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */; };
+		537CE5EA1E21C1C20004283E /* CachedFolderLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5E91E21C1C20004283E /* CachedFolderLoader.swift */; };
+		537CE5EB1E21C1C20004283E /* CachedFolderLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5E91E21C1C20004283E /* CachedFolderLoader.swift */; };
+		537CE5ED1E21C3240004283E /* CachedDatabaseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5EC1E21C3240004283E /* CachedDatabaseLoader.swift */; };
+		537CE5EE1E21C3240004283E /* CachedDatabaseLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5EC1E21C3240004283E /* CachedDatabaseLoader.swift */; };
+		537CE5F01E21C4430004283E /* CachedArtistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5EF1E21C4430004283E /* CachedArtistLoader.swift */; };
+		537CE5F11E21C4430004283E /* CachedArtistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5EF1E21C4430004283E /* CachedArtistLoader.swift */; };
+		537CE5F31E21C4EA0004283E /* CachedAlbumLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5F21E21C4EA0004283E /* CachedAlbumLoader.swift */; };
+		537CE5F41E21C4EA0004283E /* CachedAlbumLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5F21E21C4EA0004283E /* CachedAlbumLoader.swift */; };
+		537CE5F61E21C95D0004283E /* CachedRootFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5F51E21C95D0004283E /* CachedRootFoldersLoader.swift */; };
+		537CE5F71E21C95D0004283E /* CachedRootFoldersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5F51E21C95D0004283E /* CachedRootFoldersLoader.swift */; };
+		537CE5F91E21D2D10004283E /* CachedRootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5F81E21D2D10004283E /* CachedRootArtistsLoader.swift */; };
+		537CE5FA1E21D2D10004283E /* CachedRootArtistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5F81E21D2D10004283E /* CachedRootArtistsLoader.swift */; };
+		537CE5FC1E21D3280004283E /* CachedRootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5FB1E21D3280004283E /* CachedRootAlbumsLoader.swift */; };
+		537CE5FD1E21D3280004283E /* CachedRootAlbumsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5FB1E21D3280004283E /* CachedRootAlbumsLoader.swift */; };
+		537CE5FF1E21D3E30004283E /* CachedRootSongsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5FE1E21D3E30004283E /* CachedRootSongsLoader.swift */; };
+		537CE6001E21D3E30004283E /* CachedRootSongsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE5FE1E21D3E30004283E /* CachedRootSongsLoader.swift */; };
+		537CE6021E21E9610004283E /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE6011E21E9610004283E /* SelfReferencingOperationQueue.swift */; };
+		537CE6031E21E9610004283E /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE6011E21E9610004283E /* SelfReferencingOperationQueue.swift */; };
+		537CE6051E21E97E0004283E /* ItemLoaderOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE6041E21E97E0004283E /* ItemLoaderOperation.swift */; };
+		537CE6061E21E97E0004283E /* ItemLoaderOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537CE6041E21E97E0004283E /* ItemLoaderOperation.swift */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
 		537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */; };
@@ -1215,6 +1235,8 @@
 		53BC286E139AF17B00A825F1 /* Icon@2x-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */; };
 		53BCBF0F1E21A07D0008313A /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCBF0E1E21A07D0008313A /* URL.swift */; };
 		53BCBF101E21A07D0008313A /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCBF0E1E21A07D0008313A /* URL.swift */; };
+		53BCBF121E21BF460008313A /* CacheViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCBF111E21BF460008313A /* CacheViewController.swift */; };
+		53BCBF131E21BF460008313A /* CacheViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCBF111E21BF460008313A /* CacheViewController.swift */; };
 		53C4406814E87F5000A7DC41 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
 		53C4406A14E87F5000A7DC41 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
 		53C4406B14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */; };
@@ -1278,8 +1300,6 @@
 		53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */; };
 		53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */; };
 		53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */; };
-		53D59A3B1E1DC38500071ABD /* EX2SimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2E1E1DC38400071ABD /* EX2SimpleConnectionQueue.m */; };
-		53D59A3D1E1DC38500071ABD /* EX2SimpleConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2E1E1DC38400071ABD /* EX2SimpleConnectionQueue.m */; };
 		53D59A401E1DC3BA00071ABD /* UIView+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A3F1E1DC3BA00071ABD /* UIView+Tools.m */; };
 		53D59A421E1DC3BA00071ABD /* UIView+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A3F1E1DC3BA00071ABD /* UIView+Tools.m */; };
 		53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A451E1DC43F00071ABD /* NSNotificationCenter+MainThread.m */; };
@@ -1711,6 +1731,16 @@
 		536E29141E0B94570097C2F6 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
 		536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "entitlements-simulator.plist"; sourceTree = "<group>"; };
 		536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootArtistsLoader.swift; sourceTree = "<group>"; };
+		537CE5E91E21C1C20004283E /* CachedFolderLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedFolderLoader.swift; sourceTree = "<group>"; };
+		537CE5EC1E21C3240004283E /* CachedDatabaseLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedDatabaseLoader.swift; sourceTree = "<group>"; };
+		537CE5EF1E21C4430004283E /* CachedArtistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedArtistLoader.swift; sourceTree = "<group>"; };
+		537CE5F21E21C4EA0004283E /* CachedAlbumLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedAlbumLoader.swift; sourceTree = "<group>"; };
+		537CE5F51E21C95D0004283E /* CachedRootFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRootFoldersLoader.swift; sourceTree = "<group>"; };
+		537CE5F81E21D2D10004283E /* CachedRootArtistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRootArtistsLoader.swift; sourceTree = "<group>"; };
+		537CE5FB1E21D3280004283E /* CachedRootAlbumsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRootAlbumsLoader.swift; sourceTree = "<group>"; };
+		537CE5FE1E21D3E30004283E /* CachedRootSongsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRootSongsLoader.swift; sourceTree = "<group>"; };
+		537CE6011E21E9610004283E /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
+		537CE6041E21E97E0004283E /* ItemLoaderOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemLoaderOperation.swift; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537E9A0814F323EE006CB0BC /* UIViewController+PushViewControllerCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PushViewControllerCustom.h"; sourceTree = "<group>"; };
 		537E9A0914F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PushViewControllerCustom.m"; sourceTree = "<group>"; };
@@ -1861,6 +1891,7 @@
 		53BC286A139AF17B00A825F1 /* Icon-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Beta.png"; path = "Images/App Icons/Icon-Beta.png"; sourceTree = "<group>"; };
 		53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x-Beta.png"; path = "Images/App Icons/Icon@2x-Beta.png"; sourceTree = "<group>"; };
 		53BCBF0E1E21A07D0008313A /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		53BCBF111E21BF460008313A /* CacheViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheViewController.swift; sourceTree = "<group>"; };
 		53C4406614E87F5000A7DC41 /* support-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "support-tabbaricon.png"; path = "Images/Tab Bar Icons/support-tabbaricon.png"; sourceTree = "<group>"; };
 		53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "support-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/support-tabbaricon@2x.png"; sourceTree = "<group>"; };
 		53C6051A12F1EFD4003C6895 /* intro-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom.png"; path = "Images/Intro Screen/intro-bottom.png"; sourceTree = "<group>"; };
@@ -1910,8 +1941,6 @@
 		53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2NetworkIndicator.m; sourceTree = "<group>"; };
 		53D59A2B1E1DC38400071ABD /* EX2RingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2RingBuffer.h; sourceTree = "<group>"; };
 		53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2RingBuffer.m; sourceTree = "<group>"; };
-		53D59A2D1E1DC38400071ABD /* EX2SimpleConnectionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2SimpleConnectionQueue.h; sourceTree = "<group>"; };
-		53D59A2E1E1DC38400071ABD /* EX2SimpleConnectionQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2SimpleConnectionQueue.m; sourceTree = "<group>"; };
 		53D59A3E1E1DC3BA00071ABD /* UIView+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Tools.h"; sourceTree = "<group>"; };
 		53D59A3F1E1DC3BA00071ABD /* UIView+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Tools.m"; sourceTree = "<group>"; };
 		53D59A431E1DC3D000071ABD /* EX2Kit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EX2Kit.h; sourceTree = "<group>"; };
@@ -2354,6 +2383,7 @@
 				53ABE1411C60363E00E0E72B /* ItemViewController.swift */,
 				53ABE14C1C60490F00E0E72B /* ItemViewModel.swift */,
 				53ABE1481C60376B00E0E72B /* ItemTableViewCell.swift */,
+				53BCBF111E21BF460008313A /* CacheViewController.swift */,
 			);
 			name = Specific;
 			sourceTree = "<group>";
@@ -2552,6 +2582,9 @@
 				5358DC281E0B78470024A0D4 /* ISMSLoader_Subclassing.h */,
 				5358DC291E0B78470024A0D4 /* ISMSLoaderDelegate.h */,
 				5358DC2A1E0B78470024A0D4 /* ISMSLoaderManager.h */,
+				537CE6011E21E9610004283E /* SelfReferencingOperationQueue.swift */,
+				537CE6041E21E97E0004283E /* ItemLoaderOperation.swift */,
+				537CE5E81E21C1B30004283E /* Cache Loaders */,
 				5358DC2C1E0B78470024A0D4 /* Item Loaders */,
 			);
 			path = Loaders;
@@ -2755,6 +2788,22 @@
 				530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */,
 			);
 			name = Main;
+			sourceTree = "<group>";
+		};
+		537CE5E81E21C1B30004283E /* Cache Loaders */ = {
+			isa = PBXGroup;
+			children = (
+				537CE5EC1E21C3240004283E /* CachedDatabaseLoader.swift */,
+				537CE5F51E21C95D0004283E /* CachedRootFoldersLoader.swift */,
+				537CE5F81E21D2D10004283E /* CachedRootArtistsLoader.swift */,
+				537CE5FB1E21D3280004283E /* CachedRootAlbumsLoader.swift */,
+				537CE5FE1E21D3E30004283E /* CachedRootSongsLoader.swift */,
+				537CE5E91E21C1C20004283E /* CachedFolderLoader.swift */,
+				537CE5EF1E21C4430004283E /* CachedArtistLoader.swift */,
+				537CE5F21E21C4EA0004283E /* CachedAlbumLoader.swift */,
+			);
+			name = "Cache Loaders";
+			path = "New Model";
 			sourceTree = "<group>";
 		};
 		53835C6E1E0B7D6D0077B53D /* ZipKit */ = {
@@ -3138,8 +3187,6 @@
 				53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */,
 				53D59A2B1E1DC38400071ABD /* EX2RingBuffer.h */,
 				53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */,
-				53D59A2D1E1DC38400071ABD /* EX2SimpleConnectionQueue.h */,
-				53D59A2E1E1DC38400071ABD /* EX2SimpleConnectionQueue.m */,
 			);
 			name = EX2Kit;
 			path = Frameworks/EX2Kit;
@@ -4147,10 +4194,13 @@
 				532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
 				53D59A401E1DC3BA00071ABD /* UIView+Tools.m in Sources */,
 				538B4D001E1D77AC00847152 /* FolderLoader.swift in Sources */,
+				537CE5FF1E21D3E30004283E /* CachedRootSongsLoader.swift in Sources */,
 				53835CD91E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
+				537CE5F01E21C4430004283E /* CachedArtistLoader.swift in Sources */,
 				5358DF791E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				53ABE13D1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
 				530F63981A3FC78C006D7666 /* Defines.swift in Sources */,
+				53BCBF121E21BF460008313A /* CacheViewController.swift in Sources */,
 				538B4D0C1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				534FC4FE1CEC014800126751 /* DraggableTableViewController.swift in Sources */,
 				530BB65E1A61AA9A00FBC005 /* HelperFunctions.swift in Sources */,
@@ -4167,6 +4217,7 @@
 				53F40B9A1E207D4700E8CB17 /* PlayerViewController.swift in Sources */,
 				5398F27811DA627500007870 /* HelpTabViewController.m in Sources */,
 				5358E1C71E0B789B0024A0D4 /* RXMLElement.m in Sources */,
+				537CE5F91E21D2D10004283E /* CachedRootArtistsLoader.swift in Sources */,
 				5358DF881E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				53835D1F1E0B7DD50077B53D /* FMResultSet.m in Sources */,
 				538A1CDD1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
@@ -4174,6 +4225,7 @@
 				5358DD5C1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
 				53D59A501E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m in Sources */,
 				5358DF971E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
+				537CE5EA1E21C1C20004283E /* CachedFolderLoader.swift in Sources */,
 				53ABE1491C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
 				53835D291E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
@@ -4183,11 +4235,13 @@
 				53E7BC131D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
 				533B69D61E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				5358DD891E0B78480024A0D4 /* PlayQueue.swift in Sources */,
+				537CE6051E21E97E0004283E /* ItemLoaderOperation.swift in Sources */,
 				534FC5021CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				5324C6C613345D75004E6C79 /* OBSlider.m in Sources */,
 				5358DC7B1E0B78470024A0D4 /* AudioEngine.m in Sources */,
 				53835D101E0B7DD50077B53D /* FMDatabaseAdditions.m in Sources */,
 				53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */,
+				537CE5F61E21C95D0004283E /* CachedRootFoldersLoader.swift in Sources */,
 				5358DCC61E0B78470024A0D4 /* ISMSSong.m in Sources */,
 				535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */,
 				53835D0B1E0B7DD50077B53D /* FMDatabase.m in Sources */,
@@ -4202,8 +4256,10 @@
 				5358DD391E0B78480024A0D4 /* StatusLoader.swift in Sources */,
 				53835CCF1E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
 				5358DF921E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
+				537CE5FC1E21D3280004283E /* CachedRootAlbumsLoader.swift in Sources */,
 				5358DF6F1E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				5358DCD51E0B78470024A0D4 /* Server.swift in Sources */,
+				537CE5F31E21C4EA0004283E /* CachedAlbumLoader.swift in Sources */,
 				5358DC8F1E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				53835CB11E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				5358DC9E1E0B78470024A0D4 /* BassParamEqValue.m in Sources */,
@@ -4226,6 +4282,7 @@
 				53835C981E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				53D59A7C1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				5304FC3014F2F0D100A2AD42 /* MenuViewController.m in Sources */,
+				537CE5ED1E21C3240004283E /* CachedDatabaseLoader.swift in Sources */,
 				53ABE14D1C60490F00E0E72B /* ItemViewModel.swift in Sources */,
 				53835CF71E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				5358DC851E0B78470024A0D4 /* BassStream.m in Sources */,
@@ -4244,7 +4301,6 @@
 				5358DCF31E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */,
 				5304FC3C14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0A14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
-				53D59A3B1E1DC38500071ABD /* EX2SimpleConnectionQueue.m in Sources */,
 				53835D1A1E0B7DD50077B53D /* FMDatabaseQueue.m in Sources */,
 				5358DD931E0B78480024A0D4 /* SocialSingleton.m in Sources */,
 				5358DDC01E0B78480024A0D4 /* Utils.swift in Sources */,
@@ -4274,6 +4330,7 @@
 				53835CE81E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCF81E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
 				5358DD071E0B78470024A0D4 /* ISMSLoader.m in Sources */,
+				537CE6021E21E9610004283E /* SelfReferencingOperationQueue.swift in Sources */,
 				5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				533B69DA1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
@@ -4507,10 +4564,13 @@
 				532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
 				53D59A421E1DC3BA00071ABD /* UIView+Tools.m in Sources */,
 				538B4D021E1D77AC00847152 /* FolderLoader.swift in Sources */,
+				537CE6001E21D3E30004283E /* CachedRootSongsLoader.swift in Sources */,
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
+				537CE5F11E21C4430004283E /* CachedArtistLoader.swift in Sources */,
 				5358DF7B1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				53ABE13F1C60341300E0E72B /* NewMenuViewController.swift in Sources */,
 				530F639A1A3FC78C006D7666 /* Defines.swift in Sources */,
+				53BCBF131E21BF460008313A /* CacheViewController.swift in Sources */,
 				538B4D0E1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				534FC5001CEC014800126751 /* DraggableTableViewController.swift in Sources */,
 				530BB6601A61AA9A00FBC005 /* HelperFunctions.swift in Sources */,
@@ -4527,6 +4587,7 @@
 				53F40B9B1E207D4700E8CB17 /* PlayerViewController.swift in Sources */,
 				53BC27E3139AF0DD00A825F1 /* HelpTabViewController.m in Sources */,
 				5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */,
+				537CE5FA1E21D2D10004283E /* CachedRootArtistsLoader.swift in Sources */,
 				5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				53835D211E0B7DD50077B53D /* FMResultSet.m in Sources */,
 				538A1CDF1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
@@ -4534,6 +4595,7 @@
 				5358DD5E1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
 				53D59A521E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m in Sources */,
 				5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
+				537CE5EB1E21C1C20004283E /* CachedFolderLoader.swift in Sources */,
 				53ABE14B1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
 				53835D2B1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
@@ -4543,11 +4605,13 @@
 				53E7BC151D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
 				533B69D71E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				5358DD8B1E0B78480024A0D4 /* PlayQueue.swift in Sources */,
+				537CE6061E21E97E0004283E /* ItemLoaderOperation.swift in Sources */,
 				534FC5041CEC08F300126751 /* ServerListViewController.swift in Sources */,
 				53BC282C139AF0DD00A825F1 /* OBSlider.m in Sources */,
 				5358DC7D1E0B78470024A0D4 /* AudioEngine.m in Sources */,
 				53835D121E0B7DD50077B53D /* FMDatabaseAdditions.m in Sources */,
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
+				537CE5F71E21C95D0004283E /* CachedRootFoldersLoader.swift in Sources */,
 				5358DCC81E0B78470024A0D4 /* ISMSSong.m in Sources */,
 				53BC283A139AF0DD00A825F1 /* DDSocialDialog.m in Sources */,
 				53835D0D1E0B7DD50077B53D /* FMDatabase.m in Sources */,
@@ -4562,8 +4626,10 @@
 				5358DD3B1E0B78480024A0D4 /* StatusLoader.swift in Sources */,
 				53835CD11E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
 				5358DF941E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
+				537CE5FD1E21D3280004283E /* CachedRootAlbumsLoader.swift in Sources */,
 				5358DF711E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				5358DCD71E0B78470024A0D4 /* Server.swift in Sources */,
+				537CE5F41E21C4EA0004283E /* CachedAlbumLoader.swift in Sources */,
 				5358DC911E0B78470024A0D4 /* BassEffectDAO.m in Sources */,
 				53835CB31E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				5358DCA01E0B78470024A0D4 /* BassParamEqValue.m in Sources */,
@@ -4586,6 +4652,7 @@
 				53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				53D59A7E1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				5304FC3214F2F0D100A2AD42 /* MenuViewController.m in Sources */,
+				537CE5EE1E21C3240004283E /* CachedDatabaseLoader.swift in Sources */,
 				53ABE14F1C60490F00E0E72B /* ItemViewModel.swift in Sources */,
 				53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				5358DC871E0B78470024A0D4 /* BassStream.m in Sources */,
@@ -4604,7 +4671,6 @@
 				5358DCF51E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */,
 				5304FC3E14F2F0D100A2AD42 /* MenuTableViewCell.m in Sources */,
 				537E9A0C14F323EF006CB0BC /* UIViewController+PushViewControllerCustom.m in Sources */,
-				53D59A3D1E1DC38500071ABD /* EX2SimpleConnectionQueue.m in Sources */,
 				53835D1C1E0B7DD50077B53D /* FMDatabaseQueue.m in Sources */,
 				5358DD951E0B78480024A0D4 /* SocialSingleton.m in Sources */,
 				5358DDC21E0B78480024A0D4 /* Utils.swift in Sources */,
@@ -4634,6 +4700,7 @@
 				53835CEA1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCFA1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
 				5358DD091E0B78470024A0D4 /* ISMSLoader.m in Sources */,
+				537CE6031E21E9610004283E /* SelfReferencingOperationQueue.swift in Sources */,
 				5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,

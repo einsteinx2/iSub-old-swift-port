@@ -312,7 +312,12 @@
 
 #pragma mark - ISMSPersistedModel -
 
-- (BOOL)_existsInCache {
+- (BOOL)isPersisted {
+    NSString *query = @"SELECT COUNT(*) FROM songs WHERE songId = ? AND serverId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
+}
+
+- (BOOL)existsInCache {
     NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE songId = ? AND serverId = ?";
     return [databaseS.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
 }
@@ -341,7 +346,7 @@
 {
     BOOL success = [self _insertModel:YES cachedTable:NO];
     
-    if ([self _existsInCache]) {
+    if ([self existsInCache]) {
         success = success && [self cacheModel];
     }
     
@@ -562,6 +567,27 @@
     [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT * FROM songs WHERE mediaFolderId = ? AND serverId = ? AND folderId IS NULL";
         FMResultSet *result = [db executeQuery:query, @(mediaFolderId), @(serverId)];
+        while ([result next])
+        {
+            ISMSSong *song = [[ISMSSong alloc] init];
+            [song _assignPropertiesFromResultSet:result];
+            [songs addObject:song];
+        }
+        [result close];
+    }];
+    
+    [songs makeObjectsPerformSelector:@selector(reloadSubmodels)];
+    
+    return songs;
+}
+
++ (NSArray<ISMSSong*> *)allCachedSongs
+{
+    NSMutableArray<ISMSSong*> *songs = [[NSMutableArray alloc] init];
+    
+    [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
+        NSString *query = @"SELECT * FROM cachedSongs";
+        FMResultSet *result = [db executeQuery:query];
         while ([result next])
         {
             ISMSSong *song = [[ISMSSong alloc] init];

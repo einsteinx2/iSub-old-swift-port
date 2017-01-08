@@ -69,6 +69,7 @@
 + (nonnull NSArray<ISMSSong*> *)songsInFolder:(NSInteger)folderId serverId:(NSInteger)serverId;
 + (nonnull NSArray<ISMSSong*> *)songsInAlbum:(NSInteger)albumId serverId:(NSInteger)serverId;
 + (nonnull NSArray<ISMSSong*> *)rootSongsInMediaFolder:(NSInteger)mediaFolderId serverId:(NSInteger)serverId;
++ (nonnull NSArray<ISMSSong*> *)allCachedSongs;
 
 - (BOOL)isEqualToSong:(nullable ISMSSong *)otherSong;
 
@@ -78,5 +79,7 @@
 
 @property (readonly) CGFloat downloadProgress;
 @property (readonly) BOOL fileExists;
+
+- (BOOL)existsInCache;
 
 @end

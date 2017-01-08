@@ -48,6 +48,14 @@ class ArtistLoader: ISMSLoader, ItemLoader {
             }
             albums = albumsTemp
             
+            // Persist associated object model if needed
+            if !ISMSArtist.isPersisted(NSNumber(value: artistId), serverId: NSNumber(value: serverId)) {
+                if let element = root.child("artist") {
+                    let artist = ISMSArtist(rxmlElement: element, serverId: serverId)
+                    artist.replace()
+                }
+            }
+            
             self.persistModels()
             
             self.informDelegateLoadingFinished()
@@ -57,12 +65,20 @@ class ArtistLoader: ISMSLoader, ItemLoader {
     func persistModels() {
         // Save the new albums
         albums.forEach({$0.replace()})
+        
+        // Add to cache table if needed
+        if let artist = associatedObject as? ISMSArtist, artist.hasCachedSongs() {
+            artist.cacheModel()
+        }
     }
     
-    func loadModelsFromCache() -> Bool {
-        let serverId = SavedSettings.sharedInstance().currentServerId
-        albums = ISMSAlbum.albums(inArtist: self.artistId, serverId: serverId)
-        return albums.count > 0
+    func loadModelsFromDatabase() -> Bool {
+        if let artist = associatedObject as? ISMSArtist {
+            artist.reloadSubmodels()
+            albums = artist.albums
+            return albums.count > 0
+        }
+        return false
     }
     
     var associatedObject: Any? {

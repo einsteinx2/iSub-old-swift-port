@@ -59,7 +59,7 @@ class RootAlbumsLoader: ISMSLoader, ItemLoader {
         albums.forEach({$0.insert()})
     }
     
-    func loadModelsFromCache() -> Bool {
+    func loadModelsFromDatabase() -> Bool {
         let serverId = SavedSettings.sharedInstance().currentServerId as NSNumber
         let albumsTemp = ISMSAlbum.allAlbums(withServerId: serverId)
         if albumsTemp.count > 0 {

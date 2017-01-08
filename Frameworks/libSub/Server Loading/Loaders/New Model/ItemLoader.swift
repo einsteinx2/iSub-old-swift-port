@@ -19,7 +19,7 @@ protocol ItemLoader {
     var loaderState: ISMSLoaderState { get }
     
     func persistModels()
-    func loadModelsFromCache() -> Bool
+    func loadModelsFromDatabase() -> Bool
     
     func startLoad()
     func cancelLoad()

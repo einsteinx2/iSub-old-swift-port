@@ -105,12 +105,12 @@
         
         if (![db tableExists:@"artists"])
         {
-            [db executeUpdate:@"CREATE TABLE artists (artistId INTEGER, serverId INTEGER, name TEXT, albumCount INTEGER, PRIMARY KEY (artistId, serverId))"];
+            [db executeUpdate:@"CREATE TABLE artists (artistId INTEGER, serverId INTEGER, name TEXT, coverArtid TEXT, albumCount INTEGER, PRIMARY KEY (artistId, serverId))"];
         }
         
         if (![db tableExists:@"cachedArtists"])
         {
-            [db executeUpdate:@"CREATE TABLE cachedArtists (artistId INTEGER, serverId INTEGER, name TEXT, albumCount INTEGER, PRIMARY KEY (artistId, serverId))"];
+            [db executeUpdate:@"CREATE TABLE cachedArtists (artistId INTEGER, serverId INTEGER, name TEXT, coverArtId TEXT, albumCount INTEGER, PRIMARY KEY (artistId, serverId))"];
         }
         
         if (![db tableExists:@"albums"])

@@ -53,7 +53,7 @@ class RootPlaylistsLoader: ISMSLoader, ItemLoader {
         playlists.forEach({_ = $0.replace()})
     }
     
-    func loadModelsFromCache() -> Bool {
+    func loadModelsFromDatabase() -> Bool {
         // TODO: Fix with new data model
         return false
     }

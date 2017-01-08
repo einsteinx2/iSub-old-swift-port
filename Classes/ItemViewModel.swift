@@ -40,8 +40,8 @@ class ItemViewModel : NSObject {
         self.rootItem = loader.associatedObject as? ISMSItem
     }
     
-    func loadModelsFromCache() -> Bool {
-        let success = loader.loadModelsFromCache()
+    func loadModelsFromDatabase() -> Bool {
+        let success = loader.loadModelsFromDatabase()
         if (success) {
             self.processModels()
         }

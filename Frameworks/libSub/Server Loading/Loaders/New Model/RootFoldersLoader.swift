@@ -84,7 +84,7 @@ class RootFoldersLoader: ISMSLoader, ItemLoader {
         songs.forEach({$0.replace()})
     }
     
-    func loadModelsFromCache() -> Bool {
+    func loadModelsFromDatabase() -> Bool {
         let serverId = SavedSettings.sharedInstance().currentServerId
         if let mediaFolderId = mediaFolderId, let mediaFolder = ISMSMediaFolder(mediaFolderId: mediaFolderId, serverId: serverId) {
             folders = mediaFolder.rootFolders()
