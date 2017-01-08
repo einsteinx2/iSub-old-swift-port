@@ -112,7 +112,7 @@ class ItemViewController: DraggableTableViewController {
     // MARK: - Loading -
     
     override func shouldSetupRefreshControl() -> Bool {
-        return true
+        return viewModel.shouldSetupRefreshControl
     }
     
     override func didPullToRefresh() {

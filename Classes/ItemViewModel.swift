@@ -18,10 +18,17 @@ typealias LoadModelsCompletion = (_ success: Bool, _ error: Error?) -> Void
 class ItemViewModel : NSObject {
     
     fileprivate var loader: ItemLoader
+    fileprivate var isCacheLoader: Bool {
+        return loader is CachedDatabaseLoader
+    }
     
     var delegate: ItemViewModelDelegate?
     
     var topLevelController = false
+    
+    var shouldSetupRefreshControl: Bool {
+        return !isCacheLoader
+    }
     
     fileprivate(set) var rootItem: ISMSItem?
     
@@ -112,7 +119,7 @@ class ItemViewModel : NSObject {
         var folderLoader: ItemLoader?
         
         if let folderId = folder.folderId as? Int, let mediaFolderId = folder.mediaFolderId as? Int, let serverId = folder.serverId as? Int {
-            if loader is CachedDatabaseLoader {
+            if isCacheLoader {
                 folderLoader = CachedFolderLoader(folderId: folderId, serverId: serverId)
             } else {
                 folderLoader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
@@ -126,7 +133,7 @@ class ItemViewModel : NSObject {
         var artistLoader: ItemLoader?
         
         if let artistId = artist.artistId as? Int, let serverId = artist.serverId as? Int {
-            if loader is CachedDatabaseLoader {
+            if isCacheLoader {
                 artistLoader = CachedArtistLoader(artistId: artistId, serverId: serverId)
             } else {
                 artistLoader = ArtistLoader(artistId: artistId)
@@ -140,7 +147,7 @@ class ItemViewModel : NSObject {
         var albumLoader: ItemLoader?
         
         if let albumId = album.albumId as? Int, let serverId = album.serverId as? Int {
-            if loader is CachedDatabaseLoader {
+            if isCacheLoader {
                 albumLoader = CachedAlbumLoader(albumId: albumId, serverId: serverId)
             } else {
                 albumLoader = AlbumLoader(albumId: albumId)
