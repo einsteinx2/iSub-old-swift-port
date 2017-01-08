@@ -11,7 +11,12 @@ import UIKit
 
 class ItemViewController: DraggableTableViewController {
     
-    fileprivate let reuseIdentifier = "Item Cell"
+    fileprivate let folderCellIdentifier = "Folder Cell"
+    fileprivate let artistCellIdentifier = "Artist Cell"
+    fileprivate let albumCellIdentifier = "Album Cell"
+    fileprivate let songCellIdentifier = "Song Cell"
+    fileprivate let playlistCellIdentifier = "Playlist Cell"
+    
     fileprivate let foldersSectionIndex   = 0
     fileprivate let artistsSectionIndex   = 1
     fileprivate let albumsSectionIndex    = 2
@@ -49,7 +54,11 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func customizeTableView(_ tableView: UITableView) {
-        tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: folderCellIdentifier)
+        tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: artistCellIdentifier)
+        tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: albumCellIdentifier)
+        tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: songCellIdentifier)
+        tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: playlistCellIdentifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -182,10 +191,19 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ItemTableViewCell
-        cell.alwaysShowSubtitle = true
-        cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
+        var reuseIdentifier = ""
+        switch indexPath.section {
+        case foldersSectionIndex:   reuseIdentifier = folderCellIdentifier
+        case artistsSectionIndex:   reuseIdentifier = artistCellIdentifier
+        case albumsSectionIndex:    reuseIdentifier = albumCellIdentifier
+        case songsSectionIndex:     reuseIdentifier = songCellIdentifier
+        case playlistsSectionIndex: reuseIdentifier = playlistCellIdentifier
+        default: break
+        }
         
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ItemTableViewCell
+        cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
+
         switch indexPath.section {
         case foldersSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
@@ -222,12 +240,13 @@ class ItemViewController: DraggableTableViewController {
             cell.title = album.name
         case songsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.none
+            cell.alwaysShowSubtitle = true
             
             let song = viewModel.songs[indexPath.row]
             cell.associatedObject = song
             cell.coverArtId = nil
-            cell.trackNumber = song.trackNumber
             cell.title = song.title
+            cell.trackNumber = song.trackNumber
             cell.subTitle = song.artistDisplayName
             cell.duration = song.duration
             cell.playing = (song == PlayQueue.sharedInstance.currentDisplaySong)
