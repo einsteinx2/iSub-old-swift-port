@@ -14,10 +14,8 @@
 
 - (void)setup
 {
-	_partialPrecacheSleep = YES;
-	_contentLength = ULLONG_MAX;
-	_maxBitrateSetting = NSIntegerMax;
-	_secondsToPartialPrecache = ISMSNumSecondsToPartialPreCacheDefault;
+	_contentLength = -1;
+	_maxBitrateSetting = -1;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
 }
@@ -37,7 +35,7 @@
 	{
 		[self setup];
 		
-		_mySong = [song copy];
+		_song = [song copy];
 		_delegate = theDelegate;
 		_byteOffset = bOffset;
 		_secondsOffset = sOffset;
@@ -61,7 +59,7 @@
 
 - (NSString *)filePath
 {
-	return self.isTempCache ? self.mySong.localTempPath : self.mySong.localPath;
+	return self.isTempCache ? self.song.localTempPath : self.song.localPath;
 }
 
 - (void)start
@@ -79,48 +77,10 @@
 	// Override this
 }
 
-- (void)connectionTimedOut
-{
-	// Override this
-}
-
-- (void)startTimeOutTimer
-{
-    [self stopTimeOutTimer];
-	[self performSelector:@selector(connectionTimedOut) withObject:nil afterDelay:30.];
-}
-
-- (void)stopTimeOutTimer
-{
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(connectionTimedOut) object:nil];
-}
-
 - (void)playlistIndexChanged
 {
-	// If this song is partially precached and sleeping, stop sleeping
-	if (self.isPartialPrecacheSleeping)
-		self.partialPrecacheSleep = NO;
-	
-	if ([self.mySong isEqualToSong:[PlayQueue sharedInstance].currentSong])
+	if ([self.song isEqualToSong:[PlayQueue sharedInstance].currentSong])
 		self.isCurrentSong = YES;
-}
-
-+ (double)maxBytesPerIntervalForBitrate:(double)rate is3G:(BOOL)is3G
-{
-	double maxBytesDefault = is3G ? (double)ISMSMaxBytesPerInterval3G : (double)ISMSMaxBytesPerIntervalWifi;
-	double maxBytesPerInterval = maxBytesDefault * (rate / 160.0);
-	if (maxBytesPerInterval < maxBytesDefault)
-	{
-		// Don't go lower than the default
-		maxBytesPerInterval = maxBytesDefault;
-	}
-	else if (maxBytesPerInterval > (double)ISMSMaxBytesPerIntervalWifi * 2.0)
-	{
-		// Don't go higher than twice the Wifi limit to prevent disk bandwidth issues
-		maxBytesPerInterval = (double)ISMSMaxBytesPerIntervalWifi * 2.0;
-	}
-	
-	return maxBytesPerInterval;
 }
 
 + (NSUInteger)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSUInteger)bytesPerSec
@@ -181,7 +141,7 @@
 
 - (NSUInteger)hash
 {
-	return [self.mySong.songId hash];
+	return [self.song.songId hash];
 }
 
 - (BOOL)isEqualToISMSStreamHandler:(ISMSStreamHandler *)otherHandler 
@@ -189,7 +149,7 @@
 	if (self == otherHandler)
 		return YES;
 	
-	return [self.mySong isEqualToSong:otherHandler.mySong];
+	return [self.song isEqualToSong:otherHandler.song];
 }
 
 - (BOOL)isEqual:(id)other 
@@ -207,7 +167,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-	[encoder encodeObject:self.mySong forKey:@"mySong"];
+	[encoder encodeObject:self.song forKey:@"song"];
 	[encoder encodeInt64:self.byteOffset forKey:@"byteOffset"];
 	[encoder encodeDouble:self.secondsOffset forKey:@"secondsOffset"];
 	[encoder encodeBool:self.isDelegateNotifiedToStartPlayback forKey:@"isDelegateNotifiedToStartPlayback"];
@@ -224,7 +184,7 @@
 	{		
 		[self setup];
 		
-		_mySong = [[decoder decodeObjectForKey:@"mySong"] copy];
+		_song = [[decoder decodeObjectForKey:@"song"] copy];
 		_byteOffset = [decoder decodeInt64ForKey:@"byteOffset"];
 		_secondsOffset = [decoder decodeDoubleForKey:@"secondsOffset"];
 		_isDelegateNotifiedToStartPlayback = [decoder decodeBoolForKey:@"isDelegateNotifiedToStartPlayback"];
@@ -241,7 +201,7 @@
 - (NSString *)description
 {
 	//return [NSString stringWithFormat:@"%@: title: %@, songId: %@", [super description], title, songId];
-	return [NSString stringWithFormat:@"%@  title: %@", [super description], self.mySong.title];
+	return [NSString stringWithFormat:@"%@  title: %@", [super description], self.song.title];
 }
 
 @end

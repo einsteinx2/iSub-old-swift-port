@@ -439,6 +439,11 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         return false
     }
     
+    open func cacheModel() -> Bool {
+        // Not supported
+        return false
+    }
+    
     open func delete() -> Bool {
         // TODO: Fill this in
         return false

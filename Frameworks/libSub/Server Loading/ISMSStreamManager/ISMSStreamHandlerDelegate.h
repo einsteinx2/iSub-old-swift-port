@@ -14,7 +14,5 @@
 - (void)ISMSStreamHandlerStartPlayback:(ISMSStreamHandler *)handler;
 - (void)ISMSStreamHandlerConnectionFinished:(ISMSStreamHandler *)handler;
 - (void)ISMSStreamHandlerConnectionFailed:(ISMSStreamHandler *)handler withError:(NSError *)error;
-- (void)ISMSStreamHandlerPartialPrecachePaused:(ISMSStreamHandler *)handler;
-- (void)ISMSStreamHandlerPartialPrecacheUnpaused:(ISMSStreamHandler *)handler;
 
 @end

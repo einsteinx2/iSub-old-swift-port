@@ -81,6 +81,12 @@
     return [self _insertModel:YES];
 }
 
+- (BOOL)cacheModel
+{
+    // Not supported
+    return NO;
+}
+
 - (BOOL)deleteModel
 {
     if (!self.mediaFolderId)

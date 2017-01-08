@@ -8,55 +8,43 @@
 
 #import "ISMSStreamHandlerDelegate.h"
 
-#define ISMSNumSecondsToPartialPreCacheDefault 45
-#define ISMSNumBytesToPartialPreCache(bitrate) (BytesForSecondsAtBitrate(self.secondsToPartialPrecache, bitrate))
 #define ISMSMinBytesToStartPlayback(bitrate) (BytesForSecondsAtBitrate(10, bitrate))
-
-#define ISMSThrottleTimeInterval 0.1
-
-#define ISMSMaxKilobitsPerSec3G 500
-#define ISMSMaxBytesPerInterval3G BytesForSecondsAtBitrate(ISMSThrottleTimeInterval, ISMSMaxKilobitsPerSec3G)
-
-#define ISMSMaxKilobitsPerSecWifi 8000
-#define ISMSMaxBytesPerIntervalWifi BytesForSecondsAtBitrate(ISMSThrottleTimeInterval, ISMSMaxKilobitsPerSecWifi)
-
-#define ISMSMinBytesToStartLimiting(bitrate) (BytesForSecondsAtBitrate(60, bitrate))
-
 #define ISMSMaxContentLengthFailures 25
 
 @class ISMSSong;
 @interface ISMSStreamHandler : NSObject <NSCoding>
 
-- (id)initWithSong:(ISMSSong *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
-- (id)initWithSong:(ISMSSong *)song isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
+- (nonnull instancetype)initWithSong:(nonnull ISMSSong *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(nullable NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
+- (nonnull instancetype)initWithSong:(nonnull ISMSSong *)song isTemp:(BOOL)isTemp delegate:(nullable NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
 
-@property (weak) NSObject<ISMSStreamHandlerDelegate> *delegate;
-@property (copy) ISMSSong *mySong;
-@property unsigned long long byteOffset;
-@property double secondsOffset;
-@property unsigned long long totalBytesTransferred;
-@property unsigned long long bytesTransferred;
+@property (nullable, weak) NSObject<ISMSStreamHandlerDelegate> *delegate;
 @property BOOL isDelegateNotifiedToStartPlayback;
+
+@property (nonnull, copy) ISMSSong *song;
+
+@property NSUInteger byteOffset;
+@property double secondsOffset;
+@property NSUInteger totalBytesTransferred;
+@property NSUInteger bytesTransferred;
+@property (nullable, strong) NSDate *speedLoggingDate;
+@property NSUInteger speedLoggingLastSize;
+@property NSUInteger recentDownloadSpeedInBytesPerSec;
 @property NSUInteger numOfReconnects;
 @property BOOL isTempCache;
 @property NSUInteger bitrate;
-@property (weak, readonly) NSString *filePath;
-@property BOOL partialPrecacheSleep;
+@property (nonnull, readonly) NSString *filePath;
 @property BOOL isDownloading;
 @property BOOL isCurrentSong;
 @property BOOL shouldResume;
-@property unsigned long long contentLength;
-@property NSInteger maxBitrateSetting;
-@property (strong) NSDate *speedLoggingDate;
-@property unsigned long long speedLoggingLastSize;
-@property NSUInteger recentDownloadSpeedInBytesPerSec;
 @property BOOL isCanceled;
+
+
+@property long long contentLength;
+@property NSInteger maxBitrateSetting;
+
 @property NSUInteger numberOfContentLengthFailures;
-@property BOOL isPartialPrecacheSleeping;
-@property NSUInteger secondsToPartialPrecache;
-@property BOOL tempBreakPartialPrecache;
-@property (strong) NSFileHandle *fileHandle;
-@property (strong) NSDate *startDate;
+@property (nullable, strong) NSFileHandle *fileHandle;
+@property (nullable, strong) NSDate *startDate;
 
 @property BOOL isEnableRateLimiting;
 
@@ -66,12 +54,6 @@
 - (void)start;
 - (void)cancel;
 
-- (void)connectionTimedOut;
-
-- (void)startTimeOutTimer;
-- (void)stopTimeOutTimer;
-
-+ (double)maxBytesPerIntervalForBitrate:(double)rate is3G:(BOOL)is3G;
 + (NSUInteger)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSUInteger)bytesPerSec;
 
 @end

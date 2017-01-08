@@ -1190,38 +1190,22 @@
     if (aSong.contentType.basicType != ISMSBasicContentTypeVideo)
         return;
     
-    if (settingsS.isVideoUnlocked)
+    if (IS_IPAD())
     {
-        if (IS_IPAD())
-        {
-            // Turn off repeat one so user doesn't get stuck
-            if ([PlayQueue sharedInstance].repeatMode == RepeatModeRepeatOne)
-                [PlayQueue sharedInstance].repeatMode = RepeatModeNormal;
-        }
-        
-        ServerType serverType = settingsS.currentServer.type;
-        if (serverType == ServerTypeSubsonic)
-        {
-            [self playSubsonicVideo:aSong bitrates:settingsS.currentVideoBitrates];
-        }
-        else if (serverType == ServerTypeISubServer || serverType == ServerTypeWaveBox)
-        {
-            [self playWaveBoxVideo:aSong bitrates:settingsS.currentVideoBitrates];
-        }
+        // Turn off repeat one so user doesn't get stuck
+        if ([PlayQueue sharedInstance].repeatMode == RepeatModeRepeatOne)
+            [PlayQueue sharedInstance].repeatMode = RepeatModeNormal;
     }
-    else
-	{
-        // TODO: Redo for new UI
-//		StoreViewController *store = [[StoreViewController alloc] init];
-//        if (IS_IPAD())
-//        {
-//            [store pushViewControllerCustom:store];
-//        }
-//        else
-//        {
-//            [self.currentTabBarController.selectedViewController pushViewControllerCustom:store];
-//        }
-	}
+    
+    ServerType serverType = settingsS.currentServer.type;
+    if (serverType == ServerTypeSubsonic)
+    {
+        [self playSubsonicVideo:aSong bitrates:settingsS.currentVideoBitrates];
+    }
+    else if (serverType == ServerTypeISubServer || serverType == ServerTypeWaveBox)
+    {
+        [self playWaveBoxVideo:aSong bitrates:settingsS.currentVideoBitrates];
+    }
 }
 
 - (void)playSubsonicVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates

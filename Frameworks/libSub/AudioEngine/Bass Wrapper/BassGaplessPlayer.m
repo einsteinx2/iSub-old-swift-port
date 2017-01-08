@@ -17,7 +17,8 @@
 
 @implementation BassGaplessPlayer
 
-LOG_LEVEL_ISUB_DEBUG
+//LOG_LEVEL_ISUB_DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelOff;
 
 #define ISMS_BassDeviceNumber 1
 

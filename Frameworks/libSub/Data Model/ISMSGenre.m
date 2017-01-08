@@ -106,6 +106,12 @@
     return success;
 }
 
+- (BOOL)cacheModel
+{
+    // Not supported
+    return NO;
+}
+
 - (BOOL)deleteModel
 {
     __block BOOL success = NO;

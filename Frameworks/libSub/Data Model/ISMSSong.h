@@ -13,6 +13,7 @@
 
 @interface ISMSSong : NSObject <ISMSPersistedModel, NSCoding, NSCopying>
 
+// Main Properties
 @property (nullable, strong) NSNumber *songId;
 @property (nullable, strong) NSNumber *serverId;
 @property (nullable, strong) NSNumber *contentTypeId;
@@ -25,7 +26,6 @@
 @property (nullable, copy) NSString *albumName;
 @property (nullable, strong) NSNumber *genreId;
 @property (nullable, strong) NSString *coverArtId;
-
 @property (nullable, copy) NSString *title;
 @property (nullable, strong) NSNumber *duration;
 @property (nullable, strong) NSNumber *bitrate;
@@ -35,6 +35,7 @@
 @property (nullable, strong) NSNumber *size;
 @property (nullable, copy) NSString *path;
 
+// Submodels
 @property (nullable, readonly) ISMSFolder *folder;
 @property (nullable, readonly) ISMSArtist *artist;
 @property (nullable, readonly) ISMSAlbum *album;
@@ -51,18 +52,19 @@
 
 @property (nullable, nonatomic, strong) NSDate *lastPlayed;
 
-- (nullable NSString *)localSuffix;
-- (nullable NSString *)localPath;
-- (nullable NSString *)localTempPath;
-- (nullable NSString *)currentPath;
+// Cache info
+- (nonnull NSString *)fileName;
+- (nonnull NSString *)localPath;
+- (nonnull NSString *)localTempPath;
+- (nonnull NSString *)currentPath;
 @property (readonly) BOOL isTempCached;
 @property (readonly) unsigned long long localFileSize;
 @property (readonly) NSUInteger estimatedBitrate;
 
-- (nonnull instancetype)initWithRXMLElement:(nonnull RXMLElement *)element serverId:(NSInteger)serverId;
-
 // Returns an instance if it exists in the db, otherwise nil
 - (nullable instancetype)initWithSongId:(NSInteger)songId serverId:(NSInteger)serverId;
+
+- (nonnull instancetype)initWithRXMLElement:(nonnull RXMLElement *)element serverId:(NSInteger)serverId;
 
 + (nonnull NSArray<ISMSSong*> *)songsInFolder:(NSInteger)folderId serverId:(NSInteger)serverId;
 + (nonnull NSArray<ISMSSong*> *)songsInAlbum:(NSInteger)albumId serverId:(NSInteger)serverId;

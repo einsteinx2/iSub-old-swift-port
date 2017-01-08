@@ -120,6 +120,19 @@
                 [self _assignPropertiesFromResultSet:result];
             }
             [result close];
+            
+            // If not found, check the cache table
+            if (!foundRecord) {
+                
+                query = @"SELECT * FROM cachedSongs WHERE songId = ? AND serverId = ?";
+                result = [db executeQuery:query, @(songId), @(serverId)];
+                if ([result next])
+                {
+                    foundRecord = YES;
+                    [self _assignPropertiesFromResultSet:result];
+                }
+                [result close];
+            }
         }];
         
         if (foundRecord)
@@ -299,14 +312,21 @@
 
 #pragma mark - ISMSPersistedModel -
 
-- (BOOL)_insertModel:(BOOL)replace
+- (BOOL)_existsInCache {
+    NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE songId = ? AND serverId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
+}
+
+- (BOOL)_insertModel:(BOOL)replace cachedTable:(BOOL)cachedTable
 {
     __block BOOL success = NO;
     [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *insertType = replace ? @"REPLACE" : @"INSERT";
-         NSString *query = [insertType stringByAppendingString:@" INTO songs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"];
-         
+         NSString *table = cachedTable ? @"cachedSongs" : @"songs";
+         NSString *query = @"%@ INTO %@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+         query = [NSString stringWithFormat:query, insertType, table];
+
          success = [db executeUpdate:query, self.songId, self.serverId, self.contentTypeId, self.transcodedContentTypeId, self.mediaFolderId, self.folderId, self.artistId, self.albumId, self.genreId, self.coverArtId, self.title, self.duration, self.bitrate, self.trackNumber, self.discNumber, self.year, self.size, self.path, self.lastPlayed, self.artistName, self.albumName];
      }];
     return success;
@@ -314,14 +334,24 @@
 
 - (BOOL)insertModel
 {
-    return [self _insertModel:NO];
+    return [self _insertModel:NO cachedTable:NO];
 }
 
 - (BOOL)replaceModel
 {
-    return [self _insertModel:YES];
+    BOOL success = [self _insertModel:YES cachedTable:NO];
+    
+    if ([self _existsInCache]) {
+        success = success && [self cacheModel];
+    }
+    
+    return success;
 }
 
+- (BOOL)cacheModel
+{
+    return [self _insertModel:YES cachedTable:YES];
+}
 - (BOOL)deleteModel
 {
     if (!self.songId)
@@ -546,25 +576,19 @@
     return songs;
 }
 
-- (NSString *)localSuffix
+- (NSString *)fileName
 {
-    NSString *transcodedExtension = self.transcodedContentType.extension;
-    if (transcodedExtension)
-        return transcodedExtension;
-    
-    return self.contentType.extension;
+    return [NSString stringWithFormat:@"%li-%li", self.serverId.integerValue, self.songId.integerValue];
 }
 
 - (NSString *)localPath
 {
-    NSString *fileName = self.path.md5;
-    return fileName ? [[SavedSettings songCachePath] stringByAppendingPathComponent:fileName] : nil;
+    return [[SavedSettings songCachePath] stringByAppendingPathComponent:self.fileName];
 }
 
 - (NSString *)localTempPath
 {
-    NSString *fileName = self.path.md5;
-    return fileName ? [[SavedSettings tempCachePath] stringByAppendingPathComponent:fileName] : nil;
+    return [[SavedSettings tempCachePath] stringByAppendingPathComponent:self.fileName];
 }
 
 - (NSString *)currentPath
@@ -624,44 +648,49 @@
 {
     // Filesystem check
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.currentPath];
-    //DLog(@"fileExists: %@  at path: %@", NSStringFromBOOL(fileExists), self.currentPath);
     return fileExists;
     
     // Database check
-    //return [self.db stringForQuery:@"SELECT md5 FROM cachedSongs WHERE md5 = ?", [self.path md5]] ? YES : NO;
+    //return [self.db stringForQuery:@"SELECT md5 FROM cachedSongsMetadata WHERE md5 = ?", [self.path md5]] ? YES : NO;
 }
 
 - (BOOL)isPartiallyCached
 {
-    NSString *query = @"SELECT partiallyCached FROM cachedSongs WHERE songId = ? AND serverId = ?";
+    NSString *query = @"SELECT partiallyCached FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?";
     return [databaseS.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
 }
 
 - (void)setIsPartiallyCached:(BOOL)isPartiallyCached
 {
     [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
-        NSString *query = @"INSERT OR REPLACE INTO cachedSongs (songId, serverId, partiallyCached, fullyCached) VALUES (?, ?, ?, ?)";
+        NSString *query = @"INSERT OR REPLACE INTO cachedSongsMetadata (songId, serverId, partiallyCached, fullyCached) VALUES (?, ?, ?, ?)";
         [db executeUpdate:query, self.songId, self.serverId, @YES, @NO];
     }];
 }
 
 - (BOOL)isFullyCached
 {
-    NSString *query = @"SELECT fullyCached FROM cachedSongs WHERE songId = ? AND serverId = ?";
+    NSString *query = @"SELECT fullyCached FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?";
     return [databaseS.songModelReadDbPool boolForQuery:query, self.songId, self.serverId];
 }
 
 - (void)setIsFullyCached:(BOOL)isFullyCached
 {
     [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
-        NSString *query = @"INSERT OR REPLACE INTO cachedSongs (songId, serverId, partiallyCached, fullyCached) VALUES (?, ?, ?, ?)";
+        NSString *query = @"INSERT OR REPLACE INTO cachedSongsMetadata (songId, serverId, partiallyCached, fullyCached) VALUES (?, ?, ?, ?)";
         [db executeUpdate:query, self.songId, self.serverId, @NO, @YES];
     }];
+    
+    // Add submodules to cache db
+    [self.folder cacheModel];
+    [self.artist cacheModel];
+    [self.album cacheModel];
+    [self cacheModel];
 }
 
 - (void)removeFromCachedSongsTable {
     [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
-        NSString *query = @"DELETE FROM cachedSongs WHERE songId = ? AND serverId = ?";
+        NSString *query = @"DELETE FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?";
         [db executeUpdate:query, self.songId, self.serverId];
     }];
 }

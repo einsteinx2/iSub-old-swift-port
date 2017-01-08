@@ -12,8 +12,6 @@
 #import "DatabaseSingleton.h"
 #import "ISMSStreamManager.h"
 #import "ISMSStreamHandler.h"
-#import "ISMSURLConnectionStreamHandler.h"
-#import "ISMSCFNetworkStreamHandler.h"
 #import "RXMLElement.h"
 
 LOG_LEVEL_ISUB_DEBUG
@@ -37,12 +35,6 @@ LOG_LEVEL_ISUB_DEBUG
 // Start downloading the file specified in the text field.
 - (void)startDownloadQueue
 {
-    // Final check to make sure the cache feature is unlocked, just in case items were queued somehow
-    if (!settingsS.isCacheUnlocked)
-    {
-        return;
-    }
-    
 	// Are we already downloading?  If so, stop it.
 	[self stopDownloadQueue];
 	
@@ -127,7 +119,7 @@ LOG_LEVEL_ISUB_DEBUG
 	ISMSStreamHandler *handler = [streamManagerS handlerForSong:self.currentQueuedSong];
 	if (handler)
 	{
-		DDLogVerbose(@"[ISMSCacheQueueManager] stealing %@ from stream manager", handler.mySong.title);
+		DDLogVerbose(@"[ISMSCacheQueueManager] stealing %@ from stream manager", handler.song.title);
 		
 		// It's in the stream queue so steal the handler
 		self.currentStreamHandler = handler;
@@ -141,8 +133,7 @@ LOG_LEVEL_ISUB_DEBUG
 	else
 	{
 		DDLogVerbose(@"[ISMSCacheQueueManager] CQ creating download handler for %@", self.currentQueuedSong.title);
-		self.currentStreamHandler = [[ISMSCFNetworkStreamHandler alloc] initWithSong:self.currentQueuedSong isTemp:NO delegate:self];
-		self.currentStreamHandler.partialPrecacheSleep = NO;
+		self.currentStreamHandler = [[URLSessionStreamHandler alloc] initWithSong:self.currentQueuedSong isTemp:NO delegate:self];
 		[self.currentStreamHandler start];
 	}
     
@@ -182,13 +173,7 @@ LOG_LEVEL_ISUB_DEBUG
 
 #pragma mark - ISMSStreamHandler Delegate
 
-- (void)ISMSStreamHandlerPartialPrecachePaused:(ISMSStreamHandler *)handler
-{
-	// Don't ever partial pre-cache
-	handler.partialPrecacheSleep = NO;
-}
-
-- (void)ISMSStreamHandlerStartPlayback:(ISMSURLConnectionStreamHandler *)handler
+- (void)ISMSStreamHandlerStartPlayback:(ISMSStreamHandler *)handler
 {
 	[streamManagerS ISMSStreamHandlerStartPlayback:handler];
 }
@@ -276,7 +261,7 @@ LOG_LEVEL_ISUB_DEBUG
 		self.currentStreamHandler = nil;
 		
 		// Tell the cache queue view to reload
-		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:handler.mySong.songId forKey:@"songId"];
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:handler.song.songId forKey:@"songId"];
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CacheQueueSongDownloaded userInfo:userInfo];
 		
 		// Download the next song in the queue

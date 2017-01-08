@@ -9,7 +9,6 @@
 #import "ISMSStreamManager.h"
 #import "iSub-Swift.h"
 #import "ISMSStreamHandler.h"
-#import "ISMSCFNetworkStreamHandler.h"
 #import "ISMSCacheQueueManager.h"
 #import "RXMLElement.h"
 
@@ -24,7 +23,7 @@ LOG_LEVEL_ISUB_DEBUG
 		return nil;
 	
 	ISMSStreamHandler *handler = [self.handlerStack firstObjectSafe];
-	return handler.mySong;
+	return handler.song;
 }
 
 - (ISMSStreamHandler *)handlerForSong:(ISMSSong *)aSong
@@ -34,9 +33,9 @@ LOG_LEVEL_ISUB_DEBUG
 	
 	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
-		if ([handler.mySong isEqualToSong:aSong])
+		if ([handler.song isEqualToSong:aSong])
 		{
-			//DLog(@"handler.mySong: %@    aSong: %@", handler.mySong.title, aSong.title);
+			//DLog(@"handler.song: %@    aSong: %@", handler.song.title, aSong.title);
 			return handler;
 		}
 	}
@@ -49,7 +48,7 @@ LOG_LEVEL_ISUB_DEBUG
 		return NO;
 	
 	ISMSStreamHandler *firstHandler = [self.handlerStack firstObjectSafe];
-	return [aSong isEqualToSong:firstHandler.mySong];
+	return [aSong isEqualToSong:firstHandler.song];
 }
 
 - (BOOL)isSongDownloading:(ISMSSong *)aSong
@@ -193,13 +192,13 @@ LOG_LEVEL_ISUB_DEBUG
             [self cancelStream:handler];
             [self.handlerStack removeObject:handler];
             
-            if (!handler.mySong.isFullyCached && !handler.mySong.isTempCached && !([cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.mySong] && cacheQueueManagerS.isQueueDownloading))
+            if (!handler.song.isFullyCached && !handler.song.isTempCached && !([cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.song] && cacheQueueManagerS.isQueueDownloading))
             {
-                DLog(@"Removing song from cached songs table: %@", handler.mySong);
-                [handler.mySong removeFromCachedSongsTable];
-                //[[ISMSPlaylist downloadedSongs] removeSongWithSong:handler.mySong notify:YES];
+                DLog(@"Removing song from cached songs table: %@", handler.song);
+                [handler.song removeFromCachedSongsTable];
+                //[[ISMSPlaylist downloadedSongs] removeSongWithSong:handler.song notify:YES];
             }
-			//[handler.mySong removeFromCachedSongsTableDbQueue];
+			//[handler.song removeFromCachedSongsTableDbQueue];
 		}
 	}
 	
@@ -274,11 +273,11 @@ LOG_LEVEL_ISUB_DEBUG
 		[self cancelStreamAtIndex:index];
 		
 		ISMSStreamHandler *handler = [self.handlerStack objectAtIndex:index];
-		if (!handler.mySong.isFullyCached && !handler.mySong.isTempCached && !([cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.mySong] && cacheQueueManagerS.isQueueDownloading))
+		if (!handler.song.isFullyCached && !handler.song.isTempCached && !([cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.song] && cacheQueueManagerS.isQueueDownloading))
         {
-            DLog(@"Removing song from cached songs table: %@", handler.mySong);
-            [handler.mySong removeFromCachedSongsTable];
-            //[[ISMSPlaylist downloadedSongs] removeSongWithSong:handler.mySong notify:YES];
+            DLog(@"Removing song from cached songs table: %@", handler.song);
+            [handler.song removeFromCachedSongsTable];
+            //[[ISMSPlaylist downloadedSongs] removeSongWithSong:handler.song notify:YES];
         }
         [self.handlerStack removeObjectAtIndexSafe:index];
 	}
@@ -319,9 +318,9 @@ LOG_LEVEL_ISUB_DEBUG
 		return; 
 	
 	// As an added check, verify that this handler is still in the stack
-	if ([self isSongInQueue:handler.mySong])
+	if ([self isSongInQueue:handler.song])
 	{
-		if (cacheQueueManagerS.isQueueDownloading && [cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.mySong])
+		if (cacheQueueManagerS.isQueueDownloading && [cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.song])
 		{
 			// This song is already being downloaded by the cache queue, so just start the player
 			[self ISMSStreamHandlerStartPlayback:handler];
@@ -348,7 +347,7 @@ LOG_LEVEL_ISUB_DEBUG
 	if (!handler)
 		return;
 	
-	if (cacheQueueManagerS.isQueueDownloading && [cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.mySong])
+	if (cacheQueueManagerS.isQueueDownloading && [cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.song])
 	{
 		// This song is already being downloaded by the cache queue, so just start the player
 		[self ISMSStreamHandlerStartPlayback:handler];
@@ -409,8 +408,7 @@ LOG_LEVEL_ISUB_DEBUG
 // Hand of handler to cache queue
 - (void)stealHandlerForCacheQueue:(ISMSStreamHandler *)handler
 {
-	DDLogInfo(@"[ISMSStreamManager] cache queue manager stole handler for: %@", handler.mySong.title);
-	handler.partialPrecacheSleep = NO;
+	DDLogInfo(@"[ISMSStreamManager] cache queue manager stole handler for: %@", handler.song.title);
 	[self.handlerStack removeObject:handler];
 	[self saveHandlerStack];
 	[self fillStreamQueue];
@@ -424,7 +422,7 @@ LOG_LEVEL_ISUB_DEBUG
 	if (!song)
 		return;
 	
-	ISMSStreamHandler *handler = [[ISMSCFNetworkStreamHandler alloc] initWithSong:song byteOffset:byteOffset secondsOffset:secondsOffset isTemp:isTemp delegate:self];
+	ISMSStreamHandler *handler = [[URLSessionStreamHandler alloc] initWithSong:song byteOffset:byteOffset secondsOffset:secondsOffset isTemp:isTemp delegate:self];
 	if (![self.handlerStack containsObject:handler])
 	{
 		[self.handlerStack insertObject:handler atIndex:index];
@@ -474,7 +472,7 @@ LOG_LEVEL_ISUB_DEBUG
 	BOOL isSongInQueue = NO;
 	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
-		if ([handler.mySong isEqualToSong:aSong])
+		if ([handler.song isEqualToSong:aSong])
 		{
 			isSongInQueue = YES;
 			break;
@@ -556,10 +554,10 @@ LOG_LEVEL_ISUB_DEBUG
 - (void)ISMSStreamHandlerStartPlayback:(ISMSStreamHandler *)handler
 {	
 	// Update the last cached song
-	self.lastCachedSong = handler.mySong;
+	self.lastCachedSong = handler.song;
     
     ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
-	if ([handler.mySong isEqualToSong:currentSong])
+	if ([handler.song isEqualToSong:currentSong])
 	{
         // TODO: Stop interacting directly with AudioEngine
 		[audioEngineS startSong:currentSong index:[PlayQueue sharedInstance].currentIndex];
@@ -646,26 +644,26 @@ LOG_LEVEL_ISUB_DEBUG
 	
 	if (isSuccess)
 	{
-		//DLog(@"finished downloading song: %@", handler.mySong.title);
+		//DLog(@"finished downloading song: %@", handler.song.title);
 		
 		// Mark song as cached
 		if (!handler.isTempCache)
         {
-            if ([cacheQueueManagerS isSongInQueue:handler.mySong])
+            if ([cacheQueueManagerS isSongInQueue:handler.song])
             {
-                //handler.mySong.isDownloaded = YES;
-                [[ISMSPlaylist downloadQueue] removeSongWithSong:handler.mySong notify:YES];
+                //handler.song.isDownloaded = YES;
+                [[ISMSPlaylist downloadQueue] removeSongWithSong:handler.song notify:YES];
             }
             
-            DLog(@"Marking isFullyCached = YES for %@", handler.mySong);
-			handler.mySong.isFullyCached = YES;
+            DLog(@"Marking isFullyCached = YES for %@", handler.song);
+			handler.song.isFullyCached = YES;
 		}
 		
 		// Update the last cached song
-		self.lastCachedSong = handler.mySong;
+		self.lastCachedSong = handler.song;
 		
 		if (handler.isTempCache)
-			self.lastTempCachedSong = handler.mySong;
+			self.lastTempCachedSong = handler.song;
 		
 		// Remove the handler from the stack
 		[self removeStream:handler];
@@ -679,7 +677,7 @@ LOG_LEVEL_ISUB_DEBUG
 		
 		// Keep the queue filled
 		[self fillStreamQueue];
-		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:handler.mySong.songId forKey:@"songId"];
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:handler.song.songId forKey:@"songId"];
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_StreamHandlerSongDownloaded 
 													  userInfo:userInfo];
 	}

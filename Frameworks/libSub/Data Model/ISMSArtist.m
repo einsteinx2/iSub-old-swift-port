@@ -24,17 +24,26 @@
         __block BOOL foundRecord = NO;
         
         [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-            NSString *query = @"SELECT artistId, serverId, name, albumCount "
-                              @"FROM artists "
-                              @"WHERE artistId = ? AND serverId = ?";
-            
-            FMResultSet *r = [db executeQuery:query, @(artistId), @(serverId)];
-            if ([r next])
+            NSString *query = @"SELECT * FROM artists WHERE artistId = ? AND serverId = ?";
+            FMResultSet *result = [db executeQuery:query, @(artistId), @(serverId)];
+            if ([result next])
             {
                 foundRecord = YES;
-                [self _assignPropertiesFromResultSet:r];
+                [self _assignPropertiesFromResultSet:result];
             }
-            [r close];
+            [result close];
+            
+            // If not found, check the cache table
+            if (!foundRecord) {
+                query = @"SELECT * FROM cachedArtists WHERE artistId = ? AND serverId = ?";
+                FMResultSet *result = [db executeQuery:query, @(artistId), @(serverId)];
+                if ([result next])
+                {
+                    foundRecord = YES;
+                    [self _assignPropertiesFromResultSet:result];
+                }
+                [result close];
+            }
         }];
         
         if (foundRecord && loadSubmodels) {
@@ -73,13 +82,21 @@
 	return [NSString stringWithFormat:@"%@: name: %@, serverId: %@, artistId: %@, albumCount: %li", [super description], self.name, self.serverId, self.artistId, (long)self.albumCount];
 }
 
-- (BOOL)_insertModel:(BOOL)replace
+- (BOOL)_existsInCache {
+    NSString *query = @"SELECT COUNT(*) FROM cachedArtists WHERE artistId = ? AND serverId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, self.artistId, self.serverId];
+}
+
+- (BOOL)_insertModel:(BOOL)replace cachedTable:(BOOL)cachedTable
 {
     __block BOOL success = NO;
     [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *insertType = replace ? @"REPLACE" : @"INSERT";
-         NSString *query = [insertType stringByAppendingString:@" INTO artists (artistId, serverId, name, albumCount) VALUES (?, ?, ?, ?)"];
+         NSString *table = cachedTable ? @"cachedArtists" : @"artists";
+         
+         NSString *query = @"%@ INTO %@ (artistId, serverId, name, albumCount) VALUES (?, ?, ?, ?)";
+         query = [NSString stringWithFormat:query, insertType, table];
          
          success = [db executeUpdate:query, self.artistId, self.serverId, self.name, self.albumCount];
      }];
@@ -88,12 +105,23 @@
 
 - (BOOL)insertModel
 {
-    return [self _insertModel:NO];
+    return [self _insertModel:NO cachedTable:NO];
 }
 
 - (BOOL)replaceModel
 {
-    return [self _insertModel:YES];
+    BOOL success = [self _insertModel:YES cachedTable:NO];
+    
+    if ([self _existsInCache]) {
+        success = success && [self cacheModel];
+    }
+    
+    return success;
+}
+
+- (BOOL)cacheModel
+{
+    return [self _insertModel:YES cachedTable:YES];
 }
 
 - (BOOL)deleteModel

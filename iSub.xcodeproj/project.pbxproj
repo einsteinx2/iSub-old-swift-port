@@ -395,7 +395,6 @@
 		533A2D84113C963300B3A376 /* controller-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D80113C963300B3A376 /* controller-pause.png */; };
 		533A2D85113C963300B3A376 /* controller-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D81113C963300B3A376 /* controller-play.png */; };
 		533A2D86113C963300B3A376 /* controller-previous.png in Resources */ = {isa = PBXBuildFile; fileRef = 533A2D82113C963300B3A376 /* controller-previous.png */; };
-		533B69C71E20544F001FF3BF /* NavigationStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 533B69C61E20544F001FF3BF /* NavigationStack.framework */; };
 		533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
 		533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
 		533B69D61E206031001FF3BF /* CollectionStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D01E206031001FF3BF /* CollectionStackViewController.swift */; };
@@ -561,10 +560,6 @@
 		5358DCEB1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
 		5358DCEC1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
 		5358DCED1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
-		5358DCEE1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1B1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m */; };
-		5358DCF01E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1B1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m */; };
-		5358DCF11E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1B1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m */; };
-		5358DCF21E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1B1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m */; };
 		5358DCF31E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */; };
 		5358DCF51E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */; };
 		5358DCF61E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */; };
@@ -573,10 +568,6 @@
 		5358DCFA1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC201E0B78470024A0D4 /* ISMSStreamManager.m */; };
 		5358DCFB1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC201E0B78470024A0D4 /* ISMSStreamManager.m */; };
 		5358DCFC1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC201E0B78470024A0D4 /* ISMSStreamManager.m */; };
-		5358DCFD1E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC221E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m */; };
-		5358DCFF1E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC221E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m */; };
-		5358DD001E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC221E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m */; };
-		5358DD011E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC221E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m */; };
 		5358DD021E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC241E0B78470024A0D4 /* ISMSUpdateChecker.m */; };
 		5358DD041E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC241E0B78470024A0D4 /* ISMSUpdateChecker.m */; };
 		5358DD051E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC241E0B78470024A0D4 /* ISMSUpdateChecker.m */; };
@@ -1222,6 +1213,8 @@
 		53BC286C139AF17B00A825F1 /* Icon-72-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC2869139AF17B00A825F1 /* Icon-72-Beta.png */; };
 		53BC286D139AF17B00A825F1 /* Icon-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286A139AF17B00A825F1 /* Icon-Beta.png */; };
 		53BC286E139AF17B00A825F1 /* Icon@2x-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */; };
+		53BCBF0F1E21A07D0008313A /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCBF0E1E21A07D0008313A /* URL.swift */; };
+		53BCBF101E21A07D0008313A /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BCBF0E1E21A07D0008313A /* URL.swift */; };
 		53C4406814E87F5000A7DC41 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
 		53C4406A14E87F5000A7DC41 /* support-tabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406614E87F5000A7DC41 /* support-tabbaricon.png */; };
 		53C4406B14E87F5000A7DC41 /* support-tabbaricon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */; };
@@ -1351,6 +1344,8 @@
 		53F0CD8211589F0A00A665CD /* progress-label-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F0CD8111589F0A00A665CD /* progress-label-background.png */; };
 		53F40B9A1E207D4700E8CB17 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F40B991E207D4700E8CB17 /* PlayerViewController.swift */; };
 		53F40B9B1E207D4700E8CB17 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F40B991E207D4700E8CB17 /* PlayerViewController.swift */; };
+		53F507CA1E21954E00BDE716 /* URLSessionStreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F507C91E21954E00BDE716 /* URLSessionStreamHandler.swift */; };
+		53F507CB1E21954E00BDE716 /* URLSessionStreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F507C91E21954E00BDE716 /* URLSessionStreamHandler.swift */; };
 		53F675D8113B092C00822059 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675D7113B092C00822059 /* MediaPlayer.framework */; };
 		53F675DC113B093900822059 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675DB113B093900822059 /* CFNetwork.framework */; };
 		53F675E2113B095900822059 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E1113B095900822059 /* QuartzCore.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -1474,7 +1469,6 @@
 		533A2D80113C963300B3A376 /* controller-pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-pause.png"; path = "Images/Player Icons/controller-pause.png"; sourceTree = "<group>"; };
 		533A2D81113C963300B3A376 /* controller-play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-play.png"; path = "Images/Player Icons/controller-play.png"; sourceTree = "<group>"; };
 		533A2D82113C963300B3A376 /* controller-previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-previous.png"; path = "Images/Player Icons/controller-previous.png"; sourceTree = "<group>"; };
-		533B69C61E20544F001FF3BF /* NavigationStack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NavigationStack.framework; path = Carthage/Build/iOS/NavigationStack.framework; sourceTree = "<group>"; };
 		533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackCell.swift; sourceTree = "<group>"; };
 		533B69D01E206031001FF3BF /* CollectionStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionStackViewController.swift; sourceTree = "<group>"; };
 		533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackFlowLayout.swift; sourceTree = "<group>"; };
@@ -1574,15 +1568,11 @@
 		5358DC161E0B78470024A0D4 /* HLSProxyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLSProxyResponse.m; sourceTree = "<group>"; };
 		5358DC181E0B78470024A0D4 /* ISMSCacheQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSCacheQueueManager.h; sourceTree = "<group>"; };
 		5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSCacheQueueManager.m; sourceTree = "<group>"; };
-		5358DC1A1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSCFNetworkStreamHandler.h; sourceTree = "<group>"; };
-		5358DC1B1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSCFNetworkStreamHandler.m; sourceTree = "<group>"; };
 		5358DC1C1E0B78470024A0D4 /* ISMSStreamHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamHandler.h; sourceTree = "<group>"; };
 		5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSStreamHandler.m; sourceTree = "<group>"; };
 		5358DC1E1E0B78470024A0D4 /* ISMSStreamHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamHandlerDelegate.h; sourceTree = "<group>"; };
 		5358DC1F1E0B78470024A0D4 /* ISMSStreamManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamManager.h; sourceTree = "<group>"; };
 		5358DC201E0B78470024A0D4 /* ISMSStreamManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSStreamManager.m; sourceTree = "<group>"; };
-		5358DC211E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSURLConnectionStreamHandler.h; sourceTree = "<group>"; };
-		5358DC221E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSURLConnectionStreamHandler.m; sourceTree = "<group>"; };
 		5358DC231E0B78470024A0D4 /* ISMSUpdateChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSUpdateChecker.h; sourceTree = "<group>"; };
 		5358DC241E0B78470024A0D4 /* ISMSUpdateChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSUpdateChecker.m; sourceTree = "<group>"; };
 		5358DC261E0B78470024A0D4 /* ISMSLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoader.h; sourceTree = "<group>"; };
@@ -1870,6 +1860,7 @@
 		53BC2869139AF17B00A825F1 /* Icon-72-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72-Beta.png"; path = "Images/App Icons/Icon-72-Beta.png"; sourceTree = "<group>"; };
 		53BC286A139AF17B00A825F1 /* Icon-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Beta.png"; path = "Images/App Icons/Icon-Beta.png"; sourceTree = "<group>"; };
 		53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x-Beta.png"; path = "Images/App Icons/Icon@2x-Beta.png"; sourceTree = "<group>"; };
+		53BCBF0E1E21A07D0008313A /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		53C4406614E87F5000A7DC41 /* support-tabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "support-tabbaricon.png"; path = "Images/Tab Bar Icons/support-tabbaricon.png"; sourceTree = "<group>"; };
 		53C4406714E87F5000A7DC41 /* support-tabbaricon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "support-tabbaricon@2x.png"; path = "Images/Tab Bar Icons/support-tabbaricon@2x.png"; sourceTree = "<group>"; };
 		53C6051A12F1EFD4003C6895 /* intro-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom.png"; path = "Images/Intro Screen/intro-bottom.png"; sourceTree = "<group>"; };
@@ -1968,6 +1959,7 @@
 		53F0CD8111589F0A00A665CD /* progress-label-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "progress-label-background.png"; path = "Images/Other/progress-label-background.png"; sourceTree = "<group>"; };
 		53F1412015FD550C004D00D5 /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = buildnumber.xcconfig; path = Other/buildnumber.xcconfig; sourceTree = "<group>"; };
 		53F40B991E207D4700E8CB17 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		53F507C91E21954E00BDE716 /* URLSessionStreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLSessionStreamHandler.swift; path = ../URLSessionStreamHandler.swift; sourceTree = "<group>"; };
 		53F675D7113B092C00822059 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		53F675DB113B093900822059 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		53F675E1113B095900822059 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -2039,7 +2031,6 @@
 				536D620B1144495400DFCE56 /* SystemConfiguration.framework in Frameworks */,
 				53544D8A1187DED400B63DB9 /* CoreLocation.framework in Frameworks */,
 				5354914B11B03FC900928E0F /* MobileCoreServices.framework in Frameworks */,
-				533B69C71E20544F001FF3BF /* NavigationStack.framework in Frameworks */,
 				5358E19F1E0B789B0024A0D4 /* libbass_mpc.a in Frameworks */,
 				53D59A6E1E1DC9CE00071ABD /* Reachability.framework in Frameworks */,
 				5358E1951E0B789B0024A0D4 /* libbass_ape.a in Frameworks */,
@@ -2407,6 +2398,7 @@
 			isa = PBXGroup;
 			children = (
 				533C5ED01E0B8DFC00802FB1 /* String.swift */,
+				53BCBF0E1E21A07D0008313A /* URL.swift */,
 			);
 			name = Extensions;
 			path = ../..;
@@ -2540,17 +2532,14 @@
 		5358DC171E0B78470024A0D4 /* ISMSStreamManager */ = {
 			isa = PBXGroup;
 			children = (
+				5358DC1F1E0B78470024A0D4 /* ISMSStreamManager.h */,
+				5358DC201E0B78470024A0D4 /* ISMSStreamManager.m */,
 				5358DC181E0B78470024A0D4 /* ISMSCacheQueueManager.h */,
 				5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */,
-				5358DC1A1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.h */,
-				5358DC1B1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m */,
 				5358DC1C1E0B78470024A0D4 /* ISMSStreamHandler.h */,
 				5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */,
 				5358DC1E1E0B78470024A0D4 /* ISMSStreamHandlerDelegate.h */,
-				5358DC1F1E0B78470024A0D4 /* ISMSStreamManager.h */,
-				5358DC201E0B78470024A0D4 /* ISMSStreamManager.m */,
-				5358DC211E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.h */,
-				5358DC221E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m */,
+				53F507C91E21954E00BDE716 /* URLSessionStreamHandler.swift */,
 			);
 			path = ISMSStreamManager;
 			sourceTree = "<group>";
@@ -2716,7 +2705,6 @@
 		5358E1CC1E0B78F80024A0D4 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
-				533B69C61E20544F001FF3BF /* NavigationStack.framework */,
 				53835D681E0B81B80077B53D /* Async.framework */,
 				5358E1CD1E0B79210024A0D4 /* HockeySDK.framework */,
 				5358E1CE1E0B79210024A0D4 /* MBProgressHUD.framework */,
@@ -4148,6 +4136,7 @@
 				53835CB61E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBB1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				53CE503F1E20194100E5DC68 /* BCCKeychain.m in Sources */,
+				53F507CA1E21954E00BDE716 /* URLSessionStreamHandler.swift in Sources */,
 				5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
 				53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
@@ -4172,7 +4161,6 @@
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				533B69D81E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */,
-				5358DCFD1E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				5398F26D11DA61DA00007870 /* SettingsTabViewController.m in Sources */,
 				5358DDA21E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
 				5358DD661E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */,
@@ -4271,7 +4259,6 @@
 				5358DF8D1E0B789A0024A0D4 /* DDLog.m in Sources */,
 				53835CD41E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC01E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
-				5358DCEE1E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
 				5358DD8E1E0B78480024A0D4 /* SavedSettings.m in Sources */,
 				5358DCB21E0B78470024A0D4 /* ISMSContentType.m in Sources */,
@@ -4290,6 +4277,7 @@
 				5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				533B69DA1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
+				53BCBF0F1E21A07D0008313A /* URL.swift in Sources */,
 				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				5358DDAC1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
@@ -4394,13 +4382,11 @@
 				536C995016619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				533C5ED41E0B8DFC00802FB1 /* String.swift in Sources */,
 				53835D221E0B7DD50077B53D /* FMResultSet.m in Sources */,
-				5358DD001E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				5358DF9F1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				5358DF7C1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				5358DCA11E0B78470024A0D4 /* BassParamEqValue.m in Sources */,
 				53835CA51E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
 				5358DF771E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
-				5358DCF11E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */,
 				53835CB91E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				5358DF9A1E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				53835CD21E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
@@ -4493,13 +4479,11 @@
 				5358DF821E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				5358DFA01E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				5358DD831E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
-				5358DCF21E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */,
 				530F639C1A3FC78C006D7666 /* Defines.swift in Sources */,
 				5358DCBB1E0B78470024A0D4 /* ISMSFolder.m in Sources */,
 				53835D191E0B7DD50077B53D /* FMDatabasePool.m in Sources */,
 				53835CB51E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				5358DD6A1E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */,
-				5358DD011E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				5358DCCF1E0B78470024A0D4 /* Playlist.swift in Sources */,
 				53835D281E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 			);
@@ -4512,6 +4496,7 @@
 				53835CB81E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBD1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				53CE50411E20194100E5DC68 /* BCCKeychain.m in Sources */,
+				53F507CB1E21954E00BDE716 /* URLSessionStreamHandler.swift in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
 				53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
@@ -4536,7 +4521,6 @@
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				53BC27D6139AF0DD00A825F1 /* UAApplication.m in Sources */,
-				5358DCFF1E0B78470024A0D4 /* ISMSURLConnectionStreamHandler.m in Sources */,
 				53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */,
 				5358DDA41E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
 				5358DD681E0B78480024A0D4 /* NSString+cleanCredentialsForLog.m in Sources */,
@@ -4635,7 +4619,6 @@
 				5358DF8F1E0B789A0024A0D4 /* DDLog.m in Sources */,
 				53835CD61E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
-				5358DCF01E0B78470024A0D4 /* ISMSCFNetworkStreamHandler.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,
 				5358DD901E0B78480024A0D4 /* SavedSettings.m in Sources */,
 				5358DCB41E0B78470024A0D4 /* ISMSContentType.m in Sources */,
@@ -4654,6 +4637,7 @@
 				5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
+				53BCBF101E21A07D0008313A /* URL.swift in Sources */,
 				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				5358DDAE1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
 				536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
@@ -5197,7 +5181,6 @@
 				);
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Other/iSub-Info-Beta.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

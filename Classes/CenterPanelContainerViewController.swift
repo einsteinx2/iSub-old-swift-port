@@ -39,7 +39,7 @@ class CenterPanelContainerViewController: UIViewController {
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.top.equalToSuperview()
-            make.height.equalToSuperview().offset(miniPlayerShowing ? -50 : 0)
+            make.height.equalToSuperview()//.offset(miniPlayerShowing ? -50 : 0)
         }
         
         self.addChildViewController(miniPlayer)
@@ -107,9 +107,9 @@ class CenterPanelContainerViewController: UIViewController {
     }
     
     fileprivate func updateConstraintOffsets(contentViewOffset: Float, miniPlayerOffset: Float, animated: Bool) {
-        contentView.snp.updateConstraints { make in
-            make.height.equalToSuperview().offset(contentViewOffset)
-        }
+//        contentView.snp.updateConstraints { make in
+//            make.height.equalToSuperview().offset(contentViewOffset)
+//        }
         
         miniPlayer.view.snp.updateConstraints { make in
             make.bottom.equalToSuperview().offset(miniPlayerOffset)

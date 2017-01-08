@@ -46,10 +46,7 @@ class ItemViewController: DraggableTableViewController {
             viewModel.loadModelsFromWeb(nil)
         }
         
-        self.tableView.tableHeaderView = nil
-        if self.tableView.tableFooterView == nil {
-            self.tableView.tableFooterView = UIView()
-        }
+        self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 50))
     }
     
     override func customizeTableView(_ tableView: UITableView) {

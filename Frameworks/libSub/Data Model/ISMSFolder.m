@@ -49,17 +49,26 @@ static NSArray *_ignoredArticles = nil;
         __block BOOL foundRecord = NO;
         
         [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-            NSString *query = @"SELECT folderId, parentFolderId, mediaFolderId, coverArtId, name "
-                              @"FROM folders "
-                              @"WHERE folderId = ? AND serverId = ?";
-            
-            FMResultSet *r = [db executeQuery:query, @(folderId), @(serverId)];
-            if ([r next])
+            NSString *query = @"SELECT * FROM folders WHERE folderId = ? AND serverId = ?";
+            FMResultSet *result = [db executeQuery:query, @(folderId), @(serverId)];
+            if ([result next])
             {
                 foundRecord = YES;
-                [self _assignPropertiesFromResultSet:r];
+                [self _assignPropertiesFromResultSet:result];
             }
-            [r close];
+            [result close];
+            
+            // If not found, check the cache table
+            if (!foundRecord) {
+                query = @"SELECT * FROM cachedFolders WHERE folderId = ? AND serverId = ?";
+                result = [db executeQuery:query, @(folderId), @(serverId)];
+                if ([result next])
+                {
+                    foundRecord = YES;
+                    [self _assignPropertiesFromResultSet:result];
+                }
+                [result close];
+            }
         }];
         
         if (foundRecord && loadSubmodels) {
@@ -97,13 +106,20 @@ static NSArray *_ignoredArticles = nil;
     _ignoredArticles = ignoredArticles;
 }
 
-- (BOOL)_insertModel:(BOOL)replace
+- (BOOL)_existsInCache {
+    NSString *query = @"SELECT COUNT(*) FROM cachedFolders WHERE folderId = ? AND serverId = ?";
+    return [databaseS.songModelReadDbPool boolForQuery:query, self.folderId, self.serverId];
+}
+
+- (BOOL)_insertModel:(BOOL)replace cachedTable:(BOOL)cachedTable
 {
     __block BOOL success = NO;
     [databaseS.songModelWritesDbQueue inDatabase:^(FMDatabase *db)
      {
          NSString *insertType = replace ? @"REPLACE" : @"INSERT";
-         NSString *query = [insertType stringByAppendingString:@" INTO folders (folderId, serverId, parentFolderId, mediaFolderId, coverArtId, name) VALUES (?, ?, ?, ?, ?, ?)"];
+         NSString *table = cachedTable ? @"cachedFolders" : @"folders";
+         NSString *query = @"%@ INTO %@ (folderId, serverId, parentFolderId, mediaFolderId, coverArtId, name) VALUES (?, ?, ?, ?, ?, ?)";
+         query = [NSString stringWithFormat:query, insertType, table];
          
          success = [db executeUpdate:query, self.folderId, self.serverId, self.parentFolderId, self.mediaFolderId, self.coverArtId, self.name];
      }];
@@ -112,12 +128,23 @@ static NSArray *_ignoredArticles = nil;
 
 - (BOOL)insertModel
 {
-    return [self _insertModel:NO];
+    return [self _insertModel:NO cachedTable:NO];
 }
 
 - (BOOL)replaceModel
 {
-    return [self _insertModel:YES];
+    BOOL success = [self _insertModel:YES cachedTable:NO];
+    
+    if ([self _existsInCache]) {
+        success = success && [self cacheModel];
+    }
+    
+    return success;
+}
+
+- (BOOL)cacheModel
+{
+    return [self _insertModel:YES cachedTable:YES];
 }
 
 - (BOOL)deleteModel
@@ -175,9 +202,7 @@ static NSArray *_ignoredArticles = nil;
     NSMutableArray<ISMSFolder*> *folders = [[NSMutableArray alloc] init];
     
     [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-        NSString *query = @"SELECT folderId, parentFolderId, mediaFolderId, coverArtId, name "
-                          @"FROM folders "
-                          @"WHERE parentFolderId = ? AND serverId = ?";
+        NSString *query = @"SELECT * FROM folders WHERE parentFolderId = ? AND serverId = ?";
         
         FMResultSet *r = [db executeQuery:query, @(folderId), @(serverId)];
         while ([r next])

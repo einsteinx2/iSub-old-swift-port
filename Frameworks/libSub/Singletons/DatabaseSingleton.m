@@ -33,18 +33,9 @@
     {
         [db executeStatements:@"PRAGMA journal_mode=WAL"];
         
-        if (![db tableExists:@"songs"])
+        if (![db tableExists:@"cachedSongsMetadata"])
         {
-            [db executeUpdate:@"CREATE TABLE songs (songId INTEGER, serverId INTEGER, contentTypeId INTEGER, transcodedContentTypeId INTEGER, mediaFolderId INTEGER, folderId INTEGER, artistId INTEGER, albumId INTEGER, genreId TEXT, coverArtId TEXT, title TEXT, duration INTEGER, bitrate INTEGER, trackNumber INTEGER, discNumber INTEGER, year INTEGER, size INTEGER, path TEXT, lastPlayed REAL, artistName TEXT, albumName TEXT, PRIMARY KEY (songId, serverId))"];
-            [db executeUpdate:@"CREATE INDEX songs_mediaFolderId ON songs (mediaFolderId)"];
-            [db executeUpdate:@"CREATE INDEX songs_folderId ON songs (folderId)"];
-            [db executeUpdate:@"CREATE INDEX songs_artistId ON songs (artistId)"];
-            [db executeUpdate:@"CREATE INDEX songs_albumId ON songs (albumId)"];
-        }
-        
-        if (![db tableExists:@"cachedSongs"])
-        {
-            [db executeUpdate:@"CREATE TABLE cachedSongs (songId INTEGER, serverId INTEGER, partiallyCached INTEGER, fullyCached INTEGER, PRIMARY KEY (songId, serverId))"];
+            [db executeUpdate:@"CREATE TABLE cachedSongsMetadata (songId INTEGER, serverId INTEGER, partiallyCached INTEGER, fullyCached INTEGER, pinned INTEGER, PRIMARY KEY (songId, serverId))"];
         }
         
         if (![db tableExists:@"contentTypes"])
@@ -105,15 +96,49 @@
             [db executeUpdate:@"CREATE INDEX folders_mediaFolderId ON folders (mediaFolderId)"];
         }
         
+        if (![db tableExists:@"cachedFolders"])
+        {
+            [db executeUpdate:@"CREATE TABLE cachedFolders (folderId INTEGER, serverId INTEGER, parentFolderId INTEGER, mediaFolderId INTEGER, coverArtId TEXT, name TEXT, PRIMARY KEY (folderId, serverId))"];
+            [db executeUpdate:@"CREATE INDEX cachedFolders_parentFolderId ON cachedFolders (parentFolderId)"];
+            [db executeUpdate:@"CREATE INDEX cachedFolders_mediaFolderId ON cachedFolders (mediaFolderId)"];
+        }
+        
         if (![db tableExists:@"artists"])
         {
             [db executeUpdate:@"CREATE TABLE artists (artistId INTEGER, serverId INTEGER, name TEXT, albumCount INTEGER, PRIMARY KEY (artistId, serverId))"];
         }
         
-        //[db executeUpdate:@"DROP TABLE albums"];
+        if (![db tableExists:@"cachedArtists"])
+        {
+            [db executeUpdate:@"CREATE TABLE cachedArtists (artistId INTEGER, serverId INTEGER, name TEXT, albumCount INTEGER, PRIMARY KEY (artistId, serverId))"];
+        }
+        
         if (![db tableExists:@"albums"])
         {
             [db executeUpdate:@"CREATE TABLE albums (albumId INTEGER, serverId INTEGER, artistId INTEGER, genreId INTEGER, coverArtId TEXT, name TEXT, songCount INTEGER, duration INTEGER, year INTEGER, created REAL, PRIMARY KEY (albumId, serverId))"];
+        }
+        
+        if (![db tableExists:@"cachedAlbums"])
+        {
+            [db executeUpdate:@"CREATE TABLE cachedAlbums (albumId INTEGER, serverId INTEGER, artistId INTEGER, genreId INTEGER, coverArtId TEXT, name TEXT, songCount INTEGER, duration INTEGER, year INTEGER, created REAL, PRIMARY KEY (albumId, serverId))"];
+        }
+        
+        if (![db tableExists:@"songs"])
+        {
+            [db executeUpdate:@"CREATE TABLE songs (songId INTEGER, serverId INTEGER, contentTypeId INTEGER, transcodedContentTypeId INTEGER, mediaFolderId INTEGER, folderId INTEGER, artistId INTEGER, albumId INTEGER, genreId TEXT, coverArtId TEXT, title TEXT, duration INTEGER, bitrate INTEGER, trackNumber INTEGER, discNumber INTEGER, year INTEGER, size INTEGER, path TEXT, lastPlayed REAL, artistName TEXT, albumName TEXT, PRIMARY KEY (songId, serverId))"];
+            [db executeUpdate:@"CREATE INDEX songs_mediaFolderId ON songs (mediaFolderId)"];
+            [db executeUpdate:@"CREATE INDEX songs_folderId ON songs (folderId)"];
+            [db executeUpdate:@"CREATE INDEX songs_artistId ON songs (artistId)"];
+            [db executeUpdate:@"CREATE INDEX songs_albumId ON songs (albumId)"];
+        }
+        
+        if (![db tableExists:@"cachedSongs"])
+        {
+            [db executeUpdate:@"CREATE TABLE cachedSongs (songId INTEGER, serverId INTEGER, contentTypeId INTEGER, transcodedContentTypeId INTEGER, mediaFolderId INTEGER, folderId INTEGER, artistId INTEGER, albumId INTEGER, genreId TEXT, coverArtId TEXT, title TEXT, duration INTEGER, bitrate INTEGER, trackNumber INTEGER, discNumber INTEGER, year INTEGER, size INTEGER, path TEXT, lastPlayed REAL, artistName TEXT, albumName TEXT, PRIMARY KEY (songId, serverId))"];
+            [db executeUpdate:@"CREATE INDEX cachedSongs_mediaFolderId ON cachedSongs (mediaFolderId)"];
+            [db executeUpdate:@"CREATE INDEX cachedSongs_folderId ON cachedSongs (folderId)"];
+            [db executeUpdate:@"CREATE INDEX cachedSongs_artistId ON cachedSongs (artistId)"];
+            [db executeUpdate:@"CREATE INDEX cachedSongs_albumId ON cachedSongs (albumId)"];
         }
         
         if (![db tableExists:@"genres"])

@@ -739,10 +739,7 @@
 {
 	@synchronized(self)
 	{
-		if (self.isCacheUnlocked)
-			return [_userDefaults boolForKey:@"enableSongCachingSetting"];
-		else
-			return NO;
+		return [_userDefaults boolForKey:@"enableSongCachingSetting"];
 	}
 }
 

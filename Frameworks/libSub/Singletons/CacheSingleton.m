@@ -10,6 +10,7 @@
 #import "iSub-Swift.h"
 #import "ISMSStreamManager.h"
 #import "ISMSCacheQueueManager.h"
+#import "Imports.h"
 
 LOG_LEVEL_ISUB_DEFAULT
 
@@ -43,7 +44,7 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (NSUInteger)numberOfCachedSongs
 {
-    NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE fullyCached = 1";
+    NSString *query = @"SELECT COUNT(*) FROM cachedSongsMetadata WHERE fullyCached = 1";
     return [databaseS.songModelReadDbPool intForQuery:query];
     
     //return [[ISMSPlaylist downloadedSongs] songCount];

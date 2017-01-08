@@ -14,6 +14,7 @@
 
 - (BOOL)insertModel;
 - (BOOL)replaceModel;
+- (BOOL)cacheModel;
 - (BOOL)deleteModel;
 
 - (void)reloadSubmodels;

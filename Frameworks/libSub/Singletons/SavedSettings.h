@@ -40,11 +40,6 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 @property (nullable, strong) NSDate *rootFoldersReloadTime;
 @property (nullable, strong) NSNumber *rootFoldersSelectedFolderId;
 
-// Lite Version Properties
-@property (readonly) BOOL isPlaylistUnlocked;
-@property (readonly) BOOL isCacheUnlocked;
-@property (readonly) BOOL isVideoUnlocked;
-
 @property BOOL isForceOfflineMode;
 @property NSInteger recoverSetting;
 @property NSInteger maxBitrateWifi;
