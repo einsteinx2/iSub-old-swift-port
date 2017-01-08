@@ -207,7 +207,12 @@ class ItemViewController: DraggableTableViewController {
         switch indexPath.section {
         case foldersSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-            cell.alwaysShowCoverArt = true
+            
+            // Don't show cover art for root folders list
+            if self.navigationController?.viewControllers.first != self {
+                cell.alwaysShowCoverArt = true
+            }
+            
             if sectionIndexes != nil {
                 cell.indexShowing = true
             }
