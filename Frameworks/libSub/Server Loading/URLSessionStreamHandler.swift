@@ -97,6 +97,8 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         
         isCanceled = true
         
+        task?.cancel()
+        
         terminateDownload()
         
         try? FileManager.default.removeItem(atPath: filePath)
@@ -113,8 +115,6 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         
         fileHandle?.closeFile()
         fileHandle = nil
-        
-        task?.cancel()
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
