@@ -24,7 +24,7 @@ class CacheViewController: DraggableTableViewController {
         self.edgesForExtendedLayout = UIRectEdge()
         self.automaticallyAdjustsScrollViewInsets = false
         
-        self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 50))
+        self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 64))
     }
 
     override func setupLeftBarButton() -> UIBarButtonItem {
