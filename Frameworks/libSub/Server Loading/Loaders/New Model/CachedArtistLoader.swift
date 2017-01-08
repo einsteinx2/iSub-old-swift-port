@@ -29,10 +29,7 @@ class CachedArtistLoader: CachedDatabaseLoader {
     }
     
     override func loadModelsFromDatabase() -> Bool {
-        if let artist = associatedObject as? ISMSArtist {
-            artist.reloadSubmodels()
-            albums = artist.albums
-        }
+        albums = ISMSAlbum.albums(inArtist: artistId, serverId: serverId, cachedTable: true)
         return true
     }
 }

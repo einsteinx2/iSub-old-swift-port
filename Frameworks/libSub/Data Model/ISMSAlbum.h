@@ -34,7 +34,7 @@
 
 - (nonnull instancetype)initWithRXMLElement:(nonnull RXMLElement *)element serverId:(NSInteger)serverId;
 
-+ (nonnull NSArray<ISMSAlbum*> *)albumsInArtist:(NSInteger)artistId serverId:(NSInteger)serverId;
++ (nonnull NSArray<ISMSAlbum*> *)albumsInArtist:(NSInteger)artistId serverId:(NSInteger)serverId cachedTable:(BOOL)cachedTable;
 
 + (nonnull NSArray<ISMSAlbum*> *)allAlbumsWithServerId:(nullable NSNumber *)serverId;
 + (BOOL)deleteAllAlbumsWithServerId:(nullable NSNumber *)serverId;

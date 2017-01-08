@@ -263,27 +263,18 @@ class ItemViewController: DraggableTableViewController {
             switch indexPath.section {
             case foldersSectionIndex:
                 let folder = self.viewModel.folders[indexPath.row]
-                if let folderId = folder.folderId as? Int, let mediaFolderId = folder.mediaFolderId as? Int {
-                    let folderLoader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
-                    let viewModel = ItemViewModel(loader: folderLoader)
-                    let viewController = ItemViewController(viewModel: viewModel)
-                    self.pushCustom(viewController)
+                if let loader = viewModel.loaderForFolder(folder) {
+                    pushItemController(loader: loader)
                 }
             case artistsSectionIndex:
                 let artist = self.viewModel.artists[indexPath.row]
-                if let artistId = artist.artistId as? Int {
-                    let artistLoader = ArtistLoader(artistId: artistId)
-                    let viewModel = ItemViewModel(loader: artistLoader)
-                    let viewController = ItemViewController(viewModel: viewModel)
-                    self.pushCustom(viewController)
+                if let loader = viewModel.loaderForArtist(artist) {
+                    pushItemController(loader: loader)
                 }
             case albumsSectionIndex:
                 let album = self.viewModel.albums[indexPath.row]
-                if let albumId = album.albumId as? Int {
-                    let albumLoader = AlbumLoader(albumId: albumId)
-                    let viewModel = ItemViewModel(loader: albumLoader)
-                    let viewController = ItemViewController(viewModel: viewModel)
-                    self.pushCustom(viewController)
+                if let loader = viewModel.loaderForAlbum(album) {
+                    pushItemController(loader: loader)
                 }
             case songsSectionIndex:
                 // TODO: Implement a way to just switch play index when we're playing from the same array to save time
@@ -298,6 +289,12 @@ class ItemViewController: DraggableTableViewController {
         {
             self.tableView.deselectRow(at: indexPath, animated: false)
         }
+    }
+    
+    fileprivate func pushItemController(loader: ItemLoader) {
+        let viewModel = ItemViewModel(loader: loader)
+        let viewController = ItemViewController(viewModel: viewModel)
+        self.pushCustom(viewController)
     }
 }
 

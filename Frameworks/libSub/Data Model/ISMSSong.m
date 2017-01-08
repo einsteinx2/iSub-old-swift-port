@@ -518,12 +518,15 @@
 
 #pragma mark - Sort this stuff -
 
-+ (NSArray<ISMSSong*> *)songsInFolder:(NSInteger)folderId serverId:(NSInteger)serverId
++ (NSArray<ISMSSong*> *)songsInFolder:(NSInteger)folderId serverId:(NSInteger)serverId cachedTable:(BOOL)cachedTable
 {
     NSMutableArray<ISMSSong*> *songs = [[NSMutableArray alloc] init];
     
     [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-        NSString *query = @"SELECT * FROM songs WHERE folderId = ? AND serverId = ?";
+        NSString *table = cachedTable ? @"cachedSongs" : @"songs";
+        NSString *query = @"SELECT * FROM %@ WHERE folderId = ? AND serverId = ?";
+        query = [NSString stringWithFormat:query, table];
+
         FMResultSet *result = [db executeQuery:query, @(folderId), @(serverId)];
         while ([result next])
         {
@@ -539,12 +542,15 @@
     return songs;
 }
 
-+ (NSArray<ISMSSong*> *)songsInAlbum:(NSInteger)albumId serverId:(NSInteger)serverId
++ (NSArray<ISMSSong*> *)songsInAlbum:(NSInteger)albumId serverId:(NSInteger)serverId cachedTable:(BOOL)cachedTable
 {
     NSMutableArray<ISMSSong*> *songs = [[NSMutableArray alloc] init];
     
     [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-        NSString *query = @"SELECT * FROM songs WHERE albumId = ? AND serverId = ?";
+        NSString *table = cachedTable ? @"cachedSongs" : @"songs";
+        NSString *query = @"SELECT * FROM %@ WHERE albumId = ? AND serverId = ?";
+        query = [NSString stringWithFormat:query, table];
+
         FMResultSet *result = [db executeQuery:query, @(albumId), @(serverId)];
         while ([result next])
         {

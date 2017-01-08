@@ -122,12 +122,15 @@
     return [NSString stringWithFormat:@"%@: name: %@, serverId: %@, albumId: %@, coverArtId: %@, artistName: %@, artistId: %@", [super description], self.name, self.serverId, self.self.albumId, self.coverArtId, self.artist.name, self.artistId];
 }
 
-+ (NSArray<ISMSAlbum*> *)albumsInArtist:(NSInteger)artistId serverId:(NSInteger)serverId
++ (NSArray<ISMSAlbum*> *)albumsInArtist:(NSInteger)artistId serverId:(NSInteger)serverId cachedTable:(BOOL)cachedTable
 {
     NSMutableArray<ISMSAlbum*> *albums = [[NSMutableArray alloc] init];
     
     [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-        NSString *query = @"SELECT * FROM albums WHERE artistId = ? AND serverId = ?";
+        NSString *table = cachedTable ? @"cachedAlbums" : @"albums";
+        NSString *query = @"SELECT * FROM %@ WHERE artistId = ? AND serverId = ?";
+        query = [NSString stringWithFormat:query, table];
+        
         FMResultSet *r = [db executeQuery:query, @(artistId), @(serverId)];
         while ([r next])
         {
@@ -361,7 +364,7 @@
             _genre = [[ISMSGenre alloc] initWithGenreId:self.genreId.integerValue];
         }
         
-        _songs = [ISMSSong songsInAlbum:self.albumId.integerValue serverId:self.serverId.integerValue];
+        _songs = [ISMSSong songsInAlbum:self.albumId.integerValue serverId:self.serverId.integerValue cachedTable:NO];
     }
 }
 

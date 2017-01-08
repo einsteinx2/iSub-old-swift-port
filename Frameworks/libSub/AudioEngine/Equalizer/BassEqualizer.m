@@ -196,7 +196,6 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)removeAllEqualizerValues
 {
-    NSLog(@"removeAllEqualizerValues");
 	[self clearEqualizerValues];
 	
     @synchronized(self.eqValues)

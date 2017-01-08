@@ -156,7 +156,7 @@
 {
     @synchronized(self)
     {
-        _albums = [ISMSAlbum albumsInArtist:self.artistId.integerValue serverId:self.serverId.integerValue];
+        _albums = [ISMSAlbum albumsInArtist:self.artistId.integerValue serverId:self.serverId.integerValue cachedTable:NO];
     }
 }
 

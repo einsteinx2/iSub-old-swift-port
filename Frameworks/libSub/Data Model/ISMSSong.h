@@ -66,8 +66,8 @@
 
 - (nonnull instancetype)initWithRXMLElement:(nonnull RXMLElement *)element serverId:(NSInteger)serverId;
 
-+ (nonnull NSArray<ISMSSong*> *)songsInFolder:(NSInteger)folderId serverId:(NSInteger)serverId;
-+ (nonnull NSArray<ISMSSong*> *)songsInAlbum:(NSInteger)albumId serverId:(NSInteger)serverId;
++ (nonnull NSArray<ISMSSong*> *)songsInFolder:(NSInteger)folderId serverId:(NSInteger)serverId cachedTable:(BOOL)cachedTable;
++ (nonnull NSArray<ISMSSong*> *)songsInAlbum:(NSInteger)albumId serverId:(NSInteger)serverId cachedTable:(BOOL)cachedTable;
 + (nonnull NSArray<ISMSSong*> *)rootSongsInMediaFolder:(NSInteger)mediaFolderId serverId:(NSInteger)serverId;
 + (nonnull NSArray<ISMSSong*> *)allCachedSongs;
 

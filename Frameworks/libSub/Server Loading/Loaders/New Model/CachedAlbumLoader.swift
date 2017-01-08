@@ -13,6 +13,7 @@ class CachedAlbumLoader: CachedDatabaseLoader {
     let serverId: Int
     
     var songs = [ISMSSong]()
+    var songsDuration = 0.0
     
     override var items: [ISMSItem] {
         return songs
@@ -29,9 +30,12 @@ class CachedAlbumLoader: CachedDatabaseLoader {
     }
     
     override func loadModelsFromDatabase() -> Bool {
-        if let album = associatedObject as? ISMSAlbum {
-            album.reloadSubmodels()
-            songs = album.songs
+        songs = ISMSSong.songs(inAlbum: albumId, serverId: serverId, cachedTable: true)
+        songsDuration = songs.reduce(0.0) { totalDuration, song -> Double in
+            if let duration = song.duration as? Double {
+                return totalDuration + duration
+            }
+            return totalDuration
         }
         return true
     }

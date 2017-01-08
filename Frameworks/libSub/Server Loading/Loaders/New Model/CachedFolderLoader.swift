@@ -33,16 +33,13 @@ class CachedFolderLoader: CachedDatabaseLoader {
     }
     
     override func loadModelsFromDatabase() -> Bool {
-        if let folder = associatedObject as? ISMSFolder {
-            folder.reloadSubmodels()
-            folders = folder.folders
-            songs = folder.songs
-            songsDuration = songs.reduce(0.0) { totalDuration, song -> Double in
-                if let duration = song.duration as? Double {
-                    return totalDuration + duration
-                }
-                return totalDuration
+        folders = ISMSFolder.folders(inFolder: folderId, serverId: serverId, cachedTable: true)
+        songs = ISMSSong.songs(inFolder: folderId, serverId: serverId, cachedTable: true)
+        songsDuration = songs.reduce(0.0) { totalDuration, song -> Double in
+            if let duration = song.duration as? Double {
+                return totalDuration + duration
             }
+            return totalDuration
         }
         return true
     }

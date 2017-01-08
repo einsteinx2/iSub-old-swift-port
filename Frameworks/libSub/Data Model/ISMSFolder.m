@@ -187,8 +187,8 @@ static NSArray *_ignoredArticles = nil;
     @synchronized(self)
     {
         NSInteger folderId = self.folderId.integerValue;
-        _subfolders = [self.class foldersInFolder:folderId serverId:self.serverId.integerValue];
-        _songs = [ISMSSong songsInFolder:folderId serverId:self.serverId.integerValue];
+        _subfolders = [self.class foldersInFolder:folderId serverId:self.serverId.integerValue cachedTable:NO];
+        _songs = [ISMSSong songsInFolder:folderId serverId:self.serverId.integerValue cachedTable:NO];
     }
 }
 
@@ -218,12 +218,14 @@ static NSArray *_ignoredArticles = nil;
     }
 }
 
-+ (NSArray<ISMSFolder*> *)foldersInFolder:(NSInteger)folderId serverId:(NSInteger)serverId
++ (NSArray<ISMSFolder*> *)foldersInFolder:(NSInteger)folderId serverId:(NSInteger)serverId cachedTable:(BOOL)cachedTable
 {
     NSMutableArray<ISMSFolder*> *folders = [[NSMutableArray alloc] init];
     
     [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-        NSString *query = @"SELECT * FROM folders WHERE parentFolderId = ? AND serverId = ?";
+        NSString *table = cachedTable ? @"cachedArtists" : @"artists";
+        NSString *query = @"SELECT * FROM %@ WHERE parentFolderId = ? AND serverId = ?";
+        query = [NSString stringWithFormat:query, table];
         
         FMResultSet *r = [db executeQuery:query, @(folderId), @(serverId)];
         while ([r next])

@@ -65,24 +65,16 @@ class CacheViewController: DraggableTableViewController {
             switch indexPath.row {
             case foldersRowIndex:
                 let loader = CachedRootFoldersLoader()
-                let viewModel = ItemViewModel(loader: loader)
-                let viewController = ItemViewController(viewModel: viewModel)
-                self.pushCustom(viewController)
+                pushItemController(loader: loader)
             case artistsRowIndex:
                 let loader = CachedRootArtistsLoader()
-                let viewModel = ItemViewModel(loader: loader)
-                let viewController = ItemViewController(viewModel: viewModel)
-                self.pushCustom(viewController)
+                pushItemController(loader: loader)
             case albumsRowIndex:
                 let loader = CachedRootAlbumsLoader()
-                let viewModel = ItemViewModel(loader: loader)
-                let viewController = ItemViewController(viewModel: viewModel)
-                self.pushCustom(viewController)
+                pushItemController(loader: loader)
             case songsRowIndex:
                 let loader = CachedRootSongsLoader()
-                let viewModel = ItemViewModel(loader: loader)
-                let viewController = ItemViewController(viewModel: viewModel)
-                self.pushCustom(viewController)
+                pushItemController(loader: loader)
             default:
                 break
             }
@@ -91,5 +83,11 @@ class CacheViewController: DraggableTableViewController {
         {
             self.tableView.deselectRow(at: indexPath, animated: false)
         }
+    }
+    
+    fileprivate func pushItemController(loader: ItemLoader) {
+        let viewModel = ItemViewModel(loader: loader)
+        let viewController = ItemViewController(viewModel: viewModel)
+        self.pushCustom(viewController)
     }
 }

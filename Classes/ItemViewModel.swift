@@ -106,4 +106,46 @@ class ItemViewModel : NSObject {
     func cancelLoad() {
         loader.cancelLoad()
     }
+    
+    func loaderForFolder(_ folder: ISMSFolder) -> ItemLoader? {
+        var folderLoader: ItemLoader?
+        
+        if let folderId = folder.folderId as? Int, let mediaFolderId = folder.mediaFolderId as? Int, let serverId = folder.serverId as? Int {
+            if loader is CachedDatabaseLoader {
+                folderLoader = CachedFolderLoader(folderId: folderId, serverId: serverId)
+            } else {
+                folderLoader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
+            }
+        }
+        
+        return folderLoader
+    }
+    
+    func loaderForArtist(_ artist: ISMSArtist) -> ItemLoader? {
+        var artistLoader: ItemLoader?
+        
+        if let artistId = artist.artistId as? Int, let serverId = artist.serverId as? Int {
+            if loader is CachedDatabaseLoader {
+                artistLoader = CachedArtistLoader(artistId: artistId, serverId: serverId)
+            } else {
+                artistLoader = ArtistLoader(artistId: artistId)
+            }
+        }
+        
+        return artistLoader
+    }
+    
+    func loaderForAlbum(_ album: ISMSAlbum) -> ItemLoader? {
+        var albumLoader: ItemLoader?
+        
+        if let albumId = album.albumId as? Int, let serverId = album.serverId as? Int {
+            if loader is CachedDatabaseLoader {
+                albumLoader = CachedAlbumLoader(albumId: albumId, serverId: serverId)
+            } else {
+                albumLoader = AlbumLoader(albumId: albumId)
+            }
+        }
+        
+        return albumLoader
+    }
 }
