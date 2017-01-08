@@ -13,6 +13,7 @@ class CenterPanelContainerViewController: UIViewController {
     
     fileprivate let contentView = UIView()
     fileprivate let miniPlayer = MiniPlayerViewController()
+    fileprivate let miniPlayerHeight = 64
     fileprivate var miniPlayerShowing = false
     
     var contentController: UIViewController? {
@@ -45,10 +46,10 @@ class CenterPanelContainerViewController: UIViewController {
         self.addChildViewController(miniPlayer)
         self.view.addSubview(miniPlayer.view)
         miniPlayer.view.snp.makeConstraints { make in
-            make.height.equalTo(64)
+            make.height.equalTo(miniPlayerHeight)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.bottom.equalToSuperview().offset(miniPlayerShowing ? 0: 50)
+            make.bottom.equalToSuperview().offset(miniPlayerShowing ? 0: miniPlayerHeight)
         }
     }
     
@@ -95,20 +96,20 @@ class CenterPanelContainerViewController: UIViewController {
     func showMiniPlayer(animated: Bool) {
         if !miniPlayerShowing {
             miniPlayerShowing = true
-            updateConstraintOffsets(contentViewOffset: -50, miniPlayerOffset: 0, animated: true)
+            updateMiniPlayerBottomConstraint(offset: 0, animated: true)
         }
     }
     
     func hideMiniPlayer(animated: Bool) {
         if miniPlayerShowing {
             miniPlayerShowing = false
-            updateConstraintOffsets(contentViewOffset: 0, miniPlayerOffset: 50, animated: true)
+            updateMiniPlayerBottomConstraint(offset: miniPlayerHeight, animated: true)
         }
     }
     
-    fileprivate func updateConstraintOffsets(contentViewOffset: Float, miniPlayerOffset: Float, animated: Bool) {
+    fileprivate func updateMiniPlayerBottomConstraint(offset: Int, animated: Bool) {
         miniPlayer.view.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().offset(miniPlayerOffset)
+            make.bottom.equalToSuperview().offset(offset)
         }
 
         if animated {
