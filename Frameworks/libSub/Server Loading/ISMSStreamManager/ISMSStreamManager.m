@@ -198,7 +198,6 @@ LOG_LEVEL_ISUB_DEBUG
                 [handler.song removeFromCachedSongsTable];
                 //[[ISMSPlaylist downloadedSongs] removeSongWithSong:handler.song notify:YES];
             }
-			//[handler.song removeFromCachedSongsTableDbQueue];
 		}
 	}
 	

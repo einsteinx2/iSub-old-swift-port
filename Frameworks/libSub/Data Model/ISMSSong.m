@@ -722,8 +722,22 @@
 
 - (void)removeFromCachedSongsTable {
     [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
-        NSString *query = @"DELETE FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?";
-        [db executeUpdate:query, self.songId, self.serverId];
+        NSMutableArray *queries = [NSMutableArray array];
+        
+        // Remove the metadata entry
+        [queries addObject:@"DELETE FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?"];
+        
+        // Remove the song table entry
+        [queries addObject:@"DELETE FROM cachedSongs WHERE songId = ? AND serverId = ?"];
+        
+        // Remove artist/album/folder entries if no other songs reference them
+        [queries addObject:@"DELETE FROM cachedFolders c WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE folderId = c.folderId AND serverId = cf.serverId)"];
+        [queries addObject:@"DELETE FROM cachedArtists c WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE artistId = c.artistId AND serverId = ca.serverId)"];
+        [queries addObject:@"DELETE FROM cachedAlbums c WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE albumId = cf.albumId AND serverId = cf.serverId)"];
+        
+        for (NSString *query in queries) {
+            [db executeUpdate:query, self.songId, self.serverId];
+        }
     }];
 }
 

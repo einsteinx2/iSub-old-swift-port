@@ -246,7 +246,7 @@ static NSArray *_ignoredArticles = nil;
     
     [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
         NSString *query = @"SELECT cf.*, cf.folderId FROM cachedFolders cf "
-                          @"WHERE (SELECT COUNT(*) FROM cachedFolders WHERE parentFolderId = cf.folderId) = 0";
+                          @"WHERE NOT EXISTS (SELECT 1 FROM cachedFolders WHERE parentFolderId = cf.folderId)";
         
         FMResultSet *r = [db executeQuery:query];
         while ([r next])
