@@ -20,6 +20,7 @@ class PlayerViewController: UIViewController {
     var progressDisplayLink: CADisplayLink!
     
     let tapRecognizer = UITapGestureRecognizer()
+    let swipeRecognizer = UISwipeGestureRecognizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,6 +130,10 @@ class PlayerViewController: UIViewController {
         
         tapRecognizer.addTarget(self, action: #selector(hidePlayer))
         coverArtView.addGestureRecognizer(tapRecognizer)
+        
+        swipeRecognizer.direction = .down
+        swipeRecognizer.addTarget(self, action: #selector(hidePlayer))
+        self.view.addGestureRecognizer(swipeRecognizer)
     }
     
     deinit {

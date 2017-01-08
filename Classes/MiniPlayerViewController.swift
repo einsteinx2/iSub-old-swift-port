@@ -18,6 +18,7 @@ class MiniPlayerViewController: UIViewController {
     var progressDisplayLink: CADisplayLink!
     
     let tapRecognizer = UITapGestureRecognizer()
+    let swipeRecognizer = UISwipeGestureRecognizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,6 +94,10 @@ class MiniPlayerViewController: UIViewController {
         
         tapRecognizer.addTarget(self, action: #selector(showPlayer))
         self.view.addGestureRecognizer(tapRecognizer)
+        
+        swipeRecognizer.direction = .up
+        swipeRecognizer.addTarget(self, action: #selector(showPlayer))
+        self.view.addGestureRecognizer(swipeRecognizer)
     }
     
     deinit {
