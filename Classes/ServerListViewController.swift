@@ -51,7 +51,8 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
     }
     
     override func setupLeftBarButton() -> UIBarButtonItem {
-        return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(ServerListViewController.showMenu))
+        //return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(ServerListViewController.showMenu))
+        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ServerListViewController.addAction))
     }
     
     func reloadTable() {
