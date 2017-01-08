@@ -223,7 +223,7 @@ static NSArray *_ignoredArticles = nil;
     NSMutableArray<ISMSFolder*> *folders = [[NSMutableArray alloc] init];
     
     [databaseS.songModelReadDbPool inDatabase:^(FMDatabase *db) {
-        NSString *table = cachedTable ? @"cachedArtists" : @"artists";
+        NSString *table = cachedTable ? @"cachedFolders" : @"folders";
         NSString *query = @"SELECT * FROM %@ WHERE parentFolderId = ? AND serverId = ?";
         query = [NSString stringWithFormat:query, table];
         

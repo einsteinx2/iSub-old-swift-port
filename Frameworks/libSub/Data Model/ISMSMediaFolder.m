@@ -163,6 +163,8 @@
 
 + (NSArray<ISMSFolder*> *)allRootFoldersWithServerId:(NSNumber *)serverId
 {
+    NSArray *ignoredArticles = databaseS.ignoredArticles;
+
     NSMutableArray<ISMSFolder*> *rootFolders = [[NSMutableArray alloc] init];
     NSMutableArray *rootFoldersNumbers = [[NSMutableArray alloc] init];
     
@@ -182,20 +184,28 @@
             ISMSFolder *folder = [[ISMSFolder alloc] init];
             [folder _assignPropertiesFromResultSet:r];
             
-            if (folder.name.length > 0 && isnumber([folder.name characterAtIndex:0]))
-                [rootFoldersNumbers addObject:folder];
-            else
-                [rootFolders addObject:folder];
+            if (folder.name.length > 0) {
+                NSString *name = [databaseS name:folder.name ignoringArticles:ignoredArticles];
+                if (isalpha([name characterAtIndex:0])) {
+                    [rootFolders addObject:folder];
+                } else {
+                    [rootFoldersNumbers addObject:folder];
+                }
+            }
         }
         [r close];
     }];
     
-    NSArray *ignoredArticles = databaseS.ignoredArticles;
-    
-    // Sort objects without indefinite articles
+    // Sort objects without indefinite articles (try to match Subsonic's sorting)
     [rootFolders sortUsingComparator:^NSComparisonResult(ISMSFolder *obj1, ISMSFolder *obj2) {
         NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         return [name1 caseInsensitiveCompare:name2];
     }];
     

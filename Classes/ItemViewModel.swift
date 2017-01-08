@@ -13,7 +13,7 @@ protocol ItemViewModelDelegate {
     func loadingError(_ error: String)
 }
 
-typealias LoadModelsCompletion = (_ success: Bool, _ error: NSError?) -> Void
+typealias LoadModelsCompletion = (_ success: Bool, _ error: Error?) -> Void
 
 class ItemViewModel : NSObject {
     
@@ -52,6 +52,7 @@ class ItemViewModel : NSObject {
     func loadModelsFromWeb(_ completion: LoadModelsCompletion?) {
         if loader.loaderState != .loading {
             loader.callbackBlock = { success, error, loader in
+                completion?(success, error)
                 if success {
                     self.processModels()
                     self.delegate?.itemsChanged()

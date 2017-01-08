@@ -109,10 +109,10 @@
          NSString *insertType = replace ? @"REPLACE" : @"INSERT";
          NSString *table = cachedTable ? @"cachedArtists" : @"artists";
          
-         NSString *query = @"%@ INTO %@ (artistId, serverId, name, albumCount) VALUES (?, ?, ?, ?)";
+         NSString *query = @"%@ INTO %@ (artistId, serverId, name, coverArtId, albumCount) VALUES (?, ?, ?, ?, ?)";
          query = [NSString stringWithFormat:query, insertType, table];
          
-         success = [db executeUpdate:query, self.artistId, self.serverId, self.name, self.albumCount];
+         success = [db executeUpdate:query, self.artistId, self.serverId, self.name, self.coverArtId, self.albumCount];
      }];
     return success;
 }
@@ -204,10 +204,16 @@
     
     NSArray *ignoredArticles = databaseS.ignoredArticles;
     
-    // Sort objects without indefinite articles
+    // Sort objects without indefinite articles (try to match Subsonic's sorting)
     [artists sortUsingComparator:^NSComparisonResult(ISMSArtist *obj1, ISMSArtist *obj2) {
         NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         return [name1 caseInsensitiveCompare:name2];
     }];
     
@@ -239,10 +245,16 @@
     
     NSArray *ignoredArticles = databaseS.ignoredArticles;
     
-    // Sort objects without indefinite articles
+    // Sort objects without indefinite articles (try to match Subsonic's sorting)
     [artists sortUsingComparator:^NSComparisonResult(ISMSArtist *obj1, ISMSArtist *obj2) {
         NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         return [name1 caseInsensitiveCompare:name2];
     }];
     

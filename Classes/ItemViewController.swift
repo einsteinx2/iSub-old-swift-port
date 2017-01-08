@@ -42,9 +42,8 @@ class ItemViewController: DraggableTableViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         
         viewModel.delegate = self
-        if !viewModel.loadModelsFromDatabase() {
-            viewModel.loadModelsFromWeb(nil)
-        }
+        _ = viewModel.loadModelsFromDatabase()
+        viewModel.loadModelsFromWeb(nil)
         
         self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 50))
     }

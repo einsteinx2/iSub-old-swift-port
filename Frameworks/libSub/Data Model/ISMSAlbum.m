@@ -175,10 +175,16 @@
     
     NSArray *ignoredArticles = databaseS.ignoredArticles;
     
-    // Sort objects without indefinite articles
-    [albums sortUsingComparator:^NSComparisonResult(ISMSArtist *obj1, ISMSArtist *obj2) {
+    // Sort objects without indefinite articles (try to match Subsonic's sorting)
+    [albums sortUsingComparator:^NSComparisonResult(ISMSAlbum *obj1, ISMSAlbum *obj2) {
         NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         return [name1 caseInsensitiveCompare:name2];
     }];
     
@@ -212,10 +218,16 @@
     
     NSArray *ignoredArticles = databaseS.ignoredArticles;
     
-    // Sort objects without indefinite articles
-    [albums sortUsingComparator:^NSComparisonResult(ISMSArtist *obj1, ISMSArtist *obj2) {
+    // Sort objects without indefinite articles (try to match Subsonic's sorting)
+    [albums sortUsingComparator:^NSComparisonResult(ISMSAlbum *obj1, ISMSAlbum *obj2) {
         NSString *name1 = [databaseS name:obj1.name ignoringArticles:ignoredArticles];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name1 = [name1 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         NSString *name2 = [databaseS name:obj2.name ignoringArticles:ignoredArticles];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@" " withString:@""];
+        name2 = [name2 stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        
         return [name1 caseInsensitiveCompare:name2];
     }];
     
