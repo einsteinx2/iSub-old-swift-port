@@ -15,7 +15,7 @@
 {
 	NSString *clean = [self gtm_stringByUnescapingFromHTML];
 	if (clean)
-		clean = [clean stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        clean = [clean stringByRemovingPercentEncoding];
 	
 	return clean ? clean : self;
 	//return [[self gtm_stringByUnescapingFromHTML] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];

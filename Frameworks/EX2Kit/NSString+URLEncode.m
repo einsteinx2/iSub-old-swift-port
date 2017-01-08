@@ -12,11 +12,8 @@
 
 + (NSString *)URLEncodeString:(NSString *)string 
 {
-    NSString *result = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                    (__bridge CFStringRef)string, NULL, CFSTR(";/?:@&=$+{}[]<>,"), kCFStringEncodingUTF8);
-    
-    
-    return result;
+    NSCharacterSet *charSet = [NSCharacterSet characterSetWithCharactersInString:@";/?:@&=$+{}[]<>,"];
+    return [string stringByAddingPercentEncodingWithAllowedCharacters:charSet];
 } 
 
 - (NSString *)URLEncodeString 
