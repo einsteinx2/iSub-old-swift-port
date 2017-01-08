@@ -146,6 +146,10 @@ class NewMenuViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: self.reuseIdentifier, for: indexPath)
         cell.backgroundColor = UIColor.clear
+        cell.selectionStyle = .default
+        let selectedBackgroundView = UIView()
+        selectedBackgroundView.backgroundColor = UIColor.darkGray
+        cell.selectedBackgroundView = selectedBackgroundView
         cell.textLabel?.textColor = UIColor.white
         
         let menuItem = self.menuItems[indexPath.row]
@@ -155,7 +159,7 @@ class NewMenuViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 64
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
