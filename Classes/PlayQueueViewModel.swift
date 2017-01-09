@@ -92,4 +92,10 @@ class PlayQueueViewModel: NSObject {
         PlayQueue.si.removeSong(atIndex: index)
         reloadSongs()
     }
+    
+    func clearPlayQueue() {
+        PlayQueue.si.reset()
+        reloadSongs()
+        self.delegate?.itemsChanged()
+    }
 }

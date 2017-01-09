@@ -367,9 +367,22 @@ class PlayQueueViewController: DraggableTableViewController {
                 self.viewModel.playSong(atIndex: indexPath.row)
             })
             
+            let currentIndex = viewModel.currentIndex
+            if indexPath.row != currentIndex {
+                alertController.addAction(UIAlertAction(title: "Play Next", style: .default) { action in
+                    let toIndex = IndexPath(row: currentIndex + 1, section: 0)
+                    self.viewModel.moveSong(fromIndex: indexPath.row, toIndex: toIndex.row)
+                    self.tableView.moveRow(at: indexPath, to: toIndex)
+                })
+            }
+            
             alertController.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
                 self.viewModel.removeSong(atIndex: indexPath.row)
                 self.tableView.deleteRows(at: [indexPath], with: .right)
+            })
+            
+            alertController.addAction(UIAlertAction(title: "Clear Play Queue", style: .destructive) { action in
+                self.viewModel.clearPlayQueue()
             })
             
             alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

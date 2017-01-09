@@ -90,6 +90,7 @@ import Nuke
     open func reset() {
         playlist.removeAllSongs()
         audioEngine.stop()
+        currentIndex = -1
     }
     
     open func removeSongs(atIndexes indexes: IndexSet) {
