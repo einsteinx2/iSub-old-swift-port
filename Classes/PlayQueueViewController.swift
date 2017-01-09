@@ -129,7 +129,7 @@ class PlayQueueViewController: DraggableTableViewController {
                             viewModel.moveSong(fromIndex: fromIndex, toIndex: toIndex)
                         }
                     } else if !internallyDragging {
-                        viewModel.insertSong(song, atIndex: hoverRow)
+                        viewModel.insertSong(song, atIndex: hoverRow + 1)
                     }
                 }
             }
