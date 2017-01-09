@@ -350,7 +350,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         do {
             let table = Playlist.tableName(playlistId, serverId: serverId)
             try db.executeUpdate("INSERT INTO playlists VALUES (?, ?, ?)", playlistId, serverId, name)
-            try db.executeUpdate("CREATE TABLE \(table) (songIndex INTEGER PRIMARY KEY AUTOINCREMENT, songId INTEGER, serverId INTEGER)")
+            try db.executeUpdate("CREATE TABLE \(table) (songIndex INTEGER PRIMARY KEY, songId INTEGER, serverId INTEGER)")
             try db.executeUpdate("CREATE INDEX \(table)_songIdServerId ON \(table) (songId, serverId)")
         } catch {
             printError(error)
