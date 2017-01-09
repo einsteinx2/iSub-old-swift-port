@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class PlayerViewController: UIViewController {
     let coverArtView = CachedImageView()
@@ -24,6 +25,15 @@ class PlayerViewController: UIViewController {
     let tapRecognizer = UITapGestureRecognizer()
     let swipeRecognizer = UISwipeGestureRecognizer()
     
+    var coverArtViewSize: CGFloat {
+        return UIDevice.current.orientation.isLandscape ? 150 : 320
+    }
+    
+    var coverArtViewTopOffset: CGFloat {
+        let height = (UIDevice.current.orientation.isLandscape ? portraitScreenSize.width : portraitScreenSize.height)
+        return height * 0.1
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .lightGray
@@ -31,10 +41,10 @@ class PlayerViewController: UIViewController {
         coverArtView.isUserInteractionEnabled = true
         self.view.addSubview(coverArtView)
         coverArtView.snp.makeConstraints { make in
-            make.width.equalTo(320)
-            make.height.equalTo(320)
+            make.width.equalTo(coverArtViewSize)
+            make.height.equalTo(coverArtViewSize)
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().multipliedBy(0.66)
+            make.top.equalToSuperview().offset(coverArtViewTopOffset)
         }
         
         progressSlider.minimumValue = 0.0
@@ -160,6 +170,20 @@ class PlayerViewController: UIViewController {
         swipeRecognizer.direction = .down
         swipeRecognizer.addTarget(self, action: #selector(hidePlayer))
         self.view.addGestureRecognizer(swipeRecognizer)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        coverArtView.snp.updateConstraints { make in
+            make.height.equalTo(coverArtViewSize)
+            make.width.equalTo(coverArtViewSize)
+            make.top.equalToSuperview().offset(coverArtViewTopOffset)
+        }
+        
+        coordinator.animate(alongsideTransition: { context in
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
     
     deinit {

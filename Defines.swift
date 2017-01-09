@@ -30,12 +30,18 @@ func ISMSNormalize(_ value: CGFloat, multiplier: CGFloat = 1, maxDelta: CGFloat 
         return value
     }
 
-    let screenSize = UIScreen.main.bounds.size
-    let screenWidth = min(screenSize.width, screenSize.height)
+    let screenWidth = portraitScreenSize.width
     let percent = (screenWidth - BaseWidth)/screenWidth
     let normalizedValue = value * (1 + percent) * multiplier
     let minValue = min(normalizedValue, value + maxDelta) //capped by a max value if needed
     return ceil(minValue) // Return whole numbers
+}
+
+var portraitScreenSize: CGSize {
+    let screenSize = UIScreen.main.bounds.size
+    let width = min(screenSize.width, screenSize.height)
+    let height = max(screenSize.width, screenSize.height)
+    return CGSize(width: width, height: height)
 }
 
 func BytesForSecondsAtBitrate(_ seconds: Int, bitrate: Int) -> Int {
