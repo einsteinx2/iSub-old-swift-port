@@ -52,6 +52,7 @@ class ItemViewController: DraggableTableViewController {
         _ = viewModel.loadModelsFromDatabase()
         viewModel.loadModelsFromWeb(nil)
         
+        self.navigationItem.title = viewModel.navigationTitle
         self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 64))
     }
     

@@ -60,6 +60,7 @@ class NewMenuViewController: UITableViewController {
             let loader = RootFoldersLoader()
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
+            viewModel.navigationTitle = "Folders"
             let viewController = ItemViewController(viewModel: viewModel)
             let navController = NavigationStack(rootViewController: viewController)
             navController.navigationBar.barStyle = .black
@@ -76,6 +77,7 @@ class NewMenuViewController: UITableViewController {
             let loader = RootArtistsLoader()
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
+            viewModel.navigationTitle = "Artists"
             let viewController = ItemViewController(viewModel: viewModel)
             let navController = NavigationStack(rootViewController: viewController)
             navController.navigationBar.barStyle = .black
@@ -92,6 +94,7 @@ class NewMenuViewController: UITableViewController {
             let loader = RootAlbumsLoader()
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
+            viewModel.navigationTitle = "Albums"
             let viewController = ItemViewController(viewModel: viewModel)
             let navController = NavigationStack(rootViewController: viewController)
             navController.navigationBar.barStyle = .black

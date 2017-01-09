@@ -25,6 +25,8 @@ class CacheViewController: DraggableTableViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         
         self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 64))
+        
+        self.navigationItem.title = "Downloads"
     }
 
     override func setupLeftBarButton() -> UIBarButtonItem {
@@ -65,16 +67,16 @@ class CacheViewController: DraggableTableViewController {
             switch indexPath.row {
             case foldersRowIndex:
                 let loader = CachedRootFoldersLoader()
-                pushItemController(loader: loader)
+                pushItemController(loader: loader, title: "Downloaded Folders")
             case artistsRowIndex:
                 let loader = CachedRootArtistsLoader()
-                pushItemController(loader: loader)
+                pushItemController(loader: loader, title: "Downloaded Artists")
             case albumsRowIndex:
                 let loader = CachedRootAlbumsLoader()
-                pushItemController(loader: loader)
+                pushItemController(loader: loader, title: "Downloaded Albums")
             case songsRowIndex:
                 let loader = CachedRootSongsLoader()
-                pushItemController(loader: loader)
+                pushItemController(loader: loader, title: "Downloaded Songs")
             default:
                 break
             }
@@ -85,8 +87,9 @@ class CacheViewController: DraggableTableViewController {
         }
     }
     
-    fileprivate func pushItemController(loader: ItemLoader) {
+    fileprivate func pushItemController(loader: ItemLoader, title: String) {
         let viewModel = ItemViewModel(loader: loader)
+        viewModel.navigationTitle = title
         let viewController = ItemViewController(viewModel: viewModel)
         self.pushCustom(viewController)
     }

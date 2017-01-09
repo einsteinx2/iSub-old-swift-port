@@ -35,6 +35,7 @@ class ItemViewModel : NSObject {
     var delegate: ItemViewModelDelegate?
     
     var topLevelController = false
+    var navigationTitle: String?
     
     var shouldSetupRefreshControl: Bool {
         return !isBrowsingCache
