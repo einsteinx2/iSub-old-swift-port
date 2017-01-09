@@ -29,7 +29,7 @@
 @property (nullable, strong) NSDate *speedLoggingDate;
 @property NSUInteger speedLoggingLastSize;
 @property NSUInteger recentDownloadSpeedInBytesPerSec;
-@property NSUInteger numOfReconnects;
+@property NSInteger numOfReconnects;
 @property BOOL isTempCache;
 @property NSUInteger bitrate;
 @property (nonnull, readonly) NSString *filePath;

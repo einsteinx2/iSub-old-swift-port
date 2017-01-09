@@ -132,10 +132,12 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             do {
-                let query = "SELECT songId FROM \(self.tableName)"
+                let query = "SELECT songId, serverId FROM \(self.tableName)"
                 let result = try db.executeQuery(query)
                 while result.next() {
-                    if let song = ISMSSong(itemId: result.long(forColumnIndex: 0), serverId: self.playlistServerId) {
+                    let songId = result.long(forColumnIndex: 0)
+                    let serverId = result.long(forColumnIndex: 1)
+                    if let song = ISMSSong(itemId: songId, serverId: serverId) {
                         songs.append(song)
                     }
                 }
@@ -147,20 +149,27 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         return songs;
     }
     
-    open func containsSongId(_ songId: Int) -> Bool {
+    open func contains(song: ISMSSong) -> Bool {
+        if let songId = song.songId as? Int, let serverId = song.serverId as? Int {
+            return contains(songId: songId, serverId: serverId)
+        }
+        return false
+    }
+    
+    open func contains(songId: Int, serverId: Int) -> Bool {
         var count = 0
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            let query = "SELECT COUNT(*) FROM \(self.tableName) WHERE songId = ?"
-            count = db.longForQuery(query, songId)
+            let query = "SELECT COUNT(*) FROM \(self.tableName) WHERE songId = ? AND serverId = ?"
+            count = db.longForQuery(query, songId, serverId)
         }
         return count > 0
     }
     
-    open func indexOfSongId(_ songId: Int) -> Int? {
+    open func indexOf(songId: Int, serverId: Int) -> Int? {
         var index: Int?
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            let query = "SELECT songIndex FROM \(self.tableName) WHERE songId = ?"
-            index = db.longOptionalForQuery(query, songId)
+            let query = "SELECT songIndex FROM \(self.tableName) WHERE songId = ? AND serverId = ?"
+            index = db.longOptionalForQuery(query, songId, serverId)
         }
         
         if let index = index {
@@ -169,35 +178,45 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         return nil
     }
     
-    open func songAtIndex(_ index: Int) -> ISMSSong? {
+    open func song(atIndex index: Int) -> ISMSSong? {
         guard index >= 0 else {
             return nil
         }
         
         var songId: Int?
+        var serverId: Int?
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            let query = "SELECT songId FROM \(self.tableName) WHERE songIndex = ?"
-            songId = db.longOptionalForQuery(query, index + 1)
+            let query = "SELECT songId, serverId FROM \(self.tableName) WHERE songIndex = ?"
+            do {
+                let result = try db.executeQuery(query, index + 1)
+                if result.next() {
+                    songId = result.long(forColumnIndex: 0)
+                    serverId = result.long(forColumnIndex: 1)
+                }
+                result.close()
+            } catch {
+                printError(error)
+            }
         }
         
-        if let songId = songId {
-            return ISMSSong(itemId: songId, serverId: playlistServerId)
+        if let songId = songId, let serverId = serverId {
+            return ISMSSong(itemId: songId, serverId: serverId)
         } else {
             return nil
         }
     }
     
-    open func addSong(song: ISMSSong, notify: Bool = false) {
-        if let songId = song.songId?.intValue {
-            addSong(songId: songId, notify: notify)
+    open func add(song: ISMSSong, notify: Bool = false) {
+        if let songId = song.songId as? Int, let serverId = song.serverId as? Int {
+            add(songId: songId, serverId: serverId, notify: notify)
         }
     }
     
-    open func addSong(songId: Int, notify: Bool = false) {
-        let query = "INSERT INTO \(self.tableName) (songId) VALUES (?)"
+    open func add(songId: Int, serverId: Int, notify: Bool = false) {
+        let query = "INSERT INTO \(self.tableName) (songId, serverId) VALUES (?, ?)"
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
-                try db.executeUpdate(query, songId)
+                try db.executeUpdate(query, songId, serverId)
             } catch {
                 printError(error)
             }
@@ -208,21 +227,9 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func addSongs(songs: [ISMSSong], notify: Bool = false) {
-        var songIds = [Int]()
+    open func add(songs: [ISMSSong], notify: Bool = false) {
         for song in songs {
-            if let songId = song.songId?.intValue {
-                songIds.append(songId)
-            }
-        }
-        
-        addSongs(songIds: songIds, notify: notify)
-    }
-    
-    open func addSongs(songIds: [Int], notify: Bool = false) {
-        // TODO: Improve performance
-        for songId in songIds {
-            addSong(songId: songId)
+            add(song: song, notify: false)
         }
         
         if notify {
@@ -230,21 +237,21 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func insertSong(song: ISMSSong, index: Int, notify: Bool = false) {
-        if let songId = song.songId?.intValue {
-            insertSong(songId: songId, index: index, notify: notify)
+    open func insert(song: ISMSSong, index: Int, notify: Bool = false) {
+        if let songId = song.songId as? Int, let serverId = song.serverId as? Int {
+            insert(songId: songId, serverId: serverId, index: index, notify: notify)
         }
     }
     
-    open func insertSong(songId: Int, index: Int, notify: Bool = false) {
+    open func insert(songId: Int, serverId: Int, index: Int, notify: Bool = false) {
         // TODO: See if this can be simplified by using sort by
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query1 = "UPDATE \(self.tableName) SET songIndex = -songIndex WHERE songIndex >= ?"
                 try db.executeUpdate(query1, index + 1)
                 
-                let query2 = "INSERT INTO \(self.tableName) VALUES (?, ?)"
-                try db.executeUpdate(query2, index + 1, songId)
+                let query2 = "INSERT INTO \(self.tableName) VALUES (?, ?, ?)"
+                try db.executeUpdate(query2, index + 1, songId, serverId)
                 
                 let query3 = "UPDATE \(self.tableName) SET songIndex = (-songIndex) + 1 WHERE songIndex < 0"
                 try db.executeUpdate(query3)
@@ -258,7 +265,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func removeSongAtIndex(_ index: Int, notify: Bool = false) {
+    open func remove(songAtIndex index: Int, notify: Bool = false) {
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName) WHERE songIndex = ?"
@@ -276,10 +283,10 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func removeSongsAtIndexes(_ indexes: IndexSet, notify: Bool = false) {
+    open func remove(songsAtIndexes indexes: IndexSet, notify: Bool = false) {
         // TODO: Improve performance
         for index in indexes {
-            removeSongAtIndex(index, notify: false)
+            remove(songAtIndex: index, notify: false)
         }
         
         if notify {
@@ -287,33 +294,21 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func removeSong(song: ISMSSong, notify: Bool = false) {
-        if let songId = song.songId?.intValue {
-            removeSong(songId: songId, notify: notify)
+    open func remove(song: ISMSSong, notify: Bool = false) {
+        if let songId = song.songId as? Int, let serverId = song.serverId as? Int {
+            remove(songId: songId, serverId: serverId, notify: notify)
         }
     }
     
-    open func removeSong(songId: Int, notify: Bool = false) {
-        if let index = indexOfSongId(songId) {
-            removeSongAtIndex(index + 1, notify: notify)
+    open func remove(songId: Int, serverId: Int, notify: Bool = false) {
+        if let index = indexOf(songId: songId, serverId: serverId) {
+            remove(songAtIndex: index + 1, notify: notify)
         }
     }
     
-    open func removeSongs(songs: [ISMSSong], notify: Bool = false) {
-        var songIds = [Int]()
+    open func remove(songs: [ISMSSong], notify: Bool = false) {
         for song in songs {
-            if let songId = song.songId?.intValue {
-                songIds.append(songId)
-            }
-        }
-
-        removeSongs(songIds: songIds, notify: notify)
-    }
-    
-    open func removeSongs(songIds: [Int], notify: Bool = false) {
-        // TODO: Improve performance
-        for songId in songIds {
-            removeSong(songId: songId, notify: false)
+            remove(song: song, notify: false)
         }
         
         if notify {
@@ -337,11 +332,11 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     }
     
     open func moveSong(fromIndex: Int, toIndex: Int, notify: Bool = false) -> Bool {
-        if fromIndex != toIndex, let songId = songAtIndex(fromIndex)?.songId?.intValue {
+        if fromIndex != toIndex, let song = song(atIndex: fromIndex) {
             let finalToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex
             if finalToIndex >= 0 && finalToIndex < songCount {
-                removeSongAtIndex(fromIndex, notify: false)
-                insertSong(songId: songId, index: finalToIndex, notify: notify)
+                remove(songAtIndex: fromIndex, notify: false)
+                insert(song: song, index: finalToIndex, notify: notify)
                 return true
             }
         }
@@ -351,6 +346,20 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     // MARK: - Create new DB tables -
     
+    fileprivate static func createTable(db: FMDatabase, name: String, playlistId: Int, serverId: Int) -> Bool {
+        do {
+            let table = Playlist.tableName(playlistId, serverId: serverId)
+            try db.executeUpdate("INSERT INTO playlists VALUES (?, ?, ?)", playlistId, serverId, name)
+            try db.executeUpdate("CREATE TABLE \(table) (songIndex INTEGER PRIMARY KEY AUTOINCREMENT, songId INTEGER, serverId INTEGER)")
+            try db.executeUpdate("CREATE INDEX \(table)_songIdServerId ON \(table) (songId, serverId)")
+        } catch {
+            printError(error)
+            return false
+        }
+        
+        return true
+    }
+
     open static func createPlaylist(_ name: String, serverId: Int) -> Playlist? {
         var playlistId: Int?
         
@@ -362,20 +371,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
 
             // Next available ID
             playlistId = lastPlaylistId - 1
-
-            // Do the creation here instead of calling createPlaylistWithName:andId: so it's all in one transaction
-            do {
-                let table = Playlist.tableName(playlistId!, serverId: serverId)
-                try db.executeUpdate("INSERT INTO playlists VALUES (?, ?, ?)", playlistId!, serverId, name)
-                try db.executeUpdate("CREATE TABLE \(table) (songIndex INTEGER PRIMARY KEY AUTOINCREMENT, songId INTEGER)")
-                try db.executeUpdate("CREATE INDEX \(table)_songId ON \(table) (songId)")
-                
-                // Force the auto_increment to start at 0
-                try db.executeUpdate("INSERT INTO \(table) VALUES (-1, 0)", table)
-                try db.executeUpdate("DELETE FROM \(table)")
-                
-            } catch {
-                printError(error)
+            if !createTable(db: db, name: name, playlistId: playlistId!, serverId: serverId) {
                 playlistId = nil
             }
         }
@@ -390,18 +386,12 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     open static func createPlaylist(_ name: String, playlistId: Int, serverId: Int) -> Playlist? {
         var success = true
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
-            do {
-                let exists = db.longForQuery("SELECT COUNT(*) FROM playlists WHERE playlistId = ? AND serverId = ?", playlistId, serverId) > 0
-                if !exists {
-                    // Do the creation here instead of calling createPlaylistWithName:andId: so it's all in one transaction
-                    let table = Playlist.tableName(playlistId, serverId: serverId)
-                    try db.executeUpdate("INSERT INTO playlists VALUES (?, ?, ?)", playlistId, serverId, name)
-                    try db.executeUpdate("CREATE TABLE \(table) (songIndex INTEGER PRIMARY KEY, songId INTEGER)")
-                    try db.executeUpdate("CREATE INDEX \(table)_songId ON \(table) (songId)")
+            let query = "SELECT COUNT(*) FROM playlists WHERE playlistId = ? AND serverId = ?"
+            let exists = db.longForQuery(query, playlistId, serverId) > 0
+            if !exists {
+                if !createTable(db: db, name: name, playlistId: playlistId, serverId: serverId) {
+                    success = false
                 }
-            } catch {
-                printError(error)
-                success = false
             }
         }
         

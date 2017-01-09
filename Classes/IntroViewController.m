@@ -102,7 +102,7 @@
 	{
         [self dismissViewControllerAnimated:NO completion:nil];
         
-        [appDelegateS showSettings];
+        [iSubAppDelegate.si showSettings];
 	}
 }
 

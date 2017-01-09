@@ -75,7 +75,7 @@
 	// Main Settings
 	self.enableScrobblingSwitch.on = SavedSettings.si.isScrobbleEnabled;
 	
-	//scrobblePercentSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
+	//scrobblePercentSlider.value = [[iSubAppDelegate.si.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
 	self.scrobblePercentSlider.value = SavedSettings.si.scrobblePercent;
 	[self updateScrobblePercentLabel];
 	
@@ -232,17 +232,17 @@
 	if (self.cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
 		self.cacheSpaceLabel1.text = @"Minimum free space:";
-		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegateS.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[iSubAppDelegate.si.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
 		self.cacheSpaceLabel2.text = [NSString formatFileSize:SavedSettings.si.minFreeSpace];
-		//self.cacheSpaceSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
+		//self.cacheSpaceSlider.value = [[iSubAppDelegate.si.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
 		self.cacheSpaceSlider.value = (float)SavedSettings.si.minFreeSpace / self.totalSpace;
 	}
 	else if (self.cachingTypeSegmentedControl.selectedSegmentIndex == 1)
 	{
 		self.cacheSpaceLabel1.text = @"Maximum cache size:";
-		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[appDelegateS.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
+		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[iSubAppDelegate.si.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
 		self.cacheSpaceLabel2.text = [NSString formatFileSize:SavedSettings.si.maxCacheSize];
-		//self.cacheSpaceSlider.value = [[appDelegateS.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
+		//self.cacheSpaceSlider.value = [[iSubAppDelegate.si.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
 		self.cacheSpaceSlider.value = (float)SavedSettings.si.maxCacheSize / self.totalSpace;
 	}
 }
@@ -294,7 +294,7 @@
 
             // TODO: Update for new UI
 //			if (IS_IPAD())
-//				[appDelegateS.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
+//				[iSubAppDelegate.si.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
 		}
         else if (sender == self.maxVideoBitrate3GSegmentedControl)
         {
@@ -367,11 +367,11 @@
 			SavedSettings.si.isForceOfflineMode = self.manualOfflineModeSwitch.on;
 			if (self.manualOfflineModeSwitch.on)
 			{
-				[appDelegateS enterOfflineModeForce];
+				[iSubAppDelegate.si enterOfflineModeForce];
 			}
 			else
 			{
-				[appDelegateS enterOnlineModeForce];
+				[iSubAppDelegate.si enterOnlineModeForce];
 			}
 		}
 		else if (sender == self.enableScrobblingSwitch)
@@ -492,15 +492,15 @@
         {
             SavedSettings.si.isDisableUsageOver3G = self.disableCellUsageSwitch.on;
             
-            if (!SavedSettings.si.isOfflineMode && SavedSettings.si.isDisableUsageOver3G && ![appDelegateS isWifi])
+            if (!SavedSettings.si.isOfflineMode && SavedSettings.si.isDisableUsageOver3G && ![iSubAppDelegate.si isWifi])
             {
                 // We're on 3G and we just disabled use on 3G, so go offline
-                [appDelegateS enterOfflineModeForce];
+                [iSubAppDelegate.si enterOfflineModeForce];
             }
-            else if (SavedSettings.si.isOfflineMode && !SavedSettings.si.isDisableUsageOver3G && ![appDelegateS isWifi])
+            else if (SavedSettings.si.isOfflineMode && !SavedSettings.si.isDisableUsageOver3G && ![iSubAppDelegate.si isWifi])
             {
                 // We're on 3G and we just enabled use on 3G, so go online if we're offline
-                [appDelegateS enterOfflineModeForce];
+                [iSubAppDelegate.si enterOfflineModeForce];
             }
         }
 	}
@@ -532,9 +532,9 @@
 {
     // TODO: Do in new UI
 //	if (IS_IPAD())
-//		[appDelegateS.artistsNavigationController popToRootViewControllerAnimated:NO];
+//		[iSubAppDelegate.si.artistsNavigationController popToRootViewControllerAnimated:NO];
 //	else
-//		[appDelegateS.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+//		[iSubAppDelegate.si.rootViewController.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -707,7 +707,7 @@
 //		if (controller) 
 //		{
 //			if (IS_IPAD())
-//				[appDelegateS.ipadRootViewController presentModalViewController:controller animated:YES];
+//				[iSubAppDelegate.si.ipadRootViewController presentModalViewController:controller animated:YES];
 //			else
 //				[self.parentController presentModalViewController:controller animated:YES];
 //		}
@@ -764,15 +764,15 @@
 // Fix for panel sliding on iPad while using sliders
 - (IBAction)touchDown:(id)sender
 {
-    appDelegateS.ipadRootViewController.stackScrollViewController.isSlidingEnabled = NO;
+    iSubAppDelegate.si.ipadRootViewController.stackScrollViewController.isSlidingEnabled = NO;
 }
 - (IBAction)touchUpInside:(id)sender
 {
-    appDelegateS.ipadRootViewController.stackScrollViewController.isSlidingEnabled = YES;
+    iSubAppDelegate.si.ipadRootViewController.stackScrollViewController.isSlidingEnabled = YES;
 }
 - (IBAction)touchUpOutside:(id)sender
 {
-    appDelegateS.ipadRootViewController.stackScrollViewController.isSlidingEnabled = YES;
+    iSubAppDelegate.si.ipadRootViewController.stackScrollViewController.isSlidingEnabled = YES;
 }
 
 @end

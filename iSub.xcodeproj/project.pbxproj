@@ -61,6 +61,8 @@
 		530B960911E8ED33002EA08E /* settings-page@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960811E8ED33002EA08E /* settings-page@2x.png */; };
 		530BB65E1A61AA9A00FBC005 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */; };
 		530BB6601A61AA9A00FBC005 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */; };
+		530F049B1E2355EE00CBBB3E /* CacheQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F049A1E2355EE00CBBB3E /* CacheQueueManager.swift */; };
+		530F049C1E2355EE00CBBB3E /* CacheQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F049A1E2355EE00CBBB3E /* CacheQueueManager.swift */; };
 		530F63981A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
 		530F639A1A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
 		530F639B1A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
@@ -556,10 +558,6 @@
 		5358DCD71E0B78470024A0D4 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC0F1E0B78470024A0D4 /* Server.swift */; };
 		5358DCD81E0B78470024A0D4 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC0F1E0B78470024A0D4 /* Server.swift */; };
 		5358DCD91E0B78470024A0D4 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC0F1E0B78470024A0D4 /* Server.swift */; };
-		5358DCE91E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
-		5358DCEB1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
-		5358DCEC1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
-		5358DCED1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */; };
 		5358DCF31E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */; };
 		5358DCF51E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */; };
 		5358DCF61E0B78470024A0D4 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */; };
@@ -1442,6 +1440,7 @@
 		530B960611E8EC86002EA08E /* loading-screen-image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image@2x.png"; path = "Images/Other/loading-screen-image@2x.png"; sourceTree = "<group>"; };
 		530B960811E8ED33002EA08E /* settings-page@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-page@2x.png"; path = "Images/Other/settings-page@2x.png"; sourceTree = "<group>"; };
 		530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
+		530F049A1E2355EE00CBBB3E /* CacheQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheQueueManager.swift; sourceTree = "<group>"; };
 		530F63971A3FC78C006D7666 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
 		5311C32E1A3510A500054941 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		5311C3311A3510F800054941 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
@@ -1586,8 +1585,6 @@
 		5358DC141E0B78470024A0D4 /* HLSProxyConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLSProxyConnection.m; sourceTree = "<group>"; };
 		5358DC151E0B78470024A0D4 /* HLSProxyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLSProxyResponse.h; sourceTree = "<group>"; };
 		5358DC161E0B78470024A0D4 /* HLSProxyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLSProxyResponse.m; sourceTree = "<group>"; };
-		5358DC181E0B78470024A0D4 /* ISMSCacheQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSCacheQueueManager.h; sourceTree = "<group>"; };
-		5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSCacheQueueManager.m; sourceTree = "<group>"; };
 		5358DC1C1E0B78470024A0D4 /* ISMSStreamHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamHandler.h; sourceTree = "<group>"; };
 		5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSStreamHandler.m; sourceTree = "<group>"; };
 		5358DC1E1E0B78470024A0D4 /* ISMSStreamHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamHandlerDelegate.h; sourceTree = "<group>"; };
@@ -2564,8 +2561,7 @@
 			children = (
 				5358DC1F1E0B78470024A0D4 /* ISMSStreamManager.h */,
 				5358DC201E0B78470024A0D4 /* ISMSStreamManager.m */,
-				5358DC181E0B78470024A0D4 /* ISMSCacheQueueManager.h */,
-				5358DC191E0B78470024A0D4 /* ISMSCacheQueueManager.m */,
+				530F049A1E2355EE00CBBB3E /* CacheQueueManager.swift */,
 				5358DC1C1E0B78470024A0D4 /* ISMSStreamHandler.h */,
 				5358DC1D1E0B78470024A0D4 /* ISMSStreamHandler.m */,
 				5358DC1E1E0B78470024A0D4 /* ISMSStreamHandlerDelegate.h */,
@@ -4188,7 +4184,6 @@
 				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
 				53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				532300181CEE73F700B8C651 /* DroppableCell.swift in Sources */,
-				5358DCE91E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
 				533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
@@ -4203,6 +4198,7 @@
 				53BCBF121E21BF460008313A /* CacheViewController.swift in Sources */,
 				538B4D0C1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				534FC4FE1CEC014800126751 /* DraggableTableViewController.swift in Sources */,
+				530F049B1E2355EE00CBBB3E /* CacheQueueManager.swift in Sources */,
 				530BB65E1A61AA9A00FBC005 /* HelperFunctions.swift in Sources */,
 				5358DC991E0B78470024A0D4 /* BassEqualizer.m in Sources */,
 				5358DF831E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
@@ -4411,7 +4407,6 @@
 				5358DD5F1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
 				5358DCAB1E0B78470024A0D4 /* ISMSAlbum.m in Sources */,
 				53159ED4156F69D0001B0268 /* DDSocialLoginDialog.m in Sources */,
-				5358DCEC1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
 				5358DF811E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				5358DCBA1E0B78470024A0D4 /* ISMSFolder.m in Sources */,
 				53835CEB1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
@@ -4467,7 +4462,6 @@
 				53835CBA1E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				5358DCA21E0B78470024A0D4 /* BassParamEqValue.m in Sources */,
 				5358DCAC1E0B78470024A0D4 /* ISMSAlbum.m in Sources */,
-				5358DCED1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
 				53835CDD1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				53835CD81E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				5358DCB11E0B78470024A0D4 /* ISMSArtist.m in Sources */,
@@ -4558,7 +4552,6 @@
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
 				53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				5323001A1CEE750B00B8C651 /* DroppableCell.swift in Sources */,
-				5358DCEB1E0B78470024A0D4 /* ISMSCacheQueueManager.m in Sources */,
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
 				533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
@@ -4573,6 +4566,7 @@
 				53BCBF131E21BF460008313A /* CacheViewController.swift in Sources */,
 				538B4D0E1E1D83B300847152 /* ItemLoader.swift in Sources */,
 				534FC5001CEC014800126751 /* DraggableTableViewController.swift in Sources */,
+				530F049C1E2355EE00CBBB3E /* CacheQueueManager.swift in Sources */,
 				530BB6601A61AA9A00FBC005 /* HelperFunctions.swift in Sources */,
 				5358DC9B1E0B78470024A0D4 /* BassEqualizer.m in Sources */,
 				5358DF851E0B789A0024A0D4 /* DDASLLogger.m in Sources */,

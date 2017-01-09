@@ -9,8 +9,6 @@
 #ifndef iSub_iSubAppDelegate_h
 #define iSub_iSubAppDelegate_h
 
-#define appDelegateS [iSubAppDelegate sharedInstance]
-
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -43,7 +41,7 @@
 
 - (void)backToReferringApp;
 
-+ (iSubAppDelegate *)sharedInstance;
++ (iSubAppDelegate *)si;
 
 - (void)enterOnlineModeForce;
 - (void)enterOfflineModeForce;

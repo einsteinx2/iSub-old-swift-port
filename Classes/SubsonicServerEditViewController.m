@@ -262,9 +262,9 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
     if (IS_IPAD())
-        [appDelegateS.ipadRootViewController.menuViewController showHome];
+        [iSubAppDelegate.si.ipadRootViewController.menuViewController showHome];
     
-    [appDelegateS switchServerTo:self.server redirectUrl:self.redirectUrl];
+    [iSubAppDelegate.si switchServerTo:self.server redirectUrl:self.redirectUrl];
 }
 
 #pragma mark - UITextField Delegate -

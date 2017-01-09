@@ -71,9 +71,9 @@ import Nuke
     open var previousIndex: Int { return indexAtOffset(-1, fromIndex: currentIndex) }
     open var nextIndex: Int { return indexAtOffset(1, fromIndex: currentIndex) }
     open var currentDisplaySong: ISMSSong? { return currentSong ?? previousSong }
-    open var currentSong: ISMSSong? { return playlist.songAtIndex(currentIndex) }
-    open var previousSong: ISMSSong? { return playlist.songAtIndex(previousIndex) }
-    open var nextSong: ISMSSong? { return playlist.songAtIndex(nextIndex) }
+    open var currentSong: ISMSSong? { return playlist.song(atIndex: currentIndex) }
+    open var previousSong: ISMSSong? { return playlist.song(atIndex: previousIndex) }
+    open var nextSong: ISMSSong? { return playlist.song(atIndex: nextIndex) }
     open var songCount: Int { return playlist.songCount }
     open var isPlaying: Bool { return audioEngine.isPlaying() }
     open var isStarted: Bool { return audioEngine.isStarted() }
@@ -100,7 +100,7 @@ import Nuke
         }
         
         // Remove the songs
-        playlist.removeSongsAtIndexes(indexes)
+        playlist.remove(songsAtIndexes: indexes)
         
         // Adjust the current index if songs are removed below it
         if currentIndex >= 0 {
@@ -111,7 +111,7 @@ import Nuke
         
         // If we removed the current song, start the next one
         if containsCurrentIndex {
-            playSongAtIndex(currentIndex)
+            playSong(atIndex: currentIndex)
         }
     }
     
@@ -122,14 +122,14 @@ import Nuke
     }
     
     open func insertSong(song: ISMSSong, index: Int, notify: Bool = false) {
-        playlist.insertSong(song: song, index: index, notify: notify)
-        ISMSStreamManager.sharedInstance().fillStreamQueue(self.audioEngine.isStarted())
+        playlist.insert(song: song, index: index, notify: notify)
+        ISMSStreamManager.si().fillStreamQueue(self.audioEngine.isStarted())
     }
     
     open func insertSongNext(song: ISMSSong, notify: Bool = false) {
         let index = currentIndex < 0 ? songCount : currentIndex + 1
-        playlist.insertSong(song: song, index: index, notify: notify)
-        ISMSStreamManager.sharedInstance().fillStreamQueue(self.audioEngine.isStarted())
+        playlist.insert(song: song, index: index, notify: notify)
+        ISMSStreamManager.si().fillStreamQueue(self.audioEngine.isStarted())
     }
     
     open func moveSong(fromIndex: Int, toIndex: Int, notify: Bool = false) {
@@ -148,12 +148,12 @@ import Nuke
                 currentIndex -= 1
             }
             
-            ISMSStreamManager.sharedInstance().fillStreamQueue(self.audioEngine.isStarted())
+            ISMSStreamManager.si().fillStreamQueue(self.audioEngine.isStarted())
         }
     }
     
     open func songAtIndex(_ index: Int) -> ISMSSong? {
-        return playlist.songAtIndex(index)
+        return playlist.song(atIndex: index)
     }
     
     open func indexAtOffset(_ offset: Int, fromIndex: Int) -> Int {
@@ -195,11 +195,11 @@ import Nuke
     
     open func playSongs(_ songs: [ISMSSong], playIndex: Int) {
         reset()
-        playlist.addSongs(songs: songs)
-        playSongAtIndex(playIndex)
+        playlist.add(songs: songs)
+        playSong(atIndex: playIndex)
     }
     
-    open func playSongAtIndex(_ index: Int) {
+    open func playSong(atIndex index: Int) {
         currentIndex = index
         if let currentSong = currentSong {
             if currentSong.contentType?.basicType != .video {
@@ -207,7 +207,7 @@ import Nuke
                 NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_RemoveMoviePlayer)
             }
             
-            ISMSStreamManager.sharedInstance().removeAllStreamsExcept(for: currentSong)
+            ISMSStreamManager.si().removeAllStreamsExcept(for: currentSong)
             
             if currentSong.contentType?.basicType == .video {
                 NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_PlayVideo, userInfo: ["song": currentSong])
@@ -220,15 +220,15 @@ import Nuke
     open func playPreviousSong() {
         if audioEngine.progress() > 10.0 {
             // Past 10 seconds in the song, so restart playback instead of changing songs
-            playSongAtIndex(self.currentIndex)
+            playSong(atIndex: self.currentIndex)
         } else {
             // Within first 10 seconds, go to previous song
-            playSongAtIndex(self.previousIndex)
+            playSong(atIndex: self.previousIndex)
         }
     }
     
     open func playNextSong() {
-        playSongAtIndex(self.nextIndex)
+        playSong(atIndex: self.nextIndex)
     }
     
     open func play() {
@@ -286,8 +286,7 @@ import Nuke
         
         if let currentSong = currentSong {
             let settings = SavedSettings.si()
-            let streamManager = ISMSStreamManager.sharedInstance()
-            let cacheQueueManager = ISMSCacheQueueManager.sharedInstance()
+            let streamManager = ISMSStreamManager.si()
             let offsetBytes = userInfo["bytes"] as? NSNumber
             let offsetSeconds = userInfo["seconds"] as? NSNumber
             let audioEngineStartSong = {
@@ -308,11 +307,11 @@ import Nuke
                     streamManager.fillStreamQueue(true)
                 } else if !currentSong.isFullyCached && settings.isOfflineMode {
                     // TODO: Prevent this running forever in RepeatAll mode with no songs available
-                    self.playSongAtIndex(nextIndex)
+                    self.playSong(atIndex: nextIndex)
                 } else {
-                    if (cacheQueueManager?.currentQueuedSong.isEqual(to: currentSong))! {
+                    if let currentSong = CacheQueueManager.si.currentSong, currentSong.isEqual(to: currentSong) {
                         // The cache queue is downloading this song, remove it before continuing
-                        cacheQueueManager?.removeCurrentSong()
+                        CacheQueueManager.si.removeCurrentSong()
                     }
                     
                     if streamManager.isSongDownloading(currentSong) {
@@ -323,7 +322,7 @@ import Nuke
                                 audioEngineStartSong()
                             }
                         }
-                    } else if streamManager.isSongFirst(inQueue: currentSong) && !streamManager.isQueueDownloading {
+                    } else if streamManager.isSongFirst(inQueue: currentSong) && !streamManager.isDownloading {
                         // The song is first in queue, but the queue is not downloading. Probably the song was downloading
                         // when the app quit. Resume the download and start the player
                         streamManager.resumeQueue()
@@ -448,7 +447,7 @@ extension PlayQueue: BassGaplessPlayerDelegate {
     
     public func bassRetrySong(at index: Int, player: BassGaplessPlayer) {
         Async.main {
-            self.playSongAtIndex(index)
+            self.playSong(atIndex: index)
         }
     }
     
@@ -462,11 +461,11 @@ extension PlayQueue: BassGaplessPlayerDelegate {
     
     public func bassFailedToCreateNextStream(for index: Int, player: BassGaplessPlayer) {
         // The song ended, and we tried to make the next stream but it failed
-        if let song = self.songAtIndex(index), let handler = ISMSStreamManager.sharedInstance().handler(for: song) {
+        if let song = self.songAtIndex(index), let handler = ISMSStreamManager.si().handler(for: song) {
             if !handler.isDownloading || handler.isDelegateNotifiedToStartPlayback {
                 // If the song isn't downloading, or it is and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
                 Async.main {
-                    self.playSongAtIndex(index)
+                    self.playSong(atIndex: index)
                 }
             }
         }

@@ -75,7 +75,7 @@ class PlayQueueViewModel: NSObject {
     }
     
     func playSong(atIndex index: Int) {
-        PlayQueue.si.playSongAtIndex(index)
+        PlayQueue.si.playSong(atIndex: index)
     }
     
     func insertSong(_ song: ISMSSong, atIndex index: Int) {

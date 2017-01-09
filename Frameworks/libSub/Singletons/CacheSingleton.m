@@ -9,7 +9,6 @@
 #import "CacheSingleton.h"
 #import "iSub-Swift.h"
 #import "ISMSStreamManager.h"
-#import "ISMSCacheQueueManager.h"
 #import "Imports.h"
 
 LOG_LEVEL_ISUB_DEFAULT
@@ -126,8 +125,8 @@ LOG_LEVEL_ISUB_DEFAULT
 	
 	[self findCacheSize];
 	
-	if (!cacheQueueManagerS.isQueueDownloading)
-		[cacheQueueManagerS startDownloadQueue];
+	if (!CacheQueueManager.si.isDownloading)
+		[CacheQueueManager.si start];
 }
 
 - (void)findCacheSize
@@ -230,7 +229,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	// Clear the temp cache directory
 	[[NSFileManager defaultManager] removeItemAtPath:[SavedSettings tempCachePath] error:NULL];
 	[[NSFileManager defaultManager] createDirectoryAtPath:[SavedSettings tempCachePath] withIntermediateDirectories:YES attributes:nil error:NULL];
-	streamManagerS.lastTempCachedSong = nil;
+	ISMSStreamManager.si.lastTempCachedSong = nil;
 }
 
 #pragma mark - Memory management

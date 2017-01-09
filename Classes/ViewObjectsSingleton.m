@@ -39,7 +39,7 @@ static NSTimeInterval const kDelay = .5;
 
 - (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message
 {	
-	[self showLoadingScreen:appDelegateS.window withMessage:message];
+	[self showLoadingScreen:iSubAppDelegate.si.window withMessage:message];
 }
 
 - (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message
@@ -62,7 +62,7 @@ static NSTimeInterval const kDelay = .5;
     self.isLoadingScreenShowing = YES;
     
     self.HUD = [[MBProgressHUD alloc] initWithView:view];
-    [appDelegateS.window addSubview:self.HUD];
+    [iSubAppDelegate.si.window addSubview:self.HUD];
     self.HUD.delegate = self;
     self.HUD.label.text = message ? message : @"Loading";
     [self.HUD showAnimated:YES];
@@ -75,7 +75,7 @@ static NSTimeInterval const kDelay = .5;
 
 - (void)showAlbumLoadingScreenOnMainWindowWithSender:(id)sender
 {
-    [self showAlbumLoadingScreen:appDelegateS.window sender:sender];
+    [self showAlbumLoadingScreen:iSubAppDelegate.si.window sender:sender];
 }
 
 - (void)showAlbumLoadingScreen:(UIView *)view sender:(id)sender
@@ -95,7 +95,7 @@ static NSTimeInterval const kDelay = .5;
     self.isLoadingScreenShowing = YES;
     
     // TODO: See why was always using window here
-    self.HUD = [[MBProgressHUD alloc] initWithView:appDelegateS.window];
+    self.HUD = [[MBProgressHUD alloc] initWithView:iSubAppDelegate.si.window];
     self.HUD.userInteractionEnabled = YES;
     
     // TODO: verify on iPad
@@ -105,7 +105,7 @@ static NSTimeInterval const kDelay = .5;
     [cancelButton addTarget:sender action:@selector(cancelLoad) forControlEvents:UIControlEventTouchUpInside];
     [self.HUD addSubview:cancelButton];
     
-    [appDelegateS.window addSubview:self.HUD];
+    [iSubAppDelegate.si.window addSubview:self.HUD];
     self.HUD.delegate = self;
     self.HUD.label.text = @"Loading";
     self.HUD.detailsLabel.text = @"tap to cancel";
@@ -126,7 +126,7 @@ static NSTimeInterval const kDelay = .5;
 
 - (UIColor *)currentDarkColor
 {
-	//switch ([[appDelegateS.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
+	//switch ([[iSubAppDelegate.si.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
 	switch(SavedSettings.si.cachedSongCellColorType)
 	{
 		case 0:
@@ -146,7 +146,7 @@ static NSTimeInterval const kDelay = .5;
 
 - (UIColor *) currentLightColor
 {
-	//switch ([[appDelegateS.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
+	//switch ([[iSubAppDelegate.si.settingsDictionary objectForKey:@"cacheSongCellColorSetting"] intValue])
 	switch(SavedSettings.si.cachedSongCellColorType)
 	{
 		case 0:

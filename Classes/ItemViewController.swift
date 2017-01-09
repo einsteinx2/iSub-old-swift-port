@@ -369,7 +369,7 @@ class ItemViewController: DraggableTableViewController {
         if let song = item as? ISMSSong {
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             
-            alertController.addAction(UIAlertAction(title: "Play", style: .default) { action in
+            alertController.addAction(UIAlertAction(title: "Play All", style: .default) { action in
                 self.viewModel.playSong(atIndex: indexPath.row)
             })
             

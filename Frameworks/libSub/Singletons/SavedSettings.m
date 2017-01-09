@@ -642,7 +642,7 @@
 	@synchronized(self)
 	{
 #ifdef IOS
-		switch ([appDelegateS isWifi] ? self.maxBitrateWifi : self.maxBitrate3G)
+		switch ([iSubAppDelegate.si isWifi] ? self.maxBitrateWifi : self.maxBitrate3G)
 #else
         switch (self.maxBitrateWifi)
 #endif
@@ -698,7 +698,7 @@
     @synchronized(self)
 	{
 #ifdef IOS
-		switch ([appDelegateS isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
+		switch ([iSubAppDelegate.si isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
 #else
         switch (self.maxVideoBitrateWifi)
 #endif
@@ -719,7 +719,7 @@
 	@synchronized(self)
 	{
 #ifdef IOS
-		switch ([appDelegateS isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
+		switch ([iSubAppDelegate.si isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
 #else
         switch (self.maxVideoBitrateWifi)
 #endif		
@@ -821,12 +821,12 @@
 		[_userDefaults synchronize];
         
 #ifdef IOS
-        if (![appDelegateS isWifi])
+        if (![iSubAppDelegate.si isWifi])
 #else
         if (YES)
 #endif
         {
-            isManualCachingOnWWANEnabled ? [cacheQueueManagerS startDownloadQueue] : [cacheQueueManagerS stopDownloadQueue];
+            isManualCachingOnWWANEnabled ? [CacheQueueManager.si start] : [CacheQueueManager.si stop];
         }
 	}
 }

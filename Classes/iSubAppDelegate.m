@@ -37,7 +37,7 @@
 
 @implementation iSubAppDelegate
 
-+ (iSubAppDelegate *)sharedInstance
++ (iSubAppDelegate *)si
 {
 	return (iSubAppDelegate*)[UIApplication sharedApplication].delegate;
 }
@@ -116,22 +116,22 @@
     
     // Recover current state if player was interrupted. Do not resume if we're connected to the test server
     // because music will start playing behind the intro screen.
-    [ISMSStreamManager sharedInstance];
+    [ISMSStreamManager si];
     if (SavedSettings.si.isTestServer || !SavedSettings.si.isRecover)
     {
-        [streamManagerS removeAllStreams];
+        [ISMSStreamManager.si removeAllStreams];
     }
     else
     {
         ISMSSong *currentSong = PlayQueue.si.currentSong;
         if (currentSong)
         {
-            [PlayQueue.si startSongWithOffsetBytes:SavedSettings.si.byteOffset offsetSeconds:SavedSettings.si.seekTime];
+            [PlayQueue.si startSongWithOffsetBytes:(NSInteger)SavedSettings.si.byteOffset offsetSeconds:SavedSettings.si.seekTime];
         }
         else
         {
             // TODO: Start handling this via PlayQueue
-            AudioEngine.si.startByteOffset = SavedSettings.si.byteOffset;
+            AudioEngine.si.startByteOffset = (NSUInteger)SavedSettings.si.byteOffset;
             AudioEngine.si.startSecondsOffset = SavedSettings.si.seekTime;
         }
     }
@@ -292,7 +292,7 @@
                 if (![BITHockeyManager sharedHockeyManager].crashManager.didCrashInLastSession)
                 {
                     // Start the queued downloads if Wifi is available
-                    [cacheQueueManagerS startDownloadQueue];
+                    [CacheQueueManager.si start];
                 }
             }
             else
@@ -504,8 +504,8 @@
 		self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:
 						  ^{
 							  // App is about to be put to sleep, stop the cache download queue
-							  if (cacheQueueManagerS.isQueueDownloading)
-								  [cacheQueueManagerS stopDownloadQueue];
+							  if (CacheQueueManager.si.isDownloading)
+								  [CacheQueueManager.si stop];
 							  
 							  // Make sure to end the background so we don't get killed by the OS
 							  [application endBackgroundTask:self.backgroundTask];
@@ -528,9 +528,9 @@
 					//DLog(@"backgroundTimeRemaining: %f", [application backgroundTimeRemaining]);
 					
 					// Sleep early is nothing is happening after 500 seconds
-					if ([application backgroundTimeRemaining] < 200.0 && !cacheQueueManagerS.isQueueDownloading)
+					if ([application backgroundTimeRemaining] < 200.0 && !CacheQueueManager.si.isDownloading)
 					{
-                        //DLog("Sleeping early, isQueueListDownloading: %i", cacheQueueManagerS.isQueueDownloading);
+                        //DLog("Sleeping early, isQueueListDownloading: %i", CacheQueueManager.si.isDownloading);
 						[application endBackgroundTask:self.backgroundTask];
 						self.backgroundTask = UIBackgroundTaskInvalid;
                         
@@ -540,7 +540,7 @@
 					}
 					
 					// Warn at 2 minute mark if cache queue is downloading
-					if ([application backgroundTimeRemaining] < 120.0 && cacheQueueManagerS.isQueueDownloading)
+					if ([application backgroundTimeRemaining] < 120.0 && CacheQueueManager.si.isDownloading)
 					{
 						UILocalNotification *localNotif = [[UILocalNotification alloc] init];
 						if (localNotif) 
@@ -632,15 +632,15 @@
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOfflineMode];
 	
-    appDelegateS.window.backgroundColor = ViewObjectsSingleton.si.windowColor;
+    iSubAppDelegate.si.window.backgroundColor = ViewObjectsSingleton.si.windowColor;
     
 	SavedSettings.si.isOfflineMode = YES;
 		
 	[PlayQueue.si stop];
 	
-	[streamManagerS cancelAllStreams];
+	[ISMSStreamManager.si cancelAllStreams];
 	
-	[cacheQueueManagerS stopDownloadQueue];
+	[CacheQueueManager.si stop];
 
     // TODO: Implement offline mode in new UI
 //	if (IS_IPAD())
@@ -686,7 +686,7 @@
 //	[DatabaseSingleton.si closeAllDatabases];
 //	[DatabaseSingleton.si setupDatabases];
 	[self checkServer];
-	[cacheQueueManagerS startDownloadQueue];
+	[CacheQueueManager.si start];
 	
     // TODO: Implement offline mode in new UI
 //	if (IS_IPAD())
@@ -739,14 +739,14 @@
         {
             if (self.networkStatus.isReachableWifi || SavedSettings.si.isManualCachingOnWWANEnabled)
             {
-                if (!cacheQueueManagerS.isQueueDownloading)
+                if (!CacheQueueManager.si.isDownloading)
                 {
-                    [cacheQueueManagerS startDownloadQueue];
+                    [CacheQueueManager.si start];
                 }
             }
             else
             {
-                [cacheQueueManagerS stopDownloadQueue];
+                [CacheQueueManager.si stop];
             }
         }
     }
@@ -1149,12 +1149,12 @@
         // TODO: Implement video playback in new UI
 //        if (IS_IPAD())
 //        {
-//            [appDelegateS.ipadRootViewController.menuViewController.playerHolder addSubview:self.moviePlayer.view];
+//            [iSubAppDelegate.si.ipadRootViewController.menuViewController.playerHolder addSubview:self.moviePlayer.view];
 //            self.moviePlayer.view.frame = self.moviePlayer.view.superview.bounds;
 //        }
 //        else
 //        {
-//            [appDelegateS.mainTabBarController.view addSubview:self.moviePlayer.view];
+//            [iSubAppDelegate.si.mainTabBarController.view addSubview:self.moviePlayer.view];
 //            self.moviePlayer.view.frame = CGRectZero;
 //        }
         
@@ -1306,7 +1306,7 @@
     [ISMSPlaylist createPlaylist:@"Downloaded Songs" playlistId:[ISMSPlaylist downloadedSongsPlaylistId] serverId:server.serverId];
     
     // Cancel any caching
-    [streamManagerS removeAllStreams];
+    [ISMSStreamManager.si removeAllStreams];
     
     // Reset UI
     [(NewMenuViewController *)self.sidePanelController.leftPanel resetMenuItems];

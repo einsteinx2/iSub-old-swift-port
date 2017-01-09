@@ -20,7 +20,7 @@
 		viewController.view.width = ISMSiPadViewWidth;
 		viewController.view.layer.cornerRadius = ISMSiPadCornerRadius;
 		viewController.view.layer.masksToBounds = YES;
-		StackScrollViewController *stack = [iSubAppDelegate sharedInstance].ipadRootViewController.stackScrollViewController;
+		StackScrollViewController *stack = iSubAppDelegate.si.ipadRootViewController.stackScrollViewController;
 		[stack addViewInSlider:viewController invokeByController:self isStackStartView:NO];
 	}
 	else

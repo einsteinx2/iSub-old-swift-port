@@ -17,10 +17,10 @@ class DraggableTableViewController: UITableViewController {
     // MARK: - Rotation -
     
     override var shouldAutorotate : Bool {
-        if SavedSettings.si().isRotationLockEnabled && UIDevice.current.orientation != .portrait {
-            return false
-        }
-        
+//        if SavedSettings.si().isRotationLockEnabled && UIDevice.current.orientation != .portrait {
+//            return false
+//        }
+//        
         return true
     }
     

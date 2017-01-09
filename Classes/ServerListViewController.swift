@@ -44,6 +44,7 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
         headerView.addSubview(self.segmentedControl)
         
         self.tableView.tableHeaderView = self.headerView
+        self.tableView.rowHeight = ISMSNormalize(50)
         
         if !IS_IPAD() && self.tableView.tableHeaderView == nil {
             self.tableView.tableHeaderView = UIView()
@@ -51,7 +52,10 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
     }
     
     override func setupLeftBarButton() -> UIBarButtonItem {
-        //return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(ServerListViewController.showMenu))
+        return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(ServerListViewController.showMenu))
+    }
+    
+    override func setupRightBarButton() -> UIBarButtonItem? {
         return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ServerListViewController.addAction))
     }
     
@@ -296,7 +300,7 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
             SavedSettings.si().currentServerId = server.serverId
             SavedSettings.si().redirectUrlString = redirectUrl
             
-            iSubAppDelegate.sharedInstance().switchServer(to: server, redirectUrl: redirectUrl)
+            iSubAppDelegate.si().switchServer(to: server, redirectUrl: redirectUrl)
             
             ViewObjectsSingleton.si().hideLoadingScreen()
         }

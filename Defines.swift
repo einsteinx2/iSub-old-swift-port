@@ -29,8 +29,9 @@ func ISMSNormalize(_ value: CGFloat, multiplier: CGFloat = 1, maxDelta: CGFloat 
     if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
         return value
     }
-    
-    let screenWidth = UIScreen.main.bounds.size.width
+
+    let screenSize = UIScreen.main.bounds.size
+    let screenWidth = min(screenSize.width, screenSize.height)
     let percent = (screenWidth - BaseWidth)/screenWidth
     let normalizedValue = value * (1 + percent) * multiplier
     let minValue = min(normalizedValue, value + maxDelta) //capped by a max value if needed

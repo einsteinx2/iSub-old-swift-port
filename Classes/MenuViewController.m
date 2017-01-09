@@ -182,7 +182,7 @@
 	
 	_cellContents = [NSMutableArray arrayWithCapacity:10];
 	
-    if (appDelegateS.referringAppUrl)
+    if (iSubAppDelegate.si.referringAppUrl)
     {
         [_cellContents addObject:[MenuTableItem itemWithImageName:@"back-tabbaricon" text:@"Back"]];
     }
@@ -272,7 +272,7 @@
 		return;
     
     // Handle the special case of the back button / ref url
-    if (appDelegateS.referringAppUrl)
+    if (iSubAppDelegate.si.referringAppUrl)
     {
         if (indexPath.row == 0)
         {
@@ -283,7 +283,7 @@
                               scrollPosition:UITableViewScrollPositionNone];
             
             // Go back to the other app
-            [[UIApplication sharedApplication] openURL:appDelegateS.referringAppUrl];
+            [[UIApplication sharedApplication] openURL:iSubAppDelegate.si.referringAppUrl];
             return;
         }
     }
@@ -307,7 +307,7 @@
 {
     // TODO: Update for new UI
     /*// If we have the back button displayed, subtract 1 from the row to get the correct action
-    NSUInteger row = appDelegateS.referringAppUrl ? indexPath.row - 1 : indexPath.row;
+    NSUInteger row = iSubAppDelegate.si.referringAppUrl ? indexPath.row - 1 : indexPath.row;
     
 	// Present the view controller
 	//

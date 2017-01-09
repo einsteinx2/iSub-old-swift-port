@@ -546,9 +546,9 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 									NSUInteger bitrate = [BassWrapper estimateBitrate:userInfo];
                                     
                                     // Get the stream for this song
-                                    ISMSStreamHandler *handler = [streamManagerS handlerForSong:userInfo.song];
-                                    if (!handler && [[cacheQueueManagerS currentQueuedSong] isEqualToSong:userInfo.song])
-                                        handler = [cacheQueueManagerS currentStreamHandler];
+                                    ISMSStreamHandler *handler = [ISMSStreamManager.si handlerForSong:userInfo.song];
+                                    if (!handler && [[CacheQueueManager.si currentSong] isEqualToSong:userInfo.song])
+                                        handler = [CacheQueueManager.si currentStreamHandler];
                                     
                                     // Calculate the bytes to wait based on the recent download speed. If the handler is nil or recent download speed is 0
                                     // it will just use the default (currently 10 seconds)
@@ -591,7 +591,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 												if (userInfo.localFileSize >= userInfo.neededSize)
 													break;
 												// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
-												else if (theSong.isTempCached && [theSong isEqualToSong:streamManagerS.lastTempCachedSong])
+												else if (theSong.isTempCached && [theSong isEqualToSong:ISMSStreamManager.si.lastTempCachedSong])
 													break;
 												// If the song has finished caching, we can stop waiting
 												else if (theSong.isFullyCached)

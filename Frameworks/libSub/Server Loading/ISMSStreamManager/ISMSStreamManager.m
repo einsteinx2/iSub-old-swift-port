@@ -9,7 +9,6 @@
 #import "ISMSStreamManager.h"
 #import "iSub-Swift.h"
 #import "ISMSStreamHandler.h"
-#import "ISMSCacheQueueManager.h"
 #import "RXMLElement.h"
 
 LOG_LEVEL_ISUB_DEBUG
@@ -19,7 +18,7 @@ LOG_LEVEL_ISUB_DEBUG
 
 - (ISMSSong *)currentStreamingSong
 {
-	if (!self.isQueueDownloading)
+	if (!self.isDownloading)
 		return nil;
 	
 	ISMSStreamHandler *handler = [self.handlerStack firstObjectSafe];
@@ -59,7 +58,7 @@ LOG_LEVEL_ISUB_DEBUG
 	return [self handlerForSong:aSong].isDownloading;
 }
 
-- (BOOL)isQueueDownloading
+- (BOOL)isDownloading
 {
 	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
@@ -192,7 +191,7 @@ LOG_LEVEL_ISUB_DEBUG
             [self cancelStream:handler];
             [self.handlerStack removeObject:handler];
             
-            if (!handler.song.isFullyCached && !handler.song.isTempCached && !([cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.song] && cacheQueueManagerS.isQueueDownloading))
+            if (!handler.song.isFullyCached && !handler.song.isTempCached && !([CacheQueueManager.si.currentSong isEqualToSong:handler.song] && CacheQueueManager.si.isDownloading))
             {
                 DLog(@"Removing song from cached songs table: %@", handler.song);
                 [handler.song removeFromCachedSongsTable];
@@ -272,7 +271,7 @@ LOG_LEVEL_ISUB_DEBUG
 		[self cancelStreamAtIndex:index];
 		
 		ISMSStreamHandler *handler = [self.handlerStack objectAtIndex:index];
-		if (!handler.song.isFullyCached && !handler.song.isTempCached && !([cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.song] && cacheQueueManagerS.isQueueDownloading))
+		if (!handler.song.isFullyCached && !handler.song.isTempCached && !([CacheQueueManager.si.currentSong isEqualToSong:handler.song] && CacheQueueManager.si.isDownloading))
         {
             DLog(@"Removing song from cached songs table: %@", handler.song);
             [handler.song removeFromCachedSongsTable];
@@ -319,7 +318,7 @@ LOG_LEVEL_ISUB_DEBUG
 	// As an added check, verify that this handler is still in the stack
 	if ([self isSongInQueue:handler.song])
 	{
-		if (cacheQueueManagerS.isQueueDownloading && [cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.song])
+		if (CacheQueueManager.si.isDownloading && [CacheQueueManager.si.currentSong isEqualToSong:handler.song])
 		{
 			// This song is already being downloaded by the cache queue, so just start the player
 			[self ISMSStreamHandlerStartPlayback:handler];
@@ -346,7 +345,7 @@ LOG_LEVEL_ISUB_DEBUG
 	if (!handler)
 		return;
 	
-	if (cacheQueueManagerS.isQueueDownloading && [cacheQueueManagerS.currentQueuedSong isEqualToSong:handler.song])
+	if (CacheQueueManager.si.isDownloading && [CacheQueueManager.si.currentSong isEqualToSong:handler.song])
 	{
 		// This song is already being downloaded by the cache queue, so just start the player
 		[self ISMSStreamHandlerStartPlayback:handler];
@@ -504,7 +503,7 @@ LOG_LEVEL_ISUB_DEBUG
                 ![self.lastTempCachedSong isEqualToSong:aSong] &&
                 !aSong.isFullyCached &&
                 !SavedSettings.si.isOfflineMode &&
-                ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong]) {
+                ![CacheQueueManager.si.currentSong isEqualToSong:aSong]) {
                 
                 // Queue the song for download
                 [self queueStreamForSong:aSong isTempCache:!SavedSettings.si.isSongCachingEnabled isStartDownload:isStartDownload];
@@ -659,10 +658,10 @@ LOG_LEVEL_ISUB_DEBUG
 		// Mark song as cached
 		if (!handler.isTempCache)
         {
-            if ([cacheQueueManagerS isSongInQueue:handler.song])
+            if ([CacheQueueManager.si containsWithSong:handler.song])
             {
                 //handler.song.isDownloaded = YES;
-                [[ISMSPlaylist downloadQueue] removeSongWithSong:handler.song notify:YES];
+                [[ISMSPlaylist downloadQueue] removeWithSong:handler.song notify:YES];
             }
             
             DLog(@"Marking isFullyCached = YES for %@", handler.song);
@@ -762,7 +761,7 @@ LOG_LEVEL_ISUB_DEBUG
 #endif
 }
 
-+ (instancetype)sharedInstance
++ (instancetype)si
 {
     static ISMSStreamManager *sharedInstance = nil;
     static dispatch_once_t once = 0;

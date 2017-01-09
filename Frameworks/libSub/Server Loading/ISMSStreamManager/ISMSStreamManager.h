@@ -10,8 +10,6 @@
 #import "ISMSStreamHandler.h"
 #import "ISMSLoaderDelegate.h"
 
-#define streamManagerS ((ISMSStreamManager *)[ISMSStreamManager sharedInstance])
-
 #define ISMSNumberOfStreamsToQueue 2
 
 @class ISMSSong, ISMSStreamHandler, SUSLyricsDAO;
@@ -23,11 +21,11 @@
 @property (nullable, copy) ISMSSong *lastCachedSong;
 @property (nullable, copy) ISMSSong *lastTempCachedSong;
 
-@property (readonly) BOOL isQueueDownloading;
+@property (readonly) BOOL isDownloading;
 
 @property (nullable, readonly) ISMSSong *currentStreamingSong;
 
-+ (nonnull instancetype)sharedInstance;
++ (nonnull instancetype)si;
 
 - (void)delayedSetup;
 

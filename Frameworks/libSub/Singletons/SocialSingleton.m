@@ -105,7 +105,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	if (!SavedSettings.si.isOfflineMode)
 	{
 		// If this song wasn't just cached, then notify Subsonic of the playback
-		ISMSSong *lastCachedSong = streamManagerS.lastCachedSong;
+		ISMSSong *lastCachedSong = ISMSStreamManager.si.lastCachedSong;
 		ISMSSong *currentSong = PlayQueue.si.currentSong;
 		if (![lastCachedSong isEqualToSong:currentSong])
 		{
