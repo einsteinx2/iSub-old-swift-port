@@ -34,7 +34,7 @@
 - (void)closeAllDatabases;
 - (void)resetFolderCache;
 
-- (nonnull NSArray *)ignoredArticles;
+- (nonnull NSArray<NSString*> *)ignoredArticles;
 - (nonnull NSString *)name:(nonnull NSString *)name ignoringArticles:(nullable NSArray *)articles;
 
 @end

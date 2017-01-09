@@ -10,6 +10,7 @@ import Foundation
 
 protocol ItemViewModelDelegate {
     func itemsChanged()
+    func loadingFinished()
     func loadingError(_ error: String)
 }
 
@@ -50,6 +51,7 @@ class ItemViewModel : NSObject {
     
     fileprivate(set) var songsDuration = 0
     fileprivate(set) var sectionIndexes = [SectionIndex]()
+    fileprivate(set) var sectionIndexesSection = -1
     
     init(loader: ItemLoader) {
         self.loader = loader
@@ -70,6 +72,8 @@ class ItemViewModel : NSObject {
             loader.callbackBlock = { success, error, loader in
                 completion?(success, error)
                 if success {
+                    self.delegate?.loadingFinished()
+                    
                     // May have some false positives, but prevents UI pauses
                     if self.items.count != self.loader.items.count {
                         self.processModels()
@@ -114,12 +118,22 @@ class ItemViewModel : NSObject {
         }
         songsDuration = duration
         
-        if songs.count == 0 {
-            if folders.count > 20 {
-                sectionIndexes = SectionIndex.sectionIndexesForItems(folders)
-            } else if self.artists.count > 20 {
-                sectionIndexes = SectionIndex.sectionIndexesForItems(artists)
-            }
+        let minAmountForIndexes = 50
+        if folders.count >= minAmountForIndexes {
+            sectionIndexes = SectionIndex.sectionIndexesForItems(folders)
+            sectionIndexesSection = 0
+        } else if artists.count >= minAmountForIndexes {
+            sectionIndexes = SectionIndex.sectionIndexesForItems(artists)
+            sectionIndexesSection = 1
+        } else if albums.count >= minAmountForIndexes {
+            sectionIndexes = SectionIndex.sectionIndexesForItems(albums)
+            sectionIndexesSection = 2
+        } else if songs.count >= minAmountForIndexes {
+            sectionIndexes = SectionIndex.sectionIndexesForItems(songs)
+            sectionIndexesSection = 3
+        } else {
+            sectionIndexes = []
+            sectionIndexesSection = -1
         }
     }
     
@@ -174,4 +188,6 @@ class ItemViewModel : NSObject {
         //playAll(songs: viewModel.songs, playIndex: indexPath.row)
         PlayQueue.si.playSongs(songs, playIndex: index)
     }
+    
+    
 }

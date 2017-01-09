@@ -146,6 +146,8 @@
 
 + (NSArray<ISMSAlbum*> *)allAlbumsWithServerId:(NSNumber *)serverId
 {
+    NSArray *ignoredArticles = DatabaseSingleton.si.ignoredArticles;
+    
     NSMutableArray *albums = [[NSMutableArray alloc] init];
     NSMutableArray *albumsNumbers = [[NSMutableArray alloc] init];
     
@@ -165,15 +167,17 @@
             ISMSAlbum *album = [[ISMSAlbum alloc] init];
             [album _assignPropertiesFromResultSet:r];
             
-            if (album.name.length > 0 && isnumber([album.name characterAtIndex:0]))
-                [albumsNumbers addObject:album];
-            else
-                [albums addObject:album];
+            if (album.name.length > 0) {
+                NSString *name = [DatabaseSingleton.si name:album.name ignoringArticles:ignoredArticles];
+                if (isalpha([name characterAtIndex:0])) {
+                    [albums addObject:album];
+                } else {
+                    [albumsNumbers addObject:album];
+                }
+            }
         }
         [r close];
     }];
-    
-    NSArray *ignoredArticles = DatabaseSingleton.si.ignoredArticles;
     
     // Sort objects without indefinite articles (try to match Subsonic's sorting)
     [albums sortUsingComparator:^NSComparisonResult(ISMSAlbum *obj1, ISMSAlbum *obj2) {

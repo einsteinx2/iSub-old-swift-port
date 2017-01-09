@@ -28,7 +28,6 @@ class ItemViewController: DraggableTableViewController {
     
     fileprivate let viewModel: ItemViewModel
     fileprivate var reloading: Bool = false
-    fileprivate var sectionIndexes: [SectionIndex]?
     
     init(viewModel: ItemViewModel) {
         self.viewModel = viewModel
@@ -187,37 +186,14 @@ class ItemViewController: DraggableTableViewController {
     // MARK: - Table View Delegate -
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        var titles: [String] = []
-        
-        if let sectionIndexes = sectionIndexes {
-            for sectionIndex in sectionIndexes {
-                titles.append(String(sectionIndex.letter))
-            }
-        }
-        
-        return titles;
+        return viewModel.sectionIndexes.map({$0.letter})
     }
     
     override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        if let sectionIndexes = sectionIndexes {
-            let row = sectionIndexes[index].firstIndex
-            
-            // Find the section with items in it
-            var section = -1
-            if viewModel.folders.count > row {
-                section = foldersSectionIndex
-            } else if viewModel.artists.count > row {
-                section = artistsSectionIndex
-            } else if viewModel.albums.count > row {
-                section = albumsSectionIndex
-            } else if viewModel.songs.count > row {
-                section = songsSectionIndex
-            }
-            
-            if section >= 0 {
-                let indexPath = IndexPath(row: row, section: section)
-                tableView.scrollToRow(at: indexPath, at: UITableViewScrollPosition.top, animated: false)
-            }
+        if index < viewModel.sectionIndexes.count, viewModel.sectionIndexesSection >= 0 {
+            let row = viewModel.sectionIndexes[index].firstIndex
+            let indexPath = IndexPath(row: row, section: viewModel.sectionIndexesSection)
+            tableView.scrollToRow(at: indexPath, at: UITableViewScrollPosition.top, animated: false)
         }
         
         return -1;
@@ -255,6 +231,7 @@ class ItemViewController: DraggableTableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ItemTableViewCell
         cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
+        cell.indexShowing = (viewModel.sectionIndexes.count > 0)
 
         switch indexPath.section {
         case foldersSectionIndex:
@@ -265,10 +242,6 @@ class ItemViewController: DraggableTableViewController {
                 cell.alwaysShowCoverArt = true
             }
             
-            if sectionIndexes != nil {
-                cell.indexShowing = true
-            }
-            
             let folder = viewModel.folders[indexPath.row]
             cell.associatedObject = folder
             cell.coverArtId = folder.coverArtId
@@ -276,9 +249,6 @@ class ItemViewController: DraggableTableViewController {
         case artistsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.alwaysShowCoverArt = true
-            if sectionIndexes != nil {
-                cell.indexShowing = true
-            }
             
             let artist = viewModel.artists[indexPath.row]
             cell.associatedObject = artist
@@ -287,9 +257,6 @@ class ItemViewController: DraggableTableViewController {
         case albumsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.alwaysShowCoverArt = true
-            if sectionIndexes != nil {
-                cell.indexShowing = true
-            }
             
             let album = viewModel.albums[indexPath.row]
             cell.associatedObject = album
@@ -456,8 +423,10 @@ class ItemViewController: DraggableTableViewController {
 extension ItemViewController : ItemViewModelDelegate {
     
     func itemsChanged() {
-        self.tableView.reloadData()
-        
+        self.tableView.reloadData()        
+    }
+    
+    func loadingFinished() {
         dataSourceDidFinishLoadingNewData()
     }
     

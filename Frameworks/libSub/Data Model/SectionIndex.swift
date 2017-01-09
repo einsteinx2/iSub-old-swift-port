@@ -24,60 +24,19 @@ open class SectionIndex {
             return []
         }
         
-        func isDigit(_ s: String) -> Bool {
-            let cset = CharacterSet.decimalDigits
-            let ix = s.startIndex
-            let ix2 = s.endIndex
-            let result = s.rangeOfCharacter(from: cset, options: [], range: ix..<ix2)
-            return result != nil
-        }
-        
-        func ignoredArticles() -> [String] {
-            var ignoredArticles = [String]()
-            
-            DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-                do {
-                    let query = "SELECT name FROM ignoredArticles"
-                    let result = try db.executeQuery(query)
-                    while result.next() {
-                        ignoredArticles.append(result.string(forColumnIndex: 0))
-                    }
-                    result.close()
-                } catch {
-                    printError(error)
-                }
-            }
-            
-            return ignoredArticles
-        }
-        
-        func nameIgnoringArticles(name: String, articles: [String]) -> String {
-            if articles.count > 0 {
-                for article in articles {
-                    let articlePlusSpace = article + " "
-                    if name.hasPrefix(articlePlusSpace) {
-                        let index = name.characters.index(name.startIndex, offsetBy: articlePlusSpace.characters.count)
-                        return name.substring(from: index)
-                    }
-                }
-            }
-            
-            return (name as NSString).stringWithoutIndefiniteArticle()
-        }
-        
         var sectionIndexes: [SectionIndex] = []
         var lastFirstLetter: String?
-        let articles = ignoredArticles()
+        let articles = DatabaseSingleton.si().ignoredArticles()
         
         var index: Int = 0
         var count: Int = 0
         for item in items {
-            if (item.itemName != nil) {
-                let name = nameIgnoringArticles(name: item.itemName!, articles: articles)
-                var firstLetter = name.uppercased()[0]
+            if let itemName = item.itemName, itemName.characters.count > 0 {
+                let name = DatabaseSingleton.si().name(itemName, ignoringArticles: articles).uppercased()
+                let firstScalar = name.unicodeScalars.first
+                var firstLetter = name[0]
                 
-                // Sort digits to the end in a single "#" section
-                if isDigit(firstLetter) {
+                if let firstScalar = firstScalar, !CharacterSet.letters.contains(firstScalar) {
                     firstLetter = "#"
                 }
                 
