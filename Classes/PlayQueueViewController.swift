@@ -29,6 +29,7 @@ class PlayQueueViewController: DraggableTableViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.viewModel.delegate = self
+        self.draggableTableView.dimDraggedCells = false
         
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)

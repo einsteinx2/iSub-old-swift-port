@@ -66,6 +66,8 @@ class DraggableTableView: UITableView {
     var longPressTimer: DispatchSourceTimer?
     var longPressStartLocation = CGPoint()
     
+    var dimDraggedCells = true
+    
     fileprivate(set) var isDraggingCell: Bool = false
     fileprivate(set) var dragIndexPath: IndexPath?
     fileprivate(set) var dragCell: DraggableCell?
@@ -221,10 +223,12 @@ class DraggableTableView: UITableView {
             if let dragCell = dragCell {
                 dragImageView?.removeFromSuperview()
                 
-                UIView.animate(withDuration: 0.1, animations: {
-                    // Undo the cell dimming
-                    dragCell.containerView.alpha = self.dragCellAlpha
-                })
+                if dimDraggedCells {
+                    UIView.animate(withDuration: 0.1) {
+                        // Undo the cell dimming
+                        dragCell.containerView.alpha = self.dragCellAlpha
+                    }
+                }
                 
                 let windowPoint = touch.location(in: nil)
                 let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
@@ -276,7 +280,9 @@ class DraggableTableView: UITableView {
             isDraggingCell = true
             dragIndexPath = cell.indexPath
             dragCell = cell
-            dragCellAlpha = cell.containerView.alpha
+            if dimDraggedCells {
+                dragCellAlpha = cell.containerView.alpha
+            }
             
             let image = imageFromCell(cell)
             dragImageView = UIImageView(image: image)
@@ -303,7 +309,9 @@ class DraggableTableView: UITableView {
                 self.dragImageView!.frame.origin = origin
                 
                 // Dim the cell in the table
-                cell.containerView.alpha = 0.6
+                if self.dimDraggedCells {
+                    cell.containerView.alpha = 0.6
+                }
             })
             
             // Match the animation so movement is smooth
