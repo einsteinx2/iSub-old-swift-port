@@ -13,6 +13,7 @@ public protocol DataLoading {
 /// Provides basic networking using `URLSession`.
 public final class DataLoader: DataLoading {
     public private(set) var session: URLSession
+    private let sessionDelegate = SelfSignedCertSessionDelegate()
     private let scheduler: AsyncScheduler
     
     /// Initializes `DataLoader` with the given configuration.
@@ -21,7 +22,7 @@ public final class DataLoader: DataLoading {
     /// - parameter scheduler: `OperationQueueScheduler` with `maxConcurrentOperationCount` 8 by default.
     /// Scheduler is wrapped in a `RateLimiter` to prevent `URLSession` trashing.
     public init(configuration: URLSessionConfiguration = DataLoader.defaultConfiguration(), scheduler: AsyncScheduler = RateLimiter(scheduler: OperationQueueScheduler(maxConcurrentOperationCount: 8))) {
-        self.session = URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+        self.session = URLSession(configuration: configuration, delegate: sessionDelegate, delegateQueue: nil)
         self.scheduler = scheduler
     }
     
@@ -49,6 +50,16 @@ public final class DataLoader: DataLoading {
                 }
                 task.resume()
             }
+        }
+    }
+}
+
+fileprivate class SelfSignedCertSessionDelegate: NSObject, URLSessionDelegate {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        if let serverTrust = challenge.protectionSpace.serverTrust {
+            completionHandler(URLSession.AuthChallengeDisposition.useCredential, URLCredential(trust: serverTrust))
+        } else {
+            completionHandler(URLSession.AuthChallengeDisposition.useCredential, URLCredential())
         }
     }
 }
