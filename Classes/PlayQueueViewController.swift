@@ -390,6 +390,7 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
     
     func currentSongChanged() {
         // Only scroll to top when the playing song changes
+        self.tableView.reloadData()
         scrollCurrentSongToTop()
     }
 }
