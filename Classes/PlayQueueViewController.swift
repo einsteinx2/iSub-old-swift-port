@@ -96,43 +96,25 @@ class PlayQueueViewController: DraggableTableViewController {
         if let userInfo = notification.userInfo {
             if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell, dragCell.dragItem is ISMSSong,
                 let location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
-                
-                var point = location.cgPointValue
-                // Treat hovers over the top portion of the cell as the previous cell
-                point.y -= (ISMSNormalize(ISMSSongCellHeight) * 0.75)
-                let tablePoint = tableView.convert(point, from: nil)
-                
-                let indexPath = tableView.indexPathForRow(at: tablePoint)
-                var row = -1
-                if let indexPath = indexPath {
-                    row = indexPath.row
-                } else {
-                    // If we're at the end of the table, treat it as the last cell
-                    let lastRow = tableView.numberOfRows(inSection: 0) - 1
-                    if lastRow >= 0 {
-                        let lastCellIndexPath = IndexPath(row: lastRow, section: 0)
-                        let lastCellRect = tableView.rectForRow(at: lastCellIndexPath)
-                        if tablePoint.y > lastCellRect.origin.y + lastCellRect.size.height {
-                            row = lastRow
-                        }
-                    } else {
-                        // Empty table
-                        row = 0
-                    }
+                currentTouchLocation = location.cgPointValue
+                if !isAutoScrolling {
+                    handleDrag(atLocation: currentTouchLocation)
                 }
                 
-                if hoverRow != row {
-                    hoverRow = row
-                    
-                    // Reload cell heights
-                    tableView.beginUpdates()
-                    tableView.endUpdates()
+                if currentTouchLocation.y < CGFloat(50) {
+                    startAutoScroll(up: true)
+                } else if currentTouchLocation.y > self.tableView.frame.size.height - CGFloat(50) {
+                    startAutoScroll(up: false)
+                } else {
+                    stopAutoScroll()
                 }
             }
         }
     }
     
     @objc fileprivate func draggingEnded(_ notification: Notification) {
+        stopAutoScroll()
+        
         if visible, let userInfo = notification.userInfo {
             if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell,
                    let song = dragCell.dragItem as? ISMSSong,
@@ -162,11 +144,93 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     @objc fileprivate func draggingCanceled(_ notification: Notification) {
+        stopAutoScroll()
+
         hoverRow = Int.min
         self.tableView.reloadData()
         
         singleTapRecognizer.isEnabled = true
         doubleTapRecognizer.isEnabled = true
+    }
+    
+    fileprivate var currentTouchLocation = CGPoint()
+    fileprivate var isAutoScrolling = false
+    fileprivate var autoScrollAnimationId: INTUAnimationID?
+    
+    fileprivate func startAutoScroll(up: Bool) {
+        if !isAutoScrolling {
+            isAutoScrolling = true
+            
+            // Reload cell heights
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+            
+            let startOffset = self.tableView.contentOffset
+            var endOffset = CGPoint()
+            if !up {
+                let bottomCellRect = self.tableView.rectForRow(at: IndexPath(row: viewModel.numberOfRows - 1, section: 0))
+                let bottomY = bottomCellRect.origin.y + bottomCellRect.size.height + CGFloat(100)
+                endOffset = CGPoint(x: 0, y: bottomY - self.tableView.frame.size.height)
+            }
+            
+            let timelineAnimationSpeed = 500.0
+            let timelineAnimationDuration = Double(fabs(endOffset.y - startOffset.y)) / timelineAnimationSpeed
+            
+            func animations(progress: CGFloat) {
+                self.tableView.contentOffset = INTUInterpolateCGPoint(startOffset, endOffset, progress);
+            }
+            
+            func completion(success: Bool) {
+                self.autoScrollAnimationId = nil
+                self.stopAutoScroll()
+            }
+            
+            autoScrollAnimationId = INTUAnimationEngine.animate(withDuration: timelineAnimationDuration, delay: 0.0, easing: INTULinear, animations: animations, completion: completion)
+        }
+    }
+    
+    fileprivate func stopAutoScroll() {
+        isAutoScrolling = false
+        if let autoScrollAnimationId = autoScrollAnimationId {
+            INTUAnimationEngine.cancelAnimation(withID: autoScrollAnimationId)
+        }
+    }
+    
+    fileprivate func handleDrag(atLocation location: CGPoint) {
+        // Treat hovers over the top portion of the cell as the previous cell
+        var point = location
+        point.y -= (ISMSNormalize(ISMSSongCellHeight) * 0.75)
+        let tablePoint = tableView.convert(point, from: nil)
+        
+        let indexPath = tableView.indexPathForRow(at: tablePoint)
+        var row = -1
+        if let indexPath = indexPath {
+            row = indexPath.row
+        } else {
+            // If we're at the end of the table, treat it as the last cell
+            let lastRow = tableView.numberOfRows(inSection: 0) - 1
+            if lastRow >= 0 {
+                let lastCellIndexPath = IndexPath(row: lastRow, section: 0)
+                let lastCellRect = tableView.rectForRow(at: lastCellIndexPath)
+                if tablePoint.y > lastCellRect.origin.y + lastCellRect.size.height {
+                    row = lastRow
+                }
+            } else {
+                // Empty table
+                row = 0
+            }
+        }
+        
+        if hoverRow != row {
+            hoverRow = row
+            
+            // TODO: Fix this weird bug where if you drag around the top cell, a cell near the bottom opens and closes
+            //Swift.print("reloading cell heights, hoverRow: \(hoverRow)")
+            
+            // Reload cell heights
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        }
     }
     
     override func customizeTableView(_ tableView: UITableView) {
@@ -191,10 +255,11 @@ class PlayQueueViewController: DraggableTableViewController {
         tableView.register(CurrentItemCell.self, forCellReuseIdentifier: currentItemReuseIdentifier)
     }
     
+    fileprivate let minFooterSize: CGFloat = 100
     fileprivate func adjustFooter() {
         guard viewModel.currentIndex >= 0 && viewModel.currentIndex < viewModel.numberOfRows else {
             if let footerView = tableView.tableFooterView {
-                footerView.frame.size.height = 0
+                footerView.frame.size.height = minFooterSize
                 tableView.tableFooterView = footerView
             }
             return
@@ -208,8 +273,8 @@ class PlayQueueViewController: DraggableTableViewController {
         let distanceToEndOfTable = tableHeight - currentSongRect.origin.y
         
         var footerHeight = UIScreen.main.bounds.height - distanceToEndOfTable
-        if footerHeight < 0 {
-            footerHeight = 0
+        if footerHeight < minFooterSize {
+            footerHeight = minFooterSize
         }
         
         if let footerView = tableView.tableFooterView {
@@ -264,7 +329,7 @@ class PlayQueueViewController: DraggableTableViewController {
             height = 0
         }
         
-        if indexPath.row == hoverRow + 1 {
+        if !isAutoScrolling && indexPath.row == hoverRow + 1 {
             height += ISMSNormalize(ISMSSongCellHeight)
         }
         

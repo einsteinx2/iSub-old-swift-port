@@ -63,6 +63,14 @@
 		530BB6601A61AA9A00FBC005 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */; };
 		530F049B1E2355EE00CBBB3E /* CacheQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F049A1E2355EE00CBBB3E /* CacheQueueManager.swift */; };
 		530F049C1E2355EE00CBBB3E /* CacheQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F049A1E2355EE00CBBB3E /* CacheQueueManager.swift */; };
+		530F04A91E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 530F049F1E237EB700CBBB3E /* INTUAnimationEngine.m */; };
+		530F04AA1E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 530F049F1E237EB700CBBB3E /* INTUAnimationEngine.m */; };
+		530F04AB1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 530F04A21E237EB700CBBB3E /* INTUEasingFunctions.m */; };
+		530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 530F04A21E237EB700CBBB3E /* INTUEasingFunctions.m */; };
+		530F04AD1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 530F04A41E237EB700CBBB3E /* INTUInterpolationFunctions.m */; };
+		530F04AE1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 530F04A41E237EB700CBBB3E /* INTUInterpolationFunctions.m */; };
+		530F04AF1E237EB700CBBB3E /* INTUSpringSolver.c in Sources */ = {isa = PBXBuildFile; fileRef = 530F04A61E237EB700CBBB3E /* INTUSpringSolver.c */; };
+		530F04B01E237EB700CBBB3E /* INTUSpringSolver.c in Sources */ = {isa = PBXBuildFile; fileRef = 530F04A61E237EB700CBBB3E /* INTUSpringSolver.c */; };
 		530F63981A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
 		530F639A1A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
 		530F639B1A3FC78C006D7666 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F63971A3FC78C006D7666 /* Defines.swift */; };
@@ -1441,6 +1449,16 @@
 		530B960811E8ED33002EA08E /* settings-page@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-page@2x.png"; path = "Images/Other/settings-page@2x.png"; sourceTree = "<group>"; };
 		530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
 		530F049A1E2355EE00CBBB3E /* CacheQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheQueueManager.swift; sourceTree = "<group>"; };
+		530F049E1E237EB700CBBB3E /* INTUAnimationEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTUAnimationEngine.h; sourceTree = "<group>"; };
+		530F049F1E237EB700CBBB3E /* INTUAnimationEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INTUAnimationEngine.m; sourceTree = "<group>"; };
+		530F04A01E237EB700CBBB3E /* INTUAnimationEngineDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTUAnimationEngineDefines.h; sourceTree = "<group>"; };
+		530F04A11E237EB700CBBB3E /* INTUEasingFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTUEasingFunctions.h; sourceTree = "<group>"; };
+		530F04A21E237EB700CBBB3E /* INTUEasingFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INTUEasingFunctions.m; sourceTree = "<group>"; };
+		530F04A31E237EB700CBBB3E /* INTUInterpolationFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTUInterpolationFunctions.h; sourceTree = "<group>"; };
+		530F04A41E237EB700CBBB3E /* INTUInterpolationFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INTUInterpolationFunctions.m; sourceTree = "<group>"; };
+		530F04A61E237EB700CBBB3E /* INTUSpringSolver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = INTUSpringSolver.c; sourceTree = "<group>"; };
+		530F04A71E237EB700CBBB3E /* INTUSpringSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTUSpringSolver.h; sourceTree = "<group>"; };
+		530F04A81E237EB700CBBB3E /* INTUVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTUVector.h; sourceTree = "<group>"; };
 		530F63971A3FC78C006D7666 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
 		5311C32E1A3510A500054941 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		5311C3311A3510F800054941 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
@@ -2281,6 +2299,7 @@
 				53D59A241E1DC33700071ABD /* EX2Kit */,
 				53CE503C1E20194100E5DC68 /* BCCKeychain */,
 				533B69CC1E206031001FF3BF /* NavigationStack */,
+				530F049D1E237EB700CBBB3E /* AnimationEngine */,
 				5311C3311A3510F800054941 /* QuickLook.framework */,
 				5311C32E1A3510A500054941 /* AssetsLibrary.framework */,
 				538725F117CC19B200CE92F1 /* CoreTelephony.framework */,
@@ -2336,6 +2355,32 @@
 				537E9A5414F4CE41006CB0BC /* underPageBackgroundDark@2x.png */,
 			);
 			name = iPad;
+			sourceTree = "<group>";
+		};
+		530F049D1E237EB700CBBB3E /* AnimationEngine */ = {
+			isa = PBXGroup;
+			children = (
+				530F049E1E237EB700CBBB3E /* INTUAnimationEngine.h */,
+				530F049F1E237EB700CBBB3E /* INTUAnimationEngine.m */,
+				530F04A01E237EB700CBBB3E /* INTUAnimationEngineDefines.h */,
+				530F04A11E237EB700CBBB3E /* INTUEasingFunctions.h */,
+				530F04A21E237EB700CBBB3E /* INTUEasingFunctions.m */,
+				530F04A31E237EB700CBBB3E /* INTUInterpolationFunctions.h */,
+				530F04A41E237EB700CBBB3E /* INTUInterpolationFunctions.m */,
+				530F04A51E237EB700CBBB3E /* SpringSolver */,
+			);
+			name = AnimationEngine;
+			path = Frameworks/AnimationEngine;
+			sourceTree = "<group>";
+		};
+		530F04A51E237EB700CBBB3E /* SpringSolver */ = {
+			isa = PBXGroup;
+			children = (
+				530F04A61E237EB700CBBB3E /* INTUSpringSolver.c */,
+				530F04A71E237EB700CBBB3E /* INTUSpringSolver.h */,
+				530F04A81E237EB700CBBB3E /* INTUVector.h */,
+			);
+			path = SpringSolver;
 			sourceTree = "<group>";
 		};
 		532E6FD311AB31CF000A0E3B /* Settings view */ = {
@@ -4179,10 +4224,13 @@
 				53835CB61E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBB1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				53CE503F1E20194100E5DC68 /* BCCKeychain.m in Sources */,
+				530F04A91E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
+				530F04AB1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				53F507CA1E21954E00BDE716 /* URLSessionStreamHandler.swift in Sources */,
 				5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
 				53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
+				530F04AF1E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				532300181CEE73F700B8C651 /* DroppableCell.swift in Sources */,
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
 				533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
@@ -4242,6 +4290,7 @@
 				535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */,
 				53835D0B1E0B7DD50077B53D /* FMDatabase.m in Sources */,
 				5358DCCB1E0B78470024A0D4 /* Playlist.swift in Sources */,
+				530F04AD1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				53835D151E0B7DD50077B53D /* FMDatabasePool.m in Sources */,
 				53D59A571E1DC63800071ABD /* NSArray+Safe.m in Sources */,
 				5358DCA31E0B78470024A0D4 /* BassVisualizer.m in Sources */,
@@ -4547,10 +4596,13 @@
 				53835CB81E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				53835CBD1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				53CE50411E20194100E5DC68 /* BCCKeychain.m in Sources */,
+				530F04AA1E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
+				530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				53F507CB1E21954E00BDE716 /* URLSessionStreamHandler.swift in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
 				53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
+				530F04B01E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				5323001A1CEE750B00B8C651 /* DroppableCell.swift in Sources */,
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
 				533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
@@ -4610,6 +4662,7 @@
 				53BC283A139AF0DD00A825F1 /* DDSocialDialog.m in Sources */,
 				53835D0D1E0B7DD50077B53D /* FMDatabase.m in Sources */,
 				5358DCCD1E0B78470024A0D4 /* Playlist.swift in Sources */,
+				530F04AE1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				53835D171E0B7DD50077B53D /* FMDatabasePool.m in Sources */,
 				53D59A591E1DC63800071ABD /* NSArray+Safe.m in Sources */,
 				5358DCA51E0B78470024A0D4 /* BassVisualizer.m in Sources */,
