@@ -123,10 +123,10 @@
     }
     else
     {
-        ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
+        ISMSSong *currentSong = PlayQueue.si.currentSong;
         if (currentSong)
         {
-            [[PlayQueue sharedInstance] startSongWithOffsetBytes:SavedSettings.si.byteOffset offsetSeconds:SavedSettings.si.seekTime];
+            [PlayQueue.si startSongWithOffsetBytes:SavedSettings.si.byteOffset offsetSeconds:SavedSettings.si.seekTime];
         }
         else
         {
@@ -201,7 +201,7 @@
 // TODO: Double check play function on new app launch
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    PlayQueue *playQueue = [PlayQueue sharedInstance];
+    PlayQueue *playQueue = PlayQueue.si;
     
     // Handle being openned by a URL
     DLog(@"url host: %@ path components: %@", url.host, url.pathComponents );
@@ -257,7 +257,7 @@
 - (void)cancelLoad
 {
 	[self.statusLoader cancelLoad];
-	[viewObjectsS hideLoadingScreen];
+	[ViewObjectsSingleton.si hideLoadingScreen];
 }
 
 - (void)checkServer
@@ -576,7 +576,7 @@
 	}
 
 	// Update the lock screen art in case were were using another app
-	[[PlayQueue sharedInstance] updateLockScreenInfo];
+	[PlayQueue.si updateLockScreenInfo];
 }
 
 
@@ -588,7 +588,7 @@
 	
 	[SavedSettings.si saveState];
 	
-	[[PlayQueue sharedInstance] stop];
+	[PlayQueue.si stop];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
@@ -601,9 +601,9 @@
 
 - (void)enterOfflineMode
 {
-	if (viewObjectsS.isNoNetworkAlertShowing == NO)
+	if (ViewObjectsSingleton.si.isNoNetworkAlertShowing == NO)
 	{
-		viewObjectsS.isNoNetworkAlertShowing = YES;
+		ViewObjectsSingleton.si.isNoNetworkAlertShowing = YES;
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Server unavailable, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
@@ -614,9 +614,9 @@
 
 - (void)enterOnlineMode
 {
-	if (!viewObjectsS.isOnlineModeAlertShowing)
+	if (!ViewObjectsSingleton.si.isOnlineModeAlertShowing)
 	{
-		viewObjectsS.isOnlineModeAlertShowing = YES;
+		ViewObjectsSingleton.si.isOnlineModeAlertShowing = YES;
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
@@ -632,11 +632,11 @@
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOfflineMode];
 	
-    appDelegateS.window.backgroundColor = viewObjectsS.windowColor;
+    appDelegateS.window.backgroundColor = ViewObjectsSingleton.si.windowColor;
     
 	SavedSettings.si.isOfflineMode = YES;
 		
-	[[PlayQueue sharedInstance] stop];
+	[PlayQueue.si stop];
 	
 	[streamManagerS cancelAllStreams];
 	
@@ -663,7 +663,7 @@
 //        self.window.rootViewController = self.offlineTabBarController;
 //	}
 	
-	[[PlayQueue sharedInstance] updateLockScreenInfo];
+	[PlayQueue.si updateLockScreenInfo];
 }
 
 - (void)enterOnlineModeForce
@@ -676,7 +676,7 @@
 		
 	SavedSettings.si.isOfflineMode = NO;
 	
-	[[PlayQueue sharedInstance] stop];
+	[PlayQueue.si stop];
 	
 	if (IS_IPAD())
 		[self.ipadRootViewController.menuViewController toggleOfflineMode];
@@ -695,12 +695,12 @@
 //	}
 //	else
 //	{
-//		[viewObjectsS orderMainTabBarController];
+//		[ViewObjectsSingleton.si orderMainTabBarController];
 //		//[self.window addSubview:self.mainTabBarController.view];
 //        self.window.rootViewController = self.mainTabBarController;
 //	}
 	
-	[[PlayQueue sharedInstance] updateLockScreenInfo];
+	[PlayQueue.si updateLockScreenInfo];
 }
 
 - (void)reachabilityChanged
@@ -845,8 +845,8 @@
 			
 			// Offline mode handling
 			
-			viewObjectsS.isOnlineModeAlertShowing = NO;
-			viewObjectsS.isNoNetworkAlertShowing = NO;
+			ViewObjectsSingleton.si.isOnlineModeAlertShowing = NO;
+			ViewObjectsSingleton.si.isNoNetworkAlertShowing = NO;
 			
 			if (buttonIndex == 1)
 			{
@@ -1193,8 +1193,8 @@
     if (IS_IPAD())
     {
         // Turn off repeat one so user doesn't get stuck
-        if ([PlayQueue sharedInstance].repeatMode == RepeatModeRepeatOne)
-            [PlayQueue sharedInstance].repeatMode = RepeatModeNormal;
+        if (PlayQueue.si.repeatMode == RepeatModeRepeatOne)
+            PlayQueue.si.repeatMode = RepeatModeNormal;
     }
     
     ServerType serverType = SavedSettings.si.currentServer.type;
@@ -1211,7 +1211,7 @@
 - (void)playSubsonicVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates
 {
     /*
-    [[PlayQueue sharedInstance] stop];
+    [PlayQueue.si stop];
     
     if (!aSong.itemId || !bitrates)
         return;
@@ -1236,7 +1236,7 @@
 
 - (void)playWaveBoxVideo:(ISMSSong *)aSong bitrates:(NSArray *)bitrates
 {
-    [[PlayQueue sharedInstance] stop];
+    [PlayQueue.si stop];
     
     if (!aSong.itemId || !bitrates)
         return;
@@ -1283,7 +1283,7 @@
         if (reason && reason.integerValue == MPMovieFinishReasonPlaybackEnded)
         {
             // Playback ended normally, so start the next item
-            [[PlayQueue sharedInstance] playNextSong];
+            [PlayQueue.si playNextSong];
 //            [playlistS incrementIndex];
 //            [musicS playSongAtPosition:playlistS.currentIndex];
         }

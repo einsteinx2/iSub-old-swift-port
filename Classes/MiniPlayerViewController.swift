@@ -112,7 +112,7 @@ class MiniPlayerViewController: UIViewController {
             spinner.startAnimating()
         }
         
-        PlayQueue.sharedInstance.playPause()
+        PlayQueue.si.playPause()
     }
     
     @objc fileprivate func playbackStarted() {
@@ -144,7 +144,7 @@ class MiniPlayerViewController: UIViewController {
     }
     
     fileprivate func updateCurrentSong() {
-        let currentSong = PlayQueue.sharedInstance.currentDisplaySong
+        let currentSong = PlayQueue.si.currentDisplaySong
         if let coverArtId = currentSong?.coverArtId {
             coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
         } else {

@@ -65,11 +65,13 @@ class DraggableTableView: UITableView {
     
     var longPressTimer: DispatchSourceTimer?
     var longPressStartLocation = CGPoint()
-    var dragIndexPath: IndexPath?
-    var dragCell: DraggableCell?
-    var dragCellAlpha: CGFloat = 1.0
-    var dragImageView: UIImageView?
-    var dragImageOffset = CGPoint.zero
+    
+    fileprivate(set) var isDraggingCell: Bool = false
+    fileprivate(set) var dragIndexPath: IndexPath?
+    fileprivate(set) var dragCell: DraggableCell?
+    fileprivate(set) var dragCellAlpha: CGFloat = 1.0
+    fileprivate(set) var dragImageView: UIImageView?
+    fileprivate(set) var dragImageOffset = CGPoint.zero
     var dragImageSuperview: UIView {
         get {
             // Use the top level view so we can go between controllers
@@ -211,21 +213,22 @@ class DraggableTableView: UITableView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.allowsSelection = true
         self.isScrollEnabled = true
+        isDraggingCell = false
         
         cancelLongPress()
         
         if let touch = touches.first {
             if let dragCell = dragCell {
-                let windowPoint = touch.location(in: nil)
-                let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
-                NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingEnded, userInfo: userInfo)
-                
                 dragImageView?.removeFromSuperview()
                 
                 UIView.animate(withDuration: 0.1, animations: {
                     // Undo the cell dimming
                     dragCell.containerView.alpha = self.dragCellAlpha
-                }) 
+                })
+                
+                let windowPoint = touch.location(in: nil)
+                let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
+                NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingEnded, userInfo: userInfo)
             } else {
                 // Select the cell if this was not a long press
                 let point = touch.location(in: self)
@@ -248,6 +251,7 @@ class DraggableTableView: UITableView {
     override func touchesCancelled(_ touches: Set<UITouch>?, with event: UIEvent?) {
         self.allowsSelection = true
         self.isScrollEnabled = true
+        isDraggingCell = false
         
         cancelLongPress()
         
@@ -269,6 +273,7 @@ class DraggableTableView: UITableView {
     @objc fileprivate func longPressFired(_ userInfo: [AnyHashable: Any]) {
         if let cell = userInfo[Notifications.dragCellKey] as? DraggableCell {
             self.isScrollEnabled = false
+            isDraggingCell = true
             dragIndexPath = cell.indexPath
             dragCell = cell
             dragCellAlpha = cell.containerView.alpha

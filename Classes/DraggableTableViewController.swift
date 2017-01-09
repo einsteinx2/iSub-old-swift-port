@@ -59,7 +59,7 @@ class DraggableTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.view.backgroundColor = ViewObjectsSingleton.sharedInstance().windowColor
+        self.view.backgroundColor = ViewObjectsSingleton.si().windowColor
         self.navigationItem.leftBarButtonItem = setupLeftBarButton()
         self.navigationItem.rightBarButtonItem = setupRightBarButton()
     }

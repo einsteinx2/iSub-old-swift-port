@@ -14,6 +14,8 @@ class PlayerViewController: UIViewController {
     let artistLabel = UILabel()
     let playButton = UIButton(type: .custom)
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    let prevButton = UIButton(type: .custom)
+    let nextButton = UIButton(type: .custom)
     let elapsedLabel = UILabel()
     let remainingLabel = UILabel()
     let progressSlider = UISlider()
@@ -98,7 +100,7 @@ class PlayerViewController: UIViewController {
         }
         
         playButton.setTitleColor(.black, for: UIControlState())
-        playButton.titleLabel?.font = .systemFont(ofSize: 20)
+        playButton.titleLabel?.font = .systemFont(ofSize: 35)
         playButton.addTarget(self, action: #selector(playPause), for: .touchUpInside)
         self.view.addSubview(playButton)
         playButton.snp.makeConstraints { make in
@@ -113,6 +115,30 @@ class PlayerViewController: UIViewController {
         spinner.snp.makeConstraints { make in
             make.centerX.equalTo(playButton)
             make.centerY.equalTo(playButton)
+        }
+        
+        prevButton.setTitleColor(.black, for: UIControlState())
+        prevButton.titleLabel?.font = .systemFont(ofSize: 35)
+        prevButton.setTitle("«", for: UIControlState())
+        prevButton.addTarget(self, action: #selector(previousSong), for: .touchUpInside)
+        self.view.addSubview(prevButton)
+        prevButton.snp.makeConstraints { make in
+            make.width.equalTo(40)
+            make.height.equalTo(40)
+            make.right.equalTo(playButton.snp.left).offset(-20)
+            make.centerY.equalTo(playButton).offset(-2)
+        }
+        
+        nextButton.setTitleColor(.black, for: UIControlState())
+        nextButton.titleLabel?.font = .systemFont(ofSize: 35)
+        nextButton.setTitle("»", for: UIControlState())
+        nextButton.addTarget(self, action: #selector(nextSong), for: .touchUpInside)
+        self.view.addSubview(nextButton)
+        nextButton.snp.makeConstraints { make in
+            make.width.equalTo(40)
+            make.height.equalTo(40)
+            make.left.equalTo(playButton.snp.right).offset(20)
+            make.centerY.equalTo(playButton).offset(-2)
         }
         
         updatePlayButton()
@@ -148,7 +174,15 @@ class PlayerViewController: UIViewController {
             spinner.startAnimating()
         }
         
-        PlayQueue.sharedInstance.playPause()
+        PlayQueue.si.playPause()
+    }
+    
+    @objc fileprivate func previousSong() {
+        PlayQueue.si.playPreviousSong()
+    }
+    
+    @objc fileprivate func nextSong() {
+        PlayQueue.si.playNextSong()
     }
     
     @objc fileprivate func playbackStarted() {
@@ -173,14 +207,14 @@ class PlayerViewController: UIViewController {
     
     fileprivate func updatePlayButton(_ playing: Bool = AudioEngine.si().isPlaying()) {
         if playing {
-            playButton.setTitle("| |", for: UIControlState())
+            playButton.setTitle("Ⅱ", for: UIControlState())
         } else {
-            playButton.setTitle(">", for: UIControlState())
+            playButton.setTitle("▶", for: UIControlState())
         }
     }
     
     fileprivate func updateCurrentSong() {
-        let currentSong = PlayQueue.sharedInstance.currentDisplaySong
+        let currentSong = PlayQueue.si.currentDisplaySong
         if let coverArtId = currentSong?.coverArtId {
             coverArtView.loadImage(coverArtId: coverArtId, size: .player)
         } else {
@@ -196,7 +230,7 @@ class PlayerViewController: UIViewController {
         
         progressSlider.value = Float(progressPercent)
         elapsedLabel.text = NSString.formatTime(progress)
-        if let duration = PlayQueue.sharedInstance.currentDisplaySong?.duration?.doubleValue, let formattedTime = NSString.formatTime(duration - progress) {
+        if let duration = PlayQueue.si.currentDisplaySong?.duration?.doubleValue, let formattedTime = NSString.formatTime(duration - progress) {
             remainingLabel.text = "-\(formattedTime)"
         }
     }

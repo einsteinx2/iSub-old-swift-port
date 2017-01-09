@@ -720,6 +720,19 @@
     [self cacheModel];
 }
 
+- (void)removeFromCache {
+    // TODO: Handle this more gracefully
+    if ([PlayQueue.si.currentSong isEqualToSong:self] || [PlayQueue.si.nextSong isEqualToSong:self]) {
+        [AudioEngine.si stop];
+    }
+    
+    // TODO: Error handling
+    [[NSFileManager defaultManager] removeItemAtPath:self.currentPath error:nil];
+    [self removeFromCachedSongsTable];
+    
+    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CachedSongDeleted];
+}
+
 - (void)removeFromCachedSongsTable {
     [DatabaseSingleton.si.songModelWritesDbQueue inDatabase:^(FMDatabase *db) {
         NSMutableArray *queries = [NSMutableArray array];
@@ -731,9 +744,9 @@
         [queries addObject:@"DELETE FROM cachedSongs WHERE songId = ? AND serverId = ?"];
         
         // Remove artist/album/folder entries if no other songs reference them
-        [queries addObject:@"DELETE FROM cachedFolders c WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE folderId = c.folderId AND serverId = cf.serverId)"];
-        [queries addObject:@"DELETE FROM cachedArtists c WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE artistId = c.artistId AND serverId = ca.serverId)"];
-        [queries addObject:@"DELETE FROM cachedAlbums c WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE albumId = cf.albumId AND serverId = cf.serverId)"];
+        [queries addObject:@"DELETE FROM cachedFolders WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE folderId = cachedFolders.folderId AND serverId = cachedFolders.serverId)"];
+        [queries addObject:@"DELETE FROM cachedArtists WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE artistId = cachedArtists.artistId AND serverId = cachedArtists.serverId)"];
+        [queries addObject:@"DELETE FROM cachedAlbums WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE albumId = cachedAlbums.albumId AND serverId = cachedAlbums.serverId)"];
         
         for (NSString *query in queries) {
             [db executeUpdate:query, self.songId, self.serverId];
@@ -751,7 +764,7 @@
     if (self.isPartiallyCached)
     {
         CGFloat bitrate = (CGFloat)self.estimatedBitrate;
-        if ([PlayQueue sharedInstance].isPlaying)
+        if (PlayQueue.si.isPlaying)
         {
             // TODO: Stop interacting directly with AudioEngine
             bitrate = [BassWrapper estimateBitrate:AudioEngine.si.player.currentStream];
@@ -761,7 +774,7 @@
         if (self.transcodedContentType)
         {
             // This is a transcode, so we'll want to use the actual bitrate if possible
-            if ([[PlayQueue sharedInstance].currentSong isEqualToSong:self])
+            if ([PlayQueue.si.currentSong isEqualToSong:self])
             {
                 // This is the current playing song, so see if BASS has an actual bitrate for it
                 // TODO: Stop interacting directly with AudioEngine

@@ -54,12 +54,20 @@ import Nuke
     // MARK: - Properties -
     //
     
-    open static let sharedInstance = PlayQueue()
+    open static let si = PlayQueue()
     
     open var repeatMode = RepeatMode.normal
     open var shuffleMode = ShuffleMode.normal { didSet { /* TODO: Do something */ } }
     
-    open fileprivate(set) var currentIndex = -1 { didSet { updateLockScreenInfo(); notifyPlayQueueIndexChanged() } }
+    open fileprivate(set) var currentIndex = -1 {
+        didSet {
+            updateLockScreenInfo()
+            
+            if currentIndex != oldValue {
+                notifyPlayQueueIndexChanged()
+            }
+        }
+    }
     open var previousIndex: Int { return indexAtOffset(-1, fromIndex: currentIndex) }
     open var nextIndex: Int { return indexAtOffset(1, fromIndex: currentIndex) }
     open var currentDisplaySong: ISMSSong? { return currentSong ?? previousSong }
@@ -84,7 +92,7 @@ import Nuke
         audioEngine.stop()
     }
     
-    open func removeSongsAtIndexes(_ indexes: IndexSet) {
+    open func removeSongs(atIndexes indexes: IndexSet) {
         // Stop the music if we're removing the current song
         let containsCurrentIndex = indexes.contains(currentIndex)
         if containsCurrentIndex {
@@ -95,9 +103,11 @@ import Nuke
         playlist.removeSongsAtIndexes(indexes)
         
         // Adjust the current index if songs are removed below it
-        let range = NSMakeRange(0, currentIndex)
-        let countOfIndexesBelowCurrent = indexes.count(in: range.toRange() ?? 0..<0)
-        currentIndex = currentIndex - countOfIndexesBelowCurrent
+        if currentIndex >= 0 {
+            let range = NSMakeRange(0, currentIndex)
+            let countOfIndexesBelowCurrent = indexes.count(in: range.toRange() ?? 0..<0)
+            currentIndex = currentIndex - countOfIndexesBelowCurrent
+        }
         
         // If we removed the current song, start the next one
         if containsCurrentIndex {
@@ -105,7 +115,19 @@ import Nuke
         }
     }
     
+    open func removeSong(atIndex index: Int) {
+        var indexSet = IndexSet()
+        indexSet.insert(index)
+        removeSongs(atIndexes: indexSet)
+    }
+    
     open func insertSong(song: ISMSSong, index: Int, notify: Bool = false) {
+        playlist.insertSong(song: song, index: index, notify: notify)
+        ISMSStreamManager.sharedInstance().fillStreamQueue(self.audioEngine.isStarted())
+    }
+    
+    open func insertSongNext(song: ISMSSong, notify: Bool = false) {
+        let index = currentIndex < 0 ? songCount : currentIndex + 1
         playlist.insertSong(song: song, index: index, notify: notify)
         ISMSStreamManager.sharedInstance().fillStreamQueue(self.audioEngine.isStarted())
     }

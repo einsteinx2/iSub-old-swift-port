@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Ben Baron. All rights reserved.
 //
 
-// TODO: Load default cover art image or cached cover art image if available
-
 import Foundation
 import UIKit
 
@@ -27,7 +25,7 @@ class ItemTableViewCell: DroppableCell {
     // Disabled for now until optimized
     let shouldRepositionLabels = false
     
-    let viewObjects = ViewObjectsSingleton.sharedInstance()
+    let viewObjects = ViewObjectsSingleton.si()
     
     weak var delegate: ItemTableViewCellDelegate?
     var associatedObject: AnyObject?

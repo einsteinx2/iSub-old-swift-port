@@ -61,7 +61,7 @@ class CacheViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if ViewObjectsSingleton.sharedInstance().isCellEnabled {
+        if ViewObjectsSingleton.si().isCellEnabled {
             switch indexPath.row {
             case foldersRowIndex:
                 let loader = CachedRootFoldersLoader()

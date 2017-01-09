@@ -75,6 +75,7 @@
 
 @property BOOL isPartiallyCached;
 @property BOOL isFullyCached;
+- (void)removeFromCache;
 - (void)removeFromCachedSongsTable;
 
 @property (readonly) CGFloat downloadProgress;

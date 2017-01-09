@@ -7,12 +7,19 @@
 //
 
 import UIKit
+import SnapKit
 
 // Cell that expands to allow dropping underneath it
 class DroppableCell: UITableViewCell {
     
     let containerView = UIView()
-    var cellHeight: CGFloat = 50.0
+    var cellHeight: CGFloat = 50.0 {
+        didSet {
+            containerView.snp.updateConstraints { make in
+                make.height.equalTo(cellHeight)
+            }
+        }
+    }
     
     var tableView: UITableView? {
         var view = self.superview
@@ -38,8 +45,13 @@ class DroppableCell: UITableViewCell {
         super.backgroundColor = .clear
         
         containerView.backgroundColor = .white
-        containerView.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
-        self.contentView.addSubview(containerView)
+        self.addSubview(containerView)
+        containerView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.equalTo(self)
+            make.height.equalTo(cellHeight)
+        }
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -50,10 +62,5 @@ class DroppableCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        containerView.frame = CGRect(x: 0, y: 0, width: self.width, height: cellHeight)
     }
 }

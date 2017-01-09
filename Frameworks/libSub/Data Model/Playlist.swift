@@ -39,16 +39,13 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         // SELECT COUNT(*) is O(n) while selecting the max rowId is O(1)
         // Since songIndex is our primary key field, it's an alias
         // for rowId. So SELECT MAX instead of SELECT COUNT here.
-        var maxId: Int?
+        var maxId = 0
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let query = "SELECT MAX(songIndex) FROM \(self.tableName)"
-            maxId = db.longOptionalForQuery(query)
+            maxId = db.longForQuery(query)
         }
-        
-        if let maxId = maxId {
-            return maxId + 1
-        }
-        return 0
+
+        return maxId
     }
     
     // Special Playlists
@@ -165,14 +162,22 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
             let query = "SELECT songIndex FROM \(self.tableName) WHERE songId = ?"
             index = db.longOptionalForQuery(query, songId)
         }
-        return index
+        
+        if let index = index {
+            return index - 1
+        }
+        return nil
     }
     
     open func songAtIndex(_ index: Int) -> ISMSSong? {
+        guard index >= 0 else {
+            return nil
+        }
+        
         var songId: Int?
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let query = "SELECT songId FROM \(self.tableName) WHERE songIndex = ?"
-            songId = db.longOptionalForQuery(query, index)
+            songId = db.longOptionalForQuery(query, index + 1)
         }
         
         if let songId = songId {
@@ -189,13 +194,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     }
     
     open func addSong(songId: Int, notify: Bool = false) {
-        var query = ""
-        if self.songCount == 0 {
-            // Force songIndex to start at 0
-            query = "INSERT INTO \(self.tableName) VALUES (0, ?)"
-        } else {
-            query = "INSERT INTO \(self.tableName) (songId) VALUES (?)"
-        }
+        let query = "INSERT INTO \(self.tableName) (songId) VALUES (?)"
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 try db.executeUpdate(query, songId)
@@ -242,10 +241,10 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query1 = "UPDATE \(self.tableName) SET songIndex = -songIndex WHERE songIndex >= ?"
-                try db.executeUpdate(query1, index)
+                try db.executeUpdate(query1, index + 1)
                 
                 let query2 = "INSERT INTO \(self.tableName) VALUES (?, ?)"
-                try db.executeUpdate(query2, index, songId)
+                try db.executeUpdate(query2, index + 1, songId)
                 
                 let query3 = "UPDATE \(self.tableName) SET songIndex = (-songIndex) + 1 WHERE songIndex < 0"
                 try db.executeUpdate(query3)
@@ -263,10 +262,10 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName) WHERE songIndex = ?"
-                try db.executeUpdate(query1, index)
+                try db.executeUpdate(query1, index + 1)
 
                 let query2 = "UPDATE \(self.tableName) SET songIndex = songIndex - 1 WHERE songIndex > ?"
-                try db.executeUpdate(query2, index)
+                try db.executeUpdate(query2, index + 1)
             } catch {
                 printError(error)
             }
@@ -296,7 +295,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     open func removeSong(songId: Int, notify: Bool = false) {
         if let index = indexOfSongId(songId) {
-            removeSongAtIndex(index, notify: notify)
+            removeSongAtIndex(index + 1, notify: notify)
         }
     }
     

@@ -21,8 +21,6 @@
 #import "BassGaplessPlayer.h"
 #import <AVFoundation/AVFoundation.h>
 
-#define audioEngineS ((AudioEngine *)[AudioEngine sharedInstance])
-
 @class ISMSSong, BassParamEqValue, BassStream, SUSRegisterActionLoader, EX2RingBuffer;
 @interface AudioEngine : NSObject <AVAudioSessionDelegate>
 

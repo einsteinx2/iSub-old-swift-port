@@ -18,8 +18,17 @@ typealias LoadModelsCompletion = (_ success: Bool, _ error: Error?) -> Void
 class ItemViewModel : NSObject {
     
     fileprivate var loader: ItemLoader
-    fileprivate var isCacheLoader: Bool {
+    
+    var isBrowsingCache: Bool {
         return loader is CachedDatabaseLoader
+    }
+    
+    var isBrowsingFolder: Bool {
+        return loader is FolderLoader
+    }
+    
+    var isBrowsingAlbum: Bool {
+        return loader is AlbumLoader
     }
     
     var delegate: ItemViewModelDelegate?
@@ -27,7 +36,7 @@ class ItemViewModel : NSObject {
     var topLevelController = false
     
     var shouldSetupRefreshControl: Bool {
-        return !isCacheLoader
+        return !isBrowsingCache
     }
     
     fileprivate(set) var rootItem: ISMSItem?
@@ -61,8 +70,11 @@ class ItemViewModel : NSObject {
             loader.callbackBlock = { success, error, loader in
                 completion?(success, error)
                 if success {
-                    self.processModels()
-                    self.delegate?.itemsChanged()
+                    // May have some false positives, but prevents UI pauses
+                    if self.items.count != self.loader.items.count {
+                        self.processModels()
+                        self.delegate?.itemsChanged()
+                    }
                 } else {
                     let errorString = error == nil ? "Unknown error" : error!.localizedDescription
                     self.delegate?.loadingError(errorString)
@@ -119,7 +131,7 @@ class ItemViewModel : NSObject {
         var folderLoader: ItemLoader?
         
         if let folderId = folder.folderId as? Int, let mediaFolderId = folder.mediaFolderId as? Int, let serverId = folder.serverId as? Int {
-            if isCacheLoader {
+            if isBrowsingCache {
                 folderLoader = CachedFolderLoader(folderId: folderId, serverId: serverId)
             } else {
                 folderLoader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
@@ -133,7 +145,7 @@ class ItemViewModel : NSObject {
         var artistLoader: ItemLoader?
         
         if let artistId = artist.artistId as? Int, let serverId = artist.serverId as? Int {
-            if isCacheLoader {
+            if isBrowsingCache {
                 artistLoader = CachedArtistLoader(artistId: artistId, serverId: serverId)
             } else {
                 artistLoader = ArtistLoader(artistId: artistId)
@@ -147,7 +159,7 @@ class ItemViewModel : NSObject {
         var albumLoader: ItemLoader?
         
         if let albumId = album.albumId as? Int, let serverId = album.serverId as? Int {
-            if isCacheLoader {
+            if isBrowsingCache {
                 albumLoader = CachedAlbumLoader(albumId: albumId, serverId: serverId)
             } else {
                 albumLoader = AlbumLoader(albumId: albumId)
@@ -155,5 +167,11 @@ class ItemViewModel : NSObject {
         }
         
         return albumLoader
+    }
+    
+    func playSong(atIndex index: Int) {
+        // TODO: Implement a way to just switch play index when we're playing from the same array to save time
+        //playAll(songs: viewModel.songs, playIndex: indexPath.row)
+        PlayQueue.si.playSongs(songs, playIndex: index)
     }
 }

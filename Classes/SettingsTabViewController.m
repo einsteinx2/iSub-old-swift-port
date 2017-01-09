@@ -516,7 +516,7 @@
 - (void)resetFolderCache
 {
 	[DatabaseSingleton.si resetFolderCache];
-	[viewObjectsS hideLoadingScreen];
+	[ViewObjectsSingleton.si hideLoadingScreen];
 	[self popFoldersTab];
 }
 
@@ -524,7 +524,7 @@
 {
     // TODO: Reimplement
 //	[DatabaseSingleton.si resetCoverArtCache];
-//	[viewObjectsS hideLoadingScreen];
+//	[ViewObjectsSingleton.si hideLoadingScreen];
 //	[self popFoldersTab];
 }
 
@@ -541,12 +541,12 @@
 {
 	if (alertView.tag == 0 && buttonIndex == 1)
 	{
-		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Processing"];
+		[ViewObjectsSingleton.si showLoadingScreenOnMainWindowWithMessage:@"Processing"];
 		[self performSelector:@selector(resetFolderCache) withObject:nil afterDelay:0.05];
 	}
 	else if (alertView.tag == 1 && buttonIndex == 1)
 	{
-		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Processing"];
+		[ViewObjectsSingleton.si showLoadingScreenOnMainWindowWithMessage:@"Processing"];
 		[self performSelector:@selector(resetAlbumArtCache) withObject:nil afterDelay:0.05];
 	}
     else if (alertView.tag == 2)

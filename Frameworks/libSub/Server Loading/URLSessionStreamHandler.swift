@@ -79,7 +79,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         task = session?.dataTask(with: request)
         task?.resume()
         
-        if song.isEqual(to: PlayQueue.sharedInstance.currentSong) {
+        if song.isEqual(to: PlayQueue.si.currentSong) {
             isCurrentSong = true
         }
         

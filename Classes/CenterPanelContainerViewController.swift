@@ -33,7 +33,7 @@ class CenterPanelContainerViewController: UIViewController {
     override func loadView() {
         self.view = UIView()
         
-        miniPlayerShowing = (PlayQueue.sharedInstance.currentSong != nil)
+        miniPlayerShowing = (PlayQueue.si.currentSong != nil)
         
         self.view.addSubview(contentView)
         contentView.snp.makeConstraints { make in
@@ -64,7 +64,7 @@ class CenterPanelContainerViewController: UIViewController {
     }
     
     @objc fileprivate func indexChanged() {
-        if PlayQueue.sharedInstance.currentSong != nil {
+        if PlayQueue.si.currentSong != nil {
             showMiniPlayer(animated: true)
         } else {
             hideMiniPlayer(animated: true)

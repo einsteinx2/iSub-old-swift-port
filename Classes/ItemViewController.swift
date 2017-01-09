@@ -23,6 +23,9 @@ class ItemViewController: DraggableTableViewController {
     fileprivate let songsSectionIndex     = 3
     fileprivate let playlistsSectionIndex = 4
     
+    fileprivate let singleTapRecognizer = UITapGestureRecognizer()
+    fileprivate let doubleTapRecognizer = UITapGestureRecognizer()
+    
     fileprivate let viewModel: ItemViewModel
     fileprivate var reloading: Bool = false
     fileprivate var sectionIndexes: [SectionIndex]?
@@ -54,6 +57,17 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func customizeTableView(_ tableView: UITableView) {
+        doubleTapRecognizer.addTarget(self, action: #selector(doubleTap(_:)))
+        doubleTapRecognizer.numberOfTapsRequired = 2
+        doubleTapRecognizer.numberOfTouchesRequired = 1
+        tableView.addGestureRecognizer(doubleTapRecognizer)
+        
+        singleTapRecognizer.addTarget(self, action: #selector(singleTap(_:)))
+        singleTapRecognizer.numberOfTapsRequired = 1
+        singleTapRecognizer.numberOfTouchesRequired = 1
+        singleTapRecognizer.require(toFail: doubleTapRecognizer)
+        tableView.addGestureRecognizer(singleTapRecognizer)
+        
         tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: folderCellIdentifier)
         tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: artistCellIdentifier)
         tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: albumCellIdentifier)
@@ -92,21 +106,59 @@ class ItemViewController: DraggableTableViewController {
     // MARK: - Notifications - 
     
     fileprivate func registerForNotifications() {
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(ItemViewController.currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(ItemViewController.songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(cachedSongDeleted(_:)), name: ISMSNotification_CachedSongDeleted, object: nil)
+        
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
     }
     
     fileprivate func unregisterForNotifications() {
         NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
         NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_SongPlaybackStarted, object: nil)
+        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_CachedSongDeleted, object: nil)
+        
+        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingBegan, object: nil)
+        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingEnded, object: nil)
+        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingCanceled, object: nil)
     }
     
-    func currentPlaylistIndexChanged(_ notification: Notification?) {
+    @objc fileprivate func currentPlaylistIndexChanged(_ notification: Notification?) {
         self.tableView.reloadData()
     }
     
-    func songPlaybackStarted(_ notification: Notification?) {
+    @objc fileprivate func songPlaybackStarted(_ notification: Notification?) {
         self.tableView.reloadData()
+    }
+    
+    @objc fileprivate func cachedSongDeleted(_ notification: Notification?) {
+        // Prevent tons of reloads if we delete many songs
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(cachedSongDeletedRateLimited), object: nil)
+        self.perform(#selector(cachedSongDeletedRateLimited), with: nil, afterDelay: 0.25)
+    }
+    
+    @objc fileprivate func cachedSongDeletedRateLimited() {
+        if viewModel.isBrowsingCache {
+            _ = viewModel.loadModelsFromDatabase()
+        }
+        self.tableView.reloadData()
+    }
+    
+    @objc fileprivate func draggingBegan(_ notification: Notification) {
+        singleTapRecognizer.isEnabled = false
+        doubleTapRecognizer.isEnabled = false
+    }
+    
+    @objc fileprivate func draggingEnded(_ notification: Notification) {
+        singleTapRecognizer.isEnabled = true
+        doubleTapRecognizer.isEnabled = true
+    }
+    
+    @objc fileprivate func draggingCanceled(_ notification: Notification) {
+        singleTapRecognizer.isEnabled = true
+        doubleTapRecognizer.isEnabled = true
     }
     
     // MARK: - Loading -
@@ -244,6 +296,7 @@ class ItemViewController: DraggableTableViewController {
             cell.coverArtId = album.coverArtId
             cell.title = album.name
         case songsSectionIndex:
+            cell.selectionStyle = .none
             cell.accessoryType = UITableViewCellAccessoryType.none
             cell.alwaysShowSubtitle = true
             
@@ -254,7 +307,7 @@ class ItemViewController: DraggableTableViewController {
             cell.trackNumber = song.trackNumber
             cell.subTitle = song.artistDisplayName
             cell.duration = song.duration
-            cell.playing = (song == PlayQueue.sharedInstance.currentDisplaySong)
+            cell.playing = (song == PlayQueue.si.currentDisplaySong)
         default:
             break
         }
@@ -281,8 +334,45 @@ class ItemViewController: DraggableTableViewController {
         return ISMSNormalize(height)
     }
     
+    @objc fileprivate func singleTap(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            let point = recognizer.location(in: self.tableView)
+            guard let indexPath = self.tableView.indexPathForRow(at: point) else {
+                return
+            }
+            
+            if ViewObjectsSingleton.si().isCellEnabled {
+                switch indexPath.section {
+                case songsSectionIndex:
+                    let song = self.viewModel.songs[indexPath.row]
+                    showActionSheet(item: song, indexPath: indexPath)
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
+    @objc fileprivate func doubleTap(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            let point = recognizer.location(in: self.tableView)
+            guard let indexPath = self.tableView.indexPathForRow(at: point) else {
+                return
+            }
+            
+            if ViewObjectsSingleton.si().isCellEnabled {
+                switch indexPath.section {
+                case songsSectionIndex:                    
+                    viewModel.playSong(atIndex: indexPath.row)
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if ViewObjectsSingleton.sharedInstance().isCellEnabled {
+        if ViewObjectsSingleton.si().isCellEnabled {
             switch indexPath.section {
             case foldersSectionIndex:
                 let folder = self.viewModel.folders[indexPath.row]
@@ -299,18 +389,60 @@ class ItemViewController: DraggableTableViewController {
                 if let loader = viewModel.loaderForAlbum(album) {
                     pushItemController(loader: loader)
                 }
-            case songsSectionIndex:
-                // TODO: Implement a way to just switch play index when we're playing from the same array to save time
-                //playAll(songs: viewModel.songs, playIndex: indexPath.row)
-                PlayQueue.sharedInstance.playSongs(viewModel.songs, playIndex: indexPath.row)
-                break
             default:
-                break
+                tableView.deselectRow(at: indexPath, animated: false)
             }
+        } else {
+            tableView.deselectRow(at: indexPath, animated: false)
         }
-        else
-        {
-            self.tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
+    fileprivate func showActionSheet(item: ISMSItem, indexPath: IndexPath) {
+        if let song = item as? ISMSSong {
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            alertController.addAction(UIAlertAction(title: "Play", style: .default) { action in
+                self.viewModel.playSong(atIndex: indexPath.row)
+            })
+            
+            alertController.addAction(UIAlertAction(title: "Queue Next", style: .default) { action in
+                PlayQueue.si.insertSongNext(song: song, notify: true)
+            })
+            
+            alertController.addAction(UIAlertAction(title: "Queue Last", style: .default) { action in
+                PlayQueue.si.insertSong(song: song, index: PlayQueue.si.songCount, notify: true)
+            })
+            
+            if !viewModel.isBrowsingFolder, let folderId = song.folderId as? Int, let mediaFolderId = song.mediaFolderId as? Int {
+                alertController.addAction(UIAlertAction(title: "Go to Folder", style: .default) { action in
+                    let loader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
+                    self.pushItemController(loader: loader)
+                })
+            }
+            
+            if let artistId = song.artistId as? Int {
+                alertController.addAction(UIAlertAction(title: "Go to Artist", style: .default) { action in
+                    let loader = ArtistLoader(artistId: artistId)
+                    self.pushItemController(loader: loader)
+                })
+            }
+            
+            if !viewModel.isBrowsingAlbum, let albumId = song.albumId as? Int {
+                alertController.addAction(UIAlertAction(title: "Go to Album", style: .default) { action in
+                    let loader = AlbumLoader(albumId: albumId)
+                    self.pushItemController(loader: loader)
+                })
+            }
+            
+            if viewModel.isBrowsingCache {
+                alertController.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
+                    song.removeFromCache()
+                })
+            }
+            
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            
+            self.present(alertController, animated: true, completion: nil)
         }
     }
     
@@ -336,7 +468,7 @@ extension ItemViewController : ItemViewModelDelegate {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
         
-        ViewObjectsSingleton.sharedInstance().hideLoadingScreen()
+        ViewObjectsSingleton.si().hideLoadingScreen()
         
         dataSourceDidFinishLoadingNewData()
     }

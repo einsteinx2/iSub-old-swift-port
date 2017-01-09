@@ -279,9 +279,9 @@ LOG_LEVEL_ISUB_DEBUG
             //[[ISMSPlaylist downloadedSongs] removeSongWithSong:handler.song notify:YES];
         }
         [self.handlerStack removeObjectAtIndexSafe:index];
+        
+        [self saveHandlerStack];
 	}
-	
-	[self saveHandlerStack];
 }
 
 // Convenience method
@@ -480,28 +480,39 @@ LOG_LEVEL_ISUB_DEBUG
 	return isSongInQueue;
 }
 
-- (void)fillStreamQueue:(BOOL)isStartDownload
-{	
+- (void)fillStreamQueue:(BOOL)isStartDownload {
 	NSUInteger numStreamsToQueue = 1;
-	if (SavedSettings.si.isSongCachingEnabled && SavedSettings.si.isNextSongCacheEnabled)
-	{
+	if (SavedSettings.si.isSongCachingEnabled && SavedSettings.si.isNextSongCacheEnabled) {
 		numStreamsToQueue = ISMSNumberOfStreamsToQueue;
 	}
-	
-	if (self.handlerStack.count < numStreamsToQueue)
-	{
-		for (int i = 0; i < numStreamsToQueue; i++)
-		{
-			ISMSSong *aSong = [[PlayQueue sharedInstance] songAtIndex:[[PlayQueue sharedInstance] indexAtOffsetFromCurrentIndex:i]];
-			if (aSong && aSong.contentType.basicType == ISMSBasicContentTypeAudio && ![self isSongInQueue:aSong] && ![self.lastTempCachedSong isEqualToSong:aSong] && !aSong.isFullyCached && !SavedSettings.si.isOfflineMode && ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong])
-			{
-				// Queue the song for download
-				[self queueStreamForSong:aSong isTempCache:!SavedSettings.si.isSongCachingEnabled isStartDownload:isStartDownload];
-			}
-		}
-		
-		DDLogVerbose(@"[ISMSStreamManager] fill stream queue, handlerStack: %@", self.handlerStack);
-	}
+    
+    for (int i = 0; i < numStreamsToQueue; i++) {
+        ISMSSong *aSong = [PlayQueue.si songAtIndex:[PlayQueue.si indexAtOffsetFromCurrentIndex:i]];
+        
+        // Check if the song is already in this position in the queue
+        ISMSStreamHandler *handler = [self.handlerStack objectAtIndexSafe: i];
+        if (![aSong isEqualToSong:handler.song]) {
+            
+            // Song didn't match, so remove whatever is in the queue from this position forward
+            for (int j = i; j < numStreamsToQueue; j++) {
+                [self removeStreamAtIndex:j];
+            }
+            
+            // Add song to stream queue
+            if (aSong && aSong.contentType.basicType == ISMSBasicContentTypeAudio &&
+                ![self isSongInQueue:aSong] &&
+                ![self.lastTempCachedSong isEqualToSong:aSong] &&
+                !aSong.isFullyCached &&
+                !SavedSettings.si.isOfflineMode &&
+                ![cacheQueueManagerS.currentQueuedSong isEqualToSong:aSong]) {
+                
+                // Queue the song for download
+                [self queueStreamForSong:aSong isTempCache:!SavedSettings.si.isSongCachingEnabled isStartDownload:isStartDownload];
+            }
+        }
+    }
+    
+    DDLogVerbose(@"[ISMSStreamManager] fill stream queue, handlerStack: %@", self.handlerStack);
 }
 
 - (void)fillStreamQueue
@@ -527,19 +538,19 @@ LOG_LEVEL_ISUB_DEBUG
 	// TODO: Fix this logic, it's wrong
 	// Verify that the last song is not constantly retrying to connect, 
 	// so the current song can download and play
-	[self removeStreamForSong:[PlayQueue sharedInstance].previousSong];
+	[self removeStreamForSong:PlayQueue.si.previousSong];
 }
 
 - (void)currentPlaylistOrderChanged
 {
-	ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
-	ISMSSong *nextSong = [PlayQueue sharedInstance].nextSong;
+	ISMSSong *currentSong = PlayQueue.si.currentSong;
+	ISMSSong *nextSong = PlayQueue.si.nextSong;
 	NSMutableArray *songsToSkip = [NSMutableArray arrayWithCapacity:2];
 	if (currentSong) [songsToSkip addObject:currentSong];
 	if (nextSong) [songsToSkip addObject:nextSong];
 	
 	[self removeAllStreamsExceptForSongs:songsToSkip];
-	[self fillStreamQueue:[PlayQueue sharedInstance].isStarted];
+	[self fillStreamQueue:PlayQueue.si.isStarted];
 }
 
 #pragma mark - ISMSStreamHandler delegate
@@ -555,11 +566,11 @@ LOG_LEVEL_ISUB_DEBUG
 	// Update the last cached song
 	self.lastCachedSong = handler.song;
     
-    ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
+    ISMSSong *currentSong = PlayQueue.si.currentSong;
 	if ([handler.song isEqualToSong:currentSong])
 	{
         // TODO: Stop interacting directly with AudioEngine
-		[AudioEngine.si startSong:currentSong index:[PlayQueue sharedInstance].currentIndex];
+		[AudioEngine.si startSong:currentSong index:PlayQueue.si.currentIndex];
 		
 		// Only for temp cached files
 		if (handler.isTempCache)

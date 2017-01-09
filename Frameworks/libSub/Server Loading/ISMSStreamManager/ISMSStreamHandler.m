@@ -79,7 +79,7 @@
 
 - (void)playlistIndexChanged
 {
-	if ([self.song isEqualToSong:[PlayQueue sharedInstance].currentSong])
+	if ([self.song isEqualToSong:PlayQueue.si.currentSong])
 		self.isCurrentSong = YES;
 }
 

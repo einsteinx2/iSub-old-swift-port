@@ -200,7 +200,7 @@ static NSTimeInterval const kDelay = .5;
     [NSNotificationCenter addObserverOnMainThread:self selector:@selector(hideLoadingScreen) name:ISMSNotification_HideLoadingScreen object:nil];
 }
 
-+ (instancetype)sharedInstance
++ (instancetype)si
 {
     static ViewObjectsSingleton *sharedInstance = nil;
     static dispatch_once_t once = 0;

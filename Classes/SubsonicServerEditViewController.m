@@ -175,7 +175,7 @@
 	
 	if (urlValid && usernameValid && passwordValid)
 	{
-		[viewObjectsS showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
+		[ViewObjectsSingleton.si showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
         
         ISMSStatusLoader *loader = [[ISMSStatusLoader alloc] initWithUrl:self.urlField.text username:self.usernameField.text password:self.passwordField.text];
         loader.delegate = self;
@@ -212,7 +212,7 @@
 
 - (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
 {
-	[viewObjectsS hideLoadingScreen];
+	[ViewObjectsSingleton.si hideLoadingScreen];
 	
 	NSString *message = @"";
     NSInteger tag = 0;
@@ -237,7 +237,7 @@
     ISMSStatusLoader *statusLoader = (id)theLoader;
     
 	//DLog(@"server check passed");
-	[viewObjectsS hideLoadingScreen];
+	[ViewObjectsSingleton.si hideLoadingScreen];
     
     if (self.server)
     {

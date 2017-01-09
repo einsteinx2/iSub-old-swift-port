@@ -209,7 +209,7 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
             showServerEditScreen(server: server)
         } else {
             redirectUrl = nil
-            ViewObjectsSingleton.sharedInstance().showLoadingScreenOnMainWindow(withMessage: "Checking Server")
+            ViewObjectsSingleton.si().showLoadingScreenOnMainWindow(withMessage: "Checking Server")
             
             let statusLoader = StatusLoader(server: server)
             statusLoader.delegate = self;
@@ -288,7 +288,7 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
         
-        ViewObjectsSingleton.sharedInstance().hideLoadingScreen()
+        ViewObjectsSingleton.si().hideLoadingScreen()
     }
     
     func loadingFinished(_ theLoader: ISMSLoader) {
@@ -298,7 +298,7 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
             
             iSubAppDelegate.sharedInstance().switchServer(to: server, redirectUrl: redirectUrl)
             
-            ViewObjectsSingleton.sharedInstance().hideLoadingScreen()
+            ViewObjectsSingleton.si().hideLoadingScreen()
         }
     }
 }

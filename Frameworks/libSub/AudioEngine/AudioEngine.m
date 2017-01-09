@@ -219,7 +219,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 #pragma clang diagnostic pop
 #endif
     
-    _delegate = [PlayQueue sharedInstance];
+    _delegate = PlayQueue.si;
     
     // Run async to prevent potential deadlock from dispatch_once
     [EX2Dispatch runInMainThreadAsync:^{

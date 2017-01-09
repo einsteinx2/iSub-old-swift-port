@@ -9,8 +9,6 @@
 #ifndef iSub_ViewObjectsSingleton_h
 #define iSub_ViewObjectsSingleton_h
 
-#define viewObjectsS ((ViewObjectsSingleton *)[ViewObjectsSingleton sharedInstance])
-
 #import <MBProgressHUD/MBProgressHUD.h>
 
 @class FoldersViewController, ISMSArtist, LoadingScreen, ISMSAlbum, Server;
@@ -78,7 +76,7 @@
 
 @property BOOL isLoadingScreenShowing;
 
-+ (instancetype)sharedInstance;
++ (instancetype)si;
 
 - (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message;
 - (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message;

@@ -36,7 +36,7 @@ LOG_LEVEL_ISUB_DEFAULT
 - (void)playerHandleSocial
 {
     // TODO: I don't think this works anymore
-    double progress = [PlayQueue sharedInstance].currentSongProgress;
+    double progress = PlayQueue.si.currentSongProgress;
     if (!self.playerHasNotifiedSubsonic && progress >= SocialSingleton.si.subsonicDelay)
     {
         if (SavedSettings.si.currentServer.type == ServerTypeSubsonic)
@@ -78,7 +78,7 @@ LOG_LEVEL_ISUB_DEFAULT
 - (NSTimeInterval)scrobbleDelay
 {
 	// Scrobble in 30 seconds (or settings amount) if not canceled
-	ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
+	ISMSSong *currentSong = PlayQueue.si.currentSong;
 	NSTimeInterval scrobbleDelay = 30.0;
 	if (currentSong.duration != nil)
 	{
@@ -106,7 +106,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	{
 		// If this song wasn't just cached, then notify Subsonic of the playback
 		ISMSSong *lastCachedSong = streamManagerS.lastCachedSong;
-		ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
+		ISMSSong *currentSong = PlayQueue.si.currentSong;
 		if (![lastCachedSong isEqualToSong:currentSong])
 		{
 			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
@@ -127,7 +127,7 @@ LOG_LEVEL_ISUB_DEFAULT
     //DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
 	if (SavedSettings.si.isScrobbleEnabled && !SavedSettings.si.isOfflineMode)
 	{
-		ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
+		ISMSSong *currentSong = PlayQueue.si.currentSong;
 		[self scrobbleSong:currentSong isSubmission:YES];
 	//DLog(@"Scrobbled %@ as submission", currentSong.title);
 	}
@@ -139,7 +139,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	// If scrobbling is enabled, send "now playing" call
 	if (SavedSettings.si.isScrobbleEnabled && !SavedSettings.si.isOfflineMode)
 	{
-		ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
+		ISMSSong *currentSong = PlayQueue.si.currentSong;
 		[self scrobbleSong:currentSong isSubmission:NO];
 	//DLog(@"Scrobbled %@ as playing", currentSong.title);
 	}
@@ -212,7 +212,7 @@ LOG_LEVEL_ISUB_DEFAULT
 - (void)tweetSong
 {
 #ifdef IOS
-	ISMSSong *currentSong = [PlayQueue sharedInstance].currentSong;
+	ISMSSong *currentSong = PlayQueue.si.currentSong;
 	
     //DLog(@"Asked to tweet %@", currentSong.title);
 	

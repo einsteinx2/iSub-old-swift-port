@@ -10,67 +10,86 @@ import Foundation
 
 protocol PlayQueueViewModelDelegate {
     func itemsChanged()
+    func currentIndexChanged()
+    func currentSongChanged()
 }
 
 class PlayQueueViewModel: NSObject {
     
     var delegate: PlayQueueViewModelDelegate?
+    
     var numberOfRows: Int {
         return songs.count
     }
     
     fileprivate var songs = [ISMSSong]()
+    
     fileprivate(set) var currentIndex: Int = -1
+    
     fileprivate(set) var currentSong: ISMSSong?
     
     override init() {
         super.init()
         
-        reloadSongs(notifyDelegate: false)
+        reloadSongs()
         
         // Rather than loading the songs list all the time,
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(PlayQueueViewModel.playlistChanged(_:)), name: Playlist.Notifications.playlistChanged, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(PlayQueueViewModel.playQueueIndexChanged(_:)), name: PlayQueue.Notifications.playQueueIndexChanged, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playlistChanged(_:)), name: Playlist.Notifications.playlistChanged, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playQueueIndexChanged(_:)), name: PlayQueue.Notifications.playQueueIndexChanged, object: nil)
     }
     
     @objc fileprivate func playlistChanged(_ notification: Notification) {
         if let userInfo = notification.userInfo, let playlistId = userInfo[Playlist.Notifications.playlistIdKey] as? Int {
             if playlistId == Playlist.playQueuePlaylistId {
-                reloadSongs(notifyDelegate: true)
+                self.reloadSongs()
+                self.delegate?.itemsChanged()
             }
         }
     }
     
     @objc fileprivate func playQueueIndexChanged(_ notification: Notification) {
-        reloadSongs(notifyDelegate: true)
+        reloadSongs()
+        self.delegate?.itemsChanged()
     }
     
-    fileprivate func reloadSongs(notifyDelegate: Bool) {
-        let playQueue = PlayQueue.sharedInstance
-        songs = playQueue.songs
-        currentSong = playQueue.currentSong
-        currentIndex = playQueue.currentIndex
+    fileprivate func reloadSongs() {
+        songs = PlayQueue.si.songs
+        let oldIndex = currentIndex
+        currentIndex = PlayQueue.si.currentIndex
+        let oldSong = currentSong
+        currentSong = PlayQueue.si.currentSong
         
-        if notifyDelegate {
-            delegate?.itemsChanged()
+        if currentIndex != oldIndex {
+            delegate?.currentIndexChanged()
+        }
+        
+        if let oldSong = oldSong, let currentSong = currentSong, !oldSong.isEqual(to: currentSong) {
+            delegate?.currentSongChanged()
+        } else if (oldSong == nil && currentSong != nil) || (oldSong != nil && currentSong == nil) {
+            delegate?.currentSongChanged()
         }
     }
     
-    func songAtIndex(_ index: Int) -> ISMSSong {
+    func song(atIndex index: Int) -> ISMSSong {
         return songs[index]
     }
     
-    func playSongAtIndex(_ index: Int) {
-        PlayQueue.sharedInstance.playSongAtIndex(index)
+    func playSong(atIndex index: Int) {
+        PlayQueue.si.playSongAtIndex(index)
     }
     
-    func insertSongAtIndex(_ index: Int, song: ISMSSong) {
-        PlayQueue.sharedInstance.insertSong(song: song, index: index, notify: false)
-        reloadSongs(notifyDelegate: false)
+    func insertSong(_ song: ISMSSong, atIndex index: Int) {
+        PlayQueue.si.insertSong(song: song, index: index, notify: false)
+        reloadSongs()
     }
     
     func moveSong(fromIndex: Int, toIndex: Int) {
-        PlayQueue.sharedInstance.moveSong(fromIndex: fromIndex, toIndex: toIndex, notify: false)
-        reloadSongs(notifyDelegate: false)
+        PlayQueue.si.moveSong(fromIndex: fromIndex, toIndex: toIndex, notify: false)
+        reloadSongs()
+    }
+    
+    func removeSong(atIndex index: Int) {
+        PlayQueue.si.removeSong(atIndex: index)
+        reloadSongs()
     }
 }

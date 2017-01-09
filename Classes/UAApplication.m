@@ -61,15 +61,15 @@ static const int ddLogLevel = DDLogLevelDebug;
 - (void)playPauseStop
 {
 	DDLogVerbose(@"[UAApplication] playPauseStop called");
-    if ([PlayQueue sharedInstance].isStarted)
+    if (PlayQueue.si.isStarted)
     {
-        DDLogVerbose(@"[UAApplication] audio engine player exists, playPauseStop [[PlayQueue sharedInstance] playPause] called");
-        [[PlayQueue sharedInstance] playPause];
+        DDLogVerbose(@"[UAApplication] audio engine player exists, playPauseStop [PlayQueue.si playPause] called");
+        [PlayQueue.si playPause];
     }
     else
     {
         DDLogVerbose(@"[UAApplication] audio engine player doesn't exist, playPauseStop [musicS playSongAtPosition:playlistS.currentIndex] called");
-        [[PlayQueue sharedInstance] playSongAtIndex:[PlayQueue sharedInstance].currentIndex];
+        [PlayQueue.si playSongAtIndex:PlayQueue.si.currentIndex];
     }
 }
 
@@ -96,11 +96,11 @@ static const int ddLogLevel = DDLogLevelDebug;
 			break;
 		case UIEventSubtypeRemoteControlNextTrack:
 			DDLogVerbose(@"UIEventSubtypeRemoteControlNextTrack, calling nextSong");
-            [[PlayQueue sharedInstance] playNextSong];
+            [PlayQueue.si playNextSong];
 			break;
 		case UIEventSubtypeRemoteControlPreviousTrack:
 			DDLogVerbose(@"[UAApplication] UIEventSubtypeRemoteControlPreviousTrack, calling prevSong");
-            [[PlayQueue sharedInstance] playPreviousSong];
+            [PlayQueue.si playPreviousSong];
 			break;
 		default:
 			return;

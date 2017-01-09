@@ -75,16 +75,16 @@
 	_isPlaying = [_userDefaults boolForKey:@"isPlaying"];
 		
 	_shuffleMode = (ShuffleMode)[_userDefaults integerForKey:@"shuffleMode"];
-	[PlayQueue sharedInstance].shuffleMode = _shuffleMode;
+	PlayQueue.si.shuffleMode = _shuffleMode;
 	
 	_playQueueIndex = [_userDefaults integerForKey:@"playQueueIndex"];
     // TODO: Is this next line necessary?
-	//[PlayQueue sharedInstance].currentIndex = _playQueueIndex;
+	//PlayQueue.si.currentIndex = _playQueueIndex;
 	
     _currentTwitterAccount = [_userDefaults objectForKey:@"currentTwitterAccount"];
 	
 	_repeatMode = (RepeatMode)[_userDefaults integerForKey:@"repeatMode"];
-	[PlayQueue sharedInstance].repeatMode = _repeatMode;
+	PlayQueue.si.repeatMode = _repeatMode;
 	
 	_bitRate = [_userDefaults integerForKey:@"bitRate"];
 	_byteOffset = self.byteOffset;
@@ -113,15 +113,15 @@
 	{
 		BOOL isDefaultsDirty = NO;
 		
-		if ([PlayQueue sharedInstance].isPlaying != _isPlaying)
+		if (PlayQueue.si.isPlaying != _isPlaying)
 		{
-			_isPlaying = [PlayQueue sharedInstance].isPlaying;
+			_isPlaying = PlayQueue.si.isPlaying;
 			
 			[_userDefaults setBool:_isPlaying forKey:@"isPlaying"];
 			isDefaultsDirty = YES;
 		}
         
-        PlayQueue *playQueue = [PlayQueue sharedInstance];
+        PlayQueue *playQueue = PlayQueue.si;
 		
 		if (playQueue.shuffleMode != _shuffleMode)
 		{
@@ -152,9 +152,9 @@
 			isDefaultsDirty = YES;
 		}
 		
-        if (_secondsOffset != [PlayQueue sharedInstance].currentSongProgress)
+        if (_secondsOffset != PlayQueue.si.currentSongProgress)
 		{
-			_secondsOffset = [PlayQueue sharedInstance].currentSongProgress;
+			_secondsOffset = PlayQueue.si.currentSongProgress;
 			[_userDefaults setDouble:_secondsOffset forKey:@"seekTime"];
 			isDefaultsDirty = YES;
 		}

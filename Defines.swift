@@ -33,7 +33,8 @@ func ISMSNormalize(_ value: CGFloat, multiplier: CGFloat = 1, maxDelta: CGFloat 
     let screenWidth = UIScreen.main.bounds.size.width
     let percent = (screenWidth - BaseWidth)/screenWidth
     let normalizedValue = value * (1 + percent) * multiplier
-    return min(normalizedValue, value + maxDelta) //capped by a max value if needed
+    let minValue = min(normalizedValue, value + maxDelta) //capped by a max value if needed
+    return ceil(minValue) // Return whole numbers
 }
 
 func BytesForSecondsAtBitrate(_ seconds: Int, bitrate: Int) -> Int {
