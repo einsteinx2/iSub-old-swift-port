@@ -57,6 +57,7 @@ class ItemViewModel : NSObject {
     init(loader: ItemLoader) {
         self.loader = loader
         self.rootItem = loader.associatedObject as? ISMSItem
+        self.navigationTitle = self.rootItem?.itemName
     }
     
     func loadModelsFromDatabase() -> Bool {
