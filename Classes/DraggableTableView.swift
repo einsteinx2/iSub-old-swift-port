@@ -217,12 +217,12 @@ class DraggableTableView: UITableView {
         self.isScrollEnabled = true
         isDraggingCell = false
         
+        dragImageView?.removeFromSuperview()
+        dragImageView = nil
         cancelLongPress()
         
         if let touch = touches.first {
             if let dragCell = dragCell {
-                dragImageView?.removeFromSuperview()
-                
                 if dimDraggedCells {
                     UIView.animate(withDuration: 0.1) {
                         // Undo the cell dimming
@@ -257,6 +257,8 @@ class DraggableTableView: UITableView {
         self.isScrollEnabled = true
         isDraggingCell = false
         
+        dragImageView?.removeFromSuperview()
+        dragImageView = nil
         cancelLongPress()
         
         if let dragCell = dragCell {
@@ -267,8 +269,6 @@ class DraggableTableView: UITableView {
             
             let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
             NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingCanceled, userInfo: userInfo)
-            
-            dragImageView?.removeFromSuperview()
         }
         
         super.touchesCancelled(touches!, with: event)
