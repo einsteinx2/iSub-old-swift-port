@@ -246,7 +246,29 @@
         }
     }
     
-    return [name stringWithoutIndefiniteArticle];
+    return [self stringWithoutIndefiniteArticle:name];
+}
+
+- (NSString *)stringWithoutIndefiniteArticle:(NSString *)string
+{
+    NSArray *indefiniteArticles = @[@"the", @"los", @"las", @"les", @"el", @"la", @"le"];
+    
+    for (NSString *article in indefiniteArticles)
+    {
+        // See if the string starts with this article, note the space after each article to reduce false positives
+        if ([string.lowercaseString hasPrefix:[NSString stringWithFormat:@"%@ ", article]])
+        {
+            // Make sure we don't mess with it if there's nothing after the article
+            if (string.length > (article.length + 1))
+            {
+                // Move the article to the end after a comma
+                return [NSString stringWithFormat:@"%@, %@", [string substringFromIndex:(article.length + 1)], [string substringToIndex:article.length]];
+            }
+        }
+    }
+    
+    // Does not contain an article
+    return string;
 }
 
 

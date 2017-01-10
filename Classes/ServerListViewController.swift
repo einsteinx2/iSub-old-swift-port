@@ -99,7 +99,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
             self.navigationItem.rightBarButtonItem = nil
             helpTabViewController = HelpTabViewController(nibName: "HelpTabViewController", bundle: nil)
             helpTabViewController!.view.frame = self.view.bounds
-            helpTabViewController!.view.height -= 40.0
+            helpTabViewController!.view.frame.size.height -= 40.0
             self.tableView.tableFooterView = helpTabViewController!.view
             if self.tableView.tableFooterView == nil {
                 self.tableView.tableFooterView = UIView()

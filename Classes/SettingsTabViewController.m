@@ -43,31 +43,6 @@
 	self.versionLabel.text = [NSString stringWithFormat:@"iSub version %@", version];
 #endif
 	
-	// Hide elements
-	if (IS_IPAD())
-	{
-		self.swipeCellsLabel.hidden = self.tapHoldCellsLabel.hidden = YES;
-		self.enableSwipeSwitch.hidden = self.enableTapAndHoldSwitch.hidden = YES;
-		self.enableSwipeSwitch.enabled = self.enableTapAndHoldSwitch.enabled = NO;
-		
-		CGFloat y = self.autoReloadArtistSwitch.y;
-		for (UIView *view in self.view.subviews)
-		{
-			if (view.y > y+10.) view.y -= 70.;
-		}
-	}
-	if (![NSClassFromString(@"MPNowPlayingInfoCenter") class])
-	{
-		self.enableLockArtLabel.hidden = self.enableLockScreenArt.hidden = YES;
-		self.enableLockScreenArt.enabled = NO;
-		
-		CGFloat y = self.enableCacheStatusSwitch.y;
-		for (UIView *view in self.view.subviews)
-		{
-			if (view.y > y+10.) view.y -= 35.;
-		}
-	}
-	
 	// Main Settings
 	self.enableScrobblingSwitch.on = SavedSettings.si.isScrobbleEnabled;
 	
@@ -181,9 +156,13 @@
     // Fix switch positions for iOS 7
     for (UISwitch *sw in self.switches)
     {
-        sw.x += 5.;
+        CGRect swFrame = sw.frame;
+        swFrame.origin.x += 5;
+        sw.frame = swFrame;
     }
-    self.autoDeleteCacheSwitch.x -= 10.;
+    CGRect autoDeleteCacheSwitchFrame = self.autoDeleteCacheSwitch.frame;
+    autoDeleteCacheSwitchFrame.origin.x -= 10;
+    self.autoDeleteCacheSwitch.frame = autoDeleteCacheSwitchFrame;
 }
 
 - (void)reloadTwitterUIElements

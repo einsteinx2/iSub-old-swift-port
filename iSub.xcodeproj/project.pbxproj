@@ -861,14 +861,10 @@
 		53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */; };
 		53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */; };
 		53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */; };
-		53D59A401E1DC3BA00071ABD /* UIView+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A3F1E1DC3BA00071ABD /* UIView+Tools.m */; };
-		53D59A421E1DC3BA00071ABD /* UIView+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A3F1E1DC3BA00071ABD /* UIView+Tools.m */; };
 		53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A451E1DC43F00071ABD /* NSNotificationCenter+MainThread.m */; };
 		53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A451E1DC43F00071ABD /* NSNotificationCenter+MainThread.m */; };
 		53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4A1E1DC58700071ABD /* NSString+Time.m */; };
 		53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4A1E1DC58700071ABD /* NSString+Time.m */; };
-		53D59A501E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4F1E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m */; };
-		53D59A521E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4F1E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m */; };
 		53D59A571E1DC63800071ABD /* NSArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A541E1DC63800071ABD /* NSArray+Safe.m */; };
 		53D59A591E1DC63800071ABD /* NSArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A541E1DC63800071ABD /* NSArray+Safe.m */; };
 		53D59A5A1E1DC63800071ABD /* NSMutableArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A561E1DC63800071ABD /* NSMutableArray+Safe.m */; };
@@ -1335,15 +1331,11 @@
 		53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2NetworkIndicator.m; sourceTree = "<group>"; };
 		53D59A2B1E1DC38400071ABD /* EX2RingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2RingBuffer.h; sourceTree = "<group>"; };
 		53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2RingBuffer.m; sourceTree = "<group>"; };
-		53D59A3E1E1DC3BA00071ABD /* UIView+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Tools.h"; sourceTree = "<group>"; };
-		53D59A3F1E1DC3BA00071ABD /* UIView+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Tools.m"; sourceTree = "<group>"; };
 		53D59A431E1DC3D000071ABD /* EX2Kit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EX2Kit.h; sourceTree = "<group>"; };
 		53D59A441E1DC43F00071ABD /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
 		53D59A451E1DC43F00071ABD /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
 		53D59A491E1DC58700071ABD /* NSString+Time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Time.h"; sourceTree = "<group>"; };
 		53D59A4A1E1DC58700071ABD /* NSString+Time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Time.m"; sourceTree = "<group>"; };
-		53D59A4E1E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+CompareWithoutIndefiniteArticles.h"; sourceTree = "<group>"; };
-		53D59A4F1E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+CompareWithoutIndefiniteArticles.m"; sourceTree = "<group>"; };
 		53D59A531E1DC63800071ABD /* NSArray+Safe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Safe.h"; sourceTree = "<group>"; };
 		53D59A541E1DC63800071ABD /* NSArray+Safe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Safe.m"; sourceTree = "<group>"; };
 		53D59A551E1DC63800071ABD /* NSMutableArray+Safe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Safe.h"; sourceTree = "<group>"; };
@@ -2398,14 +2390,10 @@
 			children = (
 				53D59A431E1DC3D000071ABD /* EX2Kit.h */,
 				53D59A5D1E1DC76600071ABD /* EX2Macros.h */,
-				53D59A3E1E1DC3BA00071ABD /* UIView+Tools.h */,
-				53D59A3F1E1DC3BA00071ABD /* UIView+Tools.m */,
 				53D59A441E1DC43F00071ABD /* NSNotificationCenter+MainThread.h */,
 				53D59A451E1DC43F00071ABD /* NSNotificationCenter+MainThread.m */,
 				53D59A491E1DC58700071ABD /* NSString+Time.h */,
 				53D59A4A1E1DC58700071ABD /* NSString+Time.m */,
-				53D59A4E1E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.h */,
-				53D59A4F1E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m */,
 				53D59A531E1DC63800071ABD /* NSArray+Safe.h */,
 				53D59A541E1DC63800071ABD /* NSArray+Safe.m */,
 				53D59A551E1DC63800071ABD /* NSMutableArray+Safe.h */,
@@ -2938,7 +2926,6 @@
 				53CED25F113E2FF100B09699 /* SubsonicServerEditViewController.m in Sources */,
 				533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
-				53D59A401E1DC3BA00071ABD /* UIView+Tools.m in Sources */,
 				538B4D001E1D77AC00847152 /* FolderLoader.swift in Sources */,
 				537CE5FF1E21D3E30004283E /* CachedRootSongsLoader.swift in Sources */,
 				53835CD91E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
@@ -2971,7 +2958,6 @@
 				538A1CDD1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
 				5358DF741E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
 				5358DD5C1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
-				53D59A501E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m in Sources */,
 				5358DF971E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				537CE5EA1E21C1C20004283E /* CachedFolderLoader.swift in Sources */,
 				53ABE1491C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
@@ -3298,7 +3284,6 @@
 				53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */,
 				533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
-				53D59A421E1DC3BA00071ABD /* UIView+Tools.m in Sources */,
 				538B4D021E1D77AC00847152 /* FolderLoader.swift in Sources */,
 				537CE6001E21D3E30004283E /* CachedRootSongsLoader.swift in Sources */,
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
@@ -3331,7 +3316,6 @@
 				538A1CDF1D144C9100999E7F /* CenterPanelContainerViewController.swift in Sources */,
 				5358DF761E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
 				5358DD5E1E0B78480024A0D4 /* NSMutableURLRequest+PMS.m in Sources */,
-				53D59A521E1DC5CD00071ABD /* NSString+CompareWithoutIndefiniteArticles.m in Sources */,
 				5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				537CE5EB1E21C1C20004283E /* CachedFolderLoader.swift in Sources */,
 				53ABE14B1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,

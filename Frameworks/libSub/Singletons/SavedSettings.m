@@ -403,7 +403,7 @@
         _currentServerId = [_userDefaults integerForKey:@"currentServerId"];
         _currentServerUrl = [_userDefaults stringForKey:@"currentServerUrl"];
     }
-    _sessionId = [_userDefaults stringForKey:[NSString stringWithFormat:@"sessionId%@", _currentServer.url.md5]];
+    _sessionId = [_userDefaults stringForKey:[NSString stringWithFormat:@"sessionId_server%ld", (long)_currentServer.serverId]];
 }
 
 #pragma mark - Login Settings
@@ -1156,44 +1156,6 @@
 	@synchronized(self)
 	{
 		[_userDefaults setBool:isUpdateCheckQuestionAsked forKey:@"isUpdateCheckQuestionAsked"];
-		[_userDefaults synchronize];
-	}
-}
-
-- (BOOL)isVideoSupported
-{
-	@synchronized(self)
-	{
-		NSString *key = [NSString stringWithFormat:@"isVideoSupported%@", _currentServer.url.md5];
-		return [_userDefaults boolForKey:key];
-	}
-}
-
-- (void)setIsVideoSupported:(BOOL)isVideoSupported
-{
-	@synchronized(self)
-	{
-		NSString *key = [NSString stringWithFormat:@"isVideoSupported%@", _currentServer.url.md5];
-		[_userDefaults setBool:isVideoSupported forKey:key];
-		[_userDefaults synchronize];
-	}
-}
-
-- (BOOL)isNewSearchAPI
-{
-	@synchronized(self)
-	{
-		NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", _currentServer.url.md5];
-		return [_userDefaults boolForKey:key];
-	}
-}
-
-- (void)setIsNewSearchAPI:(BOOL)isNewSearchAPI
-{
-	@synchronized(self)
-	{
-		NSString *key = [NSString stringWithFormat:@"isNewSearchAPI%@", _currentServer.url.md5];
-		[_userDefaults setBool:isNewSearchAPI forKey:key];
 		[_userDefaults synchronize];
 	}
 }
