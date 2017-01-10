@@ -12,7 +12,6 @@
 #import "ISMSStreamManager.h"
 #import <Twitter/Twitter.h>
 #import "NSMutableURLRequest+SUS.h"
-#import "NSMutableURLRequest+PMS.h"
 
 // Twitter secret keys
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"

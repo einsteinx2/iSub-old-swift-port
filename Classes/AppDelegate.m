@@ -15,9 +15,7 @@
 #import <arpa/inet.h>
 #import "IntroViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import "HLSProxyConnection.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "NSMutableURLRequest+PMS.h"
 #import <HockeySDK/HockeySDK.h>
 #import "JASidePanelController.h"
 #import "Logging.h"

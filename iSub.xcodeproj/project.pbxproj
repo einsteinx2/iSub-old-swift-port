@@ -195,10 +195,6 @@
 		531B33761E24CF8B00811187 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FD1E24CF8A00811187 /* Server.swift */; };
 		531B33771E24CF8B00811187 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FF1E24CF8A00811187 /* String.swift */; };
 		531B33781E24CF8B00811187 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FF1E24CF8A00811187 /* String.swift */; };
-		531B33791E24CF8B00811187 /* HLSProxyConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33021E24CF8A00811187 /* HLSProxyConnection.m */; };
-		531B337A1E24CF8B00811187 /* HLSProxyConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33021E24CF8A00811187 /* HLSProxyConnection.m */; };
-		531B337B1E24CF8B00811187 /* HLSProxyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33041E24CF8A00811187 /* HLSProxyResponse.m */; };
-		531B337C1E24CF8B00811187 /* HLSProxyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33041E24CF8A00811187 /* HLSProxyResponse.m */; };
 		531B337D1E24CF8B00811187 /* CacheQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33061E24CF8A00811187 /* CacheQueueManager.swift */; };
 		531B337E1E24CF8B00811187 /* CacheQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33061E24CF8A00811187 /* CacheQueueManager.swift */; };
 		531B337F1E24CF8B00811187 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33081E24CF8A00811187 /* ISMSStreamHandler.m */; };
@@ -245,14 +241,8 @@
 		531B33AA1E24CF8B00811187 /* RootPlaylistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */; };
 		531B33AB1E24CF8B00811187 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33241E24CF8B00811187 /* StatusLoader.swift */; };
 		531B33AC1E24CF8B00811187 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33241E24CF8B00811187 /* StatusLoader.swift */; };
-		531B33AD1E24CF8B00811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33261E24CF8B00811187 /* SelfReferencingOperationQueue.swift */; };
-		531B33AE1E24CF8B00811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33261E24CF8B00811187 /* SelfReferencingOperationQueue.swift */; };
-		531B33AF1E24CF8B00811187 /* NSMutableURLRequest+PMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33281E24CF8B00811187 /* NSMutableURLRequest+PMS.m */; };
-		531B33B01E24CF8B00811187 /* NSMutableURLRequest+PMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33281E24CF8B00811187 /* NSMutableURLRequest+PMS.m */; };
 		531B33B11E24CF8B00811187 /* NSMutableURLRequest+SUS.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B332A1E24CF8B00811187 /* NSMutableURLRequest+SUS.m */; };
 		531B33B21E24CF8B00811187 /* NSMutableURLRequest+SUS.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B332A1E24CF8B00811187 /* NSMutableURLRequest+SUS.m */; };
-		531B33B31E24CF8B00811187 /* NSString+cleanCredentialsForLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B332C1E24CF8B00811187 /* NSString+cleanCredentialsForLog.m */; };
-		531B33B41E24CF8B00811187 /* NSString+cleanCredentialsForLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B332C1E24CF8B00811187 /* NSString+cleanCredentialsForLog.m */; };
 		531B33B51E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */; };
 		531B33B61E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */; };
 		531B33B71E24CF8B00811187 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33321E24CF8B00811187 /* CacheSingleton.m */; };
@@ -355,6 +345,8 @@
 		531B34631E24D37300811187 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 531B34601E24D37300811187 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B34651E24D3D500811187 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34641E24D3D500811187 /* Defines.swift */; };
 		531B34661E24D3D500811187 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34641E24D3D500811187 /* Defines.swift */; };
+		531B346B1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
+		531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
 		532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
 		532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A1ACF1E1DD2C400A8502A /* NSString+HasValue.m */; };
 		532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A1ACF1E1DD2C400A8502A /* NSString+HasValue.m */; };
@@ -891,10 +883,6 @@
 		531B32FC1E24CF8A00811187 /* SectionIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionIndex.swift; sourceTree = "<group>"; };
 		531B32FD1E24CF8A00811187 /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		531B32FF1E24CF8A00811187 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		531B33011E24CF8A00811187 /* HLSProxyConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLSProxyConnection.h; sourceTree = "<group>"; };
-		531B33021E24CF8A00811187 /* HLSProxyConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLSProxyConnection.m; sourceTree = "<group>"; };
-		531B33031E24CF8A00811187 /* HLSProxyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HLSProxyResponse.h; sourceTree = "<group>"; };
-		531B33041E24CF8A00811187 /* HLSProxyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HLSProxyResponse.m; sourceTree = "<group>"; };
 		531B33061E24CF8A00811187 /* CacheQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheQueueManager.swift; sourceTree = "<group>"; };
 		531B33071E24CF8A00811187 /* ISMSStreamHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamHandler.h; sourceTree = "<group>"; };
 		531B33081E24CF8A00811187 /* ISMSStreamHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSStreamHandler.m; sourceTree = "<group>"; };
@@ -902,10 +890,9 @@
 		531B330A1E24CF8A00811187 /* ISMSStreamManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamManager.h; sourceTree = "<group>"; };
 		531B330B1E24CF8A00811187 /* ISMSStreamManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSStreamManager.m; sourceTree = "<group>"; };
 		531B330F1E24CF8A00811187 /* ApiLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiLoader.swift; sourceTree = "<group>"; };
-		531B33101E24CF8A00811187 /* ISMSLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaderManager.h; sourceTree = "<group>"; };
 		531B33111E24CF8A00811187 /* ItemLoaderOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemLoaderOperation.swift; sourceTree = "<group>"; };
-		531B33131E24CF8A00811187 /* AlbumLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumLoader.swift; sourceTree = "<group>"; };
-		531B33141E24CF8A00811187 /* ArtistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistLoader.swift; sourceTree = "<group>"; };
+		531B33131E24CF8A00811187 /* AlbumLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlbumLoader.swift; path = "New Model/AlbumLoader.swift"; sourceTree = "<group>"; };
+		531B33141E24CF8A00811187 /* ArtistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ArtistLoader.swift; path = "New Model/ArtistLoader.swift"; sourceTree = "<group>"; };
 		531B33151E24CF8A00811187 /* CachedAlbumLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedAlbumLoader.swift; sourceTree = "<group>"; };
 		531B33161E24CF8A00811187 /* CachedArtistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedArtistLoader.swift; sourceTree = "<group>"; };
 		531B33171E24CF8A00811187 /* CachedDatabaseLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedDatabaseLoader.swift; sourceTree = "<group>"; };
@@ -914,22 +901,17 @@
 		531B331A1E24CF8A00811187 /* CachedRootArtistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRootArtistsLoader.swift; sourceTree = "<group>"; };
 		531B331B1E24CF8A00811187 /* CachedRootFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRootFoldersLoader.swift; sourceTree = "<group>"; };
 		531B331C1E24CF8A00811187 /* CachedRootSongsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRootSongsLoader.swift; sourceTree = "<group>"; };
-		531B331D1E24CF8A00811187 /* FolderLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderLoader.swift; sourceTree = "<group>"; };
-		531B331E1E24CF8A00811187 /* ItemLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemLoader.swift; sourceTree = "<group>"; };
-		531B331F1E24CF8A00811187 /* MediaFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaFoldersLoader.swift; sourceTree = "<group>"; };
-		531B33201E24CF8A00811187 /* RootAlbumsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootAlbumsLoader.swift; sourceTree = "<group>"; };
-		531B33211E24CF8B00811187 /* RootArtistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootArtistsLoader.swift; sourceTree = "<group>"; };
-		531B33221E24CF8B00811187 /* RootFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootFoldersLoader.swift; sourceTree = "<group>"; };
-		531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootPlaylistsLoader.swift; sourceTree = "<group>"; };
-		531B33241E24CF8B00811187 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusLoader.swift; sourceTree = "<group>"; };
-		531B33261E24CF8B00811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
-		531B33271E24CF8B00811187 /* NSMutableURLRequest+PMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableURLRequest+PMS.h"; sourceTree = "<group>"; };
-		531B33281E24CF8B00811187 /* NSMutableURLRequest+PMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableURLRequest+PMS.m"; sourceTree = "<group>"; };
+		531B331D1E24CF8A00811187 /* FolderLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FolderLoader.swift; path = "New Model/FolderLoader.swift"; sourceTree = "<group>"; };
+		531B331E1E24CF8A00811187 /* ItemLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemLoader.swift; path = "New Model/ItemLoader.swift"; sourceTree = "<group>"; };
+		531B331F1E24CF8A00811187 /* MediaFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MediaFoldersLoader.swift; path = "New Model/MediaFoldersLoader.swift"; sourceTree = "<group>"; };
+		531B33201E24CF8A00811187 /* RootAlbumsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootAlbumsLoader.swift; path = "New Model/RootAlbumsLoader.swift"; sourceTree = "<group>"; };
+		531B33211E24CF8B00811187 /* RootArtistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootArtistsLoader.swift; path = "New Model/RootArtistsLoader.swift"; sourceTree = "<group>"; };
+		531B33221E24CF8B00811187 /* RootFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootFoldersLoader.swift; path = "New Model/RootFoldersLoader.swift"; sourceTree = "<group>"; };
+		531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootPlaylistsLoader.swift; path = "New Model/RootPlaylistsLoader.swift"; sourceTree = "<group>"; };
+		531B33241E24CF8B00811187 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusLoader.swift; path = "New Model/StatusLoader.swift"; sourceTree = "<group>"; };
 		531B33291E24CF8B00811187 /* NSMutableURLRequest+SUS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableURLRequest+SUS.h"; sourceTree = "<group>"; };
 		531B332A1E24CF8B00811187 /* NSMutableURLRequest+SUS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableURLRequest+SUS.m"; sourceTree = "<group>"; };
-		531B332B1E24CF8B00811187 /* NSString+cleanCredentialsForLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+cleanCredentialsForLog.h"; sourceTree = "<group>"; };
-		531B332C1E24CF8B00811187 /* NSString+cleanCredentialsForLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+cleanCredentialsForLog.m"; sourceTree = "<group>"; };
-		531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionStreamHandler.swift; sourceTree = "<group>"; };
+		531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLSessionStreamHandler.swift; path = ../URLSessionStreamHandler.swift; sourceTree = "<group>"; };
 		531B33311E24CF8B00811187 /* CacheSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheSingleton.h; sourceTree = "<group>"; };
 		531B33321E24CF8B00811187 /* CacheSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheSingleton.m; sourceTree = "<group>"; };
 		531B33331E24CF8B00811187 /* DatabaseSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseSingleton.h; sourceTree = "<group>"; };
@@ -1011,6 +993,7 @@
 		531B34641E24D3D500811187 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
 		531B34671E24D41300811187 /* Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = "<group>"; };
 		531B34681E24D41300811187 /* Imports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Imports.h; sourceTree = "<group>"; };
+		531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
 		532862D911C573AD00B40FF0 /* UAApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAApplication.h; sourceTree = "<group>"; };
 		532862DA11C573AD00B40FF0 /* UAApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAApplication.m; sourceTree = "<group>"; };
 		532A1ACE1E1DD2C400A8502A /* NSString+HasValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HasValue.h"; sourceTree = "<group>"; };
@@ -1644,6 +1627,7 @@
 		531B32E81E24CF8A00811187 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
+				531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */,
 				531B32E91E24CF8A00811187 /* CachedImage.swift */,
 				531B32EA1E24CF8A00811187 /* ISMSAlbum.h */,
 				531B32EB1E24CF8A00811187 /* ISMSAlbum.m */,
@@ -1688,21 +1672,10 @@
 		531B33001E24CF8A00811187 /* Server Loading */ = {
 			isa = PBXGroup;
 			children = (
-				531B33011E24CF8A00811187 /* HLSProxyConnection.h */,
-				531B33021E24CF8A00811187 /* HLSProxyConnection.m */,
-				531B33031E24CF8A00811187 /* HLSProxyResponse.h */,
-				531B33041E24CF8A00811187 /* HLSProxyResponse.m */,
-				531B33051E24CF8A00811187 /* ISMSStreamManager */,
-				531B330E1E24CF8A00811187 /* Loaders */,
-				531B33271E24CF8B00811187 /* NSMutableURLRequest+PMS.h */,
-				531B33281E24CF8B00811187 /* NSMutableURLRequest+PMS.m */,
 				531B33291E24CF8B00811187 /* NSMutableURLRequest+SUS.h */,
 				531B332A1E24CF8B00811187 /* NSMutableURLRequest+SUS.m */,
-				531B332B1E24CF8B00811187 /* NSString+cleanCredentialsForLog.h */,
-				531B332C1E24CF8B00811187 /* NSString+cleanCredentialsForLog.m */,
-				531B332D1E24CF8B00811187 /* NSURLConnectionDelegates */,
-				531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */,
-				531B332F1E24CF8B00811187 /* XML Parsers */,
+				531B33051E24CF8A00811187 /* ISMSStreamManager */,
+				531B330E1E24CF8A00811187 /* Api Loaders */,
 			);
 			path = "Server Loading";
 			sourceTree = "<group>";
@@ -1716,28 +1689,28 @@
 				531B33091E24CF8A00811187 /* ISMSStreamHandlerDelegate.h */,
 				531B330A1E24CF8A00811187 /* ISMSStreamManager.h */,
 				531B330B1E24CF8A00811187 /* ISMSStreamManager.m */,
+				531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */,
 			);
 			path = ISMSStreamManager;
 			sourceTree = "<group>";
 		};
-		531B330E1E24CF8A00811187 /* Loaders */ = {
+		531B330E1E24CF8A00811187 /* Api Loaders */ = {
 			isa = PBXGroup;
 			children = (
 				531B330F1E24CF8A00811187 /* ApiLoader.swift */,
-				531B33101E24CF8A00811187 /* ISMSLoaderManager.h */,
+				531B331E1E24CF8A00811187 /* ItemLoader.swift */,
 				531B33111E24CF8A00811187 /* ItemLoaderOperation.swift */,
-				531B33121E24CF8A00811187 /* New Model */,
-				531B33251E24CF8B00811187 /* Old Model */,
-				531B33261E24CF8B00811187 /* SelfReferencingOperationQueue.swift */,
+				531B34691E24E4DA00811187 /* Item Loaders */,
+				531B33121E24CF8A00811187 /* Cache Loaders */,
+				531B346D1E24E55C00811187 /* Other Loaders */,
 			);
+			name = "Api Loaders";
 			path = Loaders;
 			sourceTree = "<group>";
 		};
-		531B33121E24CF8A00811187 /* New Model */ = {
+		531B33121E24CF8A00811187 /* Cache Loaders */ = {
 			isa = PBXGroup;
 			children = (
-				531B33131E24CF8A00811187 /* AlbumLoader.swift */,
-				531B33141E24CF8A00811187 /* ArtistLoader.swift */,
 				531B33151E24CF8A00811187 /* CachedAlbumLoader.swift */,
 				531B33161E24CF8A00811187 /* CachedArtistLoader.swift */,
 				531B33171E24CF8A00811187 /* CachedDatabaseLoader.swift */,
@@ -1746,37 +1719,9 @@
 				531B331A1E24CF8A00811187 /* CachedRootArtistsLoader.swift */,
 				531B331B1E24CF8A00811187 /* CachedRootFoldersLoader.swift */,
 				531B331C1E24CF8A00811187 /* CachedRootSongsLoader.swift */,
-				531B331D1E24CF8A00811187 /* FolderLoader.swift */,
-				531B331E1E24CF8A00811187 /* ItemLoader.swift */,
-				531B331F1E24CF8A00811187 /* MediaFoldersLoader.swift */,
-				531B33201E24CF8A00811187 /* RootAlbumsLoader.swift */,
-				531B33211E24CF8B00811187 /* RootArtistsLoader.swift */,
-				531B33221E24CF8B00811187 /* RootFoldersLoader.swift */,
-				531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */,
-				531B33241E24CF8B00811187 /* StatusLoader.swift */,
 			);
+			name = "Cache Loaders";
 			path = "New Model";
-			sourceTree = "<group>";
-		};
-		531B33251E24CF8B00811187 /* Old Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Old Model";
-			sourceTree = "<group>";
-		};
-		531B332D1E24CF8B00811187 /* NSURLConnectionDelegates */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = NSURLConnectionDelegates;
-			sourceTree = "<group>";
-		};
-		531B332F1E24CF8B00811187 /* XML Parsers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "XML Parsers";
 			sourceTree = "<group>";
 		};
 		531B33301E24CF8B00811187 /* Singletons */ = {
@@ -1921,6 +1866,29 @@
 				531B34411E24D24600811187 /* FMDatabaseVariadic.swift */,
 			);
 			path = "Swift extensions";
+			sourceTree = "<group>";
+		};
+		531B34691E24E4DA00811187 /* Item Loaders */ = {
+			isa = PBXGroup;
+			children = (
+				531B331F1E24CF8A00811187 /* MediaFoldersLoader.swift */,
+				531B33221E24CF8B00811187 /* RootFoldersLoader.swift */,
+				531B33211E24CF8B00811187 /* RootArtistsLoader.swift */,
+				531B33201E24CF8A00811187 /* RootAlbumsLoader.swift */,
+				531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */,
+				531B331D1E24CF8A00811187 /* FolderLoader.swift */,
+				531B33141E24CF8A00811187 /* ArtistLoader.swift */,
+				531B33131E24CF8A00811187 /* AlbumLoader.swift */,
+			);
+			name = "Item Loaders";
+			sourceTree = "<group>";
+		};
+		531B346D1E24E55C00811187 /* Other Loaders */ = {
+			isa = PBXGroup;
+			children = (
+				531B33241E24CF8B00811187 /* StatusLoader.swift */,
+			);
+			name = "Other Loaders";
 			sourceTree = "<group>";
 		};
 		533B69CC1E206031001FF3BF /* NavigationStack */ = {
@@ -2782,7 +2750,6 @@
 				531B337F1E24CF8B00811187 /* ISMSStreamHandler.m in Sources */,
 				53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */,
 				531B33C11E24CF8B00811187 /* SavedSettings.m in Sources */,
-				531B33791E24CF8B00811187 /* HLSProxyConnection.m in Sources */,
 				531B33611E24CF8B00811187 /* CachedImage.swift in Sources */,
 				531B33591E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
@@ -2833,7 +2800,6 @@
 				531B339B1E24CF8B00811187 /* CachedRootSongsLoader.swift in Sources */,
 				53D59A5A1E1DC63800071ABD /* NSMutableArray+Safe.m in Sources */,
 				53D59A861E1DCEAA00071ABD /* NSString+MD5.m in Sources */,
-				531B33AD1E24CF8B00811187 /* SelfReferencingOperationQueue.swift in Sources */,
 				531B33F01E24D0B600811187 /* DraggableTableView.swift in Sources */,
 				5358DBDE1E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				531B335F1E24CF8B00811187 /* BassVisualizer.m in Sources */,
@@ -2852,7 +2818,6 @@
 				53D59A7C1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				531B33511E24CF8B00811187 /* BassGaplessPlayer.m in Sources */,
 				531B33731E24CF8B00811187 /* SectionIndex.swift in Sources */,
-				531B337B1E24CF8B00811187 /* HLSProxyResponse.m in Sources */,
 				531B33FC1E24D0B600811187 /* CacheViewController.swift in Sources */,
 				53835CF71E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				531B338D1E24CF8B00811187 /* CachedAlbumLoader.swift in Sources */,
@@ -2869,6 +2834,7 @@
 				53835CA71E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				531B33FA1E24D0B600811187 /* ItemViewModel.swift in Sources */,
 				531B33751E24CF8B00811187 /* Server.swift in Sources */,
+				531B346B1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */,
 				531B33811E24CF8B00811187 /* ISMSStreamManager.m in Sources */,
 				531B33F61E24D0B600811187 /* ItemTableViewCell.swift in Sources */,
 				53835CF21E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
@@ -2895,12 +2861,10 @@
 				531B338B1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
 				531B33711E24CF8B00811187 /* Playlist.swift in Sources */,
 				531B33FE1E24D0B600811187 /* CenterPanelContainerViewController.swift in Sources */,
-				531B33AF1E24CF8B00811187 /* NSMutableURLRequest+PMS.m in Sources */,
 				531B344C1E24D24600811187 /* FMResultSet.m in Sources */,
 				53835CE81E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				533B69DA1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				531B340A1E24D0B600811187 /* SidePanelController.swift in Sources */,
-				531B33B31E24CF8B00811187 /* NSString+cleanCredentialsForLog.m in Sources */,
 				53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33771E24CF8B00811187 /* String.swift in Sources */,
@@ -3029,7 +2993,6 @@
 				531B33801E24CF8B00811187 /* ISMSStreamHandler.m in Sources */,
 				53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */,
 				531B33C21E24CF8B00811187 /* SavedSettings.m in Sources */,
-				531B337A1E24CF8B00811187 /* HLSProxyConnection.m in Sources */,
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,
 				531B335A1E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
@@ -3080,7 +3043,6 @@
 				531B339C1E24CF8B00811187 /* CachedRootSongsLoader.swift in Sources */,
 				53D59A5C1E1DC63800071ABD /* NSMutableArray+Safe.m in Sources */,
 				53D59A881E1DCEAA00071ABD /* NSString+MD5.m in Sources */,
-				531B33AE1E24CF8B00811187 /* SelfReferencingOperationQueue.swift in Sources */,
 				531B33F11E24D0B600811187 /* DraggableTableView.swift in Sources */,
 				5358DBE01E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				531B33601E24CF8B00811187 /* BassVisualizer.m in Sources */,
@@ -3099,7 +3061,6 @@
 				53D59A7E1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				531B33521E24CF8B00811187 /* BassGaplessPlayer.m in Sources */,
 				531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */,
-				531B337C1E24CF8B00811187 /* HLSProxyResponse.m in Sources */,
 				531B33FD1E24D0B600811187 /* CacheViewController.swift in Sources */,
 				53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				531B338E1E24CF8B00811187 /* CachedAlbumLoader.swift in Sources */,
@@ -3116,6 +3077,7 @@
 				53835CA91E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				531B33FB1E24D0B600811187 /* ItemViewModel.swift in Sources */,
 				531B33761E24CF8B00811187 /* Server.swift in Sources */,
+				531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */,
 				531B33821E24CF8B00811187 /* ISMSStreamManager.m in Sources */,
 				531B33F71E24D0B600811187 /* ItemTableViewCell.swift in Sources */,
 				53835CF41E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
@@ -3142,12 +3104,10 @@
 				531B338C1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
 				531B33721E24CF8B00811187 /* Playlist.swift in Sources */,
 				531B33FF1E24D0B600811187 /* CenterPanelContainerViewController.swift in Sources */,
-				531B33B01E24CF8B00811187 /* NSMutableURLRequest+PMS.m in Sources */,
 				531B344D1E24D24600811187 /* FMResultSet.m in Sources */,
 				53835CEA1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				531B340B1E24D0B600811187 /* SidePanelController.swift in Sources */,
-				531B33B41E24CF8B00811187 /* NSString+cleanCredentialsForLog.m in Sources */,
 				53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33781E24CF8B00811187 /* String.swift in Sources */,

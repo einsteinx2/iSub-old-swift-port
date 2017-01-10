@@ -46,8 +46,6 @@
 @property (nullable, strong) NSFileHandle *fileHandle;
 @property (nullable, strong) NSDate *startDate;
 
-@property BOOL isEnableRateLimiting;
-
 @property (readonly) NSUInteger totalDownloadSpeedInBytesPerSec;
 
 - (void)start:(BOOL)resume;

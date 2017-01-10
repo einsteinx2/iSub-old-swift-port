@@ -32,7 +32,6 @@
 #import "ISMSErrorDomain.h"
 #import "SUSErrorDomain.h"
 #import "NSError+ISMSError.h"
-#import "HLSProxyConnection.h"
 
 // Other
 #import "BassEffectValue.h"
@@ -42,10 +41,7 @@
 #import "DDDispatchQueueLogFormatter.h"
 #import "DDLog+LOGV.h"
 #import "DDMultiFormatter.h"
-#import "HLSProxyResponse.h"
-#import "NSMutableURLRequest+PMS.h"
 #import "NSMutableURLRequest+SUS.h"
-#import "NSString+cleanCredentialsForLog.h"
 #import "sqlite3.h"
 #import "RXMLElement.h"
 

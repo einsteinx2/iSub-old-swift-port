@@ -449,22 +449,6 @@ LOG_LEVEL_ISUB_DEBUG
 	[self saveHandlerStack];
 }
 
-- (void)queueStreamForSong:(ISMSSong *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
-{	
-	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:index isTempCache:isTemp isStartDownload:isStartDownload];
-}
-
-- (void)queueStreamForSong:(ISMSSong *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
-{
-	[self queueStreamForSong:song byteOffset:byteOffset secondsOffset:secondsOffset atIndex:[self.handlerStack count] isTempCache:isTemp isStartDownload:isStartDownload];
-}
-
-- (void)queueStreamForSong:(ISMSSong *)song isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
-{
-	//DLog(@"queuing stream for song: %@", song.title);
-	[self queueStreamForSong:song byteOffset:0 secondsOffset:0.0 atIndex:[self.handlerStack count] isTempCache:isTemp isStartDownload:isStartDownload];
-}
-
 - (BOOL)isSongInQueue:(ISMSSong *)aSong
 {
 	BOOL isSongInQueue = NO;
@@ -506,7 +490,7 @@ LOG_LEVEL_ISUB_DEBUG
                 ![CacheQueueManager.si.currentSong isEqualToSong:aSong]) {
                 
                 // Queue the song for download
-                [self queueStreamForSong:aSong isTempCache:!SavedSettings.si.isSongCachingEnabled isStartDownload:isStartDownload];
+                [self queueStreamForSong:aSong byteOffset:0 secondsOffset:0 atIndex:[self.handlerStack count] isTempCache:!SavedSettings.si.isSongCachingEnabled isStartDownload:isStartDownload];
             }
         }
     }

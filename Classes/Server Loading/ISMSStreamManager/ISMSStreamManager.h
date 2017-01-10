@@ -50,10 +50,6 @@
 - (void)removeStreamForSong:(nonnull ISMSSong *)aSong;
 
 - (void)queueStreamForSong:(nonnull ISMSSong *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
-- (void)queueStreamForSong:(nonnull ISMSSong *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
-- (void)queueStreamForSong:(nonnull ISMSSong *)song atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
-- (void)queueStreamForSong:(nonnull ISMSSong *)song isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
-
 - (void)fillStreamQueue:(BOOL)isStartDownload;
 
 - (void)resumeQueue;

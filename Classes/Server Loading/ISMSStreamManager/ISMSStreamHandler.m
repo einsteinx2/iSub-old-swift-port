@@ -175,7 +175,6 @@
 	[encoder encodeBool:self.isDownloading forKey:@"isDownloading"];
 	[encoder encodeInt64:self.contentLength forKey:@"contentLength"];
 	[encoder encodeInt32:(int32_t)self.maxBitrateSetting forKey:@"maxBitrateSetting"];
-    [encoder encodeBool:self.isEnableRateLimiting forKey:@"isEnableRateLimiting"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -192,7 +191,6 @@
 		_isDownloading = [decoder decodeBoolForKey:@"isDownloading"];
 		_contentLength = [decoder decodeInt64ForKey:@"contentLength"];
 		_maxBitrateSetting = [decoder decodeInt32ForKey:@"maxBitrateSetting"];
-        _isEnableRateLimiting = [decoder decodeBoolForKey:@"isEnableRateLimiting"];
 	}
 	
 	return self;
