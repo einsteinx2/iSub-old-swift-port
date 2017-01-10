@@ -19,7 +19,6 @@
 #import "HLSProxyConnection.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
-#import "ISMSLoaderDelegate.h"
 #import <HockeySDK/HockeySDK.h>
 #import "JASidePanelController.h"
 
@@ -247,7 +246,7 @@
 // Check server cancel load
 - (void)cancelLoad
 {
-	[self.statusLoader cancelLoad];
+	[self.statusLoader cancel];
 	[ViewObjectsSingleton.si hideLoadingScreen];
 }
 
@@ -264,13 +263,13 @@
 	{
         if (self.statusLoader)
         {
-            [self.statusLoader cancelLoad];
+            [self.statusLoader cancel];
         }
         
         Server *currentServer = SavedSettings.si.currentServer;
-        self.statusLoader = [[ISMSStatusLoader alloc] initWithUrl:currentServer.url username:currentServer.username password:currentServer.password];
+        self.statusLoader = [[StatusLoader alloc] initWithUrl:currentServer.url username:currentServer.username password:currentServer.password];
         __weak iSubAppDelegate *weakSelf = self;
-        self.statusLoader.callbackBlock = ^(BOOL success,  NSError * error, ISMSLoader * loader) {
+        self.statusLoader.completionHandler = ^(BOOL success,  NSError * error, ApiLoader * loader) {
             SavedSettings.si.redirectUrlString = loader.redirectUrlString;
             
             if (success)
@@ -296,7 +295,7 @@
             
             weakSelf.statusLoader = nil;
         };
-        [self.statusLoader startLoad];
+        [self.statusLoader start];
     }
 	
 	// Do a server check every half hour

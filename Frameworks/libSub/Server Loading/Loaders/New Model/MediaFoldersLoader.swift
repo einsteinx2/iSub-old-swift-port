@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MediaFoldersLoader: ISMSLoader, ItemLoader {
+class MediaFoldersLoader: ApiLoader, ItemLoader {
     var mediaFolders = [ISMSMediaFolder]()
     
     var associatedObject: Any?
@@ -21,31 +21,17 @@ class MediaFoldersLoader: ISMSLoader, ItemLoader {
         return NSMutableURLRequest(susAction: "getMusicFolders", parameters: nil) as URLRequest
     }
     
-    override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
-            let error = NSError(ismsCode: ISMSErrorCode_NotXML)
-            self.informDelegateLoadingFailed(error)
-            return
-        }
+    override func processResponse(root: RXMLElement) {
+        var mediaFoldersTemp = [ISMSMediaFolder]()
         
-        if let error = root.child("error"), error.isValid {
-            let code = error.attribute("code") ?? "-1"
-            let message = error.attribute("message")
-            self.subsonicErrorCode(Int(code) ?? -1, message: message)
-        } else {
-            var mediaFoldersTemp = [ISMSMediaFolder]()
-            
-            let serverId = SavedSettings.si().currentServerId
-            root.iterate("musicFolders.musicFolder") { musicFolder in
-                let aMediaFolder = ISMSMediaFolder(rxmlElement: musicFolder, serverId: serverId)
-                mediaFoldersTemp.append(aMediaFolder)
-            }
-            mediaFolders = mediaFoldersTemp
-            
-            self.persistModels()
-            
-            self.informDelegateLoadingFinished()
+        let serverId = SavedSettings.si().currentServerId
+        root.iterate("musicFolders.musicFolder") { musicFolder in
+            let aMediaFolder = ISMSMediaFolder(rxmlElement: musicFolder, serverId: serverId)
+            mediaFoldersTemp.append(aMediaFolder)
         }
+        mediaFolders = mediaFoldersTemp
+        
+        self.persistModels()
     }
     
     func persistModels() {

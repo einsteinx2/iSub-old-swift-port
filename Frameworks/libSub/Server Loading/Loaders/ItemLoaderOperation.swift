@@ -56,10 +56,10 @@ class ItemLoaderOperation: Operation {
     func execute() {
         // TODO: Remove the async main once switching to URLSession
         Async.main {
-            self.loader.callbackBlock = { _, _, _ in
+            self.loader.completionHandler = { _, _, _ in
                 self.finish()
             }
-            self.loader.startLoad()
+            self.loader.start()
         }
     }
     

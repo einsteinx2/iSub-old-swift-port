@@ -12,7 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, ISMSStatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, ItemViewController, SidePanelController, Server, NetworkStatus;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, StatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, ItemViewController, SidePanelController, Server, NetworkStatus;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 
@@ -20,7 +20,7 @@
 
 @property (strong) HTTPServer *hlsProxyServer;
 
-@property (strong) ISMSStatusLoader *statusLoader;
+@property (strong) StatusLoader *statusLoader;
 
 // New UI
 @property (nonatomic, strong) UIWindow *window;

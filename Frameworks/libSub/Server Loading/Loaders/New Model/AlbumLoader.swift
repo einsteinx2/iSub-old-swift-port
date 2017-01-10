@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AlbumLoader: ISMSLoader, ItemLoader {
+class AlbumLoader: ApiLoader, ItemLoader {
     let albumId: Int
     
     var songs = [ISMSSong]()
@@ -27,39 +27,25 @@ class AlbumLoader: ISMSLoader, ItemLoader {
         return NSMutableURLRequest(susAction: "getAlbum", parameters: parameters) as URLRequest
     }
     
-    override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
-            let error = NSError(ismsCode: ISMSErrorCode_NotXML)
-            self.informDelegateLoadingFailed(error)
-            return
+    override func processResponse(root: RXMLElement) {
+        var songsTemp = [ISMSSong]()
+        
+        let serverId = SavedSettings.si().currentServerId
+        root.iterate("album.song") { song in
+            let aSong = ISMSSong(rxmlElement: song, serverId: serverId)
+            songsTemp.append(aSong)
+        }
+        songs = songsTemp
+        
+        // Persist associated object model if needed
+        if !ISMSAlbum.isPersisted(NSNumber(value: albumId), serverId: NSNumber(value: serverId)) {
+            if let element = root.child("album") {
+                let album = ISMSAlbum(rxmlElement: element, serverId: serverId)
+                album.replace()
+            }
         }
         
-        if let error = root.child("error"), error.isValid {
-            let code = error.attribute("code") ?? "-1"
-            let message = error.attribute("message")
-            self.subsonicErrorCode(Int(code) ?? -1, message: message)
-        } else {
-            var songsTemp = [ISMSSong]()
-            
-            let serverId = SavedSettings.si().currentServerId
-            root.iterate("album.song") { song in
-                let aSong = ISMSSong(rxmlElement: song, serverId: serverId)
-                songsTemp.append(aSong)
-            }
-            songs = songsTemp
-            
-            // Persist associated object model if needed
-            if !ISMSAlbum.isPersisted(NSNumber(value: albumId), serverId: NSNumber(value: serverId)) {
-                if let element = root.child("album") {
-                    let album = ISMSAlbum(rxmlElement: element, serverId: serverId)
-                    album.replace()
-                }
-            }
-            
-            self.persistModels()
-            
-            self.informDelegateLoadingFinished()
-        }
+        self.persistModels()
     }
     
     func persistModels() {

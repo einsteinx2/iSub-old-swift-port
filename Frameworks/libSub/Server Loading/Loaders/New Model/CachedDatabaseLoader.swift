@@ -9,8 +9,8 @@
 import Foundation
 
 class CachedDatabaseLoader: ItemLoader {
-    weak var delegate: ISMSLoaderDelegate?
-    var callbackBlock: LoaderCallback?
+    weak var delegate: ApiLoaderDelegate?
+    var completionHandler: ApiLoaderCompletionHandler?
     
     var associatedObject: Any? {
         return nil
@@ -20,7 +20,7 @@ class CachedDatabaseLoader: ItemLoader {
         return [ISMSItem]()
     }
     
-    var loaderState: ISMSLoaderState = .new
+    var state: ApiLoaderState = .new
     
     func loadModelsFromDatabase() -> Bool {
         fatalError("Override in subclass")
@@ -28,6 +28,6 @@ class CachedDatabaseLoader: ItemLoader {
     
     // Not implemented
     func persistModels() {}
-    func startLoad() {}
-    func cancelLoad() {}
+    func start() {}
+    func cancel() {}
 }

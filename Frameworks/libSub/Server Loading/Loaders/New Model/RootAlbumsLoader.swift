@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RootAlbumsLoader: ISMSLoader, ItemLoader {
+class RootAlbumsLoader: ApiLoader, ItemLoader {
     var albums = [ISMSAlbum]()
     
     var associatedObject: Any?
@@ -22,32 +22,18 @@ class RootAlbumsLoader: ISMSLoader, ItemLoader {
         return NSMutableURLRequest(susAction: "getAlbumList2", parameters: parameters) as URLRequest
     }
     
-    override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
-            let error = NSError(ismsCode: ISMSErrorCode_NotXML)
-            self.informDelegateLoadingFailed(error)
-            return
+    override func processResponse(root: RXMLElement) {
+        var albumsTemp = [ISMSAlbum]()
+        
+        let serverId = SavedSettings.si().currentServerId
+        root.iterate("albumList2.album") { album in
+            let anAlbum = ISMSAlbum(rxmlElement: album, serverId: serverId)
+            albumsTemp.append(anAlbum)
         }
         
-        if let error = root.child("error"), error.isValid {
-            let code = error.attribute("code") ?? "-1"
-            let message = error.attribute("message")
-            self.subsonicErrorCode(Int(code) ?? -1, message: message)
-        } else {
-            var albumsTemp = [ISMSAlbum]()
-            
-            let serverId = SavedSettings.si().currentServerId
-            root.iterate("albumList2.album") { album in
-                let anAlbum = ISMSAlbum(rxmlElement: album, serverId: serverId)
-                albumsTemp.append(anAlbum)
-            }
-
-            albums = albumsTemp
-            
-            self.persistModels()
-            
-            self.informDelegateLoadingFinished()
-        }
+        albums = albumsTemp
+        
+        self.persistModels()
     }
     
     func persistModels() {

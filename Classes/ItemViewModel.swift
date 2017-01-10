@@ -70,8 +70,8 @@ class ItemViewModel : NSObject {
     }
     
     func loadModelsFromWeb(_ completion: LoadModelsCompletion?) {
-        if loader.loaderState != .loading {
-            loader.callbackBlock = { success, error, loader in
+        if loader.state != .loading {
+            loader.completionHandler = { success, error, loader in
                 completion?(success, error)
                 if success {
                     self.delegate?.loadingFinished()
@@ -87,7 +87,7 @@ class ItemViewModel : NSObject {
                 }
             }
             
-            loader.startLoad()
+            loader.start()
         }
     }
     
@@ -140,7 +140,7 @@ class ItemViewModel : NSObject {
     }
     
     func cancelLoad() {
-        loader.cancelLoad()
+        loader.cancel()
     }
     
     func loaderForFolder(_ folder: ISMSFolder) -> ItemLoader? {

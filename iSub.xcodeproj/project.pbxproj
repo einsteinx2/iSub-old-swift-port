@@ -23,6 +23,8 @@
 		5308D9391E2471B40026E6BD /* UITraitEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308D9371E2471B40026E6BD /* UITraitEnvironment.swift */; };
 		5308D93B1E2473260026E6BD /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308D93A1E2473260026E6BD /* UIView.swift */; };
 		5308D93C1E2473260026E6BD /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308D93A1E2473260026E6BD /* UIView.swift */; };
+		5308D9971E24A98C0026E6BD /* ApiLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308D9961E24A98C0026E6BD /* ApiLoader.swift */; };
+		5308D9981E24A98C0026E6BD /* ApiLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308D9961E24A98C0026E6BD /* ApiLoader.swift */; };
 		530A5F851516703F0081A83A /* playing-cell-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F831516703F0081A83A /* playing-cell-icon.png */; };
 		530A5F871516703F0081A83A /* playing-cell-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F831516703F0081A83A /* playing-cell-icon.png */; };
 		530A5F881516703F0081A83A /* playing-cell-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F841516703F0081A83A /* playing-cell-icon@2x.png */; };
@@ -338,10 +340,6 @@
 		5358DD041E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC241E0B78470024A0D4 /* ISMSUpdateChecker.m */; };
 		5358DD051E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC241E0B78470024A0D4 /* ISMSUpdateChecker.m */; };
 		5358DD061E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC241E0B78470024A0D4 /* ISMSUpdateChecker.m */; };
-		5358DD071E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
-		5358DD091E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
-		5358DD0A1E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
-		5358DD0B1E0B78470024A0D4 /* ISMSLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC271E0B78470024A0D4 /* ISMSLoader.m */; };
 		5358DD391E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
 		5358DD3B1E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
 		5358DD3C1E0B78480024A0D4 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DC401E0B78470024A0D4 /* StatusLoader.swift */; };
@@ -947,6 +945,7 @@
 		5308D92E1E243D270026E6BD /* Device.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Device.framework; path = Carthage/Build/iOS/Device.framework; sourceTree = "<group>"; };
 		5308D9371E2471B40026E6BD /* UITraitEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITraitEnvironment.swift; sourceTree = "<group>"; };
 		5308D93A1E2473260026E6BD /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		5308D9961E24A98C0026E6BD /* ApiLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiLoader.swift; sourceTree = "<group>"; };
 		530A5F831516703F0081A83A /* playing-cell-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon.png"; path = "Images/Other/playing-cell-icon.png"; sourceTree = "<group>"; };
 		530A5F841516703F0081A83A /* playing-cell-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon@2x.png"; path = "Images/Other/playing-cell-icon@2x.png"; sourceTree = "<group>"; };
 		530A5F8B15167CBA0081A83A /* playing-cell-icon-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon-white.png"; path = "Images/Other/playing-cell-icon-white.png"; sourceTree = "<group>"; };
@@ -1074,10 +1073,6 @@
 		5358DC201E0B78470024A0D4 /* ISMSStreamManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSStreamManager.m; sourceTree = "<group>"; };
 		5358DC231E0B78470024A0D4 /* ISMSUpdateChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSUpdateChecker.h; sourceTree = "<group>"; };
 		5358DC241E0B78470024A0D4 /* ISMSUpdateChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSUpdateChecker.m; sourceTree = "<group>"; };
-		5358DC261E0B78470024A0D4 /* ISMSLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoader.h; sourceTree = "<group>"; };
-		5358DC271E0B78470024A0D4 /* ISMSLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSLoader.m; sourceTree = "<group>"; };
-		5358DC281E0B78470024A0D4 /* ISMSLoader_Subclassing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoader_Subclassing.h; sourceTree = "<group>"; };
-		5358DC291E0B78470024A0D4 /* ISMSLoaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaderDelegate.h; sourceTree = "<group>"; };
 		5358DC2A1E0B78470024A0D4 /* ISMSLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaderManager.h; sourceTree = "<group>"; };
 		5358DC401E0B78470024A0D4 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusLoader.swift; sourceTree = "<group>"; };
 		5358DC4E1E0B78470024A0D4 /* NSMutableURLRequest+PMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableURLRequest+PMS.h"; sourceTree = "<group>"; };
@@ -1966,14 +1961,10 @@
 		5358DC251E0B78470024A0D4 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
-				5358DC261E0B78470024A0D4 /* ISMSLoader.h */,
-				5358DC271E0B78470024A0D4 /* ISMSLoader.m */,
-				5358DC281E0B78470024A0D4 /* ISMSLoader_Subclassing.h */,
-				5358DC291E0B78470024A0D4 /* ISMSLoaderDelegate.h */,
+				5308D9961E24A98C0026E6BD /* ApiLoader.swift */,
 				5358DC2A1E0B78470024A0D4 /* ISMSLoaderManager.h */,
 				537CE6011E21E9610004283E /* SelfReferencingOperationQueue.swift */,
 				537CE6041E21E97E0004283E /* ItemLoaderOperation.swift */,
-				537CE5E81E21C1B30004283E /* Cache Loaders */,
 				5358DC2C1E0B78470024A0D4 /* Item Loaders */,
 			);
 			path = Loaders;
@@ -1983,6 +1974,7 @@
 			isa = PBXGroup;
 			children = (
 				538B4D0B1E1D83B300847152 /* ItemLoader.swift */,
+				537CE5E81E21C1B30004283E /* Cache Loaders */,
 				538B4D031E1D7E2300847152 /* MediaFoldersLoader.swift */,
 				536E292F1E0BC9730097C2F6 /* RootArtistsLoader.swift */,
 				535B65F71E0BD45000B6F374 /* RootAlbumsLoader.swift */,
@@ -2193,7 +2185,6 @@
 				537CE5F21E21C4EA0004283E /* CachedAlbumLoader.swift */,
 			);
 			name = "Cache Loaders";
-			path = "New Model";
 			sourceTree = "<group>";
 		};
 		53835C6E1E0B7D6D0077B53D /* ZipKit */ = {
@@ -3001,6 +2992,7 @@
 				53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				537CE5F61E21C95D0004283E /* CachedRootFoldersLoader.swift in Sources */,
 				5358DCC61E0B78470024A0D4 /* ISMSSong.m in Sources */,
+				5308D9971E24A98C0026E6BD /* ApiLoader.swift in Sources */,
 				535B7254134CEE1E003E0E1C /* DDSocialDialog.m in Sources */,
 				53835D0B1E0B7DD50077B53D /* FMDatabase.m in Sources */,
 				5358DCCB1E0B78470024A0D4 /* Playlist.swift in Sources */,
@@ -3082,7 +3074,6 @@
 				53835D241E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				53835CE81E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCF81E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
-				5358DD071E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				537CE6021E21E9610004283E /* SelfReferencingOperationQueue.swift in Sources */,
 				5333D10F1C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				533B69DA1E206031001FF3BF /* NavigationStack.swift in Sources */,
@@ -3173,7 +3164,6 @@
 				5358DF951E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
 				5358DDA51E0B78480024A0D4 /* FMDatabaseQueueAdditions.m in Sources */,
 				53835CDC1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
-				5358DD0A1E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				5358DD821E0B78480024A0D4 /* DatabaseSingleton.m in Sources */,
 				5358DF8B1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				53835D131E0B7DD50077B53D /* FMDatabaseAdditions.m in Sources */,
@@ -3276,7 +3266,6 @@
 				53835CC41E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				5358DCA71E0B78470024A0D4 /* BassVisualizer.m in Sources */,
 				5358DF781E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
-				5358DD0B1E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				535B66221E0C6A7C00B6F374 /* RootFoldersLoader.swift in Sources */,
 				5358DF821E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				5358DFA01E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
@@ -3363,6 +3352,7 @@
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				537CE5F71E21C95D0004283E /* CachedRootFoldersLoader.swift in Sources */,
 				5358DCC81E0B78470024A0D4 /* ISMSSong.m in Sources */,
+				5308D9981E24A98C0026E6BD /* ApiLoader.swift in Sources */,
 				53BC283A139AF0DD00A825F1 /* DDSocialDialog.m in Sources */,
 				53835D0D1E0B7DD50077B53D /* FMDatabase.m in Sources */,
 				5358DCCD1E0B78470024A0D4 /* Playlist.swift in Sources */,
@@ -3444,7 +3434,6 @@
 				53835D261E0B7DD50077B53D /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				53835CEA1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				5358DCFA1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
-				5358DD091E0B78470024A0D4 /* ISMSLoader.m in Sources */,
 				537CE6031E21E9610004283E /* SelfReferencingOperationQueue.swift in Sources */,
 				5333D1111C654B5900DC19F4 /* SidePanelController.swift in Sources */,
 				533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */,

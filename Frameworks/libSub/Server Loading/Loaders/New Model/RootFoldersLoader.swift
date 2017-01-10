@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RootFoldersLoader: ISMSLoader, ItemLoader {
+class RootFoldersLoader: ApiLoader, ItemLoader {
     var mediaFolderId: Int?
     
     var ignoredArticles = [String]()
@@ -29,48 +29,34 @@ class RootFoldersLoader: ISMSLoader, ItemLoader {
         return NSMutableURLRequest(susAction: "getIndexes", parameters: parameters) as URLRequest
     }
     
-    override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
-            let error = NSError(ismsCode: ISMSErrorCode_NotXML)
-            self.informDelegateLoadingFailed(error)
-            return
+    override func processResponse(root: RXMLElement) {
+        var foldersTemp = [ISMSFolder]()
+        var songsTemp = [ISMSSong]()
+        
+        let serverId = SavedSettings.si().currentServerId
+        root.iterate("indexes.index") { index in
+            index.iterate("artist") { artist in
+                if artist.attribute("name") != ".AppleDouble" {
+                    let aFolder = ISMSFolder(rxmlElement: artist, serverId: serverId, mediaFolderId: self.mediaFolderId ?? 0)
+                    foldersTemp.append(aFolder)
+                }
+            }
         }
         
-        if let error = root.child("error"), error.isValid {
-            let code = error.attribute("code") ?? "-1"
-            let message = error.attribute("message")
-            self.subsonicErrorCode(Int(code) ?? -1, message: message)
-        } else {
-            var foldersTemp = [ISMSFolder]()
-            var songsTemp = [ISMSSong]()
-            
-            let serverId = SavedSettings.si().currentServerId
-            root.iterate("indexes.index") { index in
-                index.iterate("artist") { artist in
-                    if artist.attribute("name") != ".AppleDouble" {
-                        let aFolder = ISMSFolder(rxmlElement: artist, serverId: serverId, mediaFolderId: self.mediaFolderId ?? 0)
-                        foldersTemp.append(aFolder)
-                    }
-                }
+        root.iterate("indexes.child") { child in
+            let aSong = ISMSSong(rxmlElement: child, serverId: serverId)
+            if aSong.contentType != nil {
+                songsTemp.append(aSong)
             }
-            
-            root.iterate("indexes.child") { child in
-                let aSong = ISMSSong(rxmlElement: child, serverId: serverId)
-                if aSong.contentType != nil {
-                    songsTemp.append(aSong)
-                }
-            }
-            
-            if let ignoredArticlesString = root.child("indexes")?.attribute("ignoredArticles") {
-                ignoredArticles = ignoredArticlesString.components(separatedBy: " ")
-            }
-            folders = foldersTemp
-            songs = songsTemp
-            
-            self.persistModels()
-            
-            self.informDelegateLoadingFinished()
         }
+        
+        if let ignoredArticlesString = root.child("indexes")?.attribute("ignoredArticles") {
+            ignoredArticles = ignoredArticlesString.components(separatedBy: " ")
+        }
+        folders = foldersTemp
+        songs = songsTemp
+        
+        self.persistModels()
     }
     
     func persistModels() {

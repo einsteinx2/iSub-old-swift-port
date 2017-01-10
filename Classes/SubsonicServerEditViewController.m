@@ -14,7 +14,7 @@
 #define kBadUserTag 2
 #define kBadPassTag 3
 
-@interface SubsonicServerEditViewController() <UIAlertViewDelegate, ISMSLoaderDelegate>
+@interface SubsonicServerEditViewController() <UIAlertViewDelegate, ApiLoaderDelegate>
 @property (nonatomic, strong) IBOutlet UITextField *urlField;
 @property (nonatomic, strong) IBOutlet UITextField *usernameField;
 @property (nonatomic, strong) IBOutlet UITextField *passwordField;
@@ -175,15 +175,15 @@
 	{
 		[ViewObjectsSingleton.si showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
         
-        ISMSStatusLoader *loader = [[ISMSStatusLoader alloc] initWithUrl:self.urlField.text username:self.usernameField.text password:self.passwordField.text];
+        StatusLoader *loader = [[StatusLoader alloc] initWithUrl:self.urlField.text username:self.usernameField.text password:self.passwordField.text];
         loader.delegate = self;
-        [loader startLoad];
+        [loader start];
 	}
 }
 
 #pragma mark - Server URL Checker delegate
 
-- (void)loadingRedirected:(ISMSLoader *)theLoader redirectUrl:(NSURL *)url
+- (void)loadingRedirected:(ApiLoader *)theLoader redirectUrl:(NSURL *)url
 {
 	NSMutableString *redirectUrlString = [NSMutableString stringWithFormat:@"%@://%@", url.scheme, url.host];
 	if (url.port)
@@ -208,7 +208,7 @@
 	self.redirectUrl = [NSString stringWithString:redirectUrlString];
 }
 
-- (void)loadingFailed:(ISMSLoader *)theLoader withError:(NSError *)error
+- (void)loadingFailed:(ApiLoader *)theLoader withError:(NSError *)error
 {
 	[ViewObjectsSingleton.si hideLoadingScreen];
 	
@@ -230,9 +230,9 @@
 	[alert show];
 }	
 	
-- (void)loadingFinished:(ISMSLoader *)theLoader
+- (void)loadingFinished:(ApiLoader *)theLoader
 {
-    ISMSStatusLoader *statusLoader = (id)theLoader;
+    StatusLoader *statusLoader = (id)theLoader;
     
 	//DLog(@"server check passed");
 	[ViewObjectsSingleton.si hideLoadingScreen];

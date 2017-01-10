@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate, ServerEditDelegate {
+class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate, ServerEditDelegate {
     fileprivate let headerView = UIView()
     fileprivate let segmentedControl = UISegmentedControl(items: ["Servers", "Settings", "Help"])
     
@@ -217,7 +217,7 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
             
             let statusLoader = StatusLoader(server: server)
             statusLoader.delegate = self;
-            statusLoader.startLoad()
+            statusLoader.start()
         }
     }
     
@@ -261,7 +261,7 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
         }
     }
     
-    func loadingRedirected(_ theLoader: ISMSLoader, redirectUrl url: URL) {
+    func loadingRedirected(_ loader: ApiLoader, redirectUrl url: URL) {
         var redirectUrlString = "\(url.scheme)://\(url.host)"
         if let port = url.port {
             redirectUrlString += "\(port)"
@@ -280,12 +280,16 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
         redirectUrl = redirectUrlString
     }
     
-    public func loadingFailed(_ theLoader: ISMSLoader, withError error: Error) {
-        let message: String
-        if (error as NSError).code == ISMSErrorCode_IncorrectCredentials {
-            message = "Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code \((error as NSError).code):\n\(error.localizedDescription)"
+    public func loadingFailed(_ loader: ApiLoader, withError error: Error?) {
+        var message: String
+        if let error = error as? NSError, error.code == ISMSErrorCode_IncorrectCredentials {
+            message = "Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆"
         } else {
-            message = "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆\n\nError code \((error as NSError).code):\n\((error as NSError).description)"
+            message = "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆"
+            
+            if let error = error as? NSError {
+                message += "\n\nError code \(error.code):\n\(error.description)"
+            }
         }
         
         let alert = UIAlertController(title: "Server Unavailable", message: message, preferredStyle: .alert)
@@ -295,8 +299,8 @@ class ServerListViewController: DraggableTableViewController, ISMSLoaderDelegate
         ViewObjectsSingleton.si().hideLoadingScreen()
     }
     
-    func loadingFinished(_ theLoader: ISMSLoader) {
-        if let statusLoader = theLoader as? StatusLoader, let server = statusLoader.server {
+    func loadingFinished(_ loader: ApiLoader) {
+        if let statusLoader = loader as? StatusLoader, let server = statusLoader.server {
             SavedSettings.si().currentServerId = server.serverId
             SavedSettings.si().redirectUrlString = redirectUrl
             

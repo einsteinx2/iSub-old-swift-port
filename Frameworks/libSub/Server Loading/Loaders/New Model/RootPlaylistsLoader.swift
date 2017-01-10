@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RootPlaylistsLoader: ISMSLoader, ItemLoader {
+class RootPlaylistsLoader: ApiLoader, ItemLoader {
     var playlists = [Playlist]()
     
     var associatedObject: Any?
@@ -21,32 +21,20 @@ class RootPlaylistsLoader: ISMSLoader, ItemLoader {
         return NSMutableURLRequest(susAction: "getPlaylists", parameters: nil) as URLRequest
     }
     
-    override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
-            let error = NSError(ismsCode: ISMSErrorCode_NotXML)
-            self.informDelegateLoadingFailed(error)
-            return
-        }
+    override func processResponse(root: RXMLElement) {
+        var playlistsTemp = [Playlist]()
         
-        if let error = root.child("error"), error.isValid {
-            let code = error.attribute("code") ?? "-1"
-            let message = error.attribute("message")
-            self.subsonicErrorCode(Int(code) ?? -1, message: message)
-        } else {
-            var playlistsTemp = [Playlist]()
-            
-            let serverId = SavedSettings.si().currentServerId
-            root.iterate("playlists.playlist") { playlist in
-                let aPlaylist = Playlist(rxmlElement: playlist, serverId: serverId)
-                playlistsTemp.append(aPlaylist)
-            }
-            playlistsTemp.sort(by: { $0.name < $1.name })
-            playlists = playlistsTemp
-            
-            self.persistModels()
-            
-            self.informDelegateLoadingFinished()
+        let serverId = SavedSettings.si().currentServerId
+        root.iterate("playlists.playlist") { playlist in
+            let aPlaylist = Playlist(rxmlElement: playlist, serverId: serverId)
+            playlistsTemp.append(aPlaylist)
         }
+        playlistsTemp.sort(by: { $0.name < $1.name })
+        playlists = playlistsTemp
+        
+        self.persistModels()
+        
+        self.finished()
     }
     
     func persistModels() {

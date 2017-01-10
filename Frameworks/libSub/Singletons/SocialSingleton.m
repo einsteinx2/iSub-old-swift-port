@@ -150,7 +150,7 @@ LOG_LEVEL_ISUB_DEFAULT
     // TODO: Reimplement
 //	if (SavedSettings.si.isScrobbleEnabled && !SavedSettings.si.isOfflineMode)
 //    {
-//		ISMSScrobbleLoader *loader = [[ISMSScrobbleLoader alloc] initWithCallbackBlock:^(BOOL success, NSError *error, ISMSLoader *loader)
+//		ISMSScrobbleLoader *loader = [[ISMSScrobbleLoader alloc] initWithCallbackBlock:^(BOOL success, NSError *error, ApiLoader *loader)
 //        {
 //            ALog(@"Scrobble successfully completed for song: %@", aSong.title);
 //        }];

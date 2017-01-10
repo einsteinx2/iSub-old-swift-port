@@ -28,7 +28,6 @@
 
 // Data Model
 #import "ISMSDataModelObjects.h"
-#import "ISMSLoader.h"
 #import "ISMSErrorDomain.h"
 #import "SUSErrorDomain.h"
 #import "NSError+ISMSError.h"
@@ -43,7 +42,6 @@
 #import "DDLog+LOGV.h"
 #import "DDMultiFormatter.h"
 #import "HLSProxyResponse.h"
-#import "ISMSLoader_Subclassing.h"
 #import "ISMSUpdateChecker.h"
 #import "NSMutableURLRequest+PMS.h"
 #import "NSMutableURLRequest+SUS.h"

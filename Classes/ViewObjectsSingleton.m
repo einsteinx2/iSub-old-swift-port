@@ -102,7 +102,7 @@ static NSTimeInterval const kDelay = .5;
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     cancelButton.bounds = CGRectMake(0, 0, 1024, 1024);
     cancelButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [cancelButton addTarget:sender action:@selector(cancelLoad) forControlEvents:UIControlEventTouchUpInside];
+    [cancelButton addTarget:sender action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
     [self.HUD addSubview:cancelButton];
     
     [iSubAppDelegate.si.window addSubview:self.HUD];

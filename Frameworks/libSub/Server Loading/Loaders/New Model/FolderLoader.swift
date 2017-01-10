@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FolderLoader: ISMSLoader, ItemLoader {
+class FolderLoader: ApiLoader, ItemLoader {
     let folderId: Int
     let mediaFolderId: Int
     
@@ -31,53 +31,39 @@ class FolderLoader: ISMSLoader, ItemLoader {
         return NSMutableURLRequest(susAction: "getMusicDirectory", parameters: parameters) as URLRequest
     }
     
-    override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
-            let error = NSError(ismsCode: ISMSErrorCode_NotXML)
-            self.informDelegateLoadingFailed(error)
-            return
+    override func processResponse(root: RXMLElement) {
+        var songsDurationTemp = 0.0
+        var foldersTemp = [ISMSFolder]()
+        var songsTemp = [ISMSSong]()
+        
+        let serverId = SavedSettings.si().currentServerId
+        root.iterate("directory.child") { child in
+            if (child.attribute("isDir") as NSString).boolValue {
+                if child.attribute("title") != ".AppleDouble" {
+                    let aFolder = ISMSFolder(rxmlElement: child, serverId: serverId, mediaFolderId: self.mediaFolderId)
+                    foldersTemp.append(aFolder)
+                }
+            } else {
+                let aSong = ISMSSong(rxmlElement: child, serverId: serverId)
+                if let duration = aSong.duration as? Double {
+                    songsDurationTemp += duration
+                }
+                songsTemp.append(aSong)
+            }
+        }
+        folders = foldersTemp
+        songs = songsTemp
+        songsDuration = songsDurationTemp
+        
+        // Persist associated object model if needed
+        if !ISMSAlbum.isPersisted(NSNumber(value: folderId), serverId: NSNumber(value: serverId)) {
+            if let element = root.child("directory") {
+                let folder = ISMSFolder(rxmlElement: element, serverId: serverId, mediaFolderId: mediaFolderId)
+                folder.replace()
+            }
         }
         
-        if let error = root.child("error"), error.isValid {
-            let code = error.attribute("code") ?? "-1"
-            let message = error.attribute("message")
-            self.subsonicErrorCode(Int(code) ?? -1, message: message)
-        } else {
-            var songsDurationTemp = 0.0
-            var foldersTemp = [ISMSFolder]()
-            var songsTemp = [ISMSSong]()
-            
-            let serverId = SavedSettings.si().currentServerId
-            root.iterate("directory.child") { child in
-                if (child.attribute("isDir") as NSString).boolValue {
-                    if child.attribute("title") != ".AppleDouble" {
-                        let aFolder = ISMSFolder(rxmlElement: child, serverId: serverId, mediaFolderId: self.mediaFolderId)
-                        foldersTemp.append(aFolder)
-                    }
-                } else {
-                    let aSong = ISMSSong(rxmlElement: child, serverId: serverId)
-                    if let duration = aSong.duration as? Double {
-                        songsDurationTemp += duration
-                    }
-                    songsTemp.append(aSong)
-                }
-            }
-            folders = foldersTemp
-            songs = songsTemp
-            songsDuration = songsDurationTemp
-            
-            // Persist associated object model if needed
-            if !ISMSAlbum.isPersisted(NSNumber(value: folderId), serverId: NSNumber(value: serverId)) {
-                if let element = root.child("directory") {
-                    let folder = ISMSFolder(rxmlElement: element, serverId: serverId, mediaFolderId: mediaFolderId)
-                    folder.replace()
-                }
-            }
-            
-            self.persistModels()
-            
-            self.informDelegateLoadingFinished()
-        }
+        self.persistModels()
     }
     
     func persistModels() {

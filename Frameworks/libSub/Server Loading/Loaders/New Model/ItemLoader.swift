@@ -9,18 +9,18 @@
 import Foundation
 
 protocol ItemLoader {
-    weak var delegate: ISMSLoaderDelegate? { get set }
-    var callbackBlock: LoaderCallback? { get set }
+    weak var delegate: ApiLoaderDelegate? { get set }
+    var completionHandler: ApiLoaderCompletionHandler? { get set }
     
     var associatedObject: Any? { get }
     
     var items: [ISMSItem] { get }
     
-    var loaderState: ISMSLoaderState { get }
+    var state: ApiLoaderState { get }
     
     func persistModels()
     func loadModelsFromDatabase() -> Bool
     
-    func startLoad()
-    func cancelLoad()
+    func start()
+    func cancel()
 }

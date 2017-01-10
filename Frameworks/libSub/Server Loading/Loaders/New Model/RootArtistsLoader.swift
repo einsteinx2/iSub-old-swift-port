@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RootArtistsLoader: ISMSLoader, ItemLoader {
+class RootArtistsLoader: ApiLoader, ItemLoader {
     var artists = [ISMSArtist]()
     var ignoredArticles = [String]()
     
@@ -22,39 +22,25 @@ class RootArtistsLoader: ISMSLoader, ItemLoader {
         return NSMutableURLRequest(susAction: "getArtists", parameters: nil) as URLRequest
     }
     
-    override func processResponse() {
-        guard let root = RXMLElement(fromXMLData: self.receivedData), root.isValid else {
-            let error = NSError(ismsCode: ISMSErrorCode_NotXML)
-            self.informDelegateLoadingFailed(error)
-            return
-        }
+    override func processResponse(root: RXMLElement) {
+        var artistsTemp = [ISMSArtist]()
         
-        if let error = root.child("error"), error.isValid {
-            let code = error.attribute("code") ?? "-1"
-            let message = error.attribute("message")
-            self.subsonicErrorCode(Int(code) ?? -1, message: message)
-        } else {
-            var artistsTemp = [ISMSArtist]()
-            
-            let serverId = SavedSettings.si().currentServerId
-            root.iterate("artists.index") { index in
-                index.iterate("artist") { artist in
-                    if artist.attribute("name") != ".AppleDouble" {
-                        let anArtist = ISMSArtist(rxmlElement: artist, serverId: serverId)
-                        artistsTemp.append(anArtist)
-                    }
+        let serverId = SavedSettings.si().currentServerId
+        root.iterate("artists.index") { index in
+            index.iterate("artist") { artist in
+                if artist.attribute("name") != ".AppleDouble" {
+                    let anArtist = ISMSArtist(rxmlElement: artist, serverId: serverId)
+                    artistsTemp.append(anArtist)
                 }
             }
-            
-            if let ignoredArticlesString = root.child("artists")?.attribute("ignoredArticles") {
-                ignoredArticles = ignoredArticlesString.components(separatedBy: " ")
-            }
-            artists = artistsTemp
-            
-            self.persistModels()
-            
-            self.informDelegateLoadingFinished()
         }
+        
+        if let ignoredArticlesString = root.child("artists")?.attribute("ignoredArticles") {
+            ignoredArticles = ignoredArticlesString.components(separatedBy: " ")
+        }
+        artists = artistsTemp
+        
+        self.persistModels()
     }
     
     func persistModels() {

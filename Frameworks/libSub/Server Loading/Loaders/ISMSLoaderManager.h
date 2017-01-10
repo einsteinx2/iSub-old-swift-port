@@ -6,11 +6,11 @@
 //  Copyright 2011 Ben Baron. All rights reserved.
 //
 
-@protocol ISMSLoaderDelegate;
-@protocol ISMSLoaderManager <NSObject>
+@protocol ApiLoaderDelegate;
+@protocol ApiLoaderManager <NSObject>
 
 @required
-- (id)initWithDelegate:(NSObject <ISMSLoaderDelegate> *)theDelegate;
+- (id)initWithDelegate:(NSObject <ApiLoaderDelegate> *)theDelegate;
 - (void)startLoad;
 - (void)cancelLoad;
 
