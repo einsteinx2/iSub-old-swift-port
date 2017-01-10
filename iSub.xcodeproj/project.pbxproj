@@ -47,6 +47,10 @@
 		5306239914D4BCAD00D320A8 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239314D4BCAD00D320A8 /* eqView@2x.png */; };
 		5308D92F1E243D270026E6BD /* Device.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5308D92E1E243D270026E6BD /* Device.framework */; };
 		5308D9301E243D270026E6BD /* Device.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5308D92E1E243D270026E6BD /* Device.framework */; };
+		5308D9381E2471B40026E6BD /* UITraitEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308D9371E2471B40026E6BD /* UITraitEnvironment.swift */; };
+		5308D9391E2471B40026E6BD /* UITraitEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308D9371E2471B40026E6BD /* UITraitEnvironment.swift */; };
+		5308D93B1E2473260026E6BD /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308D93A1E2473260026E6BD /* UIView.swift */; };
+		5308D93C1E2473260026E6BD /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308D93A1E2473260026E6BD /* UIView.swift */; };
 		530A5F851516703F0081A83A /* playing-cell-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F831516703F0081A83A /* playing-cell-icon.png */; };
 		530A5F871516703F0081A83A /* playing-cell-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F831516703F0081A83A /* playing-cell-icon.png */; };
 		530A5F881516703F0081A83A /* playing-cell-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F841516703F0081A83A /* playing-cell-icon@2x.png */; };
@@ -1440,6 +1444,8 @@
 		5306239214D4BCAD00D320A8 /* eqView.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = eqView.png; path = "Images/Player Icons/eqView.png"; sourceTree = "<group>"; };
 		5306239314D4BCAD00D320A8 /* eqView@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "eqView@2x.png"; path = "Images/Player Icons/eqView@2x.png"; sourceTree = "<group>"; };
 		5308D92E1E243D270026E6BD /* Device.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Device.framework; path = Carthage/Build/iOS/Device.framework; sourceTree = "<group>"; };
+		5308D9371E2471B40026E6BD /* UITraitEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITraitEnvironment.swift; sourceTree = "<group>"; };
+		5308D93A1E2473260026E6BD /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		530A5F831516703F0081A83A /* playing-cell-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon.png"; path = "Images/Other/playing-cell-icon.png"; sourceTree = "<group>"; };
 		530A5F841516703F0081A83A /* playing-cell-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon@2x.png"; path = "Images/Other/playing-cell-icon@2x.png"; sourceTree = "<group>"; };
 		530A5F8B15167CBA0081A83A /* playing-cell-icon-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon-white.png"; path = "Images/Other/playing-cell-icon-white.png"; sourceTree = "<group>"; };
@@ -2222,6 +2228,7 @@
 				53ABE1361C6033F100E0E72B /* New UI */,
 				539797F01162CE4B00F41D8B /* Old UI */,
 				536C97A416619845005A73C6 /* 3rd Party UI Components */,
+				5308D9361E24719C0026E6BD /* Extensions */,
 			);
 			name = iSub;
 			path = Classes;
@@ -2335,6 +2342,16 @@
 				536E290C1E0B942E0097C2F6 /* libiconv.tbd */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5308D9361E24719C0026E6BD /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5308D9371E2471B40026E6BD /* UITraitEnvironment.swift */,
+				5308D93A1E2473260026E6BD /* UIView.swift */,
+			);
+			name = Extensions;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		530AB2C512713F4B002981DB /* iPad */ = {
@@ -4258,6 +4275,7 @@
 				5358DC991E0B78470024A0D4 /* BassEqualizer.m in Sources */,
 				5358DF831E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */,
+				5308D93B1E2473260026E6BD /* UIView.swift in Sources */,
 				5358DD7A1E0B78480024A0D4 /* CacheSingleton.m in Sources */,
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				533B69D81E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
@@ -4280,6 +4298,7 @@
 				53ABE1491C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53C6052E12F1F01E003C6895 /* IntroViewController.m in Sources */,
 				53835D291E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
+				5308D9381E2471B40026E6BD /* UITraitEnvironment.swift in Sources */,
 				53D59A601E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
 				538A1CD91D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */,
@@ -4630,6 +4649,7 @@
 				5358DC9B1E0B78470024A0D4 /* BassEqualizer.m in Sources */,
 				5358DF851E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */,
+				5308D93C1E2473260026E6BD /* UIView.swift in Sources */,
 				5358DD7C1E0B78480024A0D4 /* CacheSingleton.m in Sources */,
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
@@ -4652,6 +4672,7 @@
 				53ABE14B1C60376B00E0E72B /* ItemTableViewCell.swift in Sources */,
 				53BC282A139AF0DD00A825F1 /* IntroViewController.m in Sources */,
 				53835D2B1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
+				5308D9391E2471B40026E6BD /* UITraitEnvironment.swift in Sources */,
 				53D59A621E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
 				538A1CDB1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */,

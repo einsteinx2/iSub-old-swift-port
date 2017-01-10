@@ -345,15 +345,11 @@ class ItemTableViewCell: DroppableCell {
 }
 
 extension ItemTableViewCell: DraggableCell {
-    var draggable: Bool {
-        get {
-            return associatedObject is ISMSSong
-        }
+    var isDraggable: Bool {
+        return associatedObject is ISMSSong
     }
     
     var dragItem: ISMSItem? {
-        get {
-            return associatedObject as? ISMSItem ?? nil
-        }
+        return associatedObject as? ISMSItem
     }
 }

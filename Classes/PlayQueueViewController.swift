@@ -410,7 +410,7 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
 
 @objc class CurrentItemCell: DroppableCell, DraggableCell {
     var indexPath: IndexPath?
-    var associatedObject: AnyObject? {
+    var associatedObject: Any? {
         didSet {
             if let song = associatedObject as? ISMSSong {
                 if let coverArtId = song.coverArtId {
@@ -470,7 +470,7 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
         commonInit()
     }
     
-    var draggable: Bool {
+    var isDraggable: Bool {
         return true
     }
     

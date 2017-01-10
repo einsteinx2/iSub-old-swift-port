@@ -67,17 +67,30 @@ let ISMSAlbumCellHeight: CGFloat = 50.0
 let ISMSArtistCellHeight: CGFloat = 50.0
 let ISMSCellHeaderHeight: CGFloat = 20.0
 
-func tapticFeedback(heavy: Bool = false) {
+// Backfill for iOS 9
+enum TapticFeedbackStyle : Int {
+    case light
+    case medium
+    case heavy
+}
+
+func tapticFeedback(style: TapticFeedbackStyle = .medium) {
     let deviceType = UIDevice.current.deviceType
     if deviceType == .iPhone7 || deviceType == .iPhone7Plus {
         if #available(iOS 10, *) {
-            UIImpactFeedbackGenerator(style: heavy ? .heavy : .light).impactOccurred()
+            let convertedStyle = UIImpactFeedbackStyle(rawValue: style.rawValue)!
+            let feedbackGenerator = UIImpactFeedbackGenerator(style: convertedStyle)
+            feedbackGenerator.impactOccurred()
             return
         }
     }
     
     // Play undocumented peek sound
     AudioServicesPlaySystemSound(1519)
+}
+
+func clamp<T: Comparable>(value: T, lower: T, upper: T) -> T {
+    return min(max(value, lower), upper)
 }
 
 // Generic number type: http://stackoverflow.com/a/25578624/299262

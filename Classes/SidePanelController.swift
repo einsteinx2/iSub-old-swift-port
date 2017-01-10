@@ -109,19 +109,13 @@ class SidePanelController: JASidePanelController {
             
             if point.x > self.view.frame.width - 50 && self.state != JASidePanelRightVisible {
                 self.showRightPanel(animated: true)
-            } else if point.x < 50 && self.state == JASidePanelRightVisible {
+            } else if point.x < 100 && self.state == JASidePanelRightVisible {
                 self.showCenterPanel(animated: true)
             }
         }
     }
     
     @objc fileprivate func draggingEnded(_ notification: Notification) {
-        if self.state == JASidePanelRightVisible {
-            EX2Dispatch.runInMainThread(afterDelay: 0.3) {
-                //self.showCenterPanelAnimated(true)
-            }
-        }
-        
         allowLeftSwipe = true
         allowRightSwipe = true
     }
