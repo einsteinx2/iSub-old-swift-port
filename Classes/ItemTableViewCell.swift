@@ -110,11 +110,10 @@ class ItemTableViewCell: DroppableCell {
         }
     }
     
-    var playing: Bool = false {
+    var isPlaying: Bool = false {
         didSet {
-            nowPlayingImageView.isHidden = !playing
-            if trackNumber != nil {
-                trackNumberLabel.isHidden = playing
+            if isPlaying != oldValue {
+                repositionLabels()
             }
         }
     }
@@ -311,23 +310,22 @@ class ItemTableViewCell: DroppableCell {
             subTitleLabel.frame = CGRect(x: 0, y: y, width: expectedLabelSize.width, height: height)
         }
         
+        nowPlayingImageView.isHidden = true
         if alwaysShowCoverArt || coverArtId != nil {
             coverArtView.isHidden = false
             trackNumberLabel.isHidden = true
             coverArtView.frame = CGRect(x: 0, y: cellHeight - scrollViewHeight, width: scrollViewHeight, height: scrollViewHeight)
             scrollViewFrame.size.width -= scrollViewHeight
             scrollViewFrame.origin.x += scrollViewHeight
-        } else {
-            if trackNumber != nil {
-                trackNumberLabel.isHidden = playing
-                nowPlayingImageView.isHidden = !playing
-                let width: CGFloat = 30.0
-                trackNumberLabel.frame = CGRect(x: 0, y: cellHeight - scrollViewHeight, width: width, height: scrollViewHeight)
-                scrollViewFrame.size.width -= width
-                scrollViewFrame.origin.x += width
-                
-                nowPlayingImageView.center = trackNumberLabel.center
-            }
+        } else if isPlaying || trackNumber != nil {
+            trackNumberLabel.isHidden = isPlaying
+            nowPlayingImageView.isHidden = !isPlaying
+            let width: CGFloat = 30.0
+            trackNumberLabel.frame = CGRect(x: 0, y: cellHeight - scrollViewHeight, width: width, height: scrollViewHeight)
+            scrollViewFrame.size.width -= width
+            scrollViewFrame.origin.x += width
+            
+            nowPlayingImageView.center = trackNumberLabel.center
         }
         
         if duration != nil {

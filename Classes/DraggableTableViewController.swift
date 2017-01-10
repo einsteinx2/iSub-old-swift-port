@@ -145,12 +145,12 @@ class DraggableTableViewController: UITableViewController {
     func markCellAsPlayingAtIndexPath(_ indexPath: IndexPath) {
         for cell in self.tableView.visibleCells {
             if let cell = cell as? ItemTableViewCell {
-                cell.playing = false
+                cell.isPlaying = false
             }
         }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? ItemTableViewCell {
-            cell.playing = true
+            cell.isPlaying = true
         }
     }
     

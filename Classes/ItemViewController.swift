@@ -284,7 +284,7 @@ class ItemViewController: DraggableTableViewController {
             cell.trackNumber = song.trackNumber
             cell.subTitle = song.artistDisplayName
             cell.duration = song.duration
-            cell.playing = (song == PlayQueue.si.currentDisplaySong)
+            cell.isPlaying = (song == PlayQueue.si.currentDisplaySong)
         default:
             break
         }
