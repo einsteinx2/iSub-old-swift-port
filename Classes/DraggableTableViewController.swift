@@ -157,7 +157,13 @@ class DraggableTableViewController: UITableViewController {
     // MARK - Actions -
     
     func popViewController() {
-        _ = self.navigationController?.popViewController(animated: true)
+        if self.navigationController?.viewControllers.count == 2 {
+            _ = self.navigationController?.popViewController(animated: true)
+        }
+        
+        if let navigationController = self.navigationController as? NavigationStack {
+            navigationController.showControllers()
+        }
     }
     
     func showMenu() {
