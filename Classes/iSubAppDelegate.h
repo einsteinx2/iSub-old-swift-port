@@ -12,7 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, StatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, ItemViewController, SidePanelController, Server, NetworkStatus;
+@class BBSplitViewController, iPadRootViewController, InitialDetailViewController, LoadingScreen, FMDatabase, iPhoneStreamingPlayerViewController, SettingsViewController, FoldersViewController, AudioStreamer, IntroViewController, StatusLoader, MPMoviePlayerController, HTTPServer, ServerListViewController, EX2Reachability, ItemViewController, ItemViewController, SidePanelController, Server, NetworkStatus, MBProgressHUD;
 
 @interface iSubAppDelegate : NSObject <UIApplicationDelegate>
 
@@ -39,6 +39,9 @@
 
 @property (strong) MPMoviePlayerController *moviePlayer;
 
+@property (nonatomic) BOOL isLoadingScreenShowing;
+@property (strong) MBProgressHUD *HUD;
+
 - (void)backToReferringApp;
 
 + (iSubAppDelegate *)si;
@@ -63,6 +66,11 @@
 
 - (void)switchServerTo:(Server *)server redirectUrl:(NSString *)redirectionUrl;
 
+- (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message;
+- (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message;
+- (void)showAlbumLoadingScreenOnMainWindowWithSender:(id)sender;
+- (void)showAlbumLoadingScreen:(UIView *)view sender:(id)sender;
+- (void)hideLoadingScreen;
 
 @end
 

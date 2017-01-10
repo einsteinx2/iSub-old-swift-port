@@ -24,9 +24,7 @@ class ItemTableViewCell: DroppableCell {
     
     // Disabled for now until optimized
     let shouldRepositionLabels = false
-    
-    let viewObjects = ViewObjectsSingleton.si()
-    
+        
     weak var delegate: ItemTableViewCellDelegate?
     var associatedObject: AnyObject?
     

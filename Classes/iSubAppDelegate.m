@@ -21,6 +21,7 @@
 #import "NSMutableURLRequest+PMS.h"
 #import <HockeySDK/HockeySDK.h>
 #import "JASidePanelController.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -29,6 +30,8 @@
 
 @interface iSubAppDelegate() <MFMailComposeViewControllerDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate>
 @property (nonatomic) BOOL showIntro;
+@property (nonatomic) BOOL isNoNetworkAlertShowing;
+@property (nonatomic) BOOL isOnlineModeAlertShowing;
 @end
 
 @implementation iSubAppDelegate
@@ -247,7 +250,7 @@
 - (void)cancelLoad
 {
 	[self.statusLoader cancel];
-	[ViewObjectsSingleton.si hideLoadingScreen];
+	[iSubAppDelegate.si hideLoadingScreen];
 }
 
 - (void)checkServer
@@ -591,9 +594,9 @@
 
 - (void)enterOfflineMode
 {
-	if (ViewObjectsSingleton.si.isNoNetworkAlertShowing == NO)
+	if (!self.isNoNetworkAlertShowing)
 	{
-		ViewObjectsSingleton.si.isNoNetworkAlertShowing = YES;
+		self.isNoNetworkAlertShowing = YES;
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Server unavailable, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
@@ -604,9 +607,9 @@
 
 - (void)enterOnlineMode
 {
-	if (!ViewObjectsSingleton.si.isOnlineModeAlertShowing)
+	if (!self.isOnlineModeAlertShowing)
 	{
-		ViewObjectsSingleton.si.isOnlineModeAlertShowing = YES;
+        self.isOnlineModeAlertShowing = YES;
 		
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
 		alert.tag = 4;
@@ -621,9 +624,7 @@
 		return;
 	
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_EnteringOfflineMode];
-	
-    iSubAppDelegate.si.window.backgroundColor = ViewObjectsSingleton.si.windowColor;
-    
+	    
 	SavedSettings.si.isOfflineMode = YES;
 		
 	[PlayQueue.si stop];
@@ -685,7 +686,7 @@
 //	}
 //	else
 //	{
-//		[ViewObjectsSingleton.si orderMainTabBarController];
+//		[iSubAppDelegate.si orderMainTabBarController];
 //		//[self.window addSubview:self.mainTabBarController.view];
 //        self.window.rootViewController = self.mainTabBarController;
 //	}
@@ -828,8 +829,8 @@
 			
 			// Offline mode handling
 			
-			ViewObjectsSingleton.si.isOnlineModeAlertShowing = NO;
-			ViewObjectsSingleton.si.isNoNetworkAlertShowing = NO;
+			self.isOnlineModeAlertShowing = NO;
+			self.isNoNetworkAlertShowing = NO;
 			
 			if (buttonIndex == 1)
 			{
@@ -1289,6 +1290,110 @@
     [(MenuViewController *)self.sidePanelController.leftPanel resetMenuItems];
 
     [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerSwitched];
+}
+
+- (void)hudWasHidden:(MBProgressHUD *)hud
+{
+    // Remove HUD from screen when the HUD was hidden
+    [self.HUD removeFromSuperview];
+    self.HUD = nil;
+}
+
+static NSString * const kViewKey = @"view";
+static NSString * const kMessageKey = @"message";
+static NSString * const kSenderKey = @"sender";
+static NSTimeInterval const kDelay = .5;
+
+- (void)showLoadingScreenOnMainWindowNotification:(NSNotification *)notification
+{
+    [self showLoadingScreenOnMainWindowWithMessage:notification.userInfo[@"message"]];
+}
+
+- (void)showLoadingScreenOnMainWindowWithMessage:(NSString *)message
+{
+    [self showLoadingScreen:iSubAppDelegate.si.window withMessage:message];
+}
+
+- (void)showLoadingScreen:(UIView *)view withMessage:(NSString *)message
+{
+    if (self.isLoadingScreenShowing)
+    {
+        self.HUD.label.text = message ? message : self.HUD.label.text;
+        return;
+    }
+    
+    NSDictionary *options = @{ kViewKey: view, kMessageKey: n2N(message) };
+    [self performSelector:@selector(_showLoadingScreenWithOptions:) withObject:options afterDelay:kDelay];
+}
+
+- (void)_showLoadingScreenWithOptions:(NSDictionary *)options
+{
+    UIView *view = options[kViewKey];
+    NSString *message = N2n(options[kMessageKey]);
+    
+    self.isLoadingScreenShowing = YES;
+    
+    self.HUD = [[MBProgressHUD alloc] initWithView:view];
+    [iSubAppDelegate.si.window addSubview:self.HUD];
+    self.HUD.delegate = self;
+    self.HUD.label.text = message ? message : @"Loading";
+    [self.HUD showAnimated:YES];
+}
+
+- (void)showAlbumLoadingScreenOnMainWindowNotification:(NSNotification *)notification
+{
+    [self showAlbumLoadingScreenOnMainWindowWithSender:notification.userInfo[@"sender"]];
+}
+
+- (void)showAlbumLoadingScreenOnMainWindowWithSender:(id)sender
+{
+    [self showAlbumLoadingScreen:iSubAppDelegate.si.window sender:sender];
+}
+
+- (void)showAlbumLoadingScreen:(UIView *)view sender:(id)sender
+{
+    if (self.isLoadingScreenShowing)
+        return;
+    
+    NSDictionary *options = @{ kViewKey: view, kSenderKey: sender };
+    [self performSelector:@selector(_showAlbumLoadingScreenWithOptions:) withObject:options afterDelay:kDelay];
+}
+
+- (void)_showAlbumLoadingScreenWithOptions:(NSDictionary *)options
+{
+    //UIView *view = options[kViewKey];
+    id sender = options[kSenderKey];
+    
+    self.isLoadingScreenShowing = YES;
+    
+    // TODO: See why was always using window here
+    self.HUD = [[MBProgressHUD alloc] initWithView:iSubAppDelegate.si.window];
+    self.HUD.userInteractionEnabled = YES;
+    
+    // TODO: verify on iPad
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelButton.bounds = CGRectMake(0, 0, 1024, 1024);
+    cancelButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [cancelButton addTarget:sender action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
+    [self.HUD addSubview:cancelButton];
+    
+    [iSubAppDelegate.si.window addSubview:self.HUD];
+    self.HUD.delegate = self;
+    self.HUD.label.text = @"Loading";
+    self.HUD.detailsLabel.text = @"tap to cancel";
+    [self.HUD showAnimated:YES];
+}
+
+- (void)hideLoadingScreen
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
+    if (!self.isLoadingScreenShowing)
+        return;
+    
+    self.isLoadingScreenShowing = NO;
+    
+    [self.HUD hideAnimated:YES];
 }
 
 @end

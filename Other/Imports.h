@@ -14,6 +14,5 @@
 #import "libSubDefines.h"
 
 #import "iSubAppDelegate.h"
-#import "ViewObjectsSingleton.h"
 
 #endif

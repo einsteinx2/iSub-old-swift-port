@@ -318,14 +318,12 @@ class ItemViewController: DraggableTableViewController {
                 return
             }
             
-            if ViewObjectsSingleton.si().isCellEnabled {
-                switch indexPath.section {
-                case songsSectionIndex:
-                    let song = self.viewModel.songs[indexPath.row]
-                    showActionSheet(item: song, indexPath: indexPath)
-                default:
-                    break
-                }
+            switch indexPath.section {
+            case songsSectionIndex:
+                let song = self.viewModel.songs[indexPath.row]
+                showActionSheet(item: song, indexPath: indexPath)
+            default:
+                break
             }
         }
     }
@@ -337,39 +335,33 @@ class ItemViewController: DraggableTableViewController {
                 return
             }
             
-            if ViewObjectsSingleton.si().isCellEnabled {
-                switch indexPath.section {
-                case songsSectionIndex:                    
-                    viewModel.playSong(atIndex: indexPath.row)
-                default:
-                    break
-                }
+            switch indexPath.section {
+            case songsSectionIndex:
+                viewModel.playSong(atIndex: indexPath.row)
+            default:
+                break
             }
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if ViewObjectsSingleton.si().isCellEnabled {
-            switch indexPath.section {
-            case foldersSectionIndex:
-                let folder = self.viewModel.folders[indexPath.row]
-                if let loader = viewModel.loaderForFolder(folder) {
-                    pushItemController(loader: loader)
-                }
-            case artistsSectionIndex:
-                let artist = self.viewModel.artists[indexPath.row]
-                if let loader = viewModel.loaderForArtist(artist) {
-                    pushItemController(loader: loader)
-                }
-            case albumsSectionIndex:
-                let album = self.viewModel.albums[indexPath.row]
-                if let loader = viewModel.loaderForAlbum(album) {
-                    pushItemController(loader: loader)
-                }
-            default:
-                tableView.deselectRow(at: indexPath, animated: false)
+        switch indexPath.section {
+        case foldersSectionIndex:
+            let folder = self.viewModel.folders[indexPath.row]
+            if let loader = viewModel.loaderForFolder(folder) {
+                pushItemController(loader: loader)
             }
-        } else {
+        case artistsSectionIndex:
+            let artist = self.viewModel.artists[indexPath.row]
+            if let loader = viewModel.loaderForArtist(artist) {
+                pushItemController(loader: loader)
+            }
+        case albumsSectionIndex:
+            let album = self.viewModel.albums[indexPath.row]
+            if let loader = viewModel.loaderForAlbum(album) {
+                pushItemController(loader: loader)
+            }
+        default:
             tableView.deselectRow(at: indexPath, animated: false)
         }
     }
@@ -447,7 +439,7 @@ extension ItemViewController : ItemViewModelDelegate {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
         
-        ViewObjectsSingleton.si().hideLoadingScreen()
+        iSubAppDelegate.si().hideLoadingScreen()
         
         dataSourceDidFinishLoadingNewData()
     }

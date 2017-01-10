@@ -527,9 +527,6 @@
 		53649DD4184DA99B00E600EC /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD0184DA99B00E600EC /* Icon-76.png */; };
 		53649DD5184DA99B00E600EC /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD1184DA99B00E600EC /* Icon-76@2x.png */; };
 		53649DD7184DA99B00E600EC /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD1184DA99B00E600EC /* Icon-76@2x.png */; };
-		536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
-		536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
-		536C995016619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */; };
 		536D612911441F5B00DFCE56 /* settings-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D612811441F5B00DFCE56 /* settings-page.png */; };
 		536D620B1144495400DFCE56 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536D620A1144495400DFCE56 /* SystemConfiguration.framework */; };
 		536D624411444E4600DFCE56 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D624311444E4600DFCE56 /* Icon.png */; };
@@ -1172,8 +1169,6 @@
 		53649DCC184DA90600E600EC /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-120.png"; path = "Images/App Icons/Icon-120.png"; sourceTree = "<group>"; };
 		53649DD0184DA99B00E600EC /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Images/App Icons/Icon-76.png"; sourceTree = "<group>"; };
 		53649DD1184DA99B00E600EC /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Images/App Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
-		536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewObjectsSingleton.m; sourceTree = "<group>"; };
-		536C994C16619F5D005A73C6 /* ViewObjectsSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewObjectsSingleton.h; sourceTree = "<group>"; };
 		536D612811441F5B00DFCE56 /* settings-page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-page.png"; path = "Images/Other/settings-page.png"; sourceTree = "<group>"; };
 		536D620A1144495400DFCE56 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		536D624311444E4600DFCE56 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = "Images/App Icons/Icon.png"; sourceTree = "<group>"; };
@@ -2157,8 +2152,6 @@
 				1D3623250D0F684500981E51 /* iSubAppDelegate.m */,
 				532862D911C573AD00B40FF0 /* UAApplication.h */,
 				532862DA11C573AD00B40FF0 /* UAApplication.m */,
-				536C994C16619F5D005A73C6 /* ViewObjectsSingleton.h */,
-				536C994B16619F5D005A73C6 /* ViewObjectsSingleton.m */,
 				530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */,
 			);
 			name = Main;
@@ -3067,7 +3060,6 @@
 				53BCBF0F1E21A07D0008313A /* URL.swift in Sources */,
 				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				5358DDAC1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
-				536C994D16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5358DC8A1E0B78470024A0D4 /* BassWrapper.m in Sources */,
 				5349F14F16E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 				5358DD021E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */,
@@ -3158,7 +3150,6 @@
 				5358DC831E0B78470024A0D4 /* BassGaplessPlayer.m in Sources */,
 				53835D181E0B7DD50077B53D /* FMDatabasePool.m in Sources */,
 				53835CE61E0B7D6D0077B53D /* ZKDataArchive.m in Sources */,
-				536C995016619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				533C5ED41E0B8DFC00802FB1 /* String.swift in Sources */,
 				53835D221E0B7DD50077B53D /* FMResultSet.m in Sources */,
 				5358DF9F1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
@@ -3425,7 +3416,6 @@
 				53BCBF101E21A07D0008313A /* URL.swift in Sources */,
 				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				5358DDAE1E0B78480024A0D4 /* ISMSErrorDomain.m in Sources */,
-				536C994F16619F5D005A73C6 /* ViewObjectsSingleton.m in Sources */,
 				5358DC8C1E0B78470024A0D4 /* BassWrapper.m in Sources */,
 				5349F15116E9458B00E56582 /* IDTwitterAccountChooserViewController.m in Sources */,
 				5358DD041E0B78470024A0D4 /* ISMSUpdateChecker.m in Sources */,

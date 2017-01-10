@@ -63,27 +63,21 @@ class CacheViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if ViewObjectsSingleton.si().isCellEnabled {
-            switch indexPath.row {
-            case foldersRowIndex:
-                let loader = CachedRootFoldersLoader()
-                pushItemController(loader: loader, title: "Downloaded Folders")
-            case artistsRowIndex:
-                let loader = CachedRootArtistsLoader()
-                pushItemController(loader: loader, title: "Downloaded Artists")
-            case albumsRowIndex:
-                let loader = CachedRootAlbumsLoader()
-                pushItemController(loader: loader, title: "Downloaded Albums")
-            case songsRowIndex:
-                let loader = CachedRootSongsLoader()
-                pushItemController(loader: loader, title: "Downloaded Songs")
-            default:
-                break
-            }
-        }
-        else
-        {
-            self.tableView.deselectRow(at: indexPath, animated: false)
+        switch indexPath.row {
+        case foldersRowIndex:
+            let loader = CachedRootFoldersLoader()
+            pushItemController(loader: loader, title: "Downloaded Folders")
+        case artistsRowIndex:
+            let loader = CachedRootArtistsLoader()
+            pushItemController(loader: loader, title: "Downloaded Artists")
+        case albumsRowIndex:
+            let loader = CachedRootAlbumsLoader()
+            pushItemController(loader: loader, title: "Downloaded Albums")
+        case songsRowIndex:
+            let loader = CachedRootSongsLoader()
+            pushItemController(loader: loader, title: "Downloaded Songs")
+        default:
+            break
         }
     }
     

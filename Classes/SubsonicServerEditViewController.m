@@ -173,7 +173,7 @@
 	
 	if (urlValid && usernameValid && passwordValid)
 	{
-		[ViewObjectsSingleton.si showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
+		[iSubAppDelegate.si showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
         
         StatusLoader *loader = [[StatusLoader alloc] initWithUrl:self.urlField.text username:self.usernameField.text password:self.passwordField.text];
         loader.delegate = self;
@@ -210,7 +210,7 @@
 
 - (void)loadingFailed:(ApiLoader *)theLoader withError:(NSError *)error
 {
-	[ViewObjectsSingleton.si hideLoadingScreen];
+	[iSubAppDelegate.si hideLoadingScreen];
 	
 	NSString *message = @"";
     NSInteger tag = 0;
@@ -235,7 +235,7 @@
     StatusLoader *statusLoader = (id)theLoader;
     
 	//DLog(@"server check passed");
-	[ViewObjectsSingleton.si hideLoadingScreen];
+	[iSubAppDelegate.si hideLoadingScreen];
     
     if (self.server)
     {
