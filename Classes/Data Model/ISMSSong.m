@@ -650,12 +650,12 @@
     //return [[[NSFileManager defaultManager] attributesOfItemAtPath:self.currentPath error:NULL] fileSize];
 }
 
-- (NSUInteger)estimatedBitrate
+- (NSInteger)estimatedBitrate
 {
     NSInteger currentMaxBitrate = SavedSettings.si.currentMaxBitrate;
     
     // Default to 128 if there is no bitrate for this song object (should never happen)
-    NSUInteger rate = (!self.bitrate || self.bitrate.intValue == 0) ? 128 : self.bitrate.intValue;
+    NSInteger rate = (!self.bitrate || self.bitrate.intValue == 0) ? 128 : self.bitrate.intValue;
     
     // Check if this is being transcoded to the best of our knowledge
     if (self.transcodedContentType.extension)

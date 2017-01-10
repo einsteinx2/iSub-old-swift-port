@@ -8,7 +8,7 @@
 
 #import "EX2NetworkIndicator.h"
 
-static NSUInteger networkUseCount = 0;
+static NSInteger networkUseCount = 0;
 
 @implementation EX2NetworkIndicator
 

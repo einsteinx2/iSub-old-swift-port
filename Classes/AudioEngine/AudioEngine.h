@@ -32,16 +32,15 @@
 @property (readonly) BassVisualizer * _Nonnull visualizer;
 @property (strong) BassGaplessPlayer *_Nullable player;
 
-@property NSUInteger startByteOffset;
-@property NSUInteger startSecondsOffset;
+// NOTE: These byte offsets are in BASS channel bytes NOT file bytes
+@property NSInteger startByteOffset;
 
 @property (strong) id<BassGaplessPlayerDelegate> _Nonnull delegate;
 
 // BASS methods
 //
 - (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index;
-- (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index offsetInBytes:(NSInteger)bytesOffset;
-- (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index offsetInSeconds:(NSInteger)secondsOffset;
+- (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index byteOffset:(NSInteger)bytesOffset;
 - (void)startEmptyPlayer;
 
 // Player control (no longer directly touch the BassGaplessPlayer from outside the audio engine

@@ -18,14 +18,14 @@ LOG_LEVEL_ISUB_DEFAULT
 
 extern void BASSFLACplugin, BASSWVplugin, BASS_APEplugin, BASS_MPCplugin, BASSOPUSplugin;
 
-static NSUInteger _bassOutputBufferLengthMillis = 0;
+static NSInteger _bassOutputBufferLengthMillis = 0;
 
-+ (NSUInteger)bassOutputBufferLengthMillis
++ (NSInteger)bassOutputBufferLengthMillis
 {
     return _bassOutputBufferLengthMillis;
 }
 
-+ (void)bassInit:(NSUInteger)sampleRate
++ (void)bassInit:(NSInteger)sampleRate
 {
     // Free BASS just in case we use this after launch
     BASS_Free();
@@ -207,7 +207,7 @@ static NSUInteger _bassOutputBufferLengthMillis = 0;
 	}
 }
 
-+ (NSUInteger)estimateBitrate:(BassStream *)bassStream
++ (NSInteger)estimateBitrate:(BassStream *)bassStream
 {	
 	// Default to the player bitrate
 	HSTREAM stream = bassStream.stream;
@@ -216,7 +216,7 @@ static NSUInteger _bassOutputBufferLengthMillis = 0;
 	QWORD filePosition = currentFilePosition - startFilePosition;
 	QWORD decodedPosition = BASS_ChannelGetPosition(stream, BASS_POS_BYTE|BASS_POS_DECODE); // decoded PCM position
 	double bitrateDouble = filePosition * 8 / BASS_ChannelBytes2Seconds(stream, decodedPosition);
-	NSUInteger bitrate = (NSUInteger)(bitrateDouble / 1000);
+	NSInteger bitrate = (NSInteger)(bitrateDouble / 1000);
 	bitrate = bitrate > 1000000 ? -1 : bitrate;
 	
 	BASS_CHANNELINFO i;
@@ -298,7 +298,7 @@ static NSUInteger _bassOutputBufferLengthMillis = 0;
 	UInt32 size = sizeof(Float64);
 	AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &sampleRate);
 	
-	return (NSUInteger)sampleRate;
+	return (NSInteger)sampleRate;
 }
 
 + (void)setAudioSessionSampleRate:(NSInteger)audioSessionSampleRate

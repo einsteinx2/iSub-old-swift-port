@@ -49,7 +49,7 @@
 	free(_fftData);
 }
 
-- (float)fftData:(NSUInteger)index
+- (float)fftData:(NSInteger)index
 {
 	@synchronized(self)
 	{
@@ -57,7 +57,7 @@
 	}
 }
 
-- (short)lineSpecData:(NSUInteger)index
+- (short)lineSpecData:(NSInteger)index
 {
 	@synchronized(self)
 	{

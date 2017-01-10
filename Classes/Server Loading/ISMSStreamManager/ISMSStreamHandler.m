@@ -29,7 +29,7 @@
 	return self;
 }
 
-- (id)initWithSong:(ISMSSong *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
+- (id)initWithSong:(ISMSSong *)song byteOffset:(unsigned long long)bOffset isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
 {
 	if ((self = [self init]))
 	{
@@ -38,7 +38,6 @@
 		_song = [song copy];
 		_delegate = theDelegate;
 		_byteOffset = bOffset;
-		_secondsOffset = sOffset;
 		_isTempCache = isTemp;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playlistIndexChanged) name:ISMSNotification_CurrentPlaylistIndexChanged object:nil];
@@ -49,7 +48,7 @@
 
 - (id)initWithSong:(ISMSSong *)song isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
 {
-	return [self initWithSong:song byteOffset:0 secondsOffset:0.0 isTemp:isTemp delegate:theDelegate];
+	return [self initWithSong:song byteOffset:0 isTemp:isTemp delegate:theDelegate];
 }
 
 - (void)dealloc
@@ -83,7 +82,7 @@
 		self.isCurrentSong = YES;
 }
 
-+ (NSUInteger)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSUInteger)bytesPerSec
++ (NSInteger)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSInteger)bytesPerSec
 {
     // If start date is nil somehow, or total bytes transferred is 0 somehow,
     if (rate == 0. || bytesPerSec == 0)
@@ -128,11 +127,11 @@
     }
     
     // Convert from seconds to bytes
-    NSUInteger minBytesToStartPlayback = minSecondsToStartPlayback * bytesForOneSecond;
+    NSInteger minBytesToStartPlayback = minSecondsToStartPlayback * bytesForOneSecond;
     return minBytesToStartPlayback;
 }
 
-- (NSUInteger)totalDownloadSpeedInBytesPerSec
+- (NSInteger)totalDownloadSpeedInBytesPerSec
 {
     return self.totalBytesTransferred / [[NSDate date] timeIntervalSinceDate:self.startDate];
 }
@@ -169,7 +168,6 @@
 {
 	[encoder encodeObject:self.song forKey:@"song"];
 	[encoder encodeInt64:self.byteOffset forKey:@"byteOffset"];
-	[encoder encodeDouble:self.secondsOffset forKey:@"secondsOffset"];
 	[encoder encodeBool:self.isDelegateNotifiedToStartPlayback forKey:@"isDelegateNotifiedToStartPlayback"];
 	[encoder encodeBool:self.isTempCache forKey:@"isTempCache"];
 	[encoder encodeBool:self.isDownloading forKey:@"isDownloading"];
@@ -185,7 +183,6 @@
 		
 		_song = [[decoder decodeObjectForKey:@"song"] copy];
 		_byteOffset = [decoder decodeInt64ForKey:@"byteOffset"];
-		_secondsOffset = [decoder decodeDoubleForKey:@"secondsOffset"];
 		_isDelegateNotifiedToStartPlayback = [decoder decodeBoolForKey:@"isDelegateNotifiedToStartPlayback"];
 		_isTempCache = [decoder decodeBoolForKey:@"isTempCache"];
 		_isDownloading = [decoder decodeBoolForKey:@"isDownloading"];

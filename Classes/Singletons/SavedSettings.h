@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 @property (readonly) BOOL isTestServer;
 @property BOOL isBasicAuthEnabled;
 @property float gainMultiplier;
-@property NSUInteger quickSkipNumberOfSeconds;
+@property NSInteger quickSkipNumberOfSeconds;
 
 @property BOOL isEqualizerOn;
 

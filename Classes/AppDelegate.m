@@ -109,13 +109,12 @@
         ISMSSong *currentSong = PlayQueue.si.currentSong;
         if (currentSong)
         {
-            [PlayQueue.si startSongWithOffsetBytes:(NSInteger)SavedSettings.si.byteOffset offsetSeconds:SavedSettings.si.seekTime];
+            [PlayQueue.si startSongWithByteOffset:(NSInteger)SavedSettings.si.byteOffset];
         }
         else
         {
             // TODO: Start handling this via PlayQueue
-            AudioEngine.si.startByteOffset = (NSUInteger)SavedSettings.si.byteOffset;
-            AudioEngine.si.startSecondsOffset = SavedSettings.si.seekTime;
+            AudioEngine.si.startByteOffset = SavedSettings.si.byteOffset;
         }
     }
     

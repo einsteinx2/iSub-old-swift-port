@@ -15,7 +15,7 @@
 	if (seconds <= 0)
 		return @"0:00";
 
-	NSUInteger roundedSeconds = floor(seconds);
+	NSInteger roundedSeconds = floor(seconds);
 	
 	int mins = (int) roundedSeconds / 60;
 	int secs = (int) roundedSeconds % 60;
@@ -30,7 +30,7 @@
 	if (seconds <= 0)
 		return  hideHoursIfZero ? @"00m" : @"0h00m";
     
-	NSUInteger roundedSeconds = floor(seconds);
+	NSInteger roundedSeconds = floor(seconds);
 	
     int hours = (int) roundedSeconds / 3600;
 	int mins = (int) (roundedSeconds % 3600) / 60;

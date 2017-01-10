@@ -25,6 +25,6 @@
 - (NSInteger)bassIndexAtOffset:(NSInteger)offset fromIndex:(NSInteger)index player:(nonnull BassGaplessPlayer *)player;
 - (NSInteger)bassCurrentPlaylistIndex:(nonnull BassGaplessPlayer *)player;
 - (void)bassRetrySongAtIndex:(NSInteger)index player:(nonnull BassGaplessPlayer*)player;
-- (void)bassRetrySongAtOffsetInBytes:(NSInteger)bytes andSeconds:(NSInteger)seconds player:(nonnull BassGaplessPlayer*)player;
+- (void)bassRetrySongAtOffsetInBytes:(NSInteger)bytes player:(nonnull BassGaplessPlayer*)player;
 
 @end

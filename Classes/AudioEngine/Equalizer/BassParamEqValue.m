@@ -10,7 +10,7 @@
 
 @implementation BassParamEqValue
 
-- (id)initWithParameters:(BASS_DX8_PARAMEQ)params handle:(HFX)theHandle arrayIndex:(NSUInteger)index
+- (id)initWithParameters:(BASS_DX8_PARAMEQ)params handle:(HFX)theHandle arrayIndex:(NSInteger)index
 {
 	if ((self = [super init]))
 	{
@@ -22,27 +22,27 @@
 	return self;
 }
 
-+ (BassParamEqValue *)valueWithParams:(BASS_DX8_PARAMEQ)params handle:(HFX)theHandle arrayIndex:(NSUInteger)index
++ (BassParamEqValue *)valueWithParams:(BASS_DX8_PARAMEQ)params handle:(HFX)theHandle arrayIndex:(NSInteger)index
 {
 	return [[BassParamEqValue alloc] initWithParameters:params handle:theHandle arrayIndex:index];
 }
 
 - (id)initWithParameters:(BASS_DX8_PARAMEQ)params
 {
-	return [self initWithParameters:params handle:0 arrayIndex:NSUIntegerMax];
+	return [self initWithParameters:params handle:0 arrayIndex:NSIntegerMax];
 }
 
 + (BassParamEqValue *)valueWithParams:(BASS_DX8_PARAMEQ)params
 {
-	return [[BassParamEqValue alloc] initWithParameters:params handle:0 arrayIndex:NSUIntegerMax];
+	return [[BassParamEqValue alloc] initWithParameters:params handle:0 arrayIndex:NSIntegerMax];
 }
 
-- (id)initWithParameters:(BASS_DX8_PARAMEQ)params arrayIndex:(NSUInteger)index
+- (id)initWithParameters:(BASS_DX8_PARAMEQ)params arrayIndex:(NSInteger)index
 {
 	return [self initWithParameters:params handle:0 arrayIndex:index];
 }
 
-+ (BassParamEqValue *)valueWithParams:(BASS_DX8_PARAMEQ)params arrayIndex:(NSUInteger)index
++ (BassParamEqValue *)valueWithParams:(BASS_DX8_PARAMEQ)params arrayIndex:(NSInteger)index
 {
 	return [[BassParamEqValue alloc] initWithParameters:params handle:0 arrayIndex:index];
 }

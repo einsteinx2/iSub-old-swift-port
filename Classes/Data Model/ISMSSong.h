@@ -59,7 +59,7 @@
 - (nonnull NSString *)currentPath;
 @property (readonly) BOOL isTempCached;
 @property (readonly) unsigned long long localFileSize;
-@property (readonly) NSUInteger estimatedBitrate;
+@property (readonly) NSInteger estimatedBitrate;
 
 // Returns an instance if it exists in the db, otherwise nil
 - (nullable instancetype)initWithSongId:(NSInteger)songId serverId:(NSInteger)serverId;

@@ -240,52 +240,36 @@ import Nuke
         audioEngine.stop()
     }
     
-    open func startSong() {
-        startSong(offsetBytes: 0, offsetSeconds: 0)
-    }
-    
-    fileprivate var startSongDelayTimer: Timer?
-    open func startSong(offsetBytes: Int, offsetSeconds: Int) {
-        let work = {
-            if let startSongDelayTimer = self.startSongDelayTimer {
-                startSongDelayTimer.invalidate()
-                self.startSongDelayTimer = nil
-            }
-            
-            // Destroy the streamer to start a new song
-            self.audioEngine.stop()
-            
-            if self.currentSong != nil {
-                // Only start the caching process if it's been a half second after the last request
-                // Prevents crash when skipping through playlist fast
-                self.startSongDelayTimer = Timer.scheduledTimer(timeInterval: 0.6, target: self, selector: #selector(PlayQueue.startSongWithByteAndSecondsOffset(_:)), userInfo: ["bytes": offsetBytes, "seconds": offsetSeconds], repeats: false)
-            }
+    fileprivate var startSongDelayTimer: DispatchSourceTimer?
+    func startSong(byteOffset: Int = 0) {
+        if let startSongDelayTimer = startSongDelayTimer {
+            startSongDelayTimer.cancel()
+            self.startSongDelayTimer = nil
         }
         
-        // Only allowed to manipulate BASS from the main thread
-        if Thread.isMainThread {
-            work()
+        if currentSong != nil {
+            // Only start the caching process if it's been a half second after the last request
+            // Prevents crash when skipping through playlist fast
+            startSongDelayTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+            startSongDelayTimer!.scheduleOneshot(deadline: .now() + .milliseconds(600), leeway: .nanoseconds(0))
+            startSongDelayTimer!.setEventHandler {
+                self.startSongDelayed(byteOffset: byteOffset)
+            }
+            startSongDelayTimer!.resume()
         } else {
-            EX2Dispatch.run(inMainThreadAsync: work)
+            audioEngine.stop()
         }
     }
     
-    open func startSongWithByteAndSecondsOffset(_ timer: Timer) {
-        guard let userInfo = timer.userInfo as? [String: AnyObject] else {
-            return
-        }
-                
+    fileprivate func startSongDelayed(byteOffset: Int) {
+        // Destroy the streamer to start a new song
+        self.audioEngine.stop()
+        
         if let currentSong = currentSong {
             let settings = SavedSettings.si()
             let streamManager = ISMSStreamManager.si()
-            let offsetBytes = userInfo["bytes"] as? NSNumber
-            let offsetSeconds = userInfo["seconds"] as? NSNumber
             let audioEngineStartSong = {
-                if let bytes = offsetBytes?.intValue {
-                    self.audioEngine.start(currentSong, index: self.currentIndex, offsetInBytes: bytes)
-                } else if let seconds = offsetSeconds?.intValue {
-                    self.audioEngine.start(currentSong, index: self.currentIndex, offsetInSeconds: seconds)
-                }
+                self.audioEngine.start(currentSong, index: self.currentIndex, byteOffset: byteOffset)
             }
             
             // Check to see if the song is already cached
@@ -330,17 +314,12 @@ import Nuke
                         streamManager.removeAllStreams()
                         
                         var isTempCache = false
-                        if let offsetBytes = offsetBytes {
-                            if offsetBytes.intValue > 0 || !settings.isSongCachingEnabled {
-                                isTempCache = true
-                            }
+                        if byteOffset > 0 || !settings.isSongCachingEnabled {
+                            isTempCache = true
                         }
                         
-                        let bytes = offsetBytes?.uint64Value ?? 0
-                        let seconds = offsetSeconds?.doubleValue ?? 0
-                        
                         // Start downloading the current song from the correct offset
-                        streamManager.queueStream(for: currentSong, byteOffset: bytes, secondsOffset: seconds, at: 0, isTempCache: isTempCache, isStartDownload: true)
+                        streamManager.queueStream(for: currentSong, byteOffset: UInt64(byteOffset), at: 0, isTempCache: isTempCache, isStartDownload: true)
                         
                         // Fill the stream queue
                         if settings.isSongCachingEnabled {
@@ -444,8 +423,8 @@ extension PlayQueue: BassGaplessPlayerDelegate {
         updateLockScreenInfo()
     }
     
-    public func bassRetrySongAtOffset(inBytes bytes: Int, andSeconds seconds: Int, player: BassGaplessPlayer) {
-        startSong(offsetBytes: bytes, offsetSeconds: seconds)
+    public func bassRetrySongAtOffset(inBytes bytes: Int, player: BassGaplessPlayer) {
+        startSong(byteOffset: bytes)
     }
     
     public func bassFailedToCreateNextStream(for index: Int, player: BassGaplessPlayer) {

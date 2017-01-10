@@ -41,24 +41,21 @@
 @property (readonly) double progress;
 @property (readonly) double progressPercent;
 @property (strong) BassStream *waitLoopStream;
-
-@property NSUInteger startByteOffset;
-@property NSUInteger startSecondsOffset;
+@property NSInteger startByteOffset;
 
 @property (strong) BassEqualizer *equalizer;
 @property (strong) BassVisualizer *visualizer;
 
-@property NSUInteger currentPlaylistIndex;
+@property NSInteger currentPlaylistIndex;
         
 - (id)initWithDelegate:(id<BassGaplessPlayerDelegate>)theDelegate;
 
 // BASS methods
 //
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length;
-- (void)startSong:(ISMSSong *)aSong atIndex:(NSUInteger)index withOffsetInBytes:(NSNumber *)byteOffset orSeconds:(NSNumber *)seconds;
-//- (void)prepareNextSongStream;
+- (void)startSong:(ISMSSong *)aSong atIndex:(NSInteger)index byteOffset:(NSInteger)byteOffset;
 
-+ (NSUInteger)bytesToBufferForKiloBitrate:(NSUInteger)rate speedInBytesPerSec:(NSUInteger)speedInBytesPerSec;
++ (NSInteger)bytesToBufferForKiloBitrate:(NSInteger)rate speedInBytesPerSec:(NSInteger)speedInBytesPerSec;
 
 // Playback methods
 //

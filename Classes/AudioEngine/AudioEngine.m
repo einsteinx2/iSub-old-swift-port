@@ -91,26 +91,16 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index
 {
-    [self startSong:song atIndex:index withOffsetInBytes:@0 orSeconds:@0];
+    [self startSong:song index:index byteOffset:0];
 }
 
-- (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index offsetInBytes:(NSInteger)bytes
-{
-    [self startSong:song atIndex:index withOffsetInBytes:@(bytes) orSeconds:nil];
-}
-
-- (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index offsetInSeconds:(NSInteger)seconds
-{
-    [self startSong:song atIndex:index withOffsetInBytes:nil orSeconds:@(seconds)];
-}
-
-- (void)startSong:(ISMSSong *)song atIndex:(NSUInteger)index withOffsetInBytes:(NSNumber *)bytes orSeconds:(NSNumber *)seconds
+- (void)startSong:(ISMSSong *)song index:(NSInteger)index byteOffset:(NSInteger)bytes
 {
 	// Stop the player
 	[self.player stop];
     
     // Start the new song
-    [self.player startSong:song atIndex:index withOffsetInBytes:bytes orSeconds:seconds];
+    [self.player startSong:song atIndex:index byteOffset:bytes];
     
     // Load the EQ
     BassEffectDAO *effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];

@@ -36,7 +36,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         if let fileHandle = fileHandle {
             if resume {
                 // File exists so seek to the end
-                totalBytesTransferred = UInt(fileHandle.seekToEndOfFile())
+                totalBytesTransferred = Int(fileHandle.seekToEndOfFile())
                 byteOffset += totalBytesTransferred
             } else {
                 // File exists so remove it
@@ -146,13 +146,13 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         
         fileHandle?.write(data)
         
-        let bytesRead = UInt(data.count)
+        let bytesRead = data.count
         totalBytesTransferred += bytesRead
         bytesTransferred += bytesRead
         
         // Notify delegate if enough bytes received to start playback
         let bytesPerSec = Double(totalBytesTransferred) / Date().timeIntervalSince(startDate!)
-        if !isDelegateNotifiedToStartPlayback && totalBytesTransferred >= ISMSStreamHandler.minBytesToStartPlayback(forKiloBitrate: Double(bitrate), speedInBytesPerSec: UInt(bytesPerSec)) {
+        if !isDelegateNotifiedToStartPlayback && totalBytesTransferred >= ISMSStreamHandler.minBytesToStartPlayback(forKiloBitrate: Double(bitrate), speedInBytesPerSec: Int(bytesPerSec)) {
             isDelegateNotifiedToStartPlayback = true
             delegate?.ismsStreamHandlerStartPlayback?(self)
         }
@@ -162,7 +162,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         if speedInterval >= 6.0 {
             let transferredSinceLastCheck = totalBytesTransferred - speedLoggingLastSize
             let speedInBytes = Double(transferredSinceLastCheck) / speedInterval
-            recentDownloadSpeedInBytesPerSec = UInt(speedInBytes)
+            recentDownloadSpeedInBytesPerSec = Int(speedInBytes)
             
             speedLoggingLastSize = totalBytesTransferred
             speedLoggingDate = Date()
@@ -175,7 +175,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         if let _ = error {
             delegate?.ismsStreamHandlerConnectionFailed?(self, withError: nil)
         } else {
-            if contentLength > 0 && song.localFileSize < UInt64(contentLength) && numberOfContentLengthFailures < UInt(ISMSMaxContentLengthFailures) {
+            if contentLength > 0 && song.localFileSize < UInt64(contentLength) && numberOfContentLengthFailures < Int(ISMSMaxContentLengthFailures) {
                 print("[URLSessionStreamHandler] Connection Failed because not enough bytes were downloaed for \(song.title)")
                 
                 // This is a failed download, it didn't download enough

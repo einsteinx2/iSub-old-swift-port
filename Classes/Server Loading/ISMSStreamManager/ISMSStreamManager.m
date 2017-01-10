@@ -136,7 +136,7 @@ LOG_LEVEL_ISUB_DEBUG
 }
 
 // Main worker method
-- (void)cancelStreamAtIndex:(NSUInteger)index
+- (void)cancelStreamAtIndex:(NSInteger)index
 {
 	if (index < [self.handlerStack count])
 	{
@@ -162,7 +162,7 @@ LOG_LEVEL_ISUB_DEBUG
 		return;
 	
 	// Get the handler index
-	NSUInteger index = [self.handlerStack indexOfObject:handler];
+	NSInteger index = [self.handlerStack indexOfObject:handler];
 	
 	// Cancel the handler
 	[self cancelStreamAtIndex:index];
@@ -264,7 +264,7 @@ LOG_LEVEL_ISUB_DEBUG
 }
 
 // Main worker method
-- (void)removeStreamAtIndex:(NSUInteger)index
+- (void)removeStreamAtIndex:(NSInteger)index
 {
 	if (index < [self.handlerStack count])
 	{
@@ -414,13 +414,12 @@ LOG_LEVEL_ISUB_DEBUG
 
 #pragma mark Download
 
-// TODO: Why do we take both offset seconds and bytes?
-- (void)queueStreamForSong:(ISMSSong *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
+- (void)queueStreamForSong:(ISMSSong *)song byteOffset:(unsigned long long)byteOffset atIndex:(NSInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {
 	if (!song)
 		return;
 	
-	ISMSStreamHandler *handler = [[URLSessionStreamHandler alloc] initWithSong:song byteOffset:byteOffset secondsOffset:secondsOffset isTemp:isTemp delegate:self];
+	ISMSStreamHandler *handler = [[URLSessionStreamHandler alloc] initWithSong:song byteOffset:byteOffset isTemp:isTemp delegate:self];
 	if (![self.handlerStack containsObject:handler])
 	{
 		[self.handlerStack insertObject:handler atIndex:index];
@@ -464,7 +463,7 @@ LOG_LEVEL_ISUB_DEBUG
 }
 
 - (void)fillStreamQueue:(BOOL)isStartDownload {
-	NSUInteger numStreamsToQueue = 1;
+	NSInteger numStreamsToQueue = 1;
 	if (SavedSettings.si.isSongCachingEnabled && SavedSettings.si.isNextSongCacheEnabled) {
 		numStreamsToQueue = ISMSNumberOfStreamsToQueue;
 	}
@@ -490,7 +489,7 @@ LOG_LEVEL_ISUB_DEBUG
                 ![CacheQueueManager.si.currentSong isEqualToSong:aSong]) {
                 
                 // Queue the song for download
-                [self queueStreamForSong:aSong byteOffset:0 secondsOffset:0 atIndex:[self.handlerStack count] isTempCache:!SavedSettings.si.isSongCachingEnabled isStartDownload:isStartDownload];
+                [self queueStreamForSong:aSong byteOffset:0 atIndex:[self.handlerStack count] isTempCache:!SavedSettings.si.isSongCachingEnabled isStartDownload:isStartDownload];
             }
         }
     }
@@ -561,9 +560,7 @@ LOG_LEVEL_ISUB_DEBUG
 			// TODO: get rid of this ugly hack
 			[EX2Dispatch timerInMainQueueAfterDelay:1.0 withName:@"temp song set byteOffset/seconds" repeats:NO performBlock:^
              {
-                 //DLog(@"byteOffset: %llu   secondsOffset: %f", handler.byteOffset, handler.secondsOffset);
                  AudioEngine.si.player.startByteOffset = handler.byteOffset;
-                 AudioEngine.si.player.startSecondsOffset = handler.secondsOffset;
              }];
 		}
 	}

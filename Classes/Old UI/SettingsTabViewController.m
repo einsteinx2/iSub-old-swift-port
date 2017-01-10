@@ -617,7 +617,7 @@
 
 - (IBAction)updateScrobblePercentLabel
 {
-	NSUInteger percentInt = self.scrobblePercentSlider.value * 100;
+	NSInteger percentInt = self.scrobblePercentSlider.value * 100;
 	self.scrobblePercentLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)percentInt];
 }
 

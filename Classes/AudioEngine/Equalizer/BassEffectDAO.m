@@ -63,8 +63,8 @@
 
 NSInteger presetSort(id preset1, id preset2, void *context)
 {
-    NSUInteger presetId1 = [[preset1 objectForKey:@"presetId"] intValue];
-	NSUInteger presetId2 = [[preset2 objectForKey:@"presetId"] intValue];
+    NSInteger presetId1 = [[preset1 objectForKey:@"presetId"] intValue];
+	NSInteger presetId2 = [[preset2 objectForKey:@"presetId"] intValue];
 	
     if (presetId1 < presetId2)
         return NSOrderedAscending;
@@ -123,7 +123,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 	return [[self readPlist:@"BassEffectDefaultPresets"] objectForKey:[@(self.type) stringValue]];
 }
 
-- (NSUInteger)userPresetsCount
+- (NSInteger)userPresetsCount
 {
 	if (self.userPresets)
 		return [[self.userPresets allKeys] count]; 
@@ -131,7 +131,7 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 	return 0;
 }
 
-- (NSUInteger)defaultPresetsCount
+- (NSInteger)defaultPresetsCount
 {
 	if (self.defaultPresets)
 		return [[self.defaultPresets allKeys] count];
@@ -139,25 +139,25 @@ NSInteger presetSort(id preset1, id preset2, void *context)
 	return 0;
 }
 
-- (NSUInteger)selectedPresetIndex
+- (NSInteger)selectedPresetIndex
 {
 	return [self.presetsArray indexOfObject:self.selectedPreset];
 }
 
-- (NSUInteger)selectedPresetId
+- (NSInteger)selectedPresetId
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	return [[[defaults objectForKey:@"BassEffectSelectedPresetId"] objectForKey:[@(self.type) stringValue]] intValue];
 }
 
-- (void)setSelectedPresetId:(NSUInteger)preset
+- (void)setSelectedPresetId:(NSInteger)preset
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSMutableDictionary *selectedPresetIds = [NSMutableDictionary dictionaryWithCapacity:0];
 	if ([defaults objectForKey:@"BassEffectSelectedPresetId"])
 		[selectedPresetIds addEntriesFromDictionary:[defaults objectForKey:@"BassEffectSelectedPresetId"]];
 	
-	[selectedPresetIds setObject:@(preset) forKey:[@((NSUInteger)self.type) stringValue]];
+	[selectedPresetIds setObject:@(preset) forKey:[@((NSInteger)self.type) stringValue]];
 	[defaults setObject:selectedPresetIds forKey:@"BassEffectSelectedPresetId"];
 	[defaults synchronize];
 }
@@ -224,7 +224,7 @@ static CGPoint CGPointFromString(NSString *string)
 	return value;
 }
 
-- (void)selectPresetId:(NSUInteger)presetId
+- (void)selectPresetId:(NSInteger)presetId
 {
 	self.selectedPresetId = presetId;
 		
@@ -245,7 +245,7 @@ static CGPoint CGPointFromString(NSString *string)
 	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassEffectPresetLoaded];
 }
 
-- (void)selectPresetAtIndex:(NSUInteger)presetIndex
+- (void)selectPresetAtIndex:(NSInteger)presetIndex
 {
 	if (presetIndex >= [self.presets count])
 		return;
@@ -255,7 +255,7 @@ static CGPoint CGPointFromString(NSString *string)
 	[self selectPresetId:self.selectedPresetId];
 }
 
-- (void)deleteCustomPresetForId:(NSUInteger)presetId
+- (void)deleteCustomPresetForId:(NSInteger)presetId
 {
 	if (presetId == self.selectedPresetId)
 		self.selectedPresetId = 0;
@@ -278,9 +278,9 @@ static CGPoint CGPointFromString(NSString *string)
 	[self setup];
 }
 
-- (void)deleteCustomPresetForIndex:(NSUInteger)presetIndex
+- (void)deleteCustomPresetForIndex:(NSInteger)presetIndex
 {
-	NSUInteger presetId = [[[self.presetsArray objectAtIndexSafe:presetIndex] objectForKey:@"presetId"] intValue];
+	NSInteger presetId = [[[self.presetsArray objectAtIndexSafe:presetIndex] objectForKey:@"presetId"] intValue];
 	[self deleteCustomPresetForId:presetId];
 }
 
@@ -289,7 +289,7 @@ static CGPoint CGPointFromString(NSString *string)
 	[self deleteCustomPresetForId:BassEffectTempCustomPresetId];
 }
 
-- (void)saveCustomPreset:(NSArray *)arrayOfPoints name:(NSString *)name presetId:(NSUInteger)presetId	
+- (void)saveCustomPreset:(NSArray *)arrayOfPoints name:(NSString *)name presetId:(NSInteger)presetId	
 {
 	if (!name || !arrayOfPoints)
 		return;
@@ -322,7 +322,7 @@ static CGPoint CGPointFromString(NSString *string)
 
 - (void)saveCustomPreset:(NSArray *)arrayOfPoints name:(NSString *)name
 {
-	NSUInteger presetId = BassEffectUserPresetStartId;
+	NSInteger presetId = BassEffectUserPresetStartId;
 	
 	NSArray *userPresetsArrayMinusCustom = self.userPresetsArrayMinusCustom;
 	if (userPresetsArrayMinusCustom)

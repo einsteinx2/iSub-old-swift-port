@@ -37,7 +37,7 @@
 - (void)cancelAllStreamsExceptForSongs:(nonnull NSArray *)songsToSkip;
 - (void)cancelAllStreamsExceptForSong:(nonnull ISMSSong *)aSong;
 - (void)cancelAllStreams;
-- (void)cancelStreamAtIndex:(NSUInteger)index;
+- (void)cancelStreamAtIndex:(NSInteger)index;
 - (void)cancelStream:(nonnull ISMSStreamHandler *)handler;
 - (void)cancelStreamForSong:(nonnull ISMSSong *)aSong;
 
@@ -45,11 +45,11 @@
 - (void)removeAllStreamsExceptForSongs:(nonnull NSArray *)songsToSkip;
 - (void)removeAllStreamsExceptForSong:(nonnull ISMSSong *)aSong;
 - (void)removeAllStreams;
-- (void)removeStreamAtIndex:(NSUInteger)index;
+- (void)removeStreamAtIndex:(NSInteger)index;
 - (void)removeStream:(nonnull ISMSStreamHandler *)handler;
 - (void)removeStreamForSong:(nonnull ISMSSong *)aSong;
 
-- (void)queueStreamForSong:(nonnull ISMSSong *)song byteOffset:(unsigned long long)byteOffset secondsOffset:(double)secondsOffset atIndex:(NSUInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
+- (void)queueStreamForSong:(nonnull ISMSSong *)song byteOffset:(unsigned long long)byteOffset atIndex:(NSInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
 - (void)fillStreamQueue:(BOOL)isStartDownload;
 
 - (void)resumeQueue;

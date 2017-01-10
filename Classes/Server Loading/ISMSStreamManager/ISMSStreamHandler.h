@@ -14,7 +14,7 @@
 @class ISMSSong;
 @interface ISMSStreamHandler : NSObject <NSCoding>
 
-- (nonnull instancetype)initWithSong:(nonnull ISMSSong *)song byteOffset:(unsigned long long)bOffset secondsOffset:(double)sOffset isTemp:(BOOL)isTemp delegate:(nullable NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
+- (nonnull instancetype)initWithSong:(nonnull ISMSSong *)song byteOffset:(unsigned long long)bOffset isTemp:(BOOL)isTemp delegate:(nullable NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
 - (nonnull instancetype)initWithSong:(nonnull ISMSSong *)song isTemp:(BOOL)isTemp delegate:(nullable NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
 
 @property (nullable, weak) NSObject<ISMSStreamHandlerDelegate> *delegate;
@@ -22,16 +22,15 @@
 
 @property (nonnull, copy) ISMSSong *song;
 
-@property NSUInteger byteOffset;
-@property double secondsOffset;
-@property NSUInteger totalBytesTransferred;
-@property NSUInteger bytesTransferred;
+@property NSInteger byteOffset;
+@property NSInteger totalBytesTransferred;
+@property NSInteger bytesTransferred;
 @property (nullable, strong) NSDate *speedLoggingDate;
-@property NSUInteger speedLoggingLastSize;
-@property NSUInteger recentDownloadSpeedInBytesPerSec;
+@property NSInteger speedLoggingLastSize;
+@property NSInteger recentDownloadSpeedInBytesPerSec;
 @property NSInteger numOfReconnects;
 @property BOOL isTempCache;
-@property NSUInteger bitrate;
+@property NSInteger bitrate;
 @property (nonnull, readonly) NSString *filePath;
 @property BOOL isDownloading;
 @property BOOL isCurrentSong;
@@ -42,16 +41,16 @@
 @property long long contentLength;
 @property NSInteger maxBitrateSetting;
 
-@property NSUInteger numberOfContentLengthFailures;
+@property NSInteger numberOfContentLengthFailures;
 @property (nullable, strong) NSFileHandle *fileHandle;
 @property (nullable, strong) NSDate *startDate;
 
-@property (readonly) NSUInteger totalDownloadSpeedInBytesPerSec;
+@property (readonly) NSInteger totalDownloadSpeedInBytesPerSec;
 
 - (void)start:(BOOL)resume;
 - (void)start;
 - (void)cancel;
 
-+ (NSUInteger)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSUInteger)bytesPerSec;
++ (NSInteger)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSInteger)bytesPerSec;
 
 @end

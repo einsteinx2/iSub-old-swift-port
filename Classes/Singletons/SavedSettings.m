@@ -55,8 +55,6 @@
     _sessionId = self.sessionId;
 	
 	AudioEngine.si.startByteOffset = _byteOffset;
-	AudioEngine.si.startSecondsOffset = _secondsOffset;
-    //DLog(@"startByteOffset: %llu  startSecondsOffset: %f", byteOffset, secondsOffset);
 }
 
 - (void)setupSaveState
@@ -1014,7 +1012,7 @@
 	}
 }
 
-- (NSUInteger)quickSkipNumberOfSeconds
+- (NSInteger)quickSkipNumberOfSeconds
 {
 	@synchronized(self)
 	{
@@ -1022,7 +1020,7 @@
 	}
 }
 
-- (void)setQuickSkipNumberOfSeconds:(NSUInteger)numSeconds
+- (void)setQuickSkipNumberOfSeconds:(NSInteger)numSeconds
 {
 	@synchronized(self)
 	{

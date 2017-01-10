@@ -41,7 +41,7 @@ LOG_LEVEL_ISUB_DEFAULT
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkCache) object:nil];
 }
 
-- (NSUInteger)numberOfCachedSongs
+- (NSInteger)numberOfCachedSongs
 {
     NSString *query = @"SELECT COUNT(*) FROM cachedSongsMetadata WHERE fullyCached = 1";
     return [DatabaseSingleton.si.songModelReadDbPool intForQuery:query];

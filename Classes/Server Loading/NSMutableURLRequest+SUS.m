@@ -12,7 +12,7 @@
 
 @implementation NSMutableURLRequest (SUS)
 
-+ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters fragment:(NSString *)fragment byteOffset:(NSUInteger)offset
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action urlString:(NSString *)url username:(NSString *)user password:(NSString *)pass parameters:(NSDictionary *)parameters fragment:(NSString *)fragment byteOffset:(NSInteger)offset
 {
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@/rest/%@.view", url, action];
     if ([action isEqualToString:@"hls"])
@@ -134,7 +134,7 @@
     return request;
 }
 
-+ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action parameters:(NSDictionary *)parameters fragment:(NSString *)fragment byteOffset:(NSUInteger)offset
++ (NSMutableURLRequest *)requestWithSUSAction:(NSString *)action parameters:(NSDictionary *)parameters fragment:(NSString *)fragment byteOffset:(NSInteger)offset
 {
 	NSString *urlString = SavedSettings.si.currentServer.url;
 	if (SavedSettings.si.redirectUrlString)
