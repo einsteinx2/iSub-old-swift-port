@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
+		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
@@ -133,7 +133,7 @@
 		53159E59156F69D0001B0268 /* playing-cell-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F841516703F0081A83A /* playing-cell-icon@2x.png */; };
 		53159E5A156F69D0001B0268 /* playing-cell-icon-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8B15167CBA0081A83A /* playing-cell-icon-white.png */; };
 		53159E5B156F69D0001B0268 /* playing-cell-icon-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F8C15167CBA0081A83A /* playing-cell-icon-white@2x.png */; };
-		53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
+		53159E66156F69D0001B0268 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
 		53159E8F156F69D0001B0268 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
 		53159E9B156F69D0001B0268 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
@@ -175,6 +175,10 @@
 		5315A3F2156F7064001B0268 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
 		5315A3F6156F7064001B0268 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
 		53191DF01167CFDC00E1C08A /* current-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 53191DEF1167CFDC00E1C08A /* current-server.png */; };
+		531B32CA1E24C7A800811187 /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32C91E24C7A800811187 /* Logging.m */; };
+		531B32CB1E24C7A800811187 /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32C91E24C7A800811187 /* Logging.m */; };
+		531B32CF1E24C8AD00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32CE1E24C8AD00811187 /* LoadingScreen.m */; };
+		531B32D01E24C8AD00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32CE1E24C8AD00811187 /* LoadingScreen.m */; };
 		532300181CEE73F700B8C651 /* DroppableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532300171CEE73F700B8C651 /* DroppableCell.swift */; };
 		5323001A1CEE750B00B8C651 /* DroppableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532300171CEE73F700B8C651 /* DroppableCell.swift */; };
 		5324C6C613345D75004E6C79 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5324C6C513345D75004E6C79 /* OBSlider.m */; };
@@ -787,7 +791,7 @@
 		53BC2783139AF0DD00A825F1 /* intro-icon-ownserver.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054D12F1FCC6003C6895 /* intro-icon-ownserver.png */; };
 		53BC2784139AF0DD00A825F1 /* intro-icon-ownserver@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6054E12F1FCC6003C6895 /* intro-icon-ownserver@2x.png */; };
 		53BC2785139AF0DD00A825F1 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 537FCC5312F8F7F400F1D996 /* iTunesArtwork */; };
-		53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* iSubAppDelegate.m */; };
+		53BC279C139AF0DD00A825F1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		53BC27A7139AF0DD00A825F1 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CED25D113E2FF100B09699 /* SubsonicServerEditViewController.m */; };
 		53BC27D6139AF0DD00A825F1 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
 		53BC27E2139AF0DD00A825F1 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5398F26B11DA61DA00007870 /* SettingsTabViewController.m */; };
@@ -927,8 +931,8 @@
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1D3623240D0F684500981E51 /* iSubAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iSubAppDelegate.h; sourceTree = "<group>"; };
-		1D3623250D0F684500981E51 /* iSubAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iSubAppDelegate.m; sourceTree = "<group>"; };
+		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* iSub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -967,6 +971,10 @@
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5315A405156F7064001B0268 /* iSub Unit Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Unit Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
+		531B32C91E24C7A800811187 /* Logging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Logging.m; sourceTree = "<group>"; };
+		531B32CC1E24C7B800811187 /* Logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
+		531B32CD1E24C8AD00811187 /* LoadingScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScreen.h; sourceTree = "<group>"; };
+		531B32CE1E24C8AD00811187 /* LoadingScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingScreen.m; sourceTree = "<group>"; };
 		532300171CEE73F700B8C651 /* DroppableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DroppableCell.swift; sourceTree = "<group>"; };
 		5324C6C413345D75004E6C79 /* OBSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OBSlider.h; path = Classes/OBSlider.h; sourceTree = "<group>"; };
 		5324C6C513345D75004E6C79 /* OBSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OBSlider.m; path = Classes/OBSlider.m; sourceTree = "<group>"; };
@@ -1988,6 +1996,10 @@
 				5358DC651E0B78470024A0D4 /* SavedSettings.m */,
 				5358DC661E0B78470024A0D4 /* SocialSingleton.h */,
 				5358DC671E0B78470024A0D4 /* SocialSingleton.m */,
+				531B32CC1E24C7B800811187 /* Logging.h */,
+				531B32C91E24C7A800811187 /* Logging.m */,
+				531B32CD1E24C8AD00811187 /* LoadingScreen.h */,
+				531B32CE1E24C8AD00811187 /* LoadingScreen.m */,
 			);
 			path = Singletons;
 			sourceTree = "<group>";
@@ -2148,8 +2160,8 @@
 			isa = PBXGroup;
 			children = (
 				5333D1061C6540E100DC19F4 /* Main.storyboard */,
-				1D3623240D0F684500981E51 /* iSubAppDelegate.h */,
-				1D3623250D0F684500981E51 /* iSubAppDelegate.m */,
+				1D3623240D0F684500981E51 /* AppDelegate.h */,
+				1D3623250D0F684500981E51 /* AppDelegate.m */,
 				532862D911C573AD00B40FF0 /* UAApplication.h */,
 				532862DA11C573AD00B40FF0 /* UAApplication.m */,
 				530BB65D1A61AA9A00FBC005 /* HelperFunctions.swift */,
@@ -2912,7 +2924,7 @@
 				530F04AB1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				53F507CA1E21954E00BDE716 /* URLSessionStreamHandler.swift in Sources */,
 				5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
-				1D3623260D0F684500981E51 /* iSubAppDelegate.m in Sources */,
+				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				530F04AF1E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				532300181CEE73F700B8C651 /* DroppableCell.swift in Sources */,
@@ -2958,6 +2970,7 @@
 				53835D291E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
 				5308D9381E2471B40026E6BD /* UITraitEnvironment.swift in Sources */,
 				53D59A601E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
+				531B32CF1E24C8AD00811187 /* LoadingScreen.m in Sources */,
 				538A1CD91D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D21C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				53E7BC131D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
@@ -3042,6 +3055,7 @@
 				53493F2715FC6AC40059492E /* main.m in Sources */,
 				5358DD8E1E0B78480024A0D4 /* SavedSettings.m in Sources */,
 				5358DCB21E0B78470024A0D4 /* ISMSContentType.m in Sources */,
+				531B32CA1E24C7A800811187 /* Logging.m in Sources */,
 				53835CCA1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DDB61E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
 				5358DF9C1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
@@ -3073,7 +3087,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53159E66156F69D0001B0268 /* iSubAppDelegate.m in Sources */,
+				53159E66156F69D0001B0268 /* AppDelegate.m in Sources */,
 				5358DCFB1E0B78470024A0D4 /* ISMSStreamManager.m in Sources */,
 				5358DDBE1E0B78480024A0D4 /* sqlite3.c in Sources */,
 				53159E6F156F69D0001B0268 /* SubsonicServerEditViewController.m in Sources */,
@@ -3268,7 +3282,7 @@
 				530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				53F507CB1E21954E00BDE716 /* URLSessionStreamHandler.swift in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
-				53BC279C139AF0DD00A825F1 /* iSubAppDelegate.m in Sources */,
+				53BC279C139AF0DD00A825F1 /* AppDelegate.m in Sources */,
 				53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				530F04B01E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				5323001A1CEE750B00B8C651 /* DroppableCell.swift in Sources */,
@@ -3314,6 +3328,7 @@
 				53835D2B1E0B7DD50077B53D /* FMDatabaseVariadic.swift in Sources */,
 				5308D9391E2471B40026E6BD /* UITraitEnvironment.swift in Sources */,
 				53D59A621E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
+				531B32D01E24C8AD00811187 /* LoadingScreen.m in Sources */,
 				538A1CDB1D14480D00999E7F /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				53CBB2D41C683E09009DE52A /* CancelBlocks.swift in Sources */,
 				53E7BC151D15751900FD8613 /* MiniPlayerViewController.swift in Sources */,
@@ -3398,6 +3413,7 @@
 				53493F2915FC6AC40059492E /* main.m in Sources */,
 				5358DD901E0B78480024A0D4 /* SavedSettings.m in Sources */,
 				5358DCB41E0B78470024A0D4 /* ISMSContentType.m in Sources */,
+				531B32CB1E24C7A800811187 /* Logging.m in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DDB81E0B78480024A0D4 /* NSError+ISMSError.m in Sources */,
 				5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,

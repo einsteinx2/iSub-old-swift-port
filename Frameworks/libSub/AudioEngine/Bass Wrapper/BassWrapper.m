@@ -58,10 +58,6 @@ static NSUInteger _bassOutputBufferLengthMillis = 0;
         DDLogError(@"[BassGaplessPlayer] Can't initialize device");
         [BassWrapper logError];
     }
-	
-	//[AudioEngine.si startEmptyPlayer];
-    
-	//[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassInitialized];
 }
 
 + (void)bassInit

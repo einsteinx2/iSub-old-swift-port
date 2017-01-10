@@ -203,16 +203,8 @@ import Nuke
     open func playSong(atIndex index: Int) {
         currentIndex = index
         if let currentSong = currentSong {
-            if currentSong.contentType?.basicType != .video {
-                // Remove the video player if this is not a video
-                NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_RemoveMoviePlayer)
-            }
-            
             ISMSStreamManager.si().removeAllStreamsExcept(for: currentSong)
-            
-            if currentSong.contentType?.basicType == .video {
-                NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_PlayVideo, userInfo: ["song": currentSong])
-            } else {
+            if currentSong.contentType?.basicType == .audio {
                 startSong()
             }
         }
@@ -282,9 +274,7 @@ import Nuke
         guard let userInfo = timer.userInfo as? [String: AnyObject] else {
             return
         }
-        
-        NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_RemoveMoviePlayer)
-        
+                
         if let currentSong = currentSong {
             let settings = SavedSettings.si()
             let streamManager = ISMSStreamManager.si()

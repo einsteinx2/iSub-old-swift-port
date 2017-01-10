@@ -50,15 +50,12 @@ class StatusLoader: ApiLoader {
                         self.minorVersion = Int(splitVersion[1])
                     }
                 }
-            }
-            
-            NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_ServerCheckPassed)
+            }            
         }
         else
         {
             // This is not a Subsonic server, so fail
             self.failed(error: NSError(ismsCode: ISMSErrorCode_NotASubsonicServer))
-            NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_ServerCheckFailed)
         }
     }
     
@@ -66,12 +63,10 @@ class StatusLoader: ApiLoader {
         if let error = error as? NSError {
             if error.code == 40 {
                 // Incorrect credentials, so fail
-                NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_ServerCheckFailed)
                 super.failed(error: NSError(ismsCode: ISMSErrorCode_IncorrectCredentials))
                 return
             } else if error.code == 60 {
                 // Subsonic trial ended
-                NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_ServerCheckFailed)
                 super.failed(error: NSError(ismsCode: ISMSErrorCode_SubsonicTrialOver))
                 return
             }

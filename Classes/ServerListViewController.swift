@@ -213,7 +213,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
             showServerEditScreen(server: server)
         } else {
             redirectUrl = nil
-            iSubAppDelegate.si().showLoadingScreenOnMainWindow(withMessage: "Checking Server")
+            LoadingScreen.showOnMainWindow(withMessage: "Checking Server")
             
             let statusLoader = StatusLoader(server: server)
             statusLoader.delegate = self;
@@ -296,7 +296,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
         
-        iSubAppDelegate.si().hideLoadingScreen()
+        LoadingScreen.hide()
     }
     
     func loadingFinished(_ loader: ApiLoader) {
@@ -304,9 +304,9 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
             SavedSettings.si().currentServerId = server.serverId
             SavedSettings.si().redirectUrlString = redirectUrl
             
-            iSubAppDelegate.si().switchServer(to: server, redirectUrl: redirectUrl)
+            AppDelegate.si().switchServer(to: server, redirectUrl: redirectUrl)
             
-            iSubAppDelegate.si().hideLoadingScreen()
+            LoadingScreen.hide()
         }
     }
 }

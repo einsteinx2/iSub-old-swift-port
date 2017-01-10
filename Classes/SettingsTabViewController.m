@@ -46,7 +46,7 @@
 	// Main Settings
 	self.enableScrobblingSwitch.on = SavedSettings.si.isScrobbleEnabled;
 	
-	//scrobblePercentSlider.value = [[iSubAppDelegate.si.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
+	//scrobblePercentSlider.value = [[AppDelegate.si.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
 	self.scrobblePercentSlider.value = SavedSettings.si.scrobblePercent;
 	[self updateScrobblePercentLabel];
 	
@@ -207,17 +207,17 @@
 	if (self.cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
 		self.cacheSpaceLabel1.text = @"Minimum free space:";
-		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[iSubAppDelegate.si.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[AppDelegate.si.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
 		self.cacheSpaceLabel2.text = [NSString formatFileSize:SavedSettings.si.minFreeSpace];
-		//self.cacheSpaceSlider.value = [[iSubAppDelegate.si.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
+		//self.cacheSpaceSlider.value = [[AppDelegate.si.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
 		self.cacheSpaceSlider.value = (float)SavedSettings.si.minFreeSpace / self.totalSpace;
 	}
 	else if (self.cachingTypeSegmentedControl.selectedSegmentIndex == 1)
 	{
 		self.cacheSpaceLabel1.text = @"Maximum cache size:";
-		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[iSubAppDelegate.si.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
+		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[AppDelegate.si.settingsDictionary objectForKey:@"maxCacheSize"] unsignedLongLongValue]];
 		self.cacheSpaceLabel2.text = [NSString formatFileSize:SavedSettings.si.maxCacheSize];
-		//self.cacheSpaceSlider.value = [[iSubAppDelegate.si.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
+		//self.cacheSpaceSlider.value = [[AppDelegate.si.settingsDictionary objectForKey:@"maxCacheSize"] floatValue] / totalSpace;
 		self.cacheSpaceSlider.value = (float)SavedSettings.si.maxCacheSize / self.totalSpace;
 	}
 }
@@ -269,7 +269,7 @@
 
             // TODO: Update for new UI
 //			if (IS_IPAD())
-//				[iSubAppDelegate.si.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
+//				[AppDelegate.si.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
 		}
         else if (sender == self.maxVideoBitrate3GSegmentedControl)
         {
@@ -342,11 +342,11 @@
 			SavedSettings.si.isForceOfflineMode = self.manualOfflineModeSwitch.on;
 			if (self.manualOfflineModeSwitch.on)
 			{
-				[iSubAppDelegate.si enterOfflineModeForce];
+				[AppDelegate.si enterOfflineModeForce];
 			}
 			else
 			{
-				[iSubAppDelegate.si enterOnlineModeForce];
+				[AppDelegate.si enterOnlineModeForce];
 			}
 		}
 		else if (sender == self.enableScrobblingSwitch)
@@ -420,7 +420,6 @@
 		else if (sender == self.showLargeSongInfoSwitch)
 		{
 			SavedSettings.si.isShowLargeSongInfoInPlayer = self.showLargeSongInfoSwitch.on;
-			[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_LargeSongInfoToggle];
 		}
 		else if (sender == self.enableLyricsSwitch)
 		{
@@ -467,15 +466,15 @@
         {
             SavedSettings.si.isDisableUsageOver3G = self.disableCellUsageSwitch.on;
             
-            if (!SavedSettings.si.isOfflineMode && SavedSettings.si.isDisableUsageOver3G && ![iSubAppDelegate.si isWifi])
+            if (!SavedSettings.si.isOfflineMode && SavedSettings.si.isDisableUsageOver3G && ![AppDelegate.si isWifi])
             {
                 // We're on 3G and we just disabled use on 3G, so go offline
-                [iSubAppDelegate.si enterOfflineModeForce];
+                [AppDelegate.si enterOfflineModeForce];
             }
-            else if (SavedSettings.si.isOfflineMode && !SavedSettings.si.isDisableUsageOver3G && ![iSubAppDelegate.si isWifi])
+            else if (SavedSettings.si.isOfflineMode && !SavedSettings.si.isDisableUsageOver3G && ![AppDelegate.si isWifi])
             {
                 // We're on 3G and we just enabled use on 3G, so go online if we're offline
-                [iSubAppDelegate.si enterOfflineModeForce];
+                [AppDelegate.si enterOfflineModeForce];
             }
         }
 	}
@@ -491,7 +490,7 @@
 - (void)resetFolderCache
 {
 	[DatabaseSingleton.si resetFolderCache];
-	[iSubAppDelegate.si hideLoadingScreen];
+	[LoadingScreen hideLoadingScreen];
 	[self popFoldersTab];
 }
 
@@ -499,7 +498,7 @@
 {
     // TODO: Reimplement
 //	[DatabaseSingleton.si resetCoverArtCache];
-//	[iSubAppDelegate.si hideLoadingScreen];
+//	[AppDelegate.si hideLoadingScreen];
 //	[self popFoldersTab];
 }
 
@@ -507,21 +506,21 @@
 {
     // TODO: Do in new UI
 //	if (IS_IPAD())
-//		[iSubAppDelegate.si.artistsNavigationController popToRootViewControllerAnimated:NO];
+//		[AppDelegate.si.artistsNavigationController popToRootViewControllerAnimated:NO];
 //	else
-//		[iSubAppDelegate.si.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+//		[AppDelegate.si.rootViewController.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if (alertView.tag == 0 && buttonIndex == 1)
 	{
-		[iSubAppDelegate.si showLoadingScreenOnMainWindowWithMessage:@"Processing"];
+		[LoadingScreen showLoadingScreenOnMainWindowWithMessage:@"Processing"];
 		[self performSelector:@selector(resetFolderCache) withObject:nil afterDelay:0.05];
 	}
 	else if (alertView.tag == 1 && buttonIndex == 1)
 	{
-		[iSubAppDelegate.si showLoadingScreenOnMainWindowWithMessage:@"Processing"];
+		[LoadingScreen showLoadingScreenOnMainWindowWithMessage:@"Processing"];
 		[self performSelector:@selector(resetAlbumArtCache) withObject:nil afterDelay:0.05];
 	}
     else if (alertView.tag == 2)
@@ -682,7 +681,7 @@
 //		if (controller) 
 //		{
 //			if (IS_IPAD())
-//				[iSubAppDelegate.si.ipadRootViewController presentModalViewController:controller animated:YES];
+//				[AppDelegate.si.ipadRootViewController presentModalViewController:controller animated:YES];
 //			else
 //				[self.parentController presentModalViewController:controller animated:YES];
 //		}

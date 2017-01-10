@@ -173,7 +173,7 @@
 	
 	if (urlValid && usernameValid && passwordValid)
 	{
-		[iSubAppDelegate.si showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
+		[LoadingScreen showLoadingScreenOnMainWindowWithMessage:@"Checking Server"];
         
         StatusLoader *loader = [[StatusLoader alloc] initWithUrl:self.urlField.text username:self.usernameField.text password:self.passwordField.text];
         loader.delegate = self;
@@ -210,7 +210,7 @@
 
 - (void)loadingFailed:(ApiLoader *)theLoader withError:(NSError *)error
 {
-	[iSubAppDelegate.si hideLoadingScreen];
+	[LoadingScreen hideLoadingScreen];
 	
 	NSString *message = @"";
     NSInteger tag = 0;
@@ -235,7 +235,7 @@
     StatusLoader *statusLoader = (id)theLoader;
     
 	//DLog(@"server check passed");
-	[iSubAppDelegate.si hideLoadingScreen];
+	[LoadingScreen hideLoadingScreen];
     
     if (self.server)
     {
@@ -260,7 +260,7 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
 
-    [iSubAppDelegate.si switchServerTo:self.server redirectUrl:self.redirectUrl];
+    [AppDelegate.si switchServerTo:self.server redirectUrl:self.redirectUrl];
 }
 
 #pragma mark - UITextField Delegate -

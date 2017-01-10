@@ -6,7 +6,7 @@
 
 #import "libSubImports.h"
 #import "libSubDefines.h"
-#import "iSubAppDelegate.h"
+#import "AppDelegate.h"
 #import "IntroViewController.h"
 #import "HelpTabViewController.h"
 #import "SettingsTabViewController.h"

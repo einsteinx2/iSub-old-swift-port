@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
 		
-	if (!iSubAppDelegate.si.networkStatus.isReachable)
+	if (!AppDelegate.si.networkStatus.isReachable)
 	{		
 		NSString* embedHTML = @"\
 		<html><head>\

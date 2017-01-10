@@ -12,16 +12,6 @@ NSString * const ISMSNotification_SongPlaybackStarted = @"ISMSNotification_SongP
 NSString * const ISMSNotification_SongPlaybackPaused = @"ISMSNotification_SongPlaybackPaused";
 NSString * const ISMSNotification_SongPlaybackEnded = @"ISMSNotification_SongPlaybackEnded";
 
-NSString * const ISMSNotification_AlbumArtLargeDownloaded = @"ISMSNotification_AlbumArtLargeDownloaded";
-
-// TODO: Should these be notifications? Especially the second two
-NSString * const ISMSNotification_ServerSwitched = @"ISMSNotification_ServerSwitched";
-NSString * const ISMSNotification_ServerCheckPassed = @"ISMSNotification_ServerCheckPassed";
-NSString * const ISMSNotification_ServerCheckFailed = @"ISMSNotification_ServerCheckFailed";
-
-NSString * const ISMSNotification_LyricsDownloaded = @"ISMSNotification_LyricsDownloaded";
-NSString * const ISMSNotification_LyricsFailed = @"ISMSNotification_LyricsFailed";
-
 NSString * const ISMSNotification_RepeatModeChanged = @"ISMSNotification_RepeatModeChanged";
 
 NSString * const ISMSNotification_BassEffectPresetLoaded = @"ISMSNotification_BassEffectPresetLoaded";
@@ -31,21 +21,8 @@ NSString * const ISMSNotification_CurrentPlaylistShuffleToggled = @"ISMSNotifica
 NSString * const ISMSNotification_CurrentPlaylistIndexChanged = @"ISMSNotification_CurrentPlaylistIndexChanged";
 NSString * const ISMSNotification_CurrentPlaylistSongsQueued = @"ISMSNotification_CurrentPlaylistSongsQueued";
 
-NSString * const ISMSNotification_AllSongsLoadingArtists = @"ISMSNotification_AllSongsLoadingArtists";
-NSString * const ISMSNotification_AllSongsLoadingAlbums = @"ISMSNotification_AllSongsLoadingAlbums";
-NSString * const ISMSNotification_AllSongsSorting = @"ISMSNotification_AllSongsSorting";
-NSString * const ISMSNotification_AllSongsArtistName = @"ISMSNotification_AllSongsArtistName";
-NSString * const ISMSNotification_AllSongsAlbumName = @"ISMSNotification_AllSongsAlbumName";
-NSString * const ISMSNotification_AllSongsSongName = @"ISMSNotification_AllSongsSongName";
-NSString * const ISMSNotification_AllSongsLoadingFinished = @"ISMSNotification_AllSongsLoadingFinished";
-
-NSString * const ISMSNotification_StorePurchaseComplete = @"ISMSNotification_StorePurchaseComplete";
-NSString * const ISMSNotification_StorePurchaseFailed = @"ISMSNotification_StorePurchaseFailed";
-
 NSString * const ISMSNotification_SongCachingEnabled = @"ISMSNotification_SongCachingEnabled";
 NSString * const ISMSNotification_SongCachingDisabled = @"ISMSNotification_SongCachingDisabled";
-
-NSString * const ISMSNotification_ShowPlayer = @"ISMSNotification_ShowPlayer";
 
 NSString * const ISMSNotification_CacheQueueStarted = @"ISMSNotification_CacheQueueStarted";
 NSString * const ISMSNotification_CacheQueueStopped = @"ISMSNotification_CacheQueueStopped";
@@ -58,21 +35,6 @@ NSString * const ISMSNotification_CacheSizeChecked = @"ISMSNotification_CacheSiz
 
 NSString * const ISMSNotification_EnteringOfflineMode = @"ISMSNotification_EnteringOfflineMode";
 NSString * const ISMSNotification_EnteringOnlineMode = @"ISMSNotification_EnteringOnlineMode";
-
-NSString * const ISMSNotification_BassInitialized = @"ISMSNotification_BassInitialized";
-NSString * const ISMSNotification_BassFreed = @"ISMSNotification_BassFreed";
-
-NSString * const ISMSNotification_LargeSongInfoToggle = @"ISMSNotification_LargeSongInfoToggle";
-
-NSString * const ISMSNotification_PlayVideo = @"ISMSNotification_PlayVideo";
-NSString * const ISMSNotification_RemoveMoviePlayer = @"ISMSNotification_RemoveMoviePlayer";
-
-NSString * const ISMSNotification_ShowAlbumLoadingScreenOnMainWindow = @"ISMSNotification_ShowAlbumLoadingScreenOnMainWindow";
-NSString * const ISMSNotification_ShowLoadingScreenOnMainWindow = @"ISMSNotification_ShowLoadingScreenOnMainWindow";
-NSString * const ISMSNotification_HideLoadingScreen = @"ISMSNotification_HideLoadingScreen";
-
-NSString * const ISMSNotification_ShowDeleteButton = @"ISMSNotification_ShowDeleteButton";
-NSString * const ISMSNotification_HideDeleteButton = @"ISMSNotification_HideDeleteButton";
 
 NSString * const ISMSNotification_CachedSongDeleted = @"ISMSNotification_CachedSongDeleted";
 

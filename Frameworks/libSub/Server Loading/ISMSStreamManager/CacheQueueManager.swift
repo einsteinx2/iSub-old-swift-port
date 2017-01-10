@@ -27,7 +27,7 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
         
         currentSong = Playlist.downloadQueue.song(atIndex: 0)
         
-        guard let currentSong = currentSong, (iSubAppDelegate.si().isWifi || SavedSettings.si().isManualCachingOnWWANEnabled), !SavedSettings.si().isOfflineMode else {
+        guard let currentSong = currentSong, (AppDelegate.si().isWifi || SavedSettings.si().isManualCachingOnWWANEnabled), !SavedSettings.si().isOfflineMode else {
             return
         }
         

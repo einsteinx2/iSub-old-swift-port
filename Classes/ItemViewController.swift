@@ -439,7 +439,7 @@ extension ItemViewController : ItemViewModelDelegate {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
         
-        iSubAppDelegate.si().hideLoadingScreen()
+        LoadingScreen.hide()
         
         dataSourceDidFinishLoadingNewData()
     }

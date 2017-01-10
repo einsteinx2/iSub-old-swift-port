@@ -25,6 +25,7 @@
 #import "DatabaseSingleton.h"
 #import "SocialSingleton.h"
 #import "ISMSStreamManager.h"
+#import "LoadingScreen.h"
 
 // Data Model
 #import "ISMSDataModelObjects.h"

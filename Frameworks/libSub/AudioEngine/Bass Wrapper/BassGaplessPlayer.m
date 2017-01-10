@@ -677,11 +677,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
         {
             [self.streamQueue removeAllObjects];
         }
-		
-		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassFreed];		
-	}
-    
-    [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassInitialized];
+    }
 }
 
 - (BOOL)testStreamForSong:(ISMSSong *)aSong

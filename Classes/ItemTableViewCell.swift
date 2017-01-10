@@ -32,16 +32,6 @@ class ItemTableViewCell: DroppableCell {
     
     var searching = false
     
-    let deleteToggleImageView = UIImageView(image: UIImage(named: "unselected"))
-    
-    var markedForDelete = false {
-        didSet {
-            updateDeleteCheckboxImage()
-        }
-    }
-    
-    var showDeleteButton = false
-    
     var alwaysShowCoverArt = false
     var alwaysShowSubtitle = false
     
@@ -128,9 +118,6 @@ class ItemTableViewCell: DroppableCell {
     // MARK: - Lifecycle -
     
     fileprivate func commonInit() {
-        deleteToggleImageView.alpha = 0.0
-        containerView.addSubview(deleteToggleImageView)
-        
         containerView.addSubview(coverArtView)
         
         trackNumberLabel.backgroundColor = UIColor.clear
@@ -191,11 +178,6 @@ class ItemTableViewCell: DroppableCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        let oldFrame = deleteToggleImageView.frame
-        let newY = (cellHeight / 2.0) - (oldFrame.size.height / 2.0)
-        deleteToggleImageView.frame = CGRect(x: 5.0, y: newY, width: oldFrame.size.width, height: oldFrame.size.height)
-        
         repositionLabels()
     }
     
@@ -218,41 +200,6 @@ class ItemTableViewCell: DroppableCell {
                     self.titlesScrollView.contentOffset = CGPoint.zero
                 })
             })
-        }
-    }
-
-    func showDeleteCheckbox() {
-        // Use alpha to allow animation
-        deleteToggleImageView.alpha = 1.0;
-    }
-    
-    func hideDeleteCheckbox() {
-        deleteToggleImageView.alpha = 0.0;
-    }
-    
-    fileprivate func updateDeleteCheckboxImage() {
-        if markedForDelete {
-            deleteToggleImageView.image = UIImage(named: "selected")
-            
-        } else {
-            deleteToggleImageView.image = UIImage(named: "unselected")
-        }
-    }
-    
-    func toggleDelete() {
-        if indexPath != nil {
-            markedForDelete = !markedForDelete
-            
-            delegate?.tableCellDeleteToggled?(self, markedForDelete: markedForDelete)
-            
-            updateDeleteCheckboxImage()
-            
-            if markedForDelete {
-                NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_ShowDeleteButton)
-                
-            } else {
-                NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_HideDeleteButton)
-            }
         }
     }
     

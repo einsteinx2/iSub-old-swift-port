@@ -101,8 +101,7 @@
 	else if (sender == self.ownServer)
 	{
         [self dismissViewControllerAnimated:NO completion:nil];
-        
-        [iSubAppDelegate.si showSettings];
+        [(MenuViewController *)AppDelegate.si.sidePanelController.leftPanel showSettings];
 	}
 }
 

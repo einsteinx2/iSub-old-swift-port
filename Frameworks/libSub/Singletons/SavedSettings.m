@@ -642,7 +642,7 @@
 	@synchronized(self)
 	{
 #ifdef IOS
-		switch ([iSubAppDelegate.si isWifi] ? self.maxBitrateWifi : self.maxBitrate3G)
+		switch ([AppDelegate.si isWifi] ? self.maxBitrateWifi : self.maxBitrate3G)
 #else
         switch (self.maxBitrateWifi)
 #endif
@@ -698,7 +698,7 @@
     @synchronized(self)
 	{
 #ifdef IOS
-		switch ([iSubAppDelegate.si isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
+		switch ([AppDelegate.si isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
 #else
         switch (self.maxVideoBitrateWifi)
 #endif
@@ -719,7 +719,7 @@
 	@synchronized(self)
 	{
 #ifdef IOS
-		switch ([iSubAppDelegate.si isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
+		switch ([AppDelegate.si isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
 #else
         switch (self.maxVideoBitrateWifi)
 #endif		
@@ -821,7 +821,7 @@
 		[_userDefaults synchronize];
         
 #ifdef IOS
-        if (![iSubAppDelegate.si isWifi])
+        if (![AppDelegate.si isWifi])
 #else
         if (YES)
 #endif

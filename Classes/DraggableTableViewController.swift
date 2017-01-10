@@ -120,40 +120,6 @@ class DraggableTableViewController: UITableViewController {
         fatalError("didPullToRefresh must be overridden")
     }
     
-    // MARK: Other
-    
-    func showDeleteToggles() {
-        // Show the delete toggle for already visible cells
-        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseIn, animations: {
-            for cell in self.tableView.visibleCells {
-                if let cell = cell as? ItemTableViewCell {
-                    cell.showDeleteCheckbox()
-                }
-            }
-        }, completion: nil)
-    }
-    
-    func hideDeleteToggles() {
-        // Hide the delete toggle for already visible cells
-        for cell in self.tableView.visibleCells {
-            if let cell = cell as? ItemTableViewCell {
-                cell.hideDeleteCheckbox()
-            }
-        }
-    }
-    
-    func markCellAsPlayingAtIndexPath(_ indexPath: IndexPath) {
-        for cell in self.tableView.visibleCells {
-            if let cell = cell as? ItemTableViewCell {
-                cell.isPlaying = false
-            }
-        }
-        
-        if let cell = self.tableView.cellForRow(at: indexPath) as? ItemTableViewCell {
-            cell.isPlaying = true
-        }
-    }
-    
     // MARK - Actions -
     
     func popViewController() {
