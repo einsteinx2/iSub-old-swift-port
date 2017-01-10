@@ -42,6 +42,9 @@ class DraggableTableView: UITableView {
         static let draggingEnded    = "draggingEnded"
         static let draggingCanceled = "draggingCanceled"
         
+        static let forceTouchDetectionBegan     = "forceTouchDetectionBegan"
+        static let forceTouchDetectionCanceled  = "forceTouchDetectionCanceled"
+        
         static let locationKey            = "locationKey"
         static let dragCellKey            = "dragCellKey"
         static let dragSourceTableViewKey = "dragSourceTableViewKey"
@@ -65,6 +68,10 @@ class DraggableTableView: UITableView {
     
     var longPressTimer: DispatchSourceTimer?
     var longPressStartLocation = CGPoint()
+    
+    var isForceTouchAvailable: Bool {
+        return self.traitCollection.forceTouchCapability == .available
+    }
     
     var dimDraggedCells = true
     
@@ -160,8 +167,9 @@ class DraggableTableView: UITableView {
         self.isScrollEnabled = true
         dragCell = nil
         dragIndexPath = nil
+        isDraggingCell = false
         
-        // Handle long press
+        // Handle long press / force touch
         if let touch = touches.first {
             let point = touch.location(in: self)
             longPressStartLocation = point
@@ -175,13 +183,18 @@ class DraggableTableView: UITableView {
                         let location = NSValue(cgPoint: touch.location(in: nil))
                         let userInfo = Notifications.userInfo(location: location, dragSourceTableView: self, dragCell: draggableCell)
                         
-                        longPressTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-                        longPressTimer!.scheduleOneshot(deadline: .now() + .milliseconds(longPressDelay), leeway: .nanoseconds(0))
-                        longPressTimer!.setEventHandler {
-                            self.longPressFired(userInfo)
-                            print("timer fired")
+                        if isForceTouchAvailable {
+                            if touch.force >= minimumForce {
+                                forceTouchStarted(touch: touch)
+                            }
+                        } else {
+                            longPressTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+                            longPressTimer!.scheduleOneshot(deadline: .now() + .milliseconds(longPressDelay), leeway: .nanoseconds(0))
+                            longPressTimer!.setEventHandler {
+                                self.longPressFired(userInfo)
+                            }
+                            longPressTimer!.resume()
                         }
-                        longPressTimer!.resume()
                     }
                 }
             }
@@ -196,11 +209,26 @@ class DraggableTableView: UITableView {
             let point = touch.location(in: self)
             let distance = hypot(longPressStartLocation.x - point.x, longPressStartLocation.y - point.y)
             if distance > 5.0 {
+                if isForceTouchActive {
+                    let point = touch.location(in: self)
+                    if let indexPath = self.indexPathForRow(at: point), let draggableCell = self.cellForRow(at: indexPath) as? DraggableCell {
+                        draggableCell.containerView.alpha = self.dragCellAlpha
+                    }
+                    
+                    isForceTouchActive = false
+                    dragImageView?.removeFromSuperview()
+                    dragImageView = nil
+                }
+                
                 cancelLongPress()
+            } else if isForceTouchActive {
+                forceTouchForceChanged(touch: touch)
+            } else if !isDraggingCell && isForceTouchAvailable && touch.force >= minimumForce {
+                forceTouchStarted(touch: touch)
             }
         }
         
-        if let dragImageView = dragImageView, let dragCell = dragCell, let touch = touches.first {
+        if isDraggingCell, let dragImageView = dragImageView, let dragCell = dragCell, let touch = touches.first {
             let superviewPoint = touch.location(in: dragImageSuperview)
             dragImageView.frame.origin = superviewPoint - dragImageOffset
             
@@ -224,9 +252,13 @@ class DraggableTableView: UITableView {
         if let touch = touches.first {
             if let dragCell = dragCell {
                 if dimDraggedCells {
-                    UIView.animate(withDuration: 0.1) {
-                        // Undo the cell dimming
+                    if isForceTouchActive {
                         dragCell.containerView.alpha = self.dragCellAlpha
+                    } else {
+                        UIView.animate(withDuration: 0.1) {
+                            // Undo the cell dimming
+                            dragCell.containerView.alpha = self.dragCellAlpha
+                        }
                     }
                 }
                 
@@ -249,6 +281,8 @@ class DraggableTableView: UITableView {
             }
         }
         
+        isForceTouchActive = false
+        
         super.touchesEnded(touches, with: event)
     }
     
@@ -262,6 +296,17 @@ class DraggableTableView: UITableView {
         cancelLongPress()
         
         if let dragCell = dragCell {
+            if dimDraggedCells {
+                if isForceTouchActive {
+                    dragCell.containerView.alpha = self.dragCellAlpha
+                } else {
+                    UIView.animate(withDuration: 0.1) {
+                        // Undo the cell dimming
+                        dragCell.containerView.alpha = self.dragCellAlpha
+                    }
+                }
+            }
+            
             var windowPoint = CGPoint.zero
             if let touch = touches?.first {
                 windowPoint = touch.location(in: nil)
@@ -270,6 +315,8 @@ class DraggableTableView: UITableView {
             let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
             NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingCanceled, userInfo: userInfo)
         }
+        
+        isForceTouchActive = false
         
         super.touchesCancelled(touches!, with: event)
     }
@@ -304,8 +351,8 @@ class DraggableTableView: UITableView {
             UIView.animate(withDuration: 0.1, animations: {
                 // Animate the cell location to be slightly off
                 var origin = self.dragImageView!.frame.origin
-                origin.x += 2
-                origin.y -= 2
+                origin.x += 3
+                origin.y -= 3
                 self.dragImageView!.frame.origin = origin
                 
                 // Dim the cell in the table
@@ -315,8 +362,11 @@ class DraggableTableView: UITableView {
             })
             
             // Match the animation so movement is smooth
-            dragImageOffset.x -= 2
-            dragImageOffset.y += 2
+            dragImageOffset.x -= 3
+            dragImageOffset.y += 3
+            
+            // Taptic feedback
+            tapticFeedback()
             
             NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingBegan, userInfo: userInfo)
         }
@@ -325,5 +375,103 @@ class DraggableTableView: UITableView {
     override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
         cancelLongPress()
         super.setContentOffset(contentOffset, animated: animated)
+    }
+    
+    fileprivate let minimumForce: CGFloat = 3.0
+    fileprivate let activationForce: CGFloat = 6.0
+    fileprivate let maxDragImageOffset: CGFloat = 5.0
+    fileprivate var isForceTouchActive = false
+    
+    fileprivate func calculateDragImageOffset(force: CGFloat) -> CGFloat {
+        return convertToRange(number: force, inputMin: minimumForce, inputMax: activationForce, outputMin: 0, outputMax: maxDragImageOffset)
+    }
+    
+    fileprivate func originalDragImageOffset(draggableCell: DraggableCell) -> CGPoint {
+        return dragImageSuperview.convert(draggableCell.frame.origin, from: draggableCell.superview)
+    }
+    
+    fileprivate func forceTouchStarted(touch: UITouch) {
+        let point = touch.location(in: self)
+        if let indexPath = self.indexPathForRow(at: point) {
+            let cell = self.cellForRow(at: indexPath)
+            if let draggableCell = cell as? DraggableCell {
+                if draggableCell.draggable {
+                    isForceTouchActive = true
+                    self.isScrollEnabled = false
+                    dragIndexPath = draggableCell.indexPath
+                    dragCell = draggableCell
+                    if dimDraggedCells {
+                        dragCellAlpha = draggableCell.containerView.alpha
+                    }
+                    
+                    let image = imageFromCell(draggableCell)
+                    dragImageView = UIImageView(image: image)
+                    dragImageView?.frame.origin = originalDragImageOffset(draggableCell: draggableCell)
+                    dragImageView?.layer.shadowRadius = 6.0
+                    dragImageView?.layer.shadowOpacity = 0.0
+                    dragImageView?.layer.shadowOffset = CGSize(width: 0, height: 2)
+                    self.window!.rootViewController!.view.addSubview(dragImageView!)
+                    
+                    // Animate the shadow opacity so it gives the effect of the cell lifting upwards
+                    let shadowAnimation = CABasicAnimation(keyPath: "shadowOpacity")
+                    shadowAnimation.fromValue = 0.0
+                    shadowAnimation.toValue = 0.3
+                    shadowAnimation.duration = 0.1
+                    dragImageView?.layer.add(shadowAnimation, forKey: "shadowOpacity")
+                    dragImageView?.layer.shadowOpacity = 0.3
+                    
+                    let offset = calculateDragImageOffset(force: touch.force)
+                    UIView.animate(withDuration: 0.1, animations: {
+                        // Animate the cell location to be slightly off
+                        var origin = self.originalDragImageOffset(draggableCell: draggableCell)
+                        origin.x += offset
+                        origin.y -= offset
+                        self.dragImageView?.frame.origin = origin
+                        
+                        // Dim the cell in the table
+                        if self.dimDraggedCells {
+                            draggableCell.containerView.alpha = 0.6
+                        }
+                    })
+                    
+                    NotificationCenter.postNotificationToMainThread(withName: Notifications.forceTouchDetectionBegan)
+                }
+            }
+        }
+    }
+    
+    fileprivate func forceTouchForceChanged(touch: UITouch) {
+        if isForceTouchActive {
+            var force = touch.force
+            if force > activationForce {
+                force = activationForce
+            } else if force < minimumForce {
+                force = minimumForce
+            }
+            
+            var offset = calculateDragImageOffset(force: force)
+            if force >= activationForce {
+                tapticFeedback(heavy: false)
+                
+                offset = maxDragImageOffset
+                dragImageOffset.x -= offset
+                dragImageOffset.y += offset
+                
+                isDraggingCell = true
+                isForceTouchActive = false
+                
+                let location = NSValue(cgPoint: touch.location(in: nil))
+                let userInfo = Notifications.userInfo(location: location, dragSourceTableView: self, dragCell: dragCell!)
+                NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingBegan, userInfo: userInfo)
+            }
+            
+            UIView.animate(withDuration: 0.1, delay: 0.0, options: .beginFromCurrentState, animations: { 
+                // Animate the cell location to be slightly off
+                var origin = self.originalDragImageOffset(draggableCell: self.dragCell!)
+                origin.x += offset
+                origin.y -= offset
+                self.dragImageView?.frame.origin = origin
+            }, completion: nil)
+        }
     }
 }

@@ -45,6 +45,8 @@
 		5306239614D4BCAD00D320A8 /* eqView.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239214D4BCAD00D320A8 /* eqView.png */; };
 		5306239714D4BCAD00D320A8 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239314D4BCAD00D320A8 /* eqView@2x.png */; };
 		5306239914D4BCAD00D320A8 /* eqView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306239314D4BCAD00D320A8 /* eqView@2x.png */; };
+		5308D92F1E243D270026E6BD /* Device.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5308D92E1E243D270026E6BD /* Device.framework */; };
+		5308D9301E243D270026E6BD /* Device.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5308D92E1E243D270026E6BD /* Device.framework */; };
 		530A5F851516703F0081A83A /* playing-cell-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F831516703F0081A83A /* playing-cell-icon.png */; };
 		530A5F871516703F0081A83A /* playing-cell-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F831516703F0081A83A /* playing-cell-icon.png */; };
 		530A5F881516703F0081A83A /* playing-cell-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F841516703F0081A83A /* playing-cell-icon@2x.png */; };
@@ -1437,6 +1439,7 @@
 		5306238B14D4BB7E00D320A8 /* controller-equalizer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "controller-equalizer@2x.png"; path = "Images/Player Icons/controller-equalizer@2x.png"; sourceTree = "<group>"; };
 		5306239214D4BCAD00D320A8 /* eqView.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = eqView.png; path = "Images/Player Icons/eqView.png"; sourceTree = "<group>"; };
 		5306239314D4BCAD00D320A8 /* eqView@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "eqView@2x.png"; path = "Images/Player Icons/eqView@2x.png"; sourceTree = "<group>"; };
+		5308D92E1E243D270026E6BD /* Device.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Device.framework; path = Carthage/Build/iOS/Device.framework; sourceTree = "<group>"; };
 		530A5F831516703F0081A83A /* playing-cell-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon.png"; path = "Images/Other/playing-cell-icon.png"; sourceTree = "<group>"; };
 		530A5F841516703F0081A83A /* playing-cell-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon@2x.png"; path = "Images/Other/playing-cell-icon@2x.png"; sourceTree = "<group>"; };
 		530A5F8B15167CBA0081A83A /* playing-cell-icon-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon-white.png"; path = "Images/Other/playing-cell-icon-white.png"; sourceTree = "<group>"; };
@@ -2047,6 +2050,7 @@
 				53C7FDA0150F0EAF008DA51C /* MessageUI.framework in Frameworks */,
 				5358E19A1E0B789B0024A0D4 /* libbass_fx.a in Frameworks */,
 				53D9D24D16DEF85F002F55F7 /* Twitter.framework in Frameworks */,
+				5308D92F1E243D270026E6BD /* Device.framework in Frameworks */,
 				5358E1A41E0B789B0024A0D4 /* libbass_tta.a in Frameworks */,
 				53D9D24E16DEF85F002F55F7 /* AdSupport.framework in Frameworks */,
 				5358E1901E0B789B0024A0D4 /* libbass.a in Frameworks */,
@@ -2176,6 +2180,7 @@
 				5358E19C1E0B789B0024A0D4 /* libbass_fx.a in Frameworks */,
 				53D9D25616DEF86F002F55F7 /* AdSupport.framework in Frameworks */,
 				5358E1A61E0B789B0024A0D4 /* libbass_tta.a in Frameworks */,
+				5308D9301E243D270026E6BD /* Device.framework in Frameworks */,
 				53D9D25716DEF86F002F55F7 /* Accounts.framework in Frameworks */,
 				5358E1921E0B789B0024A0D4 /* libbass.a in Frameworks */,
 				53D9D25816DEF86F002F55F7 /* Social.framework in Frameworks */,
@@ -2785,6 +2790,7 @@
 				5358E1D01E0B79210024A0D4 /* SnapKit.framework */,
 				538B4D0F1E1DA68B00847152 /* Nuke.framework */,
 				53D59A6D1E1DC9CE00071ABD /* Reachability.framework */,
+				5308D92E1E243D270026E6BD /* Device.framework */,
 			);
 			name = Carthage;
 			sourceTree = "<group>";
@@ -4192,6 +4198,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Async.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Device.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (

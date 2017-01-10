@@ -113,6 +113,9 @@ class ItemViewController: DraggableTableViewController {
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+        
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(forceTouchDetectionBegan(_:)), name: DraggableTableView.Notifications.forceTouchDetectionBegan, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(forceTouchDetectionCanceled(_:)), name: DraggableTableView.Notifications.forceTouchDetectionCanceled, object: nil)
     }
     
     fileprivate func unregisterForNotifications() {
@@ -123,6 +126,9 @@ class ItemViewController: DraggableTableViewController {
         NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingBegan, object: nil)
         NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingEnded, object: nil)
         NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+        
+        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.forceTouchDetectionBegan, object: nil)
+        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.forceTouchDetectionCanceled, object: nil)
     }
     
     @objc fileprivate func currentPlaylistIndexChanged(_ notification: Notification?) {
@@ -157,6 +163,16 @@ class ItemViewController: DraggableTableViewController {
     }
     
     @objc fileprivate func draggingCanceled(_ notification: Notification) {
+        singleTapRecognizer.isEnabled = true
+        doubleTapRecognizer.isEnabled = true
+    }
+    
+    @objc fileprivate func forceTouchDetectionBegan(_ notification: Notification) {
+        singleTapRecognizer.isEnabled = false
+        doubleTapRecognizer.isEnabled = false
+    }
+    
+    @objc fileprivate func forceTouchDetectionCanceled(_ notification: Notification) {
         singleTapRecognizer.isEnabled = true
         doubleTapRecognizer.isEnabled = true
     }
