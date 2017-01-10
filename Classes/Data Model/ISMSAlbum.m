@@ -353,17 +353,6 @@
     return success;
 }
 
-// TODO: Add this to protocol
-- (BOOL)isModelPersisted
-{
-    if (!self.albumId)
-    {
-        return NO;
-    }
-    
-    return [DatabaseSingleton.si.songModelReadDbPool intForQuery:@"SELECT COUNT(*) FROM albums WHERE albumId = ? AND serverId = ?", self.albumId, self.serverId] > 0;
-}
-
 - (void)reloadSubmodels
 {
     @synchronized(self)

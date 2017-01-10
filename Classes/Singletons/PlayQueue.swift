@@ -28,7 +28,6 @@ import Nuke
     // MARK: - Notifications -
     //
     
-    // TODO: Make these available in Obj-C
     public struct Notifications {
         public static let playQueueIndexChanged = ISMSNotification_CurrentPlaylistIndexChanged
     }

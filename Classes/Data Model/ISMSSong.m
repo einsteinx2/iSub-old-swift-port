@@ -84,7 +84,7 @@
         }
         
         // Retreive lastPlayed date, if it exists
-        if ([self isModelPersisted])
+        if ([self isPersisted])
         {
             [DatabaseSingleton.si.songModelReadDbPool inDatabase:^(FMDatabase *db) {
                 NSString *query = @"SELECT lastPlayed FROM songs WHERE songId = ? AND serverId = ?";
@@ -372,17 +372,6 @@
          success = [db executeUpdate:query, self.songId, self.serverId];
      }];
     return success;
-}
-
-// TODO: Add this to protocol
-- (BOOL)isModelPersisted
-{
-    if (!self.songId)
-    {
-        return NO;
-    }
-    
-    return [DatabaseSingleton.si.songModelReadDbPool intForQuery:@"SELECT COUNT(*) FROM songs WHERE songId = ? AND serverId = ?", self.songId, self.serverId] > 0;
 }
 
 - (void)reloadSubmodels
@@ -777,7 +766,6 @@
             if ([PlayQueue.si.currentSong isEqualToSong:self])
             {
                 // This is the current playing song, so see if BASS has an actual bitrate for it
-                // TODO: Stop interacting directly with AudioEngine
                 if (AudioEngine.si.player.bitRate > 0)
                 {
                     // Bass has a non-zero bitrate, so use that for the calculation

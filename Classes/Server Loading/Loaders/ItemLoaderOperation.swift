@@ -21,6 +21,14 @@ class ItemLoaderOperation: Operation {
         return true
     }
     
+    override var isExecuting: Bool {
+        return isExecutingInternal
+    }
+    
+    override var isFinished: Bool {
+        return isFinishedInternal
+    }
+    
     fileprivate var isExecutingInternal = false {
         willSet {
             willChangeValue(forKey: "isExecuting")
@@ -30,9 +38,7 @@ class ItemLoaderOperation: Operation {
         }
     }
     
-    override var isExecuting: Bool {
-        return isExecutingInternal
-    }
+    
     
     fileprivate var isFinishedInternal = false {
         willSet {
@@ -44,28 +50,20 @@ class ItemLoaderOperation: Operation {
         }
     }
     
-    override var isFinished: Bool {
-        return isFinishedInternal
-    }
-    
     override func start() {
         isExecutingInternal = true
         execute()
     }
     
     func execute() {
-        // TODO: Remove the async main once switching to URLSession
-        Async.main {
-            self.loader.completionHandler = { _, _, _ in
-                self.finish()
-            }
-            self.loader.start()
+        self.loader.completionHandler = { _, _, _ in
+            self.finish()
         }
+        self.loader.start()
     }
     
     func finish() {
         // Notify the completion of async task and hence the completion of the operation
-        
         isExecutingInternal = false
         isFinishedInternal = true
     }

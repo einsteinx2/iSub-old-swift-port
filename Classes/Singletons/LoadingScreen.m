@@ -83,11 +83,9 @@ static NSTimeInterval const kDelay = .5;
     
     isLoadingScreenShowing = YES;
     
-    // TODO: See why was always using window here
     hud = [[MBProgressHUD alloc] initWithView:AppDelegate.si.window];
     hud.userInteractionEnabled = YES;
     
-    // TODO: verify on iPad
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     cancelButton.bounds = CGRectMake(0, 0, 1024, 1024);
     cancelButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

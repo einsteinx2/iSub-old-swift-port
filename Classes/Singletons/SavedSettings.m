@@ -103,7 +103,6 @@
 			isDefaultsDirty = YES;
 		}
 		
-        // TODO: Stop interacting directly with AudioEngine
 		if (AudioEngine.si.player.bitRate != _bitRate && AudioEngine.si.player.bitRate >= 0)
 		{
 			_bitRate = AudioEngine.si.player.bitRate;
@@ -117,9 +116,8 @@
 			[_userDefaults setDouble:_secondsOffset forKey:@"seekTime"];
 			isDefaultsDirty = YES;
 		}
-		
-        // TODO: Stop interacting directly with AudioEngine
-		if (_byteOffset != AudioEngine.si.player.currentByteOffset)
+        
+        if (_byteOffset != AudioEngine.si.player.currentByteOffset)
 		{
 			_byteOffset = AudioEngine.si.player.currentByteOffset;
 			[_userDefaults setObject:@(_byteOffset) forKey:@"byteOffset"];

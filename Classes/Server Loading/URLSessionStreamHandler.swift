@@ -125,7 +125,6 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
             song.isPartiallyCached = true
         }
         
-        // TODO: Maybe read the raw headers?
         contentLength = response.expectedContentLength
         
         delegate?.ismsStreamHandlerStarted?(self)
