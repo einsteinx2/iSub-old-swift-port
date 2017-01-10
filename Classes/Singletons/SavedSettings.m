@@ -15,22 +15,7 @@
     NSUserDefaults *_userDefaults;
     
     NSInteger _currentServerId;
-    NSString *_currentServerUrl;
     Server *_currentServer;
-    NSString *_sessionId;
-    
-    BOOL _isPopupsEnabled;
-    BOOL _isScreenSleepEnabled;
-    float _gainMultiplier;
-    BOOL _isPartialCacheNextSong;
-    BOOL _isExtraPlayerControlsShowing;
-    BOOL _isPlayerPlaylistShowing;
-    NSUInteger _quickSkipNumberOfSeconds;
-    NSUInteger _audioEngineStartNumberOfSeconds;
-    NSUInteger _audioEngineBufferNumberOfSeconds;
-    BOOL _isShowLargeSongInfoInPlayer;
-    BOOL _isLockScreenArtEnabled;
-    BOOL _isEqualizerOn;
     
     // State Saving
     BOOL _isPlaying;
@@ -41,34 +26,11 @@
     unsigned long long _byteOffset;
     double _secondsOffset;
     BOOL _isRecover;
-    NSInteger _recoverSetting;
     NSString *_currentTwitterAccount;
 }
 @end
 
 @implementation SavedSettings
-
-/*- (NSString *)formatFileSize:(unsigned long long int)size
-{
-	if (size < 1024)
-	{
-		return [NSString stringWithFormat:@"%qu bytes", size];
-	}
-	else if (size >= 1024 && size < 1048576)
-	{
-		return [NSString stringWithFormat:@"%.02f KB", ((double)size / 1024)];
-	}
-	else if (size >= 1048576 && size < 1073741824)
-	{
-		return [NSString stringWithFormat:@"%.02f MB", ((double)size / 1024 / 1024)];
-	}
-	else if (size >= 1073741824)
-	{
-		return [NSString stringWithFormat:@"%.02f GB", ((double)size / 1024 / 1024 / 1024)];
-	}
-	
-	return @"";
-}*/
 
 - (void)loadState
 {	
@@ -90,7 +52,6 @@
 	_byteOffset = self.byteOffset;
 	_secondsOffset = self.seekTime;
 	_isRecover = self.isRecover;
-	_recoverSetting = self.recoverSetting;
     _sessionId = self.sessionId;
 	
 	AudioEngine.si.startByteOffset = _byteOffset;
@@ -104,7 +65,7 @@
 	[self loadState];
 	
 	// Start the timer
-	[NSTimer scheduledTimerWithTimeInterval:3.3 target:self selector:@selector(saveState) userInfo:nil repeats:YES];
+	[NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(saveState) userInfo:nil repeats:YES];
 }
 
 - (void)saveState
@@ -170,7 +131,7 @@
 		BOOL newIsRecover = NO;
 		if (_isPlaying)
 		{
-			if (_recoverSetting == 0)
+			if (self.recoverSetting == 0)
 				newIsRecover = YES;
 			else
 				newIsRecover = NO;
@@ -331,44 +292,7 @@
 	// New settings 3.0.5 beta 18
 	if (![_userDefaults objectForKey:@"gainMultiplier"])
 	{
-		[_userDefaults setBool:YES forKey:@"isTapAndHoldEnabled"];
-		[_userDefaults setBool:YES forKey:@"isSwipeEnabled"];
 		[_userDefaults setFloat:1.0 forKey:@"gainMultiplier"];
-	}
-	
-	// Removal of 3rd recovery type option
-	if (self.recoverSetting == 2)
-	{
-		// "Never" option removed, change to "Paused" option if set
-		self.recoverSetting = 1;
-	}
-	
-	// Partial caching of next song
-	if (![_userDefaults objectForKey:@"isPartialCacheNextSong"])
-	{
-		self.isPartialCacheNextSong = YES;
-	}
-	
-	// Visualizer Type
-	if (![_userDefaults objectForKey:@"currentVisualizerType"])
-	{
-		self.currentVisualizerType = ISMSBassVisualType_none;
-	}
-	
-	// Quick Skip
-	if (![_userDefaults objectForKey:@"quickSkipNumberOfSeconds"])
-	{
-		self.quickSkipNumberOfSeconds = 30;
-	}
-	
-	if (![_userDefaults objectForKey:@"isShouldShowEQViewInstructions"])
-	{
-		self.isShouldShowEQViewInstructions = YES;
-	}
-	
-	if (![_userDefaults objectForKey:@"isLockScreenArtEnabled"])
-	{
-		self.isLockScreenArtEnabled = YES;
 	}
     
     if (![_userDefaults objectForKey:@"maxVideoBitrateWifi"])
@@ -376,34 +300,15 @@
         self.maxVideoBitrateWifi = 5;
         self.maxVideoBitrate3G = 5;
     }
-	
-	[_userDefaults synchronize];
-}
-
-- (void)memCacheDefaults
-{
-	_isScreenSleepEnabled = [_userDefaults boolForKey:@"isScreenSleepEnabled"];
-	_isPopupsEnabled = [_userDefaults boolForKey:@"isPopupsEnabled"];
-	_gainMultiplier = [_userDefaults floatForKey:@"gainMultiplier"];
-	_isPartialCacheNextSong = [_userDefaults boolForKey:@"isPartialCacheNextSong"];
-	_isExtraPlayerControlsShowing = [_userDefaults boolForKey:@"isExtraPlayerControlsShowing"];
-	_isPlayerPlaylistShowing = [_userDefaults boolForKey:@"isPlayerPlaylistShowing"];
-	_quickSkipNumberOfSeconds = [_userDefaults integerForKey:@"quickSkipNumberOfSeconds"];
-	_audioEngineBufferNumberOfSeconds = [_userDefaults integerForKey:@"audioEngineBufferNumberOfSeconds"];
-	_audioEngineStartNumberOfSeconds = [_userDefaults integerForKey:@"audioEngineStartNumberOfSeconds"];
-	_isShowLargeSongInfoInPlayer = [_userDefaults boolForKey:@"isShowLargeSongInfoInPlayer"];
-	_isLockScreenArtEnabled = [_userDefaults boolForKey:@"isLockScreenArtEnabled"];
-	_isEqualizerOn = [_userDefaults boolForKey:@"isEqualizerOn"];
-	
+    
     if (![_userDefaults objectForKey:@"currentServerId"]) {
         _currentServer = [Server testServer];
         _currentServerId = _currentServer.serverId;
-        _currentServerUrl = _currentServer.url;
     } else {
         _currentServerId = [_userDefaults integerForKey:@"currentServerId"];
-        _currentServerUrl = [_userDefaults stringForKey:@"currentServerUrl"];
     }
-    _sessionId = [_userDefaults stringForKey:[NSString stringWithFormat:@"sessionId_server%ld", (long)_currentServer.serverId]];
+	
+	[_userDefaults synchronize];
 }
 
 #pragma mark - Login Settings
@@ -422,21 +327,9 @@
     {
         _currentServer = [[Server alloc] initWithItemId:currentServerId];
         _currentServerId = _currentServer.serverId;
-        _currentServerUrl = _currentServer.url;
         [_userDefaults setInteger:_currentServerId forKey:@"currentServerId"];
-        [_userDefaults setObject:_currentServerUrl forKey:@"currentServerUrl"];
         [_userDefaults synchronize];
     }
-}
-
-// Because of the stupid way iSub creates DB filenames (using a hash of the URL at the end)
-// and due to the stupid use of fucking singletons all over the fucking app, which creates a
-// problem during initialization when the DatabaseSingleton wants the server URL to setup the
-// DB, but the SavedSettings singleton needs to ask the DatabaseSingleton for that...we need
-// to store the URL separately. Hence this property.
-- (NSString *)currentServerUrl
-{
-    return _currentServerUrl;
 }
 
 - (Server *)currentServer
@@ -485,105 +378,13 @@
 	return paths[0];
 }
 
-+ (NSString *)databasePath
-{
-	return [self.documentsPath stringByAppendingPathComponent:@"database"];
-}
-
 + (NSString *)cachesPath
 {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
 	return paths[0];
 }
 
-+ (NSURL *)cachesUrl
-{
-    return [NSURL URLWithString:self.cachesPath];
-}
-
-// As of 5.0.1, it's possible to mark files in the Documents folder to not be backed up. Therefore
-// we want to use that if possible, so that our cache doesn't get wiped when the device has no
-// more space left, as will happen if we put the files inside ./Library/Caches
-+ (NSString *)currentCacheRoot
-{
-#ifdef IOS
-    if (SYSTEM_VERSION_GREATER_THAN(@"5.0.0"))
-    {
-        return self.documentsPath;
-    }
-    else
-    {
-        return self.cachesPath;
-    }
-#else
-    return self.documentsPath;
-#endif
-}
-
-+ (NSString *)songCachePath
-{
-	return [self.currentCacheRoot stringByAppendingPathComponent:@"songCache"];
-}
-
-+ (NSString *)tempCachePath
-{
-	return [self.currentCacheRoot stringByAppendingPathComponent:@"tempCache"];
-}
-
-#pragma mark - Root Folders Settings
-
-- (NSDate *)rootFoldersReloadTime
-{
-	@synchronized(self)
-	{
-		return [_userDefaults objectForKey:[NSString stringWithFormat:@"%@rootFoldersReloadTime", _currentServer.url]];
-	}
-}
-
-- (void)setRootFoldersReloadTime:(NSDate *)reloadTime
-{
-	@synchronized(self)
-	{
-		[_userDefaults setObject:reloadTime forKey:[NSString stringWithFormat:@"%@rootFoldersReloadTime", _currentServer.url]];
-		[_userDefaults synchronize];
-	}
-}
-
-- (NSNumber *)rootFoldersSelectedFolderId
-{
-	@synchronized(self)
-	{
-		return [_userDefaults objectForKey:[NSString stringWithFormat:@"%@rootFoldersSelectedFolder", _currentServer.url]];
-	}
-}
-
-- (void)setRootFoldersSelectedFolderId:(NSNumber *)folderId
-{
-	@synchronized(self)
-	{
-		[_userDefaults setObject:folderId forKey:[NSString stringWithFormat:@"%@rootFoldersSelectedFolder", _currentServer.url]];
-		[_userDefaults synchronize];
-	}
-}
-
 #pragma mark - Other Settings
-
-- (BOOL)isForceOfflineMode
-{
-	@synchronized(self)
-	{
-		return [_userDefaults boolForKey:@"manualOfflineModeSetting"];
-	}
-}
-
-- (void)setIsForceOfflineMode:(BOOL)isForceOfflineMode
-{
-	@synchronized(self)
-	{
-		[_userDefaults setBool:isForceOfflineMode forKey:@"manualOfflineModeSetting"];
-		[_userDefaults synchronize];
-	}
-}
 
 - (NSInteger)recoverSetting
 {
@@ -597,7 +398,6 @@
 {
 	@synchronized(self)
 	{
-		_recoverSetting = setting;
 		[_userDefaults setInteger:setting forKey:@"recoverSetting"];
 		[_userDefaults synchronize];
 	}
@@ -787,20 +587,20 @@
     
     if (isBackupCacheEnabled)
     {
-       //Set all cached songs to removeSkipBackup
-        [CacheSingleton setAllCachedSongsToBackup];
+        // Set all cached songs to removeSkipBackup
+        [CacheSingleton.si setAllCachedSongsToBackup];
         
         // Set database to removeskipBackup
-        [DatabaseSingleton setAllSongsToBackup];
+        [DatabaseSingleton.si setAllSongsToBackup];
  
     }
     else
     {
         //Set all cached songs to removeSkipBackup
-        [CacheSingleton setAllCachedSongsToNotBackup];
+        [CacheSingleton.si setAllCachedSongsToNotBackup];
         
         // Set database to removeskipBackup
-        [DatabaseSingleton setAllSongsToNotBackup];
+        [DatabaseSingleton.si setAllSongsToNotBackup];
     }
 }
 
@@ -950,23 +750,6 @@
 	}
 }
 
-- (BOOL)isLyricsEnabled
-{
-	@synchronized(self)
-	{
-		return [_userDefaults boolForKey:@"lyricsEnabledSetting"];
-	}
-}
-
-- (void)setIsLyricsEnabled:(BOOL)isLyricsEnabled
-{
-	@synchronized(self)
-	{
-		[_userDefaults setBool:isLyricsEnabled forKey:@"lyricsEnabledSetting"];
-		[_userDefaults synchronize];
-	}
-}
-
 - (BOOL)isCacheStatusEnabled
 {
 	@synchronized(self)
@@ -1005,7 +788,7 @@
 {
 	@synchronized(self)
 	{
-		return _isPlayerPlaylistShowing;
+        return [_userDefaults boolForKey:@"enableSongsTabSetting"];
 	}
 }
 
@@ -1013,12 +796,8 @@
 {
 	@synchronized(self)
 	{
-		if (_isPlayerPlaylistShowing != isEnabled)
-		{
-			_isPlayerPlaylistShowing = isEnabled;
-			[_userDefaults setBool:isEnabled forKey:@"isPlayerPlaylistShowing"];
-			[_userDefaults synchronize];
-		}
+        [_userDefaults setBool:isEnabled forKey:@"isPlayerPlaylistShowing"];
+        [_userDefaults synchronize];
 	}
 }
 
@@ -1094,7 +873,7 @@
 {
 	@synchronized(self)
 	{
-		return _isScreenSleepEnabled;
+        return [_userDefaults boolForKey:@"isScreenSleepEnabled"];
 	}
 }
 
@@ -1102,7 +881,6 @@
 {
 	@synchronized(self)
 	{
-		_isScreenSleepEnabled = enabled;
 		[_userDefaults setBool:enabled forKey:@"isScreenSleepEnabled"];
 		[_userDefaults synchronize];
 	}
@@ -1112,7 +890,7 @@
 {
 	@synchronized(self)
 	{
-		return _isPopupsEnabled;
+        return [_userDefaults boolForKey:@"isPopupsEnabled"];
 	}
 }
 
@@ -1120,42 +898,7 @@
 {
 	@synchronized(self)
 	{
-		_isPopupsEnabled = enabled;
 		[_userDefaults setBool:enabled forKey:@"isPopupsEnabled"];
-		[_userDefaults synchronize];
-	}
-}
-
-- (BOOL)isUpdateCheckEnabled
-{
-	@synchronized(self)
-	{
-		return [_userDefaults boolForKey:@"checkUpdatesSetting"];
-	}
-}
-
-- (void)setIsUpdateCheckEnabled:(BOOL)isUpdateCheckEnabled
-{
-	@synchronized(self)
-	{
-		[_userDefaults setBool:isUpdateCheckEnabled forKey:@"checkUpdatesSetting"];
-		[_userDefaults synchronize];
-	}
-}
-
-- (BOOL)isUpdateCheckQuestionAsked
-{
-	@synchronized(self)
-	{
-		return [_userDefaults boolForKey:@"isUpdateCheckQuestionAsked"];
-	}
-}
-
-- (void)setIsUpdateCheckQuestionAsked:(BOOL)isUpdateCheckQuestionAsked
-{
-	@synchronized(self)
-	{
-		[_userDefaults setBool:isUpdateCheckQuestionAsked forKey:@"isUpdateCheckQuestionAsked"];
 		[_userDefaults synchronize];
 	}
 }
@@ -1254,45 +997,11 @@
 	}
 }
 
-- (BOOL)isTapAndHoldEnabled
-{
-	@synchronized(self)
-	{
-		return [_userDefaults boolForKey:@"isTapAndHoldEnabled"];
-	}
-}
-
-- (void)setIsTapAndHoldEnabled:(BOOL)isTapAndHoldEnabled
-{
-	@synchronized(self)
-	{
-		[_userDefaults setBool:isTapAndHoldEnabled forKey:@"isTapAndHoldEnabled"];
-		[_userDefaults synchronize];
-	}
-}
-
-- (BOOL)isSwipeEnabled
-{
-	@synchronized(self)
-	{
-		return [_userDefaults boolForKey:@"isSwipeEnabled"];
-	}
-}
-
-- (void)setIsSwipeEnabled:(BOOL)isSwipeEnabled
-{
-	@synchronized(self)
-	{
-		[_userDefaults setBool:isSwipeEnabled forKey:@"isSwipeEnabled"];
-		[_userDefaults synchronize];
-	}
-}
-
 - (float)gainMultiplier
 {
 	@synchronized(self)
 	{
-		return _gainMultiplier;
+        return [_userDefaults floatForKey:@"gainMultiplier"];
 	}
 }
 
@@ -1300,66 +1009,8 @@
 {
 	@synchronized(self)
 	{
-		_gainMultiplier = multiplier;
 		[_userDefaults setFloat:multiplier forKey:@"gainMultiplier"];
 		[_userDefaults synchronize];
-	}
-}
-
-- (BOOL)isPartialCacheNextSong
-{
-	@synchronized(self)
-	{
-		return _isPartialCacheNextSong;
-	}
-}
-
-- (void)setIsPartialCacheNextSong:(BOOL)partialCache
-{
-	@synchronized(self)
-	{
-		_isPartialCacheNextSong = partialCache;
-		[_userDefaults setBool:_isPartialCacheNextSong forKey:@"isPartialCacheNextSong"];
-		[_userDefaults synchronize];
-	}
-}
-
-- (ISMSBassVisualType)currentVisualizerType
-{
-	@synchronized(self)
-	{
-		return (ISMSBassVisualType)[_userDefaults integerForKey:@"currentVisualizerType"];
-	}
-}
-
-- (void)setCurrentVisualizerType:(ISMSBassVisualType)currentVisualizerType
-{
-	@synchronized(self)
-	{
-		[_userDefaults setInteger:currentVisualizerType forKey:@"currentVisualizerType"];
-		[_userDefaults synchronize];
-	}
-
-}
-
-- (BOOL)isExtraPlayerControlsShowing
-{
-	@synchronized(self)
-	{
-		return _isExtraPlayerControlsShowing;
-	}
-}
-
-- (void)setIsExtraPlayerControlsShowing:(BOOL)isShowing
-{
-	@synchronized(self)
-	{
-		if (_isExtraPlayerControlsShowing != isShowing)
-		{
-			_isExtraPlayerControlsShowing = isShowing;
-			[_userDefaults setBool:isShowing forKey:@"isExtraPlayerControlsShowing"];
-			[_userDefaults synchronize];
-		}
 	}
 }
 
@@ -1367,7 +1018,7 @@
 {
 	@synchronized(self)
 	{
-		return _quickSkipNumberOfSeconds;
+        return [_userDefaults integerForKey:@"quickSkipNumberOfSeconds"];
 	}
 }
 
@@ -1375,71 +1026,8 @@
 {
 	@synchronized(self)
 	{
-		if (_quickSkipNumberOfSeconds != numSeconds)
-		{
-			_quickSkipNumberOfSeconds = numSeconds;
-			[_userDefaults setInteger:numSeconds forKey:@"quickSkipNumberOfSeconds"];
-			[_userDefaults synchronize];
-		}
-	}
-}
-
-- (BOOL)isShouldShowEQViewInstructions
-{
-	@synchronized(self)
-	{
-		return [_userDefaults boolForKey:@"isShouldShowEQViewInstructions"];
-	}
-}
-
-- (void)setIsShouldShowEQViewInstructions:(BOOL)isShouldShowEQViewInstructions
-{
-	@synchronized(self)
-	{
-		[_userDefaults setBool:isShouldShowEQViewInstructions forKey:@"isShouldShowEQViewInstructions"];
-		[_userDefaults synchronize];
-	}
-}
-
-- (BOOL)isShowLargeSongInfoInPlayer
-{
-	@synchronized(self)
-	{
-		return _isShowLargeSongInfoInPlayer;
-	}
-}
-
-- (void)setIsShowLargeSongInfoInPlayer:(BOOL)isShow
-{
-	@synchronized(self)
-	{
-		if (_isShowLargeSongInfoInPlayer != isShow)
-		{
-			_isShowLargeSongInfoInPlayer = isShow;
-			[_userDefaults setBool:isShow forKey:@"isShowLargeSongInfoInPlayer"];
-			[_userDefaults synchronize];
-		}
-	}
-}
-
-- (BOOL)isLockScreenArtEnabled
-{
-	@synchronized(self)
-	{
-		return _isLockScreenArtEnabled;
-	}
-}
-
-- (void)setIsLockScreenArtEnabled:(BOOL)isEnabled
-{
-	@synchronized(self)
-	{
-		if (_isLockScreenArtEnabled != isEnabled)
-		{
-			_isLockScreenArtEnabled = isEnabled;
-			[_userDefaults setBool:isEnabled forKey:@"isLockScreenArtEnabled"];
-			[_userDefaults synchronize];
-		}
+        [_userDefaults setInteger:numSeconds forKey:@"quickSkipNumberOfSeconds"];
+        [_userDefaults synchronize];
 	}
 }
 
@@ -1447,7 +1035,7 @@
 {
 	@synchronized(self)
 	{
-		return _isEqualizerOn;
+        return [_userDefaults boolForKey:@"isEqualizerOn"];
 	}
 }
 
@@ -1455,8 +1043,7 @@
 {
 	@synchronized(self)
 	{
-		_isEqualizerOn = isOn;
-		[_userDefaults setBool:_isEqualizerOn forKey:@"isEqualizerOn"];
+        [_userDefaults setBool:isOn forKey:@"isEqualizerOn"];
 		[_userDefaults synchronize];
 	}
 }
@@ -1487,39 +1074,14 @@
 
 - (void)setup
 {
-#ifdef IOS
-	// Disable screen sleep if necessary
-	if (!self.isScreenSleepEnabled)
-		[UIApplication sharedApplication].idleTimerDisabled = YES;
-#endif
+	[UIApplication sharedApplication].idleTimerDisabled = !self.isScreenSleepEnabled;
 	
 	_userDefaults = [NSUserDefaults standardUserDefaults];
 	_serverList = nil;
 	
 	_redirectUrlString = nil;
-	
-    //DLog(@"urlString: %@", urlString);
-	
+		
 	[self createInitialSettings];
-	
-    //DLog(@"urlString: %@", urlString);
-    
-	// If the settings are not set up, convert them
-	if ([_userDefaults boolForKey:@"areSettingsSetup"])
-	{
-		NSData *servers = [_userDefaults objectForKey:@"servers"];
-		if (servers)
-		{
-			self.serverList = [NSKeyedUnarchiver unarchiveObjectWithData:servers];
-		}
-	}
-	
-//DLog(@"urlString: %@", urlString);
-	
-	// Cache certain settings to memory for speed
-	[self memCacheDefaults];
-	
-//DLog(@"urlString: %@", urlString);
 }
 
 + (instancetype)si

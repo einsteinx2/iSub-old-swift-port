@@ -43,7 +43,6 @@
 #import "DDLog+LOGV.h"
 #import "DDMultiFormatter.h"
 #import "HLSProxyResponse.h"
-#import "ISMSUpdateChecker.h"
 #import "NSMutableURLRequest+PMS.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSString+cleanCredentialsForLog.h"

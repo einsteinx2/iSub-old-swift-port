@@ -615,12 +615,12 @@
 
 - (NSString *)localPath
 {
-    return [[SavedSettings songCachePath] stringByAppendingPathComponent:self.fileName];
+    return [[CacheSingleton songCachePath] stringByAppendingPathComponent:self.fileName];
 }
 
 - (NSString *)localTempPath
 {
-    return [[SavedSettings tempCachePath] stringByAppendingPathComponent:self.fileName];
+    return [[CacheSingleton tempCachePath] stringByAppendingPathComponent:self.fileName];
 }
 
 - (NSString *)currentPath

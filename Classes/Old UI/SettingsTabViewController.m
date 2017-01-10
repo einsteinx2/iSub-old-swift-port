@@ -49,11 +49,7 @@
 	//scrobblePercentSlider.value = [[AppDelegate.si.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
 	self.scrobblePercentSlider.value = SavedSettings.si.scrobblePercent;
 	[self updateScrobblePercentLabel];
-	
-	self.manualOfflineModeSwitch.on = SavedSettings.si.isForceOfflineMode;
-	
-	self.checkUpdatesSwitch.on = SavedSettings.si.isUpdateCheckEnabled;
-	
+			
 	self.autoReloadArtistSwitch.on = SavedSettings.si.isAutoReloadArtistsEnabled;
 
 	self.disablePopupsSwitch.on = !SavedSettings.si.isPopupsEnabled;
@@ -70,20 +66,12 @@
 	
 	self.maxBitrateWifiSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitrateWifi;
 	self.maxBitrate3GSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitrate3G;
-		
-	self.enableSwipeSwitch.on = SavedSettings.si.isSwipeEnabled;
-	self.enableTapAndHoldSwitch.on = SavedSettings.si.isTapAndHoldEnabled;
-	
-	self.showLargeSongInfoSwitch.on = SavedSettings.si.isShowLargeSongInfoInPlayer;
-	self.enableLyricsSwitch.on = SavedSettings.si.isLyricsEnabled;
+			
 	self.enableCacheStatusSwitch.on = SavedSettings.si.isCacheStatusEnabled;
-	self.enableLockScreenArt.on = SavedSettings.si.isLockScreenArtEnabled;
 	
 	// Cache Settings
     self.enableManualCachingOnWWANSwitch.on = SavedSettings.si.isManualCachingOnWWANEnabled;
 	self.enableSongCachingSwitch.on = SavedSettings.si.isSongCachingEnabled;
-	self.enableNextSongCacheSwitch.on = SavedSettings.si.isNextSongCacheEnabled;
-	self.enableNextSongPartialCacheSwitch.on = SavedSettings.si.isPartialCacheNextSong;
     self.enableBackupCacheSwitch.on = SavedSettings.si.isBackupCacheEnabled;
     
     if (SYSTEM_VERSION_LESS_THAN(@"5.0.1"))
@@ -337,19 +325,7 @@
 {
 	if ([[NSDate date] timeIntervalSinceDate:self.loadedTime] > 0.5)
 	{
-		if (sender == self.manualOfflineModeSwitch)
-		{
-			SavedSettings.si.isForceOfflineMode = self.manualOfflineModeSwitch.on;
-			if (self.manualOfflineModeSwitch.on)
-			{
-				[AppDelegate.si enterOfflineModeForce];
-			}
-			else
-			{
-				[AppDelegate.si enterOnlineModeForce];
-			}
-		}
-		else if (sender == self.enableScrobblingSwitch)
+		if (sender == self.enableScrobblingSwitch)
 		{
 			SavedSettings.si.isScrobbleEnabled = self.enableScrobblingSwitch.on;
 		}
@@ -377,20 +353,6 @@
 			SavedSettings.si.isNextSongCacheEnabled = self.enableNextSongCacheSwitch.on;
 			[self toggleCacheControlsVisibility];
 		}
-		else if (sender == self.enableNextSongPartialCacheSwitch)
-		{
-            if (self.enableNextSongPartialCacheSwitch.on)
-            {
-                // Prompt the warning
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Due to changes in Subsonic, this will cause audio corruption if transcoding is enabled.\n\nIf you're not sure what that means, choose cancel." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-                alert.tag = 3;
-                [alert show];
-            }
-            else
-            {
-                SavedSettings.si.isPartialCacheNextSong = NO;
-            }
-		}
         else if (sender == self.enableBackupCacheSwitch)
 		{
             if (self.enableBackupCacheSwitch.on)
@@ -413,29 +375,9 @@
 		{
 			SavedSettings.si.isTwitterEnabled = self.twitterEnabledSwitch.on;
 		}
-		else if (sender == self.checkUpdatesSwitch)
-		{
-			SavedSettings.si.isUpdateCheckEnabled = self.checkUpdatesSwitch.on;
-		}
-		else if (sender == self.showLargeSongInfoSwitch)
-		{
-			SavedSettings.si.isShowLargeSongInfoInPlayer = self.showLargeSongInfoSwitch.on;
-		}
-		else if (sender == self.enableLyricsSwitch)
-		{
-			SavedSettings.si.isLyricsEnabled = self.enableLyricsSwitch.on;
-		}
 		else if (sender == self.enableCacheStatusSwitch)
 		{
 			SavedSettings.si.isCacheStatusEnabled = self.enableCacheStatusSwitch.on;
-		}
-		else if (sender == self.enableSwipeSwitch)
-		{
-			SavedSettings.si.isSwipeEnabled = self.enableSwipeSwitch.on;
-		}
-		else if (sender == self.enableTapAndHoldSwitch)
-		{
-			SavedSettings.si.isTapAndHoldEnabled = self.enableTapAndHoldSwitch.on;
 		}
 		else if (sender == self.autoReloadArtistSwitch)
 		{
@@ -457,10 +399,6 @@
 		else if (sender == self.enableBasicAuthSwitch)
 		{
 			SavedSettings.si.isBasicAuthEnabled = self.enableBasicAuthSwitch.on;
-		}
-		else if (sender == self.enableLockScreenArt)
-		{
-			SavedSettings.si.isLockScreenArtEnabled = self.enableLockScreenArt.on;
 		}
         else if (sender == self.disableCellUsageSwitch)
         {
@@ -533,17 +471,6 @@
         else
         {
             SavedSettings.si.isManualCachingOnWWANEnabled = YES;
-        }
-    }
-    else if (alertView.tag == 3)
-    {
-        if (buttonIndex == 0)
-        {
-            [self.enableNextSongPartialCacheSwitch setOn:NO animated:YES];
-        }
-        else
-        {
-            SavedSettings.si.isPartialCacheNextSong = YES;
         }
     }
     else if (alertView.tag == 4)

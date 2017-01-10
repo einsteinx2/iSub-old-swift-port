@@ -27,18 +27,11 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 
 // Server Login Settings
 @property NSInteger currentServerId;
-@property (nonnull, readonly) NSString *currentServerUrl;
 @property (nonnull, readonly) Server *currentServer;
 @property (nullable, strong) NSMutableArray *serverList;
 @property (nullable, copy) NSString *sessionId;
-
 @property (nullable, copy) NSString *redirectUrlString;
 
-// Root Folders Settings
-@property (nullable, strong) NSDate *rootFoldersReloadTime;
-@property (nullable, strong) NSNumber *rootFoldersSelectedFolderId;
-
-@property BOOL isForceOfflineMode;
 @property NSInteger recoverSetting;
 @property NSInteger maxBitrateWifi;
 @property NSInteger maxBitrate3G;
@@ -57,7 +50,6 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 @property NSInteger autoDeleteCacheType;
 @property NSInteger cachedSongCellColorType;
 @property BOOL isTwitterEnabled;
-@property BOOL isLyricsEnabled;
 @property BOOL isCacheStatusEnabled;
 @property BOOL isSongsTabEnabled;
 @property BOOL isAutoReloadArtistsEnabled;
@@ -66,32 +58,15 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 @property BOOL isRotationLockEnabled;
 @property BOOL isScreenSleepEnabled;
 @property BOOL isPopupsEnabled;
-@property BOOL isUpdateCheckEnabled;
-@property BOOL isUpdateCheckQuestionAsked;
 @property (readonly) BOOL isTestServer;
 @property BOOL isBasicAuthEnabled;
-@property BOOL isTapAndHoldEnabled;
-@property BOOL isSwipeEnabled;
 @property float gainMultiplier;
-@property BOOL isPartialCacheNextSong;
-@property ISMSBassVisualType currentVisualizerType;
 @property NSUInteger quickSkipNumberOfSeconds;
-
-@property BOOL isExtraPlayerControlsShowing;
-@property BOOL isPlayerPlaylistShowing;
-
-@property BOOL isShouldShowEQViewInstructions;
-
-@property BOOL isShowLargeSongInfoInPlayer;
-
-@property BOOL isLockScreenArtEnabled;
 
 @property BOOL isEqualizerOn;
 
 @property BOOL isDisableUsageOver3G;
 @property (nullable, strong) NSString *currentTwitterAccount;
-
-@property BOOL isCacheSizeTableFinished;
 
 // State Saving
 @property BOOL isRecover;
@@ -102,12 +77,7 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 // Document Paths
 
 + (nonnull NSString *)documentsPath;
-+ (nonnull NSString *)databasePath;
 + (nonnull NSString *)cachesPath;
-+ (nonnull NSURL *)cachesUrl;
-+ (nonnull NSString *)currentCacheRoot;
-+ (nonnull NSString *)songCachePath;
-+ (nonnull NSString *)tempCachePath;
 
 - (void)setupSaveState;
 - (void)loadState;

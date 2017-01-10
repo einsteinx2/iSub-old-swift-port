@@ -27,12 +27,13 @@
 @property (nonnull, strong) ISMSQueueAllLoader *queueAll;
 
 + (nonnull instancetype)si;
-+ (void) setAllSongsToBackup;
-+ (void) setAllSongsToNotBackup;
 
 - (void)setupDatabases;
 - (void)closeAllDatabases;
 - (void)resetFolderCache;
+
+- (void)setAllSongsToBackup;
+- (void)setAllSongsToNotBackup;
 
 - (nonnull NSArray<NSString*> *)ignoredArticles;
 - (nonnull NSString *)name:(nonnull NSString *)name ignoringArticles:(nullable NSArray *)articles;

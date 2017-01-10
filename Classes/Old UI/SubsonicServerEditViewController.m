@@ -14,7 +14,7 @@
 #define kBadUserTag 2
 #define kBadPassTag 3
 
-@interface SubsonicServerEditViewController() <UIAlertViewDelegate, ApiLoaderDelegate>
+@interface SubsonicServerEditViewController() <ApiLoaderDelegate>
 @property (nonatomic, strong) IBOutlet UITextField *urlField;
 @property (nonatomic, strong) IBOutlet UITextField *usernameField;
 @property (nonatomic, strong) IBOutlet UITextField *passwordField;
@@ -301,8 +301,6 @@
 	[self.passwordField resignFirstResponder];
 	[super touchesBegan:touches withEvent:event];
 }
-
-#pragma mark - UIAlertView Delegate -
 
 - (void)alertAction:(NSInteger)tag {
     UITextField *textField = nil;

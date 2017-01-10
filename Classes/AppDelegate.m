@@ -14,7 +14,6 @@
 #import <netdb.h>
 #import <arpa/inet.h>
 #import "IntroViewController.h"
-#import "ISMSUpdateChecker.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "HLSProxyConnection.h"
 #import "NSMutableURLRequest+SUS.h"
@@ -129,7 +128,7 @@
     self.sidePanelController = (id)self.window.rootViewController;
     
     // Handle offline mode
-    if (SavedSettings.si.isForceOfflineMode || !self.networkStatus.isReachable || (!self.networkStatus.isReachableWifi && SavedSettings.si.isDisableUsageOver3G))
+    if (!self.networkStatus.isReachable || (!self.networkStatus.isReachableWifi && SavedSettings.si.isDisableUsageOver3G))
     {
         SavedSettings.si.isOfflineMode = YES;
     }
@@ -216,9 +215,6 @@
 
 - (void)checkServer
 {
-	ISMSUpdateChecker *updateChecker = [[ISMSUpdateChecker alloc] init];
-	[updateChecker checkForUpdate];
-
     // Check if the subsonic URL is valid by attempting to access the ping.view page, 
 	// if it's not then display an alert and allow user to change settings if they want.
 	// This is in case the user is, for instance, connected to a wifi network but does not 
@@ -288,13 +284,6 @@
         [hockeyManager startManager];
 #endif
     hockeyManager.crashManager.crashManagerStatus = BITCrashManagerStatusAutoSend;
-	
-    if (hockeyManager.crashManager.didCrashInLastSession)
-	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh no! iSub crashed!" message:@"iSub support has received your anonymous crash logs and they will be investigated. \n\nWould you also like to send an email to support with more details?" delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"Send Email", @"Visit iSub Forum", nil];
-		alert.tag = 7;
-		[alert performSelector:@selector(show) withObject:nil afterDelay:2.];
-	}
 }
 
 - (NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager
@@ -428,10 +417,6 @@
 	if (!self.isNoNetworkAlertShowing)
 	{
 		self.isNoNetworkAlertShowing = YES;
-		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Server unavailable, would you like to enter offline mode? Any currently playing music will stop.\n\nIf this is just temporary connection loss, select No." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-		alert.tag = 4;
-		[alert show];
 	}
 }
 
@@ -441,10 +426,6 @@
 	if (!self.isOnlineModeAlertShowing)
 	{
         self.isOnlineModeAlertShowing = YES;
-		
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Network detected, would you like to enter online mode? Any currently playing music will stop." delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-		alert.tag = 4;
-		[alert show];
 	}
 }
 
@@ -487,9 +468,6 @@
 
 - (void)reachabilityChanged
 {
-	if (SavedSettings.si.isForceOfflineMode)
-		return;
-	
     if (!self.networkStatus.isReachable)
     {
         //Change over to offline mode
@@ -545,92 +523,6 @@
 - (void)showSettings
 {
 	[(MenuViewController *)self.sidePanelController.leftPanel showSettings];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	switch (alertView.tag)
-	{
-		case 1:
-		{
-			// Title: @"Subsonic Error"
-			if(buttonIndex == 1)
-			{
-				[self showSettings];
-				
-				/*if (IS_IPAD())
-				{
-					[mainMenu showSettings];
-				}
-				else
-				{
-					ServerListViewController *serverListViewController = [[ServerListViewController alloc] initWithNibName:@"ServerListViewController" bundle:nil];
-					
-					if (currentTabBarController.selectedIndex == 4)
-					{
-						[currentTabBarController.moreNavigationController pushViewController:serverListViewController animated:YES];
-					}
-					else
-					{
-						[(UINavigationController*)currentTabBarController.selectedViewController pushViewController:serverListViewController animated:YES];
-					}
-					
-					[serverListViewController release];
-				}*/
-			}
-			
-			break;
-		}
-		case 3:
-		{
-			// Title: @"Server Unavailable"
-			if (buttonIndex == 1)
-			{
-				[self showSettings];
-			}
-			
-			break;
-		}
-		case 4:
-		{
-			// Title: @"Notice"
-			
-			// Offline mode handling
-			
-			self.isOnlineModeAlertShowing = NO;
-			self.isNoNetworkAlertShowing = NO;
-			
-			if (buttonIndex == 1)
-			{
-				if (SavedSettings.si.isOfflineMode)
-				{
-					[self enterOnlineModeForce];
-				}
-				else
-				{
-					[self enterOfflineModeForce];
-				}
-			}
-			
-			break;
-		}
-		case 6:
-		{
-			// Title: @"Update Alerts"
-			if (buttonIndex == 0)
-			{
-				SavedSettings.si.isUpdateCheckEnabled = NO;
-			}
-			else if (buttonIndex == 1)
-			{
-				SavedSettings.si.isUpdateCheckEnabled = YES;
-			}
-			
-			SavedSettings.si.isUpdateCheckQuestionAsked = YES;
-			
-			break;
-		}
-	}
 }
 
 - (void)switchServerTo:(Server *)server redirectUrl:(NSString *)redirectUrl

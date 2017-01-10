@@ -271,20 +271,10 @@
     return string;
 }
 
-
-#pragma mark - Memory management
-
-- (void)didReceiveMemoryWarning
-{
-//DLog(@"received memory warning");
-	
-	
-}
-
 #pragma mark - Singleton methods
 
 - (void)setup 
-{	
+{
     _databaseFolderPath = [[SavedSettings documentsPath] stringByAppendingPathComponent:@"database"];
 	
 	// Make sure database directory exists, if not create them
@@ -293,52 +283,34 @@
 	{
 		[[NSFileManager defaultManager] createDirectoryAtPath:_databaseFolderPath withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
-    
-#ifdef IOS
-    // Create the caches folder database path if this is iOS 5.0
-    if (SYSTEM_VERSION_LESS_THAN(@"5.0.1"))
-    {
-        NSString *path = [[SavedSettings currentCacheRoot] stringByAppendingPathComponent:@"database"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir])
-        {
-            [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:NULL];
-        }
-    }
-#endif
 	
 	[self setupDatabases];
-	
-#ifdef IOS
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-#endif
 }
 
-+ (void) setAllSongsToBackup
+- (void)setAllSongsToBackup
 {
     // Handle moving the song cache database if necessary
-    NSString *path = [[[SavedSettings currentCacheRoot] stringByAppendingPathComponent:@"database"] stringByAppendingPathComponent:@"songCache.db"];
+    NSString *path = [_databaseFolderPath stringByAppendingPathComponent:@"songCache.db"];
     NSFileManager *defaultManager = [NSFileManager defaultManager];
-#ifdef IOS
-    if ([defaultManager fileExistsAtPath:path] && SYSTEM_VERSION_GREATER_THAN(@"5.0.0"))
+
+    if ([defaultManager fileExistsAtPath:path])
     {
         // Set the no backup flag since the file already exists
         [[NSURL fileURLWithPath:path] removeSkipBackupAttribute];
     }
-#endif
 }
 
-+ (void) setAllSongsToNotBackup
+- (void)setAllSongsToNotBackup
 {
     // Handle moving the song cache database if necessary
-    NSString *path = [[[SavedSettings currentCacheRoot] stringByAppendingPathComponent:@"database"] stringByAppendingPathComponent:@"songCache.db"];
+    NSString *path = [_databaseFolderPath stringByAppendingPathComponent:@"songCache.db"];
     NSFileManager *defaultManager = [NSFileManager defaultManager];
-#ifdef IOS
-    if ([defaultManager fileExistsAtPath:path] && SYSTEM_VERSION_GREATER_THAN(@"5.0.0"))
+
+    if ([defaultManager fileExistsAtPath:path])
     {
         // Set the no backup flag since the file already exists
         [[NSURL fileURLWithPath:path] addSkipBackupAttribute];
     }
-#endif
 }
 
 + (instancetype)si

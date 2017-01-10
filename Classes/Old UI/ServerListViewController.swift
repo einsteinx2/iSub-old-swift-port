@@ -245,13 +245,6 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         if (editingStyle == .delete)
         {
             // TODO: Automatically switch to the next server. Or if it's the last server, connect to the test server
-            //		// Alert user to select new default server if they deleting the default
-            //		if ([ SavedSettings.si.urlString isEqualToString:[(Server *)[ SavedSettings.si.serverList objectAtIndexSafe:indexPath.row] url]])
-            //		{
-            //			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Make sure to select a new server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            //			alert.tag = 4;
-            //			[alert show];
-            //		}
             
             // Delete the row from the data source
             let server = servers[indexPath.row]

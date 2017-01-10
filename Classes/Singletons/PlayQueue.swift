@@ -385,11 +385,9 @@ import Nuke
                 trackInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioEngine.progress() as AnyObject?
                 trackInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0 as AnyObject?
                 
-                if SavedSettings.si().isLockScreenArtEnabled {
-                    trackInfo[MPMediaItemPropertyArtwork] = defaultItemArtwork
-                    if let coverArtId = song.coverArtId, let image = CachedImage.cached(coverArtId: coverArtId, size: .player) {
-                        trackInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
-                    }
+                trackInfo[MPMediaItemPropertyArtwork] = defaultItemArtwork
+                if let coverArtId = song.coverArtId, let image = CachedImage.cached(coverArtId: coverArtId, size: .player) {
+                    trackInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
                 }
                 
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = trackInfo

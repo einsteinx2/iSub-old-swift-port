@@ -205,8 +205,6 @@
 		531B33801E24CF8B00811187 /* ISMSStreamHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33081E24CF8A00811187 /* ISMSStreamHandler.m */; };
 		531B33811E24CF8B00811187 /* ISMSStreamManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B330B1E24CF8A00811187 /* ISMSStreamManager.m */; };
 		531B33821E24CF8B00811187 /* ISMSStreamManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B330B1E24CF8A00811187 /* ISMSStreamManager.m */; };
-		531B33831E24CF8B00811187 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B330D1E24CF8A00811187 /* ISMSUpdateChecker.m */; };
-		531B33841E24CF8B00811187 /* ISMSUpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B330D1E24CF8A00811187 /* ISMSUpdateChecker.m */; };
 		531B33851E24CF8B00811187 /* ApiLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B330F1E24CF8A00811187 /* ApiLoader.swift */; };
 		531B33861E24CF8B00811187 /* ApiLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B330F1E24CF8A00811187 /* ApiLoader.swift */; };
 		531B33871E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33111E24CF8A00811187 /* ItemLoaderOperation.swift */; };
@@ -318,11 +316,11 @@
 		531B341A1E24D12300811187 /* HelpTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 531B340F1E24D12300811187 /* HelpTabViewController.xib */; };
 		531B341B1E24D12300811187 /* HelpTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 531B340F1E24D12300811187 /* HelpTabViewController.xib */; };
 		531B341C1E24D12300811187 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34111E24D12300811187 /* IntroViewController.m */; };
-		531B341D1E24D12300811187 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34111E24D12300811187 /* IntroViewController.m */; };
+		531B341D1E24D12300811187 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34111E24D12300811187 /* IntroViewController.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B341E1E24D12300811187 /* ServerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34131E24D12300811187 /* ServerListViewController.swift */; };
 		531B341F1E24D12300811187 /* ServerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34131E24D12300811187 /* ServerListViewController.swift */; };
 		531B34201E24D12300811187 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34151E24D12300811187 /* SettingsTabViewController.m */; };
-		531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34151E24D12300811187 /* SettingsTabViewController.m */; };
+		531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34151E24D12300811187 /* SettingsTabViewController.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B34221E24D12300811187 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34171E24D12300811187 /* SubsonicServerEditViewController.m */; };
 		531B34231E24D12300811187 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34171E24D12300811187 /* SubsonicServerEditViewController.m */; };
 		531B34271E24D1C300811187 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34261E24D1C300811187 /* OBSlider.m */; };
@@ -903,8 +901,6 @@
 		531B33091E24CF8A00811187 /* ISMSStreamHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamHandlerDelegate.h; sourceTree = "<group>"; };
 		531B330A1E24CF8A00811187 /* ISMSStreamManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSStreamManager.h; sourceTree = "<group>"; };
 		531B330B1E24CF8A00811187 /* ISMSStreamManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSStreamManager.m; sourceTree = "<group>"; };
-		531B330C1E24CF8A00811187 /* ISMSUpdateChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSUpdateChecker.h; sourceTree = "<group>"; };
-		531B330D1E24CF8A00811187 /* ISMSUpdateChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSUpdateChecker.m; sourceTree = "<group>"; };
 		531B330F1E24CF8A00811187 /* ApiLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiLoader.swift; sourceTree = "<group>"; };
 		531B33101E24CF8A00811187 /* ISMSLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSLoaderManager.h; sourceTree = "<group>"; };
 		531B33111E24CF8A00811187 /* ItemLoaderOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemLoaderOperation.swift; sourceTree = "<group>"; };
@@ -1697,8 +1693,6 @@
 				531B33031E24CF8A00811187 /* HLSProxyResponse.h */,
 				531B33041E24CF8A00811187 /* HLSProxyResponse.m */,
 				531B33051E24CF8A00811187 /* ISMSStreamManager */,
-				531B330C1E24CF8A00811187 /* ISMSUpdateChecker.h */,
-				531B330D1E24CF8A00811187 /* ISMSUpdateChecker.m */,
 				531B330E1E24CF8A00811187 /* Loaders */,
 				531B33271E24CF8B00811187 /* NSMutableURLRequest+PMS.h */,
 				531B33281E24CF8B00811187 /* NSMutableURLRequest+PMS.m */,
@@ -2899,7 +2893,6 @@
 				531B33851E24CF8B00811187 /* ApiLoader.swift in Sources */,
 				531B33991E24CF8B00811187 /* CachedRootFoldersLoader.swift in Sources */,
 				531B338B1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
-				531B33831E24CF8B00811187 /* ISMSUpdateChecker.m in Sources */,
 				531B33711E24CF8B00811187 /* Playlist.swift in Sources */,
 				531B33FE1E24D0B600811187 /* CenterPanelContainerViewController.swift in Sources */,
 				531B33AF1E24CF8B00811187 /* NSMutableURLRequest+PMS.m in Sources */,
@@ -3147,7 +3140,6 @@
 				531B33861E24CF8B00811187 /* ApiLoader.swift in Sources */,
 				531B339A1E24CF8B00811187 /* CachedRootFoldersLoader.swift in Sources */,
 				531B338C1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
-				531B33841E24CF8B00811187 /* ISMSUpdateChecker.m in Sources */,
 				531B33721E24CF8B00811187 /* Playlist.swift in Sources */,
 				531B33FF1E24D0B600811187 /* CenterPanelContainerViewController.swift in Sources */,
 				531B33B01E24CF8B00811187 /* NSMutableURLRequest+PMS.m in Sources */,

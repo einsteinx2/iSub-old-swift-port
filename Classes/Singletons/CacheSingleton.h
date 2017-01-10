@@ -1,3 +1,4 @@
+
 //
 //  CacheSingleton.h
 //  iSub
@@ -20,14 +21,17 @@
 
 + (nonnull instancetype)si;
 
-+ (void)setAllCachedSongsToBackup;
-+ (void)setAllCachedSongsToNotBackup;
++ (nonnull NSString *)songCachePath;
++ (nonnull NSString *)tempCachePath;
 
 //- (void)startCacheCheckTimer;
 - (void)startCacheCheckTimerWithInterval:(NSTimeInterval)interval;
 - (void)stopCacheCheckTimer;
 - (void)clearTempCache;
 - (void)findCacheSize;
+
+- (void)setAllCachedSongsToBackup;
+- (void)setAllCachedSongsToNotBackup;
 
 @end
 
