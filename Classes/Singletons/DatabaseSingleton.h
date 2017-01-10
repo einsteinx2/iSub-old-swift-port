@@ -27,6 +27,7 @@
 @property (nonnull, strong) ISMSQueueAllLoader *queueAll;
 
 + (nonnull instancetype)si;
+- (void)setup;
 
 - (void)setupDatabases;
 - (void)closeAllDatabases;

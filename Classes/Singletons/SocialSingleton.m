@@ -218,21 +218,7 @@
 }
 #pragma clang diagnostic pop
 
-#pragma mark - Memory management
-
-- (void)didReceiveMemoryWarning
-{
-    //DLog(@"received memory warning");
-}
-
 #pragma mark - Singleton methods
-
-- (void)setup
-{
-#ifdef IOS
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-#endif
-}
 
 + (instancetype)si
 {
@@ -240,7 +226,6 @@
     static dispatch_once_t once = 0;
     dispatch_once(&once, ^{
 		sharedInstance = [[self alloc] init];
-		[sharedInstance setup];
 	});
     return sharedInstance;
 }

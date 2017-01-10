@@ -84,6 +84,7 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 - (void)saveState;
 
 + (nonnull instancetype)si;
+- (void)setup;
 
 @end
 

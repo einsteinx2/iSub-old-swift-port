@@ -1080,23 +1080,17 @@
 	_redirectUrlString = nil;
 		
 	[self createInitialSettings];
+    
+    [self setupSaveState];
 }
 
 + (instancetype)si
 {
     static SavedSettings *sharedInstance = nil;
     static dispatch_once_t once = 0;
-    __block BOOL runSetup = NO;
     dispatch_once(&once, ^{
 		sharedInstance = [[self alloc] init];
-        runSetup = YES;
 	});
-    
-    if (runSetup)
-    {
-        [sharedInstance setup];
-    }
-    
     return sharedInstance;
 }
 

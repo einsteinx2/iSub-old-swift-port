@@ -271,6 +271,32 @@
     return string;
 }
 
+- (void)setAllSongsToBackup
+{
+    // Handle moving the song cache database if necessary
+    NSString *path = [_databaseFolderPath stringByAppendingPathComponent:@"songCache.db"];
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    
+    if ([defaultManager fileExistsAtPath:path])
+    {
+        // Set the no backup flag since the file already exists
+        [[NSURL fileURLWithPath:path] removeSkipBackupAttribute];
+    }
+}
+
+- (void)setAllSongsToNotBackup
+{
+    // Handle moving the song cache database if necessary
+    NSString *path = [_databaseFolderPath stringByAppendingPathComponent:@"songCache.db"];
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    
+    if ([defaultManager fileExistsAtPath:path])
+    {
+        // Set the no backup flag since the file already exists
+        [[NSURL fileURLWithPath:path] addSkipBackupAttribute];
+    }
+}
+
 #pragma mark - Singleton methods
 
 - (void)setup 
@@ -287,48 +313,13 @@
 	[self setupDatabases];
 }
 
-- (void)setAllSongsToBackup
-{
-    // Handle moving the song cache database if necessary
-    NSString *path = [_databaseFolderPath stringByAppendingPathComponent:@"songCache.db"];
-    NSFileManager *defaultManager = [NSFileManager defaultManager];
-
-    if ([defaultManager fileExistsAtPath:path])
-    {
-        // Set the no backup flag since the file already exists
-        [[NSURL fileURLWithPath:path] removeSkipBackupAttribute];
-    }
-}
-
-- (void)setAllSongsToNotBackup
-{
-    // Handle moving the song cache database if necessary
-    NSString *path = [_databaseFolderPath stringByAppendingPathComponent:@"songCache.db"];
-    NSFileManager *defaultManager = [NSFileManager defaultManager];
-
-    if ([defaultManager fileExistsAtPath:path])
-    {
-        // Set the no backup flag since the file already exists
-        [[NSURL fileURLWithPath:path] addSkipBackupAttribute];
-    }
-}
-
 + (instancetype)si
 {
     static DatabaseSingleton *sharedInstance = nil;
     static dispatch_once_t once = 0;
-    
-    __block BOOL runSetup = NO;
     dispatch_once(&once, ^{
 		sharedInstance = [[self alloc] init];
-        runSetup = YES;
     });
-    
-    if (runSetup)
-    {
-        [sharedInstance setup];
-    }
-    
     return sharedInstance;
 }
 

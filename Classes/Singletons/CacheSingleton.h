@@ -20,6 +20,7 @@
 @property (readonly) NSInteger numberOfCachedSongs;
 
 + (nonnull instancetype)si;
+- (void)setup;
 
 + (nonnull NSString *)songCachePath;
 + (nonnull NSString *)tempCachePath;

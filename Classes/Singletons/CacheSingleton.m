@@ -213,13 +213,31 @@ LOG_LEVEL_ISUB_DEFAULT
 	ISMSStreamManager.si.lastTempCachedSong = nil;
 }
 
-#pragma mark - Memory management
-
-- (void)didReceiveMemoryWarning
+- (void)setAllCachedSongsToBackup
 {
-//DLog(@"received memory warning");
-	
-	
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    
+    // Now set all of the files to be backed up
+    NSArray *cachedSongNames = [defaultManager contentsOfDirectoryAtPath:[CacheSingleton songCachePath] error:nil];
+    for (NSString *songName in cachedSongNames)
+    {
+        NSURL *fileUrl = [NSURL fileURLWithPath:[[CacheSingleton songCachePath] stringByAppendingPathComponent:songName]];
+        [fileUrl removeSkipBackupAttribute];
+    }
+}
+
+- (void)setAllCachedSongsToNotBackup
+{
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    
+    // Now set all of the files to be backed up
+    NSArray *cachedSongNames = [defaultManager contentsOfDirectoryAtPath:[CacheSingleton songCachePath] error:nil];
+    for (NSString *songName in cachedSongNames)
+    {
+        NSURL *fileUrl = [NSURL fileURLWithPath:[[CacheSingleton songCachePath] stringByAppendingPathComponent:songName]];
+        
+        [fileUrl addSkipBackupAttribute];
+    }
 }
 
 #pragma mark - Singleton methods
@@ -307,33 +325,6 @@ LOG_LEVEL_ISUB_DEFAULT
 #endif
 }
 
-- (void)setAllCachedSongsToBackup
-{
-    NSFileManager *defaultManager = [NSFileManager defaultManager];
-    
-    // Now set all of the files to be backed up
-    NSArray *cachedSongNames = [defaultManager contentsOfDirectoryAtPath:[CacheSingleton songCachePath] error:nil];
-    for (NSString *songName in cachedSongNames)
-    {
-        NSURL *fileUrl = [NSURL fileURLWithPath:[[CacheSingleton songCachePath] stringByAppendingPathComponent:songName]];
-        [fileUrl removeSkipBackupAttribute];
-    }
-}
-
-- (void)setAllCachedSongsToNotBackup
-{
-    NSFileManager *defaultManager = [NSFileManager defaultManager];
-    
-    // Now set all of the files to be backed up
-    NSArray *cachedSongNames = [defaultManager contentsOfDirectoryAtPath:[CacheSingleton songCachePath] error:nil];
-    for (NSString *songName in cachedSongNames)
-    {
-        NSURL *fileUrl = [NSURL fileURLWithPath:[[CacheSingleton songCachePath] stringByAppendingPathComponent:songName]];
-        
-        [fileUrl addSkipBackupAttribute];
-    }
-}
-
 + (NSString *)songCachePath
 {
     return [[SavedSettings documentsPath] stringByAppendingPathComponent:@"songCache"];
@@ -350,7 +341,6 @@ LOG_LEVEL_ISUB_DEFAULT
     static dispatch_once_t once = 0;
     dispatch_once(&once, ^{
 		sharedInstance = [[self alloc] init];
-		[sharedInstance setup];
 	});
     return sharedInstance;
 }

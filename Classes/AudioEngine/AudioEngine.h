@@ -22,9 +22,10 @@
 #import <AVFoundation/AVFoundation.h>
 
 @class ISMSSong, BassParamEqValue, BassStream, SUSRegisterActionLoader, EX2RingBuffer;
-@interface AudioEngine : NSObject <AVAudioSessionDelegate>
+@interface AudioEngine : NSObject
 
 + (nonnull instancetype)si;
+- (void)setup;
 
 @property BOOL shouldResumeFromInterruption;
 

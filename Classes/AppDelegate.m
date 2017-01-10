@@ -61,13 +61,11 @@
     
     // Make sure the singletons get setup immediately and in the correct order
     // Perfect example of why using singletons is bad practice!
-    [DatabaseSingleton si];
-	[AudioEngine si];
-	[CacheSingleton si];
+    [DatabaseSingleton.si setup];
+	[AudioEngine.si setup];
+	[CacheSingleton.si setup];
+    [SavedSettings.si setup];
     
-    // Start the save defaults timer and mem cache initial defaults
-	[SavedSettings.si setupSaveState];
-	
 #if !IS_ADHOC() && !IS_RELEASE()
     // Don't turn on console logging for adhoc or release builds
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
