@@ -86,6 +86,7 @@ extension CollectionViewStackCell {
         layer.shadowOffset = CGSize.zero;
         layer.shadowPath = UIBezierPath(rect: bounds).cgPath
         layer.shouldRasterize = true;
+        layer.rasterizationScale = max(UIScreen.main.scale, 2.0)
     }
     
     fileprivate func addBlurOnImage(_ image: UIImageView) {

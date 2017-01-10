@@ -79,7 +79,7 @@ open class NavigationStack: UINavigationController {
     }
 }
 
-// MARK: pulbic methods
+// MARK: public methods
 
 extension NavigationStack {
     
@@ -93,16 +93,16 @@ extension NavigationStack {
         
         var allScreens = screens
         allScreens.append(view.takeScreenshot())
-        let collectioView = CollectionStackViewController(images: allScreens,
-                                                          delegate: self,
-                                                          overlay: overlay,
-                                                          scaleRatio: scaleRatio,
-                                                          scaleValue: scaleValue,
-                                                          bgColor: bgColor,
-                                                          bgView: bgView,
-                                                          decelerationRate: decelerationRate)
+        let collectionView = CollectionStackViewController(images: allScreens,
+                                                           delegate: self,
+                                                           overlay: overlay,
+                                                           scaleRatio: scaleRatio,
+                                                           scaleValue: scaleValue,
+                                                           bgColor: bgColor,
+                                                           bgView: bgView,
+                                                           decelerationRate: decelerationRate)
         
-        present(collectioView, animated: false, completion: nil)
+        present(collectionView, animated: false, completion: nil)
     }
 }
 

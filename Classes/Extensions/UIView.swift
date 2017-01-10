@@ -11,7 +11,7 @@ import UIKit
 extension UIView {
     var screenshot: UIImage {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.layer.isOpaque, 0.0)
-        self.layer.render(in: UIGraphicsGetCurrentContext()!)
+        self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
         let image = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return image
