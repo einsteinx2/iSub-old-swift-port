@@ -8,7 +8,6 @@
 
 import Foundation
 import Reachability
-//import Async
 
 @objc class NetworkStatus: NSObject {
     let reachability = Reachability()
