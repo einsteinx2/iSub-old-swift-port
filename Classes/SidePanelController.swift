@@ -52,7 +52,7 @@ class SidePanelController: JASidePanelController {
         self.shouldResizeLeftPanel = true
         self.shouldResizeRightPanel = true
         
-        let menu = NewMenuViewController()
+        let menu = MenuViewController()
         self.leftPanel = menu
         self.rightPanel = PlayQueueViewController(viewModel: PlayQueueViewModel())
         menu.showDefaultViewController()

@@ -8,10 +8,6 @@
 
 #import "SettingsTabViewController.h"
 #import "Imports.h"
-#import "iPadRootViewController.h"
-#import "MenuViewController.h"
-#import "iPadRootViewController.h"
-#import "StackScrollViewController.h"
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
 #import "IDTwitterAccountChooserViewController.h"
@@ -759,20 +755,6 @@
 {
 	[self updateCacheSpaceSlider];
 //DLog(@"file size: %llu   formatted: %@", [textField.text fileSizeFromFormat], [NSString formatFileSize:[textField.text fileSizeFromFormat]]);
-}
-
-// Fix for panel sliding on iPad while using sliders
-- (IBAction)touchDown:(id)sender
-{
-    iSubAppDelegate.si.ipadRootViewController.stackScrollViewController.isSlidingEnabled = NO;
-}
-- (IBAction)touchUpInside:(id)sender
-{
-    iSubAppDelegate.si.ipadRootViewController.stackScrollViewController.isSlidingEnabled = YES;
-}
-- (IBAction)touchUpOutside:(id)sender
-{
-    iSubAppDelegate.si.ipadRootViewController.stackScrollViewController.isSlidingEnabled = YES;
 }
 
 @end

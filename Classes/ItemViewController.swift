@@ -426,7 +426,7 @@ class ItemViewController: DraggableTableViewController {
     fileprivate func pushItemController(loader: ItemLoader) {
         let viewModel = ItemViewModel(loader: loader)
         let viewController = ItemViewController(viewModel: viewModel)
-        self.pushCustom(viewController)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

@@ -14,11 +14,8 @@
 #import <netdb.h>
 #import <arpa/inet.h>
 #import "IntroViewController.h"
-#import "iPadRootViewController.h"
-#import "MenuViewController.h"
 #import "ISMSUpdateChecker.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import "UIViewController+PushViewControllerCustom.h"
 #import "HLSProxyConnection.h"
 #import "NSMutableURLRequest+SUS.h"
 #import "NSMutableURLRequest+PMS.h"
@@ -234,12 +231,6 @@
     if ([queryParameters.allKeys containsObject:@"ref"])
     {
         self.referringAppUrl = [NSURL URLWithString:[queryParameters objectForKey:@"ref"]];
-        
-        // On the iPad we need to reload the menu table to see the back button
-        if (IS_IPAD())
-        {
-            [self.ipadRootViewController.menuViewController loadCellContents];
-        }
     }
     
     return YES;
@@ -678,8 +669,8 @@
 	
 	[PlayQueue.si stop];
 	
-	if (IS_IPAD())
-		[self.ipadRootViewController.menuViewController toggleOfflineMode];
+	//if (IS_IPAD())
+	//	[self.ipadRootViewController.menuViewController toggleOfflineMode];
 	//else
 	//	[self.offlineTabBarController.view removeFromSuperview];
 	
@@ -762,14 +753,7 @@
 
 - (void)showSettings
 {
-	if (IS_IPAD())
-	{
-		[self.ipadRootViewController.menuViewController showSettings];
-	}
-	else
-	{
-        [(NewMenuViewController *)self.sidePanelController.leftPanel showSettings];
-	}
+	[(MenuViewController *)self.sidePanelController.leftPanel showSettings];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -922,10 +906,7 @@
                         }
                     }
 					
-					if (IS_IPAD())
-						[self.ipadRootViewController presentViewController:mailer animated:YES completion:nil];
-					else
-						[self.sidePanelController presentViewController:mailer animated:YES completion:nil];
+					[self.sidePanelController presentViewController:mailer animated:YES completion:nil];
 					
 				}
 				else
@@ -963,10 +944,7 @@
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
 {   
-	if (IS_IPAD())
-		[self.ipadRootViewController dismissViewControllerAnimated:YES completion:nil];
-	else
-		[self.sidePanelController dismissViewControllerAnimated:YES completion:nil];
+	[self.sidePanelController dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -1309,7 +1287,7 @@
     [ISMSStreamManager.si removeAllStreams];
     
     // Reset UI
-    [(NewMenuViewController *)self.sidePanelController.leftPanel resetMenuItems];
+    [(MenuViewController *)self.sidePanelController.leftPanel resetMenuItems];
 
     [NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_ServerSwitched];
 }

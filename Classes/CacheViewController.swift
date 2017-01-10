@@ -91,6 +91,6 @@ class CacheViewController: DraggableTableViewController {
         let viewModel = ItemViewModel(loader: loader)
         viewModel.navigationTitle = title
         let viewController = ItemViewController(viewModel: viewModel)
-        self.pushCustom(viewController)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }

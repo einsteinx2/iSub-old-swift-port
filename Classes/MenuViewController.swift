@@ -1,5 +1,5 @@
 //
-//  NewMenuViewController.swift
+//  MenuViewController.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 2/1/16.
@@ -11,16 +11,16 @@ import Async
 
 private class MenuItem {
     let name: String
-    let function: (NewMenuViewController) -> (MenuItem) -> Void
+    let function: (MenuViewController) -> (MenuItem) -> Void
     var navController: UINavigationController?
     
-    init(name: String, function: @escaping (NewMenuViewController) -> (MenuItem) -> Void) {
+    init(name: String, function: @escaping (MenuViewController) -> (MenuItem) -> Void) {
         self.name = name
         self.function = function
     }
 }
 
-class NewMenuViewController: UITableViewController {
+class MenuViewController: UITableViewController {
     
     fileprivate let reuseIdentifier = "Menu Cell"
     fileprivate let menuItems = [MenuItem(name: "Folders", function: showFolders),

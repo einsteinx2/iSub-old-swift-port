@@ -9,8 +9,6 @@
 #import "SubsonicServerEditViewController.h"
 #import "Imports.h"
 #import "iSub-Swift.h"
-#import "iPadRootViewController.h"
-#import "MenuViewController.h"
 
 #define kBadUrlTag 1
 #define kBadUserTag 2
@@ -261,9 +259,7 @@
     [self.delegate serverEdited:self.server];
     
     [self dismissViewControllerAnimated:YES completion:nil];
-    if (IS_IPAD())
-        [iSubAppDelegate.si.ipadRootViewController.menuViewController showHome];
-    
+
     [iSubAppDelegate.si switchServerTo:self.server redirectUrl:self.redirectUrl];
 }
 
