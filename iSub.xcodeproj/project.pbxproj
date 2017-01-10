@@ -354,7 +354,7 @@
 		531B345E1E24D34C00811187 /* NSError+ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B345D1E24D34C00811187 /* NSError+ISMSError.m */; };
 		531B345F1E24D34C00811187 /* NSError+ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B345D1E24D34C00811187 /* NSError+ISMSError.m */; };
 		531B34621E24D37300811187 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 531B34601E24D37300811187 /* sqlite3.c */; };
-		531B34631E24D37300811187 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 531B34601E24D37300811187 /* sqlite3.c */; };
+		531B34631E24D37300811187 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 531B34601E24D37300811187 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B34651E24D3D500811187 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34641E24D3D500811187 /* Defines.swift */; };
 		531B34661E24D3D500811187 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34641E24D3D500811187 /* Defines.swift */; };
 		532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 532862DA11C573AD00B40FF0 /* UAApplication.m */; };
@@ -1788,19 +1788,19 @@
 		531B33301E24CF8B00811187 /* Singletons */ = {
 			isa = PBXGroup;
 			children = (
+				531B33391E24CF8B00811187 /* PlayQueue.swift */,
 				531B33311E24CF8B00811187 /* CacheSingleton.h */,
 				531B33321E24CF8B00811187 /* CacheSingleton.m */,
 				531B33331E24CF8B00811187 /* DatabaseSingleton.h */,
 				531B33341E24CF8B00811187 /* DatabaseSingleton.m */,
-				531B33351E24CF8B00811187 /* LoadingScreen.h */,
-				531B33361E24CF8B00811187 /* LoadingScreen.m */,
-				531B33371E24CF8B00811187 /* Logging.h */,
-				531B33381E24CF8B00811187 /* Logging.m */,
-				531B33391E24CF8B00811187 /* PlayQueue.swift */,
 				531B333A1E24CF8B00811187 /* SavedSettings.h */,
 				531B333B1E24CF8B00811187 /* SavedSettings.m */,
 				531B333C1E24CF8B00811187 /* SocialSingleton.h */,
 				531B333D1E24CF8B00811187 /* SocialSingleton.m */,
+				531B33351E24CF8B00811187 /* LoadingScreen.h */,
+				531B33361E24CF8B00811187 /* LoadingScreen.m */,
+				531B33371E24CF8B00811187 /* Logging.h */,
+				531B33381E24CF8B00811187 /* Logging.m */,
 			);
 			path = Singletons;
 			sourceTree = "<group>";

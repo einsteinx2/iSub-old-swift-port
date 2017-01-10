@@ -24,7 +24,6 @@
 #import "Logging.h"
 
 #import <MessageUI/MessageUI.h>
-#import <MessageUI/MFMailComposeViewController.h>
 
 //LOG_LEVEL_ISUB_DEFAULT
 
@@ -138,15 +137,7 @@
     // Show intro if necessary
     if (SavedSettings.si.isTestServer)
     {
-        if (SavedSettings.si.isOfflineMode)
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome!" message:@"Looks like this is your first time using iSub or you haven't set up your Subsonic account info yet.\n\nYou'll need an internet connection to watch the intro video and use the included demo account." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert performSelector:@selector(show) withObject:nil afterDelay:1.0];
-        }
-        else
-        {
-            self.showIntro = YES;
-        }
+        self.showIntro = YES;
     }
 }
 
@@ -590,29 +581,6 @@
 			
 			break;
 		}
-		/*case 2: // Isn't used
-		{
-			// Title: @"Error"
-			[introController dismissModalViewControllerAnimated:NO];
-			
-			if (buttonIndex == 0)
-			{
-				[self appInit2];
-			}
-			else if (buttonIndex == 1)
-			{
-				if (IS_IPAD())
-				{
-					[mainMenu showSettings];
-				}
-				else
-				{
-					[self showSettings];
-				}
-			}
-			
-			break;
-		}*/
 		case 3:
 		{
 			// Title: @"Server Unavailable"
@@ -662,89 +630,7 @@
 			
 			break;
 		}
-		case 7:
-		{
-			// Title: Oh no! :(
-			if (buttonIndex == 1)
-			{
-				if ([MFMailComposeViewController canSendMail])
-				{
-					MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
-					[mailer setMailComposeDelegate:self];
-					[mailer setToRecipients:@[@"support@isubapp.com"]];
-					
-					if ([[[BITHockeyManager sharedHockeyManager] crashManager] didCrashInLastSession])
-					{
-						// Set version label
-						NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
-						NSString *formattedVersion = nil;
-                        #if IS_RELEASE()
-                            formattedVersion = version;
-                        #else
-							NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-							formattedVersion = [NSString stringWithFormat:@"%@ build %@", build, version];
-                        #endif
-						
-						NSString *subject = [NSString stringWithFormat:@"I had a crash in iSub %@ :(", formattedVersion];
-						[mailer setSubject:subject];
-						
-						[mailer setMessageBody:@"Here's what I was doing when iSub crashed..." isHTML:NO];
-					}
-					else 
-					{
-						[mailer setSubject:@"I need some help with iSub :)"];
-					}
-                    
-                    NSString *zippedLogs = [Logging zipAllLogFiles];
-                    if (zippedLogs)
-                    {
-                        NSError *fileError;
-                        NSData *zipData = [NSData dataWithContentsOfFile:zippedLogs options:NSDataReadingMappedIfSafe error:&fileError];
-                        if (!fileError)
-                        {
-                            [mailer addAttachmentData:zipData mimeType:@"application/x-zip-compressed" fileName:[zippedLogs lastPathComponent]];
-                        }
-                    }
-					
-					[self.sidePanelController presentViewController:mailer animated:YES completion:nil];
-					
-				}
-				else
-				{
-					UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!" message:@"It looks like you don't have an email account set up, but you can reach support from your computer by emailing support@isubapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-					[alert show];
-				}
-			}
-			else if (buttonIndex == 2)
-			{
-				NSString *urlString = IS_IPAD() ? @"http://isubapp.com/forum" : @"http://isubapp.com/vanilla";
-				NSURL *url = [NSURL URLWithString:urlString];
-				[[UIApplication sharedApplication] openURL:url];
-			}
-		}
-        case 10:
-        {            
-            // WaveBox Release message
-            SavedSettings.si.isStopCheckingWaveboxRelease = YES;
-            if (buttonIndex == 1)
-            {
-                // More Info
-                NSString *moreInfoUrl = [alertView ex2CustomObjectForKey:@"moreInfoUrl"];
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:moreInfoUrl]];
-            }
-            else if (buttonIndex == 2)
-            {
-                // App Store
-                NSString *appStoreUrl = [alertView ex2CustomObjectForKey:@"appStoreUrl"];
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appStoreUrl]];
-            }
-        }
 	}
-}
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
-{   
-	[self.sidePanelController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)switchServerTo:(Server *)server redirectUrl:(NSString *)redirectUrl

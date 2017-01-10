@@ -149,26 +149,29 @@
     
 	if (!urlValid)
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The URL must be in the format: http://mywebsite.com:port/folder\n\nBoth the :port and /folder are optional" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        alert.delegate = self;
-        alert.tag = kBadUrlTag;
-		[alert show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"The URL must be in the format: http://mywebsite.com:port/folder\n\nBoth the :port and /folder are optional" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self alertAction:kBadUrlTag];
+        }]];
+        [self presentViewController:alert animated:true completion:nil];
 	}
 	
 	if (!usernameValid)
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a username" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        alert.delegate = self;
-        alert.tag = kBadUserTag;
-		[alert show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Please enter a username" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self alertAction:kBadUserTag];
+        }]];
+        [self presentViewController:alert animated:true completion:nil];
 	}
 	
 	if (!passwordValid)
 	{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        alert.delegate = self;
-        alert.tag = kBadPassTag;
-		[alert show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Please enter a password" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self alertAction:kBadPassTag];
+        }]];
+        [self presentViewController:alert animated:true completion:nil];
 	}
 	
 	if (urlValid && usernameValid && passwordValid)
@@ -224,10 +227,12 @@
 		message = [NSString stringWithFormat:@"Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError code %li:\n%@", (long)[error code], [error localizedDescription]];
         tag = kBadUrlTag;
     }
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    alert.delegate = self;
-    alert.tag = tag;
-	[alert show];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self alertAction:tag];
+    }]];
+    [self presentViewController:alert animated:true completion:nil];
 }	
 	
 - (void)loadingFinished:(ApiLoader *)theLoader
@@ -299,10 +304,9 @@
 
 #pragma mark - UIAlertView Delegate -
 
-- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
-{
+- (void)alertAction:(NSInteger)tag {
     UITextField *textField = nil;
-    switch (alertView.tag)
+    switch (tag)
     {
         case kBadUrlTag: textField = self.urlField; break;
         case kBadUserTag: textField = self.usernameField; break;

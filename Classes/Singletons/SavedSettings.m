@@ -1483,23 +1483,6 @@
     return [self.currentServer isEqual:[Server testServer]];
 }
 
-- (BOOL)isStopCheckingWaveboxRelease
-{
-	@synchronized(self)
-	{
-		return [_userDefaults boolForKey:@"isStopCheckingWaveboxRelease"];
-	}
-}
-
-- (void)setIsStopCheckingWaveboxRelease:(BOOL)isStopCheckingWaveboxRelease
-{
-	@synchronized(self)
-	{
-		[_userDefaults setBool:isStopCheckingWaveboxRelease forKey:@"isStopCheckingWaveboxRelease"];
-		[_userDefaults synchronize];
-	}
-}
-
 #pragma mark - Singleton methods
 
 - (void)setup

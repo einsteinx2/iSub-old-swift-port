@@ -342,7 +342,7 @@ static void ReadStreamClientCallBack(CFReadStreamRef stream, CFStreamEventType t
         return;
     }
     
-    //***	ALWAYS set the stream client (notifier) to NULL if you are releasing it
+    //	ALWAYS set the stream client (notifier) to NULL if you are releasing it
     //	otherwise your notifier may be called after you released the stream leaving you with a
     //	bogus stream within your notifier.
     //DLog(@"canceling stream: %@", readStreamRef);

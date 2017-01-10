@@ -18,7 +18,7 @@
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"
 #define kOAuthConsumerSecret			@"wXSWVvY7GN1e8Z2KFaR9A5skZKtHzpchvMS7Elpu0"
 
-LOG_LEVEL_ISUB_DEFAULT
+//LOG_LEVEL_ISUB_DEFAULT
 
 @implementation SocialSingleton
 
@@ -102,22 +102,23 @@ LOG_LEVEL_ISUB_DEFAULT
 
 - (void)notifySubsonic
 {
-	if (!SavedSettings.si.isOfflineMode)
-	{
-		// If this song wasn't just cached, then notify Subsonic of the playback
-		ISMSSong *lastCachedSong = ISMSStreamManager.si.lastCachedSong;
-		ISMSSong *currentSong = PlayQueue.si.currentSong;
-		if (![lastCachedSong isEqualToSong:currentSong])
-		{
-			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters fragment:nil byteOffset:0];
-			NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-            if (conn)
-            {
-                DDLogVerbose(@"notified Subsonic about cached song %@", currentSong.title);
-            }
-		}
-	}
+    // TODO: Reimplement
+//	if (!SavedSettings.si.isOfflineMode)
+//	{
+//		// If this song wasn't just cached, then notify Subsonic of the playback
+//		ISMSSong *lastCachedSong = ISMSStreamManager.si.lastCachedSong;
+//		ISMSSong *currentSong = PlayQueue.si.currentSong;
+//		if (![lastCachedSong isEqualToSong:currentSong])
+//		{
+//			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
+//            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters fragment:nil byteOffset:0];
+//			NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+//            if (conn)
+//            {
+//                DDLogVerbose(@"notified Subsonic about cached song %@", currentSong.title);
+//            }
+//		}
+//	}
 }
 
 #pragma mark - Scrobbling -
@@ -160,49 +161,6 @@ LOG_LEVEL_ISUB_DEFAULT
 //        
 //        [loader startLoad];
 //	}
-}
-
-#pragma mark Subsonic chache notification hack and Last.fm scrobbling connection delegate
-
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space 
-{
-	if([[space authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) 
-		return YES; // Self-signed cert will be accepted
-	
-	return NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{	
-	if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
-	{
-		[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge]; 
-	}
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-	// Do nothing
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)incrementalData 
-{
-	if ([incrementalData length] > 0)
-	{
-		// Subsonic has been notified, cancel the connection
-        //DLog(@"Subsonic has been notified, cancel the connection");
-		[theConnection cancel];
-	}
-}
-
-- (void)connection:(NSURLConnection *)theConnection didFailWithError:(NSError *)error
-{
-	ALog(@"Subsonic cached song play notification failed\n\nError: %@", [error localizedDescription]);
-}	
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection 
-{
 }
 
 #pragma mark - Twitter -
