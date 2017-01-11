@@ -15,6 +15,11 @@ private var kvoContext = 0
 
 class SidePanelController: JASidePanelController {
     
+    var panelGapPercentage: CGFloat {
+        //return UIDevice.current.orientation.isLandscape ? 0.5 : 0.8
+        return 0.8
+    }
+    
     // MARK: - Status Bar -
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -41,7 +46,8 @@ class SidePanelController: JASidePanelController {
         // Setup KVO to hide and show the status bar when opening the side panels
         self.addObserver(self, forKeyPath: "state", options: .new, context: &kvoContext)
         
-        // TODO: Look into custom side panel animations
+        self.leftGapPercentage = panelGapPercentage
+        self.rightGapPercentage = panelGapPercentage
         self.pushesSidePanels = true
         self.bounceOnSidePanelOpen = false
         
@@ -95,6 +101,16 @@ class SidePanelController: JASidePanelController {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
+    
+//    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+//        super.viewWillTransition(to: size, with: coordinator)
+//        
+//        self.leftGapPercentage = panelGapPercentage
+//        self.rightGapPercentage = panelGapPercentage
+//        
+//        self.view.setNeedsLayout()
+//        self.view.layoutIfNeeded()
+//    }
     
     // MARK: - Draggable TableView -
     
