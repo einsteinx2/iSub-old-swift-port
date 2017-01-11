@@ -92,7 +92,9 @@ extension NavigationStack {
         }
         
         var allScreens = screens
-        allScreens.append(view.takeScreenshot())
+        let screenshot = AppDelegate.si().sidePanelController?.centerPanel?.view?.takeScreenshot() ?? view.takeScreenshot()
+        allScreens.append(screenshot)
+        //allScreens.append(view.takeScreenshot())
         let collectionView = CollectionStackViewController(images: allScreens,
                                                            delegate: self,
                                                            overlay: overlay,
