@@ -66,8 +66,8 @@ class DraggableTableView: UITableView {
     fileprivate let longPressDelay = 150
     fileprivate let cellDimmedAlpha: CGFloat = 0.6
     fileprivate let maxDragImageOffset: CGFloat = 5.0
-    fileprivate let minimumForce: CGFloat = 3.0
-    fileprivate let activationForce: CGFloat = 6.0
+    fileprivate let minimumForce: CGFloat = 2.0
+    fileprivate let activationForce: CGFloat = 5.0
     
     // MARK: - Public Properties -
     

@@ -21,7 +21,6 @@ class StatusLoader: ApiLoader {
     fileprivate(set) var minorVersion: Int?
     
     convenience init(server: Server) {
-        // TODO: Handle this case better, should only happen if there's a keychain problem
         let password = server.password ?? ""
         self.init(url: server.url, username: server.username, password: password)
         self.server = server
