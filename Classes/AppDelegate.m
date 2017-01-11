@@ -61,10 +61,10 @@
     
     // Make sure the singletons get setup immediately and in the correct order
     // Perfect example of why using singletons is bad practice!
+    [SavedSettings.si setup];
     [DatabaseSingleton.si setup];
 	[AudioEngine.si setup];
 	[CacheSingleton.si setup];
-    [SavedSettings.si setup];
     
 #if !IS_ADHOC() && !IS_RELEASE()
     // Don't turn on console logging for adhoc or release builds
