@@ -46,10 +46,11 @@ class RootArtistsLoader: ApiLoader, ItemLoader {
     func persistModels() {
         // Remove existing artists
         let serverId = SavedSettings.si().currentServerId as NSNumber
+        // TODO: Should only delete artists not in artists array, same for other loaders
         ISMSArtist.deleteAllArtists(withServerId: serverId)
         
         // Save the new artists
-        artists.forEach({$0.insert()})
+        artists.forEach({$0.replace()})
     }
     
     func loadModelsFromDatabase() -> Bool {

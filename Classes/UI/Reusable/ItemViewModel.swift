@@ -32,6 +32,9 @@ class ItemViewModel : NSObject {
         return loader is AlbumLoader
     }
     
+    fileprivate(set) var isSongsAlphabetized = false
+    var isShowTrackNumbers = true
+    
     var delegate: ItemViewModelDelegate?
     
     var topLevelController = false
@@ -120,6 +123,14 @@ class ItemViewModel : NSObject {
         }
         songsDuration = duration
         
+        if isSongsAlphabetized {
+            alphabetizeSongs()
+        } else {
+            createSectionIndexes()
+        }
+    }
+    
+    fileprivate func createSectionIndexes() {
         let minAmountForIndexes = 50
         if folders.count >= minAmountForIndexes {
             sectionIndexes = SectionIndex.sectionIndexesForItems(folders)
@@ -130,7 +141,7 @@ class ItemViewModel : NSObject {
         } else if albums.count >= minAmountForIndexes {
             sectionIndexes = SectionIndex.sectionIndexesForItems(albums)
             sectionIndexesSection = 2
-        } else if songs.count >= minAmountForIndexes {
+        } else if isSongsAlphabetized && songs.count >= minAmountForIndexes {
             sectionIndexes = SectionIndex.sectionIndexesForItems(songs)
             sectionIndexesSection = 3
         } else {
@@ -190,5 +201,16 @@ class ItemViewModel : NSObject {
         PlayQueue.si.playSongs(songs, playIndex: index)
     }
     
-    
+    func alphabetizeSongs() {
+        // TODO: Save this setting per folder id
+        // TODO: Allow to alphabetize by artist
+        songs.sort { lhs, rhs -> Bool in
+            let lhsTitle = lhs.title?.lowercased() ?? ""
+            let rhsTitle = rhs.title?.lowercased() ?? ""
+            return lhsTitle < rhsTitle
+        }
+        isSongsAlphabetized = true
+        createSectionIndexes()
+        delegate?.itemsChanged()
+    }
 }

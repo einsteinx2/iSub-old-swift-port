@@ -55,7 +55,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(ServerListViewController.showMenu))
     }
     
-    override func setupRightBarButton() -> UIBarButtonItem? {
+    override func setupRightBarButton() -> UIBarButtonItem {
         return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ServerListViewController.addAction))
     }
     

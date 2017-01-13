@@ -208,7 +208,7 @@ class ItemTableViewCell: DroppableCell {
     // Automatically hide and show labels based on whether we have data for them, then reposition the others to fit
     func repositionLabels() {
         
-        let cellWidth: CGFloat = self.frame.size.width
+        let cellWidth: CGFloat = indexShowing ? self.frame.size.width - CGFloat(20) : self.frame.size.width
         let spacer: CGFloat = 2.0
         
         coverArtView.isHidden = true

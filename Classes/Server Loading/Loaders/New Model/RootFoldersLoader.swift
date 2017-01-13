@@ -60,6 +60,7 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
     }
     
     func persistModels() {
+        // TODO: Only delete missing ones
         // Remove existing root folders
         let serverId = SavedSettings.si().currentServerId
         let mediaFolder = ISMSMediaFolder(mediaFolderId: mediaFolderId ?? 0, serverId: serverId)

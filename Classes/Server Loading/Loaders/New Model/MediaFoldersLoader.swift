@@ -35,6 +35,7 @@ class MediaFoldersLoader: ApiLoader, ItemLoader {
     }
     
     func persistModels() {
+        // TODO: Only delete missing ones
         let serverId = SavedSettings.si().currentServerId
         ISMSMediaFolder.deleteAllMediaFolders(withServerId: serverId as NSNumber)
         mediaFolders.forEach({$0.replace()})

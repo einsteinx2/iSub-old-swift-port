@@ -103,7 +103,29 @@ class ItemViewController: DraggableTableViewController {
         }
     }
     
-    // MARK: - Notifications - 
+    override func setupRightBarButton() -> UIBarButtonItem {
+        if viewModel.isBrowsingFolder && viewModel.songs.count > 0 {
+            return UIBarButtonItem(title: "•••", style: .plain, target: self, action: #selector(showOptions))
+        } else {
+            return super.setupRightBarButton()
+        }
+    }
+    
+    @objc fileprivate func showOptions() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "Alphabetize Songs", style: .default) { action in
+            self.viewModel.alphabetizeSongs()
+        })
+        let trackNumbersTitle = self.viewModel.isShowTrackNumbers ? "Hide Track Numbers" : "Show Track Numbers"
+        alertController.addAction(UIAlertAction(title: trackNumbersTitle, style: .default) { action in
+            self.viewModel.isShowTrackNumbers = !self.viewModel.isShowTrackNumbers
+            self.tableView.reloadData()
+        })
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    // MARK: - Notifications -
     
     fileprivate func registerForNotifications() {
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
@@ -281,7 +303,7 @@ class ItemViewController: DraggableTableViewController {
             cell.associatedObject = song
             cell.coverArtId = nil
             cell.title = song.title
-            cell.trackNumber = song.trackNumber
+            cell.trackNumber = viewModel.isShowTrackNumbers ? song.trackNumber : nil
             cell.subTitle = song.artistDisplayName
             cell.duration = song.duration
             cell.isPlaying = (song == PlayQueue.si.currentDisplaySong)

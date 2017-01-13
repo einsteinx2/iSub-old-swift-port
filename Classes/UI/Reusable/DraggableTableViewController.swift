@@ -82,21 +82,11 @@ class DraggableTableViewController: UITableViewController {
     }
 
     func setupLeftBarButton() -> UIBarButtonItem {
-        return UIBarButtonItem(title: "Back",
-                               style: .plain,
-                               target: self,
-                               action: #selector(popViewController))
+        return UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(popViewController))
     }
 
-    func setupRightBarButton() -> UIBarButtonItem? {
-        if !IS_IPAD() {
-            return UIBarButtonItem(image: UIImage(named: "now-playing"),
-                                   style: .plain,
-                                   target: self,
-                                   action: #selector(showPlayQueue))
-        } else {
-            return nil
-        }
+    func setupRightBarButton() -> UIBarButtonItem {
+        return UIBarButtonItem(image: UIImage(named: "now-playing"), style: .plain, target: self, action: #selector(showPlayQueue))
     }
     
     // MARK: Pull to Refresh
