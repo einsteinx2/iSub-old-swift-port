@@ -17,9 +17,8 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
         return albums
     }
     
-    override func createRequest() -> URLRequest? {
-        let parameters = ["type": "alphabeticalByName"]
-        return NSMutableURLRequest(susAction: "getAlbumList2", parameters: parameters) as URLRequest
+    override func createRequest() -> URLRequest {
+        return URLRequest(subsonicAction: .getAlbumList2, parameters: ["type": "alphabeticalByName"])
     }
     
     override func processResponse(root: RXMLElement) {

@@ -11,7 +11,6 @@
 #import "BassGaplessPlayer.h"
 #import "ISMSStreamManager.h"
 #import <Twitter/Twitter.h>
-#import "NSMutableURLRequest+SUS.h"
 
 // Twitter secret keys
 #define kOAuthConsumerKey				@"nYKAEcLstFYnI9EEnv6g"

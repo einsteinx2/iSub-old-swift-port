@@ -40,13 +40,8 @@ struct CachedImage {
             parameters["size"] = "\(size.pixelSize)"
         }
         let fragment = "id_\(coverArtId)_size_\(size.name)"
-        
-        var urlRequest = NSMutableURLRequest.init(susAction: "getCoverArt", parameters: parameters, fragment: fragment) as URLRequest
-        urlRequest.cachePolicy = .reloadIgnoringLocalCacheData
-        urlRequest.timeoutInterval = 30
-        
-        let request = Request(urlRequest: urlRequest)
-        return request
+        let urlRequest = URLRequest(subsonicAction: .getCoverArt, parameters: parameters, fragment: fragment)
+        return Request(urlRequest: urlRequest)
     }
     
     static func preheat(coverArtId: String, size: CachedImageSize) {

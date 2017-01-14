@@ -2,6 +2,8 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
+#import <CommonCrypto/CommonCrypto.h>
+
 #import <HockeySDK/HockeySDK.h>
 
 #import "libSubImports.h"
@@ -14,7 +16,6 @@
 #import "JASidePanelController.h"
 #import "UIViewController+JASidePanel.h"
 #import "RXMLElement.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "BCCKeychain.h"
 #import "INTUAnimationEngine.h"
 

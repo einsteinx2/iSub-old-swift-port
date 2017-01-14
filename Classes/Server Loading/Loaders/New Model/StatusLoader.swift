@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO: Make sure that the status loader completes before making any other API calls, that way we have the correct redirect URL.
 class StatusLoader: ApiLoader {
     
     fileprivate(set) var server: Server?
@@ -33,8 +34,8 @@ class StatusLoader: ApiLoader {
         super.init()
     }
     
-    override func createRequest() -> URLRequest? {
-        return NSMutableURLRequest(susAction: "ping", urlString: url, username: username, password: password, parameters: nil, fragment: nil, byteOffset: 0) as URLRequest?        
+    override func createRequest() -> URLRequest {
+        return URLRequest(subsonicAction: .ping, baseUrl: url, username: username, password: password)    
     }
     
     override func processResponse(root: RXMLElement) {

@@ -17,8 +17,8 @@ class MediaFoldersLoader: ApiLoader, ItemLoader {
         return mediaFolders
     }
     
-    override func createRequest() -> URLRequest? {
-        return NSMutableURLRequest(susAction: "getMusicFolders", parameters: nil) as URLRequest
+    override func createRequest() -> URLRequest {
+        return URLRequest(subsonicAction: .getMusicFolders)
     }
     
     override func processResponse(root: RXMLElement) {

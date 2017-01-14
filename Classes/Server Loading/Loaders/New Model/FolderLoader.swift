@@ -26,9 +26,8 @@ class FolderLoader: ApiLoader, ItemLoader {
         super.init()
     }
     
-    override func createRequest() -> URLRequest? {
-        let parameters = ["id": "\(folderId)"]
-        return NSMutableURLRequest(susAction: "getMusicDirectory", parameters: parameters) as URLRequest
+    override func createRequest() -> URLRequest {
+        return URLRequest(subsonicAction: .getMusicDirectory, parameters: ["id": folderId])
     }
     
     override func processResponse(root: RXMLElement) {

@@ -17,8 +17,8 @@ class RootPlaylistsLoader: ApiLoader, ItemLoader {
         return playlists
     }
     
-    override func createRequest() -> URLRequest? {
-        return NSMutableURLRequest(susAction: "getPlaylists", parameters: nil) as URLRequest
+    override func createRequest() -> URLRequest {
+        return URLRequest(subsonicAction: .getPlaylists)
     }
     
     override func processResponse(root: RXMLElement) {

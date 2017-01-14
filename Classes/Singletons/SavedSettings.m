@@ -1074,9 +1074,7 @@
 	
 	_userDefaults = [NSUserDefaults standardUserDefaults];
 	_serverList = nil;
-	
-	_redirectUrlString = nil;
-		
+			
 	[self createInitialSettings];
     
     [self setupSaveState];

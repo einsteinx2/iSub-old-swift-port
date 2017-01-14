@@ -33,8 +33,8 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
     fileprivate(set) var redirectUrl: URL?
     
     var redirectUrlString: String? {
-        if let url = redirectUrl {
-            var redirectUrlString = "\(url.scheme)://\(url.host)"
+        if let url = redirectUrl, let scheme = url.scheme, let host = url.host {
+            var redirectUrlString = "\(scheme)://\(host)"
             if let port = url.port {
                 redirectUrlString += ":\(port)"
             }
@@ -54,6 +54,7 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
         return nil
     }
     
+    fileprivate var request: URLRequest?
     fileprivate var session: URLSession?
     fileprivate var task: URLSessionDataTask?
     fileprivate var receivedData = Data()
@@ -74,7 +75,7 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
         super.init()
     }
     
-    func createRequest() -> URLRequest? {
+    func createRequest() -> URLRequest {
         fatalError("Must override in subclass")
     }
     
@@ -87,22 +88,15 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
             return
         }
         
-        if let request = createRequest() {
-            session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
-            task = session?.dataTask(with: request)
-            task?.resume()
-            
-            state = .loading
-            
-            if selfRef == nil {
-                selfRef = self
-            }
-        } else {
-            state = .failed
-            
-            Async.main {
-                self.failed(error: NSError(ismsCode: ISMSErrorCode_CouldNotCreateConnection))
-            }
+        request = createRequest()
+        session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+        task = session!.dataTask(with: request!)
+        task!.resume()
+        
+        state = .loading
+        
+        if selfRef == nil {
+            selfRef = self
         }
     }
     

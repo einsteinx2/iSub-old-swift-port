@@ -6,6 +6,8 @@
 //  Copyright 2010 Ben Baron. All rights reserved.
 //
 
+// TODO: See why so many of my songs are showing 2Pac as artist
+
 #import "ISMSSong.h"
 #import "iSub-Swift.h"
 #import "ISMSFolder.h"

@@ -18,8 +18,8 @@ class RootArtistsLoader: ApiLoader, ItemLoader {
         return artists
     }
     
-    override func createRequest() -> URLRequest? {
-        return NSMutableURLRequest(susAction: "getArtists", parameters: nil) as URLRequest
+    override func createRequest() -> URLRequest {
+        return URLRequest(subsonicAction: .getArtists)
     }
     
     override func processResponse(root: RXMLElement) {

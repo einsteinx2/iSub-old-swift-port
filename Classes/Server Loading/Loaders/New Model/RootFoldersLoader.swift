@@ -21,12 +21,12 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
         return folders as [ISMSItem] + songs as [ISMSItem]
     }
     
-    override func createRequest() -> URLRequest? {
+    override func createRequest() -> URLRequest {
         var parameters: [String: String]?
         if let mediaFolderId = mediaFolderId, mediaFolderId >= 0 {
             parameters = ["musicFolderId": "\(mediaFolderId)"]
         }
-        return NSMutableURLRequest(susAction: "getIndexes", parameters: parameters) as URLRequest
+        return URLRequest(subsonicAction: .getIndexes, parameters: parameters)
     }
     
     override func processResponse(root: RXMLElement) {

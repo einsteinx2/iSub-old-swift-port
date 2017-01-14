@@ -73,7 +73,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         if maxBitrateSetting > 0 {
             parameters["maxBitRate"] = "\(maxBitrateSetting)"
         }
-        let request = NSMutableURLRequest(susAction: "stream", parameters: parameters) as URLRequest
+        let request = URLRequest(subsonicAction: .stream, parameters: parameters)
         
         session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
         task = session?.dataTask(with: request)

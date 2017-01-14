@@ -241,8 +241,6 @@
 		531B33AA1E24CF8B00811187 /* RootPlaylistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */; };
 		531B33AB1E24CF8B00811187 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33241E24CF8B00811187 /* StatusLoader.swift */; };
 		531B33AC1E24CF8B00811187 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33241E24CF8B00811187 /* StatusLoader.swift */; };
-		531B33B11E24CF8B00811187 /* NSMutableURLRequest+SUS.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B332A1E24CF8B00811187 /* NSMutableURLRequest+SUS.m */; };
-		531B33B21E24CF8B00811187 /* NSMutableURLRequest+SUS.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B332A1E24CF8B00811187 /* NSMutableURLRequest+SUS.m */; };
 		531B33B51E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */; };
 		531B33B61E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */; };
 		531B33B71E24CF8B00811187 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33321E24CF8B00811187 /* CacheSingleton.m */; };
@@ -327,8 +325,6 @@
 		531B34471E24D24600811187 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34371E24D24600811187 /* FMDatabasePool.m */; };
 		531B34481E24D24600811187 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34391E24D24600811187 /* FMDatabaseQueue.m */; };
 		531B34491E24D24600811187 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34391E24D24600811187 /* FMDatabaseQueue.m */; };
-		531B344A1E24D24600811187 /* FMDatabaseQueueAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B343B1E24D24600811187 /* FMDatabaseQueueAdditions.m */; };
-		531B344B1E24D24600811187 /* FMDatabaseQueueAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B343B1E24D24600811187 /* FMDatabaseQueueAdditions.m */; };
 		531B344C1E24D24600811187 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B343E1E24D24600811187 /* FMResultSet.m */; };
 		531B344D1E24D24600811187 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B343E1E24D24600811187 /* FMResultSet.m */; };
 		531B344E1E24D24600811187 /* FMDatabaseAdditionsVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34401E24D24600811187 /* FMDatabaseAdditionsVariadic.swift */; };
@@ -614,6 +610,10 @@
 		538B4D101E1DA68B00847152 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538B4D0F1E1DA68B00847152 /* Nuke.framework */; };
 		538C01B012C3DCC40061545B /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
 		538C01B112C3DCC40061545B /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
+		539133511E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */; };
+		539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */; };
+		539133541E29D53000B8A99E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133531E29D53000B8A99E /* Data.swift */; };
+		539133551E29D53000B8A99E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133531E29D53000B8A99E /* Data.swift */; };
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
 		53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
@@ -909,8 +909,6 @@
 		531B33221E24CF8B00811187 /* RootFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootFoldersLoader.swift; path = "New Model/RootFoldersLoader.swift"; sourceTree = "<group>"; };
 		531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootPlaylistsLoader.swift; path = "New Model/RootPlaylistsLoader.swift"; sourceTree = "<group>"; };
 		531B33241E24CF8B00811187 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusLoader.swift; path = "New Model/StatusLoader.swift"; sourceTree = "<group>"; };
-		531B33291E24CF8B00811187 /* NSMutableURLRequest+SUS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableURLRequest+SUS.h"; sourceTree = "<group>"; };
-		531B332A1E24CF8B00811187 /* NSMutableURLRequest+SUS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableURLRequest+SUS.m"; sourceTree = "<group>"; };
 		531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLSessionStreamHandler.swift; path = ../URLSessionStreamHandler.swift; sourceTree = "<group>"; };
 		531B33311E24CF8B00811187 /* CacheSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheSingleton.h; sourceTree = "<group>"; };
 		531B33321E24CF8B00811187 /* CacheSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheSingleton.m; sourceTree = "<group>"; };
@@ -976,8 +974,6 @@
 		531B34371E24D24600811187 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
 		531B34381E24D24600811187 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
 		531B34391E24D24600811187 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
-		531B343A1E24D24600811187 /* FMDatabaseQueueAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueueAdditions.h; sourceTree = "<group>"; };
-		531B343B1E24D24600811187 /* FMDatabaseQueueAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueueAdditions.m; sourceTree = "<group>"; };
 		531B343C1E24D24600811187 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
 		531B343D1E24D24600811187 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		531B343E1E24D24600811187 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
@@ -1147,6 +1143,8 @@
 		538B4D0F1E1DA68B00847152 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
 		538C01AF12C3DCC40061545B /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Images/Other/back@2x.png"; sourceTree = "<group>"; };
+		539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubsonicURLRequest.swift; sourceTree = "<group>"; };
+		539133531E29D53000B8A99E /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		539799781163084200F41D8B /* loading-screen-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image.png"; path = "Images/Other/loading-screen-image.png"; sourceTree = "<group>"; };
 		53A2BE27147DF13600E44822 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		53AA300311461A04003E57E3 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Images/Other/background.png; sourceTree = "<group>"; };
@@ -1658,6 +1656,7 @@
 			isa = PBXGroup;
 			children = (
 				531B32FF1E24CF8A00811187 /* String.swift */,
+				539133531E29D53000B8A99E /* Data.swift */,
 				531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */,
 				531B33D41E24CFAF00811187 /* UIView.swift */,
 				531B33D51E24CFAF00811187 /* URL.swift */,
@@ -1672,8 +1671,7 @@
 		531B33001E24CF8A00811187 /* Server Loading */ = {
 			isa = PBXGroup;
 			children = (
-				531B33291E24CF8B00811187 /* NSMutableURLRequest+SUS.h */,
-				531B332A1E24CF8B00811187 /* NSMutableURLRequest+SUS.m */,
+				539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */,
 				531B33051E24CF8A00811187 /* ISMSStreamManager */,
 				531B330E1E24CF8A00811187 /* Api Loaders */,
 			);
@@ -1847,8 +1845,6 @@
 				531B34531E24D28D00811187 /* FMDatabasePoolAdditions.m */,
 				531B34381E24D24600811187 /* FMDatabaseQueue.h */,
 				531B34391E24D24600811187 /* FMDatabaseQueue.m */,
-				531B343A1E24D24600811187 /* FMDatabaseQueueAdditions.h */,
-				531B343B1E24D24600811187 /* FMDatabaseQueueAdditions.m */,
 				531B343D1E24D24600811187 /* FMResultSet.h */,
 				531B343E1E24D24600811187 /* FMResultSet.m */,
 				531B34611E24D37300811187 /* sqlite3.h */,
@@ -2765,6 +2761,7 @@
 				5358DF881E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				531B34021E24D0B600811187 /* MiniPlayerViewController.swift in Sources */,
 				531B34461E24D24600811187 /* FMDatabasePool.m in Sources */,
+				539133511E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */,
 				531B33D61E24CFAF00811187 /* UITraitEnvironment.swift in Sources */,
 				531B33631E24CF8B00811187 /* ISMSAlbum.m in Sources */,
 				5358DF741E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
@@ -2809,7 +2806,6 @@
 				53D59A651E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
 				531B33B71E24CF8B00811187 /* CacheSingleton.m in Sources */,
 				531B33551E24CF8B00811187 /* BassWrapper.m in Sources */,
-				531B33B11E24CF8B00811187 /* NSMutableURLRequest+SUS.m in Sources */,
 				531B33911E24CF8B00811187 /* CachedDatabaseLoader.swift in Sources */,
 				531B34081E24D0B600811187 /* PlayQueueViewModel.swift in Sources */,
 				53835CDE1E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
@@ -2842,7 +2838,6 @@
 				53835CD41E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC01E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				531B336D1E24CF8B00811187 /* ISMSMediaFolder.m in Sources */,
-				531B344A1E24D24600811187 /* FMDatabaseQueueAdditions.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
 				531B34201E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCA1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
@@ -2865,6 +2860,7 @@
 				53835CE81E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				533B69DA1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				531B340A1E24D0B600811187 /* SidePanelController.swift in Sources */,
+				539133541E29D53000B8A99E /* Data.swift in Sources */,
 				53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33771E24CF8B00811187 /* String.swift in Sources */,
@@ -3008,6 +3004,7 @@
 				5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				531B34031E24D0B600811187 /* MiniPlayerViewController.swift in Sources */,
 				531B34471E24D24600811187 /* FMDatabasePool.m in Sources */,
+				539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */,
 				531B33D71E24CFAF00811187 /* UITraitEnvironment.swift in Sources */,
 				531B33641E24CF8B00811187 /* ISMSAlbum.m in Sources */,
 				5358DF761E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
@@ -3052,7 +3049,6 @@
 				53D59A671E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
 				531B33B81E24CF8B00811187 /* CacheSingleton.m in Sources */,
 				531B33561E24CF8B00811187 /* BassWrapper.m in Sources */,
-				531B33B21E24CF8B00811187 /* NSMutableURLRequest+SUS.m in Sources */,
 				531B33921E24CF8B00811187 /* CachedDatabaseLoader.swift in Sources */,
 				531B34091E24D0B600811187 /* PlayQueueViewModel.swift in Sources */,
 				53835CE01E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
@@ -3085,7 +3081,6 @@
 				53835CD61E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				531B336E1E24CF8B00811187 /* ISMSMediaFolder.m in Sources */,
-				531B344B1E24D24600811187 /* FMDatabaseQueueAdditions.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,
 				531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
@@ -3108,6 +3103,7 @@
 				53835CEA1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				531B340B1E24D0B600811187 /* SidePanelController.swift in Sources */,
+				539133551E29D53000B8A99E /* Data.swift in Sources */,
 				53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33781E24CF8B00811187 /* String.swift in Sources */,

@@ -15,7 +15,6 @@
 #import "EX2Kit.h"
 #import "ZipKit.h"
 #import "CocoaLumberjack.h"
-#import "FMDatabaseQueueAdditions.h"
 #import "FMDatabasePoolAdditions.h"
 
 // Singletons
@@ -41,7 +40,6 @@
 #import "DDDispatchQueueLogFormatter.h"
 #import "DDLog+LOGV.h"
 #import "DDMultiFormatter.h"
-#import "NSMutableURLRequest+SUS.h"
 #import "sqlite3.h"
 #import "RXMLElement.h"
 

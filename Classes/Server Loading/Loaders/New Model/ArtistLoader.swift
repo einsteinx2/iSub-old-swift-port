@@ -22,9 +22,8 @@ class ArtistLoader: ApiLoader, ItemLoader {
         super.init()
     }
     
-    override func createRequest() -> URLRequest? {
-        let parameters = ["id": "\(artistId)"]
-        return NSMutableURLRequest(susAction: "getArtist", parameters: parameters) as URLRequest
+    override func createRequest() -> URLRequest {
+        return URLRequest(subsonicAction: .getArtist, parameters: ["id": artistId])
     }
     
     override func processResponse(root: RXMLElement) {
