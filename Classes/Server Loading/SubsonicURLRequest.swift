@@ -74,25 +74,24 @@ extension URLRequest {
         let version = "1.13.0"
         
         // Setup the post body
-        var bodyString = "c=iSub&v=\(version)&u=\(username)&t=\(token)&s=\(salt)"
+        var parametersString = "?c=iSub&v=\(version)&u=\(username)&t=\(token)&s=\(salt)"
         if let parameters = parameters {
             for (key, value) in parameters {
                 if let value = value as? [Any] {
                     for subValue in value {
-                        bodyString += "&\(key)=\(encodedParameter(subValue))"
+                        parametersString += "&\(key)=\(encodedParameter(subValue))"
                     }
                 } else {
-                    bodyString += "&\(key)=\(encodedParameter(value))"
+                    parametersString += "&\(key)=\(encodedParameter(value))"
                 }
             }
         }
+        urlString += parametersString
         
         self.init(url: URL(string: urlString)!)
         self.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         self.timeoutInterval = subsonicAction.timeout
-        self.httpMethod = "POST"
-        self.httpBody = bodyString.data(using: .utf8)
-        self.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        self.httpMethod = "GET"
         self.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
         if byteOffset > 0 {
             self.setValue("bytes=\(byteOffset)-", forHTTPHeaderField: "Range")
@@ -105,5 +104,7 @@ extension URLRequest {
             let authValue = "Basic \(authData?.base64EncodedString())"
             self.setValue(authValue, forHTTPHeaderField: "Authorization")
         }
+        
+        print(self)
     }
 }

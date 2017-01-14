@@ -87,13 +87,7 @@
 		
 	//[self loadFlurryAnalytics];
 	[self loadHockeyApp];
-		    
-    // Check the server status in the background
-    if (!SavedSettings.si.isOfflineMode)
-    {
-        [self checkServer];
-    }
-        
+    
     // Recover current state if player was interrupted. Do not resume if we're connected to the test server
     // because music will start playing behind the intro screen.
     [ISMSStreamManager si];
