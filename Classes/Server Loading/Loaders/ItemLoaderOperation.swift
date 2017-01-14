@@ -10,10 +10,12 @@ import Foundation
 import Async
 
 class ItemLoaderOperation: Operation {
-    var loader: ItemLoader
+    fileprivate(set) var loader: ItemLoader
+    let onlyLoadIfNotExists: Bool
     
-    init(loader: ItemLoader) {
+    init(loader: ItemLoader, onlyLoadIfNotExists: Bool = true) {
         self.loader = loader
+        self.onlyLoadIfNotExists = true
         super.init()
     }
     
@@ -56,10 +58,24 @@ class ItemLoaderOperation: Operation {
     }
     
     func execute() {
-        self.loader.completionHandler = { _, _, _ in
-            self.finish()
+        var shouldLoad = true
+        if onlyLoadIfNotExists {
+            // Only load if it's not persisted
+            if let persistedModel = loader.associatedObject as? ISMSPersistedModel {
+                // If we have duplicate loaders in the queue, the first one should have a nil associated object
+                // and the second one should have isPersisted = true, so should skip loading.
+                shouldLoad = !persistedModel.isPersisted
+            }
         }
-        self.loader.start()
+        
+        if shouldLoad {
+            loader.completionHandler = { _, _, _ in
+                self.finish()
+            }
+            loader.start()
+        } else {
+            finish()
+        }
     }
     
     func finish() {

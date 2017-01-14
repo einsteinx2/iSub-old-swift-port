@@ -97,19 +97,16 @@ class FolderLoader: ApiLoader, ItemLoader {
         }
         
         // Load any needed models (ensure that artists load first)
-        let queue = SelfReferencingOperationQueue()
-        queue.maxConcurrentOperationCount = 1
-        
         for artistId in artistIds {
             let loader = ArtistLoader(artistId: artistId)
             let operation = ItemLoaderOperation(loader: loader)
-            queue.addOperation(operation)
+            ApiLoader.backgroundLoadingQueue.addOperation(operation)
         }
         
         for albumId in albumIds {
             let loader = AlbumLoader(albumId: albumId)
             let operation = ItemLoaderOperation(loader: loader)
-            queue.addOperation(operation)
+            ApiLoader.backgroundLoadingQueue.addOperation(operation)
         }
     }
     

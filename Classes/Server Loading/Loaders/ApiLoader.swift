@@ -26,6 +26,15 @@ typealias ApiLoaderCompletionHandler = (_ success: Bool, _ error: Error?, _ load
 }
 
 class ApiLoader: NSObject, URLSessionDataDelegate {
+    // Queue for background loading of additional models. I.e. If you load a folder, 
+    // to ensure you get all artist and album records needed
+    // TODO: Save the contents of this queue in case the app closes or crashes or the server goes down
+    static var backgroundLoadingQueue: OperationQueue = {
+        let operationQueue = OperationQueue()
+        operationQueue.maxConcurrentOperationCount = 1
+        return operationQueue
+    }()
+    
     var completionHandler: ApiLoaderCompletionHandler?
     var delegate: ApiLoaderDelegate?
     

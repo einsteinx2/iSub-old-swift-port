@@ -103,8 +103,6 @@ extension URLRequest {
             let authData = authString.data(using: .ascii)
             let authValue = "Basic \(authData?.base64EncodedString())"
             self.setValue(authValue, forHTTPHeaderField: "Authorization")
-        }
-        
-        print(self)
+        }        
     }
 }

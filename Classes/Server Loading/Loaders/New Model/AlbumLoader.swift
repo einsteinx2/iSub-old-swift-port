@@ -57,9 +57,6 @@ class AlbumLoader: ApiLoader, ItemLoader {
         }
         
         // Make sure all folder records are created if needed
-        let queue = SelfReferencingOperationQueue()
-        queue.maxConcurrentOperationCount = 1
-        
         var folderIds = Set<Int>()
         for song in songs {
             func performOperation(folderId: Int, mediaFolderId: Int) {
@@ -67,7 +64,7 @@ class AlbumLoader: ApiLoader, ItemLoader {
                     folderIds.insert(folderId)
                     let loader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
                     let operation = ItemLoaderOperation(loader: loader)
-                    queue.addOperation(operation)
+                    ApiLoader.backgroundLoadingQueue.addOperation(operation)
                 }
             }
             
