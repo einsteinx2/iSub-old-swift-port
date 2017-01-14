@@ -178,7 +178,7 @@ class MenuViewController: UITableViewController {
 // MARK: - Navigation Stack -
 
 fileprivate func sharedGestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer, self: UIViewController) -> Bool {
-    if self.navigationController?.viewControllers.count == 2 {
+    if self.navigationController?.viewControllers.count ?? 0 <= 2 {
         return true
     }
     
