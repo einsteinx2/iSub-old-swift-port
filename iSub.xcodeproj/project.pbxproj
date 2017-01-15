@@ -621,6 +621,10 @@
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
 		53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
+		53A418011E2C1D8500671330 /* MediaFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A418001E2C1D8500671330 /* MediaFolder.swift */; };
+		53A418021E2C1D8500671330 /* MediaFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A418001E2C1D8500671330 /* MediaFolder.swift */; };
+		53A418041E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A418031E2C1DAE00671330 /* MediaFolderRepository.swift */; };
+		53A418051E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A418031E2C1DAE00671330 /* MediaFolderRepository.swift */; };
 		53AA300411461A04003E57E3 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AA300311461A04003E57E3 /* background.png */; };
 		53AAF1C411DA983700447FF7 /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1C311DA983700447FF7 /* gear@2x.png */; };
 		53AAF1D911DA9DB600447FF7 /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53AAF1D811DA9DB600447FF7 /* background@2x.png */; };
@@ -1177,6 +1181,8 @@
 		539133531E29D53000B8A99E /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		539799781163084200F41D8B /* loading-screen-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image.png"; path = "Images/Other/loading-screen-image.png"; sourceTree = "<group>"; };
 		53A2BE27147DF13600E44822 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		53A418001E2C1D8500671330 /* MediaFolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaFolder.swift; sourceTree = "<group>"; };
+		53A418031E2C1DAE00671330 /* MediaFolderRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaFolderRepository.swift; sourceTree = "<group>"; };
 		53AA300311461A04003E57E3 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Images/Other/background.png; sourceTree = "<group>"; };
 		53AAF1C311DA983700447FF7 /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gear@2x.png"; path = "Images/Other/gear@2x.png"; sourceTree = "<group>"; };
 		53AAF1D811DA9DB600447FF7 /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "background@2x.png"; path = "Images/Other/background@2x.png"; sourceTree = "<group>"; };
@@ -2222,6 +2228,7 @@
 				53CFBB621E2AE18A005895F4 /* Album.swift */,
 				530D5A121E2C047500C9ED43 /* Song.swift */,
 				53CFBB7D1E2B3038005895F4 /* Genre.swift */,
+				53A418001E2C1D8500671330 /* MediaFolder.swift */,
 			);
 			name = "New Item Models";
 			sourceTree = "<group>";
@@ -2232,8 +2239,6 @@
 				53CFBB6C1E2B1605005895F4 /* Ported */,
 				531B32EE1E24CF8A00811187 /* ISMSContentType.h */,
 				531B32EF1E24CF8A00811187 /* ISMSContentType.m */,
-				531B32F61E24CF8A00811187 /* ISMSMediaFolder.h */,
-				531B32F71E24CF8A00811187 /* ISMSMediaFolder.m */,
 				531B32FB1E24CF8A00811187 /* Playlist.swift */,
 				531B32FD1E24CF8A00811187 /* Server.swift */,
 			);
@@ -2256,6 +2261,8 @@
 				531B32F41E24CF8A00811187 /* ISMSGenre.m */,
 				531B32F91E24CF8A00811187 /* ISMSSong.h */,
 				531B32FA1E24CF8A00811187 /* ISMSSong.m */,
+				531B32F61E24CF8A00811187 /* ISMSMediaFolder.h */,
+				531B32F71E24CF8A00811187 /* ISMSMediaFolder.m */,
 			);
 			name = Ported;
 			sourceTree = "<group>";
@@ -2312,6 +2319,7 @@
 				53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */,
 				530D5A0F1E2C044700C9ED43 /* SongRepository.swift */,
 				53CFBB801E2B3075005895F4 /* GenreRepository.swift */,
+				53A418031E2C1DAE00671330 /* MediaFolderRepository.swift */,
 				53CFBB611E2AE160005895F4 /* New Item Models */,
 			);
 			name = "Item Repositories";
@@ -2811,6 +2819,7 @@
 				53F107A61E2AD144003B7D59 /* Item.swift in Sources */,
 				530F04A91E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
 				530F04AB1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
+				53A418011E2C1D8500671330 /* MediaFolder.swift in Sources */,
 				531B33931E24CF8B00811187 /* CachedFolderLoader.swift in Sources */,
 				531B33F21E24D0B600811187 /* DraggableTableViewController.swift in Sources */,
 				5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
@@ -2961,6 +2970,7 @@
 				53835CE81E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				533B69DA1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				531B340A1E24D0B600811187 /* SidePanelController.swift in Sources */,
+				53A418041E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */,
 				539133541E29D53000B8A99E /* Data.swift in Sources */,
 				53CFBB691E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
 				53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
@@ -3068,6 +3078,7 @@
 				53F107A71E2AD144003B7D59 /* Item.swift in Sources */,
 				530F04AA1E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
 				530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
+				53A418021E2C1D8500671330 /* MediaFolder.swift in Sources */,
 				531B33941E24CF8B00811187 /* CachedFolderLoader.swift in Sources */,
 				531B33F31E24D0B600811187 /* DraggableTableViewController.swift in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
@@ -3218,6 +3229,7 @@
 				53835CEA1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
 				533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				531B340B1E24D0B600811187 /* SidePanelController.swift in Sources */,
+				53A418051E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */,
 				539133551E29D53000B8A99E /* Data.swift in Sources */,
 				53CFBB6A1E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
 				53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
