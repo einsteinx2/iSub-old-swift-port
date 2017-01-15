@@ -14,19 +14,25 @@ protocol ItemRepository {
     var itemId: String { get }
 }
 
-fileprivate func tableName(repository: ItemRepository, isCachedTable: Bool) -> String {
+func tableName(repository: ItemRepository, isCachedTable: Bool) -> String {
     return isCachedTable ? repository.cachedTable : repository.table
 }
 
 class GenericItemRepository {
     static var si = GenericItemRepository()
     
-    func item<T: PersistedItem>(repository: ItemRepository, itemId: Int, serverId: Int, loadSubItems: Bool = false) -> T? {
+    func item<T: PersistedItem>(repository: ItemRepository, itemId: Int, serverId: Int? = nil, loadSubItems: Bool = false) -> T? {
         func runQuery(db: FMDatabase, table: String) -> T? {
             var item: T? = nil
-            let query = "SELECT * FROM \(table) WHERE \(itemId) = ? AND serverId = ?"
+            var query = "SELECT * FROM \(table) WHERE \(itemId) = ?"
             do {
-                let result = try db.executeQuery(query, itemId, serverId)
+                let result: FMResultSet
+                if let serverId = serverId {
+                    query += " AND serverId = ?"
+                    result = try db.executeQuery(query, itemId, serverId)
+                } else {
+                    result = try db.executeQuery(query, itemId)
+                }
                 if result.next() {
                     item = T(result: result, repository: repository)
                 }
@@ -46,7 +52,7 @@ class GenericItemRepository {
         }
         
         if loadSubItems, let item = item {
-            item.loadSubitems()
+            item.loadSubItems()
         }
         
         return item
@@ -89,7 +95,7 @@ class GenericItemRepository {
         items.append(contentsOf: itemsNumbers)
         
         for item in items {
-            item.loadSubitems()
+            item.loadSubItems()
         }
         
         return items

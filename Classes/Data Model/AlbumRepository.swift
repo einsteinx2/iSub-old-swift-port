@@ -8,9 +8,6 @@
 
 import Foundation
 
-fileprivate let albumsTable = "albums"
-fileprivate let cachedAlbumsTable = "cachedAlbums"
-
 struct AlbumRepository: ItemRepository {
     static let si = AlbumRepository()
     fileprivate let gr = GenericItemRepository.si
@@ -46,7 +43,7 @@ struct AlbumRepository: ItemRepository {
     func albums(artistId: Int, serverId: Int, isCachedTable: Bool) -> [Album] {
         var albums = [Album]()
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            let table = isCachedTable ? cachedAlbumsTable : albumsTable
+            let table = tableName(repository: self, isCachedTable: isCachedTable)
             let query = "SELECT * FROM \(table) WHERE artistId = ? AND serverId = ?"
             do {
                 let result = try db.executeQuery(query, artistId, serverId)
@@ -66,7 +63,7 @@ struct AlbumRepository: ItemRepository {
         var success = true
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
-                let table = isCachedTable ? cachedAlbumsTable : albumsTable
+                let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 try db.executeUpdate(query, album.albumId, album.serverId, n2N(album.artistId), n2N(album.genreId), n2N(album.coverArtId), album.name, n2N(album.songCount), n2N(album.duration), n2N(album.year), n2N(album.created))
             } catch {
@@ -111,7 +108,7 @@ extension Album: PersistedItem {
         return repository.delete(album: self)
     }
     
-    func loadSubitems() {
+    func loadSubItems() {
         repository.loadSubItems(album: self)
     }
 }

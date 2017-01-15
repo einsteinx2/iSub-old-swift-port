@@ -39,20 +39,6 @@ class Album {
     
     var songs = [ISMSSong]()
     
-//    init(albumId: Int, serverId: Int, artistId: Int?, genreId: Int?, coverArtId: String?, name: String, songCount: Int?, duration: Int?, year: Int?, created: Date?, repository: AlbumRepository = AlbumRepository.si) {
-//        self.albumId = albumId
-//        self.serverId = serverId
-//        self.artistId = artistId
-//        self.genreId = genreId
-//        self.coverArtId = coverArtId
-//        self.name = name
-//        self.songCount = songCount
-//        self.duration = duration
-//        self.year = year
-//        self.created = created
-//        self.repository = repository
-//    }
-    
     init?(rxmlElement element: RXMLElement, serverId: Int, repository: AlbumRepository = AlbumRepository.si) {
         guard let albumId = element.attribute(asIntOptional: "id"), let name = element.attribute(asStringOptional: "name") else {
             return nil

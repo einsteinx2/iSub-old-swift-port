@@ -29,15 +29,6 @@ class Artist {
     
     var albums = [Album]()
     
-//    init(artistId: Int, serverId: Int, name: String, coverArtId: String?, albumCount: Int?, repository: ArtistRepository = ArtistRepository.si) {
-//        self.artistId = artistId
-//        self.serverId = serverId
-//        self.name = name
-//        self.coverArtId = coverArtId
-//        self.albumCount = albumCount
-//        self.repository = repository
-//    }
-    
     init?(rxmlElement element: RXMLElement, serverId: Int, repository: ArtistRepository = ArtistRepository.si) {
         guard let artistId = element.attribute(asIntOptional: "id"), let name = element.attribute(asStringOptional: "name") else {
             return nil

@@ -8,9 +8,6 @@
 
 import Foundation
 
-fileprivate let artistsTable = "artists"
-fileprivate let cachedArtistsTable = "cachedArtists"
-
 struct ArtistRepository: ItemRepository {
     static let si = ArtistRepository()
     fileprivate let gr = GenericItemRepository.si
@@ -47,7 +44,7 @@ struct ArtistRepository: ItemRepository {
         var success = true
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
-                let table = isCachedTable ? cachedArtistsTable : artistsTable
+                let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?)"
                 try db.executeUpdate(query, artist.artistId, artist.serverId, artist.name, n2N(artist.coverArtId), n2N(artist.albumCount))
             } catch {
@@ -84,7 +81,7 @@ extension Artist: PersistedItem {
         return repository.delete(artist: self)
     }
     
-    func loadSubitems() {
+    func loadSubItems() {
         repository.loadSubItems(artist: self)
     }
 }

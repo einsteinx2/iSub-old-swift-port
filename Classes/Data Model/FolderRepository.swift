@@ -8,9 +8,6 @@
 
 import Foundation
 
-fileprivate let foldersTable = "folders"
-fileprivate let cachedFoldersTable = "cachedFolders"
-
 struct FolderRepository: ItemRepository {
     static let si = FolderRepository()
     fileprivate let gr = GenericItemRepository.si
@@ -46,7 +43,7 @@ struct FolderRepository: ItemRepository {
     func folders(parentFolderId: Int, serverId: Int, isCachedTable: Bool) -> [Folder] {
         var folders = [Folder]()
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            let table = isCachedTable ? cachedFoldersTable : foldersTable
+            let table = tableName(repository: self, isCachedTable: isCachedTable)
             let query = "SELECT * FROM \(table) WHERE parentFolderId = ? AND serverId = ?"
             do {
                 let result = try db.executeQuery(query, parentFolderId, serverId)
@@ -66,7 +63,7 @@ struct FolderRepository: ItemRepository {
         var success = true
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
-                let table = isCachedTable ? cachedFoldersTable : foldersTable
+                let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?)"
                 try db.executeUpdate(query, folder.folderId, folder.serverId, n2N(folder.parentFolderId), n2N(folder.mediaFolderId), n2N(folder.coverArtId), folder.name)
             } catch {
@@ -104,7 +101,7 @@ extension Folder: PersistedItem {
         return repository.delete(folder: self)
     }
     
-    func loadSubitems() {
+    func loadSubItems() {
         repository.loadSubItems(folder: self)
     }
 }

@@ -756,6 +756,10 @@
 		53CFBB791E2B1E56005895F4 /* FolderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB771E2B1E56005895F4 /* FolderRepository.swift */; };
 		53CFBB7B1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB7A1E2B2F9E005895F4 /* GenericItemRepository.swift */; };
 		53CFBB7C1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB7A1E2B2F9E005895F4 /* GenericItemRepository.swift */; };
+		53CFBB7E1E2B3038005895F4 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB7D1E2B3038005895F4 /* Genre.swift */; };
+		53CFBB7F1E2B3038005895F4 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB7D1E2B3038005895F4 /* Genre.swift */; };
+		53CFBB811E2B3075005895F4 /* GenreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB801E2B3075005895F4 /* GenreRepository.swift */; };
+		53CFBB821E2B3075005895F4 /* GenreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB801E2B3075005895F4 /* GenreRepository.swift */; };
 		53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A261E1DC38400071ABD /* EX2Dispatch.m */; };
 		53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A261E1DC38400071ABD /* EX2Dispatch.m */; };
@@ -1217,6 +1221,8 @@
 		53CFBB741E2B1E3B005895F4 /* Folder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		53CFBB771E2B1E56005895F4 /* FolderRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderRepository.swift; sourceTree = "<group>"; };
 		53CFBB7A1E2B2F9E005895F4 /* GenericItemRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericItemRepository.swift; sourceTree = "<group>"; };
+		53CFBB7D1E2B3038005895F4 /* Genre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
+		53CFBB801E2B3075005895F4 /* GenreRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenreRepository.swift; sourceTree = "<group>"; };
 		53D44F8415AA621A00CDD3B8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		53D59A251E1DC38400071ABD /* EX2Dispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2Dispatch.h; sourceTree = "<group>"; };
 		53D59A261E1DC38400071ABD /* EX2Dispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2Dispatch.m; sourceTree = "<group>"; };
@@ -2208,6 +2214,7 @@
 				53CFBB741E2B1E3B005895F4 /* Folder.swift */,
 				53CFBB711E2B164F005895F4 /* Artist.swift */,
 				53CFBB621E2AE18A005895F4 /* Album.swift */,
+				53CFBB7D1E2B3038005895F4 /* Genre.swift */,
 			);
 			name = "New Item Models";
 			sourceTree = "<group>";
@@ -2218,11 +2225,6 @@
 				53CFBB6C1E2B1605005895F4 /* Ported */,
 				531B32EE1E24CF8A00811187 /* ISMSContentType.h */,
 				531B32EF1E24CF8A00811187 /* ISMSContentType.m */,
-				531B32F01E24CF8A00811187 /* ISMSDataModelObjects.h */,
-				531B32F11E24CF8A00811187 /* ISMSFolder.h */,
-				531B32F21E24CF8A00811187 /* ISMSFolder.m */,
-				531B32F31E24CF8A00811187 /* ISMSGenre.h */,
-				531B32F41E24CF8A00811187 /* ISMSGenre.m */,
 				531B32F61E24CF8A00811187 /* ISMSMediaFolder.h */,
 				531B32F71E24CF8A00811187 /* ISMSMediaFolder.m */,
 				531B32F91E24CF8A00811187 /* ISMSSong.h */,
@@ -2236,12 +2238,17 @@
 		53CFBB6C1E2B1605005895F4 /* Ported */ = {
 			isa = PBXGroup;
 			children = (
+				531B32F01E24CF8A00811187 /* ISMSDataModelObjects.h */,
 				531B32F51E24CF8A00811187 /* ISMSItem.h */,
 				531B32F81E24CF8A00811187 /* ISMSPersistedModel.h */,
+				531B32F11E24CF8A00811187 /* ISMSFolder.h */,
+				531B32F21E24CF8A00811187 /* ISMSFolder.m */,
 				531B32EA1E24CF8A00811187 /* ISMSAlbum.h */,
 				531B32EB1E24CF8A00811187 /* ISMSAlbum.m */,
 				531B32EC1E24CF8A00811187 /* ISMSArtist.h */,
 				531B32ED1E24CF8A00811187 /* ISMSArtist.m */,
+				531B32F31E24CF8A00811187 /* ISMSGenre.h */,
+				531B32F41E24CF8A00811187 /* ISMSGenre.m */,
 			);
 			name = Ported;
 			sourceTree = "<group>";
@@ -2296,6 +2303,7 @@
 				53CFBB771E2B1E56005895F4 /* FolderRepository.swift */,
 				53CFBB6E1E2B1628005895F4 /* ArtistRepository.swift */,
 				53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */,
+				53CFBB801E2B3075005895F4 /* GenreRepository.swift */,
 				53CFBB611E2AE160005895F4 /* New Item Models */,
 			);
 			name = "Item Repositories";
@@ -2853,6 +2861,7 @@
 				531B33871E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */,
 				533B69D61E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				531B33DA1E24CFAF00811187 /* URL.swift in Sources */,
+				53CFBB7E1E2B3038005895F4 /* Genre.swift in Sources */,
 				531B34001E24D0B600811187 /* MenuViewController.swift in Sources */,
 				53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				531B335D1E24CF8B00811187 /* BassParamEqValue.m in Sources */,
@@ -2904,6 +2913,7 @@
 				53CFBB661E2AE203005895F4 /* RXMLElement.swift in Sources */,
 				531B33BF1E24CF8B00811187 /* PlayQueue.swift in Sources */,
 				531B33B51E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */,
+				53CFBB811E2B3075005895F4 /* GenreRepository.swift in Sources */,
 				53835CA71E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				53CFBB781E2B1E56005895F4 /* FolderRepository.swift in Sources */,
 				53CFBB7B1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */,
@@ -3106,6 +3116,7 @@
 				531B33881E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */,
 				533B69D71E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				531B33DB1E24CFAF00811187 /* URL.swift in Sources */,
+				53CFBB7F1E2B3038005895F4 /* Genre.swift in Sources */,
 				531B34011E24D0B600811187 /* MenuViewController.swift in Sources */,
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				531B335E1E24CF8B00811187 /* BassParamEqValue.m in Sources */,
@@ -3157,6 +3168,7 @@
 				53CFBB671E2AE203005895F4 /* RXMLElement.swift in Sources */,
 				531B33C01E24CF8B00811187 /* PlayQueue.swift in Sources */,
 				531B33B61E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */,
+				53CFBB821E2B3075005895F4 /* GenreRepository.swift in Sources */,
 				53835CA91E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				53CFBB791E2B1E56005895F4 /* FolderRepository.swift in Sources */,
 				53CFBB7C1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */,
