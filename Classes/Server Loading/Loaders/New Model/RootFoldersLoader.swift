@@ -29,7 +29,7 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
         return URLRequest(subsonicAction: .getIndexes, parameters: parameters)
     }
     
-    override func processResponse(root: RXMLElement) {
+    override func processResponse(root: RXMLElement) -> Bool {
         var foldersTemp = [ISMSFolder]()
         var songsTemp = [ISMSSong]()
         
@@ -57,6 +57,8 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
         songs = songsTemp
         
         self.persistModels()
+        
+        return true
     }
     
     func persistModels() {

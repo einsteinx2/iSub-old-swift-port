@@ -9,6 +9,10 @@
 import Foundation
 
 class RootAlbumsLoader: ApiLoader, ItemLoader {
+    // 500 is the maximum size supported by Subsonic
+    fileprivate let size = 500
+    fileprivate var offset = 0
+    
     var albums = [ISMSAlbum]()
     
     var associatedObject: Any?
@@ -18,10 +22,11 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
     }
     
     override func createRequest() -> URLRequest {
-        return URLRequest(subsonicAction: .getAlbumList2, parameters: ["type": "alphabeticalByName"])
+        let parameters = ["type": "alphabeticalByName", "offset": "\(offset)", "size":"\(size)"]
+        return URLRequest(subsonicAction: .getAlbumList2, parameters: parameters)
     }
     
-    override func processResponse(root: RXMLElement) {
+    override func processResponse(root: RXMLElement) -> Bool {
         var albumsTemp = [ISMSAlbum]()
         
         let serverId = SavedSettings.si().currentServerId
@@ -30,18 +35,31 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
             albumsTemp.append(anAlbum)
         }
         
-        albums = albumsTemp
+        if offset == 0 {
+            albums = albumsTemp
+        } else {
+            albums.append(contentsOf: albumsTemp)
+        }
         
-        self.persistModels()
+        // Check if we have all albums, if not, keep paging
+        if albumsTemp.count < size {
+            self.persistModels()
+            return true
+        } else {
+            offset += size
+            self.state = .new
+            self.start()
+            return false
+        }
     }
     
     func persistModels() {
-        // Remove existing artists
+        // Remove existing albums
         let serverId = SavedSettings.si().currentServerId as NSNumber
         ISMSAlbum.deleteAllAlbums(withServerId: serverId)
         
-        // Save the new artists
-        albums.forEach({$0.insert()})
+        // Save the new albums
+        albums.forEach({$0.replace()})
     }
     
     func loadModelsFromDatabase() -> Bool {

@@ -21,7 +21,7 @@ class MediaFoldersLoader: ApiLoader, ItemLoader {
         return URLRequest(subsonicAction: .getMusicFolders)
     }
     
-    override func processResponse(root: RXMLElement) {
+    override func processResponse(root: RXMLElement) -> Bool {
         var mediaFoldersTemp = [ISMSMediaFolder]()
         
         let serverId = SavedSettings.si().currentServerId
@@ -32,6 +32,8 @@ class MediaFoldersLoader: ApiLoader, ItemLoader {
         mediaFolders = mediaFoldersTemp
         
         self.persistModels()
+        
+        return true
     }
     
     func persistModels() {

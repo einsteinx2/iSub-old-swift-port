@@ -30,7 +30,7 @@ class FolderLoader: ApiLoader, ItemLoader {
         return URLRequest(subsonicAction: .getMusicDirectory, parameters: ["id": folderId])
     }
     
-    override func processResponse(root: RXMLElement) {
+    override func processResponse(root: RXMLElement) -> Bool {
         var songsDurationTemp = 0.0
         var foldersTemp = [ISMSFolder]()
         var songsTemp = [ISMSSong]()
@@ -63,6 +63,8 @@ class FolderLoader: ApiLoader, ItemLoader {
         }
         
         self.persistModels()
+        
+        return true
     }
     
     func persistModels() {

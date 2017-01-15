@@ -38,7 +38,7 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
     var completionHandler: ApiLoaderCompletionHandler?
     var delegate: ApiLoaderDelegate?
     
-    fileprivate(set) var state = ApiLoaderState.new
+    var state: ApiLoaderState = .new
     fileprivate(set) var redirectUrl: URL?
     
     var redirectUrlString: String? {
@@ -88,7 +88,8 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
         fatalError("Must override in subclass")
     }
     
-    func processResponse(root: RXMLElement) {
+    // Return success to call finished. Otherwise, the loader can reload itself for paged API calls.
+    func processResponse(root: RXMLElement) -> Bool {
         fatalError("Must override in subclass")
     }
     
@@ -190,9 +191,10 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
                     self.failed(error: error)
                 }
             } else {
-                processResponse(root: root)
-                Async.main {
-                    self.finished()
+                if processResponse(root: root) {
+                    Async.main {
+                        self.finished()
+                    }
                 }
             }
         }

@@ -21,7 +21,7 @@ class RootPlaylistsLoader: ApiLoader, ItemLoader {
         return URLRequest(subsonicAction: .getPlaylists)
     }
     
-    override func processResponse(root: RXMLElement) {
+    override func processResponse(root: RXMLElement) -> Bool {
         var playlistsTemp = [Playlist]()
         
         let serverId = SavedSettings.si().currentServerId
@@ -35,6 +35,8 @@ class RootPlaylistsLoader: ApiLoader, ItemLoader {
         self.persistModels()
         
         self.finished()
+        
+        return true
     }
     
     func persistModels() {

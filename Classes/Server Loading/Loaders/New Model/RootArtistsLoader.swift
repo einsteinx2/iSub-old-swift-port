@@ -22,7 +22,7 @@ class RootArtistsLoader: ApiLoader, ItemLoader {
         return URLRequest(subsonicAction: .getArtists)
     }
     
-    override func processResponse(root: RXMLElement) {
+    override func processResponse(root: RXMLElement) -> Bool {
         var artistsTemp = [ISMSArtist]()
         
         let serverId = SavedSettings.si().currentServerId
@@ -41,6 +41,8 @@ class RootArtistsLoader: ApiLoader, ItemLoader {
         artists = artistsTemp
         
         self.persistModels()
+        
+        return true
     }
     
     func persistModels() {

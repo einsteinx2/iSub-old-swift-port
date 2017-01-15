@@ -26,7 +26,7 @@ class AlbumLoader: ApiLoader, ItemLoader {
         return URLRequest(subsonicAction: .getAlbum, parameters: ["id": albumId])
     }
     
-    override func processResponse(root: RXMLElement) {
+    override func processResponse(root: RXMLElement) -> Bool {
         var songsTemp = [ISMSSong]()
         
         let serverId = SavedSettings.si().currentServerId
@@ -45,6 +45,8 @@ class AlbumLoader: ApiLoader, ItemLoader {
         }
         
         self.persistModels()
+        
+        return true
     }
     
     func persistModels() {

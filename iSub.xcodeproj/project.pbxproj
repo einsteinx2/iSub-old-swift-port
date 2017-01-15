@@ -1729,9 +1729,9 @@
 		531B33121E24CF8A00811187 /* Cache Loaders */ = {
 			isa = PBXGroup;
 			children = (
+				531B33171E24CF8A00811187 /* CachedDatabaseLoader.swift */,
 				531B33151E24CF8A00811187 /* CachedAlbumLoader.swift */,
 				531B33161E24CF8A00811187 /* CachedArtistLoader.swift */,
-				531B33171E24CF8A00811187 /* CachedDatabaseLoader.swift */,
 				531B33181E24CF8A00811187 /* CachedFolderLoader.swift */,
 				531B33191E24CF8A00811187 /* CachedRootAlbumsLoader.swift */,
 				531B331A1E24CF8A00811187 /* CachedRootArtistsLoader.swift */,

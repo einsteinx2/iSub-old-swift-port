@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Async
 
 // TODO: Make sure that the status loader completes before making any other API calls, that way we have the correct redirect URL.
 class StatusLoader: ApiLoader {
@@ -38,7 +39,7 @@ class StatusLoader: ApiLoader {
         return URLRequest(subsonicAction: .ping, baseUrl: url, username: username, password: password)    
     }
     
-    override func processResponse(root: RXMLElement) {
+    override func processResponse(root: RXMLElement) -> Bool {
         if root.tag == "subsonic-response" {
             self.versionString = root.attribute("version")
             if let versionString = self.versionString {
@@ -50,12 +51,16 @@ class StatusLoader: ApiLoader {
                         self.minorVersion = Int(splitVersion[1])
                     }
                 }
-            }            
+            }
+            return true
         }
         else
         {
             // This is not a Subsonic server, so fail
-            self.failed(error: NSError(ismsCode: ISMSErrorCode_NotASubsonicServer))
+            Async.main {
+                self.failed(error: NSError(ismsCode: ISMSErrorCode_NotASubsonicServer))
+            }
+            return false
         }
     }
     
