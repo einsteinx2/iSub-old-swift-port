@@ -64,26 +64,13 @@ struct AlbumRepository: ItemRepository {
         return albums
     }
     
-    fileprivate func subsonicSorted(albums: [Album], ignoredArticles: [String]) -> [Album] {
-        return albums.sorted {
-            var name1 = DatabaseSingleton.si().name($0.name.lowercased(), ignoringArticles: ignoredArticles)
-            name1 = name1.replacingOccurrences(of: " ", with: "")
-            name1 = name1.replacingOccurrences(of: "-", with: "")
-            
-            var name2 = DatabaseSingleton.si().name($1.name.lowercased(), ignoringArticles: ignoredArticles)
-            name2 = name2.replacingOccurrences(of: " ", with: "")
-            name2 = name2.replacingOccurrences(of: "-", with: "")
-            
-            return name1 < name2
-        }
-    }
-    
-    func allAlbums(serverId: Int?) -> [Album] {
+    func allAlbums(serverId: Int? = nil, isCachedTable: Bool = false) -> [Album] {
         let ignoredArticles = DatabaseSingleton.si().ignoredArticles()
         var albums = [Album]()
         var albumsNumbers = [Album]()
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            var query = "SELECT * FROM \(albumsTable)"
+            let table = isCachedTable ? cachedAlbumsTable : albumsTable
+            var query = "SELECT * FROM \(table)"
             do {
                 let result: FMResultSet
                 if let serverId = serverId {
@@ -110,43 +97,7 @@ struct AlbumRepository: ItemRepository {
             }
         }
         
-        albums = subsonicSorted(albums: albums, ignoredArticles: ignoredArticles)
-        albums.append(contentsOf: albumsNumbers)
-        
-        for album in albums {
-            album.loadSubitems()
-        }
-        
-        return albums
-    }
-    
-    func allCachedAlbums() -> [Album] {
-        let ignoredArticles = DatabaseSingleton.si().ignoredArticles()
-        var albums = [Album]()
-        var albumsNumbers = [Album]()
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            let query = "SELECT * FROM \(cachedAlbumsTable)"
-            do {
-                let result = try db.executeQuery(query)
-                while result.next() {
-                    let album = Album(result: result)
-                    let name = DatabaseSingleton.si().name(album.name, ignoringArticles: ignoredArticles)
-                    if let firstScalar = name.unicodeScalars.first {
-                        if CharacterSet.letters.contains(firstScalar) {
-                            albums.append(album)
-                        } else {
-                            albumsNumbers.append(album)
-                        }
-                    }
-
-                }
-                result.close()
-            } catch {
-                print("DB Error: \(error)")
-            }
-        }
-        
-        albums = subsonicSorted(albums: albums, ignoredArticles: ignoredArticles)
+        albums = subsonicSorted(items: albums, ignoredArticles: ignoredArticles)
         albums.append(contentsOf: albumsNumbers)
         
         for album in albums {

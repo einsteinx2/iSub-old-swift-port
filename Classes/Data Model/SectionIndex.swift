@@ -8,10 +8,10 @@
 
 import Foundation
 
-open class SectionIndex {
-    open var firstIndex: Int
-    open var sectionCount: Int
-    open var letter: String
+struct SectionIndex {
+    var firstIndex: Int
+    var sectionCount: Int
+    var letter: String
     
     init (firstIndex: Int, sectionCount: Int, letter: String) {
         self.firstIndex = firstIndex
@@ -19,7 +19,7 @@ open class SectionIndex {
         self.letter = letter
     }
     
-    open class func sectionIndexesForItems(_ items: [ISMSItem]?) -> [SectionIndex] {
+    static func sectionIndexesForItems(_ items: [ISMSItem]?) -> [SectionIndex] {
         guard let items = items else {
             return []
         }
@@ -48,7 +48,7 @@ open class SectionIndex {
                 if lastFirstLetter != firstLetter {
                     lastFirstLetter = firstLetter
                     
-                    if let last = sectionIndexes.last {
+                    if var last = sectionIndexes.last {
                         last.sectionCount = count
                         sectionIndexes.removeLast()
                         sectionIndexes.append(last)
@@ -63,7 +63,7 @@ open class SectionIndex {
             }
         }
         
-        if let last = sectionIndexes.last {
+        if var last = sectionIndexes.last {
             last.sectionCount = count
             sectionIndexes.removeLast()
             sectionIndexes.append(last)

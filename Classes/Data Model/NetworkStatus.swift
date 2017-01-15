@@ -9,7 +9,7 @@
 import Foundation
 import Reachability
 
-@objc class NetworkStatus: NSObject {
+class NetworkStatus: NSObject {
     let reachability = Reachability()
     
     var isReachable: Bool {
