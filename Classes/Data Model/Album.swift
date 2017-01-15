@@ -37,7 +37,7 @@ class Album {
     var artist: ISMSArtist?
     var genre: ISMSGenre?
     
-    var songs: [ISMSSong]?
+    var songs = [ISMSSong]()
     
     init(albumId: Int, serverId: Int, artistId: Int?, genreId: Int?, coverArtId: String?, name: String, songCount: Int?, duration: Int?, year: Int?, created: Date?, repository: AlbumRepository = AlbumRepository.si) {
         self.albumId = albumId

@@ -27,7 +27,7 @@ class Artist {
     let coverArtId: String?
     let albumCount: Int?
     
-    var albums: [Album]?
+    var albums = [Album]()
     
     init(artistId: Int, serverId: Int, name: String, coverArtId: String?, albumCount: Int?, repository: ArtistRepository = ArtistRepository.si) {
         self.artistId = artistId
