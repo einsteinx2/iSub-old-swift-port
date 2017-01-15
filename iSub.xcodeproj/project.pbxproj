@@ -740,6 +740,14 @@
 		53C7FDA0150F0EAF008DA51C /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C7FD9C150F0E94008DA51C /* MessageUI.framework */; };
 		53CE503F1E20194100E5DC68 /* BCCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CE503E1E20194100E5DC68 /* BCCKeychain.m */; };
 		53CE50411E20194100E5DC68 /* BCCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CE503E1E20194100E5DC68 /* BCCKeychain.m */; };
+		53CFBB5F1E2AE14D005895F4 /* ItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB5E1E2AE14D005895F4 /* ItemRepository.swift */; };
+		53CFBB601E2AE14D005895F4 /* ItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB5E1E2AE14D005895F4 /* ItemRepository.swift */; };
+		53CFBB631E2AE18A005895F4 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB621E2AE18A005895F4 /* Album.swift */; };
+		53CFBB641E2AE18A005895F4 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB621E2AE18A005895F4 /* Album.swift */; };
+		53CFBB661E2AE203005895F4 /* RXMLElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB651E2AE203005895F4 /* RXMLElement.swift */; };
+		53CFBB671E2AE203005895F4 /* RXMLElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB651E2AE203005895F4 /* RXMLElement.swift */; };
+		53CFBB691E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB681E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift */; };
+		53CFBB6A1E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB681E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift */; };
 		53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A261E1DC38400071ABD /* EX2Dispatch.m */; };
 		53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A261E1DC38400071ABD /* EX2Dispatch.m */; };
@@ -784,6 +792,10 @@
 		53D9D25C16DEF87B002F55F7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24516DEF839002F55F7 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53DE598314F1932C00206529 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
 		53DE598514F1933800206529 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
+		53F107A21E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */; };
+		53F107A31E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */; };
+		53F107A61E2AD144003B7D59 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A51E2AD144003B7D59 /* Item.swift */; };
+		53F107A71E2AD144003B7D59 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A51E2AD144003B7D59 /* Item.swift */; };
 		53F675D8113B092C00822059 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675D7113B092C00822059 /* MediaPlayer.framework */; };
 		53F675DC113B093900822059 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675DB113B093900822059 /* CFNetwork.framework */; };
 		53F675E2113B095900822059 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E1113B095900822059 /* QuartzCore.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -1189,6 +1201,10 @@
 		53C7FD9C150F0E94008DA51C /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		53CE503D1E20194100E5DC68 /* BCCKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCCKeychain.h; sourceTree = "<group>"; };
 		53CE503E1E20194100E5DC68 /* BCCKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCCKeychain.m; sourceTree = "<group>"; };
+		53CFBB5E1E2AE14D005895F4 /* ItemRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemRepository.swift; sourceTree = "<group>"; };
+		53CFBB621E2AE18A005895F4 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		53CFBB651E2AE203005895F4 /* RXMLElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXMLElement.swift; sourceTree = "<group>"; };
+		53CFBB681E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDatabasePoolAdditionsVariadic.swift; sourceTree = "<group>"; };
 		53D44F8415AA621A00CDD3B8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		53D59A251E1DC38400071ABD /* EX2Dispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2Dispatch.h; sourceTree = "<group>"; };
 		53D59A261E1DC38400071ABD /* EX2Dispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2Dispatch.m; sourceTree = "<group>"; };
@@ -1226,6 +1242,8 @@
 		53D9D24916DEF843002F55F7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		53D9D24B16DEF847002F55F7 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		53DE598214F1932C00206529 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumRepository.swift; sourceTree = "<group>"; };
+		53F107A51E2AD144003B7D59 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		53F1412015FD550C004D00D5 /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = buildnumber.xcconfig; path = Other/buildnumber.xcconfig; sourceTree = "<group>"; };
 		53F675D7113B092C00822059 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		53F675DB113B093900822059 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -1625,8 +1643,11 @@
 		531B32E81E24CF8A00811187 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
+				53F107A41E2ACDDC003B7D59 /* Repositories */,
 				531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */,
 				531B32E91E24CF8A00811187 /* CachedImage.swift */,
+				531B32F51E24CF8A00811187 /* ISMSItem.h */,
+				531B32F81E24CF8A00811187 /* ISMSPersistedModel.h */,
 				531B32EA1E24CF8A00811187 /* ISMSAlbum.h */,
 				531B32EB1E24CF8A00811187 /* ISMSAlbum.m */,
 				531B32EC1E24CF8A00811187 /* ISMSArtist.h */,
@@ -1638,10 +1659,8 @@
 				531B32F21E24CF8A00811187 /* ISMSFolder.m */,
 				531B32F31E24CF8A00811187 /* ISMSGenre.h */,
 				531B32F41E24CF8A00811187 /* ISMSGenre.m */,
-				531B32F51E24CF8A00811187 /* ISMSItem.h */,
 				531B32F61E24CF8A00811187 /* ISMSMediaFolder.h */,
 				531B32F71E24CF8A00811187 /* ISMSMediaFolder.m */,
-				531B32F81E24CF8A00811187 /* ISMSPersistedModel.h */,
 				531B32F91E24CF8A00811187 /* ISMSSong.h */,
 				531B32FA1E24CF8A00811187 /* ISMSSong.m */,
 				531B32FB1E24CF8A00811187 /* Playlist.swift */,
@@ -1664,6 +1683,7 @@
 				531B342E1E24D20300811187 /* UINavigationBar+FixedHeightWhenStatusBarHidden.m */,
 				531B345C1E24D34C00811187 /* NSError+ISMSError.h */,
 				531B345D1E24D34C00811187 /* NSError+ISMSError.m */,
+				53CFBB651E2AE203005895F4 /* RXMLElement.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1859,6 +1879,7 @@
 			isa = PBXGroup;
 			children = (
 				531B34401E24D24600811187 /* FMDatabaseAdditionsVariadic.swift */,
+				53CFBB681E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift */,
 				531B34411E24D24600811187 /* FMDatabaseVariadic.swift */,
 			);
 			path = "Swift extensions";
@@ -2186,6 +2207,15 @@
 			path = Frameworks/BCCKeychain;
 			sourceTree = "<group>";
 		};
+		53CFBB611E2AE160005895F4 /* New Models */ = {
+			isa = PBXGroup;
+			children = (
+				53F107A51E2AD144003B7D59 /* Item.swift */,
+				53CFBB621E2AE18A005895F4 /* Album.swift */,
+			);
+			name = "New Models";
+			sourceTree = "<group>";
+		};
 		53D59A241E1DC33700071ABD /* EX2Kit */ = {
 			isa = PBXGroup;
 			children = (
@@ -2227,6 +2257,16 @@
 			);
 			name = EX2Kit;
 			path = Frameworks/EX2Kit;
+			sourceTree = "<group>";
+		};
+		53F107A41E2ACDDC003B7D59 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				53CFBB5E1E2AE14D005895F4 /* ItemRepository.swift */,
+				53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */,
+				53CFBB611E2AE160005895F4 /* New Models */,
+			);
+			name = Repositories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2720,6 +2760,7 @@
 				53CE503F1E20194100E5DC68 /* BCCKeychain.m in Sources */,
 				531B33BB1E24CF8B00811187 /* LoadingScreen.m in Sources */,
 				531B33A91E24CF8B00811187 /* RootPlaylistsLoader.swift in Sources */,
+				53F107A61E2AD144003B7D59 /* Item.swift in Sources */,
 				530F04A91E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
 				530F04AB1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				531B33931E24CF8B00811187 /* CachedFolderLoader.swift in Sources */,
@@ -2824,11 +2865,14 @@
 				531B33531E24CF8B00811187 /* BassStream.m in Sources */,
 				531B342F1E24D20300811187 /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				531B33A51E24CF8B00811187 /* RootArtistsLoader.swift in Sources */,
+				53F107A21E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
 				531B33AB1E24CF8B00811187 /* StatusLoader.swift in Sources */,
+				53CFBB661E2AE203005895F4 /* RXMLElement.swift in Sources */,
 				531B33BF1E24CF8B00811187 /* PlayQueue.swift in Sources */,
 				531B33B51E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */,
 				53835CA71E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				531B33FA1E24D0B600811187 /* ItemViewModel.swift in Sources */,
+				53CFBB631E2AE18A005895F4 /* Album.swift in Sources */,
 				531B33751E24CF8B00811187 /* Server.swift in Sources */,
 				531B346B1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */,
 				531B33811E24CF8B00811187 /* ISMSStreamManager.m in Sources */,
@@ -2839,6 +2883,7 @@
 				53835CC01E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				531B336D1E24CF8B00811187 /* ISMSMediaFolder.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
+				53CFBB5F1E2AE14D005895F4 /* ItemRepository.swift in Sources */,
 				531B34201E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCA1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				531B334F1E24CF8B00811187 /* AudioEngine.m in Sources */,
@@ -2861,6 +2906,7 @@
 				533B69DA1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				531B340A1E24D0B600811187 /* SidePanelController.swift in Sources */,
 				539133541E29D53000B8A99E /* Data.swift in Sources */,
+				53CFBB691E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
 				53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33771E24CF8B00811187 /* String.swift in Sources */,
@@ -2963,6 +3009,7 @@
 				53CE50411E20194100E5DC68 /* BCCKeychain.m in Sources */,
 				531B33BC1E24CF8B00811187 /* LoadingScreen.m in Sources */,
 				531B33AA1E24CF8B00811187 /* RootPlaylistsLoader.swift in Sources */,
+				53F107A71E2AD144003B7D59 /* Item.swift in Sources */,
 				530F04AA1E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
 				530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				531B33941E24CF8B00811187 /* CachedFolderLoader.swift in Sources */,
@@ -3067,11 +3114,14 @@
 				531B33541E24CF8B00811187 /* BassStream.m in Sources */,
 				531B34301E24D20300811187 /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
 				531B33A61E24CF8B00811187 /* RootArtistsLoader.swift in Sources */,
+				53F107A31E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
 				531B33AC1E24CF8B00811187 /* StatusLoader.swift in Sources */,
+				53CFBB671E2AE203005895F4 /* RXMLElement.swift in Sources */,
 				531B33C01E24CF8B00811187 /* PlayQueue.swift in Sources */,
 				531B33B61E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */,
 				53835CA91E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				531B33FB1E24D0B600811187 /* ItemViewModel.swift in Sources */,
+				53CFBB641E2AE18A005895F4 /* Album.swift in Sources */,
 				531B33761E24CF8B00811187 /* Server.swift in Sources */,
 				531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */,
 				531B33821E24CF8B00811187 /* ISMSStreamManager.m in Sources */,
@@ -3082,6 +3132,7 @@
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				531B336E1E24CF8B00811187 /* ISMSMediaFolder.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,
+				53CFBB601E2AE14D005895F4 /* ItemRepository.swift in Sources */,
 				531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				531B33501E24CF8B00811187 /* AudioEngine.m in Sources */,
@@ -3104,6 +3155,7 @@
 				533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */,
 				531B340B1E24D0B600811187 /* SidePanelController.swift in Sources */,
 				539133551E29D53000B8A99E /* Data.swift in Sources */,
+				53CFBB6A1E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
 				53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33781E24CF8B00811187 /* String.swift in Sources */,

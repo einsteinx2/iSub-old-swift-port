@@ -10,7 +10,7 @@
 
 @interface NSString (Clean)
 
-- (NSString *)cleanString;
-- (NSString *)trimString;
+- (nonnull NSString *)cleanString;
+- (nonnull NSString *)trimString;
 
 @end

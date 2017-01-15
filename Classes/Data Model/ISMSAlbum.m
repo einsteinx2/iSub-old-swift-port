@@ -277,8 +277,8 @@
 #pragma mark - ISMSPersistedModel -
 
 - (BOOL)hasCachedSongs {
-    NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE albumId = ?";
-    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.albumId];
+    NSString *query = @"SELECT COUNT(*) FROM cachedSongs WHERE albumId = ? AND serverId = ?";
+    return [DatabaseSingleton.si.songModelReadDbPool boolForQuery:query, self.albumId, self.serverId];
 }
 
 + (BOOL)isPersisted:(NSNumber *)albumId serverId:(NSNumber *)serverId {

@@ -22,7 +22,7 @@ public func printError(_ error: Any, file: String = #file, line: Int = #line, fu
 // Returns NSNull if the input is nil. Useful for things like db queries.
 // TODO: Figure out why FMDB in Swift won't take nil arguments in var args functions
 public func n2N(_ nullableObject: Any?) -> Any {
-    return nullableObject == nil ? NSNull() : nullableObject!
+    return nullableObject ?? NSNull()
 }
 
 // Backfill for iOS 9

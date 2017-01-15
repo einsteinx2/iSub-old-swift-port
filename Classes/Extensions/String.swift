@@ -95,4 +95,8 @@ public extension String {
             return self
         }
     }
+    
+    var clean: String {
+        return (self as NSString).clean()
+    }
 }
