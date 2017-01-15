@@ -68,6 +68,10 @@ struct GenreRepository: ItemRepository {
 }
 
 extension Genre: PersistedItem {
+    class func item(itemId: Int, serverId: Int, repository: ItemRepository = GenreRepository.si) -> Item? {
+        return (repository as? GenreRepository)?.genre(genreId: itemId)
+    }
+    
     var isPersisted: Bool {
         return repository.isPersisted(genre: self)
     }

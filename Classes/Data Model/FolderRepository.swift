@@ -76,11 +76,15 @@ struct FolderRepository: ItemRepository {
     
     func loadSubItems(folder: Folder) {
         folder.folders = folders(parentFolderId: folder.folderId, serverId: folder.serverId, isCachedTable: false)
-        folder.songs = ISMSSong.songs(inFolder: folder.folderId, serverId: folder.serverId, cachedTable: false)
+        folder.songs = SongRepository.si.songs(folderId: folder.folderId, serverId: folder.serverId, isCachedTable: false)
     }
 }
 
 extension Folder: PersistedItem {
+    class func item(itemId: Int, serverId: Int, repository: ItemRepository = FolderRepository.si) -> Item? {
+        return (repository as? FolderRepository)?.folder(folderId: itemId, serverId: serverId)
+    }
+    
     var isPersisted: Bool {
         return repository.isPersisted(folder: self)
     }

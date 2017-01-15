@@ -76,18 +76,22 @@ struct AlbumRepository: ItemRepository {
     
     func loadSubItems(album: Album) {
         if let artistId = album.artistId {
-            album.artist = ISMSArtist(artistId: artistId, serverId: album.serverId, loadSubmodels: false)
+            album.artist = ArtistRepository.si.artist(artistId: artistId, serverId: album.serverId, loadSubItems: false)
         }
  
         if let genreId = album.genreId {
-            album.genre = ISMSGenre(genreId: genreId)
+            album.genre = GenreRepository.si.genre(genreId: genreId)
         }
         
-        album.songs = ISMSSong.songs(inAlbum: album.albumId, serverId: album.serverId, cachedTable: false)
+        album.songs = SongRepository.si.songs(albumId: album.albumId, serverId: album.serverId, isCachedTable: false)
     }
 }
 
 extension Album: PersistedItem {
+    class func item(itemId: Int, serverId: Int, repository: ItemRepository = AlbumRepository.si) -> Item? {
+        return (repository as? AlbumRepository)?.album(albumId: itemId, serverId: serverId)
+    }
+    
     var isPersisted: Bool {
         return repository.isPersisted(album: self)
     }

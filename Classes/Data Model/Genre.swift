@@ -12,10 +12,6 @@ extension Genre: Item {
     var itemId: Int { return genreId }
     var itemName: String { return name }
     var serverId: Int { return -1 }
-    
-    class func item(itemId: Int, serverId: Int, repository: ItemRepository = GenreRepository.si) -> Item? {
-        return (repository as? GenreRepository)?.genre(genreId: itemId)
-    }
 }
 
 class Genre {

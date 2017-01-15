@@ -11,10 +11,6 @@ import Foundation
 extension Folder: Item {
     var itemId: Int { return folderId }
     var itemName: String { return name }
-    
-    class func item(itemId: Int, serverId: Int, repository: ItemRepository = FolderRepository.si) -> Item? {
-        return (repository as? FolderRepository)?.folder(folderId: itemId, serverId: serverId)
-    }
 }
 
 class Folder {
@@ -30,7 +26,7 @@ class Folder {
     let name: String
     
     var folders = [Folder]()
-    var songs = [ISMSSong]()
+    var songs = [Song]()
     
     required init(result: FMResultSet, repository: ItemRepository = FolderRepository.si) {
         self.folderId       = result.long(forColumnIndex: 0)

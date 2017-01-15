@@ -61,6 +61,10 @@ struct ArtistRepository: ItemRepository {
 }
 
 extension Artist: PersistedItem {
+    class func item(itemId: Int, serverId: Int, repository: ItemRepository = ArtistRepository.si) -> Item? {
+        return (repository as? ArtistRepository)?.artist(artistId: itemId, serverId: serverId)
+    }
+    
     var isPersisted: Bool {
         return repository.isPersisted(artist: self)
     }

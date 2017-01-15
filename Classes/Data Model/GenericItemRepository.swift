@@ -121,9 +121,13 @@ class GenericItemRepository {
     }
     
     func isPersisted<T: PersistedItem>(repository: ItemRepository, item: T, isCachedTable: Bool = false) -> Bool {
+        return isPersisted(repository: repository, itemId: item.itemId, serverId: item.serverId)
+    }
+    
+    func isPersisted(repository: ItemRepository, itemId: Int, serverId: Int, isCachedTable: Bool = false) -> Bool {
         let table = tableName(repository: repository, isCachedTable: isCachedTable)
         let query = "SELECT COUNT(*) FROM \(table) WHERE \(repository.itemId) = ? AND serverId = ?"
-        return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, item.itemId, item.serverId)
+        return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, itemId, serverId)
     }
     
     func hasCachedSubItems<T: PersistedItem>(repository: ItemRepository, item: T) -> Bool {

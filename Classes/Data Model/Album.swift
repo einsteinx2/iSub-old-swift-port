@@ -11,10 +11,6 @@ import Foundation
 extension Album: Item {
     var itemId: Int { return albumId }
     var itemName: String { return name }
-    
-    class func item(itemId: Int, serverId: Int, repository: ItemRepository = AlbumRepository.si) -> Item? {
-        return (repository as? AlbumRepository)?.album(albumId: itemId, serverId: serverId)
-    }
 }
 
 class Album {
@@ -34,10 +30,10 @@ class Album {
     
     let created: Date?
     
-    var artist: ISMSArtist?
-    var genre: ISMSGenre?
+    var artist: Artist?
+    var genre: Genre?
     
-    var songs = [ISMSSong]()
+    var songs = [Song]()
     
     init?(rxmlElement element: RXMLElement, serverId: Int, repository: AlbumRepository = AlbumRepository.si) {
         guard let albumId = element.attribute(asIntOptional: "id"), let name = element.attribute(asStringOptional: "name") else {

@@ -11,10 +11,6 @@ import Foundation
 extension Artist: Item {
     var itemId: Int { return artistId }
     var itemName: String { return name }
-    
-    class func item(itemId: Int, serverId: Int, repository: ItemRepository = ArtistRepository.si) -> Item? {
-        return (repository as? ArtistRepository)?.artist(artistId: itemId, serverId: serverId)
-    }
 }
 
 class Artist {

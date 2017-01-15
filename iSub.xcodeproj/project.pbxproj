@@ -33,6 +33,10 @@
 		530B960311E8E99C002EA08E /* play-all-note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960211E8E99C002EA08E /* play-all-note@2x.png */; };
 		530B960711E8EC86002EA08E /* loading-screen-image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960611E8EC86002EA08E /* loading-screen-image@2x.png */; };
 		530B960911E8ED33002EA08E /* settings-page@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960811E8ED33002EA08E /* settings-page@2x.png */; };
+		530D5A101E2C044700C9ED43 /* SongRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530D5A0F1E2C044700C9ED43 /* SongRepository.swift */; };
+		530D5A111E2C044700C9ED43 /* SongRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530D5A0F1E2C044700C9ED43 /* SongRepository.swift */; };
+		530D5A131E2C047500C9ED43 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530D5A121E2C047500C9ED43 /* Song.swift */; };
+		530D5A141E2C047500C9ED43 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530D5A121E2C047500C9ED43 /* Song.swift */; };
 		530F04A91E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 530F049F1E237EB700CBBB3E /* INTUAnimationEngine.m */; };
 		530F04AA1E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 530F049F1E237EB700CBBB3E /* INTUAnimationEngine.m */; };
 		530F04AB1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 530F04A21E237EB700CBBB3E /* INTUEasingFunctions.m */; };
@@ -851,6 +855,8 @@
 		530B960211E8E99C002EA08E /* play-all-note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "play-all-note@2x.png"; path = "Images/Other/play-all-note@2x.png"; sourceTree = "<group>"; };
 		530B960611E8EC86002EA08E /* loading-screen-image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image@2x.png"; path = "Images/Other/loading-screen-image@2x.png"; sourceTree = "<group>"; };
 		530B960811E8ED33002EA08E /* settings-page@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-page@2x.png"; path = "Images/Other/settings-page@2x.png"; sourceTree = "<group>"; };
+		530D5A0F1E2C044700C9ED43 /* SongRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongRepository.swift; sourceTree = "<group>"; };
+		530D5A121E2C047500C9ED43 /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		530F049E1E237EB700CBBB3E /* INTUAnimationEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTUAnimationEngine.h; sourceTree = "<group>"; };
 		530F049F1E237EB700CBBB3E /* INTUAnimationEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INTUAnimationEngine.m; sourceTree = "<group>"; };
 		530F04A01E237EB700CBBB3E /* INTUAnimationEngineDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTUAnimationEngineDefines.h; sourceTree = "<group>"; };
@@ -2214,6 +2220,7 @@
 				53CFBB741E2B1E3B005895F4 /* Folder.swift */,
 				53CFBB711E2B164F005895F4 /* Artist.swift */,
 				53CFBB621E2AE18A005895F4 /* Album.swift */,
+				530D5A121E2C047500C9ED43 /* Song.swift */,
 				53CFBB7D1E2B3038005895F4 /* Genre.swift */,
 			);
 			name = "New Item Models";
@@ -2227,8 +2234,6 @@
 				531B32EF1E24CF8A00811187 /* ISMSContentType.m */,
 				531B32F61E24CF8A00811187 /* ISMSMediaFolder.h */,
 				531B32F71E24CF8A00811187 /* ISMSMediaFolder.m */,
-				531B32F91E24CF8A00811187 /* ISMSSong.h */,
-				531B32FA1E24CF8A00811187 /* ISMSSong.m */,
 				531B32FB1E24CF8A00811187 /* Playlist.swift */,
 				531B32FD1E24CF8A00811187 /* Server.swift */,
 			);
@@ -2249,6 +2254,8 @@
 				531B32ED1E24CF8A00811187 /* ISMSArtist.m */,
 				531B32F31E24CF8A00811187 /* ISMSGenre.h */,
 				531B32F41E24CF8A00811187 /* ISMSGenre.m */,
+				531B32F91E24CF8A00811187 /* ISMSSong.h */,
+				531B32FA1E24CF8A00811187 /* ISMSSong.m */,
 			);
 			name = Ported;
 			sourceTree = "<group>";
@@ -2303,6 +2310,7 @@
 				53CFBB771E2B1E56005895F4 /* FolderRepository.swift */,
 				53CFBB6E1E2B1628005895F4 /* ArtistRepository.swift */,
 				53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */,
+				530D5A0F1E2C044700C9ED43 /* SongRepository.swift */,
 				53CFBB801E2B3075005895F4 /* GenreRepository.swift */,
 				53CFBB611E2AE160005895F4 /* New Item Models */,
 			);
@@ -2806,6 +2814,7 @@
 				531B33931E24CF8B00811187 /* CachedFolderLoader.swift in Sources */,
 				531B33F21E24D0B600811187 /* DraggableTableViewController.swift in Sources */,
 				5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
+				530D5A131E2C047500C9ED43 /* Song.swift in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				530F04AF1E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
@@ -2851,6 +2860,7 @@
 				531B33A31E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
 				5358DF971E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				531B336B1E24CF8B00811187 /* ISMSGenre.m in Sources */,
+				530D5A101E2C044700C9ED43 /* SongRepository.swift in Sources */,
 				531B33671E24CF8B00811187 /* ISMSContentType.m in Sources */,
 				531B338F1E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
 				53D59A601E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
@@ -3061,6 +3071,7 @@
 				531B33941E24CF8B00811187 /* CachedFolderLoader.swift in Sources */,
 				531B33F31E24D0B600811187 /* DraggableTableViewController.swift in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
+				530D5A141E2C047500C9ED43 /* Song.swift in Sources */,
 				53BC279C139AF0DD00A825F1 /* AppDelegate.m in Sources */,
 				53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				530F04B01E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
@@ -3106,6 +3117,7 @@
 				531B33A41E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
 				5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				531B336C1E24CF8B00811187 /* ISMSGenre.m in Sources */,
+				530D5A111E2C044700C9ED43 /* SongRepository.swift in Sources */,
 				531B33681E24CF8B00811187 /* ISMSContentType.m in Sources */,
 				531B33901E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
 				53D59A621E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
