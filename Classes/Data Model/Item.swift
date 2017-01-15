@@ -14,7 +14,7 @@ protocol Item {
     var serverId: Int { get }
 }
 
-protocol PersistedItem {
+protocol PersistedItem: Item {
     var isPersisted: Bool { get }
     var hasCachedSubItems: Bool { get }
     
@@ -24,4 +24,5 @@ protocol PersistedItem {
     func loadSubitems()
     
     static func item(itemId: Int, serverId: Int, repository: ItemRepository) -> Item?
+    init(result: FMResultSet, repository: ItemRepository)
 }

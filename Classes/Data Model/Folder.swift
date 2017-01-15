@@ -32,13 +32,23 @@ class Folder {
     var folders = [Folder]()
     var songs = [ISMSSong]()
     
-    init(folderId: Int, serverId: Int, parentFolderId: Int?, mediaFolderId: Int?, coverArtId: String?, name: String, repository: FolderRepository = FolderRepository.si) {
-        self.folderId = folderId
-        self.serverId = serverId
-        self.parentFolderId = parentFolderId
-        self.mediaFolderId = mediaFolderId
-        self.coverArtId = coverArtId
-        self.name = name
-        self.repository = repository
+//    init(folderId: Int, serverId: Int, parentFolderId: Int?, mediaFolderId: Int?, coverArtId: String?, name: String, repository: FolderRepository = FolderRepository.si) {
+//        self.folderId = folderId
+//        self.serverId = serverId
+//        self.parentFolderId = parentFolderId
+//        self.mediaFolderId = mediaFolderId
+//        self.coverArtId = coverArtId
+//        self.name = name
+//        self.repository = repository
+//    }
+    
+    required init(result: FMResultSet, repository: ItemRepository = FolderRepository.si) {
+        self.folderId       = result.long(forColumnIndex: 0)
+        self.serverId       = result.long(forColumnIndex: 1)
+        self.parentFolderId = result.object(forColumnIndex: 2) as? Int
+        self.mediaFolderId  = result.object(forColumnIndex: 3) as? Int
+        self.coverArtId     = result.string(forColumnIndex: 4)
+        self.name           = result.string(forColumnIndex: 5) ?? ""
+        self.repository     = repository as! FolderRepository
     }
 }

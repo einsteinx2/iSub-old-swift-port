@@ -29,14 +29,14 @@ class Artist {
     
     var albums = [Album]()
     
-    init(artistId: Int, serverId: Int, name: String, coverArtId: String?, albumCount: Int?, repository: ArtistRepository = ArtistRepository.si) {
-        self.artistId = artistId
-        self.serverId = serverId
-        self.name = name
-        self.coverArtId = coverArtId
-        self.albumCount = albumCount
-        self.repository = repository
-    }
+//    init(artistId: Int, serverId: Int, name: String, coverArtId: String?, albumCount: Int?, repository: ArtistRepository = ArtistRepository.si) {
+//        self.artistId = artistId
+//        self.serverId = serverId
+//        self.name = name
+//        self.coverArtId = coverArtId
+//        self.albumCount = albumCount
+//        self.repository = repository
+//    }
     
     init?(rxmlElement element: RXMLElement, serverId: Int, repository: ArtistRepository = ArtistRepository.si) {
         guard let artistId = element.attribute(asIntOptional: "id"), let name = element.attribute(asStringOptional: "name") else {
@@ -49,5 +49,14 @@ class Artist {
         self.coverArtId = element.attribute(asStringOptional: "coverArtId")
         self.albumCount = element.attribute(asIntOptional: "albumCount")
         self.repository = repository
+    }
+    
+    required init(result: FMResultSet, repository: ItemRepository = ArtistRepository.si) {
+        self.artistId    = result.long(forColumnIndex: 0)
+        self.serverId    = result.long(forColumnIndex: 1)
+        self.name        = result.string(forColumnIndex: 2) ?? ""
+        self.coverArtId  = result.string(forColumnIndex: 3)
+        self.albumCount  = result.object(forColumnIndex: 4) as? Int
+        self.repository  = repository as! ArtistRepository
     }
 }

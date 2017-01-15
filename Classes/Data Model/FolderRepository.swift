@@ -12,37 +12,35 @@ fileprivate let foldersTable = "folders"
 fileprivate let cachedFoldersTable = "cachedFolders"
 
 struct FolderRepository: ItemRepository {
-    static var si: FolderRepository = FolderRepository()
+    static let si = FolderRepository()
+    fileprivate let gr = GenericItemRepository.si
     
-    func folder(folderId: Int, serverId: Int, loadSubitems: Bool = false) -> Folder? {
-        func runQuery(db: FMDatabase, table: String) -> Folder? {
-            var folder: Folder? = nil
-            let query = "SELECT * FROM \(table) WHERE folderId = ? AND serverId = ?"
-            do {
-                let result = try db.executeQuery(query, folderId, serverId)
-                if result.next() {
-                    folder = Folder(result: result)
-                }
-                result.close()
-            } catch {
-                print("DB Error: \(error)")
-            }
-            return folder
-        }
-        
-        var folder: Folder? = nil
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            folder = runQuery(db: db, table: foldersTable)
-            if folder == nil {
-                folder = runQuery(db: db, table: cachedFoldersTable)
-            }
-        }
-        
-        if loadSubitems, let folder = folder {
-            folder.loadSubitems()
-        }
-        
-        return folder
+    let table = "folders"
+    let cachedTable = "cachedFolders"
+    let itemId = "folderId"
+    
+    func folder(folderId: Int, serverId: Int, loadSubItems: Bool = false) -> Folder? {
+        return gr.item(repository: self, itemId: folderId, serverId: serverId, loadSubItems: loadSubItems)
+    }
+    
+    func allFolders(serverId: Int? = nil, isCachedTable: Bool = false) -> [Folder] {
+        return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
+    }
+    
+    func deleteAllFolders(serverId: Int?) -> Bool {
+        return gr.deleteAllItems(repository: self, serverId: serverId)
+    }
+    
+    func isPersisted(folder: Folder, isCachedTable: Bool = false) -> Bool {
+        return gr.isPersisted(repository: self, item: folder, isCachedTable: isCachedTable)
+    }
+    
+    func hasCachedSubItems(folder: Folder) -> Bool {
+        return gr.hasCachedSubItems(repository: self, item: folder)
+    }
+    
+    func delete(folder: Folder, isCachedTable: Bool = false) -> Bool {
+        return gr.delete(repository: self, item: folder, isCachedTable: isCachedTable)
     }
     
     func folders(parentFolderId: Int, serverId: Int, isCachedTable: Bool) -> [Folder] {
@@ -64,80 +62,6 @@ struct FolderRepository: ItemRepository {
         return folders
     }
     
-    func allFolders(serverId: Int? = nil, isCachedTable: Bool = false) -> [Folder] {
-        return [Folder]()
-        let ignoredArticles = DatabaseSingleton.si().ignoredArticles()
-        var folders = [Folder]()
-        var foldersNumbers = [Folder]()
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            let table = isCachedTable ? cachedFoldersTable : foldersTable
-            var query = "SELECT * FROM \(table)"
-            do {
-                let result: FMResultSet
-                if let serverId = serverId {
-                    query += " WHERE serverId = ?"
-                    result = try db.executeQuery(query, serverId)
-                } else {
-                    result = try db.executeQuery(query)
-                }
-                
-                while result.next() {
-                    let folder = Folder(result: result)
-                    let name = DatabaseSingleton.si().name(folder.name, ignoringArticles: ignoredArticles)
-                    if let firstScalar = name.unicodeScalars.first {
-                        if CharacterSet.letters.contains(firstScalar) {
-                            folders.append(folder)
-                        } else {
-                            foldersNumbers.append(folder)
-                        }
-                    }
-                }
-                result.close()
-            } catch {
-                print("DB Error: \(error)")
-            }
-        }
-        
-        folders = subsonicSorted(items: folders, ignoredArticles: ignoredArticles)
-        folders.append(contentsOf: foldersNumbers)
-        
-        for folder in folders {
-            folder.loadSubitems()
-        }
-        
-        return folders
-    }
-    
-    func deleteAllFolders(serverId: Int?) -> Bool {
-        var success = true
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
-            do {
-                if let serverId = serverId {
-                    let query = "DELETE FROM \(foldersTable) WHERE serverId = ?"
-                    try db.executeUpdate(query, serverId)
-                } else {
-                    let query = "DELETE FROM \(foldersTable)"
-                    try db.executeUpdate(query)
-                }
-            } catch {
-                success = false
-                print("DB Error: \(error)")
-            }
-        }
-        return success
-    }
-    
-    func isPersisted(folder: Folder, isCachedTable: Bool = false) -> Bool {
-        let table = isCachedTable ? cachedFoldersTable : foldersTable
-        let query = "SELECT COUNT(*) FROM \(table) WHERE folderId = ? AND serverId = ?"
-        return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, folder.folderId, folder.serverId)
-    }
-    
-    func hasCachedSubItems(folder: Folder) -> Bool {
-        let query = "SELECT COUNT(*) FROM cachedSongs WHERE folderId = ? AND serverId = ?"
-        return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, folder.folderId, folder.serverId)
-    }
-    
     func replace(folder: Folder, isCachedTable: Bool = false) -> Bool {
         var success = true
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
@@ -153,36 +77,9 @@ struct FolderRepository: ItemRepository {
         return success
     }
     
-    func delete(folder: Folder, isCachedTable: Bool = false) -> Bool {
-        var success = true
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
-            do {
-                let table = isCachedTable ? cachedFoldersTable : foldersTable
-                let query = "DELETE FROM \(table) WHERE folderId = ? AND serverId = ?"
-                try db.executeUpdate(query, folder.folderId, folder.serverId)
-            } catch {
-                success = false
-                print("DB Error: \(error)")
-            }
-        }
-        return success
-    }
-    
     func loadSubItems(folder: Folder) {
-        folder.folders = self.folders(parentFolderId: folder.folderId, serverId: folder.serverId, isCachedTable: false)
+        folder.folders = folders(parentFolderId: folder.folderId, serverId: folder.serverId, isCachedTable: false)
         folder.songs = ISMSSong.songs(inFolder: folder.folderId, serverId: folder.serverId, cachedTable: false)
-    }
-}
-
-extension Folder {
-    convenience init(result: FMResultSet, repository: FolderRepository = FolderRepository.si) {
-        let folderId        = result.long(forColumnIndex: 0)
-        let serverId        = result.long(forColumnIndex: 1)
-        let parentFolderId  = result.object(forColumnIndex: 2) as? Int
-        let mediaFolderId  = result.object(forColumnIndex: 3) as? Int
-        let coverArtId  = result.string(forColumnIndex: 4)
-        let name        = result.string(forColumnIndex: 5) ?? ""
-        self.init(folderId: folderId, serverId: serverId, parentFolderId: parentFolderId, mediaFolderId: mediaFolderId, coverArtId: coverArtId, name: name, repository: repository)
     }
 }
 

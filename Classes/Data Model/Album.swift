@@ -39,19 +39,19 @@ class Album {
     
     var songs = [ISMSSong]()
     
-    init(albumId: Int, serverId: Int, artistId: Int?, genreId: Int?, coverArtId: String?, name: String, songCount: Int?, duration: Int?, year: Int?, created: Date?, repository: AlbumRepository = AlbumRepository.si) {
-        self.albumId = albumId
-        self.serverId = serverId
-        self.artistId = artistId
-        self.genreId = genreId
-        self.coverArtId = coverArtId
-        self.name = name
-        self.songCount = songCount
-        self.duration = duration
-        self.year = year
-        self.created = created
-        self.repository = repository
-    }
+//    init(albumId: Int, serverId: Int, artistId: Int?, genreId: Int?, coverArtId: String?, name: String, songCount: Int?, duration: Int?, year: Int?, created: Date?, repository: AlbumRepository = AlbumRepository.si) {
+//        self.albumId = albumId
+//        self.serverId = serverId
+//        self.artistId = artistId
+//        self.genreId = genreId
+//        self.coverArtId = coverArtId
+//        self.name = name
+//        self.songCount = songCount
+//        self.duration = duration
+//        self.year = year
+//        self.created = created
+//        self.repository = repository
+//    }
     
     init?(rxmlElement element: RXMLElement, serverId: Int, repository: AlbumRepository = AlbumRepository.si) {
         guard let albumId = element.attribute(asIntOptional: "id"), let name = element.attribute(asStringOptional: "name") else {
@@ -82,6 +82,20 @@ class Album {
         } else {
             self.genreId = nil
         }
+    }
+    
+    required init(result: FMResultSet, repository: ItemRepository = AlbumRepository.si) {
+        self.albumId     = result.long(forColumnIndex: 0)
+        self.serverId    = result.long(forColumnIndex: 1)
+        self.artistId    = result.object(forColumnIndex: 2) as? Int
+        self.genreId     = result.object(forColumnIndex: 3) as? Int
+        self.coverArtId  = result.string(forColumnIndex: 4)
+        self.name        = result.string(forColumnIndex: 5) ?? ""
+        self.songCount   = result.object(forColumnIndex: 6) as? Int
+        self.duration    = result.object(forColumnIndex: 7) as? Int
+        self.year        = result.object(forColumnIndex: 8) as? Int
+        self.created     = result.date(forColumnIndex: 9)
+        self.repository  = repository as! AlbumRepository
     }
 }
 

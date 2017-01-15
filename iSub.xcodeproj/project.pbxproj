@@ -740,8 +740,6 @@
 		53C7FDA0150F0EAF008DA51C /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C7FD9C150F0E94008DA51C /* MessageUI.framework */; };
 		53CE503F1E20194100E5DC68 /* BCCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CE503E1E20194100E5DC68 /* BCCKeychain.m */; };
 		53CE50411E20194100E5DC68 /* BCCKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CE503E1E20194100E5DC68 /* BCCKeychain.m */; };
-		53CFBB5F1E2AE14D005895F4 /* ItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB5E1E2AE14D005895F4 /* ItemRepository.swift */; };
-		53CFBB601E2AE14D005895F4 /* ItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB5E1E2AE14D005895F4 /* ItemRepository.swift */; };
 		53CFBB631E2AE18A005895F4 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB621E2AE18A005895F4 /* Album.swift */; };
 		53CFBB641E2AE18A005895F4 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB621E2AE18A005895F4 /* Album.swift */; };
 		53CFBB661E2AE203005895F4 /* RXMLElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB651E2AE203005895F4 /* RXMLElement.swift */; };
@@ -756,6 +754,8 @@
 		53CFBB761E2B1E3B005895F4 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB741E2B1E3B005895F4 /* Folder.swift */; };
 		53CFBB781E2B1E56005895F4 /* FolderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB771E2B1E56005895F4 /* FolderRepository.swift */; };
 		53CFBB791E2B1E56005895F4 /* FolderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB771E2B1E56005895F4 /* FolderRepository.swift */; };
+		53CFBB7B1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB7A1E2B2F9E005895F4 /* GenericItemRepository.swift */; };
+		53CFBB7C1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB7A1E2B2F9E005895F4 /* GenericItemRepository.swift */; };
 		53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A261E1DC38400071ABD /* EX2Dispatch.m */; };
 		53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A261E1DC38400071ABD /* EX2Dispatch.m */; };
@@ -1209,7 +1209,6 @@
 		53C7FD9C150F0E94008DA51C /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		53CE503D1E20194100E5DC68 /* BCCKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCCKeychain.h; sourceTree = "<group>"; };
 		53CE503E1E20194100E5DC68 /* BCCKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCCKeychain.m; sourceTree = "<group>"; };
-		53CFBB5E1E2AE14D005895F4 /* ItemRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemRepository.swift; sourceTree = "<group>"; };
 		53CFBB621E2AE18A005895F4 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		53CFBB651E2AE203005895F4 /* RXMLElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RXMLElement.swift; sourceTree = "<group>"; };
 		53CFBB681E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDatabasePoolAdditionsVariadic.swift; sourceTree = "<group>"; };
@@ -1217,6 +1216,7 @@
 		53CFBB711E2B164F005895F4 /* Artist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		53CFBB741E2B1E3B005895F4 /* Folder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		53CFBB771E2B1E56005895F4 /* FolderRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderRepository.swift; sourceTree = "<group>"; };
+		53CFBB7A1E2B2F9E005895F4 /* GenericItemRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericItemRepository.swift; sourceTree = "<group>"; };
 		53D44F8415AA621A00CDD3B8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		53D59A251E1DC38400071ABD /* EX2Dispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2Dispatch.h; sourceTree = "<group>"; };
 		53D59A261E1DC38400071ABD /* EX2Dispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2Dispatch.m; sourceTree = "<group>"; };
@@ -2292,7 +2292,7 @@
 		53F107A41E2ACDDC003B7D59 /* Item Repositories */ = {
 			isa = PBXGroup;
 			children = (
-				53CFBB5E1E2AE14D005895F4 /* ItemRepository.swift */,
+				53CFBB7A1E2B2F9E005895F4 /* GenericItemRepository.swift */,
 				53CFBB771E2B1E56005895F4 /* FolderRepository.swift */,
 				53CFBB6E1E2B1628005895F4 /* ArtistRepository.swift */,
 				53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */,
@@ -2906,6 +2906,7 @@
 				531B33B51E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */,
 				53835CA71E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				53CFBB781E2B1E56005895F4 /* FolderRepository.swift in Sources */,
+				53CFBB7B1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */,
 				531B33FA1E24D0B600811187 /* ItemViewModel.swift in Sources */,
 				53CFBB631E2AE18A005895F4 /* Album.swift in Sources */,
 				531B33751E24CF8B00811187 /* Server.swift in Sources */,
@@ -2918,7 +2919,6 @@
 				53835CC01E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				531B336D1E24CF8B00811187 /* ISMSMediaFolder.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
-				53CFBB5F1E2AE14D005895F4 /* ItemRepository.swift in Sources */,
 				53CFBB721E2B164F005895F4 /* Artist.swift in Sources */,
 				531B34201E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCA1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
@@ -3159,6 +3159,7 @@
 				531B33B61E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */,
 				53835CA91E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				53CFBB791E2B1E56005895F4 /* FolderRepository.swift in Sources */,
+				53CFBB7C1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */,
 				531B33FB1E24D0B600811187 /* ItemViewModel.swift in Sources */,
 				53CFBB641E2AE18A005895F4 /* Album.swift in Sources */,
 				531B33761E24CF8B00811187 /* Server.swift in Sources */,
@@ -3171,7 +3172,6 @@
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				531B336E1E24CF8B00811187 /* ISMSMediaFolder.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,
-				53CFBB601E2AE14D005895F4 /* ItemRepository.swift in Sources */,
 				53CFBB731E2B164F005895F4 /* Artist.swift in Sources */,
 				531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
