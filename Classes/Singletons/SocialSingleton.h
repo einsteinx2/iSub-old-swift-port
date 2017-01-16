@@ -9,7 +9,7 @@
 #ifndef iSub_SocialSingleton_h
 #define iSub_SocialSingleton_h
 
-@class ISMSSong;
+@class Song;
 
 @interface SocialSingleton : NSObject
 
@@ -21,7 +21,7 @@
 
 - (void)scrobbleSongAsPlaying;
 - (void)scrobbleSongAsSubmission;
-- (void)scrobbleSong:(ISMSSong *)aSong isSubmission:(BOOL)isSubmission;
+- (void)scrobbleSong:(Song *)aSong isSubmission:(BOOL)isSubmission;
 - (void)tweetSong;
 - (void)notifySubsonic;
 

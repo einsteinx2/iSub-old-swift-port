@@ -13,11 +13,11 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
     fileprivate let size = 500
     fileprivate var offset = 0
     
-    var albums = [ISMSAlbum]()
+    var albums = [Album]()
     
     var associatedObject: Any?
     
-    var items: [ISMSItem] {
+    var items: [Item] {
         return albums
     }
     
@@ -27,12 +27,13 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
-        var albumsTemp = [ISMSAlbum]()
+        var albumsTemp = [Album]()
         
         let serverId = SavedSettings.si().currentServerId
         root.iterate("albumList2.album") { album in
-            let anAlbum = ISMSAlbum(rxmlElement: album, serverId: serverId)
-            albumsTemp.append(anAlbum)
+            if let anAlbum = Album(rxmlElement: album, serverId: serverId) {
+                albumsTemp.append(anAlbum)
+            }
         }
         
         if offset == 0 {
@@ -43,7 +44,7 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
         
         // Check if we have all albums, if not, keep paging
         if albumsTemp.count < size {
-            self.persistModels()
+            persistModels()
             return true
         } else {
             offset += size
@@ -55,16 +56,16 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
     
     func persistModels() {
         // Remove existing albums
-        let serverId = SavedSettings.si().currentServerId as NSNumber
-        ISMSAlbum.deleteAllAlbums(withServerId: serverId)
+        let serverId = SavedSettings.si().currentServerId
+        _ = AlbumRepository.si.deleteAllAlbums(serverId: serverId)
         
         // Save the new albums
-        albums.forEach({$0.replace()})
+        albums.forEach({_ = $0.replace()})
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.si().currentServerId as NSNumber
-        let albumsTemp = ISMSAlbum.allAlbums(withServerId: serverId)
+        let serverId = SavedSettings.si().currentServerId
+        let albumsTemp = AlbumRepository.si.allAlbums(serverId: serverId)
         if albumsTemp.count > 0 {
             albums = albumsTemp
             return true

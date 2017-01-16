@@ -76,15 +76,11 @@
 - (NSTimeInterval)scrobbleDelay
 {
 	// Scrobble in 30 seconds (or settings amount) if not canceled
-	ISMSSong *currentSong = PlayQueue.si.currentSong;
+	Song *currentSong = PlayQueue.si.currentSong;
 	NSTimeInterval scrobbleDelay = 30.0;
-	if (currentSong.duration != nil)
-	{
-		float scrobblePercent = SavedSettings.si.scrobblePercent;
-		float duration = [currentSong.duration floatValue];
-		scrobbleDelay = scrobblePercent * duration;
-	}
-	
+    float scrobblePercent = SavedSettings.si.scrobblePercent;
+    float duration = (float)currentSong.durationObjC;
+    scrobbleDelay = scrobblePercent * duration;
 	return scrobbleDelay;
 }
 
@@ -104,9 +100,9 @@
 //	if (!SavedSettings.si.isOfflineMode)
 //	{
 //		// If this song wasn't just cached, then notify Subsonic of the playback
-//		ISMSSong *lastCachedSong = ISMSStreamManager.si.lastCachedSong;
-//		ISMSSong *currentSong = PlayQueue.si.currentSong;
-//		if (![lastCachedSong isEqualToSong:currentSong])
+//		Song *lastCachedSong = ISMSStreamManager.si.lastCachedSong;
+//		Song *currentSong = PlayQueue.si.currentSong;
+//		if (![lastCachedSong isEqual:currentSong])
 //		{
 //			NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:n2N(currentSong.songId), @"id", nil];
 //            NSMutableURLRequest *request = [NSMutableURLRequest requestWithSUSAction:@"stream" parameters:parameters fragment:nil byteOffset:0];
@@ -126,7 +122,7 @@
     //DLog(@"Asked to scrobble %@ as submission", playlistS.currentSong.title);
 	if (SavedSettings.si.isScrobbleEnabled && !SavedSettings.si.isOfflineMode)
 	{
-		ISMSSong *currentSong = PlayQueue.si.currentSong;
+		Song *currentSong = PlayQueue.si.currentSong;
 		[self scrobbleSong:currentSong isSubmission:YES];
 	//DLog(@"Scrobbled %@ as submission", currentSong.title);
 	}
@@ -138,13 +134,13 @@
 	// If scrobbling is enabled, send "now playing" call
 	if (SavedSettings.si.isScrobbleEnabled && !SavedSettings.si.isOfflineMode)
 	{
-		ISMSSong *currentSong = PlayQueue.si.currentSong;
+		Song *currentSong = PlayQueue.si.currentSong;
 		[self scrobbleSong:currentSong isSubmission:NO];
 	//DLog(@"Scrobbled %@ as playing", currentSong.title);
 	}
 }
 
-- (void)scrobbleSong:(ISMSSong*)aSong isSubmission:(BOOL)isSubmission
+- (void)scrobbleSong:(Song*)aSong isSubmission:(BOOL)isSubmission
 {
     // TODO: Reimplement
 //	if (SavedSettings.si.isScrobbleEnabled && !SavedSettings.si.isOfflineMode)
@@ -168,7 +164,7 @@
 - (void)tweetSong
 {
 #ifdef IOS
-	ISMSSong *currentSong = PlayQueue.si.currentSong;
+	Song *currentSong = PlayQueue.si.currentSong;
 	
     //DLog(@"Asked to tweet %@", currentSong.title);
 	

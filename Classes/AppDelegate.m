@@ -97,7 +97,7 @@
     }
     else
     {
-        ISMSSong *currentSong = PlayQueue.si.currentSong;
+        Song *currentSong = PlayQueue.si.currentSong;
         if (currentSong)
         {
             [PlayQueue.si startSongWithByteOffset:(NSInteger)SavedSettings.si.byteOffset];
@@ -520,9 +520,9 @@
     SavedSettings.si.redirectUrlString = redirectUrl;
     
     // Create the playlist table if necessary (does nothing if they exist)
-    [ISMSPlaylist createPlaylist:@"Play Queue" playlistId:[ISMSPlaylist playQueuePlaylistId] serverId:server.serverId];
-    [ISMSPlaylist createPlaylist:@"Download Queue" playlistId:[ISMSPlaylist downloadQueuePlaylistId] serverId:server.serverId];
-    [ISMSPlaylist createPlaylist:@"Downloaded Songs" playlistId:[ISMSPlaylist downloadedSongsPlaylistId] serverId:server.serverId];
+    [Playlist createPlaylist:@"Play Queue" playlistId:[Playlist playQueuePlaylistId] serverId:server.serverId];
+    [Playlist createPlaylist:@"Download Queue" playlistId:[Playlist downloadQueuePlaylistId] serverId:server.serverId];
+    [Playlist createPlaylist:@"Downloaded Songs" playlistId:[Playlist downloadedSongsPlaylistId] serverId:server.serverId];
     
     // Cancel any caching
     [ISMSStreamManager.si removeAllStreams];

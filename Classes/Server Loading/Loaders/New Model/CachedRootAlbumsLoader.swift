@@ -9,9 +9,9 @@
 import Foundation
 
 class CachedRootAlbumsLoader: CachedDatabaseLoader {
-    var albums = [ISMSAlbum]()
+    var albums = [Album]()
     
-    override var items: [ISMSItem] {
+    override var items: [Item] {
         return albums
     }
     
@@ -20,7 +20,7 @@ class CachedRootAlbumsLoader: CachedDatabaseLoader {
     }
     
     override func loadModelsFromDatabase() -> Bool {
-        albums = ISMSAlbum.allCachedAlbums()
+        albums = AlbumRepository.si.allAlbums(isCachedTable: true)
         return true
     }
 }

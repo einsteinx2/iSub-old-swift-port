@@ -18,11 +18,6 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
     fileprivate var task: URLSessionDataTask?
     
     override func start(_ resume: Bool) {
-        guard let songId = song.songId else {
-            delegate?.ismsStreamHandlerConnectionFailed?(self, withError: nil)
-            return
-        }
-        
         if selfRef == nil {
             selfRef = self
         }
@@ -36,7 +31,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         if let fileHandle = fileHandle {
             if resume {
                 // File exists so seek to the end
-                totalBytesTransferred = Int(fileHandle.seekToEndOfFile())
+                totalBytesTransferred = Int64(fileHandle.seekToEndOfFile())
                 byteOffset += totalBytesTransferred
             } else {
                 // File exists so remove it
@@ -69,7 +64,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
             maxBitrateSetting = SavedSettings.si().currentMaxBitrate
         }
         
-        var parameters = ["id": "\(songId)"]
+        var parameters = ["id": "\(song.songId)"]
         if maxBitrateSetting > 0 {
             parameters["maxBitRate"] = "\(maxBitrateSetting)"
         }
@@ -79,7 +74,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         task = session?.dataTask(with: request)
         task?.resume()
         
-        if song.isEqual(to: PlayQueue.si.currentSong) {
+        if song.isEqual(PlayQueue.si.currentSong) {
             isCurrentSong = true
         }
         
@@ -174,7 +169,7 @@ class URLSessionStreamHandler: ISMSStreamHandler, URLSessionDataDelegate {
         if let _ = error {
             delegate?.ismsStreamHandlerConnectionFailed?(self, withError: nil)
         } else {
-            if contentLength > 0 && song.localFileSize < UInt64(contentLength) && numberOfContentLengthFailures < Int(ISMSMaxContentLengthFailures) {
+            if contentLength > 0 && song.localFileSize < contentLength && numberOfContentLengthFailures < Int(ISMSMaxContentLengthFailures) {
                 print("[URLSessionStreamHandler] Connection Failed because not enough bytes were downloaed for \(song.title)")
                 
                 // This is a failed download, it didn't download enough

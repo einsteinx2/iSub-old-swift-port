@@ -12,12 +12,12 @@ class FolderLoader: ApiLoader, ItemLoader {
     let folderId: Int
     let mediaFolderId: Int
     
-    var folders = [ISMSFolder]()
-    var songs = [ISMSSong]()
-    var songsDuration = 0.0
+    var folders = [Folder]()
+    var songs = [Song]()
+    var songsDuration = 0
     
-    var items: [ISMSItem] {
-        return folders as [ISMSItem] + songs as [ISMSItem]
+    var items: [Item] {
+        return folders as [Item] + songs as [Item]
     }
     
     init(folderId: Int, mediaFolderId: Int) {
@@ -31,23 +31,25 @@ class FolderLoader: ApiLoader, ItemLoader {
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
-        var songsDurationTemp = 0.0
-        var foldersTemp = [ISMSFolder]()
-        var songsTemp = [ISMSSong]()
+        var songsDurationTemp = 0
+        var foldersTemp = [Folder]()
+        var songsTemp = [Song]()
         
         let serverId = SavedSettings.si().currentServerId
         root.iterate("directory.child") { child in
             if (child.attribute("isDir") as NSString).boolValue {
                 if child.attribute("title") != ".AppleDouble" {
-                    let aFolder = ISMSFolder(rxmlElement: child, serverId: serverId, mediaFolderId: self.mediaFolderId)
-                    foldersTemp.append(aFolder)
+                    if let aFolder = Folder(rxmlElement: child, serverId: serverId, mediaFolderId: self.mediaFolderId) {
+                        foldersTemp.append(aFolder)
+                    }
                 }
             } else {
-                let aSong = ISMSSong(rxmlElement: child, serverId: serverId)
-                if let duration = aSong.duration as? Double {
-                    songsDurationTemp += duration
+                if let aSong = Song(rxmlElement: child, serverId: serverId) {
+                    if let duration = aSong.duration {
+                        songsDurationTemp += duration
+                    }
+                    songsTemp.append(aSong)
                 }
-                songsTemp.append(aSong)
             }
         }
         folders = foldersTemp
@@ -55,29 +57,27 @@ class FolderLoader: ApiLoader, ItemLoader {
         songsDuration = songsDurationTemp
         
         // Persist associated object model if needed
-        if !ISMSAlbum.isPersisted(NSNumber(value: folderId), serverId: NSNumber(value: serverId)) {
-            if let element = root.child("directory") {
-                let folder = ISMSFolder(rxmlElement: element, serverId: serverId, mediaFolderId: mediaFolderId)
-                folder.replace()
+        if !FolderRepository.si.isPersisted(folderId: folderId, serverId: serverId) {
+            if let element = root.child("directory"), let folder = Folder(rxmlElement: element, serverId: serverId, mediaFolderId: mediaFolderId) {
+                _ = folder.replace()
             }
         }
-        
-        self.persistModels()
+        persistModels()
         
         return true
     }
     
     func persistModels() {
-        folders.forEach({$0.replace()})
-        songs.forEach({$0.replace()})
+        folders.forEach({_ = $0.replace()})
+        songs.forEach({_ = $0.replace()})
         
-        if let folder = associatedObject as? ISMSFolder {
+        if let folder = associatedObject as? Folder {
             // Persist if needed
-            folder.replace()
+            _ = folder.replace()
             
             // Add to cache table if needed
-            if let folder = associatedObject as? ISMSFolder, folder.hasCachedSongs() {
-                folder.cacheModel()
+            if let folder = associatedObject as? Folder, folder.hasCachedSubItems {
+                _ = folder.cache()
             }
         }
         
@@ -85,15 +85,15 @@ class FolderLoader: ApiLoader, ItemLoader {
         var artistIds = Set<Int>()
         var albumIds = Set<Int>()
         for song in songs {
-            if let artist = song.artist, let artistId = artist.artistId as? Int, !artist.isPersisted {
-                artistIds.insert(artistId)
-            } else if song.artist == nil, let artistId = song.artistId as? Int {
+            if let artist = song.artist, !artist.isPersisted {
+                artistIds.insert(artist.artistId)
+            } else if song.artist == nil, let artistId = song.artistId {
                 artistIds.insert(artistId)
             }
             
-            if let album = song.album, let albumId = album.albumId as? Int, !album.isPersisted {
-                albumIds.insert(albumId)
-            } else if song.album == nil, let albumId = song.albumId as? Int {
+            if let album = song.album, !album.isPersisted {
+                albumIds.insert(album.albumId)
+            } else if song.album == nil, let albumId = song.albumId {
                 albumIds.insert(albumId)
             }
         }
@@ -113,12 +113,12 @@ class FolderLoader: ApiLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        if let folder = associatedObject as? ISMSFolder {
-            folder.reloadSubmodels()
+        if let folder = associatedObject as? Folder {
+            folder.loadSubItems()
             folders = folder.folders
             songs = folder.songs
-            songsDuration = songs.reduce(0.0) { totalDuration, song -> Double in
-                if let duration = song.duration as? Double {
+            songsDuration = songs.reduce(0) { totalDuration, song -> Int in
+                if let duration = song.duration {
                     return totalDuration + duration
                 }
                 return totalDuration
@@ -129,6 +129,7 @@ class FolderLoader: ApiLoader, ItemLoader {
     }
     
     var associatedObject: Any? {
-        return ISMSFolder(folderId: folderId, serverId: SavedSettings.si().currentServerId, loadSubmodels: false)
+        let serverId = SavedSettings.si().currentServerId
+        return FolderRepository.si.folder(folderId: folderId, serverId: serverId)
     }
 }

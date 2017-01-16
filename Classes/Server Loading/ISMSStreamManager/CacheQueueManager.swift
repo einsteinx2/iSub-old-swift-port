@@ -15,10 +15,10 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
     open static let si = CacheQueueManager()
     
     fileprivate(set) var isDownloading = false
-    fileprivate(set) var currentSong: ISMSSong?
+    fileprivate(set) var currentSong: Song?
     fileprivate(set) var currentStreamHandler: ISMSStreamHandler?
     
-    func contains(song: ISMSSong) -> Bool {
+    func contains(song: Song) -> Bool {
         return Playlist.downloadQueue.contains(song: song)
     }
     
@@ -106,11 +106,9 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
     
     // MARK: - Helper Functions -
     
-    fileprivate func sendSongDownloadedNotification(song: ISMSSong) {
-        if let songId = song.songId as? Int {
-            let userInfo = ["songId": "\(songId)"]
-            NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_CacheQueueSongDownloaded, userInfo: userInfo)
-        }
+    fileprivate func sendSongDownloadedNotification(song: Song) {
+        let userInfo = ["songId": "\(song.songId)"]
+        NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_CacheQueueSongDownloaded, userInfo: userInfo)
     }
     
     fileprivate func removeFile(forHandler handler: ISMSStreamHandler) {
@@ -118,7 +116,7 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
         try? FileManager.default.removeItem(atPath: handler.filePath)
     }
     
-    fileprivate func removeFromDownloadQueue(song: ISMSSong) {
+    fileprivate func removeFromDownloadQueue(song: Song) {
         Playlist.downloadQueue.remove(song: song, notify: true)
     }
     

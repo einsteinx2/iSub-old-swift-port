@@ -8,6 +8,7 @@
 
 #import "BassWrapper.h"
 #import "Imports.h"
+#import "iSub-Swift.h"
 
 LOG_LEVEL_ISUB_DEFAULT
 
@@ -221,7 +222,7 @@ static NSInteger _bassOutputBufferLengthMillis = 0;
 	
 	BASS_CHANNELINFO i;
 	BASS_ChannelGetInfo(bassStream.stream, &i);
-	ISMSSong *songForStream = bassStream.song;
+	Song *songForStream = bassStream.song;
 	
 	// Check the current stream format, and make sure that the bitrate is in the correct range
 	// otherwise use the song's estimated bitrate instead (to keep something like a 10000 kbitrate on an mp3 from being used for buffering)

@@ -14,18 +14,18 @@ struct GenreRepository: ItemRepository {
     
     let table = "genres"
     let cachedTable = "genres"
-    let itemId = "genreId"
+    let itemIdField = "genreId"
     
     func genre(genreId: Int) -> Genre? {
-        return gr.item(repository: self, itemId: genreId, loadSubItems: false)
+        return gr.item(repository: self, itemId: genreId)
     }
     
     func isPersisted(genre: Genre) -> Bool {
-        return gr.isPersisted(repository: self, item: genre, isCachedTable: false)
+        return gr.isPersisted(repository: self, item: genre)
     }
     
     func delete(genre: Genre) -> Bool {
-        return gr.delete(repository: self, item: genre, isCachedTable: false)
+        return gr.delete(repository: self, item: genre)
     }
     
     func replace(genre: Genre) -> Bool {
@@ -36,7 +36,7 @@ struct GenreRepository: ItemRepository {
                 try db.executeUpdate(query, genre.genreId, genre.name)
             } catch {
                 success = false
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return success
@@ -59,7 +59,7 @@ struct GenreRepository: ItemRepository {
                 }
                 result.close()
             } catch {
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         
@@ -90,6 +90,10 @@ extension Genre: PersistedItem {
     
     func delete() -> Bool {
         return repository.delete(genre: self)
+    }
+    
+    func deleteCache() -> Bool {
+        return false
     }
     
     func loadSubItems() {

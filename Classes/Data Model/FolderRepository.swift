@@ -14,7 +14,7 @@ struct FolderRepository: ItemRepository {
     
     let table = "folders"
     let cachedTable = "cachedFolders"
-    let itemId = "folderId"
+    let itemIdField = "folderId"
     
     func folder(folderId: Int, serverId: Int, loadSubItems: Bool = false) -> Folder? {
         return gr.item(repository: self, itemId: folderId, serverId: serverId, loadSubItems: loadSubItems)
@@ -32,6 +32,10 @@ struct FolderRepository: ItemRepository {
         return gr.isPersisted(repository: self, item: folder, isCachedTable: isCachedTable)
     }
     
+    func isPersisted(folderId: Int, serverId: Int, isCachedTable: Bool = false) -> Bool {
+        return gr.isPersisted(repository: self, itemId: folderId, serverId: serverId, isCachedTable: isCachedTable)
+    }
+    
     func hasCachedSubItems(folder: Folder) -> Bool {
         return gr.hasCachedSubItems(repository: self, item: folder)
     }
@@ -40,7 +44,60 @@ struct FolderRepository: ItemRepository {
         return gr.delete(repository: self, item: folder, isCachedTable: isCachedTable)
     }
     
-    func folders(parentFolderId: Int, serverId: Int, isCachedTable: Bool) -> [Folder] {
+    func deleteRootFolders(mediaFolderId: Int?, serverId: Int, isCachedTable: Bool = false) -> Bool {
+        var success = true
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+            let table = tableName(repository: self, isCachedTable: isCachedTable)
+            var query = "DELETE FROM \(table) WHERE parentFolderId IS NULL AND serverId = ?"
+            do {
+                if let mediaFolderId = mediaFolderId {
+                    query += " AND mediaFolderId = ?"
+                    try db.executeUpdate(query, serverId, mediaFolderId)
+                } else {
+                    try db.executeUpdate(query, serverId)
+                }
+            } catch {
+                success = false
+                printError(error)
+            }
+        }
+        return success
+    }
+    
+    func rootFolders(mediaFolderId: Int? = nil, serverId: Int? = nil, isCachedTable: Bool = false) -> [Folder] {
+        var folders = [Folder]()
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+            let table = tableName(repository: self, isCachedTable: isCachedTable)
+            var query = "SELECT * FROM \(table) WHERE parentFolderId IS NULL"
+            do {
+                let result: FMResultSet
+                if let mediaFolderId = mediaFolderId, let serverId = serverId {
+                    query += " AND mediaFolderId = ? AND serverId = ?"
+                    result = try db.executeQuery(query, mediaFolderId, serverId, serverId)
+                } else if let mediaFolderId = mediaFolderId {
+                    query += " AND mediaFolderId = ?"
+                    result = try db.executeQuery(query, mediaFolderId)
+                } else if let serverId = serverId {
+                    query += " AND serverId = ?"
+                    result = try db.executeQuery(query, serverId)
+                } else {
+                    result = try db.executeQuery(query)
+                }
+                
+                while result.next() {
+                    let folder = Folder(result: result)
+                    folders.append(folder)
+                }
+                result.close()
+            } catch {
+                printError(error)
+            }
+        }
+        
+        return subsonicSorted(items: folders, ignoredArticles: DatabaseSingleton.si().ignoredArticles())
+    }
+    
+    func folders(parentFolderId: Int, serverId: Int, isCachedTable: Bool = false) -> [Folder] {
         var folders = [Folder]()
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
@@ -53,7 +110,7 @@ struct FolderRepository: ItemRepository {
                 }
                 result.close()
             } catch {
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return folders
@@ -68,15 +125,15 @@ struct FolderRepository: ItemRepository {
                 try db.executeUpdate(query, folder.folderId, folder.serverId, n2N(folder.parentFolderId), n2N(folder.mediaFolderId), n2N(folder.coverArtId), folder.name)
             } catch {
                 success = false
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return success
     }
     
     func loadSubItems(folder: Folder) {
-        folder.folders = folders(parentFolderId: folder.folderId, serverId: folder.serverId, isCachedTable: false)
-        folder.songs = SongRepository.si.songs(folderId: folder.folderId, serverId: folder.serverId, isCachedTable: false)
+        folder.folders = folders(parentFolderId: folder.folderId, serverId: folder.serverId)
+        folder.songs = SongRepository.si.songs(folderId: folder.folderId, serverId: folder.serverId)
     }
 }
 
@@ -103,6 +160,10 @@ extension Folder: PersistedItem {
     
     func delete() -> Bool {
         return repository.delete(folder: self)
+    }
+    
+    func deleteCache() -> Bool {
+        return repository.delete(folder: self, isCachedTable: true)
     }
     
     func loadSubItems() {

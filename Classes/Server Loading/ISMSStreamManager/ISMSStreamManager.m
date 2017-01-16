@@ -16,7 +16,7 @@ LOG_LEVEL_ISUB_DEBUG
 
 @implementation ISMSStreamManager
 
-- (ISMSSong *)currentStreamingSong
+- (Song *)currentStreamingSong
 {
 	if (!self.isDownloading)
 		return nil;
@@ -25,14 +25,14 @@ LOG_LEVEL_ISUB_DEBUG
 	return handler.song;
 }
 
-- (ISMSStreamHandler *)handlerForSong:(ISMSSong *)aSong
+- (ISMSStreamHandler *)handlerForSong:(Song *)aSong
 {
 	if (!aSong)
 		return nil;
 	
 	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
-		if ([handler.song isEqualToSong:aSong])
+		if ([handler.song isEqual:aSong])
 		{
 			//DLog(@"handler.song: %@    aSong: %@", handler.song.title, aSong.title);
 			return handler;
@@ -41,16 +41,16 @@ LOG_LEVEL_ISUB_DEBUG
 	return nil;
 }
 
-- (BOOL)isSongFirstInQueue:(ISMSSong *)aSong
+- (BOOL)isSongFirstInQueue:(Song *)aSong
 {
 	if (!aSong)
 		return NO;
 	
 	ISMSStreamHandler *firstHandler = [self.handlerStack firstObjectSafe];
-	return [aSong isEqualToSong:firstHandler.song];
+	return [aSong isEqual:firstHandler.song];
 }
 
-- (BOOL)isSongDownloading:(ISMSSong *)aSong
+- (BOOL)isSongDownloading:(Song *)aSong
 {
 	if (!aSong)
 		return NO;
@@ -101,7 +101,7 @@ LOG_LEVEL_ISUB_DEBUG
 	
 	// Gather the handler objects to cancel
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
-	for (ISMSSong *aSong in songsToSkip)
+	for (Song *aSong in songsToSkip)
 	{
 		ISMSStreamHandler *handler = [self handlerForSong:aSong];
 		if (handler)
@@ -113,7 +113,7 @@ LOG_LEVEL_ISUB_DEBUG
 }
 
 // Convenience method
-- (void)cancelAllStreamsExceptForSong:(ISMSSong *)aSong
+- (void)cancelAllStreamsExceptForSong:(Song *)aSong
 {
 	// If aSong == nil, just cancel all handlers
 	if (![self handlerForSong:aSong])
@@ -169,7 +169,7 @@ LOG_LEVEL_ISUB_DEBUG
 }
 
 // Convenience method
-- (void)cancelStreamForSong:(ISMSSong *)aSong
+- (void)cancelStreamForSong:(Song *)aSong
 {
 	// If aSong == nil, do nothing
 	if (!aSong)
@@ -191,11 +191,11 @@ LOG_LEVEL_ISUB_DEBUG
             [self cancelStream:handler];
             [self.handlerStack removeObject:handler];
             
-            if (!handler.song.isFullyCached && !handler.song.isTempCached && !([CacheQueueManager.si.currentSong isEqualToSong:handler.song] && CacheQueueManager.si.isDownloading))
+            if (!handler.song.isFullyCached && !handler.song.isTempCached && !([CacheQueueManager.si.currentSong isEqual:handler.song] && CacheQueueManager.si.isDownloading))
             {
                 DLog(@"Removing song from cached songs table: %@", handler.song);
-                [handler.song removeFromCachedSongsTable];
-                //[[ISMSPlaylist downloadedSongs] removeSongWithSong:handler.song notify:YES];
+                [handler.song deleteCache];
+                //[[Playlist downloadedSongs] removeSongWithSong:handler.song notify:YES];
             }
 		}
 	}
@@ -228,7 +228,7 @@ LOG_LEVEL_ISUB_DEBUG
 	
 	// Gather the handler objects to skip
 	NSMutableArray *handlersToSkip = [NSMutableArray arrayWithCapacity:[songsToSkip count]];
-	for (ISMSSong *aSong in songsToSkip)
+	for (Song *aSong in songsToSkip)
 	{
 		ISMSStreamHandler *handler = [self handlerForSong:aSong];
 		if (handler) 
@@ -240,7 +240,7 @@ LOG_LEVEL_ISUB_DEBUG
 }
 
 // Convenience method
-- (void)removeAllStreamsExceptForSong:(ISMSSong *)aSong
+- (void)removeAllStreamsExceptForSong:(Song *)aSong
 {
 	// If aSong == nil, remove all handlers
 	if (![self handlerForSong:aSong])
@@ -271,11 +271,11 @@ LOG_LEVEL_ISUB_DEBUG
 		[self cancelStreamAtIndex:index];
 		
 		ISMSStreamHandler *handler = [self.handlerStack objectAtIndex:index];
-		if (!handler.song.isFullyCached && !handler.song.isTempCached && !([CacheQueueManager.si.currentSong isEqualToSong:handler.song] && CacheQueueManager.si.isDownloading))
+		if (!handler.song.isFullyCached && !handler.song.isTempCached && !([CacheQueueManager.si.currentSong isEqual:handler.song] && CacheQueueManager.si.isDownloading))
         {
             DLog(@"Removing song from cached songs table: %@", handler.song);
-            [handler.song removeFromCachedSongsTable];
-            //[[ISMSPlaylist downloadedSongs] removeSongWithSong:handler.song notify:YES];
+            [handler.song deleteCache];
+            //[[Playlist downloadedSongs] removeSongWithSong:handler.song notify:YES];
         }
         [self.handlerStack removeObjectAtIndexSafe:index];
         
@@ -295,7 +295,7 @@ LOG_LEVEL_ISUB_DEBUG
 }
 
 // Convenience method
-- (void)removeStreamForSong:(ISMSSong *)aSong
+- (void)removeStreamForSong:(Song *)aSong
 {
 	// If aSong == nil, do nothing
 	if (!aSong)
@@ -318,7 +318,7 @@ LOG_LEVEL_ISUB_DEBUG
 	// As an added check, verify that this handler is still in the stack
 	if ([self isSongInQueue:handler.song])
 	{
-		if (CacheQueueManager.si.isDownloading && [CacheQueueManager.si.currentSong isEqualToSong:handler.song])
+		if (CacheQueueManager.si.isDownloading && [CacheQueueManager.si.currentSong isEqual:handler.song])
 		{
 			// This song is already being downloaded by the cache queue, so just start the player
 			[self ISMSStreamHandlerStartPlayback:handler];
@@ -345,7 +345,7 @@ LOG_LEVEL_ISUB_DEBUG
 	if (!handler)
 		return;
 	
-	if (CacheQueueManager.si.isDownloading && [CacheQueueManager.si.currentSong isEqualToSong:handler.song])
+	if (CacheQueueManager.si.isDownloading && [CacheQueueManager.si.currentSong isEqual:handler.song])
 	{
 		// This song is already being downloaded by the cache queue, so just start the player
 		[self ISMSStreamHandlerStartPlayback:handler];
@@ -378,26 +378,28 @@ LOG_LEVEL_ISUB_DEBUG
 
 - (void)saveHandlerStack
 {
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.handlerStack];
-	if (data)
-	{
-		[[NSUserDefaults standardUserDefaults] setObject:data forKey:@"handlerStack"];
-		[[NSUserDefaults standardUserDefaults] synchronize];
-	}
+    // TODO: Rewrite this
+//	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.handlerStack];
+//	if (data)
+//	{
+//		[[NSUserDefaults standardUserDefaults] setObject:data forKey:@"handlerStack"];
+//		[[NSUserDefaults standardUserDefaults] synchronize];
+//	}
 }
 
 - (void)loadHandlerStack
-{	
-	NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"handlerStack"];
-	if (data) 
-		self.handlerStack = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-
-	for (ISMSStreamHandler *handler in self.handlerStack)
-	{
-		handler.delegate = self;
-	}
-	
-	DDLogVerbose(@"[ISMSStreamManager] load handler stack, handlerStack: %@", self.handlerStack);
+{
+    // TODO: Rewrite this
+//	NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"handlerStack"];
+//	if (data) 
+//		self.handlerStack = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//
+//	for (ISMSStreamHandler *handler in self.handlerStack)
+//	{
+//		handler.delegate = self;
+//	}
+//	
+//	DDLogVerbose(@"[ISMSStreamManager] load handler stack, handlerStack: %@", self.handlerStack);
 
 }
 
@@ -414,7 +416,7 @@ LOG_LEVEL_ISUB_DEBUG
 
 #pragma mark Download
 
-- (void)queueStreamForSong:(ISMSSong *)song byteOffset:(unsigned long long)byteOffset atIndex:(NSInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
+- (void)queueStreamForSong:(Song *)song byteOffset:(unsigned long long)byteOffset atIndex:(NSInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload
 {
 	if (!song)
 		return;
@@ -448,12 +450,12 @@ LOG_LEVEL_ISUB_DEBUG
 	[self saveHandlerStack];
 }
 
-- (BOOL)isSongInQueue:(ISMSSong *)aSong
+- (BOOL)isSongInQueue:(Song *)aSong
 {
 	BOOL isSongInQueue = NO;
 	for (ISMSStreamHandler *handler in self.handlerStack)
 	{
-		if ([handler.song isEqualToSong:aSong])
+		if ([handler.song isEqual:aSong])
 		{
 			isSongInQueue = YES;
 			break;
@@ -469,11 +471,11 @@ LOG_LEVEL_ISUB_DEBUG
 	}
     
     for (int i = 0; i < numStreamsToQueue; i++) {
-        ISMSSong *aSong = [PlayQueue.si songAtIndex:[PlayQueue.si indexAtOffsetFromCurrentIndex:i]];
+        Song *aSong = [PlayQueue.si songAtIndex:[PlayQueue.si indexAtOffsetFromCurrentIndex:i]];
         
         // Check if the song is already in this position in the queue
         ISMSStreamHandler *handler = [self.handlerStack objectAtIndexSafe: i];
-        if (![aSong isEqualToSong:handler.song]) {
+        if (![aSong isEqual:handler.song]) {
             
             // Song didn't match, so remove whatever is in the queue from this position forward
             for (int j = i; j < numStreamsToQueue; j++) {
@@ -483,10 +485,10 @@ LOG_LEVEL_ISUB_DEBUG
             // Add song to stream queue
             if (aSong && aSong.contentType.basicType == ISMSBasicContentTypeAudio &&
                 ![self isSongInQueue:aSong] &&
-                ![self.lastTempCachedSong isEqualToSong:aSong] &&
+                ![self.lastTempCachedSong isEqual:aSong] &&
                 !aSong.isFullyCached &&
                 !SavedSettings.si.isOfflineMode &&
-                ![CacheQueueManager.si.currentSong isEqualToSong:aSong]) {
+                ![CacheQueueManager.si.currentSong isEqual:aSong]) {
                 
                 // Queue the song for download
                 [self queueStreamForSong:aSong byteOffset:0 atIndex:[self.handlerStack count] isTempCache:!SavedSettings.si.isSongCachingEnabled isStartDownload:isStartDownload];
@@ -525,8 +527,8 @@ LOG_LEVEL_ISUB_DEBUG
 
 - (void)currentPlaylistOrderChanged
 {
-	ISMSSong *currentSong = PlayQueue.si.currentSong;
-	ISMSSong *nextSong = PlayQueue.si.nextSong;
+	Song *currentSong = PlayQueue.si.currentSong;
+	Song *nextSong = PlayQueue.si.nextSong;
 	NSMutableArray *songsToSkip = [NSMutableArray arrayWithCapacity:2];
 	if (currentSong) [songsToSkip addObject:currentSong];
 	if (nextSong) [songsToSkip addObject:nextSong];
@@ -548,8 +550,8 @@ LOG_LEVEL_ISUB_DEBUG
 	// Update the last cached song
 	self.lastCachedSong = handler.song;
     
-    ISMSSong *currentSong = PlayQueue.si.currentSong;
-	if ([handler.song isEqualToSong:currentSong])
+    Song *currentSong = PlayQueue.si.currentSong;
+	if ([handler.song isEqual:currentSong])
 	{
         // TODO: Stop interacting directly with AudioEngine
 		[AudioEngine.si startSong:currentSong index:PlayQueue.si.currentIndex];
@@ -642,7 +644,7 @@ LOG_LEVEL_ISUB_DEBUG
             if ([CacheQueueManager.si containsWithSong:handler.song])
             {
                 //handler.song.isDownloaded = YES;
-                [[ISMSPlaylist downloadQueue] removeWithSong:handler.song notify:YES];
+                [[Playlist downloadQueue] removeWithSong:handler.song notify:YES];
             }
             
             DLog(@"Marking isFullyCached = YES for %@", handler.song);
@@ -667,7 +669,7 @@ LOG_LEVEL_ISUB_DEBUG
 		
 		// Keep the queue filled
 		[self fillStreamQueue];
-		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:handler.song.songId forKey:@"songId"];
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@(handler.song.songId) forKey:@"songId"];
 		[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_StreamHandlerSongDownloaded 
 													  userInfo:userInfo];
 	}

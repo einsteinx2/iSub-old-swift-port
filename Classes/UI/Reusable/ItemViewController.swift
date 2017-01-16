@@ -325,7 +325,7 @@ class ItemViewController: DraggableTableViewController {
         case albumsSectionIndex:
             height = ISMSAlbumCellHeight
         case songsSectionIndex:
-            height = ISMSSongCellHeight
+            height = SongCellHeight
         default:
             break
         }
@@ -388,8 +388,8 @@ class ItemViewController: DraggableTableViewController {
         }
     }
     
-    fileprivate func showActionSheet(item: ISMSItem, indexPath: IndexPath) {
-        if let song = item as? ISMSSong {
+    fileprivate func showActionSheet(item: Item, indexPath: IndexPath) {
+        if let song = item as? Song {
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             
             alertController.addAction(UIAlertAction(title: "Play All", style: .default) { action in
@@ -404,21 +404,21 @@ class ItemViewController: DraggableTableViewController {
                 PlayQueue.si.insertSong(song: song, index: PlayQueue.si.songCount, notify: true)
             })
             
-            if !viewModel.isBrowsingFolder, let folderId = song.folderId as? Int, let mediaFolderId = song.mediaFolderId as? Int {
+            if !viewModel.isBrowsingFolder, let folderId = song.folderId, let mediaFolderId = song.mediaFolderId {
                 alertController.addAction(UIAlertAction(title: "Go to Folder", style: .default) { action in
                     let loader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
                     self.pushItemController(loader: loader)
                 })
             }
             
-            if let artistId = song.artistId as? Int {
+            if let artistId = song.artistId {
                 alertController.addAction(UIAlertAction(title: "Go to Artist", style: .default) { action in
                     let loader = ArtistLoader(artistId: artistId)
                     self.pushItemController(loader: loader)
                 })
             }
             
-            if !viewModel.isBrowsingAlbum, let albumId = song.albumId as? Int {
+            if !viewModel.isBrowsingAlbum, let albumId = song.albumId {
                 alertController.addAction(UIAlertAction(title: "Go to Album", style: .default) { action in
                     let loader = AlbumLoader(albumId: albumId)
                     self.pushItemController(loader: loader)
@@ -427,7 +427,7 @@ class ItemViewController: DraggableTableViewController {
             
             if viewModel.isBrowsingCache {
                 alertController.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
-                    song.removeFromCache()
+                    _ = song.deleteCache()
                 })
             }
             

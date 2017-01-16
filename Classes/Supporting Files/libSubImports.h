@@ -27,7 +27,6 @@
 #import "LoadingScreen.h"
 
 // Data Model
-#import "ISMSDataModelObjects.h"
 #import "ISMSErrorDomain.h"
 #import "SUSErrorDomain.h"
 #import "NSError+ISMSError.h"

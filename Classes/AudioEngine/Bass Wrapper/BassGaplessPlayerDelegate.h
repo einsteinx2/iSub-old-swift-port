@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Ben Baron. All rights reserved.
 //
 
-@class ISMSSong, BassGaplessPlayer;
+@class Song, BassGaplessPlayer;
 @protocol BassGaplessPlayerDelegate <NSObject>
 
 @optional
@@ -21,7 +21,7 @@
 - (void)bassRetrievingOutputData:(nonnull BassGaplessPlayer *)player;
 
 @required
-- (nullable ISMSSong *)bassSongForIndex:(NSInteger)index player:(nonnull BassGaplessPlayer *)player;
+- (nullable Song *)bassSongForIndex:(NSInteger)index player:(nonnull BassGaplessPlayer *)player;
 - (NSInteger)bassIndexAtOffset:(NSInteger)offset fromIndex:(NSInteger)index player:(nonnull BassGaplessPlayer *)player;
 - (NSInteger)bassCurrentPlaylistIndex:(nonnull BassGaplessPlayer *)player;
 - (void)bassRetrySongAtIndex:(NSInteger)index player:(nonnull BassGaplessPlayer*)player;

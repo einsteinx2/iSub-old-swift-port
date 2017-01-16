@@ -11,7 +11,7 @@ import UIKit
 import QuartzCore
 import Async
 
-@objc protocol View {
+protocol View {
     // Must be a UIView or at least act like one
     var screenshot: UIImage { get }
     var layer: CALayer { get }
@@ -21,10 +21,10 @@ import Async
     var alpha: CGFloat { get set }
 }
 
-@objc protocol DraggableCell: View {
+protocol DraggableCell: View {
     var containerView: UIView { get }
     var isDraggable: Bool { get }
-    var dragItem: ISMSItem? { get }
+    var dragItem: Item? { get }
     var indexPath: IndexPath? { get }
 }
 
@@ -51,8 +51,8 @@ class DraggableTableView: UITableView {
         static let dragCellKey            = "dragCellKey"
         static let dragSourceTableViewKey = "dragSourceTableViewKey"
         
-        static func userInfo(location: NSValue, dragSourceTableView: UITableView, dragCell: DraggableCell) -> [String: AnyObject] {
-            var userInfo = [String: AnyObject]()
+        static func userInfo(location: NSValue, dragSourceTableView: UITableView, dragCell: DraggableCell) -> [String: Any] {
+            var userInfo = [String: Any]()
             userInfo[dragSourceTableViewKey] = dragSourceTableView
             userInfo[locationKey] = location
             userInfo[dragCellKey] = dragCell
@@ -346,7 +346,7 @@ class DraggableTableView: UITableView {
         super.setContentOffset(contentOffset, animated: animated)
     }
     
-    @objc fileprivate func longPressFired(cell: DraggableCell, windowLocation: CGPoint) {
+    fileprivate func longPressFired(cell: DraggableCell, windowLocation: CGPoint) {
         isDraggingCell = true
         activateDragging(cell: cell, animateToOffset: maxDragImageOffset)
         

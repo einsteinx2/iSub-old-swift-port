@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RootPlaylistsLoader: ApiLoader, ItemLoader {
+/*class RootPlaylistsLoader: ApiLoader, ItemLoader {
     var playlists = [Playlist]()
     
     var associatedObject: Any?
@@ -47,4 +47,4 @@ class RootPlaylistsLoader: ApiLoader, ItemLoader {
         // TODO: Fix with new data model
         return false
     }
-}
+}*/

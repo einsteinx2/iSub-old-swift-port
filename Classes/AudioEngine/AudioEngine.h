@@ -21,7 +21,7 @@
 #import "BassGaplessPlayer.h"
 #import <AVFoundation/AVFoundation.h>
 
-@class ISMSSong, BassParamEqValue, BassStream, SUSRegisterActionLoader, EX2RingBuffer;
+@class Song, BassParamEqValue, BassStream, SUSRegisterActionLoader, EX2RingBuffer;
 @interface AudioEngine : NSObject
 
 + (nonnull instancetype)si;
@@ -40,8 +40,8 @@
 
 // BASS methods
 //
-- (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index;
-- (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index byteOffset:(NSInteger)bytesOffset;
+- (void)startSong:(nonnull Song *)song index:(NSInteger)index;
+- (void)startSong:(nonnull Song *)song index:(NSInteger)index byteOffset:(NSInteger)bytesOffset;
 - (void)startEmptyPlayer;
 
 // Player control (no longer directly touch the BassGaplessPlayer from outside the audio engine

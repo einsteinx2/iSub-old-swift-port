@@ -65,12 +65,12 @@ static AudioEngine *sharedInstance = nil;
     }
 }
 
-- (void)startSong:(nonnull ISMSSong *)song index:(NSInteger)index
+- (void)startSong:(nonnull Song *)song index:(NSInteger)index
 {
     [self startSong:song index:index byteOffset:0];
 }
 
-- (void)startSong:(ISMSSong *)song index:(NSInteger)index byteOffset:(NSInteger)bytes
+- (void)startSong:(Song *)song index:(NSInteger)index byteOffset:(NSInteger)bytes
 {
 	// Stop the player
 	[self.player stop];

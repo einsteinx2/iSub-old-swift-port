@@ -14,9 +14,9 @@ struct MediaFolderRepository: ItemRepository {
     
     let table = "mediaFolders"
     let cachedTable = "cachedMediaFolders"
-    let itemId = "mediaFolderId"
+    let itemIdField = "mediaFolderId"
     
-    func mediaFolder(mediaFolderId: Int, serverId: Int, loadSubItems: Bool = false) -> Album? {
+    func mediaFolder(mediaFolderId: Int, serverId: Int, loadSubItems: Bool = false) -> MediaFolder? {
         return gr.item(repository: self, itemId: mediaFolderId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
@@ -49,33 +49,15 @@ struct MediaFolderRepository: ItemRepository {
                 try db.executeUpdate(query, mediaFolder.mediaFolderId, mediaFolder.serverId, mediaFolder.name)
             } catch {
                 success = false
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return success
     }
     
-    func folders(mediaFolderId: Int, serverId: Int, isCachedTable: Bool) -> [Folder] {
-        var folders = [Folder]()
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
-            let table = tableName(repository: self, isCachedTable: isCachedTable)
-            let query = "SELECT * FROM \(table) WHERE mediaFolderId = ? AND serverId = ? AND parentFolderId IS NULL"
-            do {
-                let result = try db.executeQuery(query, mediaFolderId, serverId)
-                while result.next() {
-                    let folder = Folder(result: result)
-                    folders.append(folder)
-                }
-                result.close()
-            } catch {
-                print("DB Error: \(error)")
-            }
-        }
-        return folders
-    }
-    
     func loadSubItems(mediaFolder: MediaFolder) {
-        mediaFolder.folders = folders(mediaFolderId: mediaFolder.mediaFolderId, serverId: mediaFolder.serverId, isCachedTable: false)
+        mediaFolder.folders = FolderRepository.si.rootFolders(mediaFolderId: mediaFolder.mediaFolderId, serverId: mediaFolder.serverId)
+        mediaFolder.songs = SongRepository.si.rootSongs(mediaFolderId: mediaFolder.mediaFolderId, serverId: mediaFolder.serverId)
     }
 }
 
@@ -102,6 +84,10 @@ extension MediaFolder: PersistedItem {
     
     func delete() -> Bool {
         return repository.delete(mediaFolder: self)
+    }
+    
+    func deleteCache() -> Bool {
+        return repository.delete(mediaFolder: self, isCachedTable: true)
     }
     
     func loadSubItems() {

@@ -12,7 +12,7 @@
 
 @interface BassGaplessPlayer ()
 - (NSInteger)nextIndex;
-- (ISMSSong *)nextSong;
+- (Song *)nextSong;
 @end
 
 @implementation BassGaplessPlayer
@@ -104,7 +104,7 @@ void CALLBACK MyStreamEndCallback(HSYNC handle, DWORD channel, DWORD data, void 
             [EX2Dispatch runInQueue:userInfo.player.streamGcdQueue waitUntilDone:NO block:^
              {
                  // Prepare the next song in the queue
-                 ISMSSong *nextSong = [userInfo.player nextSong];
+                 Song *nextSong = [userInfo.player nextSong];
                  DDLogVerbose(@"[BassGaplessPlayer]  Preparing stream for: %@", nextSong);
                  BassStream *nextStream = [userInfo.player prepareStreamForSong:nextSong];
                  if (nextStream)
@@ -165,7 +165,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 			return 0;
 		
 		QWORD length = 0;
-		ISMSSong *theSong = userInfo.song;
+		Song *theSong = userInfo.song;
 		if (userInfo.shouldBreakWaitLoopForever)
 		{
 			return 0;
@@ -178,7 +178,7 @@ QWORD CALLBACK MyFileLenProc(void *user)
 		else
 		{
 			// Return server reported file size
-			length = [theSong.size longLongValue];
+			length = theSong.size;
 		}
 		
 		DDLogVerbose(@"[BassGaplessPlayer] checking %@ length: %llu", theSong.title, length);
@@ -294,7 +294,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		}
 	}
     
-    ISMSSong *currentSong = userInfo.song;
+    Song *currentSong = userInfo.song;
 	if (!currentSong || (bytesRead == 0 && !BASS_ChannelIsActive(userInfo.stream) && (currentSong.isFullyCached || currentSong.isTempCached)))
 	{
 		self.isPlaying = NO;
@@ -523,7 +523,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 							userInfo.wasFileJustUnderrun = YES;
 							
 							// Handle waiting for additional data
-							ISMSSong *theSong = userInfo.song;
+							Song *theSong = userInfo.song;
 							if (!theSong.isFullyCached)
 							{
                                 // Bail if the thread was canceled
@@ -546,7 +546,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
                                     
                                     // Get the stream for this song
                                     ISMSStreamHandler *handler = [ISMSStreamManager.si handlerForSong:userInfo.song];
-                                    if (!handler && [[CacheQueueManager.si currentSong] isEqualToSong:userInfo.song])
+                                    if (!handler && [[CacheQueueManager.si currentSong] isEqual:userInfo.song])
                                         handler = [CacheQueueManager.si currentStreamHandler];
                                     
                                     // Calculate the bytes to wait based on the recent download speed. If the handler is nil or recent download speed is 0
@@ -590,7 +590,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 												if (userInfo.localFileSize >= userInfo.neededSize)
 													break;
 												// Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
-												else if (theSong.isTempCached && [theSong isEqualToSong:ISMSStreamManager.si.lastTempCachedSong])
+												else if (theSong.isTempCached && [theSong isEqual:ISMSStreamManager.si.lastTempCachedSong])
 													break;
 												// If the song has finished caching, we can stop waiting
 												else if (theSong.isFullyCached)
@@ -679,7 +679,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     }
 }
 
-- (BOOL)testStreamForSong:(ISMSSong *)aSong
+- (BOOL)testStreamForSong:(Song *)aSong
 {
     // Make sure we're using the right device
     BASS_SetDevice(ISMS_BassDeviceNumber);
@@ -688,10 +688,10 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	if (aSong.fileExists)
 	{
 		// Create the stream
-        HSTREAM fileStream = BASS_StreamCreateFile(NO, [aSong.currentPath cStringUsingEncoding:NSUTF8StringEncoding], 0, aSong.size.longValue, BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT);
+        HSTREAM fileStream = BASS_StreamCreateFile(NO, [aSong.currentPath cStringUsingEncoding:NSUTF8StringEncoding], 0, aSong.size, BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT);
 		if(!fileStream)
         {
-            fileStream = BASS_StreamCreateFile(NO, [aSong.currentPath cStringUsingEncoding:NSUTF8StringEncoding], 0, aSong.size.longValue, BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT);
+            fileStream = BASS_StreamCreateFile(NO, [aSong.currentPath cStringUsingEncoding:NSUTF8StringEncoding], 0, aSong.size, BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT);
         }
         
 		if (fileStream)
@@ -708,7 +708,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     return NO;
 }
 
-- (BassStream *)prepareStreamForSong:(ISMSSong *)aSong
+- (BassStream *)prepareStreamForSong:(Song *)aSong
 {
     // Make sure we're using the right device
     BASS_SetDevice(ISMS_BassDeviceNumber);
@@ -779,7 +779,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	return nil;
 }
 
-- (void)startSong:(ISMSSong *)aSong atIndex:(NSInteger)index byteOffset:(NSInteger)byteOffset
+- (void)startSong:(Song *)aSong atIndex:(NSInteger)index byteOffset:(NSInteger)byteOffset
 {
     if (!aSong)
         return;
@@ -870,8 +870,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 				 {
 					 DDLogError(@"[BassGaplessPlayer] Stream for song %@ failed, file is not on disk, so calling retrying the song", userInfo.song.title);
 					 // File was removed, so start again normally
-                     [aSong removeFromCachedSongsTable];
-                     //[[ISMSPlaylist downloadedSongs] removeSongWithSong:aSong notify:YES];
+                     [aSong deleteCache];
+                     //[[Playlist downloadedSongs] removeSongWithSong:aSong notify:YES];
                      
                      [self.delegate bassRetrySongAtIndex:self.currentPlaylistIndex player:self];
 				 }
@@ -890,8 +890,8 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 			 }
 			 else
 			 {
-                 [aSong removeFromCachedSongsTable];
-				 //[[ISMSPlaylist downloadedSongs] removeSongWithSong:aSong notify:YES];
+                 [aSong deleteCache];
+				 //[[Playlist downloadedSongs] removeSongWithSong:aSong notify:YES];
                  
                  [self.delegate bassRetrySongAtIndex:self.currentPlaylistIndex player:self];
 			 }
@@ -904,7 +904,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     return [self.delegate bassIndexAtOffset:1 fromIndex:self.currentPlaylistIndex player:self];
 }
 
-- (ISMSSong *)nextSong
+- (Song *)nextSong
 {
     return [self.delegate bassSongForIndex:[self nextIndex] player:self];
 }
@@ -968,7 +968,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	if (seconds < 0)
     {
         // Use the previous song (i.e the one still coming out of the speakers), since we're actually finishing it right now
-        return self.previousSongForProgress.duration.doubleValue + seconds;
+        return self.previousSongForProgress.durationObjC + seconds;
     }
     
 	return seconds + BASS_ChannelBytes2Seconds(self.currentStream.stream, self.startByteOffset);
@@ -982,12 +982,12 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
     double seconds = [self rawProgress];
     if (seconds < 0)
     {
-        double duration = self.previousSongForProgress.duration.doubleValue;
+        double duration = self.previousSongForProgress.durationObjC;
         seconds = duration + seconds;
         return seconds / duration;
     }
     
-    double duration = self.currentStream.song.duration.doubleValue;
+    double duration = self.currentStream.song.durationObjC;
     return seconds / duration;
 }
 
@@ -1054,7 +1054,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 		if (self.currentStream == 0)
 		{
             // See if we're at the end of the playlist
-            ISMSSong *currentSong = [self.delegate bassSongForIndex:self.currentPlaylistIndex player:self];
+            Song *currentSong = [self.delegate bassSongForIndex:self.currentPlaylistIndex player:self];
             if (currentSong)
             {
                 [self.delegate bassRetrySongAtOffsetInBytes:AudioEngine.si.startByteOffset player:self];
@@ -1152,7 +1152,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 
 - (void)seekToPositionInPercent:(double)percent fadeVolume:(BOOL)fadeVolume
 {
-    double seconds = self.currentStream.song.duration.doubleValue * percent;
+    double seconds = self.currentStream.song.durationObjC * percent;
     [self seekToPositionInSeconds:seconds fadeVolume:fadeVolume];
 }
 

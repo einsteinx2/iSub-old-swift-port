@@ -61,9 +61,6 @@ extension URLRequest {
     init(subsonicAction: SubsonicURLAction, baseUrl: String, username: String, password: String, parameters: [String: Any]? = nil, fragment: String? = nil, byteOffset: Int = 0) {
         
         var urlString = "\(baseUrl)/rest/\(subsonicAction.rawValue).\(subsonicAction.urlExtension)"
-        if let fragment = fragment {
-            urlString += "#\(fragment)"
-        }
         
         // Generate a 32 character random salt
         // Then use the Subsonic required md5(password + salt) function to generate the token.
@@ -73,7 +70,7 @@ extension URLRequest {
         // Only support Subsonic version 5.3 and later
         let version = "1.13.0"
         
-        // Setup the post body
+        // Setup the parameters
         var parametersString = "?c=iSub&v=\(version)&u=\(username)&t=\(token)&s=\(salt)"
         if let parameters = parameters {
             for (key, value) in parameters {
@@ -87,6 +84,11 @@ extension URLRequest {
             }
         }
         urlString += parametersString
+        
+        // Add the fragment
+        if let fragment = fragment {
+            urlString += "#\(fragment)"
+        }
         
         self.init(url: URL(string: urlString)!)
         self.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData

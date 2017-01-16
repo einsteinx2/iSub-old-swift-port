@@ -22,11 +22,11 @@ class PlayQueueViewModel: NSObject {
         return songs.count
     }
     
-    fileprivate var songs = [ISMSSong]()
+    fileprivate var songs = [Song]()
     
     fileprivate(set) var currentIndex: Int = -1
     
-    fileprivate(set) var currentSong: ISMSSong?
+    fileprivate(set) var currentSong: Song?
     
     override init() {
         super.init()
@@ -63,14 +63,14 @@ class PlayQueueViewModel: NSObject {
             delegate?.currentIndexChanged()
         }
         
-        if let oldSong = oldSong, let currentSong = currentSong, !oldSong.isEqual(to: currentSong) {
+        if let oldSong = oldSong, let currentSong = currentSong, !oldSong.isEqual(currentSong) {
             delegate?.currentSongChanged()
         } else if (oldSong == nil && currentSong != nil) || (oldSong != nil && currentSong == nil) {
             delegate?.currentSongChanged()
         }
     }
     
-    func song(atIndex index: Int) -> ISMSSong {
+    func song(atIndex index: Int) -> Song {
         return songs[index]
     }
     
@@ -78,7 +78,7 @@ class PlayQueueViewModel: NSObject {
         PlayQueue.si.playSong(atIndex: index)
     }
     
-    func insertSong(_ song: ISMSSong, atIndex index: Int) {
+    func insertSong(_ song: Song, atIndex index: Int) {
         PlayQueue.si.insertSong(song: song, index: index, notify: false)
         reloadSongs()
     }

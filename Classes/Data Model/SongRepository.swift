@@ -14,17 +14,17 @@ struct SongRepository: ItemRepository {
     
     let table = "songs"
     let cachedTable = "cachedSongs"
-    let itemId = "songId"
+    let itemIdField = "songId"
     
     func song(songId: Int, serverId: Int, loadSubItems: Bool = false) -> Song? {
         return gr.item(repository: self, itemId: songId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
-    func allAlbums(serverId: Int? = nil, isCachedTable: Bool = false) -> [Album] {
+    func allSongs(serverId: Int? = nil, isCachedTable: Bool = false) -> [Song] {
         return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
     }
     
-    func deleteAllAlbums(serverId: Int?) -> Bool {
+    func deleteAllSongs(serverId: Int?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -54,7 +54,53 @@ struct SongRepository: ItemRepository {
         return lastPlayed
     }
     
-    func songs(albumId: Int, serverId: Int, isCachedTable: Bool) -> [Song] {
+    func deleteRootSongs(mediaFolderId: Int?, serverId: Int, isCachedTable: Bool = false) -> Bool {
+        var success = true
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+            let table = tableName(repository: self, isCachedTable: isCachedTable)
+            var query = "DELETE FROM \(table) WHERE folderId IS NULL AND serverId = ?"
+            do {
+                if let mediaFolderId = mediaFolderId {
+                    query += " AND mediaFolderId = ?"
+                    try db.executeUpdate(query, serverId, mediaFolderId)
+                } else {
+                    try db.executeUpdate(query, serverId)
+                }
+            } catch {
+                success = false
+                printError(error)
+            }
+        }
+        return success
+    }
+    
+    func rootSongs(mediaFolderId: Int?, serverId: Int, isCachedTable: Bool = false) -> [Song] {
+        var songs = [Song]()
+        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+            let table = tableName(repository: self, isCachedTable: isCachedTable)
+            var query = "SELECT * FROM \(table) WHERE folderId IS NULL AND serverId = ?"
+            do {
+                let result: FMResultSet
+                if let mediaFolderId = mediaFolderId {
+                    query += " AND mediaFolderId = ?"
+                    result = try db.executeQuery(query, serverId, mediaFolderId)
+                } else {
+                    result = try db.executeQuery(query, serverId)
+                }
+                
+                while result.next() {
+                    let song = Song(result: result)
+                    songs.append(song)
+                }
+                result.close()
+            } catch {
+                printError(error)
+            }
+        }
+        return songs
+    }
+    
+    func songs(albumId: Int, serverId: Int, isCachedTable: Bool = false) -> [Song] {
         var songs = [Song]()
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
@@ -67,13 +113,13 @@ struct SongRepository: ItemRepository {
                 }
                 result.close()
             } catch {
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return songs
     }
     
-    func songs(folderId: Int, serverId: Int, isCachedTable: Bool) -> [Song] {
+    func songs(folderId: Int, serverId: Int, isCachedTable: Bool = false) -> [Song] {
         var songs = [Song]()
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
@@ -86,7 +132,7 @@ struct SongRepository: ItemRepository {
                 }
                 result.close()
             } catch {
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return songs
@@ -101,7 +147,7 @@ struct SongRepository: ItemRepository {
                 try db.executeUpdate(query, song.songId, song.serverId, song.contentTypeId, n2N(song.transcodedContentTypeId), n2N(song.mediaFolderId), n2N(song.folderId), n2N(song.artistId), n2N(song.albumId), n2N(song.genreId), n2N(song.coverArtId), song.title, n2N(song.duration), n2N(song.bitrate), n2N(song.trackNumber), n2N(song.discNumber), n2N(song.year), song.size, song.path, n2N(song.lastPlayed), n2N(song.artistName), n2N(song.albumName))
             } catch {
                 success = false
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return success
@@ -109,25 +155,62 @@ struct SongRepository: ItemRepository {
     
     func loadSubItems(song: Song) {
         if let folderId = song.folderId {
-            song.folder = FolderRepository.si.folder(folderId: folderId, serverId: song.serverId, loadSubItems: false)
+            song.folder = FolderRepository.si.folder(folderId: folderId, serverId: song.serverId)
         }
         
         if let artistId = song.artistId {
-            song.artist = ArtistRepository.si.artist(artistId: artistId, serverId: song.serverId, loadSubItems: false)
+            song.artist = ArtistRepository.si.artist(artistId: artistId, serverId: song.serverId)
         }
         
         if let albumId = song.albumId {
-            song.album = AlbumRepository.si.album(albumId: albumId, serverId: song.serverId, loadSubItems: false)
+            song.album = AlbumRepository.si.album(albumId: albumId, serverId: song.serverId)
         }
 
         if let genreId = song.genreId {
             song.genre = GenreRepository.si.genre(genreId: genreId)
         }
         
-        song.contentType = ISMSContentType(contentTypeId: song.contentTypeId)!
+        song.contentType = ISMSContentType(contentTypeId: song.contentTypeId)
         
         if let transcodedContentTypeId = song.transcodedContentTypeId {
             song.transcodedContentType = ISMSContentType(contentTypeId: transcodedContentTypeId)
+        }
+    }
+}
+
+extension Song {
+    var isFullyCached: Bool {
+        get {
+            let query = "SELECT fullyCached FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?"
+            return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, songId, serverId)
+        }
+        set {
+            // TODO: Handle pinned column
+            DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+                let query = "REPLACE INTO cachedSongsMetadata VALUES (?, ?, ?, ?, ?)"
+                try? db.executeUpdate(query, self.songId, self.serverId, false, true, false)
+            }
+            
+            // Add subItems to cache db
+            loadSubItems()
+            _ = folder?.cache()
+            _ = artist?.cache()
+            _ = album?.cache()
+            _ = cache()
+        }
+    }
+    
+    var isPartiallyCached: Bool {
+        get {
+            let query = "SELECT partiallyCached FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?"
+            return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, songId, serverId)
+        }
+        set {
+            // TODO: Handle pinned column
+            DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+                let query = "REPLACE INTO cachedSongsMetadata VALUES (?, ?, ?, ?, ?)"
+                try? db.executeUpdate(query, self.songId, self.serverId, true, false, false)
+            }
         }
     }
 }
@@ -155,6 +238,35 @@ extension Song: PersistedItem {
     
     func delete() -> Bool {
         return repository.delete(song: self)
+    }
+    
+    func deleteCache() -> Bool {
+        // TODO: Use a transaction
+        var success = true
+        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+            var queries = [String]()
+            
+            // Remove the metadata entry
+            queries.append("DELETE FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?")
+            
+            // Remove the song table entry
+            queries.append("DELETE FROM cachedSongs WHERE songId = ? AND serverId = ?")
+            
+            // Remove artist/album/folder entries if no other songs reference them
+            queries.append("DELETE FROM cachedFolders WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE folderId = cachedFolders.folderId AND serverId = cachedFolders.serverId)")
+            queries.append("DELETE FROM cachedArtists WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE artistId = cachedArtists.artistId AND serverId = cachedArtists.serverId)")
+            queries.append("DELETE FROM cachedAlbums WHERE NOT EXISTS (SELECT 1 FROM cachedSongs WHERE albumId = cachedAlbums.albumId AND serverId = cachedAlbums.serverId)")
+            
+            for query in queries {
+                do {
+                    try db.executeUpdate(query, self.songId, self.serverId)
+                } catch {
+                    success = false
+                    printError(error)
+                }
+            }
+        }
+        return success
     }
     
     func loadSubItems() {

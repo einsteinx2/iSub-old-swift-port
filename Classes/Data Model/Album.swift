@@ -59,8 +59,8 @@ class Album {
         }
         
         if let genreString = element.attribute(asStringOptional: "genre") {
-            let genre = ISMSGenre(name: genreString)
-            self.genreId = genre.genreId as? Int
+            genre = GenreRepository.si.genre(name: genreString)
+            self.genreId = genre!.genreId
         } else {
             self.genreId = nil
         }

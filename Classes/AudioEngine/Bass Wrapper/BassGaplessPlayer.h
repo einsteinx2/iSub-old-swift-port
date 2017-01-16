@@ -30,7 +30,7 @@
 // BASS streams
 @property (strong) NSMutableArray *streamQueue;
 @property (readonly) BassStream *currentStream;
-@property (copy) ISMSSong *previousSongForProgress;
+@property (strong) Song *previousSongForProgress;
 @property (nonatomic) HSTREAM outStream;
 @property (nonatomic) HSTREAM mixerStream;
 
@@ -53,7 +53,7 @@
 // BASS methods
 //
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length;
-- (void)startSong:(ISMSSong *)aSong atIndex:(NSInteger)index byteOffset:(NSInteger)byteOffset;
+- (void)startSong:(Song *)aSong atIndex:(NSInteger)index byteOffset:(NSInteger)byteOffset;
 
 + (NSInteger)bytesToBufferForKiloBitrate:(NSInteger)rate speedInBytesPerSec:(NSInteger)speedInBytesPerSec;
 
@@ -67,7 +67,7 @@
 - (void)seekToPositionInSeconds:(double)seconds fadeVolume:(BOOL)fadeVolume;
 - (void)seekToPositionInPercent:(double)percent fadeVolume:(BOOL)fadeVolume;
 
-- (BOOL)testStreamForSong:(ISMSSong *)aSong;
-- (BassStream *)prepareStreamForSong:(ISMSSong *)aSong;
+- (BOOL)testStreamForSong:(Song *)aSong;
+- (BassStream *)prepareStreamForSong:(Song *)aSong;
 
 @end

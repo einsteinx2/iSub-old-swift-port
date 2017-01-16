@@ -11,9 +11,9 @@ import Foundation
 class ArtistLoader: ApiLoader, ItemLoader {
     let artistId: Int
     
-    var albums = [ISMSAlbum]()
+    var albums = [Album]()
     
-    var items: [ISMSItem] {
+    var items: [Item] {
         return albums
     }
     
@@ -27,41 +27,41 @@ class ArtistLoader: ApiLoader, ItemLoader {
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
-        var albumsTemp = [ISMSAlbum]()
+        var albumsTemp = [Album]()
         
         let serverId = SavedSettings.si().currentServerId
         root.iterate("artist.album") { album in
-            let anAlbum = ISMSAlbum(rxmlElement: album, serverId: serverId)
-            albumsTemp.append(anAlbum)
+            if let anAlbum = Album(rxmlElement: album, serverId: serverId) {
+                albumsTemp.append(anAlbum)
+            }
         }
         albums = albumsTemp
         
         // Persist associated object model if needed
-        if !ISMSArtist.isPersisted(NSNumber(value: artistId), serverId: NSNumber(value: serverId)) {
-            if let element = root.child("artist") {
-                let artist = ISMSArtist(rxmlElement: element, serverId: serverId)
-                artist.replace()
+        if !ArtistRepository.si.isPersisted(artistId: artistId, serverId: serverId) {
+            if let element = root.child("artist"), let artist = Artist(rxmlElement: element, serverId: serverId) {
+                _ = artist.replace()
             }
         }
         
-        self.persistModels()
+        persistModels()
         
         return true
     }
     
     func persistModels() {
         // Save the new albums
-        albums.forEach({$0.replace()})
+        albums.forEach({_ = $0.replace()})
         
         // Add to cache table if needed
-        if let artist = associatedObject as? ISMSArtist, artist.hasCachedSongs() {
-            artist.cacheModel()
+        if let artist = associatedObject as? Artist, artist.hasCachedSubItems {
+            _ = artist.cache()
         }
     }
     
     func loadModelsFromDatabase() -> Bool {
-        if let artist = associatedObject as? ISMSArtist {
-            artist.reloadSubmodels()
+        if let artist = associatedObject as? Artist {
+            artist.loadSubItems()
             albums = artist.albums
             return albums.count > 0
         }
@@ -69,6 +69,7 @@ class ArtistLoader: ApiLoader, ItemLoader {
     }
     
     var associatedObject: Any? {
-        return ISMSArtist(artistId: artistId, serverId: SavedSettings.si().currentServerId, loadSubmodels: false)
+        let serverId = SavedSettings.si().currentServerId
+        return ArtistRepository.si.artist(artistId: artistId, serverId: serverId)
     }
 }

@@ -12,14 +12,14 @@ class CachedArtistLoader: CachedDatabaseLoader {
     let artistId: Int
     let serverId: Int
     
-    var albums = [ISMSAlbum]()
+    var albums = [Album]()
     
-    override var items: [ISMSItem] {
+    override var items: [Item] {
         return albums
     }
     
     override var associatedObject: Any? {
-        return ISMSArtist(artistId: artistId, serverId: serverId, loadSubmodels: false)
+        return ArtistRepository.si.artist(artistId: artistId, serverId: serverId)
     }
     
     init(artistId: Int, serverId: Int) {
@@ -29,7 +29,7 @@ class CachedArtistLoader: CachedDatabaseLoader {
     }
     
     override func loadModelsFromDatabase() -> Bool {
-        albums = ISMSAlbum.albums(inArtist: artistId, serverId: serverId, cachedTable: true)
+        albums = AlbumRepository.si.albums(artistId: artistId, serverId: serverId, isCachedTable: true)
         return true
     }
 }

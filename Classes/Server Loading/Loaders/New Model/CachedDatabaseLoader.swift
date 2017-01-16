@@ -16,8 +16,8 @@ class CachedDatabaseLoader: ItemLoader {
         return nil
     }
     
-    var items: [ISMSItem] {
-        return [ISMSItem]()
+    var items: [Item] {
+        return [Item]()
     }
     
     var state: ApiLoaderState = .new

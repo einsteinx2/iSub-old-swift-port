@@ -13,7 +13,7 @@ extension Song: Item {
     var itemName: String { return title }
 }
 
-class Song: NSObject {
+@objc class Song: NSObject {
     let repository: SongRepository
     
     let songId: Int
@@ -21,6 +21,7 @@ class Song: NSObject {
     
     let contentTypeId: Int
     let transcodedContentTypeId: Int?
+    // TODO: See if mediaFolderId should be nullable
     let mediaFolderId: Int?
     let folderId: Int?
     let artistId: Int?
@@ -77,9 +78,16 @@ class Song: NSObject {
         return FileManager.default.fileExists(atPath: localTempPath)
     }
     
-    var localFileSize: Int {
-        let attributes = try? FileManager.default.attributesOfItem(atPath: currentPath)
-        return attributes?[.size] as? Int ?? 0
+    var localFileSize: Int64 {
+        if fileExists {
+            let attributes = try? FileManager.default.attributesOfItem(atPath: currentPath)
+            return attributes?[.size] as? Int64 ?? Int64(0)
+        }
+        return 0
+    }
+    
+    var fileExists: Bool {
+        return FileManager.default.fileExists(atPath: currentPath)
     }
     
     var estimatedBitrate: Int {
@@ -131,17 +139,17 @@ class Song: NSObject {
         self.albumName = element.attribute("album")?.clean
         
         // Retreive contentTypeId
-        if let contentTypeString = element.attribute(asStringOptional: "contentType") {
-            self.contentType = ISMSContentType(mimeType: contentTypeString)
-            self.contentTypeId = contentType!.contentTypeId as? Int ?? -1
+        if let contentTypeString = element.attribute(asStringOptional: "contentType"), let contentType = ISMSContentType(mimeType: contentTypeString) {
+            self.contentType = contentType
+            self.contentTypeId = contentType.contentTypeId as! Int
         } else {
             self.contentTypeId = -1
         }
         
         // Retreive transcodedContentTypeId
-        if let transcodedContentTypeString = element.attribute(asStringOptional: "transcodedContentType") {
-            self.transcodedContentType = ISMSContentType(mimeType: transcodedContentTypeString)
-            self.transcodedContentTypeId = transcodedContentType!.contentTypeId as? Int
+        if let transcodedContentTypeString = element.attribute(asStringOptional: "transcodedContentType"), let transcodedContentType = ISMSContentType(mimeType: transcodedContentTypeString) {
+            self.transcodedContentType = transcodedContentType
+            self.transcodedContentTypeId = transcodedContentType.contentTypeId as? Int
         } else {
             self.transcodedContentTypeId = nil
         }
@@ -155,7 +163,7 @@ class Song: NSObject {
         }
         
         // Retreive lastPlayed date, if it exists
-        self.lastPlayed = repository.lastPlayed(songId: songId, serverId: serverId, isCachedTable: false)
+        self.lastPlayed = repository.lastPlayed(songId: songId, serverId: serverId)
         
         self.repository = repository
         
@@ -186,5 +194,29 @@ class Song: NSObject {
         self.artistName              = result.string(forColumnIndex: 19)
         self.albumName               = result.string(forColumnIndex: 20)
         self.repository              = repository as! SongRepository
+        
+        // Preload content type objects
+        self.contentType = ISMSContentType(contentTypeId: self.contentTypeId)
+        if let transcodedContentTypeId = self.transcodedContentTypeId {
+            self.transcodedContentType = ISMSContentType(contentTypeId: transcodedContentTypeId)
+        }
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        if let song = object as? Song {
+            return isEqual(to: song)
+        }
+        return false
+    }
+    
+    func isEqual(to: Song) -> Bool {
+        return songId == to.songId && serverId == to.serverId
+    }
+}
+
+// Shim for Objective-C
+extension Song {
+    var durationObjC: Int {
+        return duration ?? 0
     }
 }

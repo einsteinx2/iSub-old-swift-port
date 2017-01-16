@@ -14,14 +14,15 @@ struct ArtistRepository: ItemRepository {
 
     let table = "artists"
     let cachedTable = "cachedArtists"
-    let itemId = "artistId"
+    let itemIdField = "artistId"
     
     func artist(artistId: Int, serverId: Int, loadSubItems: Bool = false) -> Artist? {
         return gr.item(repository: self, itemId: artistId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
     func allArtists(serverId: Int? = nil, isCachedTable: Bool = false) -> [Artist] {
-        return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
+        let artists: [Artist] = gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
+        return subsonicSorted(items: artists, ignoredArticles: DatabaseSingleton.si().ignoredArticles())
     }
     
     func deleteAllArtists(serverId: Int?) -> Bool {
@@ -30,6 +31,10 @@ struct ArtistRepository: ItemRepository {
     
     func isPersisted(artist: Artist, isCachedTable: Bool = false) -> Bool {
         return gr.isPersisted(repository: self, item: artist, isCachedTable: isCachedTable)
+    }
+    
+    func isPersisted(artistId: Int, serverId: Int, isCachedTable: Bool = false) -> Bool {
+        return gr.isPersisted(repository: self, itemId: artistId, serverId: serverId, isCachedTable: isCachedTable)
     }
     
     func hasCachedSubItems(artist: Artist) -> Bool {
@@ -49,14 +54,14 @@ struct ArtistRepository: ItemRepository {
                 try db.executeUpdate(query, artist.artistId, artist.serverId, artist.name, n2N(artist.coverArtId), n2N(artist.albumCount))
             } catch {
                 success = false
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return success
     }
     
     func loadSubItems(artist: Artist) {
-        artist.albums = AlbumRepository.si.albums(artistId: artist.artistId, serverId: artist.serverId, isCachedTable: false)
+        artist.albums = AlbumRepository.si.albums(artistId: artist.artistId, serverId: artist.serverId)
     }
 }
 
@@ -83,6 +88,10 @@ extension Artist: PersistedItem {
     
     func delete() -> Bool {
         return repository.delete(artist: self)
+    }
+    
+    func deleteCache() -> Bool {
+        return repository.delete(artist: self, isCachedTable: true)
     }
     
     func loadSubItems() {

@@ -29,13 +29,13 @@
 	return self;
 }
 
-- (id)initWithSong:(ISMSSong *)song byteOffset:(unsigned long long)bOffset isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
+- (id)initWithSong:(Song *)song byteOffset:(unsigned long long)bOffset isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
 {
 	if ((self = [self init]))
 	{
 		[self setup];
 		
-		_song = [song copy];
+        _song = song;
 		_delegate = theDelegate;
 		_byteOffset = bOffset;
 		_isTempCache = isTemp;
@@ -46,7 +46,7 @@
 	return self;
 }
 
-- (id)initWithSong:(ISMSSong *)song isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
+- (id)initWithSong:(Song *)song isTemp:(BOOL)isTemp delegate:(NSObject<ISMSStreamHandlerDelegate> *)theDelegate
 {
 	return [self initWithSong:song byteOffset:0 isTemp:isTemp delegate:theDelegate];
 }
@@ -78,11 +78,11 @@
 
 - (void)playlistIndexChanged
 {
-	if ([self.song isEqualToSong:PlayQueue.si.currentSong])
+	if ([self.song isEqual:PlayQueue.si.currentSong])
 		self.isCurrentSong = YES;
 }
 
-+ (NSInteger)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSInteger)bytesPerSec
++ (long long)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSInteger)bytesPerSec
 {
     // If start date is nil somehow, or total bytes transferred is 0 somehow,
     if (rate == 0. || bytesPerSec == 0)
@@ -127,7 +127,7 @@
     }
     
     // Convert from seconds to bytes
-    NSInteger minBytesToStartPlayback = minSecondsToStartPlayback * bytesForOneSecond;
+    long long minBytesToStartPlayback = minSecondsToStartPlayback * bytesForOneSecond;
     return minBytesToStartPlayback;
 }
 
@@ -140,7 +140,7 @@
 
 - (NSUInteger)hash
 {
-	return [self.song.songId hash];
+	return [self.song hash];
 }
 
 - (BOOL)isEqualToISMSStreamHandler:(ISMSStreamHandler *)otherHandler 
@@ -148,7 +148,7 @@
 	if (self == otherHandler)
 		return YES;
 	
-	return [self.song isEqualToSong:otherHandler.song];
+	return [self.song isEqual:otherHandler.song];
 }
 
 - (BOOL)isEqual:(id)other 
@@ -160,37 +160,6 @@
 		return NO;
 	
 	return [self isEqualToISMSStreamHandler:other];
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	[encoder encodeObject:self.song forKey:@"song"];
-	[encoder encodeInt64:self.byteOffset forKey:@"byteOffset"];
-	[encoder encodeBool:self.isDelegateNotifiedToStartPlayback forKey:@"isDelegateNotifiedToStartPlayback"];
-	[encoder encodeBool:self.isTempCache forKey:@"isTempCache"];
-	[encoder encodeBool:self.isDownloading forKey:@"isDownloading"];
-	[encoder encodeInt64:self.contentLength forKey:@"contentLength"];
-	[encoder encodeInt32:(int32_t)self.maxBitrateSetting forKey:@"maxBitrateSetting"];
-}
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	if ((self = [super init]))
-	{		
-		[self setup];
-		
-		_song = [[decoder decodeObjectForKey:@"song"] copy];
-		_byteOffset = [decoder decodeInt64ForKey:@"byteOffset"];
-		_isDelegateNotifiedToStartPlayback = [decoder decodeBoolForKey:@"isDelegateNotifiedToStartPlayback"];
-		_isTempCache = [decoder decodeBoolForKey:@"isTempCache"];
-		_isDownloading = [decoder decodeBoolForKey:@"isDownloading"];
-		_contentLength = [decoder decodeInt64ForKey:@"contentLength"];
-		_maxBitrateSetting = [decoder decodeInt32ForKey:@"maxBitrateSetting"];
-	}
-	
-	return self;
 }
 
 - (NSString *)description

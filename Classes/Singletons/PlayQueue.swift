@@ -22,7 +22,7 @@ import Nuke
     case shuffle
 }
 
-@objc open class PlayQueue: NSObject {
+@objc class PlayQueue: NSObject {
     
     //
     // MARK: - Notifications -
@@ -53,12 +53,12 @@ import Nuke
     // MARK: - Properties -
     //
     
-    open static let si = PlayQueue()
+    static let si = PlayQueue()
     
-    open var repeatMode = RepeatMode.normal
-    open var shuffleMode = ShuffleMode.normal { didSet { /* TODO: Do something */ } }
+    var repeatMode = RepeatMode.normal
+    var shuffleMode = ShuffleMode.normal { didSet { /* TODO: Do something */ } }
     
-    open fileprivate(set) var currentIndex = -1 {
+    fileprivate(set) var currentIndex = -1 {
         didSet {
             updateLockScreenInfo()
             
@@ -67,18 +67,18 @@ import Nuke
             }
         }
     }
-    open var previousIndex: Int { return indexAtOffset(-1, fromIndex: currentIndex) }
-    open var nextIndex: Int { return indexAtOffset(1, fromIndex: currentIndex) }
-    open var currentDisplaySong: ISMSSong? { return currentSong ?? previousSong }
-    open var currentSong: ISMSSong? { return playlist.song(atIndex: currentIndex) }
-    open var previousSong: ISMSSong? { return playlist.song(atIndex: previousIndex) }
-    open var nextSong: ISMSSong? { return playlist.song(atIndex: nextIndex) }
-    open var songCount: Int { return playlist.songCount }
-    open var isPlaying: Bool { return audioEngine.isPlaying() }
-    open var isStarted: Bool { return audioEngine.isStarted() }
-    open var currentSongProgress: Double { return audioEngine.progress() }
-    open var songs: [ISMSSong] { return playlist.songs }
-    open var playlist: Playlist { return Playlist.playQueue }
+    var previousIndex: Int { return indexAtOffset(-1, fromIndex: currentIndex) }
+    var nextIndex: Int { return indexAtOffset(1, fromIndex: currentIndex) }
+    var currentDisplaySong: Song? { return currentSong ?? previousSong }
+    var currentSong: Song? { return playlist.song(atIndex: currentIndex) }
+    var previousSong: Song? { return playlist.song(atIndex: previousIndex) }
+    var nextSong: Song? { return playlist.song(atIndex: nextIndex) }
+    var songCount: Int { return playlist.songCount }
+    var isPlaying: Bool { return audioEngine.isPlaying() }
+    var isStarted: Bool { return audioEngine.isStarted() }
+    var currentSongProgress: Double { return audioEngine.progress() }
+    var songs: [Song] { return playlist.songs }
+    var playlist: Playlist { return Playlist.playQueue }
     
     fileprivate var audioEngine: AudioEngine { return AudioEngine.si() }
     
@@ -86,13 +86,13 @@ import Nuke
     // MARK: - Play Queue -
     //
     
-    open func reset() {
+    func reset() {
         playlist.removeAllSongs()
         audioEngine.stop()
         currentIndex = -1
     }
     
-    open func removeSongs(atIndexes indexes: IndexSet) {
+    func removeSongs(atIndexes indexes: IndexSet) {
         // Stop the music if we're removing the current song
         let containsCurrentIndex = indexes.contains(currentIndex)
         if containsCurrentIndex {
@@ -115,24 +115,24 @@ import Nuke
         }
     }
     
-    open func removeSong(atIndex index: Int) {
+    func removeSong(atIndex index: Int) {
         var indexSet = IndexSet()
         indexSet.insert(index)
         removeSongs(atIndexes: indexSet)
     }
     
-    open func insertSong(song: ISMSSong, index: Int, notify: Bool = false) {
+    func insertSong(song: Song, index: Int, notify: Bool = false) {
         playlist.insert(song: song, index: index, notify: notify)
         ISMSStreamManager.si().fillStreamQueue(self.audioEngine.isStarted())
     }
     
-    open func insertSongNext(song: ISMSSong, notify: Bool = false) {
+    func insertSongNext(song: Song, notify: Bool = false) {
         let index = currentIndex < 0 ? songCount : currentIndex + 1
         playlist.insert(song: song, index: index, notify: notify)
         ISMSStreamManager.si().fillStreamQueue(self.audioEngine.isStarted())
     }
     
-    open func moveSong(fromIndex: Int, toIndex: Int, notify: Bool = false) {
+    func moveSong(fromIndex: Int, toIndex: Int, notify: Bool = false) {
         if playlist.moveSong(fromIndex: fromIndex, toIndex: toIndex, notify: notify) {
             if fromIndex == currentIndex && toIndex < currentIndex {
                 // Moved the current song to a lower index
@@ -152,11 +152,11 @@ import Nuke
         }
     }
     
-    open func songAtIndex(_ index: Int) -> ISMSSong? {
+    func songAtIndex(_ index: Int) -> Song? {
         return playlist.song(atIndex: index)
     }
     
-    open func indexAtOffset(_ offset: Int, fromIndex: Int) -> Int {
+    func indexAtOffset(_ offset: Int, fromIndex: Int) -> Int {
         switch repeatMode {
         case .normal:
             if offset >= 0 {
@@ -185,7 +185,7 @@ import Nuke
         }
     }
     
-    open func indexAtOffsetFromCurrentIndex(_ offset: Int) -> Int {
+    func indexAtOffsetFromCurrentIndex(_ offset: Int) -> Int {
         return indexAtOffset(offset, fromIndex: self.currentIndex)
     }
     
@@ -193,13 +193,13 @@ import Nuke
     // MARK: - Player Control -
     //
     
-    open func playSongs(_ songs: [ISMSSong], playIndex: Int) {
+    func playSongs(_ songs: [Song], playIndex: Int) {
         reset()
         playlist.add(songs: songs)
         playSong(atIndex: playIndex)
     }
     
-    open func playSong(atIndex index: Int) {
+    func playSong(atIndex index: Int) {
         currentIndex = index
         if let currentSong = currentSong {
             ISMSStreamManager.si().removeAllStreamsExcept(for: currentSong)
@@ -209,7 +209,7 @@ import Nuke
         }
     }
 
-    open func playPreviousSong() {
+    func playPreviousSong() {
         if audioEngine.progress() > 10.0 {
             // Past 10 seconds in the song, so restart playback instead of changing songs
             playSong(atIndex: self.currentIndex)
@@ -219,23 +219,23 @@ import Nuke
         }
     }
     
-    open func playNextSong() {
+    func playNextSong() {
         playSong(atIndex: self.nextIndex)
     }
     
-    open func play() {
+    func play() {
         audioEngine.play()
     }
     
-    open func pause() {
+    func pause() {
         audioEngine.pause()
     }
     
-    open func playPause() {
+    func playPause() {
         audioEngine.playPause()
     }
     
-    open func stop() {
+    func stop() {
         audioEngine.stop()
     }
     
@@ -283,7 +283,7 @@ import Nuke
                     // TODO: Prevent this running forever in RepeatAll mode with no songs available
                     self.playSong(atIndex: nextIndex)
                 } else {
-                    if let currentSong = CacheQueueManager.si.currentSong, currentSong.isEqual(to: currentSong) {
+                    if let currentSong = CacheQueueManager.si.currentSong, currentSong.isEqual(currentSong) {
                         // The cache queue is downloading this song, remove it before continuing
                         CacheQueueManager.si.removeCurrentSong()
                     }
@@ -339,13 +339,11 @@ import Nuke
     }()
     
     fileprivate var lockScreenUpdateTimer: Timer?
-    open func updateLockScreenInfo() {
+    func updateLockScreenInfo() {
         #if os(iOS)
             var trackInfo = [String: AnyObject]()
             if let song = self.currentSong {
-                if let title = song.title {
-                    trackInfo[MPMediaItemPropertyTitle] = title as AnyObject?
-                }
+                trackInfo[MPMediaItemPropertyTitle] = song.title as AnyObject?
                 if let albumName = song.album?.name {
                     trackInfo[MPMediaItemPropertyAlbumTitle] = albumName as AnyObject?
                 }
@@ -356,7 +354,7 @@ import Nuke
                     trackInfo[MPMediaItemPropertyGenre] = genre as AnyObject?
                 }
                 if let duration = song.duration {
-                    trackInfo[MPMediaItemPropertyPlaybackDuration] = duration
+                    trackInfo[MPMediaItemPropertyPlaybackDuration] = duration as AnyObject?
                 }
                 trackInfo[MPNowPlayingInfoPropertyPlaybackQueueIndex] = currentIndex as AnyObject?
                 trackInfo[MPNowPlayingInfoPropertyPlaybackQueueCount] = songCount as AnyObject?
@@ -404,7 +402,7 @@ extension PlayQueue: BassGaplessPlayerDelegate {
         return indexAtOffset(offset, fromIndex: index)
     }
     
-    public func bassSong(for index: Int, player: BassGaplessPlayer) -> ISMSSong? {
+    public func bassSong(for index: Int, player: BassGaplessPlayer) -> Song? {
         return songAtIndex(index)
     }
     

@@ -18,7 +18,7 @@
 
 #define ISMSArtistFont ISMSRegularFont(16)
 #define ISMSAlbumFont ISMSRegularFont(16)
-#define ISMSSongFont ISMSRegularFont(16)
+#define SongFont ISMSRegularFont(16)
 
 #define ISMSiPadBackgroundColor [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:206.0/255.0 alpha:1]
 #define ISMSiPadCornerRadius 5.
@@ -35,7 +35,7 @@ NS_INLINE CGFloat ISMSNormalize(CGFloat value)
     return normalizedValue;
 }
 
-#define ISMSSongCellHeight 44.0
+#define SongCellHeight 44.0
 #define ISMSAlbumCellHeight 50.0
 #define ISMSArtistCellHeight 44.0
 #define ISMSCellHeaderHeight 20.0

@@ -161,9 +161,9 @@
     }];
     
     // Create the playlist tables if necessary (does nothing if they exist)
-    [ISMSPlaylist createPlaylist:@"Play Queue" playlistId:[ISMSPlaylist playQueuePlaylistId] serverId:SavedSettings.si.currentServerId];
-    [ISMSPlaylist createPlaylist:@"Download Queue" playlistId:[ISMSPlaylist downloadQueuePlaylistId] serverId:SavedSettings.si.currentServerId];
-    [ISMSPlaylist createPlaylist:@"Downloaded Songs" playlistId:[ISMSPlaylist downloadedSongsPlaylistId] serverId:SavedSettings.si.currentServerId];
+    [Playlist createPlaylist:@"Play Queue" playlistId:[Playlist playQueuePlaylistId] serverId:SavedSettings.si.currentServerId];
+    [Playlist createPlaylist:@"Download Queue" playlistId:[Playlist downloadQueuePlaylistId] serverId:SavedSettings.si.currentServerId];
+    [Playlist createPlaylist:@"Downloaded Songs" playlistId:[Playlist downloadedSongsPlaylistId] serverId:SavedSettings.si.currentServerId];
 	
 	// Setup the bookmarks database
 	path = [self.databaseFolderPath stringByAppendingPathComponent:@"bookmarks.db"];
@@ -181,7 +181,7 @@
             if (![db columnExists:@"isVideo" inTableWithName:@"bookmarks"])
             {
                 // Doesn't exist so fix the table definition
-                [db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [ISMSSong standardSongColumnSchema]]];
+                [db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarksTemp (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
                 [db executeUpdate:@"INSERT INTO bookmarksTemp SELECT bookmarkId, playlistIndex, name, position, title, songId, artist, album, genre, coverArtId, path, suffix, transcodedSuffix, duration, bitRate, track, year, size, parentId, 0, bytes FROM bookmarks"];
                 [db executeUpdate:@"DROP TABLE bookmarks"];
                 [db executeUpdate:@"ALTER TABLE bookmarksTemp RENAME TO bookmarks"];
@@ -195,7 +195,7 @@
         }
         else
 		{
-			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [ISMSSong standardSongColumnSchema]]];
+			[db executeUpdate:[NSString stringWithFormat:@"CREATE TABLE bookmarks (bookmarkId INTEGER PRIMARY KEY, playlistIndex INTEGER, name TEXT, position INTEGER, %@, bytes INTEGER)", [Song standardSongColumnSchema]]];
 			[db executeUpdate:@"CREATE INDEX songId ON bookmarks (songId)"];
 		}
 	}];

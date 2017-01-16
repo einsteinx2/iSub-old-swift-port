@@ -9,9 +9,9 @@
 import Foundation
 
 class CachedRootFoldersLoader: CachedDatabaseLoader {
-    var folders = [ISMSFolder]()
+    var folders = [Folder]()
 
-    override var items: [ISMSItem] {
+    override var items: [Item] {
         return folders
     }
     
@@ -20,7 +20,7 @@ class CachedRootFoldersLoader: CachedDatabaseLoader {
     }
     
     override func loadModelsFromDatabase() -> Bool {
-        folders = ISMSFolder.topLevelCachedFolders()
+        folders = FolderRepository.si.rootFolders(isCachedTable: true)
         return true
     }
 }

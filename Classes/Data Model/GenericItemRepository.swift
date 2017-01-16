@@ -11,10 +11,10 @@ import Foundation
 protocol ItemRepository {
     var table: String { get }
     var cachedTable: String { get }
-    var itemId: String { get }
+    var itemIdField: String { get }
 }
 
-func tableName(repository: ItemRepository, isCachedTable: Bool) -> String {
+func tableName(repository: ItemRepository, isCachedTable: Bool = false) -> String {
     return isCachedTable ? repository.cachedTable : repository.table
 }
 
@@ -24,7 +24,7 @@ class GenericItemRepository {
     func item<T: PersistedItem>(repository: ItemRepository, itemId: Int, serverId: Int? = nil, loadSubItems: Bool = false) -> T? {
         func runQuery(db: FMDatabase, table: String) -> T? {
             var item: T? = nil
-            var query = "SELECT * FROM \(table) WHERE \(itemId) = ?"
+            var query = "SELECT * FROM \(table) WHERE \(repository.itemIdField) = ?"
             do {
                 let result: FMResultSet
                 if let serverId = serverId {
@@ -38,7 +38,7 @@ class GenericItemRepository {
                 }
                 result.close()
             } catch {
-                print("DB Error: \(error)")
+                printError(error)
             }
             return item
         }
@@ -87,7 +87,7 @@ class GenericItemRepository {
                 }
                 result.close()
             } catch {
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         
@@ -114,7 +114,7 @@ class GenericItemRepository {
                 }
             } catch {
                 success = false
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return success
@@ -126,12 +126,12 @@ class GenericItemRepository {
     
     func isPersisted(repository: ItemRepository, itemId: Int, serverId: Int, isCachedTable: Bool = false) -> Bool {
         let table = tableName(repository: repository, isCachedTable: isCachedTable)
-        let query = "SELECT COUNT(*) FROM \(table) WHERE \(repository.itemId) = ? AND serverId = ?"
+        let query = "SELECT COUNT(*) FROM \(table) WHERE \(repository.itemIdField) = ? AND serverId = ?"
         return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, itemId, serverId)
     }
     
     func hasCachedSubItems<T: PersistedItem>(repository: ItemRepository, item: T) -> Bool {
-        let query = "SELECT COUNT(*) FROM cachedSongs WHERE \(repository.itemId) = ? AND serverId = ?"
+        let query = "SELECT COUNT(*) FROM cachedSongs WHERE \(repository.itemIdField) = ? AND serverId = ?"
         return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, item.itemId, item.serverId)
     }
     
@@ -140,11 +140,11 @@ class GenericItemRepository {
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let table = tableName(repository: repository, isCachedTable: isCachedTable)
-                let query = "DELETE FROM \(table) WHERE \(repository.itemId) = ? AND serverId = ?"
+                let query = "DELETE FROM \(table) WHERE \(repository.itemIdField) = ? AND serverId = ?"
                 try db.executeUpdate(query, item.itemId, item.serverId)
             } catch {
                 success = false
-                print("DB Error: \(error)")
+                printError(error)
             }
         }
         return success

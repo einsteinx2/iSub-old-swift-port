@@ -61,10 +61,10 @@ class ItemLoaderOperation: Operation {
         var shouldLoad = true
         if onlyLoadIfNotExists {
             // Only load if it's not persisted
-            if let persistedModel = loader.associatedObject as? ISMSPersistedModel {
+            if let persistedItem = loader.associatedObject as? PersistedItem {
                 // If we have duplicate loaders in the queue, the first one should have a nil associated object
                 // and the second one should have isPersisted = true, so should skip loading.
-                shouldLoad = !persistedModel.isPersisted
+                shouldLoad = !persistedItem.isPersisted
             }
         }
         

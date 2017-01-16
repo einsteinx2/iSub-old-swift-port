@@ -14,7 +14,7 @@ protocol ItemLoader {
     
     var associatedObject: Any? { get }
     
-    var items: [ISMSItem] { get }
+    var items: [Item] { get }
     
     var state: ApiLoaderState { get }
     

@@ -9,12 +9,12 @@
 import Foundation
 
 class RootArtistsLoader: ApiLoader, ItemLoader {
-    var artists = [ISMSArtist]()
+    var artists = [Artist]()
     var ignoredArticles = [String]()
     
     var associatedObject: Any?
     
-    var items: [ISMSItem] {
+    var items: [Item] {
         return artists
     }
     
@@ -23,14 +23,15 @@ class RootArtistsLoader: ApiLoader, ItemLoader {
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
-        var artistsTemp = [ISMSArtist]()
+        var artistsTemp = [Artist]()
         
         let serverId = SavedSettings.si().currentServerId
         root.iterate("artists.index") { index in
             index.iterate("artist") { artist in
                 if artist.attribute("name") != ".AppleDouble" {
-                    let anArtist = ISMSArtist(rxmlElement: artist, serverId: serverId)
-                    artistsTemp.append(anArtist)
+                    if let anArtist = Artist(rxmlElement: artist, serverId: serverId) {
+                        artistsTemp.append(anArtist)
+                    }
                 }
             }
         }
@@ -40,24 +41,24 @@ class RootArtistsLoader: ApiLoader, ItemLoader {
         }
         artists = artistsTemp
         
-        self.persistModels()
+        persistModels()
         
         return true
     }
     
     func persistModels() {
         // Remove existing artists
-        let serverId = SavedSettings.si().currentServerId as NSNumber
+        let serverId = SavedSettings.si().currentServerId
         // TODO: Should only delete artists not in artists array, same for other loaders
-        ISMSArtist.deleteAllArtists(withServerId: serverId)
+        _ = ArtistRepository.si.deleteAllArtists(serverId: serverId)
         
         // Save the new artists
-        artists.forEach({$0.replace()})
+        artists.forEach({_ = $0.replace()})
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.si().currentServerId as NSNumber
-        let artistsTemp = ISMSArtist.allArtists(withServerId: serverId)
+        let serverId = SavedSettings.si().currentServerId
+        let artistsTemp = ArtistRepository.si.allArtists(serverId: serverId)
         if artistsTemp.count > 0 {
             artists = artistsTemp
             return true

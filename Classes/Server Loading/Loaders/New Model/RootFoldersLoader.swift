@@ -12,13 +12,13 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
     var mediaFolderId: Int?
     
     var ignoredArticles = [String]()
-    var folders = [ISMSFolder]()
-    var songs = [ISMSSong]()
+    var folders = [Folder]()
+    var songs = [Song]()
     
     var associatedObject: Any?
     
-    var items: [ISMSItem] {
-        return folders as [ISMSItem] + songs as [ISMSItem]
+    var items: [Item] {
+        return folders as [Item] + songs as [Item]
     }
     
     override func createRequest() -> URLRequest {
@@ -30,22 +30,22 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
-        var foldersTemp = [ISMSFolder]()
-        var songsTemp = [ISMSSong]()
+        var foldersTemp = [Folder]()
+        var songsTemp = [Song]()
         
         let serverId = SavedSettings.si().currentServerId
         root.iterate("indexes.index") { index in
             index.iterate("artist") { artist in
                 if artist.attribute("name") != ".AppleDouble" {
-                    let aFolder = ISMSFolder(rxmlElement: artist, serverId: serverId, mediaFolderId: self.mediaFolderId ?? 0)
-                    foldersTemp.append(aFolder)
+                    if let aFolder = Folder(rxmlElement: artist, serverId: serverId, mediaFolderId: self.mediaFolderId ?? 0) {
+                        foldersTemp.append(aFolder)
+                    }
                 }
             }
         }
         
         root.iterate("indexes.child") { child in
-            let aSong = ISMSSong(rxmlElement: child, serverId: serverId)
-            if aSong.contentType != nil {
+            if let aSong = Song(rxmlElement: child, serverId: serverId), aSong.contentType != nil {
                 songsTemp.append(aSong)
             }
         }
@@ -56,7 +56,7 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
         folders = foldersTemp
         songs = songsTemp
         
-        self.persistModels()
+        persistModels()
         
         return true
     }
@@ -65,22 +65,18 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
         // TODO: Only delete missing ones
         // Remove existing root folders
         let serverId = SavedSettings.si().currentServerId
-        let mediaFolder = ISMSMediaFolder(mediaFolderId: mediaFolderId ?? 0, serverId: serverId)
-        mediaFolder?.deleteRootFolders()
+        _ = FolderRepository.si.deleteRootFolders(mediaFolderId: mediaFolderId, serverId: serverId)
+        _ = SongRepository.si.deleteRootSongs(mediaFolderId: mediaFolderId, serverId: serverId)
         
         // Save the new folders and songs
-        folders.forEach({$0.replace()})
-        songs.forEach({$0.replace()})
+        folders.forEach({_ = $0.replace()})
+        songs.forEach({_ = $0.replace()})
     }
     
     func loadModelsFromDatabase() -> Bool {
         let serverId = SavedSettings.si().currentServerId
-        if let mediaFolderId = mediaFolderId, let mediaFolder = ISMSMediaFolder(mediaFolderId: mediaFolderId, serverId: serverId) {
-            folders = mediaFolder.rootFolders()
-            songs = ISMSSong.rootSongs(inMediaFolder: mediaFolderId, serverId: serverId)
-        } else {
-            folders = ISMSMediaFolder.allRootFolders(withServerId: serverId as NSNumber)
-        }
+        folders = FolderRepository.si.rootFolders(mediaFolderId: mediaFolderId, serverId: serverId)
+        songs = SongRepository.si.rootSongs(mediaFolderId: mediaFolderId, serverId: serverId)
         
         return folders.count + songs.count > 0
     }

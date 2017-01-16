@@ -49,7 +49,7 @@ class ItemTableViewCell: DroppableCell {
         }
     }
 
-    var trackNumber: NSNumber? {
+    var trackNumber: Int? {
         didSet {
             if let trackNumber = trackNumber {
                 trackNumberLabel.text = "\(trackNumber)"
@@ -87,10 +87,10 @@ class ItemTableViewCell: DroppableCell {
         }
     }
     
-    var duration: NSNumber? {
+    var duration: Int? {
         didSet {
             if let duration = duration {
-                durationLabel.text = NSString.formatTime(duration.doubleValue)
+                durationLabel.text = NSString.formatTime(Double(duration))
             }
             if shouldRepositionLabels {
                 repositionLabels()
@@ -147,7 +147,7 @@ class ItemTableViewCell: DroppableCell {
         
         titleLabel.backgroundColor = UIColor.clear
         titleLabel.textAlignment = NSTextAlignment.left
-        titleLabel.font = ISMSSongFont
+        titleLabel.font = SongFont
         titlesScrollView.addSubview(titleLabel)
         
         subTitleLabel.backgroundColor = UIColor.clear
@@ -289,10 +289,10 @@ class ItemTableViewCell: DroppableCell {
 
 extension ItemTableViewCell: DraggableCell {
     var isDraggable: Bool {
-        return associatedObject is ISMSSong
+        return associatedObject is Song
     }
     
-    var dragItem: ISMSItem? {
-        return associatedObject as? ISMSItem
+    var dragItem: Item? {
+        return associatedObject as? Item
     }
 }

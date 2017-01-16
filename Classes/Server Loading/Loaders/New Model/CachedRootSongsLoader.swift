@@ -9,9 +9,9 @@
 import Foundation
 
 class CachedRootSongsLoader: CachedDatabaseLoader {
-    var songs = [ISMSSong]()
+    var songs = [Song]()
     
-    override var items: [ISMSItem] {
+    override var items: [Item] {
         return songs
     }
     
@@ -20,7 +20,7 @@ class CachedRootSongsLoader: CachedDatabaseLoader {
     }
     
     override func loadModelsFromDatabase() -> Bool {
-        songs = ISMSSong.allCachedSongs()
+        songs = SongRepository.si.allSongs(isCachedTable: true)
         return true
     }
 }

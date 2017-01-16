@@ -14,16 +14,16 @@ class CachedFolderLoader: CachedDatabaseLoader {
     let folderId: Int
     let serverId: Int
     
-    var folders = [ISMSFolder]()
-    var songs = [ISMSSong]()
-    var songsDuration = 0.0
+    var folders = [Folder]()
+    var songs = [Song]()
+    var songsDuration = 0
     
-    override var items: [ISMSItem] {
-        return folders as [ISMSItem] + songs as [ISMSItem]
+    override var items: [Item] {
+        return folders as [Item] + songs as [Item]
     }
     
     override var associatedObject: Any? {
-        return ISMSFolder(folderId: folderId, serverId: serverId, loadSubmodels: false)
+        return FolderRepository.si.folder(folderId: folderId, serverId: serverId)
     }
     
     init(folderId: Int, serverId: Int) {
@@ -33,10 +33,10 @@ class CachedFolderLoader: CachedDatabaseLoader {
     }
     
     override func loadModelsFromDatabase() -> Bool {
-        folders = ISMSFolder.folders(inFolder: folderId, serverId: serverId, cachedTable: true)
-        songs = ISMSSong.songs(inFolder: folderId, serverId: serverId, cachedTable: true)
-        songsDuration = songs.reduce(0.0) { totalDuration, song -> Double in
-            if let duration = song.duration as? Double {
+        folders = FolderRepository.si.folders(parentFolderId: folderId, serverId: serverId, isCachedTable: true)
+        songs = SongRepository.si.songs(folderId: folderId, serverId: serverId, isCachedTable: true)
+        songsDuration = songs.reduce(0) { totalDuration, song -> Int in
+            if let duration = song.duration {
                 return totalDuration + duration
             }
             return totalDuration

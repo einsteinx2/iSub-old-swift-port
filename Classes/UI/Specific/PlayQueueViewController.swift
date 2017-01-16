@@ -94,7 +94,7 @@ class PlayQueueViewController: DraggableTableViewController {
     
     @objc fileprivate func draggingMoved(_ notification: Notification) {
         if let userInfo = notification.userInfo {
-            if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell, dragCell.dragItem is ISMSSong,
+            if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell, dragCell.dragItem is Song,
                 let location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
                 currentTouchLocation = location.cgPointValue
                 if !isAutoScrolling {
@@ -117,7 +117,7 @@ class PlayQueueViewController: DraggableTableViewController {
         
         if visible, let userInfo = notification.userInfo {
             if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell,
-                   let song = dragCell.dragItem as? ISMSSong,
+                   let song = dragCell.dragItem as? Song,
                    let location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
                 
                 let point = location.cgPointValue
@@ -199,7 +199,7 @@ class PlayQueueViewController: DraggableTableViewController {
     fileprivate func handleDrag(atLocation location: CGPoint) {
         // Treat hovers over the top portion of the cell as the previous cell
         var point = location
-        point.y -= (ISMSNormalize(ISMSSongCellHeight) * 0.75)
+        point.y -= (ISMSNormalize(SongCellHeight) * 0.75)
         let tablePoint = tableView.convert(point, from: nil)
         
         let indexPath = tableView.indexPathForRow(at: tablePoint)
@@ -305,7 +305,7 @@ class PlayQueueViewController: DraggableTableViewController {
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: itemReuseIdentifier, for: indexPath) as? ItemTableViewCell {
             cell.containerView.isHidden = (self.draggableTableView.isDraggingCell && self.draggableTableView.dragIndexPath == indexPath)
             cell.alwaysShowSubtitle = true
-            cell.cellHeight = ISMSNormalize(ISMSSongCellHeight)
+            cell.cellHeight = ISMSNormalize(SongCellHeight)
             cell.accessoryType = .none
             cell.selectionStyle = .none
             
@@ -324,13 +324,13 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        var height = indexPath.row == viewModel.currentIndex ? 64.0 : ISMSNormalize(ISMSSongCellHeight)
+        var height = indexPath.row == viewModel.currentIndex ? 64.0 : ISMSNormalize(SongCellHeight)
         if internallyDragging, self.draggableTableView.isDraggingCell, let draggedIndexPath = self.draggableTableView.dragIndexPath, indexPath.row == draggedIndexPath.row {
             height = 0
         }
         
         if !isAutoScrolling && indexPath.row == hoverRow + 1 {
-            height += ISMSNormalize(ISMSSongCellHeight)
+            height += ISMSNormalize(SongCellHeight)
         }
         
         return height
@@ -359,8 +359,8 @@ class PlayQueueViewController: DraggableTableViewController {
         }
     }
     
-    fileprivate func showActionSheet(item: ISMSItem, indexPath: IndexPath) {
-        if item is ISMSSong {
+    fileprivate func showActionSheet(item: Item, indexPath: IndexPath) {
+        if item is Song {
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             
             alertController.addAction(UIAlertAction(title: "Play", style: .default) { action in
@@ -412,7 +412,7 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
     var indexPath: IndexPath?
     var associatedObject: Any? {
         didSet {
-            if let song = associatedObject as? ISMSSong {
+            if let song = associatedObject as? Song {
                 if let coverArtId = song.coverArtId {
                     coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
                 } else {
@@ -474,7 +474,7 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
         return true
     }
     
-    var dragItem: ISMSItem? {
-        return associatedObject as? ISMSItem
+    var dragItem: Item? {
+        return associatedObject as? Item
     }
 }

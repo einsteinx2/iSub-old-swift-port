@@ -12,15 +12,13 @@
 
 import Foundation
 
-@objc(ISMSPlaylist)
-open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
+@objc class Playlist: NSObject, PersistedItem, NSCopying, NSCoding {
     
     // MARK: - Notifications -
     
-    public struct Notifications {
-        public static let playlistChanged = "playlistChanged"
-        
-        public static let playlistIdKey   = "playlistIdKey"
+    struct Notifications {
+        static let playlistChanged = "playlistChanged"
+        static let playlistIdKey   = "playlistIdKey"
     }
     
     func notifyPlaylistChanged() {
@@ -31,11 +29,11 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     // MARK: - Class -
     
-    open var playlistId: Int
-    open var playlistServerId: Int // This will just be serverId once ISMSPersistedModel is swift
-    open var name: String
+    var playlistId: Int
+    var playlistServerId: Int // This will just be serverId once ISMSPersistedModel is swift
+    var name: String
     
-    open var songCount: Int {
+    var songCount: Int {
         // SELECT COUNT(*) is O(n) while selecting the max rowId is O(1)
         // Since songIndex is our primary key field, it's an alias
         // for rowId. So SELECT MAX instead of SELECT COUNT here.
@@ -49,17 +47,17 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     }
     
     // Special Playlists
-    open static let playQueuePlaylistId       = NSIntegerMax - 1
-    open static let downloadQueuePlaylistId   = NSIntegerMax - 2
-    open static let downloadedSongsPlaylistId = NSIntegerMax - 3
+    static let playQueuePlaylistId       = NSIntegerMax - 1
+    static let downloadQueuePlaylistId   = NSIntegerMax - 2
+    static let downloadedSongsPlaylistId = NSIntegerMax - 3
     
-    open static var playQueue: Playlist {
+    static var playQueue: Playlist {
         return Playlist(itemId: playQueuePlaylistId, serverId: SavedSettings.si().currentServerId)!
     }
-    open static var downloadQueue: Playlist {
+    static var downloadQueue: Playlist {
         return Playlist(itemId: downloadQueuePlaylistId, serverId: SavedSettings.si().currentServerId)!
     }
-    open static var downloadedSongs: Playlist {
+    static var downloadedSongs: Playlist {
         return Playlist(itemId: downloadedSongsPlaylistId, serverId: SavedSettings.si().currentServerId)!
     }
     
@@ -115,7 +113,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         super.init()
     }
     
-    open func compare(_ otherObject: Playlist) -> ComparisonResult {
+    func compare(_ otherObject: Playlist) -> ComparisonResult {
         return self.name.caseInsensitiveCompare(otherObject.name)
     }
     
@@ -127,8 +125,8 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         return Playlist.tableName(self.playlistId, serverId: self.playlistServerId)
     }
     
-    open var songs: [ISMSSong] {
-        var songs = [ISMSSong]()
+    var songs: [Song] {
+        var songs = [Song]()
         
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             do {
@@ -137,7 +135,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
                 while result.next() {
                     let songId = result.long(forColumnIndex: 0)
                     let serverId = result.long(forColumnIndex: 1)
-                    if let song = ISMSSong(itemId: songId, serverId: serverId) {
+                    if let song = SongRepository.si.song(songId: songId, serverId: serverId) {
                         songs.append(song)
                     }
                 }
@@ -149,14 +147,11 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         return songs;
     }
     
-    open func contains(song: ISMSSong) -> Bool {
-        if let songId = song.songId as? Int, let serverId = song.serverId as? Int {
-            return contains(songId: songId, serverId: serverId)
-        }
-        return false
+    func contains(song: Song) -> Bool {
+        return contains(songId: song.songId, serverId: song.serverId)
     }
     
-    open func contains(songId: Int, serverId: Int) -> Bool {
+    func contains(songId: Int, serverId: Int) -> Bool {
         var count = 0
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let query = "SELECT COUNT(*) FROM \(self.tableName) WHERE songId = ? AND serverId = ?"
@@ -165,7 +160,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         return count > 0
     }
     
-    open func indexOf(songId: Int, serverId: Int) -> Int? {
+    func indexOf(songId: Int, serverId: Int) -> Int? {
         var index: Int?
         DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
             let query = "SELECT songIndex FROM \(self.tableName) WHERE songId = ? AND serverId = ?"
@@ -178,7 +173,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         return nil
     }
     
-    open func song(atIndex index: Int) -> ISMSSong? {
+    func song(atIndex index: Int) -> Song? {
         guard index >= 0 else {
             return nil
         }
@@ -200,19 +195,17 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
         
         if let songId = songId, let serverId = serverId {
-            return ISMSSong(itemId: songId, serverId: serverId)
+            return SongRepository.si.song(songId: songId, serverId: serverId)
         } else {
             return nil
         }
     }
     
-    open func add(song: ISMSSong, notify: Bool = false) {
-        if let songId = song.songId as? Int, let serverId = song.serverId as? Int {
-            add(songId: songId, serverId: serverId, notify: notify)
-        }
+    func add(song: Song, notify: Bool = false) {
+        add(songId: song.songId, serverId: song.serverId, notify: notify)
     }
     
-    open func add(songId: Int, serverId: Int, notify: Bool = false) {
+    func add(songId: Int, serverId: Int, notify: Bool = false) {
         let query = "INSERT INTO \(self.tableName) (songId, serverId) VALUES (?, ?)"
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
@@ -227,7 +220,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func add(songs: [ISMSSong], notify: Bool = false) {
+    func add(songs: [Song], notify: Bool = false) {
         for song in songs {
             add(song: song, notify: false)
         }
@@ -237,13 +230,11 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func insert(song: ISMSSong, index: Int, notify: Bool = false) {
-        if let songId = song.songId as? Int, let serverId = song.serverId as? Int {
-            insert(songId: songId, serverId: serverId, index: index, notify: notify)
-        }
+    func insert(song: Song, index: Int, notify: Bool = false) {
+        insert(songId: song.songId, serverId: song.serverId, index: index, notify: notify)
     }
     
-    open func insert(songId: Int, serverId: Int, index: Int, notify: Bool = false) {
+    func insert(songId: Int, serverId: Int, index: Int, notify: Bool = false) {
         // TODO: See if this can be simplified by using sort by
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
@@ -265,7 +256,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func remove(songAtIndex index: Int, notify: Bool = false) {
+    func remove(songAtIndex index: Int, notify: Bool = false) {
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName) WHERE songIndex = ?"
@@ -283,7 +274,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func remove(songsAtIndexes indexes: IndexSet, notify: Bool = false) {
+    func remove(songsAtIndexes indexes: IndexSet, notify: Bool = false) {
         // TODO: Improve performance
         for index in indexes {
             remove(songAtIndex: index, notify: false)
@@ -294,19 +285,17 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func remove(song: ISMSSong, notify: Bool = false) {
-        if let songId = song.songId as? Int, let serverId = song.serverId as? Int {
-            remove(songId: songId, serverId: serverId, notify: notify)
-        }
+    func remove(song: Song, notify: Bool = false) {
+        remove(songId: song.songId, serverId: song.serverId, notify: notify)
     }
     
-    open func remove(songId: Int, serverId: Int, notify: Bool = false) {
+    func remove(songId: Int, serverId: Int, notify: Bool = false) {
         if let index = indexOf(songId: songId, serverId: serverId) {
             remove(songAtIndex: index + 1, notify: notify)
         }
     }
     
-    open func remove(songs: [ISMSSong], notify: Bool = false) {
+    func remove(songs: [Song], notify: Bool = false) {
         for song in songs {
             remove(song: song, notify: false)
         }
@@ -316,7 +305,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func removeAllSongs(_ notify: Bool = false) {
+    func removeAllSongs(_ notify: Bool = false) {
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName)"
@@ -331,7 +320,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open func moveSong(fromIndex: Int, toIndex: Int, notify: Bool = false) -> Bool {
+    func moveSong(fromIndex: Int, toIndex: Int, notify: Bool = false) -> Bool {
         if fromIndex != toIndex, let song = song(atIndex: fromIndex) {
             let finalToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex
             if finalToIndex >= 0 && finalToIndex < songCount {
@@ -360,7 +349,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         return true
     }
 
-    open static func createPlaylist(_ name: String, serverId: Int) -> Playlist? {
+    static func createPlaylist(_ name: String, serverId: Int) -> Playlist? {
         var playlistId: Int?
         
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
@@ -383,7 +372,7 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
         }
     }
     
-    open static func createPlaylist(_ name: String, playlistId: Int, serverId: Int) -> Playlist? {
+    static func createPlaylist(_ name: String, playlistId: Int, serverId: Int) -> Playlist? {
         var success = true
         DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
             let query = "SELECT COUNT(*) FROM playlists WHERE playlistId = ? AND serverId = ?"
@@ -404,52 +393,73 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     // MARK: - ISMSItem -
     
-    open var itemId: NSNumber? {
-        return NSNumber(value: self.playlistId as Int)
+    var itemId: Int {
+        return playlistId
     }
     
-    open var serverId: NSNumber? {
-        return NSNumber(value: self.playlistServerId as Int)
+    var serverId: Int {
+        return playlistServerId
     }
     
-    open var itemName: String? {
-        return self.name
+    var itemName: String {
+        return name
     }
     
-    // MARK: - ISMSPersistantItem -
+    // MARK: - PersistantItem -
     
-    public var isPersisted: Bool {
+    required init(result: FMResultSet, repository: ItemRepository) {
         // TODO: Fill this in
         fatalError("not implemented yet")
     }
     
-    open func insert() -> Bool {
+    static func item(itemId: Int, serverId: Int, repository: ItemRepository) -> Item? {
         // TODO: Fill this in
         fatalError("not implemented yet")
     }
     
-    open func replace() -> Bool {
+    var hasCachedSubItems: Bool {
         // TODO: Fill this in
         fatalError("not implemented yet")
     }
     
-    open func cacheModel() -> Bool {
+    var isPersisted: Bool {
+        // TODO: Fill this in
+        fatalError("not implemented yet")
+    }
+    
+    func insert() -> Bool {
+        // TODO: Fill this in
+        fatalError("not implemented yet")
+    }
+    
+    func replace() -> Bool {
+        // TODO: Fill this in
+        fatalError("not implemented yet")
+    }
+    
+    func cache() -> Bool {
         // Not supported
-        fatalError("not implemented yet")
+        fatalError("not supported")
     }
     
-    open func delete() -> Bool {
+    func delete() -> Bool {
         // TODO: Fill this in
         fatalError("not implemented yet")
     }
     
-    open func reloadSubmodels() {
+    func deleteCache() -> Bool {
+        // Not supported
+        fatalError("not supported")
+    }
+    
+    func loadSubItems() {
         // TODO: Fill this in
+        fatalError("not implemented yet")
     }
     
     // MARK: - NSCoding -
     
-    open func encode(with aCoder: NSCoder) {
+    func encode(with aCoder: NSCoder) {
         aCoder.encode(self.playlistId, forKey: "playlistId")
         aCoder.encode(self.playlistServerId, forKey: "serverId")
         aCoder.encode(self.name, forKey: "name")
@@ -463,13 +473,13 @@ open class Playlist: NSObject, ISMSPersistedModel, NSCopying, NSCoding {
     
     // MARK: - NSCopying -
     
-    open func copy(with zone: NSZone?) -> Any {
+    func copy(with zone: NSZone?) -> Any {
         return Playlist(playlistId: self.playlistId, serverId: self.playlistServerId, name: self.name)
     }
     
     // MARK: - Equality -
     
-    override open func isEqual(_ object: Any?) -> Bool {
+    override func isEqual(_ object: Any?) -> Bool {
         if let playlist = object as? Playlist {
             return self.playlistId == playlist.playlistId
         }

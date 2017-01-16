@@ -18,5 +18,6 @@
 #import "RXMLElement.h"
 #import "BCCKeychain.h"
 #import "INTUAnimationEngine.h"
+#import "ISMSContentType.h"
 
 #import "UINavigationBar+FixedHeightWhenStatusBarHidden.h"

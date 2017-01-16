@@ -44,13 +44,13 @@ class ItemViewModel : NSObject {
         return !isBrowsingCache
     }
     
-    fileprivate(set) var rootItem: ISMSItem?
+    fileprivate(set) var rootItem: Item?
     
-    fileprivate(set) var items = [ISMSItem]()
-    fileprivate(set) var folders = [ISMSFolder]()
-    fileprivate(set) var artists = [ISMSArtist]()
-    fileprivate(set) var albums = [ISMSAlbum]()
-    fileprivate(set) var songs = [ISMSSong]()
+    fileprivate(set) var items = [Item]()
+    fileprivate(set) var folders = [Folder]()
+    fileprivate(set) var artists = [Artist]()
+    fileprivate(set) var albums = [Album]()
+    fileprivate(set) var songs = [Song]()
     fileprivate(set) var playlists = [Playlist]()
     
     fileprivate(set) var songsDuration = 0
@@ -59,7 +59,7 @@ class ItemViewModel : NSObject {
     
     init(loader: ItemLoader) {
         self.loader = loader
-        self.rootItem = loader.associatedObject as? ISMSItem
+        self.rootItem = loader.associatedObject as? Item
         self.navigationTitle = self.rootItem?.itemName
     }
     
@@ -106,11 +106,11 @@ class ItemViewModel : NSObject {
         
         for item in items {
             switch item {
-            case is ISMSFolder:   folders.append(item as! ISMSFolder)
-            case is ISMSArtist:   artists.append(item as! ISMSArtist)
-            case is ISMSAlbum:    albums.append(item as! ISMSAlbum)
-            case is ISMSSong:     songs.append(item as! ISMSSong)
-            case is Playlist:     playlists.append(item as! Playlist)
+            case is Folder:   folders.append(item as! Folder)
+            case is Artist:   artists.append(item as! Artist)
+            case is Album:    albums.append(item as! Album)
+            case is Song:     songs.append(item as! Song)
+            case is Playlist: playlists.append(item as! Playlist)
             default: assertionFailure("WHY YOU NO ITEM?")
             }
         }
@@ -154,45 +154,33 @@ class ItemViewModel : NSObject {
         loader.cancel()
     }
     
-    func loaderForFolder(_ folder: ISMSFolder) -> ItemLoader? {
+    func loaderForFolder(_ folder: Folder) -> ItemLoader? {
         var folderLoader: ItemLoader?
-        
-        if let folderId = folder.folderId as? Int, let mediaFolderId = folder.mediaFolderId as? Int, let serverId = folder.serverId as? Int {
-            if isBrowsingCache {
-                folderLoader = CachedFolderLoader(folderId: folderId, serverId: serverId)
-            } else {
-                folderLoader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
-            }
+        if isBrowsingCache {
+            folderLoader = CachedFolderLoader(folderId: folder.folderId, serverId: folder.serverId)
+        } else if let mediaFolderId = folder.mediaFolderId {
+            folderLoader = FolderLoader(folderId: folder.folderId, mediaFolderId: mediaFolderId)
         }
-        
         return folderLoader
     }
     
-    func loaderForArtist(_ artist: ISMSArtist) -> ItemLoader? {
+    func loaderForArtist(_ artist: Artist) -> ItemLoader? {
         var artistLoader: ItemLoader?
-        
-        if let artistId = artist.artistId as? Int, let serverId = artist.serverId as? Int {
-            if isBrowsingCache {
-                artistLoader = CachedArtistLoader(artistId: artistId, serverId: serverId)
-            } else {
-                artistLoader = ArtistLoader(artistId: artistId)
-            }
+        if isBrowsingCache {
+            artistLoader = CachedArtistLoader(artistId: artist.artistId, serverId: artist.serverId)
+        } else{
+            artistLoader = ArtistLoader(artistId: artist.artistId)
         }
-        
         return artistLoader
     }
     
-    func loaderForAlbum(_ album: ISMSAlbum) -> ItemLoader? {
+    func loaderForAlbum(_ album: Album) -> ItemLoader? {
         var albumLoader: ItemLoader?
-        
-        if let albumId = album.albumId as? Int, let serverId = album.serverId as? Int {
-            if isBrowsingCache {
-                albumLoader = CachedAlbumLoader(albumId: albumId, serverId: serverId)
-            } else {
-                albumLoader = AlbumLoader(albumId: albumId)
-            }
+        if isBrowsingCache {
+            albumLoader = CachedAlbumLoader(albumId: album.albumId, serverId: album.serverId)
+        } else {
+            albumLoader = AlbumLoader(albumId: album.albumId)
         }
-        
         return albumLoader
     }
     
@@ -205,9 +193,7 @@ class ItemViewModel : NSObject {
         // TODO: Save this setting per folder id
         // TODO: Allow to alphabetize by artist
         songs.sort { lhs, rhs -> Bool in
-            let lhsTitle = lhs.title?.lowercased() ?? ""
-            let rhsTitle = rhs.title?.lowercased() ?? ""
-            return lhsTitle < rhsTitle
+            return lhs.title.lowercased() < rhs.title.lowercased()
         }
         isSongsAlphabetized = true
         createSectionIndexes()

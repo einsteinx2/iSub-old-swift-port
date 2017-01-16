@@ -9,7 +9,7 @@
 #ifndef iSub_DatabaseSingleton_h
 #define iSub_DatabaseSingleton_h
 
-@class FMDatabase, FMDatabasePool, FMDatabaseQueue, ISMSArtist, ISMSAlbum, ISMSSong, ISMSQueueAllLoader;
+@class FMDatabase, FMDatabasePool, FMDatabaseQueue, ISMSArtist, ISMSAlbum, Song, ISMSQueueAllLoader;
 
 @interface DatabaseSingleton : NSObject 
 

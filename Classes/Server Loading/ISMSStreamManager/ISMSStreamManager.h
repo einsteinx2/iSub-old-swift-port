@@ -11,45 +11,45 @@
 
 #define ISMSNumberOfStreamsToQueue 2
 
-@class ISMSSong, ISMSStreamHandler, SUSLyricsDAO;
+@class Song, ISMSStreamHandler, SUSLyricsDAO;
 @interface ISMSStreamManager : NSObject <ISMSStreamHandlerDelegate>
 
 @property (nullable, strong) NSMutableArray *handlerStack;
 @property (nullable, strong) SUSLyricsDAO *lyricsDAO;
 
-@property (nullable, copy) ISMSSong *lastCachedSong;
-@property (nullable, copy) ISMSSong *lastTempCachedSong;
+@property (nullable, strong) Song *lastCachedSong;
+@property (nullable, strong) Song *lastTempCachedSong;
 
 @property (readonly) BOOL isDownloading;
 
-@property (nullable, readonly) ISMSSong *currentStreamingSong;
+@property (nullable, readonly) Song *currentStreamingSong;
 
 + (nonnull instancetype)si;
 
 - (void)delayedSetup;
 
-- (nullable ISMSStreamHandler *)handlerForSong:(nonnull ISMSSong *)aSong;
-- (BOOL)isSongInQueue:(nonnull ISMSSong *)aSong;
-- (BOOL)isSongFirstInQueue:(nonnull ISMSSong *)aSong;
-- (BOOL)isSongDownloading:(nonnull ISMSSong *)aSong;
+- (nullable ISMSStreamHandler *)handlerForSong:(nonnull Song *)aSong;
+- (BOOL)isSongInQueue:(nonnull Song *)aSong;
+- (BOOL)isSongFirstInQueue:(nonnull Song *)aSong;
+- (BOOL)isSongDownloading:(nonnull Song *)aSong;
 
 - (void)cancelAllStreamsExcept:(nonnull NSArray *)handlersToSkip;
 - (void)cancelAllStreamsExceptForSongs:(nonnull NSArray *)songsToSkip;
-- (void)cancelAllStreamsExceptForSong:(nonnull ISMSSong *)aSong;
+- (void)cancelAllStreamsExceptForSong:(nonnull Song *)aSong;
 - (void)cancelAllStreams;
 - (void)cancelStreamAtIndex:(NSInteger)index;
 - (void)cancelStream:(nonnull ISMSStreamHandler *)handler;
-- (void)cancelStreamForSong:(nonnull ISMSSong *)aSong;
+- (void)cancelStreamForSong:(nonnull Song *)aSong;
 
 - (void)removeAllStreamsExcept:(nonnull NSArray *)handlersToSkip;
 - (void)removeAllStreamsExceptForSongs:(nonnull NSArray *)songsToSkip;
-- (void)removeAllStreamsExceptForSong:(nonnull ISMSSong *)aSong;
+- (void)removeAllStreamsExceptForSong:(nonnull Song *)aSong;
 - (void)removeAllStreams;
 - (void)removeStreamAtIndex:(NSInteger)index;
 - (void)removeStream:(nonnull ISMSStreamHandler *)handler;
-- (void)removeStreamForSong:(nonnull ISMSSong *)aSong;
+- (void)removeStreamForSong:(nonnull Song *)aSong;
 
-- (void)queueStreamForSong:(nonnull ISMSSong *)song byteOffset:(unsigned long long)byteOffset atIndex:(NSInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
+- (void)queueStreamForSong:(nonnull Song *)song byteOffset:(unsigned long long)byteOffset atIndex:(NSInteger)index isTempCache:(BOOL)isTemp isStartDownload:(BOOL)isStartDownload;
 - (void)fillStreamQueue:(BOOL)isStartDownload;
 
 - (void)resumeQueue;

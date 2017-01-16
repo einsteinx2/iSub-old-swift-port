@@ -9,7 +9,13 @@ extension FMDatabase {
     fileprivate func valueForQuery<T>(_ sql: String, values: [Any]?, completionHandler:(FMResultSet)->(T!)) -> T? {
         var result: T?
         
-        if let rs = executeQuery(sql, withArgumentsIn: values) {
+        // Handle chained variadic functions
+        var arguments = values
+        if let first = values?.first as? [Any] {
+            arguments = first
+        }
+        
+        if let rs = executeQuery(sql, withArgumentsIn: arguments) {
             if rs.next() {
                 let obj: Any = rs.object(forColumnIndex: 0)
                 if !(obj is NSNull) {

@@ -19,7 +19,7 @@ struct SectionIndex {
         self.letter = letter
     }
     
-    static func sectionIndexesForItems(_ items: [ISMSItem]?) -> [SectionIndex] {
+    static func sectionIndexesForItems(_ items: [Item]?) -> [SectionIndex] {
         guard let items = items else {
             return []
         }
@@ -31,8 +31,8 @@ struct SectionIndex {
         var index: Int = 0
         var count: Int = 0
         for item in items {
-            if let itemName = item.itemName, itemName.characters.count > 0 {
-                let name = DatabaseSingleton.si().name(itemName, ignoringArticles: articles).uppercased()
+            if item.itemName.characters.count > 0 {
+                let name = DatabaseSingleton.si().name(item.itemName, ignoringArticles: articles).uppercased()
                 let firstScalar = name.unicodeScalars.first
                 var firstLetter = name[0]
                 

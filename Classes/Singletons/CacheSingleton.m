@@ -46,7 +46,7 @@ LOG_LEVEL_ISUB_DEFAULT
     NSString *query = @"SELECT COUNT(*) FROM cachedSongsMetadata WHERE fullyCached = 1";
     return [DatabaseSingleton.si.songModelReadDbPool intForQuery:query];
     
-    //return [[ISMSPlaylist downloadedSongs] songCount];
+    //return [[Playlist downloadedSongs] songCount];
 }
 
 //
@@ -87,7 +87,7 @@ LOG_LEVEL_ISUB_DEFAULT
 				else
 					songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 				//DLog(@"removing %@", songMD5);
-				[ISMSSong removeSongFromCacheDbQueueByMD5:songMD5];	
+				[Song removeSongFromCacheDbQueueByMD5:songMD5];	
 			}
 		}
 	}
@@ -108,7 +108,7 @@ LOG_LEVEL_ISUB_DEFAULT
 					songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 				}
 				//songSize = [DatabaseSingleton.si.songCacheDbQueue intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
-				ISMSSong *aSong = [ISMSSong songFromCacheDbQueue:songMD5];
+				Song *aSong = [Song songFromCacheDbQueue:songMD5];
 				// Determine the name of the file we are downloading.
 				//DLog(@"currentSongObject.path: %@", currentSongObject.path);
                 
@@ -116,7 +116,7 @@ LOG_LEVEL_ISUB_DEFAULT
 				unsigned long long songSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:songPath error:NULL] fileSize];
 				
 				//DLog(@"removing %@", songMD5);
-				[ISMSSong removeSongFromCacheDbQueueByMD5:songMD5];
+				[Song removeSongFromCacheDbQueueByMD5:songMD5];
 				
 				size -= songSize;
 			}

@@ -9,11 +9,11 @@
 import Foundation
 
 class MediaFoldersLoader: ApiLoader, ItemLoader {
-    var mediaFolders = [ISMSMediaFolder]()
+    var mediaFolders = [MediaFolder]()
     
     var associatedObject: Any?
     
-    var items: [ISMSItem] {
+    var items: [Item] {
         return mediaFolders
     }
     
@@ -22,12 +22,13 @@ class MediaFoldersLoader: ApiLoader, ItemLoader {
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
-        var mediaFoldersTemp = [ISMSMediaFolder]()
+        var mediaFoldersTemp = [MediaFolder]()
         
         let serverId = SavedSettings.si().currentServerId
         root.iterate("musicFolders.musicFolder") { musicFolder in
-            let aMediaFolder = ISMSMediaFolder(rxmlElement: musicFolder, serverId: serverId)
-            mediaFoldersTemp.append(aMediaFolder)
+            if let aMediaFolder = MediaFolder(rxmlElement: musicFolder, serverId: serverId) {
+                mediaFoldersTemp.append(aMediaFolder)
+            }
         }
         mediaFolders = mediaFoldersTemp
         
@@ -39,13 +40,13 @@ class MediaFoldersLoader: ApiLoader, ItemLoader {
     func persistModels() {
         // TODO: Only delete missing ones
         let serverId = SavedSettings.si().currentServerId
-        ISMSMediaFolder.deleteAllMediaFolders(withServerId: serverId as NSNumber)
-        mediaFolders.forEach({$0.replace()})
+        _ = MediaFolderRepository.si.deleteAllMediaFolders(serverId: serverId)
+        mediaFolders.forEach({_ = $0.replace()})
     }
     
     func loadModelsFromDatabase() -> Bool {
         let serverId = SavedSettings.si().currentServerId
-        mediaFolders = ISMSMediaFolder.allMediaFolders(withServerId: serverId as NSNumber)
+        mediaFolders = MediaFolderRepository.si.allMediaFolders(serverId: serverId)
         return mediaFolders.count > 0
     }
 }

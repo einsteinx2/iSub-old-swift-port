@@ -11,22 +11,22 @@
 #define ISMSMinBytesToStartPlayback(bitrate) (BytesForSecondsAtBitrate(10, bitrate))
 #define ISMSMaxContentLengthFailures 25
 
-@class ISMSSong;
-@interface ISMSStreamHandler : NSObject <NSCoding>
+@class Song;
+@interface ISMSStreamHandler : NSObject
 
-- (nonnull instancetype)initWithSong:(nonnull ISMSSong *)song byteOffset:(unsigned long long)bOffset isTemp:(BOOL)isTemp delegate:(nullable NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
-- (nonnull instancetype)initWithSong:(nonnull ISMSSong *)song isTemp:(BOOL)isTemp delegate:(nullable NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
+- (nonnull instancetype)initWithSong:(nonnull Song *)song byteOffset:(unsigned long long)bOffset isTemp:(BOOL)isTemp delegate:(nullable NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
+- (nonnull instancetype)initWithSong:(nonnull Song *)song isTemp:(BOOL)isTemp delegate:(nullable NSObject<ISMSStreamHandlerDelegate> *)theDelegate;
 
 @property (nullable, weak) NSObject<ISMSStreamHandlerDelegate> *delegate;
 @property BOOL isDelegateNotifiedToStartPlayback;
 
-@property (nonnull, copy) ISMSSong *song;
+@property (nonnull, strong) Song *song;
 
-@property NSInteger byteOffset;
-@property NSInteger totalBytesTransferred;
-@property NSInteger bytesTransferred;
+@property long long byteOffset;
+@property long long totalBytesTransferred;
+@property long long bytesTransferred;
 @property (nullable, strong) NSDate *speedLoggingDate;
-@property NSInteger speedLoggingLastSize;
+@property long long speedLoggingLastSize;
 @property NSInteger recentDownloadSpeedInBytesPerSec;
 @property NSInteger numOfReconnects;
 @property BOOL isTempCache;
@@ -51,6 +51,6 @@
 - (void)start;
 - (void)cancel;
 
-+ (NSInteger)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSInteger)bytesPerSec;
++ (long long)minBytesToStartPlaybackForKiloBitrate:(double)rate speedInBytesPerSec:(NSInteger)bytesPerSec;
 
 @end

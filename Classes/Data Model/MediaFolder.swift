@@ -21,6 +21,7 @@ class MediaFolder {
     let name: String
     
     var folders = [Folder]()
+    var songs = [Song]()
     
     init?(rxmlElement element: RXMLElement, serverId: Int, repository: MediaFolderRepository = MediaFolderRepository.si) {
         guard let mediaFolderId = element.attribute(asIntOptional: "id"), let name = element.attribute(asStringOptional: "name") else {

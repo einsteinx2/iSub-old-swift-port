@@ -21,6 +21,7 @@ protocol PersistedItem: Item {
     func replace() -> Bool
     func cache() -> Bool
     func delete() -> Bool
+    func deleteCache() -> Bool
     func loadSubItems()
     
     static func item(itemId: Int, serverId: Int, repository: ItemRepository) -> Item?

@@ -254,7 +254,7 @@ class PlayerViewController: UIViewController {
         
         progressSlider.value = Float(progressPercent)
         elapsedLabel.text = NSString.formatTime(progress)
-        if let duration = PlayQueue.si.currentDisplaySong?.duration?.doubleValue, let formattedTime = NSString.formatTime(duration - progress) {
+        if let duration = PlayQueue.si.currentDisplaySong?.duration, let formattedTime = NSString.formatTime(Double(duration) - progress) {
             remainingLabel.text = "-\(formattedTime)"
         }
     }

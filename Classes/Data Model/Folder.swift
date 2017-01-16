@@ -28,6 +28,26 @@ class Folder {
     var folders = [Folder]()
     var songs = [Song]()
     
+    init?(rxmlElement element: RXMLElement, serverId: Int, mediaFolderId: Int, repository: FolderRepository = FolderRepository.si) {
+        guard let folderId = element.attribute(asIntOptional: "id") else {
+            return nil
+        }
+        
+        self.folderId = folderId
+        self.serverId = serverId
+        self.parentFolderId = element.attribute(asIntOptional: "parent")
+        self.mediaFolderId = mediaFolderId
+        self.coverArtId = element.attribute(asStringOptional: "coverArt")
+        if let name = element.attribute(asStringOptional: "title") {
+            self.name = name.clean
+        } else if let name = element.attribute(asStringOptional: "name") {
+            self.name = name.clean
+        } else {
+            self.name = ""
+        }
+        self.repository = repository
+    }
+    
     required init(result: FMResultSet, repository: ItemRepository = FolderRepository.si) {
         self.folderId       = result.long(forColumnIndex: 0)
         self.serverId       = result.long(forColumnIndex: 1)
