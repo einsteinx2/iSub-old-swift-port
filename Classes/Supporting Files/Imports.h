@@ -13,6 +13,4 @@
 #import "libSubImports.h"
 #import "libSubDefines.h"
 
-#import "AppDelegate.h"
-
 #endif

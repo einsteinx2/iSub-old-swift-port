@@ -338,11 +338,7 @@
 {
 	@synchronized(self)
 	{
-#ifdef IOS
-		switch ([AppDelegate.si isWifi] ? self.maxBitrateWifi : self.maxBitrate3G)
-#else
-        switch (self.maxBitrateWifi)
-#endif
+        switch (AppDelegate.si.networkStatus.isReachableWifi ? self.maxBitrateWifi : self.maxBitrate3G)
 		{
 			case 0: return 64;
 			case 1: return 96;
@@ -394,11 +390,7 @@
 {    
     @synchronized(self)
 	{
-#ifdef IOS
-		switch ([AppDelegate.si isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
-#else
-        switch (self.maxVideoBitrateWifi)
-#endif
+        switch (AppDelegate.si.networkStatus.isReachableWifi ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
 		{
 			case 0: return @[@60];
 			case 1: return @[@256, @60];
@@ -415,11 +407,7 @@
 {
 	@synchronized(self)
 	{
-#ifdef IOS
-		switch ([AppDelegate.si isWifi] ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
-#else
-        switch (self.maxVideoBitrateWifi)
-#endif		
+        switch (AppDelegate.si.networkStatus.isReachableWifi ? self.maxVideoBitrateWifi : self.maxVideoBitrate3G)
         {
 			case 0: return 60;
 			case 1: return 256;
@@ -511,11 +499,7 @@
 		[_userDefaults setBool:isManualCachingOnWWANEnabled forKey:@"isManualCachingOnWWANEnabled"];
 		[_userDefaults synchronize];
         
-#ifdef IOS
-        if (![AppDelegate.si isWifi])
-#else
-        if (YES)
-#endif
+        if (AppDelegate.si.networkStatus.isReachableWifi)
         {
             isManualCachingOnWWANEnabled ? [CacheQueueManager.si start] : [CacheQueueManager.si stop];
         }

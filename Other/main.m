@@ -6,8 +6,8 @@
 //  Copyright __MyCompanyName__ 2010. All rights reserved.
 //
 
-#import "AppDelegate.h"
 #import "UAApplication.h"
+#import "iSub-Swift.h"
 
 int main(int argc, char *argv[])
 {

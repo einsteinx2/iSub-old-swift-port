@@ -10,6 +10,6 @@
 
 @interface NSURL (QueryParameterDictionary)
 
-- (NSDictionary<NSString*,NSString*> *)queryParameterDictionary;
+- (nonnull NSDictionary<NSString*,NSString*> *)queryParameterDictionary;
 
 @end

@@ -173,7 +173,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
             
             delegate?.serverEdited(server!)
             self.dismiss(animated: true, completion: nil)
-            AppDelegate.si().switchServer(to: server, redirectUrl: redirectUrl)
+            AppDelegate.si.switchServer(to: server!, redirectUrl: redirectUrl)
         } else {
             var message = ""
             var textField: UITextField?

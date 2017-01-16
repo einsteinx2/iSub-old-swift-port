@@ -99,7 +99,7 @@ class StreamManager: NSObject, StreamHandlerDelegate {
                                               message: "You can purchase a license for Subsonic by logging in to the web interface and clicking the red Donate link on the top right.\n\nPlease remember, iSub is a 3rd party client for Subsonic, and this license and trial is for Subsonic and not iSub.\n\nIf you didn't know about the Subsonic license requirement, and do not wish to purchase it, please tap the Support button on the Home tab and contact iSub support for a refund.",
                                               preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                AppDelegate.si().sidePanelController.present(alert, animated: true, completion: nil)
+                AppDelegate.si.sidePanelController.present(alert, animated: true, completion: nil)
                 
                 // TODO: Error handling
                 removeFile(forHandler: handler)

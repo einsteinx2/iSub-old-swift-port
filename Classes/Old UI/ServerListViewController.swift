@@ -295,7 +295,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
             SavedSettings.si().currentServerId = server.serverId
             SavedSettings.si().redirectUrlString = redirectUrl
             
-            AppDelegate.si().switchServer(to: server, redirectUrl: redirectUrl)
+            AppDelegate.si.switchServer(to: server, redirectUrl: redirectUrl)
             
             LoadingScreen.hide()
         }

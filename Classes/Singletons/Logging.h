@@ -8,8 +8,9 @@
 
 @interface Logging: NSObject
 
-+ (NSString *)latestLogFileName;
-+ (NSString *)zipAllLogFiles;
++ (nonnull NSString *)logsFolder;
++ (nullable NSString *)latestLogFileName;
++ (nullable NSString *)zipAllLogFiles;
 + (void)startRedirectingLogToFile;
 + (void)stopRedirectingLogToFile;
 

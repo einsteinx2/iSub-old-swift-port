@@ -7,8 +7,8 @@
 //
 
 #import "LoadingScreen.h"
-#import "AppDelegate.h"
 #import "EX2Macros.h"
+#import "iSub-Swift.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 
 @implementation LoadingScreen
