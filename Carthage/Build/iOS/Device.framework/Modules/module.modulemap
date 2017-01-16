@@ -1,0 +1,10 @@
+framework module Device {
+  umbrella header "Device.h"
+
+  export *
+  module * { export * }
+}
+
+module Device.Swift {
+    header "Device-Swift.h"
+}
