@@ -290,26 +290,20 @@ static NSInteger _bassOutputBufferLengthMillis = 0;
 	return bitrate;
 }
 
-#ifdef IOS
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-+ (NSInteger)audioSessionSampleRate
++ (double)audioSessionSampleRate
 {
-	Float64 sampleRate;
-	UInt32 size = sizeof(Float64);
-	AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareSampleRate, &size, &sampleRate);
-	
-	return (NSInteger)sampleRate;
+    return [[AVAudioSession sharedInstance] sampleRate];
 }
 
-+ (void)setAudioSessionSampleRate:(NSInteger)audioSessionSampleRate
++ (BOOL)setAudioSessionSampleRate:(double)sampleRate
 {
-	Float64 sampleRateFloat = (Float64)audioSessionSampleRate;
-	AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareSampleRate, 
-							sizeof(sampleRateFloat), 
-							&sampleRateFloat);
+    NSError *error = nil;
+    [[AVAudioSession sharedInstance] setPreferredSampleRate:sampleRate error:&error];
+    if (error) {
+        NSLog(@"Error changing sample rate: %@", error);
+    }
+    
+    return self.audioSessionSampleRate == sampleRate;
 }
-#pragma clang diagnostic pop
-#endif
 
 @end

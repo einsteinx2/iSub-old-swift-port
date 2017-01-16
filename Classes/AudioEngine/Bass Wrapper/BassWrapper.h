@@ -32,9 +32,7 @@
 + (NSString *)stringFromErrorCode:(NSInteger)errorCode;
 + (NSInteger)estimateBitrate:(BassStream *)bassStream;
 
-#ifdef IOS
-+ (NSInteger)audioSessionSampleRate;
-+ (void)setAudioSessionSampleRate:(NSInteger)audioSessionSampleRate;
-#endif
++ (double)audioSessionSampleRate;
++ (BOOL)setAudioSessionSampleRate:(double)sampleRate;
 
 @end
