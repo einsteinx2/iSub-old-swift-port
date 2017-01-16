@@ -8,7 +8,6 @@
 
 #import "CacheSingleton.h"
 #import "iSub-Swift.h"
-#import "ISMSStreamManager.h"
 #import "Imports.h"
 
 LOG_LEVEL_ISUB_DEFAULT
@@ -210,7 +209,6 @@ LOG_LEVEL_ISUB_DEFAULT
 	// Clear the temp cache directory
 	[[NSFileManager defaultManager] removeItemAtPath:[CacheSingleton tempCachePath] error:NULL];
 	[[NSFileManager defaultManager] createDirectoryAtPath:[CacheSingleton tempCachePath] withIntermediateDirectories:YES attributes:nil error:NULL];
-	ISMSStreamManager.si.lastTempCachedSong = nil;
 }
 
 - (void)setAllCachedSongsToBackup

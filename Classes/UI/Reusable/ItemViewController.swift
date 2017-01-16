@@ -390,7 +390,7 @@ class ItemViewController: DraggableTableViewController {
     
     fileprivate func showActionSheet(item: Item, indexPath: IndexPath) {
         if let song = item as? Song {
-            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            let alertController = UIAlertController(title: item.itemName, message: nil, preferredStyle: .actionSheet)
             
             alertController.addAction(UIAlertAction(title: "Play All", style: .default) { action in
                 self.viewModel.playSong(atIndex: indexPath.row)
@@ -428,6 +428,8 @@ class ItemViewController: DraggableTableViewController {
             if viewModel.isBrowsingCache {
                 alertController.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
                     _ = song.deleteCache()
+                    _ = self.viewModel.loadModelsFromDatabase()
+                    self.tableView.reloadData()
                 })
             }
             

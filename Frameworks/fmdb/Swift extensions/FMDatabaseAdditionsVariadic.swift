@@ -11,7 +11,7 @@ extension FMDatabase {
         
         // Handle chained variadic functions
         var arguments = values
-        if let first = values?.first as? [Any] {
+        while let first = arguments?.first as? [Any] {
             arguments = first
         }
         

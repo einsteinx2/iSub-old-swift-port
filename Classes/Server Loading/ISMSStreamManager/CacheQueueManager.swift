@@ -9,14 +9,14 @@
 import Foundation
 import Async
 
-fileprivate let maxNumOfReconnects = 5
+fileprivate let maxReconnects = 5
 
-class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
+class CacheQueueManager: NSObject, StreamHandlerDelegate {
     open static let si = CacheQueueManager()
     
     fileprivate(set) var isDownloading = false
     fileprivate(set) var currentSong: Song?
-    fileprivate(set) var currentStreamHandler: ISMSStreamHandler?
+    fileprivate(set) var streamHandler: StreamHandler?
     
     func contains(song: Song) -> Bool {
         return Playlist.downloadQueue.contains(song: song)
@@ -43,7 +43,7 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
         }
         
         // Make sure it's a song
-        guard let basicType = currentSong.contentType?.basicType, basicType == .audio else {
+        guard currentSong.basicType == .audio else {
             removeFromDownloadQueue(song: currentSong)
             start()
             return
@@ -62,17 +62,19 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
         // TODO: Download the art
         
         // Create the stream handler
-        if let handler = ISMSStreamManager.si().handler(for: currentSong) {
+        if StreamManager.si.song == currentSong, let handler = StreamManager.si.streamHandler {
             // It's in the stream queue so steal the handler
-            currentStreamHandler = handler
+            StreamManager.si.streamHandler = nil
+            StreamManager.si.stop()
+            StreamManager.si.start()
+            
             handler.delegate = self
-            ISMSStreamManager.si().stealHandler(forCacheQueue: handler)
             if !handler.isDownloading {
                 handler.start()
             }
         } else {
-            currentStreamHandler = URLSessionStreamHandler(song: currentSong, isTemp: false, delegate: self)
-            currentStreamHandler?.start()
+            streamHandler = StreamHandler(song: currentSong, isTemp: false, delegate: self)
+            streamHandler?.start()
         }
         
         NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_CacheQueueStarted)
@@ -81,8 +83,8 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
     func stop() {
         isDownloading = false
         
-        currentStreamHandler?.cancel()
-        currentStreamHandler = nil
+        streamHandler?.cancel()
+        streamHandler = nil
         currentSong = nil
         
         NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_CacheQueueStopped)
@@ -90,7 +92,7 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
     
     func resume() {
         if !SavedSettings.si().isOfflineMode {
-            currentStreamHandler?.start()
+            streamHandler?.start()
         }
     }
     
@@ -111,7 +113,7 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
         NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_CacheQueueSongDownloaded, userInfo: userInfo)
     }
     
-    fileprivate func removeFile(forHandler handler: ISMSStreamHandler) {
+    fileprivate func removeFile(forHandler handler: StreamHandler) {
         // TODO: Error handling
         try? FileManager.default.removeItem(atPath: handler.filePath)
     }
@@ -122,11 +124,11 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
     
     // MARK: - Stream Handler Delegate -
     
-    func ismsStreamHandlerStartPlayback(_ handler: ISMSStreamHandler!) {
-        ISMSStreamManager.si().ismsStreamHandlerStartPlayback(handler)
+    func streamHandlerStarted(_ handler: StreamHandler) {
+        
     }
     
-    func ismsStreamHandlerConnectionFinished(_ handler: ISMSStreamHandler!) {
+    func streamHandlerConnectionFinished(_ handler: StreamHandler) {
         var isSuccess = true
         if handler.totalBytesTransferred == 0 {
             let alert = UIAlertController(title: "Uh oh!",
@@ -175,7 +177,7 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
             }
             
             currentSong = nil
-            currentStreamHandler = nil
+            streamHandler = nil
             
             sendSongDownloadedNotification(song: handler.song)
             
@@ -183,10 +185,10 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
         }
     }
     
-    func ismsStreamHandlerConnectionFailed(_ handler: ISMSStreamHandler!, withError error: Error!) {
-        if handler.numOfReconnects < maxNumOfReconnects {
+    func streamHandlerConnectionFailed(_ handler: StreamHandler, withError error: Error?) {
+        if handler.allowReconnects && handler.numberOfReconnects < maxReconnects {
             // Less than max number of reconnections, so try again
-            handler.numOfReconnects += 1;
+            handler.numberOfReconnects += 1;
             
             // Retry connection after a delay to prevent a tight loop
             Async.main(after: 2.0) {
@@ -197,7 +199,7 @@ class CacheQueueManager: NSObject, ISMSStreamHandlerDelegate {
             //[[EX2SlidingNotification slidingNotificationOnTopViewWithMessage:NSLocalizedString(@"Song failed to download", @"Download manager, download failed message") image:nil] showAndHideSlidingNotification];
 
             // Tried max number of times so remove
-            currentStreamHandler = nil;
+            streamHandler = nil;
             if let currentSong = currentSong {
                 removeFromDownloadQueue(song: currentSong)
             }

@@ -38,15 +38,24 @@ import Nuke
     
     fileprivate func registerForNotifications() {
         // Watch for changes to the play queue playlist
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(PlayQueue.playlistChanged(_:)), name: Playlist.Notifications.playlistChanged, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playlistChanged(_:)), name: Playlist.Notifications.playlistChanged, object: nil)
+        NotificationCenter.addObserver(onMainThread: self, selector: #selector(songReadyForPlayback(_:)), name: ISMSNotification_StreamHandlerSongReadyForPlayback, object: nil)
     }
     
     fileprivate func unregisterForNotifications() {
         NotificationCenter.removeObserver(onMainThread: self, name: Playlist.Notifications.playlistChanged, object: nil)
+        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_StreamHandlerSongReadyForPlayback, object: nil)
     }
     
     @objc fileprivate func playlistChanged(_ notification: Notification) {
         
+    }
+    
+    @objc fileprivate func songReadyForPlayback(_ notification: Notification) {
+        //print("PlayQueue song ready for playback, song: \(notification.userInfo?["song"]) currentSong: \(currentSong)")
+        if let song = notification.userInfo?["song"] as? Song, song == currentSong {
+            startSong()
+        }
     }
     
     //
@@ -81,6 +90,15 @@ import Nuke
     var playlist: Playlist { return Playlist.playQueue }
     
     fileprivate var audioEngine: AudioEngine { return AudioEngine.si() }
+    
+    override init() {
+        super.init()
+        registerForNotifications()
+    }
+    
+    deinit {
+        unregisterForNotifications()
+    }
     
     //
     // MARK: - Play Queue -
@@ -123,13 +141,11 @@ import Nuke
     
     func insertSong(song: Song, index: Int, notify: Bool = false) {
         playlist.insert(song: song, index: index, notify: notify)
-        ISMSStreamManager.si().fillStreamQueue(self.audioEngine.isStarted())
     }
     
     func insertSongNext(song: Song, notify: Bool = false) {
         let index = currentIndex < 0 ? songCount : currentIndex + 1
         playlist.insert(song: song, index: index, notify: notify)
-        ISMSStreamManager.si().fillStreamQueue(self.audioEngine.isStarted())
     }
     
     func moveSong(fromIndex: Int, toIndex: Int, notify: Bool = false) {
@@ -147,8 +163,6 @@ import Nuke
                 // Moved a song from before the current song to after
                 currentIndex -= 1
             }
-            
-            ISMSStreamManager.si().fillStreamQueue(self.audioEngine.isStarted())
         }
     }
     
@@ -202,7 +216,6 @@ import Nuke
     func playSong(atIndex index: Int) {
         currentIndex = index
         if let currentSong = currentSong {
-            ISMSStreamManager.si().removeAllStreamsExcept(for: currentSong)
             if currentSong.contentType?.basicType == .audio {
                 startSong()
             }
@@ -262,68 +275,25 @@ import Nuke
     
     fileprivate func startSongDelayed(byteOffset: Int) {
         // Destroy the streamer to start a new song
-        self.audioEngine.stop()
+        audioEngine.stop()
+        
+        // Start the stream manager
+        StreamManager.si.start()
         
         if let currentSong = currentSong {
-            let settings = SavedSettings.si()
-            let streamManager = ISMSStreamManager.si()
-            let audioEngineStartSong = {
-                self.audioEngine.start(currentSong, index: self.currentIndex, byteOffset: byteOffset)
-            }
-            
             // Check to see if the song is already cached
             if currentSong.isFullyCached {
                 // The song is fully cached, start streaming from the local copy
-                audioEngineStartSong()
+                audioEngine.start(currentSong, index: currentIndex, byteOffset: byteOffset)
             } else {
-                // Fill the stream queue
-                if !settings.isOfflineMode {
-                    streamManager.fillStreamQueue(true)
-                } else if !currentSong.isFullyCached && settings.isOfflineMode {
-                    // TODO: Prevent this running forever in RepeatAll mode with no songs available
-                    self.playSong(atIndex: nextIndex)
-                } else {
-                    if let currentSong = CacheQueueManager.si.currentSong, currentSong.isEqual(currentSong) {
-                        // The cache queue is downloading this song, remove it before continuing
-                        CacheQueueManager.si.removeCurrentSong()
+                if let currentSong = CacheQueueManager.si.currentSong, currentSong.isEqual(currentSong) {
+                    // If the Cache Queue is downloading it and it's ready for playback, start the player
+                    if CacheQueueManager.si.streamHandler?.isReadyForPlayback == true {
+                        audioEngine.start(currentSong, index: currentIndex, byteOffset: byteOffset)
                     }
-                    
-                    if streamManager.isSongDownloading(currentSong) {
-                        // The song is caching, start streaming from the local copy
-                        if let handler = streamManager.handler(for: currentSong) {
-                            if !audioEngine.isPlaying() && handler.isDelegateNotifiedToStartPlayback {
-                                // Only start the player if the handler isn't going to do it itself
-                                audioEngineStartSong()
-                            }
-                        }
-                    } else if streamManager.isSongFirst(inQueue: currentSong) && !streamManager.isDownloading {
-                        // The song is first in queue, but the queue is not downloading. Probably the song was downloading
-                        // when the app quit. Resume the download and start the player
-                        streamManager.resumeQueue()
-                        
-                        // The song is caching, start streaming from the local copy
-                        if let handler = streamManager.handler(for: currentSong) {
-                            if !self.audioEngine.isPlaying() && handler.isDelegateNotifiedToStartPlayback {
-                                // Only start the player if the handler isn't going to do it itself
-                                audioEngineStartSong()
-                            }
-                        }
-                    } else {
-                        // Clear the stream manager
-                        streamManager.removeAllStreams()
-                        
-                        var isTempCache = false
-                        if byteOffset > 0 || !settings.isSongCachingEnabled {
-                            isTempCache = true
-                        }
-                        
-                        // Start downloading the current song from the correct offset
-                        streamManager.queueStream(for: currentSong, byteOffset: UInt64(byteOffset), at: 0, isTempCache: isTempCache, isStartDownload: true)
-                        
-                        // Fill the stream queue
-                        if settings.isSongCachingEnabled {
-                            streamManager.fillStreamQueue(self.audioEngine.isStarted())
-                        }
+                } else {
+                    if StreamManager.si.streamHandler?.isReadyForPlayback == true {
+                        audioEngine.start(currentSong, index: currentIndex, byteOffset: byteOffset)
                     }
                 }
             }
@@ -389,6 +359,9 @@ extension PlayQueue: BassGaplessPlayerDelegate {
         // Increment current playlist index
         currentIndex = nextIndex
         
+        // Start preloading the next song
+        StreamManager.si.start()
+        
         // TODO: Is this the best place for this?
         //SocialSingleton.si().playerClearSocial()
     }
@@ -426,12 +399,20 @@ extension PlayQueue: BassGaplessPlayerDelegate {
     
     public func bassFailedToCreateNextStream(for index: Int, player: BassGaplessPlayer) {
         // The song ended, and we tried to make the next stream but it failed
-        if let song = self.songAtIndex(index), let handler = ISMSStreamManager.si().handler(for: song) {
-            if !handler.isDownloading || handler.isDelegateNotifiedToStartPlayback {
-                // If the song isn't downloading, or it is and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
+        if let song = self.songAtIndex(index) {
+            if let handler = StreamManager.si.streamHandler, song == StreamManager.si.song {
+                if handler.isReadyForPlayback {
+                    // If the song is downloading and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
+                    Async.main {
+                        self.playSong(atIndex: index)
+                    }
+                }
+            } else if song.isFullyCached {
                 Async.main {
                     self.playSong(atIndex: index)
                 }
+            } else {
+                StreamManager.si.start()
             }
         }
     }

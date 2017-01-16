@@ -48,6 +48,10 @@ extension Song: Item {
     var contentType: ContentType?
     var transcodedContentType: ContentType?
     
+    var basicType: BasicContentType? {
+        return contentType?.basicType
+    }
+    
     // Automatically chooses either the artist/album model name or uses the song property if it's not available
     // NOTE: Not every song has an Artist or Album object in Subsonic. So when folder browsing this is especially
     // important.
@@ -204,13 +208,13 @@ extension Song: Item {
     
     override func isEqual(_ object: Any?) -> Bool {
         if let song = object as? Song {
-            return isEqual(to: song)
+            return self == song
         }
         return false
     }
     
-    func isEqual(to: Song) -> Bool {
-        return songId == to.songId && serverId == to.serverId
+    static func ==(lhs: Song, rhs: Song) -> Bool {
+        return lhs.songId == rhs.songId && lhs.serverId == rhs.serverId
     }
 }
 

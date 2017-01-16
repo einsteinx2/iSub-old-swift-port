@@ -90,12 +90,7 @@
     
     // Recover current state if player was interrupted. Do not resume if we're connected to the test server
     // because music will start playing behind the intro screen.
-    [ISMSStreamManager si];
-    if (SavedSettings.si.isTestServer || !SavedSettings.si.isRecover)
-    {
-        [ISMSStreamManager.si removeAllStreams];
-    }
-    else
+    if (!SavedSettings.si.isTestServer && SavedSettings.si.isRecover)
     {
         Song *currentSong = PlayQueue.si.currentSong;
         if (currentSong)
@@ -429,7 +424,7 @@
 		
 	[PlayQueue.si stop];
 	
-	[ISMSStreamManager.si cancelAllStreams];
+	[StreamManager.si stop];
 	
 	[CacheQueueManager.si stop];
     
@@ -525,7 +520,7 @@
     [Playlist createPlaylist:@"Downloaded Songs" playlistId:[Playlist downloadedSongsPlaylistId] serverId:server.serverId];
     
     // Cancel any caching
-    [ISMSStreamManager.si removeAllStreams];
+    [StreamManager.si stop];
     
     // Reset UI
     [(MenuViewController *)self.sidePanelController.leftPanel resetMenuItems];

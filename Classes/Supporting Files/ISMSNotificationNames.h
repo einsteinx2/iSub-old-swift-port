@@ -29,6 +29,7 @@ extern NSString * const ISMSNotification_CacheQueueStopped;
 extern NSString * const ISMSNotification_CacheQueueSongDownloaded;
 extern NSString * const ISMSNotification_CacheQueueSongFailed;
 
+extern NSString * const ISMSNotification_StreamHandlerSongReadyForPlayback;
 extern NSString * const ISMSNotification_StreamHandlerSongDownloaded;
 extern NSString * const ISMSNotification_StreamHandlerSongFailed;
 

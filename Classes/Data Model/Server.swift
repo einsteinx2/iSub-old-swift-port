@@ -65,7 +65,8 @@ extension Server: Item {
         self.repository = repository
     }
     
-    init(result: FMResultSet, repository: ItemRepository) {
+    // This must be marked required or we get a crash due to a Swift bug
+    required init(result: FMResultSet, repository: ItemRepository) {
         self.serverId = result.longLongInt(forColumnIndex: 0)
         self.type = ServerType(rawValue: result.long(forColumnIndex: 1)) ?? .subsonic
         self.url = result.string(forColumnIndex: 2) ?? ""

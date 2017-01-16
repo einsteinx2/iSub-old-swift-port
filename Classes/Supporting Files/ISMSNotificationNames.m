@@ -28,6 +28,7 @@ NSString * const ISMSNotification_CacheQueueStarted = @"ISMSNotification_CacheQu
 NSString * const ISMSNotification_CacheQueueStopped = @"ISMSNotification_CacheQueueStopped";
 NSString * const ISMSNotification_CacheQueueSongDownloaded = @"ISMSNotification_CacheQueueSongDownloaded";
 NSString * const ISMSNotification_CacheQueueSongFailed = @"ISMSNotification_CacheQueueSongFailed";
+NSString * const ISMSNotification_StreamHandlerSongReadyForPlayback = @"ISMSNotification_StreamHandlerSongReadyForPlayback";
 NSString * const ISMSNotification_StreamHandlerSongDownloaded = @"ISMSNotification_StreamHandlerSongDownloaded";
 NSString * const ISMSNotification_StreamHandlerSongFailed = @"ISMSNotification_StreamHandlerSongFailed";
 
