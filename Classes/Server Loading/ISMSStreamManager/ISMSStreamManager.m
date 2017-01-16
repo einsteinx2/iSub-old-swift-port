@@ -14,6 +14,12 @@
 LOG_LEVEL_ISUB_DEBUG
 #define maxNumOfReconnects 5
 
+@interface ISMSStreamManager()
+@property (nullable, strong) NSMutableArray *handlerStack;
+@property (nullable, strong) Song *lastCachedSong;
+@property (nullable, readonly) Song *currentStreamingSong;
+@end
+
 @implementation ISMSStreamManager
 
 - (Song *)currentStreamingSong
