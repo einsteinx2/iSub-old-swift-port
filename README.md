@@ -1,10 +1,9 @@
 # \#iSUBFOREVER - iSub is back!
 
 ### How to build
-0. Clone the repository
-1. Install Carthage: `brew install carthage` or `https://github.com/Carthage/Carthage/releases`
-2. Update Carthage frameworks: `carthage update --platform ios`
-3. Run the **iSub Beta** target.
+1. Clone the repository
+2. Run the **iSub Beta** target.
+3. That's it! All frameworks are checked in. You can install Carthage to update them, but it's not required.
 
 ### Contributing
 1. Fork the repo
