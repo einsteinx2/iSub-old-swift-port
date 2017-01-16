@@ -9,8 +9,8 @@
 import Foundation
 
 class CachedArtistLoader: CachedDatabaseLoader {
-    let artistId: Int
-    let serverId: Int
+    let artistId: Int64
+    let serverId: Int64
     
     var albums = [Album]()
     
@@ -22,7 +22,7 @@ class CachedArtistLoader: CachedDatabaseLoader {
         return ArtistRepository.si.artist(artistId: artistId, serverId: serverId)
     }
     
-    init(artistId: Int, serverId: Int) {
+    init(artistId: Int64, serverId: Int64) {
         self.artistId = artistId
         self.serverId = serverId
         super.init()

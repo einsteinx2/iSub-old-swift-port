@@ -9,9 +9,9 @@
 import Foundation
 
 protocol Item {
-    var itemId: Int { get }
+    var itemId: Int64 { get }
     var itemName: String { get }
-    var serverId: Int { get }
+    var serverId: Int64 { get }
 }
 
 protocol PersistedItem: Item {
@@ -24,6 +24,6 @@ protocol PersistedItem: Item {
     func deleteCache() -> Bool
     func loadSubItems()
     
-    static func item(itemId: Int, serverId: Int, repository: ItemRepository) -> Item?
+    static func item(itemId: Int64, serverId: Int64, repository: ItemRepository) -> Item?
     init(result: FMResultSet, repository: ItemRepository)
 }

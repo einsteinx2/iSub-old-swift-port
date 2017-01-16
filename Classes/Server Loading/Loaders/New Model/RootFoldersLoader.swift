@@ -9,7 +9,7 @@
 import Foundation
 
 class RootFoldersLoader: ApiLoader, ItemLoader {
-    var mediaFolderId: Int?
+    var mediaFolderId: Int64?
     
     var ignoredArticles = [String]()
     var folders = [Folder]()

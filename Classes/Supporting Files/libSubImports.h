@@ -21,8 +21,6 @@
 #import "AudioEngine.h"
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
-#import "DatabaseSingleton.h"
-#import "SocialSingleton.h"
 #import "ISMSStreamManager.h"
 #import "LoadingScreen.h"
 

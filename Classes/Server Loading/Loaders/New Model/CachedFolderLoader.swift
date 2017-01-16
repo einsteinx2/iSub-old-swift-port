@@ -11,8 +11,8 @@ import Foundation
 class CachedFolderLoader: CachedDatabaseLoader {
     fileprivate static var operationQueues = [OperationQueue]()
     
-    let folderId: Int
-    let serverId: Int
+    let folderId: Int64
+    let serverId: Int64
     
     var folders = [Folder]()
     var songs = [Song]()
@@ -26,7 +26,7 @@ class CachedFolderLoader: CachedDatabaseLoader {
         return FolderRepository.si.folder(folderId: folderId, serverId: serverId)
     }
     
-    init(folderId: Int, serverId: Int) {
+    init(folderId: Int64, serverId: Int64) {
         self.folderId = folderId
         self.serverId = serverId
         super.init()

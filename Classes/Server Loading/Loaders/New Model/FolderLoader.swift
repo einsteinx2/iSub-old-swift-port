@@ -9,8 +9,8 @@
 import Foundation
 
 class FolderLoader: ApiLoader, ItemLoader {
-    let folderId: Int
-    let mediaFolderId: Int
+    let folderId: Int64
+    let mediaFolderId: Int64
     
     var folders = [Folder]()
     var songs = [Song]()
@@ -20,7 +20,7 @@ class FolderLoader: ApiLoader, ItemLoader {
         return folders as [Item] + songs as [Item]
     }
     
-    init(folderId: Int, mediaFolderId: Int) {
+    init(folderId: Int64, mediaFolderId: Int64) {
         self.folderId = folderId
         self.mediaFolderId = mediaFolderId
         super.init()
@@ -82,8 +82,8 @@ class FolderLoader: ApiLoader, ItemLoader {
         }
         
         // Make sure all artist and album records are created if needed
-        var artistIds = Set<Int>()
-        var albumIds = Set<Int>()
+        var artistIds = Set<Int64>()
+        var albumIds = Set<Int64>()
         for song in songs {
             if let artist = song.artist, !artist.isPersisted {
                 artistIds.insert(artist.artistId)

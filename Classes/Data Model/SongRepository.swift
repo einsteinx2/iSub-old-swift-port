@@ -16,15 +16,15 @@ struct SongRepository: ItemRepository {
     let cachedTable = "cachedSongs"
     let itemIdField = "songId"
     
-    func song(songId: Int, serverId: Int, loadSubItems: Bool = false) -> Song? {
+    func song(songId: Int64, serverId: Int64, loadSubItems: Bool = false) -> Song? {
         return gr.item(repository: self, itemId: songId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
-    func allSongs(serverId: Int? = nil, isCachedTable: Bool = false) -> [Song] {
+    func allSongs(serverId: Int64? = nil, isCachedTable: Bool = false) -> [Song] {
         return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
     }
     
-    func deleteAllSongs(serverId: Int?) -> Bool {
+    func deleteAllSongs(serverId: Int64?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -32,7 +32,7 @@ struct SongRepository: ItemRepository {
         return gr.isPersisted(repository: self, item: song, isCachedTable: isCachedTable)
     }
     
-    func isPersisted(songId: Int, serverId: Int, isCachedTable: Bool = false) -> Bool {
+    func isPersisted(songId: Int64, serverId: Int64, isCachedTable: Bool = false) -> Bool {
         return gr.isPersisted(repository: self, itemId: songId, serverId: serverId, isCachedTable: isCachedTable)
     }
     
@@ -44,9 +44,9 @@ struct SongRepository: ItemRepository {
         return gr.delete(repository: self, item: song, isCachedTable: isCachedTable)
     }
     
-    func lastPlayed(songId: Int, serverId: Int, isCachedTable: Bool = false) -> Date? {
+    func lastPlayed(songId: Int64, serverId: Int64, isCachedTable: Bool = false) -> Date? {
         var lastPlayed: Date? = nil
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             let query = "SELECT lastPlayed FROM \(table) WHERE songId = ? AND serverId = ?"
             lastPlayed = db.dateForQuery(query, songId, serverId)
@@ -54,9 +54,9 @@ struct SongRepository: ItemRepository {
         return lastPlayed
     }
     
-    func deleteRootSongs(mediaFolderId: Int?, serverId: Int, isCachedTable: Bool = false) -> Bool {
+    func deleteRootSongs(mediaFolderId: Int64?, serverId: Int64, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             var query = "DELETE FROM \(table) WHERE folderId IS NULL AND serverId = ?"
             do {
@@ -74,9 +74,9 @@ struct SongRepository: ItemRepository {
         return success
     }
     
-    func rootSongs(mediaFolderId: Int?, serverId: Int, isCachedTable: Bool = false) -> [Song] {
+    func rootSongs(mediaFolderId: Int64?, serverId: Int64, isCachedTable: Bool = false) -> [Song] {
         var songs = [Song]()
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             var query = "SELECT * FROM \(table) WHERE folderId IS NULL AND serverId = ?"
             do {
@@ -100,9 +100,9 @@ struct SongRepository: ItemRepository {
         return songs
     }
     
-    func songs(albumId: Int, serverId: Int, isCachedTable: Bool = false) -> [Song] {
+    func songs(albumId: Int64, serverId: Int64, isCachedTable: Bool = false) -> [Song] {
         var songs = [Song]()
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             let query = "SELECT * FROM \(table) WHERE albumId = ? AND serverId = ?"
             do {
@@ -119,9 +119,9 @@ struct SongRepository: ItemRepository {
         return songs
     }
     
-    func songs(folderId: Int, serverId: Int, isCachedTable: Bool = false) -> [Song] {
+    func songs(folderId: Int64, serverId: Int64, isCachedTable: Bool = false) -> [Song] {
         var songs = [Song]()
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             let query = "SELECT * FROM \(table) WHERE folderId = ? AND serverId = ?"
             do {
@@ -140,7 +140,7 @@ struct SongRepository: ItemRepository {
     
     func replace(song: Song, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -170,10 +170,9 @@ struct SongRepository: ItemRepository {
             song.genre = GenreRepository.si.genre(genreId: genreId)
         }
         
-        song.contentType = ISMSContentType(contentTypeId: song.contentTypeId)
-        
+        song.contentType = ContentTypeRepository.si.contentType(contentTypeId: song.contentTypeId)
         if let transcodedContentTypeId = song.transcodedContentTypeId {
-            song.transcodedContentType = ISMSContentType(contentTypeId: transcodedContentTypeId)
+            song.transcodedContentType = ContentTypeRepository.si.contentType(contentTypeId: transcodedContentTypeId)
         }
     }
 }
@@ -182,11 +181,11 @@ extension Song {
     var isFullyCached: Bool {
         get {
             let query = "SELECT fullyCached FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?"
-            return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, songId, serverId)
+            return DatabaseSingleton.si.read.boolForQuery(query, songId, serverId)
         }
         set {
             // TODO: Handle pinned column
-            DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+            DatabaseSingleton.si.write.inDatabase { db in
                 let query = "REPLACE INTO cachedSongsMetadata VALUES (?, ?, ?, ?, ?)"
                 try? db.executeUpdate(query, self.songId, self.serverId, false, true, false)
             }
@@ -203,11 +202,11 @@ extension Song {
     var isPartiallyCached: Bool {
         get {
             let query = "SELECT partiallyCached FROM cachedSongsMetadata WHERE songId = ? AND serverId = ?"
-            return DatabaseSingleton.si().songModelReadDbPool.boolForQuery(query, songId, serverId)
+            return DatabaseSingleton.si.read.boolForQuery(query, songId, serverId)
         }
         set {
             // TODO: Handle pinned column
-            DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+            DatabaseSingleton.si.write.inDatabase { db in
                 let query = "REPLACE INTO cachedSongsMetadata VALUES (?, ?, ?, ?, ?)"
                 try? db.executeUpdate(query, self.songId, self.serverId, true, false, false)
             }
@@ -216,7 +215,7 @@ extension Song {
 }
 
 extension Song: PersistedItem {
-    class func item(itemId: Int, serverId: Int, repository: ItemRepository = SongRepository.si) -> Item? {
+    class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = SongRepository.si) -> Item? {
         return (repository as? SongRepository)?.song(songId: itemId, serverId: serverId)
     }
     
@@ -243,7 +242,7 @@ extension Song: PersistedItem {
     func deleteCache() -> Bool {
         // TODO: Use a transaction
         var success = true
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             var queries = [String]()
             
             // Remove the metadata entry

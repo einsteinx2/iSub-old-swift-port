@@ -483,7 +483,7 @@ LOG_LEVEL_ISUB_DEBUG
             }
             
             // Add song to stream queue
-            if (aSong && aSong.contentType.basicType == ISMSBasicContentTypeAudio &&
+            if (aSong && aSong.basicContentTypeObjC == 1 &&
                 ![self isSongInQueue:aSong] &&
                 ![self.lastTempCachedSong isEqual:aSong] &&
                 !aSong.isFullyCached &&

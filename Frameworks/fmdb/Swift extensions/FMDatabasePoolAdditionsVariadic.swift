@@ -17,36 +17,40 @@ extension FMDatabasePool {
         return value
     }
     
-    func intOptionalForQuery(_ sql: String, _ values: Any...) -> Int32? {
-        var value: Int32?
+    func intOptionalForQuery(_ sql: String, _ values: Any...) -> Int? {
+        var value: Int?
         self.inDatabase { db in
             value = db.intOptionalForQuery(sql, values)
         }
         return value
     }
     
-    func intForQuery(_ sql: String, _ values: Any...) -> Int32 {
-        var value: Int32 = 0
+    func intForQuery(_ sql: String, _ values: Any...) -> Int {
+        return intOptionalForQuery(sql, values) ?? 0
+    }
+    
+    func int32OptionalForQuery(_ sql: String, _ values: Any...) -> Int32? {
+        var value: Int32?
         self.inDatabase { db in
-            value = db.intForQuery(sql, values)
+            value = db.int32OptionalForQuery(sql, values)
         }
         return value
     }
     
-    func longOptionalForQuery(_ sql: String, _ values: Any...) -> Int? {
-        var value: Int?
+    func int32ForQuery(_ sql: String, _ values: Any...) -> Int32 {
+        return int32OptionalForQuery(sql, values) ?? 0
+    }
+    
+    func int64OptionalForQuery(_ sql: String, _ values: Any...) -> Int64? {
+        var value: Int64?
         self.inDatabase { db in
-            value = db.longOptionalForQuery(sql, values)
+            value = db.int64OptionalForQuery(sql, values)
         }
         return value
     }
     
-    func longForQuery(_ sql: String, _ values: Any...) -> Int {
-        var value: Int = 0
-        self.inDatabase { db in
-            value = db.longForQuery(sql, values)
-        }
-        return value
+    func int64ForQuery(_ sql: String, _ values: Any...) -> Int64 {
+        return int64OptionalForQuery(sql, values) ?? 0
     }
     
     func boolOptionalForQuery(_ sql: String, _ values: Any...) -> Bool? {
@@ -58,11 +62,7 @@ extension FMDatabasePool {
     }
     
     func boolForQuery(_ sql: String, _ values: Any...) -> Bool {
-        var value: Bool = false
-        self.inDatabase { db in
-            value = db.boolForQuery(sql, values)
-        }
-        return value
+        return boolOptionalForQuery(sql, values) ?? false
     }
     
     func doubleOptionalForQuery(_ sql: String, _ values: Any...) -> Double? {
@@ -74,11 +74,7 @@ extension FMDatabasePool {
     }
     
     func doubleForQuery(_ sql: String, _ values: Any...) -> Double {
-        var value: Double = 0
-        self.inDatabase { db in
-            value = db.doubleForQuery(sql, values)
-        }
-        return value
+        return doubleOptionalForQuery(sql, values) ?? 0.0
     }
     
     func dateForQuery(_ sql: String, _ values: Any...) -> Date? {

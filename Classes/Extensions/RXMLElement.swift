@@ -10,7 +10,7 @@ import Foundation
 
 extension RXMLElement {
     func attribute(asStringOptional attributeName: String) -> String? {
-        if let value = self.attribute(attributeName), value.characters.count > 0 {
+        if let value = self.attribute(attributeName), value.length > 0 {
             return value
         }
         return nil
@@ -21,5 +21,16 @@ extension RXMLElement {
             return value
         }
         return nil
+    }
+    
+    func attribute(asInt64Optional attributeName: String) -> Int64? {
+        if let stringValue = self.attribute(attributeName), let value = Int64(stringValue) {
+            return value
+        }
+        return nil
+    }
+    
+    func attribute(asInt64 attributeName: String) -> Int64 {
+        return attribute(asInt64Optional: attributeName) ?? Int64(0)
     }
 }

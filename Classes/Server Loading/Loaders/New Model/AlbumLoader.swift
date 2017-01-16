@@ -9,7 +9,7 @@
 import Foundation
 
 class AlbumLoader: ApiLoader, ItemLoader {
-    let albumId: Int
+    let albumId: Int64
     
     var songs = [Song]()
     
@@ -17,7 +17,7 @@ class AlbumLoader: ApiLoader, ItemLoader {
         return songs
     }
     
-    init(albumId: Int) {
+    init(albumId: Int64) {
         self.albumId = albumId
         super.init()
     }
@@ -59,9 +59,9 @@ class AlbumLoader: ApiLoader, ItemLoader {
         }
         
         // Make sure all folder records are created if needed
-        var folderIds = Set<Int>()
+        var folderIds = Set<Int64>()
         for song in songs {
-            func performOperation(folderId: Int, mediaFolderId: Int) {
+            func performOperation(folderId: Int64, mediaFolderId: Int64) {
                 if !folderIds.contains(folderId) {
                     folderIds.insert(folderId)
                     let loader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)

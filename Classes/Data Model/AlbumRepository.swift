@@ -16,16 +16,16 @@ struct AlbumRepository: ItemRepository {
     let cachedTable = "cachedAlbums"
     let itemIdField = "albumId"
     
-    func album(albumId: Int, serverId: Int, loadSubItems: Bool = false) -> Album? {
+    func album(albumId: Int64, serverId: Int64, loadSubItems: Bool = false) -> Album? {
         return gr.item(repository: self, itemId: albumId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
-    func allAlbums(serverId: Int? = nil, isCachedTable: Bool = false) -> [Album] {
+    func allAlbums(serverId: Int64? = nil, isCachedTable: Bool = false) -> [Album] {
         let albums: [Album] = gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
-        return subsonicSorted(items: albums, ignoredArticles: DatabaseSingleton.si().ignoredArticles())
+        return subsonicSorted(items: albums, ignoredArticles: DatabaseSingleton.si.ignoredArticles)
     }
     
-    func deleteAllAlbums(serverId: Int?) -> Bool {
+    func deleteAllAlbums(serverId: Int64?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -33,7 +33,7 @@ struct AlbumRepository: ItemRepository {
         return gr.isPersisted(repository: self, item: album, isCachedTable: isCachedTable)
     }
     
-    func isPersisted(albumId: Int, serverId: Int, isCachedTable: Bool = false) -> Bool {
+    func isPersisted(albumId: Int64, serverId: Int64, isCachedTable: Bool = false) -> Bool {
         return gr.isPersisted(repository: self, itemId: albumId, serverId: serverId, isCachedTable: isCachedTable)
     }
     
@@ -45,9 +45,9 @@ struct AlbumRepository: ItemRepository {
         return gr.delete(repository: self, item: album, isCachedTable: isCachedTable)
     }
     
-    func albums(artistId: Int, serverId: Int, isCachedTable: Bool = false) -> [Album] {
+    func albums(artistId: Int64, serverId: Int64, isCachedTable: Bool = false) -> [Album] {
         var albums = [Album]()
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             let query = "SELECT * FROM \(table) WHERE artistId = ? AND serverId = ?"
             do {
@@ -66,7 +66,7 @@ struct AlbumRepository: ItemRepository {
     
     func replace(album: Album, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -93,7 +93,7 @@ struct AlbumRepository: ItemRepository {
 }
 
 extension Album: PersistedItem {
-    class func item(itemId: Int, serverId: Int, repository: ItemRepository = AlbumRepository.si) -> Item? {
+    class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = AlbumRepository.si) -> Item? {
         return (repository as? AlbumRepository)?.album(albumId: itemId, serverId: serverId)
     }
     

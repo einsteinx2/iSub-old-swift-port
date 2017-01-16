@@ -16,15 +16,15 @@ struct FolderRepository: ItemRepository {
     let cachedTable = "cachedFolders"
     let itemIdField = "folderId"
     
-    func folder(folderId: Int, serverId: Int, loadSubItems: Bool = false) -> Folder? {
+    func folder(folderId: Int64, serverId: Int64, loadSubItems: Bool = false) -> Folder? {
         return gr.item(repository: self, itemId: folderId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
-    func allFolders(serverId: Int? = nil, isCachedTable: Bool = false) -> [Folder] {
+    func allFolders(serverId: Int64? = nil, isCachedTable: Bool = false) -> [Folder] {
         return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
     }
     
-    func deleteAllFolders(serverId: Int?) -> Bool {
+    func deleteAllFolders(serverId: Int64?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -32,7 +32,7 @@ struct FolderRepository: ItemRepository {
         return gr.isPersisted(repository: self, item: folder, isCachedTable: isCachedTable)
     }
     
-    func isPersisted(folderId: Int, serverId: Int, isCachedTable: Bool = false) -> Bool {
+    func isPersisted(folderId: Int64, serverId: Int64, isCachedTable: Bool = false) -> Bool {
         return gr.isPersisted(repository: self, itemId: folderId, serverId: serverId, isCachedTable: isCachedTable)
     }
     
@@ -44,9 +44,9 @@ struct FolderRepository: ItemRepository {
         return gr.delete(repository: self, item: folder, isCachedTable: isCachedTable)
     }
     
-    func deleteRootFolders(mediaFolderId: Int?, serverId: Int, isCachedTable: Bool = false) -> Bool {
+    func deleteRootFolders(mediaFolderId: Int64?, serverId: Int64, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             var query = "DELETE FROM \(table) WHERE parentFolderId IS NULL AND serverId = ?"
             do {
@@ -64,9 +64,9 @@ struct FolderRepository: ItemRepository {
         return success
     }
     
-    func rootFolders(mediaFolderId: Int? = nil, serverId: Int? = nil, isCachedTable: Bool = false) -> [Folder] {
+    func rootFolders(mediaFolderId: Int64? = nil, serverId: Int64? = nil, isCachedTable: Bool = false) -> [Folder] {
         var folders = [Folder]()
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             var query = "SELECT * FROM \(table) WHERE parentFolderId IS NULL"
             do {
@@ -94,12 +94,12 @@ struct FolderRepository: ItemRepository {
             }
         }
         
-        return subsonicSorted(items: folders, ignoredArticles: DatabaseSingleton.si().ignoredArticles())
+        return subsonicSorted(items: folders, ignoredArticles: DatabaseSingleton.si.ignoredArticles)
     }
     
-    func folders(parentFolderId: Int, serverId: Int, isCachedTable: Bool = false) -> [Folder] {
+    func folders(parentFolderId: Int64, serverId: Int64, isCachedTable: Bool = false) -> [Folder] {
         var folders = [Folder]()
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             let query = "SELECT * FROM \(table) WHERE parentFolderId = ? AND serverId = ?"
             do {
@@ -118,7 +118,7 @@ struct FolderRepository: ItemRepository {
     
     func replace(folder: Folder, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?)"
@@ -138,7 +138,7 @@ struct FolderRepository: ItemRepository {
 }
 
 extension Folder: PersistedItem {
-    class func item(itemId: Int, serverId: Int, repository: ItemRepository = FolderRepository.si) -> Item? {
+    class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = FolderRepository.si) -> Item? {
         return (repository as? FolderRepository)?.folder(folderId: itemId, serverId: serverId)
     }
     

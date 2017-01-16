@@ -9,26 +9,26 @@
 import Foundation
 
 extension Song: Item {
-    var itemId: Int { return songId }
+    var itemId: Int64 { return songId }
     var itemName: String { return title }
 }
 
 @objc class Song: NSObject {
     let repository: SongRepository
     
-    let songId: Int
-    let serverId: Int
+    let songId: Int64
+    let serverId: Int64
     
-    let contentTypeId: Int
-    let transcodedContentTypeId: Int?
+    let contentTypeId: Int64
+    let transcodedContentTypeId: Int64?
     // TODO: See if mediaFolderId should be nullable
-    let mediaFolderId: Int?
-    let folderId: Int?
-    let artistId: Int?
+    let mediaFolderId: Int64?
+    let folderId: Int64?
+    let artistId: Int64?
     let artistName: String?
-    let albumId: Int?
+    let albumId: Int64?
     let albumName: String?
-    let genreId: Int?
+    let genreId: Int64?
     let coverArtId: String?
     let title: String
     let duration: Int?
@@ -36,7 +36,7 @@ extension Song: Item {
     let trackNumber: Int?
     let discNumber: Int?
     let year: Int?
-    let size: Int
+    let size: Int64
     let path: String
     
     var lastPlayed: Date?
@@ -45,8 +45,8 @@ extension Song: Item {
     var artist: Artist?
     var album: Album?
     var genre: Genre?
-    var contentType: ISMSContentType?
-    var transcodedContentType: ISMSContentType?
+    var contentType: ContentType?
+    var transcodedContentType: ContentType?
     
     // Automatically chooses either the artist/album model name or uses the song property if it's not available
     // NOTE: Not every song has an Artist or Album object in Subsonic. So when folder browsing this is especially
@@ -114,16 +114,16 @@ extension Song: Item {
         return rate;
     }
     
-    init?(rxmlElement element: RXMLElement, serverId: Int, repository: SongRepository = SongRepository.si) {
-        guard let songId = element.attribute(asIntOptional: "id"), let title = element.attribute(asStringOptional: "title") else {
+    init?(rxmlElement element: RXMLElement, serverId: Int64, repository: SongRepository = SongRepository.si) {
+        guard let songId = element.attribute(asInt64Optional: "id"), let title = element.attribute(asStringOptional: "title") else {
             return nil
         }
         
         self.songId = songId
         self.serverId = serverId
-        self.folderId = element.attribute(asIntOptional: "parent")
-        self.artistId = element.attribute(asIntOptional: "artistId")
-        self.albumId = element.attribute(asIntOptional: "albumId")
+        self.folderId = element.attribute(asInt64Optional: "parent")
+        self.artistId = element.attribute(asInt64Optional: "artistId")
+        self.albumId = element.attribute(asInt64Optional: "albumId")
         self.coverArtId = element.attribute(asStringOptional: "coverArt")
         
         self.title = title.clean
@@ -132,24 +132,24 @@ extension Song: Item {
         self.trackNumber = element.attribute(asIntOptional: "track")
         self.discNumber = element.attribute(asIntOptional: "discNumber")
         self.year = element.attribute(asIntOptional: "year")
-        self.size = element.attribute(asInt: "size")
+        self.size = element.attribute(asInt64: "size")
         self.path = element.attribute("path")?.clean ?? ""
         
         self.artistName = element.attribute("artist")?.clean
         self.albumName = element.attribute("album")?.clean
         
         // Retreive contentTypeId
-        if let contentTypeString = element.attribute(asStringOptional: "contentType"), let contentType = ISMSContentType(mimeType: contentTypeString) {
+        if let contentTypeString = element.attribute(asStringOptional: "contentType"), let contentType = ContentTypeRepository.si.contentType(mimeType: contentTypeString) {
             self.contentType = contentType
-            self.contentTypeId = contentType.contentTypeId as! Int
+            self.contentTypeId = contentType.contentTypeId
         } else {
             self.contentTypeId = -1
         }
         
         // Retreive transcodedContentTypeId
-        if let transcodedContentTypeString = element.attribute(asStringOptional: "transcodedContentType"), let transcodedContentType = ISMSContentType(mimeType: transcodedContentTypeString) {
+        if let transcodedContentTypeString = element.attribute(asStringOptional: "transcodedContentType"), let transcodedContentType = ContentTypeRepository.si.contentType(mimeType: transcodedContentTypeString) {
             self.transcodedContentType = transcodedContentType
-            self.transcodedContentTypeId = transcodedContentType.contentTypeId as? Int
+            self.transcodedContentTypeId = transcodedContentType.contentTypeId
         } else {
             self.transcodedContentTypeId = nil
         }
@@ -172,15 +172,15 @@ extension Song: Item {
     }
     
     required init(result: FMResultSet, repository: ItemRepository = SongRepository.si) {
-        self.songId                  = result.long(forColumnIndex: 0)
-        self.serverId                = result.long(forColumnIndex: 1)
-        self.contentTypeId           = result.long(forColumnIndex: 2)
-        self.transcodedContentTypeId = result.object(forColumnIndex: 3) as? Int
-        self.mediaFolderId           = result.object(forColumnIndex: 4) as? Int
-        self.folderId                = result.object(forColumnIndex: 5) as? Int
-        self.artistId                = result.object(forColumnIndex: 6) as? Int
-        self.albumId                 = result.object(forColumnIndex: 7) as? Int
-        self.genreId                 = result.object(forColumnIndex: 8) as? Int
+        self.songId                  = result.longLongInt(forColumnIndex: 0)
+        self.serverId                = result.longLongInt(forColumnIndex: 1)
+        self.contentTypeId           = result.longLongInt(forColumnIndex: 2)
+        self.transcodedContentTypeId = result.object(forColumnIndex: 3) as? Int64
+        self.mediaFolderId           = result.object(forColumnIndex: 4) as? Int64
+        self.folderId                = result.object(forColumnIndex: 5) as? Int64
+        self.artistId                = result.object(forColumnIndex: 6) as? Int64
+        self.albumId                 = result.object(forColumnIndex: 7) as? Int64
+        self.genreId                 = result.object(forColumnIndex: 8) as? Int64
         self.coverArtId              = result.string(forColumnIndex: 9)
         self.title                   = result.string(forColumnIndex: 10) ?? ""
         self.duration                = result.object(forColumnIndex: 11) as? Int
@@ -188,7 +188,7 @@ extension Song: Item {
         self.trackNumber             = result.object(forColumnIndex: 13) as? Int
         self.discNumber              = result.object(forColumnIndex: 14) as? Int
         self.year                    = result.object(forColumnIndex: 15) as? Int
-        self.size                    = result.long(forColumnIndex: 16)
+        self.size                    = result.longLongInt(forColumnIndex: 16)
         self.path                    = result.string(forColumnIndex: 17) ?? ""
         self.lastPlayed              = result.date(forColumnIndex: 18)
         self.artistName              = result.string(forColumnIndex: 19)
@@ -196,9 +196,9 @@ extension Song: Item {
         self.repository              = repository as! SongRepository
         
         // Preload content type objects
-        self.contentType = ISMSContentType(contentTypeId: self.contentTypeId)
+        self.contentType = ContentTypeRepository.si.contentType(contentTypeId: self.contentTypeId)
         if let transcodedContentTypeId = self.transcodedContentTypeId {
-            self.transcodedContentType = ISMSContentType(contentTypeId: transcodedContentTypeId)
+            self.transcodedContentType = ContentTypeRepository.si.contentType(contentTypeId: transcodedContentTypeId)
         }
     }
     
@@ -218,5 +218,9 @@ extension Song: Item {
 extension Song {
     var durationObjC: Int {
         return duration ?? 0
+    }
+    
+    var basicContentTypeObjC: Int64 {
+        return contentType?.basicType?.rawValue ?? Int64(0)
     }
 }

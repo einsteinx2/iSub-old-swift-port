@@ -12,7 +12,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
     fileprivate let headerView = UIView()
     fileprivate let segmentedControl = UISegmentedControl(items: ["Servers", "Settings", "Help"])
     
-    fileprivate var servers = Server.allServers()
+    fileprivate var servers = ServerRepository.si.allServers()
     fileprivate var isEditingServerList = false
     fileprivate var redirectUrl: String?
     fileprivate var settingsTabViewController: SettingsTabViewController?
@@ -28,7 +28,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         self.tableView.allowsSelectionDuringEditing = true
         self.title = "Servers"
         
-        if Server.allServers().count == 0 {
+        if servers.count == 0 {
             addAction()
         }
         
@@ -60,7 +60,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
     }
     
     func reloadTable() {
-        servers = Server.allServers()
+        servers = ServerRepository.si.allServers()
         self.tableView.reloadData()
     }
     
@@ -184,7 +184,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         serverType.autoresizingMask = .flexibleLeftMargin;
         cell.contentView.addSubview(serverType)
         
-        if SavedSettings.si().currentServer.isEqual(server) {
+        if server == SavedSettings.si().currentServer {
             let currentServerMarker = UIImageView()
             currentServerMarker.image = UIImage(named: "current-server")
             cell.contentView.addSubview(currentServerMarker)
@@ -247,9 +247,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
             // TODO: Automatically switch to the next server. Or if it's the last server, connect to the test server
             
             // Delete the row from the data source
-            let server = servers[indexPath.row]
-            _ = server.deleteModel()
-            
+            _ = servers[indexPath.row].delete()            
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }

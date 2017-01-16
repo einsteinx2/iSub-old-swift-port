@@ -16,15 +16,15 @@ struct MediaFolderRepository: ItemRepository {
     let cachedTable = "cachedMediaFolders"
     let itemIdField = "mediaFolderId"
     
-    func mediaFolder(mediaFolderId: Int, serverId: Int, loadSubItems: Bool = false) -> MediaFolder? {
+    func mediaFolder(mediaFolderId: Int64, serverId: Int64, loadSubItems: Bool = false) -> MediaFolder? {
         return gr.item(repository: self, itemId: mediaFolderId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
-    func allMediaFolders(serverId: Int? = nil, isCachedTable: Bool = false) -> [MediaFolder] {
+    func allMediaFolders(serverId: Int64? = nil, isCachedTable: Bool = false) -> [MediaFolder] {
         return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
     }
     
-    func deleteAllMediaFolders(serverId: Int?) -> Bool {
+    func deleteAllMediaFolders(serverId: Int64?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -42,7 +42,7 @@ struct MediaFolderRepository: ItemRepository {
     
     func replace(mediaFolder: MediaFolder, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?)"
@@ -62,7 +62,7 @@ struct MediaFolderRepository: ItemRepository {
 }
 
 extension MediaFolder: PersistedItem {
-    class func item(itemId: Int, serverId: Int, repository: ItemRepository = MediaFolderRepository.si) -> Item? {
+    class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = MediaFolderRepository.si) -> Item? {
         return (repository as? MediaFolderRepository)?.mediaFolder(mediaFolderId: itemId, serverId: serverId)
     }
     

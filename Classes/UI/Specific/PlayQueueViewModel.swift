@@ -39,7 +39,7 @@ class PlayQueueViewModel: NSObject {
     }
     
     @objc fileprivate func playlistChanged(_ notification: Notification) {
-        if let userInfo = notification.userInfo, let playlistId = userInfo[Playlist.Notifications.playlistIdKey] as? Int {
+        if let userInfo = notification.userInfo, let playlistId = userInfo[Playlist.Notifications.playlistIdKey] as? Int64 {
             if playlistId == Playlist.playQueuePlaylistId {
                 self.reloadSongs()
                 self.delegate?.itemsChanged()

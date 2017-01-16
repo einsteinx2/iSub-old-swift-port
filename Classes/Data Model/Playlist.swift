@@ -12,7 +12,7 @@
 
 import Foundation
 
-@objc class Playlist: NSObject, PersistedItem, NSCopying, NSCoding {
+@objc class Playlist: NSObject, PersistedItem {
     
     // MARK: - Notifications -
     
@@ -29,8 +29,8 @@ import Foundation
     
     // MARK: - Class -
     
-    var playlistId: Int
-    var playlistServerId: Int // This will just be serverId once ISMSPersistedModel is swift
+    var playlistId: Int64
+    var playlistServerId: Int64 // This will just be serverId once ISMSPersistedModel is swift
     var name: String
     
     var songCount: Int {
@@ -38,18 +38,18 @@ import Foundation
         // Since songIndex is our primary key field, it's an alias
         // for rowId. So SELECT MAX instead of SELECT COUNT here.
         var maxId = 0
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let query = "SELECT MAX(songIndex) FROM \(self.tableName)"
-            maxId = db.longForQuery(query)
+            maxId = db.intForQuery(query)
         }
 
         return maxId
     }
     
     // Special Playlists
-    static let playQueuePlaylistId       = NSIntegerMax - 1
-    static let downloadQueuePlaylistId   = NSIntegerMax - 2
-    static let downloadedSongsPlaylistId = NSIntegerMax - 3
+    static let playQueuePlaylistId       = Int64.max - 1
+    static let downloadQueuePlaylistId   = Int64.max - 2
+    static let downloadedSongsPlaylistId = Int64.max - 3
     
     static var playQueue: Playlist {
         return Playlist(itemId: playQueuePlaylistId, serverId: SavedSettings.si().currentServerId)!
@@ -61,9 +61,9 @@ import Foundation
         return Playlist(itemId: downloadedSongsPlaylistId, serverId: SavedSettings.si().currentServerId)!
     }
     
-    public required init?(itemId: Int, serverId: Int) {
+    required init?(itemId: Int64, serverId: Int64) {
         var name: String?
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let query = "SELECT name FROM playlists WHERE playlistId = ? AND serverId = ?"
             do {
                 let result = try db.executeQuery(query, itemId, serverId)
@@ -80,44 +80,35 @@ import Foundation
             self.playlistId = itemId
             self.playlistServerId = serverId
             self.name = name
-            super.init()
         } else {
-            self.playlistId = -1; self.playlistServerId = -1; self.name = ""
-            super.init()
             return nil
         }
     }
     
-    public init(rxmlElement element: RXMLElement, serverId: Int) {
+    init(rxmlElement element: RXMLElement, serverId: Int64) {
         let playlistIdString = element.attribute("id") ?? ""
-        self.playlistId = Int(playlistIdString) ?? -1
+        self.playlistId = Int64(playlistIdString) ?? -1
         self.playlistServerId = serverId
         self.name = element.attribute("name") ?? ""
-        
-        super.init()
     }
 
-    public init(_ result: FMResultSet) {
-        self.playlistId = result.long(forColumnIndex: 0)
-        self.playlistServerId = result.long(forColumnIndex: 1)
+    init(_ result: FMResultSet) {
+        self.playlistId = result.longLongInt(forColumnIndex: 0)
+        self.playlistServerId = result.longLongInt(forColumnIndex: 1)
         self.name = result.string(forColumnIndex: 2)
-        
-        super.init()
     }
     
-    public init(playlistId: Int, serverId: Int, name: String) {
+    init(playlistId: Int64, serverId: Int64, name: String) {
         self.playlistId = playlistId
         self.playlistServerId = serverId
         self.name = name
-        
-        super.init()
     }
     
     func compare(_ otherObject: Playlist) -> ComparisonResult {
         return self.name.caseInsensitiveCompare(otherObject.name)
     }
     
-    fileprivate static func tableName(_ playlistId: Int, serverId: Int) -> String {
+    fileprivate static func tableName(_ playlistId: Int64, serverId: Int64) -> String {
         return "playlist\(playlistId)_server\(serverId)"
     }
     
@@ -128,13 +119,13 @@ import Foundation
     var songs: [Song] {
         var songs = [Song]()
         
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             do {
                 let query = "SELECT songId, serverId FROM \(self.tableName)"
                 let result = try db.executeQuery(query)
                 while result.next() {
-                    let songId = result.long(forColumnIndex: 0)
-                    let serverId = result.long(forColumnIndex: 1)
+                    let songId = result.longLongInt(forColumnIndex: 0)
+                    let serverId = result.longLongInt(forColumnIndex: 1)
                     if let song = SongRepository.si.song(songId: songId, serverId: serverId) {
                         songs.append(song)
                     }
@@ -151,20 +142,20 @@ import Foundation
         return contains(songId: song.songId, serverId: song.serverId)
     }
     
-    func contains(songId: Int, serverId: Int) -> Bool {
+    func contains(songId: Int64, serverId: Int64) -> Bool {
         var count = 0
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let query = "SELECT COUNT(*) FROM \(self.tableName) WHERE songId = ? AND serverId = ?"
-            count = db.longForQuery(query, songId, serverId)
+            count = db.intForQuery(query, songId, serverId)
         }
         return count > 0
     }
     
-    func indexOf(songId: Int, serverId: Int) -> Int? {
+    func indexOf(songId: Int64, serverId: Int64) -> Int? {
         var index: Int?
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             let query = "SELECT songIndex FROM \(self.tableName) WHERE songId = ? AND serverId = ?"
-            index = db.longOptionalForQuery(query, songId, serverId)
+            index = db.intOptionalForQuery(query, songId, serverId)
         }
         
         if let index = index {
@@ -178,15 +169,15 @@ import Foundation
             return nil
         }
         
-        var songId: Int?
-        var serverId: Int?
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        var songId: Int64?
+        var serverId: Int64?
+        DatabaseSingleton.si.read.inDatabase { db in
             let query = "SELECT songId, serverId FROM \(self.tableName) WHERE songIndex = ?"
             do {
                 let result = try db.executeQuery(query, index + 1)
                 if result.next() {
-                    songId = result.long(forColumnIndex: 0)
-                    serverId = result.long(forColumnIndex: 1)
+                    songId = result.longLongInt(forColumnIndex: 0)
+                    serverId = result.longLongInt(forColumnIndex: 1)
                 }
                 result.close()
             } catch {
@@ -205,9 +196,9 @@ import Foundation
         add(songId: song.songId, serverId: song.serverId, notify: notify)
     }
     
-    func add(songId: Int, serverId: Int, notify: Bool = false) {
+    func add(songId: Int64, serverId: Int64, notify: Bool = false) {
         let query = "INSERT INTO \(self.tableName) (songId, serverId) VALUES (?, ?)"
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             do {
                 try db.executeUpdate(query, songId, serverId)
             } catch {
@@ -234,9 +225,9 @@ import Foundation
         insert(songId: song.songId, serverId: song.serverId, index: index, notify: notify)
     }
     
-    func insert(songId: Int, serverId: Int, index: Int, notify: Bool = false) {
+    func insert(songId: Int64, serverId: Int64, index: Int, notify: Bool = false) {
         // TODO: See if this can be simplified by using sort by
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             do {
                 let query1 = "UPDATE \(self.tableName) SET songIndex = -songIndex WHERE songIndex >= ?"
                 try db.executeUpdate(query1, index + 1)
@@ -257,7 +248,7 @@ import Foundation
     }
     
     func remove(songAtIndex index: Int, notify: Bool = false) {
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName) WHERE songIndex = ?"
                 try db.executeUpdate(query1, index + 1)
@@ -289,7 +280,7 @@ import Foundation
         remove(songId: song.songId, serverId: song.serverId, notify: notify)
     }
     
-    func remove(songId: Int, serverId: Int, notify: Bool = false) {
+    func remove(songId: Int64, serverId: Int64, notify: Bool = false) {
         if let index = indexOf(songId: songId, serverId: serverId) {
             remove(songAtIndex: index + 1, notify: notify)
         }
@@ -306,7 +297,7 @@ import Foundation
     }
     
     func removeAllSongs(_ notify: Bool = false) {
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName)"
                 try db.executeUpdate(query1)
@@ -335,7 +326,7 @@ import Foundation
     
     // MARK: - Create new DB tables -
     
-    fileprivate static func createTable(db: FMDatabase, name: String, playlistId: Int, serverId: Int) -> Bool {
+    fileprivate static func createTable(db: FMDatabase, name: String, playlistId: Int64, serverId: Int64) -> Bool {
         do {
             let table = Playlist.tableName(playlistId, serverId: serverId)
             try db.executeUpdate("INSERT INTO playlists VALUES (?, ?, ?)", playlistId, serverId, name)
@@ -349,14 +340,14 @@ import Foundation
         return true
     }
 
-    static func createPlaylist(_ name: String, serverId: Int) -> Playlist? {
-        var playlistId: Int?
+    static func createPlaylist(_ name: String, serverId: Int64) -> Playlist? {
+        var playlistId: Int64?
         
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             // Find the first available playlist id. Local playlists (before being synced) start from NSIntegerMax and count down.
             // So since NSIntegerMax is so huge, look for the lowest ID above NSIntegerMax - 1,000,000 to give room for virtually
             // unlimited local playlists without ever hitting the server playlists which start from 0 and go up.
-            let lastPlaylistId = db.longForQuery("SELECT playlistId FROM playlists WHERE playlistId > ? AND serverId = ?", NSIntegerMax - 1000000, serverId)
+            let lastPlaylistId = db.int64ForQuery("SELECT playlistId FROM playlists WHERE playlistId > ? AND serverId = ?", Int64.max - 1000000, serverId)
 
             // Next available ID
             playlistId = lastPlaylistId - 1
@@ -372,11 +363,11 @@ import Foundation
         }
     }
     
-    static func createPlaylist(_ name: String, playlistId: Int, serverId: Int) -> Playlist? {
+    static func createPlaylist(_ name: String, playlistId: Int64, serverId: Int64) -> Playlist? {
         var success = true
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             let query = "SELECT COUNT(*) FROM playlists WHERE playlistId = ? AND serverId = ?"
-            let exists = db.longForQuery(query, playlistId, serverId) > 0
+            let exists = db.intForQuery(query, playlistId, serverId) > 0
             if !exists {
                 if !createTable(db: db, name: name, playlistId: playlistId, serverId: serverId) {
                     success = false
@@ -393,11 +384,11 @@ import Foundation
     
     // MARK: - ISMSItem -
     
-    var itemId: Int {
+    var itemId: Int64 {
         return playlistId
     }
     
-    var serverId: Int {
+    var serverId: Int64 {
         return playlistServerId
     }
     
@@ -412,7 +403,7 @@ import Foundation
         fatalError("not implemented yet")
     }
     
-    static func item(itemId: Int, serverId: Int, repository: ItemRepository) -> Item? {
+    static func item(itemId: Int64, serverId: Int64, repository: ItemRepository) -> Item? {
         // TODO: Fill this in
         fatalError("not implemented yet")
     }
@@ -457,36 +448,7 @@ import Foundation
         fatalError("not implemented yet")
     }
     
-    // MARK: - NSCoding -
-    
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(self.playlistId, forKey: "playlistId")
-        aCoder.encode(self.playlistServerId, forKey: "serverId")
-        aCoder.encode(self.name, forKey: "name")
+    static func ==(lhs: Playlist, rhs: Playlist) -> Bool {
+        return lhs.playlistId == rhs.playlistId
     }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        self.playlistId = aDecoder.decodeInteger(forKey: "playlistId")
-        self.playlistServerId = aDecoder.decodeInteger(forKey: "serverId")
-        self.name       = aDecoder.decodeObject(forKey: "name") as! String
-    }
-    
-    // MARK: - NSCopying -
-    
-    func copy(with zone: NSZone?) -> Any {
-        return Playlist(playlistId: self.playlistId, serverId: self.playlistServerId, name: self.name)
-    }
-    
-    // MARK: - Equality -
-    
-    override func isEqual(_ object: Any?) -> Bool {
-        if let playlist = object as? Playlist {
-            return self.playlistId == playlist.playlistId
-        }
-        return false
-    }
-}
-
-func ==(lhs: Playlist, rhs: Playlist) -> Bool {
-    return lhs.playlistId == rhs.playlistId
 }

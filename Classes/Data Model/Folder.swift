@@ -9,18 +9,18 @@
 import Foundation
 
 extension Folder: Item {
-    var itemId: Int { return folderId }
+    var itemId: Int64 { return folderId }
     var itemName: String { return name }
 }
 
 class Folder {
     let repository: FolderRepository
     
-    let folderId: Int
-    let serverId: Int
+    let folderId: Int64
+    let serverId: Int64
     
-    let parentFolderId: Int?
-    let mediaFolderId: Int?
+    let parentFolderId: Int64?
+    let mediaFolderId: Int64?
     let coverArtId: String?
     
     let name: String
@@ -28,14 +28,14 @@ class Folder {
     var folders = [Folder]()
     var songs = [Song]()
     
-    init?(rxmlElement element: RXMLElement, serverId: Int, mediaFolderId: Int, repository: FolderRepository = FolderRepository.si) {
-        guard let folderId = element.attribute(asIntOptional: "id") else {
+    init?(rxmlElement element: RXMLElement, serverId: Int64, mediaFolderId: Int64, repository: FolderRepository = FolderRepository.si) {
+        guard let folderId = element.attribute(asInt64Optional: "id") else {
             return nil
         }
         
         self.folderId = folderId
         self.serverId = serverId
-        self.parentFolderId = element.attribute(asIntOptional: "parent")
+        self.parentFolderId = element.attribute(asInt64Optional: "parent")
         self.mediaFolderId = mediaFolderId
         self.coverArtId = element.attribute(asStringOptional: "coverArt")
         if let name = element.attribute(asStringOptional: "title") {
@@ -49,10 +49,10 @@ class Folder {
     }
     
     required init(result: FMResultSet, repository: ItemRepository = FolderRepository.si) {
-        self.folderId       = result.long(forColumnIndex: 0)
-        self.serverId       = result.long(forColumnIndex: 1)
-        self.parentFolderId = result.object(forColumnIndex: 2) as? Int
-        self.mediaFolderId  = result.object(forColumnIndex: 3) as? Int
+        self.folderId       = result.longLongInt(forColumnIndex: 0)
+        self.serverId       = result.longLongInt(forColumnIndex: 1)
+        self.parentFolderId = result.object(forColumnIndex: 2) as? Int64
+        self.mediaFolderId  = result.object(forColumnIndex: 3) as? Int64
         self.coverArtId     = result.string(forColumnIndex: 4)
         self.name           = result.string(forColumnIndex: 5) ?? ""
         self.repository     = repository as! FolderRepository

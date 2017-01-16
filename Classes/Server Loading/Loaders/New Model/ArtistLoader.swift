@@ -9,7 +9,7 @@
 import Foundation
 
 class ArtistLoader: ApiLoader, ItemLoader {
-    let artistId: Int
+    let artistId: Int64
     
     var albums = [Album]()
     
@@ -17,7 +17,7 @@ class ArtistLoader: ApiLoader, ItemLoader {
         return albums
     }
     
-    init(artistId: Int) {
+    init(artistId: Int64) {
         self.artistId = artistId
         super.init()
     }

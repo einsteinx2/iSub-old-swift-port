@@ -16,7 +16,7 @@ struct GenreRepository: ItemRepository {
     let cachedTable = "genres"
     let itemIdField = "genreId"
     
-    func genre(genreId: Int) -> Genre? {
+    func genre(genreId: Int64) -> Genre? {
         return gr.item(repository: self, itemId: genreId)
     }
     
@@ -30,7 +30,7 @@ struct GenreRepository: ItemRepository {
     
     func replace(genre: Genre) -> Bool {
         var success = true
-        DatabaseSingleton.si().songModelWritesDbQueue.inDatabase { db in
+        DatabaseSingleton.si.write.inDatabase { db in
             do {
                 let query = "REPLACE INTO \(self.table) VALUES (?, ?)"
                 try db.executeUpdate(query, genre.genreId, genre.name)
@@ -44,7 +44,7 @@ struct GenreRepository: ItemRepository {
     
     func genre(name: String) -> Genre? {
         var genre: Genre?
-        DatabaseSingleton.si().songModelReadDbPool.inDatabase { db in
+        DatabaseSingleton.si.read.inDatabase { db in
             do {
                 // First check if a record already exists
                 let query = "SELECT * FROM \(self.table) WHERE name = ?"
@@ -55,7 +55,7 @@ struct GenreRepository: ItemRepository {
                     //  It doesn't exist, so create the record
                     let insert = "INSERT INTO \(self.table) VALUES (?, ?)"
                     try db.executeUpdate(insert, NSNull(), name)
-                    genre = Genre(genreId: Int(db.lastInsertRowId()), name: name)
+                    genre = Genre(genreId: db.lastInsertRowId(), name: name)
                 }
                 result.close()
             } catch {
@@ -68,7 +68,7 @@ struct GenreRepository: ItemRepository {
 }
 
 extension Genre: PersistedItem {
-    class func item(itemId: Int, serverId: Int, repository: ItemRepository = GenreRepository.si) -> Item? {
+    class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = GenreRepository.si) -> Item? {
         return (repository as? GenreRepository)?.genre(genreId: itemId)
     }
     

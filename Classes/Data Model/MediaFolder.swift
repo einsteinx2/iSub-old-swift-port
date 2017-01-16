@@ -9,22 +9,22 @@
 import Foundation
 
 extension MediaFolder: Item {
-    var itemId: Int { return mediaFolderId }
+    var itemId: Int64 { return mediaFolderId }
     var itemName: String { return name }
 }
 
 class MediaFolder {
     let repository: MediaFolderRepository
     
-    let mediaFolderId: Int
-    let serverId: Int
+    let mediaFolderId: Int64
+    let serverId: Int64
     let name: String
     
     var folders = [Folder]()
     var songs = [Song]()
     
-    init?(rxmlElement element: RXMLElement, serverId: Int, repository: MediaFolderRepository = MediaFolderRepository.si) {
-        guard let mediaFolderId = element.attribute(asIntOptional: "id"), let name = element.attribute(asStringOptional: "name") else {
+    init?(rxmlElement element: RXMLElement, serverId: Int64, repository: MediaFolderRepository = MediaFolderRepository.si) {
+        guard let mediaFolderId = element.attribute(asInt64Optional: "id"), let name = element.attribute(asStringOptional: "name") else {
             return nil
         }
 
@@ -35,8 +35,8 @@ class MediaFolder {
     }
     
     required init(result: FMResultSet, repository: ItemRepository = MediaFolderRepository.si) {
-        self.mediaFolderId = result.long(forColumnIndex: 0)
-        self.serverId      = result.long(forColumnIndex: 1)
+        self.mediaFolderId = result.longLongInt(forColumnIndex: 0)
+        self.serverId      = result.longLongInt(forColumnIndex: 1)
         self.name          = result.string(forColumnIndex: 2) ?? ""
         self.repository    = repository as! MediaFolderRepository
     }

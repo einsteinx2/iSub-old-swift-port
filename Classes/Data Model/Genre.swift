@@ -9,25 +9,25 @@
 import Foundation
 
 extension Genre: Item {
-    var itemId: Int { return genreId }
+    var itemId: Int64 { return genreId }
     var itemName: String { return name }
-    var serverId: Int { return -1 }
+    var serverId: Int64 { return -1 }
 }
 
 class Genre {
     let repository: GenreRepository
     
-    let genreId: Int
+    let genreId: Int64
     let name: String
     
-    init(genreId: Int, name: String, repository: GenreRepository = GenreRepository.si) {
+    init(genreId: Int64, name: String, repository: GenreRepository = GenreRepository.si) {
         self.genreId = genreId
         self.name = name
         self.repository = repository
     }
     
     required init(result: FMResultSet, repository: ItemRepository) {
-        self.genreId    = result.long(forColumnIndex: 0)
+        self.genreId    = result.longLongInt(forColumnIndex: 0)
         self.name       = result.string(forColumnIndex: 1) ?? ""
         self.repository = repository as! GenreRepository
     }

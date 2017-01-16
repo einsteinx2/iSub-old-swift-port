@@ -382,7 +382,7 @@ extension PlayQueue: BassGaplessPlayerDelegate {
     
     public func bassFirstStreamStarted(_ player: BassGaplessPlayer) {
         // TODO: Is this the best place for this?
-        SocialSingleton.si().playerClearSocial()
+        //SocialSingleton.si().playerClearSocial()
     }
     
     public func bassSongEndedCalled(_ player: BassGaplessPlayer) {
@@ -390,12 +390,12 @@ extension PlayQueue: BassGaplessPlayerDelegate {
         currentIndex = nextIndex
         
         // TODO: Is this the best place for this?
-        SocialSingleton.si().playerClearSocial()
+        //SocialSingleton.si().playerClearSocial()
     }
     
     public func bassFreed(_ player: BassGaplessPlayer) {
         // TODO: Is this the best place for this?
-        SocialSingleton.si().playerClearSocial()
+        //SocialSingleton.si().playerClearSocial()
     }
 
     public func bassIndex(atOffset offset: Int, from index: Int, player: BassGaplessPlayer) -> Int {
@@ -438,6 +438,6 @@ extension PlayQueue: BassGaplessPlayerDelegate {
     
     public func bassRetrievingOutputData(_ player: BassGaplessPlayer) {
         // TODO: Is this the best place for this?
-        SocialSingleton.si().playerHandleSocial()
+        //SocialSingleton.si().playerHandleSocial()
     }
 }

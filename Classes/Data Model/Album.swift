@@ -9,18 +9,18 @@
 import Foundation
 
 extension Album: Item {
-    var itemId: Int { return albumId }
+    var itemId: Int64 { return albumId }
     var itemName: String { return name }
 }
 
 class Album {
     let repository: AlbumRepository
     
-    let albumId: Int
-    let serverId: Int
+    let albumId: Int64
+    let serverId: Int64
     
-    let artistId: Int?
-    let genreId: Int?
+    let artistId: Int64?
+    let genreId: Int64?
     let coverArtId: String?
     
     let name: String
@@ -35,8 +35,8 @@ class Album {
     
     var songs = [Song]()
     
-    init?(rxmlElement element: RXMLElement, serverId: Int, repository: AlbumRepository = AlbumRepository.si) {
-        guard let albumId = element.attribute(asIntOptional: "id"), let name = element.attribute(asStringOptional: "name") else {
+    init?(rxmlElement element: RXMLElement, serverId: Int64, repository: AlbumRepository = AlbumRepository.si) {
+        guard let albumId = element.attribute(asInt64Optional: "id"), let name = element.attribute(asStringOptional: "name") else {
             return nil
         }
         
@@ -44,7 +44,7 @@ class Album {
         
         self.albumId = albumId
         self.serverId = serverId
-        self.artistId = element.attribute(asIntOptional: "artistId")
+        self.artistId = element.attribute(asInt64Optional: "artistId")
         self.coverArtId = element.attribute("coverArt")?.clean
         
         self.name = name
@@ -67,10 +67,10 @@ class Album {
     }
     
     required init(result: FMResultSet, repository: ItemRepository = AlbumRepository.si) {
-        self.albumId     = result.long(forColumnIndex: 0)
-        self.serverId    = result.long(forColumnIndex: 1)
-        self.artistId    = result.object(forColumnIndex: 2) as? Int
-        self.genreId     = result.object(forColumnIndex: 3) as? Int
+        self.albumId     = result.longLongInt(forColumnIndex: 0)
+        self.serverId    = result.longLongInt(forColumnIndex: 1)
+        self.artistId    = result.object(forColumnIndex: 2) as? Int64
+        self.genreId     = result.object(forColumnIndex: 3) as? Int64
         self.coverArtId  = result.string(forColumnIndex: 4)
         self.name        = result.string(forColumnIndex: 5) ?? ""
         self.songCount   = result.object(forColumnIndex: 6) as? Int

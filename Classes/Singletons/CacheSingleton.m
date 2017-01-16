@@ -44,7 +44,7 @@ LOG_LEVEL_ISUB_DEFAULT
 - (NSInteger)numberOfCachedSongs
 {
     NSString *query = @"SELECT COUNT(*) FROM cachedSongsMetadata WHERE fullyCached = 1";
-    return [DatabaseSingleton.si.songModelReadDbPool intForQuery:query];
+    return [DatabaseSingleton.si.read intForQuery:query];
     
     //return [[Playlist downloadedSongs] songCount];
 }

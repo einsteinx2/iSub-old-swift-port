@@ -33,6 +33,10 @@
 		530B960311E8E99C002EA08E /* play-all-note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960211E8E99C002EA08E /* play-all-note@2x.png */; };
 		530B960711E8EC86002EA08E /* loading-screen-image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960611E8EC86002EA08E /* loading-screen-image@2x.png */; };
 		530B960911E8ED33002EA08E /* settings-page@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530B960811E8ED33002EA08E /* settings-page@2x.png */; };
+		530C2D831E2C5A6000839B7A /* ContentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C2D821E2C5A6000839B7A /* ContentType.swift */; };
+		530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C2D821E2C5A6000839B7A /* ContentType.swift */; };
+		530C2D861E2C623000839B7A /* ServerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C2D851E2C623000839B7A /* ServerRepository.swift */; };
+		530C2D871E2C623000839B7A /* ServerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C2D851E2C623000839B7A /* ServerRepository.swift */; };
 		530D5A101E2C044700C9ED43 /* SongRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530D5A0F1E2C044700C9ED43 /* SongRepository.swift */; };
 		530D5A111E2C044700C9ED43 /* SongRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530D5A0F1E2C044700C9ED43 /* SongRepository.swift */; };
 		530D5A131E2C047500C9ED43 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530D5A121E2C047500C9ED43 /* Song.swift */; };
@@ -177,8 +181,6 @@
 		531B33601E24CF8B00811187 /* BassVisualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E71E24CF8A00811187 /* BassVisualizer.m */; };
 		531B33611E24CF8B00811187 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E91E24CF8A00811187 /* CachedImage.swift */; };
 		531B33621E24CF8B00811187 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E91E24CF8A00811187 /* CachedImage.swift */; };
-		531B33671E24CF8B00811187 /* ISMSContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32EF1E24CF8A00811187 /* ISMSContentType.m */; };
-		531B33681E24CF8B00811187 /* ISMSContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32EF1E24CF8A00811187 /* ISMSContentType.m */; };
 		531B33711E24CF8B00811187 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FB1E24CF8A00811187 /* Playlist.swift */; };
 		531B33721E24CF8B00811187 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FB1E24CF8A00811187 /* Playlist.swift */; };
 		531B33731E24CF8B00811187 /* SectionIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FC1E24CF8A00811187 /* SectionIndex.swift */; };
@@ -237,8 +239,6 @@
 		531B33B61E24CF8B00811187 /* URLSessionStreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */; };
 		531B33B71E24CF8B00811187 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33321E24CF8B00811187 /* CacheSingleton.m */; };
 		531B33B81E24CF8B00811187 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33321E24CF8B00811187 /* CacheSingleton.m */; };
-		531B33B91E24CF8B00811187 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33341E24CF8B00811187 /* DatabaseSingleton.m */; };
-		531B33BA1E24CF8B00811187 /* DatabaseSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33341E24CF8B00811187 /* DatabaseSingleton.m */; };
 		531B33BB1E24CF8B00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33361E24CF8B00811187 /* LoadingScreen.m */; };
 		531B33BC1E24CF8B00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33361E24CF8B00811187 /* LoadingScreen.m */; };
 		531B33BD1E24CF8B00811187 /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33381E24CF8B00811187 /* Logging.m */; };
@@ -247,8 +247,6 @@
 		531B33C01E24CF8B00811187 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33391E24CF8B00811187 /* PlayQueue.swift */; };
 		531B33C11E24CF8B00811187 /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333B1E24CF8B00811187 /* SavedSettings.m */; };
 		531B33C21E24CF8B00811187 /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333B1E24CF8B00811187 /* SavedSettings.m */; };
-		531B33C31E24CF8B00811187 /* SocialSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333D1E24CF8B00811187 /* SocialSingleton.m */; };
-		531B33C41E24CF8B00811187 /* SocialSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333D1E24CF8B00811187 /* SocialSingleton.m */; };
 		531B33C91E24CF8B00811187 /* ISMSErrorDomain.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33441E24CF8B00811187 /* ISMSErrorDomain.m */; };
 		531B33CA1E24CF8B00811187 /* ISMSErrorDomain.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33441E24CF8B00811187 /* ISMSErrorDomain.m */; };
 		531B33CB1E24CF8B00811187 /* ISMSNotificationNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33461E24CF8B00811187 /* ISMSNotificationNames.m */; };
@@ -301,8 +299,6 @@
 		531B341F1E24D12300811187 /* ServerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34131E24D12300811187 /* ServerListViewController.swift */; };
 		531B34201E24D12300811187 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34151E24D12300811187 /* SettingsTabViewController.m */; };
 		531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34151E24D12300811187 /* SettingsTabViewController.m */; settings = {COMPILER_FLAGS = "-w"; }; };
-		531B34221E24D12300811187 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34171E24D12300811187 /* SubsonicServerEditViewController.m */; };
-		531B34231E24D12300811187 /* SubsonicServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34171E24D12300811187 /* SubsonicServerEditViewController.m */; };
 		531B34271E24D1C300811187 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34261E24D1C300811187 /* OBSlider.m */; };
 		531B34281E24D1C300811187 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34261E24D1C300811187 /* OBSlider.m */; };
 		531B342B1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B342A1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m */; };
@@ -786,6 +782,12 @@
 		53D59A851E1DCEAA00071ABD /* NSString+Clean.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A801E1DCEAA00071ABD /* NSString+Clean.m */; };
 		53D59A861E1DCEAA00071ABD /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A821E1DCEAA00071ABD /* NSString+MD5.m */; };
 		53D59A881E1DCEAA00071ABD /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A821E1DCEAA00071ABD /* NSString+MD5.m */; };
+		53D9590E1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */; };
+		53D9590F1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */; };
+		53D959111E2C774200A1667F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959101E2C774200A1667F /* Error.swift */; };
+		53D959121E2C774200A1667F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959101E2C774200A1667F /* Error.swift */; };
+		53D959141E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */; };
+		53D959151E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */; };
 		53D9D24D16DEF85F002F55F7 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24B16DEF847002F55F7 /* Twitter.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53D9D24E16DEF85F002F55F7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24916DEF843002F55F7 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53D9D24F16DEF85F002F55F7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24716DEF83E002F55F7 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -847,6 +849,8 @@
 		530B960211E8E99C002EA08E /* play-all-note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "play-all-note@2x.png"; path = "Images/Other/play-all-note@2x.png"; sourceTree = "<group>"; };
 		530B960611E8EC86002EA08E /* loading-screen-image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image@2x.png"; path = "Images/Other/loading-screen-image@2x.png"; sourceTree = "<group>"; };
 		530B960811E8ED33002EA08E /* settings-page@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-page@2x.png"; path = "Images/Other/settings-page@2x.png"; sourceTree = "<group>"; };
+		530C2D821E2C5A6000839B7A /* ContentType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentType.swift; sourceTree = "<group>"; };
+		530C2D851E2C623000839B7A /* ServerRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerRepository.swift; sourceTree = "<group>"; };
 		530D5A0F1E2C044700C9ED43 /* SongRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongRepository.swift; sourceTree = "<group>"; };
 		530D5A121E2C047500C9ED43 /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		530F049E1E237EB700CBBB3E /* INTUAnimationEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTUAnimationEngine.h; sourceTree = "<group>"; };
@@ -884,8 +888,6 @@
 		531B32E61E24CF8A00811187 /* BassVisualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassVisualizer.h; sourceTree = "<group>"; };
 		531B32E71E24CF8A00811187 /* BassVisualizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassVisualizer.m; sourceTree = "<group>"; };
 		531B32E91E24CF8A00811187 /* CachedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImage.swift; sourceTree = "<group>"; };
-		531B32EE1E24CF8A00811187 /* ISMSContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSContentType.h; sourceTree = "<group>"; };
-		531B32EF1E24CF8A00811187 /* ISMSContentType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSContentType.m; sourceTree = "<group>"; };
 		531B32FB1E24CF8A00811187 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		531B32FC1E24CF8A00811187 /* SectionIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionIndex.swift; sourceTree = "<group>"; };
 		531B32FD1E24CF8A00811187 /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
@@ -919,8 +921,6 @@
 		531B332E1E24CF8B00811187 /* URLSessionStreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLSessionStreamHandler.swift; path = ../URLSessionStreamHandler.swift; sourceTree = "<group>"; };
 		531B33311E24CF8B00811187 /* CacheSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheSingleton.h; sourceTree = "<group>"; };
 		531B33321E24CF8B00811187 /* CacheSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheSingleton.m; sourceTree = "<group>"; };
-		531B33331E24CF8B00811187 /* DatabaseSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseSingleton.h; sourceTree = "<group>"; };
-		531B33341E24CF8B00811187 /* DatabaseSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseSingleton.m; sourceTree = "<group>"; };
 		531B33351E24CF8B00811187 /* LoadingScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScreen.h; sourceTree = "<group>"; };
 		531B33361E24CF8B00811187 /* LoadingScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingScreen.m; sourceTree = "<group>"; };
 		531B33371E24CF8B00811187 /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
@@ -928,8 +928,6 @@
 		531B33391E24CF8B00811187 /* PlayQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueue.swift; sourceTree = "<group>"; };
 		531B333A1E24CF8B00811187 /* SavedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedSettings.h; sourceTree = "<group>"; };
 		531B333B1E24CF8B00811187 /* SavedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedSettings.m; sourceTree = "<group>"; };
-		531B333C1E24CF8B00811187 /* SocialSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialSingleton.h; sourceTree = "<group>"; };
-		531B333D1E24CF8B00811187 /* SocialSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialSingleton.m; sourceTree = "<group>"; };
 		531B33431E24CF8B00811187 /* ISMSErrorDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSErrorDomain.h; sourceTree = "<group>"; };
 		531B33441E24CF8B00811187 /* ISMSErrorDomain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSErrorDomain.m; sourceTree = "<group>"; };
 		531B33451E24CF8B00811187 /* ISMSNotificationNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSNotificationNames.h; sourceTree = "<group>"; };
@@ -965,8 +963,6 @@
 		531B34131E24D12300811187 /* ServerListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerListViewController.swift; sourceTree = "<group>"; };
 		531B34141E24D12300811187 /* SettingsTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTabViewController.h; sourceTree = "<group>"; };
 		531B34151E24D12300811187 /* SettingsTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTabViewController.m; sourceTree = "<group>"; };
-		531B34161E24D12300811187 /* SubsonicServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubsonicServerEditViewController.h; sourceTree = "<group>"; };
-		531B34171E24D12300811187 /* SubsonicServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubsonicServerEditViewController.m; sourceTree = "<group>"; };
 		531B34251E24D1C300811187 /* OBSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSlider.h; sourceTree = "<group>"; };
 		531B34261E24D1C300811187 /* OBSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSlider.m; sourceTree = "<group>"; };
 		531B34291E24D1DA00811187 /* IDTwitterAccountChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDTwitterAccountChooserViewController.h; sourceTree = "<group>"; };
@@ -1240,6 +1236,9 @@
 		53D59A801E1DCEAA00071ABD /* NSString+Clean.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Clean.m"; sourceTree = "<group>"; };
 		53D59A811E1DCEAA00071ABD /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
 		53D59A821E1DCEAA00071ABD /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubsonicServerEditViewController.swift; sourceTree = "<group>"; };
+		53D959101E2C774200A1667F /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseSingleton.swift; sourceTree = "<group>"; };
 		53D9D24516DEF839002F55F7 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		53D9D24716DEF83E002F55F7 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		53D9D24916DEF843002F55F7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -1650,7 +1649,9 @@
 				531B32E91E24CF8A00811187 /* CachedImage.swift */,
 				531B32FC1E24CF8A00811187 /* SectionIndex.swift */,
 				531B34591E24D30500811187 /* NetworkStatus.swift */,
-				53F107A41E2ACDDC003B7D59 /* Item Repositories */,
+				530C2D821E2C5A6000839B7A /* ContentType.swift */,
+				53CFBB611E2AE160005895F4 /* Item Models */,
+				53F107A41E2ACDDC003B7D59 /* Repositories */,
 				53CFBB6B1E2B1558005895F4 /* Old Item Models */,
 			);
 			path = "Data Model";
@@ -1669,6 +1670,7 @@
 				531B345C1E24D34C00811187 /* NSError+ISMSError.h */,
 				531B345D1E24D34C00811187 /* NSError+ISMSError.m */,
 				53CFBB651E2AE203005895F4 /* RXMLElement.swift */,
+				53D959101E2C774200A1667F /* Error.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1733,12 +1735,9 @@
 				531B33391E24CF8B00811187 /* PlayQueue.swift */,
 				531B33311E24CF8B00811187 /* CacheSingleton.h */,
 				531B33321E24CF8B00811187 /* CacheSingleton.m */,
-				531B33331E24CF8B00811187 /* DatabaseSingleton.h */,
-				531B33341E24CF8B00811187 /* DatabaseSingleton.m */,
+				53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */,
 				531B333A1E24CF8B00811187 /* SavedSettings.h */,
 				531B333B1E24CF8B00811187 /* SavedSettings.m */,
-				531B333C1E24CF8B00811187 /* SocialSingleton.h */,
-				531B333D1E24CF8B00811187 /* SocialSingleton.m */,
 				531B33351E24CF8B00811187 /* LoadingScreen.h */,
 				531B33361E24CF8B00811187 /* LoadingScreen.m */,
 				531B33371E24CF8B00811187 /* Logging.h */,
@@ -1814,12 +1813,11 @@
 				533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */,
 				531B34121E24D12300811187 /* ServerEditDelegate.h */,
 				531B34131E24D12300811187 /* ServerListViewController.swift */,
+				53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */,
+				533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */,
 				531B34141E24D12300811187 /* SettingsTabViewController.h */,
 				531B34151E24D12300811187 /* SettingsTabViewController.m */,
 				533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */,
-				531B34161E24D12300811187 /* SubsonicServerEditViewController.h */,
-				531B34171E24D12300811187 /* SubsonicServerEditViewController.m */,
-				533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */,
 				531B34291E24D1DA00811187 /* IDTwitterAccountChooserViewController.h */,
 				531B342A1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m */,
 			);
@@ -2192,7 +2190,7 @@
 			path = Frameworks/BCCKeychain;
 			sourceTree = "<group>";
 		};
-		53CFBB611E2AE160005895F4 /* New Item Models */ = {
+		53CFBB611E2AE160005895F4 /* Item Models */ = {
 			isa = PBXGroup;
 			children = (
 				53F107A51E2AD144003B7D59 /* Item.swift */,
@@ -2202,17 +2200,15 @@
 				530D5A121E2C047500C9ED43 /* Song.swift */,
 				53CFBB7D1E2B3038005895F4 /* Genre.swift */,
 				53A418001E2C1D8500671330 /* MediaFolder.swift */,
+				531B32FD1E24CF8A00811187 /* Server.swift */,
 			);
-			name = "New Item Models";
+			name = "Item Models";
 			sourceTree = "<group>";
 		};
 		53CFBB6B1E2B1558005895F4 /* Old Item Models */ = {
 			isa = PBXGroup;
 			children = (
-				531B32EE1E24CF8A00811187 /* ISMSContentType.h */,
-				531B32EF1E24CF8A00811187 /* ISMSContentType.m */,
 				531B32FB1E24CF8A00811187 /* Playlist.swift */,
-				531B32FD1E24CF8A00811187 /* Server.swift */,
 			);
 			name = "Old Item Models";
 			sourceTree = "<group>";
@@ -2260,7 +2256,7 @@
 			path = Frameworks/EX2Kit;
 			sourceTree = "<group>";
 		};
-		53F107A41E2ACDDC003B7D59 /* Item Repositories */ = {
+		53F107A41E2ACDDC003B7D59 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
 				53CFBB7A1E2B2F9E005895F4 /* GenericItemRepository.swift */,
@@ -2270,9 +2266,9 @@
 				530D5A0F1E2C044700C9ED43 /* SongRepository.swift */,
 				53CFBB801E2B3075005895F4 /* GenreRepository.swift */,
 				53A418031E2C1DAE00671330 /* MediaFolderRepository.swift */,
-				53CFBB611E2AE160005895F4 /* New Item Models */,
+				530C2D851E2C623000839B7A /* ServerRepository.swift */,
 			);
-			name = "Item Repositories";
+			name = Repositories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2776,6 +2772,7 @@
 				530D5A131E2C047500C9ED43 /* Song.swift in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
+				53D959141E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */,
 				530F04AF1E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				531B33D11E24CF8B00811187 /* Utils.swift in Sources */,
 				533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
@@ -2784,7 +2781,6 @@
 				531B34441E24D24600811187 /* FMDatabaseAdditions.m in Sources */,
 				53835CD91E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358DF791E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
-				531B34221E24D12300811187 /* SubsonicServerEditViewController.m in Sources */,
 				53CFBB751E2B1E3B005895F4 /* Folder.swift in Sources */,
 				531B34481E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				531B339D1E24CF8B00811187 /* FolderLoader.swift in Sources */,
@@ -2816,28 +2812,27 @@
 				531B33A31E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
 				5358DF971E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				530D5A101E2C044700C9ED43 /* SongRepository.swift in Sources */,
-				531B33671E24CF8B00811187 /* ISMSContentType.m in Sources */,
 				531B338F1E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
 				53D59A601E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
 				531B33F41E24D0B600811187 /* DroppableCell.swift in Sources */,
 				531B33891E24CF8B00811187 /* AlbumLoader.swift in Sources */,
 				531B34061E24D0B600811187 /* PlayQueueViewController.swift in Sources */,
-				531B33C31E24CF8B00811187 /* SocialSingleton.m in Sources */,
 				531B33871E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */,
 				533B69D61E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				531B33DA1E24CFAF00811187 /* URL.swift in Sources */,
 				53CFBB7E1E2B3038005895F4 /* Genre.swift in Sources */,
 				531B34001E24D0B600811187 /* MenuViewController.swift in Sources */,
+				530C2D831E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				531B335D1E24CF8B00811187 /* BassParamEqValue.m in Sources */,
 				530F04AD1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				53D59A571E1DC63800071ABD /* NSArray+Safe.m in Sources */,
 				531B34621E24D37300811187 /* sqlite3.c in Sources */,
+				53D9590E1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */,
 				531B33EE1E24D0B600811187 /* CachedImageView.swift in Sources */,
 				53835CE31E0B7D6D0077B53D /* ZKDataArchive.m in Sources */,
 				53835CCF1E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
 				5358DF921E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
-				531B33B91E24CF8B00811187 /* DatabaseSingleton.m in Sources */,
 				531B341C1E24D12300811187 /* IntroViewController.m in Sources */,
 				531B34541E24D28D00811187 /* FMDatabasePoolAdditions.m in Sources */,
 				5358DF6F1E0B789A0024A0D4 /* CLIColor.m in Sources */,
@@ -2864,6 +2859,7 @@
 				531B33511E24CF8B00811187 /* BassGaplessPlayer.m in Sources */,
 				531B33731E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FC1E24D0B600811187 /* CacheViewController.swift in Sources */,
+				53D959111E2C774200A1667F /* Error.swift in Sources */,
 				53835CF71E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				531B338D1E24CF8B00811187 /* CachedAlbumLoader.swift in Sources */,
 				53835CA21E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
@@ -2921,6 +2917,7 @@
 				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33771E24CF8B00811187 /* String.swift in Sources */,
 				531B33A11E24CF8B00811187 /* MediaFoldersLoader.swift in Sources */,
+				530C2D861E2C623000839B7A /* ServerRepository.swift in Sources */,
 				531B34271E24D1C300811187 /* OBSlider.m in Sources */,
 				53D59A771E1DCDD700071ABD /* NSString+FileSize.m in Sources */,
 				532A1AD61E1DD33600A8502A /* GTMNSString+HTML.m in Sources */,
@@ -3029,6 +3026,7 @@
 				530D5A141E2C047500C9ED43 /* Song.swift in Sources */,
 				53BC279C139AF0DD00A825F1 /* AppDelegate.m in Sources */,
 				53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
+				53D959151E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */,
 				530F04B01E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				531B33D21E24CF8B00811187 /* Utils.swift in Sources */,
 				533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
@@ -3037,7 +3035,6 @@
 				531B34451E24D24600811187 /* FMDatabaseAdditions.m in Sources */,
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358DF7B1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
-				531B34231E24D12300811187 /* SubsonicServerEditViewController.m in Sources */,
 				53CFBB761E2B1E3B005895F4 /* Folder.swift in Sources */,
 				531B34491E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				531B339E1E24CF8B00811187 /* FolderLoader.swift in Sources */,
@@ -3069,28 +3066,27 @@
 				531B33A41E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
 				5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				530D5A111E2C044700C9ED43 /* SongRepository.swift in Sources */,
-				531B33681E24CF8B00811187 /* ISMSContentType.m in Sources */,
 				531B33901E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
 				53D59A621E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
 				531B33F51E24D0B600811187 /* DroppableCell.swift in Sources */,
 				531B338A1E24CF8B00811187 /* AlbumLoader.swift in Sources */,
 				531B34071E24D0B600811187 /* PlayQueueViewController.swift in Sources */,
-				531B33C41E24CF8B00811187 /* SocialSingleton.m in Sources */,
 				531B33881E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */,
 				533B69D71E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				531B33DB1E24CFAF00811187 /* URL.swift in Sources */,
 				53CFBB7F1E2B3038005895F4 /* Genre.swift in Sources */,
 				531B34011E24D0B600811187 /* MenuViewController.swift in Sources */,
+				530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				531B335E1E24CF8B00811187 /* BassParamEqValue.m in Sources */,
 				530F04AE1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				53D59A591E1DC63800071ABD /* NSArray+Safe.m in Sources */,
 				531B34631E24D37300811187 /* sqlite3.c in Sources */,
+				53D9590F1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */,
 				531B33EF1E24D0B600811187 /* CachedImageView.swift in Sources */,
 				53835CE51E0B7D6D0077B53D /* ZKDataArchive.m in Sources */,
 				53835CD11E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
 				5358DF941E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
-				531B33BA1E24CF8B00811187 /* DatabaseSingleton.m in Sources */,
 				531B341D1E24D12300811187 /* IntroViewController.m in Sources */,
 				531B34551E24D28D00811187 /* FMDatabasePoolAdditions.m in Sources */,
 				5358DF711E0B789A0024A0D4 /* CLIColor.m in Sources */,
@@ -3117,6 +3113,7 @@
 				531B33521E24CF8B00811187 /* BassGaplessPlayer.m in Sources */,
 				531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FD1E24D0B600811187 /* CacheViewController.swift in Sources */,
+				53D959121E2C774200A1667F /* Error.swift in Sources */,
 				53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				531B338E1E24CF8B00811187 /* CachedAlbumLoader.swift in Sources */,
 				53835CA41E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
@@ -3174,6 +3171,7 @@
 				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33781E24CF8B00811187 /* String.swift in Sources */,
 				531B33A21E24CF8B00811187 /* MediaFoldersLoader.swift in Sources */,
+				530C2D871E2C623000839B7A /* ServerRepository.swift in Sources */,
 				531B34281E24D1C300811187 /* OBSlider.m in Sources */,
 				53D59A791E1DCDD700071ABD /* NSString+FileSize.m in Sources */,
 				532A1AD81E1DD33600A8502A /* GTMNSString+HTML.m in Sources */,

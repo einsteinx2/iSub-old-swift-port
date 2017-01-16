@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, ISMSCachingType)
 @property BOOL isOfflineMode;
 
 // Server Login Settings
-@property NSInteger currentServerId;
+@property long long currentServerId;
 @property (nonnull, readonly) Server *currentServer;
 @property (nullable, strong) NSMutableArray *serverList;
 @property (nullable, copy) NSString *sessionId;

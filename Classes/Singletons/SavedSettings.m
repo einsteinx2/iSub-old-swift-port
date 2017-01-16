@@ -152,103 +152,6 @@
 
 #pragma mark - Settings Setup
 
-- (void)convertFromOldSettingsType
-{
-    // TODO: Update for upgrading from this previous change to the newest settings storage
-	// Convert server list
-	id oldServers = [_userDefaults objectForKey:@"servers"];
-	if ([oldServers isKindOfClass:[NSArray class]])
-	{
-		if ([oldServers count] > 0)
-		{
-			if ([[oldServers objectAtIndexSafe:0] isKindOfClass:[NSArray class]])
-			{
-				for (NSArray *serverInfo in oldServers)
-				{
-                    // Create database record
-                    (void)[[Server alloc] initWithType:ServerTypeSubsonic
-                                                   url:[serverInfo objectAtIndexSafe:0]
-                                              username:[serverInfo objectAtIndexSafe:1]
-                                           lastQueryId:@""
-                                                  uuid:@""
-                                              password:[serverInfo objectAtIndexSafe:2]];
-				}
-			}
-		}
-	}
-	
-	// Convert the old settings format over
-	NSDictionary *settingsDictionary = [_userDefaults objectForKey:@"settingsDictionary"];
-	if (settingsDictionary != nil)
-	{
-		NSArray *boolKeys = @[@"manualOfflineModeSetting" , @"enableSongCachingSetting" , @"enableNextSongCacheSetting", @"autoDeleteCacheSetting", @"twitterEnabledSetting", @"lyricsEnabledSetting", @"enableSongsTabSetting", @"autoPlayerInfoSetting", @"autoReloadArtistsSetting", @"enableScrobblingSetting", @"lockRotationSetting", @"checkUpdatesSetting"];
-		NSArray *intKeys = @[@"recoverSetting", @"maxBitrateWifiSetting", @"maxBitrate3GSetting", @"cachingTypeSetting", @"autoDeleteCacheTypeSetting", @"cacheSongCellColorSetting"];
-		NSArray *objKeys = @[@"maxCacheSize", @"minFreeSpace"];
-		NSArray *floatKeys = @[@"scrobblePercentSetting"];
-		
-		// Process BOOL keys
-		for (NSString *key in boolKeys)
-		{
-			NSString *value = [settingsDictionary objectForKey:key];
-			if (value)
-			{
-				[_userDefaults setBool:[value boolValue] forKey:key];
-			}
-		}
-		
-		// Process int keys
-		for (NSString *key in intKeys)
-		{
-			NSNumber *value = [settingsDictionary objectForKey:key];
-			if (value)
-			{
-				[_userDefaults setInteger:[value intValue] forKey:key];
-			}
-		}
-		
-		// Process Object keys (unsigned long long in NSNumber)
-		for (NSString *key in objKeys)
-		{
-			NSNumber *value = [settingsDictionary objectForKey:key];
-			if (value)
-			{
-				[_userDefaults setObject:value forKey:key];
-			}
-		}
-		
-		// Process float key
-		for (NSString *key in floatKeys)
-		{
-			NSNumber *value = [settingsDictionary objectForKey:key];
-			if (value)
-			{
-				[_userDefaults setFloat:[value floatValue] forKey:key];
-			}
-		}
-		
-		// Special Cases
-		NSString *disableSleep = [settingsDictionary objectForKey:@"disableScreenSleepSetting"];
-		if (disableSleep)
-		{
-			[_userDefaults setBool:![disableSleep boolValue] forKey:@"isScreenSleepEnabled"];
-		}
-		NSString *disablePopups = [settingsDictionary objectForKey:@"disablePopupsSetting"];
-		if (disablePopups)
-		{
-			[_userDefaults setBool:![disablePopups boolValue] forKey:@"isPopupsEnabled"];
-		}
-		if ([settingsDictionary objectForKey:@"checkUpdatesSetting"] != nil)
-		{
-			[_userDefaults setBool:YES forKey:@"isUpdateCheckQuestionAsked"];
-		}
-		
-		// Delete the old settings
-		//[settings removeObjectForKey:@"settingsDictionary"];
-		
-		[_userDefaults synchronize];
-	}
-}
-
 - (void)createInitialSettings
 {
 	if (![_userDefaults boolForKey:@"areSettingsSetup"])
@@ -281,8 +184,6 @@
 		[_userDefaults setBool:NO forKey:@"isUpdateCheckQuestionAsked"];
 		[_userDefaults setBool:NO forKey:@"isBasicAuthEnabled"];
 		[_userDefaults setBool:YES forKey:@"checkUpdatesSetting"];
-		
-		[self convertFromOldSettingsType];
 	}
 	
 	// New settings 3.0.5 beta 18
@@ -309,7 +210,7 @@
 
 #pragma mark - Login Settings
 
-- (NSInteger)currentServerId
+- (long long)currentServerId
 {
     @synchronized(self)
     {
@@ -317,11 +218,11 @@
     }
 }
 
-- (void)setCurrentServerId:(NSInteger)currentServerId
+- (void)setCurrentServerId:(long long)currentServerId
 {
     @synchronized(self)
     {
-        _currentServer = [[Server alloc] initWithItemId:currentServerId];
+        _currentServer = [Server serverWithServerId: currentServerId];
         _currentServerId = _currentServer.serverId;
         [_userDefaults setInteger:_currentServerId forKey:@"currentServerId"];
         [_userDefaults synchronize];
@@ -339,7 +240,7 @@
         
         if (_currentServer == nil)
         {
-            _currentServer = [[Server alloc] initWithItemId:_currentServerId];
+            _currentServer = [Server serverWithServerId: _currentServerId];
         }
         
         return _currentServer;
@@ -585,18 +486,12 @@
     {
         // Set all cached songs to removeSkipBackup
         [CacheSingleton.si setAllCachedSongsToBackup];
-        
-        // Set database to removeskipBackup
-        [DatabaseSingleton.si setAllSongsToBackup];
  
     }
     else
     {
         //Set all cached songs to removeSkipBackup
         [CacheSingleton.si setAllCachedSongsToNotBackup];
-        
-        // Set database to removeskipBackup
-        [DatabaseSingleton.si setAllSongsToNotBackup];
     }
 }
 

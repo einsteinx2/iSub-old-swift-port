@@ -9,15 +9,15 @@
 import Foundation
 
 extension Artist: Item {
-    var itemId: Int { return artistId }
+    var itemId: Int64 { return artistId }
     var itemName: String { return name }
 }
 
 class Artist {
     let repository: ArtistRepository
     
-    let artistId: Int
-    let serverId: Int
+    let artistId: Int64
+    let serverId: Int64
     
     let name: String
     let coverArtId: String?
@@ -25,8 +25,8 @@ class Artist {
     
     var albums = [Album]()
     
-    init?(rxmlElement element: RXMLElement, serverId: Int, repository: ArtistRepository = ArtistRepository.si) {
-        guard let artistId = element.attribute(asIntOptional: "id"), let name = element.attribute(asStringOptional: "name") else {
+    init?(rxmlElement element: RXMLElement, serverId: Int64, repository: ArtistRepository = ArtistRepository.si) {
+        guard let artistId = element.attribute(asInt64Optional: "id"), let name = element.attribute(asStringOptional: "name") else {
             return nil
         }
         
@@ -39,8 +39,8 @@ class Artist {
     }
     
     required init(result: FMResultSet, repository: ItemRepository = ArtistRepository.si) {
-        self.artistId    = result.long(forColumnIndex: 0)
-        self.serverId    = result.long(forColumnIndex: 1)
+        self.artistId    = result.longLongInt(forColumnIndex: 0)
+        self.serverId    = result.longLongInt(forColumnIndex: 1)
         self.name        = result.string(forColumnIndex: 2) ?? ""
         self.coverArtId  = result.string(forColumnIndex: 3)
         self.albumCount  = result.object(forColumnIndex: 4) as? Int
