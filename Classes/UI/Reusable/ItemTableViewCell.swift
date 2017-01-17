@@ -122,7 +122,7 @@ class ItemTableViewCell: DroppableCell {
         
         trackNumberLabel.backgroundColor = UIColor.clear
         trackNumberLabel.textAlignment = NSTextAlignment.center
-        trackNumberLabel.font = ISMSBoldFont(22)
+        trackNumberLabel.font = UIFont.boldSystemFont(ofSize: 22)
         trackNumberLabel.adjustsFontSizeToFitWidth = true
         trackNumberLabel.minimumScaleFactor = 16.0 / trackNumberLabel.font.pointSize
         containerView.addSubview(trackNumberLabel)
@@ -133,7 +133,7 @@ class ItemTableViewCell: DroppableCell {
         headerTitleLabel.textAlignment = NSTextAlignment.center
         headerTitleLabel.backgroundColor = UIColor.black
         headerTitleLabel.alpha = 0.65
-        headerTitleLabel.font = ISMSBoldFont(10)
+        headerTitleLabel.font = UIFont.boldSystemFont(ofSize: 10)
         headerTitleLabel.textColor = UIColor.white
         containerView.addSubview(headerTitleLabel)
         
@@ -147,19 +147,19 @@ class ItemTableViewCell: DroppableCell {
         
         titleLabel.backgroundColor = UIColor.clear
         titleLabel.textAlignment = NSTextAlignment.left
-        titleLabel.font = SongFont
+        titleLabel.font = UIFont.systemFont(ofSize: 16)
         titlesScrollView.addSubview(titleLabel)
         
         subTitleLabel.backgroundColor = UIColor.clear
         subTitleLabel.textAlignment = NSTextAlignment.left
-        subTitleLabel.font = ISMSRegularFont(13)
+        subTitleLabel.font = UIFont.systemFont(ofSize: 13)
         subTitleLabel.textColor = UIColor(white: 0.4, alpha: 1.0)
         titlesScrollView.addSubview(subTitleLabel)
         
         durationLabel.autoresizingMask = UIViewAutoresizing.flexibleWidth
         durationLabel.backgroundColor = UIColor.clear
         durationLabel.textAlignment = NSTextAlignment.right
-        durationLabel.font = ISMSRegularFont(16)
+        durationLabel.font = UIFont.systemFont(ofSize: 16)
         durationLabel.adjustsFontSizeToFitWidth = true
         durationLabel.minimumScaleFactor = 12.0 / durationLabel.font.pointSize
         durationLabel.textColor = UIColor.gray

@@ -21,7 +21,7 @@
 @property HFX volumeFx;
 @end
 
-LOG_LEVEL_ISUB_DEFAULT
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @implementation BassEqualizer
 

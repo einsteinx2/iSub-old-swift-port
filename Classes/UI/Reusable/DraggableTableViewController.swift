@@ -44,10 +44,6 @@ class DraggableTableViewController: UITableViewController {
         
         setupRefreshControl()
         
-        if IS_IPAD() {
-            self.view.backgroundColor = ISMSiPadBackgroundColor
-        }
-        
         self.tableView.tableHeaderView = setupHeaderView()
         // Keep the table rows from showing past the bottom
         if tableView.tableFooterView == nil {

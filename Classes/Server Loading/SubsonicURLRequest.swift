@@ -8,6 +8,9 @@
 
 import Foundation
 
+fileprivate let defaultLoadingTimeout = 240.0
+fileprivate let serverCheckTimeout = 15.0
+
 enum SubsonicURLAction: String {
     case getMusicFolders   = "getMusicFolders"
     case getIndexes        = "getIndexes"
@@ -31,8 +34,8 @@ enum SubsonicURLAction: String {
         switch self {
         case .getPlaylist: return 3600.0
         case .getCoverArt: return 30.0
-        case .ping:        return ISMSServerCheckTimeout
-        default:           return ISMSLoadingTimeout
+        case .ping:        return serverCheckTimeout
+        default:           return defaultLoadingTimeout
         }
     }
 }

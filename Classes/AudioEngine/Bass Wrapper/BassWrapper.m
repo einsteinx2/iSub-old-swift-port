@@ -10,7 +10,7 @@
 #import "Imports.h"
 #import "iSub-Swift.h"
 
-LOG_LEVEL_ISUB_DEFAULT
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #define ISMS_BASSBufferSize 800
 #define ISMS_defaultSampleRate 44100

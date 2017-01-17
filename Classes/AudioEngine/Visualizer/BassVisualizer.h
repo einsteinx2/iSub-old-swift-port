@@ -8,6 +8,16 @@
 
 #import "bass.h"
 
+typedef NS_ENUM(NSInteger, ISMSBassVisualType)
+{
+    ISMSBassVisualType_none      = 0,
+    ISMSBassVisualType_line      = 1,
+    ISMSBassVisualType_skinnyBar = 2,
+    ISMSBassVisualType_fatBar    = 3,
+    ISMSBassVisualType_aphexFace = 4,
+    ISMSBassVisualType_maxValue  = 5
+};
+
 typedef NS_ENUM(NSInteger, BassVisualizerType)
 {
 	BassVisualizerTypeNone = 0,

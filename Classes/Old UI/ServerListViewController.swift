@@ -39,7 +39,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         segmentedControl.autoresizingMask = .flexibleWidth
         segmentedControl.addTarget(self, action: #selector(ServerListViewController.segmentAction), for: .valueChanged)
         segmentedControl.frame = CGRect(x: 5, y: 2, width: 310, height: 36)
-        segmentedControl.tintColor = ISMSHeaderColor
+        segmentedControl.tintColor = [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:206.0/255.0 alpha:1]
         segmentedControl.selectedSegmentIndex = 0;
         headerView.addSubview(self.segmentedControl)
         
@@ -163,7 +163,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         serverNameLabel.autoresizingMask = .flexibleWidth
         serverNameLabel.backgroundColor = UIColor.clear
         serverNameLabel.textAlignment = .left; // default
-        serverNameLabel.font = ISMSBoldFont(20)
+        serverNameLabel.font = UIFont.boldSystemFont(ofSize: 20)
         serverNameLabel.text = server.url
         cell.contentView.addSubview(serverNameLabel)
         
@@ -171,7 +171,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         detailsLabel.autoresizingMask = .flexibleWidth;
         detailsLabel.backgroundColor = UIColor.clear
         detailsLabel.textAlignment = .left; // default
-        detailsLabel.font = ISMSRegularFont(15)
+        detailsLabel.font = UIFont.systemFont(ofSize: 15)
         detailsLabel.text = "username: \(server.username)"
         cell.contentView.addSubview(detailsLabel)
         

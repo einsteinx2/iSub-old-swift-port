@@ -17,7 +17,7 @@
 
 @implementation AudioEngine
 
-LOG_LEVEL_ISUB_DEFAULT
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 // Singleton object
 static AudioEngine *sharedInstance = nil;

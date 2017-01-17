@@ -9,7 +9,7 @@
 #ifndef libSub_libSubImports_h
 #define libSub_libSubImports_h
 
-#import "libSubDefines.h"
+#import "ISMSNotificationNames.h"
 
 // Frameworks
 #import "EX2Kit.h"

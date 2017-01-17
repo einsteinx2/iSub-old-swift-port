@@ -10,7 +10,7 @@
 #import "iSub-Swift.h"
 #import "Imports.h"
 
-LOG_LEVEL_ISUB_DEFAULT
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @implementation CacheSingleton
 

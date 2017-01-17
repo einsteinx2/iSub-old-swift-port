@@ -7,7 +7,6 @@
 #import <HockeySDK/HockeySDK.h>
 
 #import "libSubImports.h"
-#import "libSubDefines.h"
 #import "IntroViewController.h"
 #import "HelpTabViewController.h"
 #import "SettingsTabViewController.h"
