@@ -146,7 +146,7 @@ import Async
         PlayQueue.si.stop()
     }
     
-    // TODO: Audit all this and test. Seems to duplicate code in UAApplication
+    // TODO: Audit all this and test. Seems to duplicate code in Application
     // TODO: Double check play function on new app launch
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         // Handle being openned by a URL
