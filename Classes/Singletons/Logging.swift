@@ -12,7 +12,7 @@ struct Logging {
     static var logsFolder = SavedSettings.cachesPath() + "/Logs"
     
     static var latestLogFileName: String? {
-        if let logFiles = try? FileManager.default.contentsOfDirectory(atPath: Logging.logsFolder) {
+        if let logFiles = try? FileManager.default.contentsOfDirectory(atPath: logsFolder) {
             var modifiedTime = 0.0
             var fileName: String?
             for file in logFiles {
@@ -39,7 +39,7 @@ struct Logging {
 
         // Zip the logs
         let archive = ZKFileArchive(archivePath: zipFilePath)
-        let result = archive?.deflateDirectory(Logging.logsFolder, relativeToPath: SavedSettings.cachesPath(), usingResourceFork: false)
+        let result = archive?.deflateDirectory(logsFolder, relativeToPath: SavedSettings.cachesPath(), usingResourceFork: false)
         if let result = result, Int32(result) == zkSucceeded.rawValue {
             return zipFilePath
         }

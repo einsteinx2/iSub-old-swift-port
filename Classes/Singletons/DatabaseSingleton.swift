@@ -149,11 +149,9 @@ import Foundation
             }
         }
         
-        // Create the playlist tables if necessary (does nothing if they exist)
-        // TODO: Why are we setting these up here when we dont have a server id yet?
-        _ = Playlist.createPlaylist("Play Queue", playlistId: Playlist.playQueuePlaylistId, serverId: SavedSettings.si().currentServerId)
-        _ = Playlist.createPlaylist("Download Queue", playlistId: Playlist.downloadQueuePlaylistId, serverId: SavedSettings.si().currentServerId)
-        _ = Playlist.createPlaylist("Downloaded Songs", playlistId: Playlist.downloadedSongsPlaylistId, serverId: SavedSettings.si().currentServerId)
+        // Create the default playlist tables
+        let serverId = SavedSettings.si().currentServerId
+        PlaylistRepository.si.createDefaultPlaylists(serverId: serverId)
     }
     
     func closeAll() {

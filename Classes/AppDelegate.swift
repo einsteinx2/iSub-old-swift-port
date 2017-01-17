@@ -320,10 +320,8 @@ import Async
         SavedSettings.si().currentServerId = server.serverId
         SavedSettings.si().redirectUrlString = redirectUrl
         
-        // Create the playlist table if necessary (does nothing if they exist)
-        _ = Playlist.createPlaylist("Play Queue", playlistId: Playlist.playQueuePlaylistId, serverId: server.serverId)
-        _ = Playlist.createPlaylist("Download Queue", playlistId: Playlist.downloadQueuePlaylistId, serverId: server.serverId)
-        _ = Playlist.createPlaylist("Downloaded Songs", playlistId: Playlist.downloadedSongsPlaylistId, serverId: server.serverId)
+        // Create the default playlist tables
+        PlaylistRepository.si.createDefaultPlaylists(serverId: server.serverId)
         
         // Cancel any caching
         StreamManager.si.stop()
