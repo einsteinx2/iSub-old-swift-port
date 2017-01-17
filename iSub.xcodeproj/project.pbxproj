@@ -290,8 +290,6 @@
 		531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34151E24D12300811187 /* SettingsTabViewController.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B34271E24D1C300811187 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34261E24D1C300811187 /* OBSlider.m */; };
 		531B34281E24D1C300811187 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34261E24D1C300811187 /* OBSlider.m */; };
-		531B342B1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B342A1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m */; };
-		531B342C1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B342A1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m */; };
 		531B34421E24D24600811187 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34331E24D24600811187 /* FMDatabase.m */; };
 		531B34431E24D24600811187 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34331E24D24600811187 /* FMDatabase.m */; };
 		531B34441E24D24600811187 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34351E24D24600811187 /* FMDatabaseAdditions.m */; };
@@ -947,8 +945,6 @@
 		531B34151E24D12300811187 /* SettingsTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTabViewController.m; sourceTree = "<group>"; };
 		531B34251E24D1C300811187 /* OBSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSlider.h; sourceTree = "<group>"; };
 		531B34261E24D1C300811187 /* OBSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSlider.m; sourceTree = "<group>"; };
-		531B34291E24D1DA00811187 /* IDTwitterAccountChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDTwitterAccountChooserViewController.h; sourceTree = "<group>"; };
-		531B342A1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDTwitterAccountChooserViewController.m; sourceTree = "<group>"; };
 		531B34321E24D24600811187 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		531B34331E24D24600811187 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		531B34341E24D24600811187 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -1785,8 +1781,6 @@
 				531B34141E24D12300811187 /* SettingsTabViewController.h */,
 				531B34151E24D12300811187 /* SettingsTabViewController.m */,
 				533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */,
-				531B34291E24D1DA00811187 /* IDTwitterAccountChooserViewController.h */,
-				531B342A1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m */,
 			);
 			path = "Old UI";
 			sourceTree = "<group>";
@@ -2825,7 +2819,6 @@
 				53835CA21E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
 				5355BFB01E2DB59D00C6D27F /* NSError.swift in Sources */,
 				531B33951E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
-				531B342B1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m in Sources */,
 				531B33531E24CF8B00811187 /* BassStream.m in Sources */,
 				531B33A51E24CF8B00811187 /* RootArtistsLoader.swift in Sources */,
 				53F107A21E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
@@ -3076,7 +3069,6 @@
 				53835CA41E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
 				5355BFB11E2DB59D00C6D27F /* NSError.swift in Sources */,
 				531B33961E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
-				531B342C1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m in Sources */,
 				531B33541E24CF8B00811187 /* BassStream.m in Sources */,
 				531B33A61E24CF8B00811187 /* RootArtistsLoader.swift in Sources */,
 				53F107A31E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,

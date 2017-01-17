@@ -10,7 +10,6 @@
 #import "Imports.h"
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
-#import "IDTwitterAccountChooserViewController.h"
 #import "iSub-Swift.h"
 
 @implementation SettingsTabViewController
@@ -548,50 +547,51 @@
 
 - (IBAction)twitterButtonAction
 {
-    ACAccountStore *account = [[ACAccountStore alloc] init];
-    ACAccountType *accountType = [account accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
-    
-    if (SavedSettings.si.currentTwitterAccount)
-    {
-        SavedSettings.si.currentTwitterAccount = nil;
-        [self reloadTwitterUIElements];
-    }
-    else
-    {
-        [account requestAccessToAccountsWithType:accountType options:nil completion:^(BOOL granted, NSError *error)
-        {
-            if (granted == YES)
-            {
-                [EX2Dispatch runInMainThreadAsync:^
-                 {
-                     if ([[account accounts] count] == 1)
-                     {
-                         SavedSettings.si.currentTwitterAccount = [[[account accounts] firstObjectSafe] identifier];
-                         [self reloadTwitterUIElements];
-                     }
-                     else if ([[account accounts] count] > 1)
-                     {
-                         // more than one account, use Chooser
-                         IDTwitterAccountChooserViewController *chooser = [[IDTwitterAccountChooserViewController alloc] initWithRootViewController:self];
-                         [chooser setTwitterAccounts:[account accounts]];
-                         [chooser setCompletionHandler:^(ACAccount *account)
-                          {
-                              if (account)
-                              {
-                                  SavedSettings.si.currentTwitterAccount = [account identifier];
-                                  [self reloadTwitterUIElements];
-                              }
-                          }];
-                         [self.parentController.navigationController presentViewController:chooser animated:YES completion:nil];
-                     }
-                     else
-                     {
-                         [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"To use this feature, please add a Twitter account in the iOS Settings app.", @"No twitter accounts alert") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                     }
-                 }];
-            }
-        }];
-    }
+    // TODO: Rewrite all this
+//    ACAccountStore *account = [[ACAccountStore alloc] init];
+//    ACAccountType *accountType = [account accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+//    
+//    if (SavedSettings.si.currentTwitterAccount)
+//    {
+//        SavedSettings.si.currentTwitterAccount = nil;
+//        [self reloadTwitterUIElements];
+//    }
+//    else
+//    {
+//        [account requestAccessToAccountsWithType:accountType options:nil completion:^(BOOL granted, NSError *error)
+//        {
+//            if (granted == YES)
+//            {
+//                [EX2Dispatch runInMainThreadAsync:^
+//                 {
+//                     if ([[account accounts] count] == 1)
+//                     {
+//                         SavedSettings.si.currentTwitterAccount = [[[account accounts] firstObjectSafe] identifier];
+//                         [self reloadTwitterUIElements];
+//                     }
+//                     else if ([[account accounts] count] > 1)
+//                     {
+//                         // more than one account, use Chooser
+//                         IDTwitterAccountChooserViewController *chooser = [[IDTwitterAccountChooserViewController alloc] initWithRootViewController:self];
+//                         [chooser setTwitterAccounts:[account accounts]];
+//                         [chooser setCompletionHandler:^(ACAccount *account)
+//                          {
+//                              if (account)
+//                              {
+//                                  SavedSettings.si.currentTwitterAccount = [account identifier];
+//                                  [self reloadTwitterUIElements];
+//                              }
+//                          }];
+//                         [self.parentController.navigationController presentViewController:chooser animated:YES completion:nil];
+//                     }
+//                     else
+//                     {
+//                         [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"To use this feature, please add a Twitter account in the iOS Settings app.", @"No twitter accounts alert") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//                     }
+//                 }];
+//            }
+//        }];
+//    }
 }
 
 //	if (SocialSingleton.si.twitterEngine.isAuthorized)
