@@ -229,8 +229,8 @@ import Async
     }
     
     func applicationLog(for crashManager: BITCrashManager!) -> String! {
-        let logsFolder = Logging.logsFolder()
-        if let fileName = Logging.latestLogFileName() {
+        let logsFolder = Logging.logsFolder
+        if let fileName = Logging.latestLogFileName {
             let path = logsFolder + "/" + fileName
             if let contents = try? String(contentsOfFile: path) {
                 return contents

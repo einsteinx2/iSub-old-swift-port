@@ -22,7 +22,6 @@
 #import "SavedSettings.h"
 #import "CacheSingleton.h"
 #import "LoadingScreen.h"
-#import "Logging.h"
 
 // Data Model
 #import "ISMSErrorDomain.h"

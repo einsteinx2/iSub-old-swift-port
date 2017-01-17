@@ -235,8 +235,6 @@
 		531B33B81E24CF8B00811187 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33321E24CF8B00811187 /* CacheSingleton.m */; };
 		531B33BB1E24CF8B00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33361E24CF8B00811187 /* LoadingScreen.m */; };
 		531B33BC1E24CF8B00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33361E24CF8B00811187 /* LoadingScreen.m */; };
-		531B33BD1E24CF8B00811187 /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33381E24CF8B00811187 /* Logging.m */; };
-		531B33BE1E24CF8B00811187 /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33381E24CF8B00811187 /* Logging.m */; };
 		531B33BF1E24CF8B00811187 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33391E24CF8B00811187 /* PlayQueue.swift */; };
 		531B33C01E24CF8B00811187 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33391E24CF8B00811187 /* PlayQueue.swift */; };
 		531B33C11E24CF8B00811187 /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333B1E24CF8B00811187 /* SavedSettings.m */; };
@@ -376,6 +374,8 @@
 		5355BFA21E2D671C00C6D27F /* StreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA01E2D671C00C6D27F /* StreamManager.swift */; };
 		5355BFA41E2D81D900C6D27F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA31E2D81D900C6D27F /* AppDelegate.swift */; };
 		5355BFA51E2D81D900C6D27F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA31E2D81D900C6D27F /* AppDelegate.swift */; };
+		5355BFA71E2D955C00C6D27F /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA61E2D955C00C6D27F /* Logging.swift */; };
+		5355BFA81E2D955C00C6D27F /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA61E2D955C00C6D27F /* Logging.swift */; };
 		5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
 		5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
 		5358DBDC1E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
@@ -913,8 +913,6 @@
 		531B33321E24CF8B00811187 /* CacheSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheSingleton.m; sourceTree = "<group>"; };
 		531B33351E24CF8B00811187 /* LoadingScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScreen.h; sourceTree = "<group>"; };
 		531B33361E24CF8B00811187 /* LoadingScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingScreen.m; sourceTree = "<group>"; };
-		531B33371E24CF8B00811187 /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
-		531B33381E24CF8B00811187 /* Logging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Logging.m; sourceTree = "<group>"; };
 		531B33391E24CF8B00811187 /* PlayQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueue.swift; sourceTree = "<group>"; };
 		531B333A1E24CF8B00811187 /* SavedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedSettings.h; sourceTree = "<group>"; };
 		531B333B1E24CF8B00811187 /* SavedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedSettings.m; sourceTree = "<group>"; };
@@ -1016,6 +1014,7 @@
 		5354914A11B03FC900928E0F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		5355BFA01E2D671C00C6D27F /* StreamManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamManager.swift; sourceTree = "<group>"; };
 		5355BFA31E2D81D900C6D27F /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		5355BFA61E2D955C00C6D27F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		5358DBD51E0B780E0024A0D4 /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
 		5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JASidePanelController.m; sourceTree = "<group>"; };
 		5358DBD71E0B780E0024A0D4 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
@@ -1728,8 +1727,7 @@
 				531B333B1E24CF8B00811187 /* SavedSettings.m */,
 				531B33351E24CF8B00811187 /* LoadingScreen.h */,
 				531B33361E24CF8B00811187 /* LoadingScreen.m */,
-				531B33371E24CF8B00811187 /* Logging.h */,
-				531B33381E24CF8B00811187 /* Logging.m */,
+				5355BFA61E2D955C00C6D27F /* Logging.swift */,
 			);
 			path = Singletons;
 			sourceTree = "<group>";
@@ -2801,6 +2799,7 @@
 				530D5A101E2C044700C9ED43 /* SongRepository.swift in Sources */,
 				531B338F1E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
 				53D59A601E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
+				5355BFA71E2D955C00C6D27F /* Logging.swift in Sources */,
 				531B33F41E24D0B600811187 /* DroppableCell.swift in Sources */,
 				531B33891E24CF8B00811187 /* AlbumLoader.swift in Sources */,
 				531B34061E24D0B600811187 /* PlayQueueViewController.swift in Sources */,
@@ -2851,7 +2850,6 @@
 				531B338D1E24CF8B00811187 /* CachedAlbumLoader.swift in Sources */,
 				53835CA21E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
 				531B33951E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
-				531B33BD1E24CF8B00811187 /* Logging.m in Sources */,
 				531B342B1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m in Sources */,
 				531B33531E24CF8B00811187 /* BassStream.m in Sources */,
 				531B342F1E24D20300811187 /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
@@ -3053,6 +3051,7 @@
 				530D5A111E2C044700C9ED43 /* SongRepository.swift in Sources */,
 				531B33901E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
 				53D59A621E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
+				5355BFA81E2D955C00C6D27F /* Logging.swift in Sources */,
 				531B33F51E24D0B600811187 /* DroppableCell.swift in Sources */,
 				531B338A1E24CF8B00811187 /* AlbumLoader.swift in Sources */,
 				531B34071E24D0B600811187 /* PlayQueueViewController.swift in Sources */,
@@ -3103,7 +3102,6 @@
 				531B338E1E24CF8B00811187 /* CachedAlbumLoader.swift in Sources */,
 				53835CA41E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
 				531B33961E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
-				531B33BE1E24CF8B00811187 /* Logging.m in Sources */,
 				531B342C1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m in Sources */,
 				531B33541E24CF8B00811187 /* BassStream.m in Sources */,
 				531B34301E24D20300811187 /* UINavigationBar+FixedHeightWhenStatusBarHidden.m in Sources */,
