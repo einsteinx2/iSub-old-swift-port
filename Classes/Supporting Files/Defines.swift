@@ -46,9 +46,5 @@ let ISMSHeaderButtonColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alp
 let ISMSiPadBackgroundColor = ISMSHeaderColor
 let ISMSiPadCornerRadius = 5.0
 
-let ISMSFolderCellHeight: CGFloat = 50.0
-let ISMSSubfolderCellHeight: CGFloat = 50.0
-let SongCellHeight: CGFloat = 50.0
-let ISMSAlbumCellHeight: CGFloat = 50.0
-let ISMSArtistCellHeight: CGFloat = 50.0
-let ISMSCellHeaderHeight: CGFloat = 20.0
+let CellHeight: CGFloat = 50.0
+let CellHeaderHeight: CGFloat = 20.0

@@ -59,7 +59,7 @@ class CacheViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ISMSNormalize(ISMSSubfolderCellHeight)
+        return ISMSNormalize(CellHeight)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

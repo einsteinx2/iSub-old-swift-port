@@ -199,7 +199,7 @@ class PlayQueueViewController: DraggableTableViewController {
     fileprivate func handleDrag(atLocation location: CGPoint) {
         // Treat hovers over the top portion of the cell as the previous cell
         var point = location
-        point.y -= (ISMSNormalize(SongCellHeight) * 0.75)
+        point.y -= (ISMSNormalize(CellHeight) * 0.75)
         let tablePoint = tableView.convert(point, from: nil)
         
         let indexPath = tableView.indexPathForRow(at: tablePoint)
@@ -305,7 +305,7 @@ class PlayQueueViewController: DraggableTableViewController {
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: itemReuseIdentifier, for: indexPath) as? ItemTableViewCell {
             cell.containerView.isHidden = (self.draggableTableView.isDraggingCell && self.draggableTableView.dragIndexPath == indexPath)
             cell.alwaysShowSubtitle = true
-            cell.cellHeight = ISMSNormalize(SongCellHeight)
+            cell.cellHeight = ISMSNormalize(CellHeight)
             cell.accessoryType = .none
             cell.selectionStyle = .none
             
@@ -324,13 +324,13 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        var height = indexPath.row == viewModel.currentIndex ? 64.0 : ISMSNormalize(SongCellHeight)
+        var height = indexPath.row == viewModel.currentIndex ? 64.0 : ISMSNormalize(CellHeight)
         if internallyDragging, self.draggableTableView.isDraggingCell, let draggedIndexPath = self.draggableTableView.dragIndexPath, indexPath.row == draggedIndexPath.row {
             height = 0
         }
         
         if !isAutoScrolling && indexPath.row == hoverRow + 1 {
-            height += ISMSNormalize(SongCellHeight)
+            height += ISMSNormalize(CellHeight)
         }
         
         return height

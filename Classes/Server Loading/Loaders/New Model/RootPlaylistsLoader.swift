@@ -8,12 +8,12 @@
 
 import Foundation
 
-/*class RootPlaylistsLoader: ApiLoader, ItemLoader {
+class RootPlaylistsLoader: ApiLoader, ItemLoader {
     var playlists = [Playlist]()
     
     var associatedObject: Any?
     
-    var items: [ISMSItem] {
+    var items: [Item] {
         return playlists
     }
     
@@ -26,15 +26,14 @@ import Foundation
         
         let serverId = SavedSettings.si().currentServerId
         root.iterate("playlists.playlist") { playlist in
-            let aPlaylist = Playlist(rxmlElement: playlist, serverId: serverId)
-            playlistsTemp.append(aPlaylist)
+            if let aPlaylist = Playlist(rxmlElement: playlist, serverId: serverId) {
+                playlistsTemp.append(aPlaylist)
+            }
         }
         playlistsTemp.sort(by: { $0.name < $1.name })
         playlists = playlistsTemp
         
-        self.persistModels()
-        
-        self.finished()
+        persistModels()
         
         return true
     }
@@ -44,7 +43,7 @@ import Foundation
     }
     
     func loadModelsFromDatabase() -> Bool {
-        // TODO: Fix with new data model
-        return false
+        playlists = PlaylistRepository.si.allPlaylists(serverId: SavedSettings.si().currentServerId)
+        return true
     }
-}*/
+}

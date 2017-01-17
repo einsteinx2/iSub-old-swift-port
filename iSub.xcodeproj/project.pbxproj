@@ -374,6 +374,8 @@
 		5355BFB11E2DB59D00C6D27F /* NSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFAF1E2DB59D00C6D27F /* NSError.swift */; };
 		5355BFB31E2DB88200C6D27F /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFB21E2DB88200C6D27F /* Application.swift */; };
 		5355BFB41E2DB88200C6D27F /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFB21E2DB88200C6D27F /* Application.swift */; };
+		5355BFB61E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFB51E2DBC9B00C6D27F /* PlaylistLoader.swift */; };
+		5355BFB71E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFB51E2DBC9B00C6D27F /* PlaylistLoader.swift */; };
 		5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
 		5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
 		5358DBDC1E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
@@ -1002,6 +1004,7 @@
 		5355BFAC1E2DAA7300C6D27F /* UINavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBar.swift; sourceTree = "<group>"; };
 		5355BFAF1E2DB59D00C6D27F /* NSError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSError.swift; sourceTree = "<group>"; };
 		5355BFB21E2DB88200C6D27F /* Application.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		5355BFB51E2DBC9B00C6D27F /* PlaylistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistLoader.swift; sourceTree = "<group>"; };
 		5358DBD51E0B780E0024A0D4 /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
 		5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JASidePanelController.m; sourceTree = "<group>"; };
 		5358DBD71E0B780E0024A0D4 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
@@ -1840,6 +1843,7 @@
 				531B331D1E24CF8A00811187 /* FolderLoader.swift */,
 				531B33141E24CF8A00811187 /* ArtistLoader.swift */,
 				531B33131E24CF8A00811187 /* AlbumLoader.swift */,
+				5355BFB51E2DBC9B00C6D27F /* PlaylistLoader.swift */,
 			);
 			name = "Item Loaders";
 			sourceTree = "<group>";
@@ -2855,6 +2859,7 @@
 				53835CED1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				531B33851E24CF8B00811187 /* ApiLoader.swift in Sources */,
 				531B33991E24CF8B00811187 /* CachedRootFoldersLoader.swift in Sources */,
+				5355BFB61E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */,
 				531B338B1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
 				531B33711E24CF8B00811187 /* Playlist.swift in Sources */,
 				531B33FE1E24D0B600811187 /* CenterPanelContainerViewController.swift in Sources */,
@@ -3105,6 +3110,7 @@
 				53835CEF1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				531B33861E24CF8B00811187 /* ApiLoader.swift in Sources */,
 				531B339A1E24CF8B00811187 /* CachedRootFoldersLoader.swift in Sources */,
+				5355BFB71E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */,
 				531B338C1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
 				531B33721E24CF8B00811187 /* Playlist.swift in Sources */,
 				531B33FF1E24D0B600811187 /* CenterPanelContainerViewController.swift in Sources */,

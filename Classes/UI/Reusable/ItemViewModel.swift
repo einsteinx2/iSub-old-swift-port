@@ -184,6 +184,10 @@ class ItemViewModel : NSObject {
         return albumLoader
     }
     
+    func loaderForPlaylist(_ playlist: Playlist) -> ItemLoader? {
+        return PlaylistLoader(playlistId: playlist.playlistId)
+    }
+    
     func playSong(atIndex index: Int) {
         // TODO: Implement a way to just switch play index when we're playing from the same array to save time
         PlayQueue.si.playSongs(songs, playIndex: index)

@@ -20,7 +20,7 @@ class FolderLoader: ApiLoader, ItemLoader {
         return folders as [Item] + songs as [Item]
     }
     
-    init(folderId: Int64, mediaFolderId: Int64) {
+    init(folderId: Int64, mediaFolderId: Int64 = 0) {
         self.folderId = folderId
         self.mediaFolderId = mediaFolderId
         super.init()

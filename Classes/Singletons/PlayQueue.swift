@@ -86,8 +86,13 @@ import Nuke
     var isPlaying: Bool { return audioEngine.isPlaying() }
     var isStarted: Bool { return audioEngine.isStarted() }
     var currentSongProgress: Double { return audioEngine.progress() }
-    var songs: [Song] { return playlist.songs }
     var playlist: Playlist { return Playlist.playQueue }
+    var songs: [Song] {
+        // TODO: Figure out what to do about the way playlist models hold songs and how we regenerate the model in this class
+        let playlist = self.playlist
+        playlist.loadSubItems()
+        return playlist.songs
+    }
     
     fileprivate var audioEngine: AudioEngine { return AudioEngine.si() }
     

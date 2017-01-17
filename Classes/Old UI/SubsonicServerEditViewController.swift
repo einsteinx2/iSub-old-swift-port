@@ -111,11 +111,11 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
         return password != nil && password!.length > 0
     }
     
-    @IBAction func cancelButtonPressed(sender: UIButton) {
+    @IBAction func cancelButtonPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func saveButtonPressed(sender: UIButton) {
+    @IBAction func saveButtonPressed(_ sender: UIButton) {
         if (!checkUrl(url: urlField.text)) {
             let alert = UIAlertController(title: "Error", message: "The URL must be in the format: http://mywebsite.com:port/folder\n\nBoth the :port and /folder are optional", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
@@ -147,9 +147,9 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
         }
         
         LoadingScreen.showOnMainWindow(withMessage: "Checking Server")
-        let loader = StatusLoader(url: urlField.text!, username: usernameField.text!, password: passwordField.text!)
-        loader.completionHandler = loadingCompletionHandler
-        loader.start()
+        statusLoader = StatusLoader(url: urlField.text!, username: usernameField.text!, password: passwordField.text!)
+        statusLoader!.completionHandler = loadingCompletionHandler
+        statusLoader!.start()
     }
     
     func loadingCompletionHandler(success: Bool, error: Error?, loader: ApiLoader) {
@@ -204,7 +204,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
         } else if textField == usernameField {
             passwordField.becomeFirstResponder()
         } else if textField == passwordField {
-            saveButtonPressed(sender: saveButton)
+            saveButtonPressed(saveButton)
         }
         
         return true

@@ -36,14 +36,16 @@ extension Playlist: Item {
     var playlistId: Int64
     var serverId: Int64
     var name: String
+    var coverArtId: String?
     
     // TODO: See if we should always load these from database rather than using the loadSubItems concept from the other models
     var songs = [Song]()
     
-    init(playlistId: Int64, serverId: Int64, name: String, repository: PlaylistRepository = PlaylistRepository.si) {
+    init(playlistId: Int64, serverId: Int64, name: String, coverArtId: String?, repository: PlaylistRepository = PlaylistRepository.si) {
         self.playlistId = playlistId
         self.serverId = serverId
         self.name = name
+        self.coverArtId = coverArtId
         self.repository = repository
     }
     
@@ -55,6 +57,7 @@ extension Playlist: Item {
         self.playlistId = playlistId
         self.serverId = serverId
         self.name = element.attribute("name") ?? ""
+        self.coverArtId = element.attribute(asStringOptional: "coverArt")
         self.repository = repository
     }
 
@@ -62,6 +65,7 @@ extension Playlist: Item {
         self.playlistId = result.longLongInt(forColumnIndex: 0)
         self.serverId = result.longLongInt(forColumnIndex: 1)
         self.name = result.string(forColumnIndex: 2)
+        self.coverArtId = result.string(forColumnIndex: 3)
         self.repository = repository as! PlaylistRepository
     }
     

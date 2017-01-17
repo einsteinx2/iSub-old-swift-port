@@ -16,7 +16,7 @@ struct PlaylistRepository: ItemRepository {
     let cachedTable = "playlists"
     let itemIdField = "playlistId"
     
-    fileprivate func tableName(playlistId: Int64, serverId: Int64) -> String {
+    fileprivate func playlistTableName(playlistId: Int64, serverId: Int64) -> String {
         return "playlist\(playlistId)_server\(serverId)"
     }
     
@@ -25,7 +25,9 @@ struct PlaylistRepository: ItemRepository {
     }
     
     func allPlaylists(serverId: Int64? = nil, isCachedTable: Bool = false) -> [Playlist] {
-        return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
+        let playlists: [Playlist] = gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
+        let excludedIds = [Playlist.playQueuePlaylistId, Playlist.downloadQueuePlaylistId, Playlist.downloadedSongsPlaylistId]
+        return playlists.filter({!excludedIds.contains($0.playlistId)})        
     }
     
     func isPersisted(playlist: Playlist, isCachedTable: Bool = false) -> Bool {
@@ -44,8 +46,9 @@ struct PlaylistRepository: ItemRepository {
         var success = true
         DatabaseSingleton.si.write.inDatabase { db in
             do {
-                let query = "REPLACE INTO \(self.table) VALUES (?, ?, ?)"
-                try db.executeUpdate(query, playlist.playlistId, playlist.serverId, playlist.name)
+                let query = "REPLACE INTO \(self.table) VALUES (?, ?, ?, ?)"
+                try db.executeUpdate(query, playlist.playlistId, playlist.serverId, playlist.name, n2N(playlist.coverArtId))
+                try self.createPlaylistTable(db: db, playlistId: playlist.playlistId, serverId: playlist.serverId, name: playlist.name)
             } catch {
                 success = false
                 printError(error)
@@ -55,16 +58,15 @@ struct PlaylistRepository: ItemRepository {
     }
     
     func hasCachedSubItems(playlist: Playlist) -> Bool {
-        let tableName = self.tableName(playlistId: playlist.playlistId, serverId: playlist.serverId)
+        let tableName = playlistTableName(playlistId: playlist.playlistId, serverId: playlist.serverId)
         let query = "SELECT COUNT(*) FROM \(tableName) JOIN cachedSongs where \(tableName).songId = cachedSongs.songId"
         return DatabaseSingleton.si.read.boolForQuery(query)
     }
     
-    fileprivate func createTable(db: FMDatabase, playlistId: Int64, serverId: Int64, name: String) {
-        let table = tableName(playlistId: playlistId, serverId: serverId)
-        try? db.executeUpdate("INSERT INTO playlists VALUES (?, ?, ?)", playlistId, serverId, name)
-        try? db.executeUpdate("CREATE TABLE \(table) (songIndex INTEGER PRIMARY KEY, songId INTEGER, serverId INTEGER)")
-        try? db.executeUpdate("CREATE INDEX \(table)_songIdServerId ON \(table) (songId, serverId)")
+    fileprivate func createPlaylistTable(db: FMDatabase, playlistId: Int64, serverId: Int64, name: String) throws {
+        let table = playlistTableName(playlistId: playlistId, serverId: serverId)
+        try db.executeUpdate("CREATE TABLE IF NOT EXISTS \(table) (songIndex INTEGER PRIMARY KEY, songId INTEGER, serverId INTEGER)")
+        try db.executeUpdate("CREATE INDEX IF NOT EXISTS \(table)_songIdServerId ON \(table) (songId, serverId)")
     }
     
     func playlist(playlistId: Int64? = nil, name: String, serverId: Int64) -> Playlist {
@@ -74,7 +76,8 @@ struct PlaylistRepository: ItemRepository {
             }
             
             DatabaseSingleton.si.write.inDatabase { db in
-                self.createTable(db: db, playlistId: playlistId, serverId: serverId, name: name)
+                try? db.executeUpdate("INSERT INTO playlists VALUES (?, ?, ?, ?)", playlistId, serverId, name, NSNull())
+                try? self.createPlaylistTable(db: db, playlistId: playlistId, serverId: serverId, name: name)
             }
             
             return playlist(playlistId: playlistId, serverId: serverId)!
@@ -90,7 +93,8 @@ struct PlaylistRepository: ItemRepository {
                 
                 // Next available ID
                 newPlaylistId = lastPlaylistId - 1
-                self.createTable(db: db, playlistId: newPlaylistId, serverId: serverId, name: name)
+                try? db.executeUpdate("INSERT INTO playlists VALUES (?, ?, ?, ?)", newPlaylistId, serverId, name, NSNull())
+                try? self.createPlaylistTable(db: db, playlistId: newPlaylistId, serverId: serverId, name: name)
             }
             
             return playlist(playlistId: newPlaylistId, serverId: serverId)!
@@ -101,7 +105,7 @@ struct PlaylistRepository: ItemRepository {
         var songs = [Song]()
         DatabaseSingleton.si.read.inDatabase { db in
             do {
-                let query = "SELECT songId, serverId FROM \(self.tableName)"
+                let query = "SELECT songId, serverId FROM \(playlist.tableName)"
                 let result = try db.executeQuery(query)
                 while result.next() {
                     let songId = result.longLongInt(forColumnIndex: 0)
@@ -117,6 +121,22 @@ struct PlaylistRepository: ItemRepository {
         playlist.songs = songs
     }
     
+    func overwriteSubItems(playlist: Playlist) {
+        DatabaseSingleton.si.write.inDatabase { db in
+            do {
+                let query = "DELETE FROM \(playlist.tableName)"
+                try db.executeUpdate(query)
+            
+                for song in playlist.songs {
+                    let query = "INSERT INTO \(playlist.tableName) (songId, serverId) VALUES (?, ?)"
+                    try db.executeUpdate(query, song.songId, song.serverId)
+                }
+            } catch {
+                printError(error)
+            }
+        }
+    }
+    
     func createDefaultPlaylists(serverId: Int64) {
         _ = PlaylistRepository.si.playlist(playlistId: Playlist.playQueuePlaylistId, name: "Play Queue", serverId: serverId)
         _ = PlaylistRepository.si.playlist(playlistId: Playlist.downloadQueuePlaylistId, name: "Download Queue", serverId: serverId)
@@ -126,7 +146,7 @@ struct PlaylistRepository: ItemRepository {
 
 extension Playlist {
     var tableName: String {
-        return PlaylistRepository.si.tableName(playlistId: playlistId, serverId: serverId)
+        return PlaylistRepository.si.playlistTableName(playlistId: playlistId, serverId: serverId)
     }
     
     var songCount: Int {
@@ -378,5 +398,9 @@ extension Playlist: PersistedItem {
     
     func loadSubItems() {
         repository.loadSubItems(playlist: self)
+    }
+    
+    func overwriteSubItems() {
+        repository.overwriteSubItems(playlist: self)
     }
 }

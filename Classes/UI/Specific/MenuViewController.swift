@@ -26,6 +26,7 @@ class MenuViewController: UITableViewController {
     fileprivate let menuItems = [MenuItem(name: "Folders", function: showFolders),
                                  MenuItem(name: "Artists", function: showArtists),
                                  MenuItem(name: "Albums", function: showAlbums),
+                                 MenuItem(name: "Playlists", function: showPlaylists),
                                  MenuItem(name: "Downloads", function: showDownloads),
                                  MenuItem(name: "Settings", function: showSettings)];
     
@@ -95,6 +96,23 @@ class MenuViewController: UITableViewController {
             let viewModel = ItemViewModel(loader: loader)
             viewModel.topLevelController = true
             viewModel.navigationTitle = "Albums"
+            let viewController = ItemViewController(viewModel: viewModel)
+            let navController = NavigationStack(rootViewController: viewController)
+            navController.navigationBar.barStyle = .black
+            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
+            navController.interactivePopGestureRecognizer?.delegate = viewController
+            menuItem.navController = navController
+        }
+        
+        centerController.contentController = menuItem.navController
+    }
+    
+    fileprivate func showPlaylists(_ menuItem: MenuItem) {
+        if menuItem.navController == nil {
+            let loader = RootPlaylistsLoader()
+            let viewModel = ItemViewModel(loader: loader)
+            viewModel.topLevelController = true
+            viewModel.navigationTitle = "Playlists"
             let viewController = ItemViewController(viewModel: viewModel)
             let navController = NavigationStack(rootViewController: viewController)
             navController.navigationBar.barStyle = .black

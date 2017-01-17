@@ -307,6 +307,14 @@ class ItemViewController: DraggableTableViewController {
             cell.subTitle = song.artistDisplayName
             cell.duration = song.duration
             cell.isPlaying = (song == PlayQueue.si.currentDisplaySong)
+        case playlistsSectionIndex:
+            cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            cell.alwaysShowCoverArt = true
+            
+            let playlist = viewModel.playlists[indexPath.row]
+            cell.associatedObject = playlist
+            cell.coverArtId = playlist.coverArtId
+            cell.title = playlist.name
         default:
             break
         }
@@ -315,22 +323,7 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        var height: CGFloat = 0
-        
-        switch indexPath.section {
-        case foldersSectionIndex:
-            height = ISMSSubfolderCellHeight
-        case artistsSectionIndex:
-            height = ISMSArtistCellHeight
-        case albumsSectionIndex:
-            height = ISMSAlbumCellHeight
-        case songsSectionIndex:
-            height = SongCellHeight
-        default:
-            break
-        }
-        
-        return ISMSNormalize(height)
+        return ISMSNormalize(CellHeight)
     }
     
     @objc fileprivate func singleTap(_ recognizer: UITapGestureRecognizer) {
@@ -381,6 +374,11 @@ class ItemViewController: DraggableTableViewController {
         case albumsSectionIndex:
             let album = self.viewModel.albums[indexPath.row]
             if let loader = viewModel.loaderForAlbum(album) {
+                pushItemController(loader: loader)
+            }
+        case playlistsSectionIndex:
+            let playlist = self.viewModel.playlists[indexPath.row]
+            if let loader = viewModel.loaderForPlaylist(playlist) {
                 pushItemController(loader: loader)
             }
         default:

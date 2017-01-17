@@ -139,13 +139,13 @@ import Foundation
             }
             
             if !db.tableExists("playlists") {
-                try? db.executeUpdate("CREATE TABLE playlists (playlistId INTEGER, serverId INTEGER, name TEXT, PRIMARY KEY (playlistId, serverId))")
+                try? db.executeUpdate("CREATE TABLE playlists (playlistId INTEGER, serverId INTEGER, name TEXT, coverArtId TEXT, PRIMARY KEY (playlistId, serverId))")
                 try? db.executeUpdate("CREATE INDEX playlists_name ON playlists (name)")
             }
             
             // NOTE: Passwords stored in the keychain
             if !db.tableExists("servers") {
-                try? db.executeUpdate("CREATE TABLE servers (serverId INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER, url TEXT, username TEXT, lastQueryId TEXT, uuid TEXT)")
+                try? db.executeUpdate("CREATE TABLE servers (serverId INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER, url TEXT, username TEXT)")
             }
         }
         
