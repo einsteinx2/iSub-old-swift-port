@@ -11,16 +11,24 @@ import SnapKit
 
 class PlayerViewController: UIViewController {
     let coverArtView = CachedImageView()
+    
+    let bitrateLabel = UILabel()
+    let formatLabel = UILabel()
+    
     let titleLabel = UILabel()
     let artistLabel = UILabel()
+    
     let playButton = UIButton(type: .custom)
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     let prevButton = UIButton(type: .custom)
     let nextButton = UIButton(type: .custom)
+    
     let elapsedLabel = UILabel()
     let remainingLabel = UILabel()
     let progressSlider = UISlider()
     var progressDisplayLink: CADisplayLink!
+    
+    var isZoomed = false
     
     let tapRecognizer = UITapGestureRecognizer()
     let swipeRecognizer = UISwipeGestureRecognizer()
@@ -47,6 +55,28 @@ class PlayerViewController: UIViewController {
             make.top.equalToSuperview().offset(coverArtViewTopOffset)
         }
         
+        bitrateLabel.textColor = .black
+        bitrateLabel.font = .systemFont(ofSize: 13)
+        bitrateLabel.textAlignment = .left
+        self.view.addSubview(bitrateLabel)
+        bitrateLabel.snp.makeConstraints { make in
+            make.top.equalTo(coverArtView.snp.bottom).offset(5)
+            make.left.equalTo(coverArtView)
+            make.width.equalToSuperview().dividedBy(2)
+            make.height.equalTo(15)
+        }
+        
+        formatLabel.textColor = .black
+        formatLabel.font = .systemFont(ofSize: 13)
+        formatLabel.textAlignment = .right
+        self.view.addSubview(formatLabel)
+        formatLabel.snp.makeConstraints { make in
+            make.top.equalTo(coverArtView.snp.bottom).offset(5)
+            make.right.equalTo(coverArtView)
+            make.width.equalToSuperview().dividedBy(2)
+            make.height.equalTo(15)
+        }
+        
         progressSlider.minimumValue = 0.0
         progressSlider.maximumValue = 1.0
         progressSlider.isContinuous = false
@@ -58,7 +88,7 @@ class PlayerViewController: UIViewController {
             make.width.equalTo(280)
             make.height.equalTo(30)
             make.centerX.equalTo(coverArtView)
-            make.top.equalTo(coverArtView.snp.bottom).offset(20)
+            make.top.equalTo(coverArtView.snp.bottom).offset(40)
         }
         
         elapsedLabel.textColor = .black
@@ -164,7 +194,7 @@ class PlayerViewController: UIViewController {
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(playbackEnded), name: ISMSNotification_SongPlaybackEnded, object: nil)
         NotificationCenter.addObserver(onMainThread: self, selector: #selector(indexChanged), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
         
-        tapRecognizer.addTarget(self, action: #selector(hidePlayer))
+        tapRecognizer.addTarget(self, action: #selector(toggleZoom))
         coverArtView.addGestureRecognizer(tapRecognizer)
         
         swipeRecognizer.direction = .down
@@ -273,5 +303,65 @@ class PlayerViewController: UIViewController {
     
     @objc fileprivate func hidePlayer() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc fileprivate func toggleZoom() {
+        if isZoomed {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.formatLabel.alpha = 1.0
+                self.bitrateLabel.alpha = 1.0
+                
+                self.coverArtView.transform = .identity
+                self.titleLabel.transform = .identity
+                self.artistLabel.transform = .identity
+                self.prevButton.transform = .identity
+                self.playButton.transform = .identity
+                self.nextButton.transform = .identity
+            }, completion: { _ in
+                let screenScale = UIScreen.main.scale
+                self.coverArtView.contentScaleFactor = screenScale
+                self.titleLabel.contentScaleFactor = screenScale
+                self.artistLabel.contentScaleFactor = screenScale
+                self.prevButton.titleLabel?.contentScaleFactor = screenScale
+                self.playButton.titleLabel?.contentScaleFactor = screenScale
+                self.nextButton.titleLabel?.contentScaleFactor = screenScale
+            })
+        } else {
+            UIView.animate(withDuration: 0.3) {
+                self.formatLabel.alpha = 0.0
+                self.bitrateLabel.alpha = 0.0
+                
+                var coverTransform = self.coverArtView.transform.scaledBy(x: 1.2, y: 1.2)
+                coverTransform = coverTransform.translatedBy(x: 0, y: -10)
+                self.coverArtView.transform = coverTransform
+                self.coverArtView.contentScaleFactor *= 1.2
+                
+                var titleTransform = self.titleLabel.transform.scaledBy(x: 1.5, y: 1.5)
+                titleTransform = titleTransform.translatedBy(x: 0, y: -5)
+                self.titleLabel.transform = titleTransform
+                self.titleLabel.contentScaleFactor *= 1.5
+                
+                var artistTransform = self.artistLabel.transform.scaledBy(x: 1.5, y: 1.5)
+                artistTransform = artistTransform.translatedBy(x: 0, y: 5)
+                self.artistLabel.transform = artistTransform
+                self.artistLabel.contentScaleFactor *= 1.5
+                
+                var prevTransform = self.prevButton.transform.scaledBy(x: 1.5, y: 1.5)
+                prevTransform = prevTransform.translatedBy(x: -40, y: 20)
+                self.prevButton.transform = prevTransform
+                self.prevButton.titleLabel?.contentScaleFactor *= 1.5
+                
+                var playTransform = self.playButton.transform.scaledBy(x: 1.5, y: 1.5)
+                playTransform = playTransform.translatedBy(x: 0, y: 20)
+                self.playButton.transform = playTransform
+                self.playButton.titleLabel?.contentScaleFactor *= 1.5
+                
+                var nextTransform = self.nextButton.transform.scaledBy(x: 1.5, y: 1.5)
+                nextTransform = nextTransform.translatedBy(x: 40, y: 20)
+                self.nextButton.transform = nextTransform
+                self.nextButton.titleLabel?.contentScaleFactor *= 1.5
+            }
+        }
+        isZoomed = !isZoomed
     }
 }
