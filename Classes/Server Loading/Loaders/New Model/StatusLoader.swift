@@ -58,7 +58,7 @@ class StatusLoader: ApiLoader {
         {
             // This is not a Subsonic server, so fail
             Async.main {
-                self.failed(error: NSError(ismsCode: ISMSErrorCode_NotASubsonicServer))
+                self.failed(error: NSError(iSubCode: .notSubsonicServer))
             }
             return false
         }
@@ -68,11 +68,11 @@ class StatusLoader: ApiLoader {
         if let error = error as? NSError {
             if error.code == 40 {
                 // Incorrect credentials, so fail
-                super.failed(error: NSError(ismsCode: ISMSErrorCode_IncorrectCredentials))
+                super.failed(error: NSError(iSubCode: .invalidCredentials))
                 return
             } else if error.code == 60 {
                 // Subsonic trial ended
-                super.failed(error: NSError(ismsCode: ISMSErrorCode_SubsonicTrialOver))
+                super.failed(error: NSError(iSubCode: .subsonicTrialExpired))
                 return
             }
         }

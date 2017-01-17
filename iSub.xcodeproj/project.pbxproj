@@ -239,8 +239,6 @@
 		531B33C01E24CF8B00811187 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33391E24CF8B00811187 /* PlayQueue.swift */; };
 		531B33C11E24CF8B00811187 /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333B1E24CF8B00811187 /* SavedSettings.m */; };
 		531B33C21E24CF8B00811187 /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333B1E24CF8B00811187 /* SavedSettings.m */; };
-		531B33C91E24CF8B00811187 /* ISMSErrorDomain.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33441E24CF8B00811187 /* ISMSErrorDomain.m */; };
-		531B33CA1E24CF8B00811187 /* ISMSErrorDomain.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33441E24CF8B00811187 /* ISMSErrorDomain.m */; };
 		531B33CB1E24CF8B00811187 /* ISMSNotificationNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33461E24CF8B00811187 /* ISMSNotificationNames.m */; };
 		531B33CC1E24CF8B00811187 /* ISMSNotificationNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33461E24CF8B00811187 /* ISMSNotificationNames.m */; };
 		531B33D11E24CF8B00811187 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B334E1E24CF8B00811187 /* Utils.swift */; };
@@ -313,8 +311,6 @@
 		531B34551E24D28D00811187 /* FMDatabasePoolAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34531E24D28D00811187 /* FMDatabasePoolAdditions.m */; };
 		531B345A1E24D30500811187 /* NetworkStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34591E24D30500811187 /* NetworkStatus.swift */; };
 		531B345B1E24D30500811187 /* NetworkStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34591E24D30500811187 /* NetworkStatus.swift */; };
-		531B345E1E24D34C00811187 /* NSError+ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B345D1E24D34C00811187 /* NSError+ISMSError.m */; };
-		531B345F1E24D34C00811187 /* NSError+ISMSError.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B345D1E24D34C00811187 /* NSError+ISMSError.m */; };
 		531B34621E24D37300811187 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 531B34601E24D37300811187 /* sqlite3.c */; };
 		531B34631E24D37300811187 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 531B34601E24D37300811187 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B34651E24D3D500811187 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34641E24D3D500811187 /* Defines.swift */; };
@@ -378,6 +374,8 @@
 		5355BFAB1E2D9EE000C6D27F /* PlaylistRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA91E2D9EE000C6D27F /* PlaylistRepository.swift */; };
 		5355BFAD1E2DAA7300C6D27F /* UINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFAC1E2DAA7300C6D27F /* UINavigationBar.swift */; };
 		5355BFAE1E2DAA7300C6D27F /* UINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFAC1E2DAA7300C6D27F /* UINavigationBar.swift */; };
+		5355BFB01E2DB59D00C6D27F /* NSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFAF1E2DB59D00C6D27F /* NSError.swift */; };
+		5355BFB11E2DB59D00C6D27F /* NSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFAF1E2DB59D00C6D27F /* NSError.swift */; };
 		5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
 		5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
 		5358DBDC1E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
@@ -918,12 +916,8 @@
 		531B33391E24CF8B00811187 /* PlayQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueue.swift; sourceTree = "<group>"; };
 		531B333A1E24CF8B00811187 /* SavedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedSettings.h; sourceTree = "<group>"; };
 		531B333B1E24CF8B00811187 /* SavedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedSettings.m; sourceTree = "<group>"; };
-		531B33431E24CF8B00811187 /* ISMSErrorDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSErrorDomain.h; sourceTree = "<group>"; };
-		531B33441E24CF8B00811187 /* ISMSErrorDomain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSErrorDomain.m; sourceTree = "<group>"; };
 		531B33451E24CF8B00811187 /* ISMSNotificationNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSNotificationNames.h; sourceTree = "<group>"; };
 		531B33461E24CF8B00811187 /* ISMSNotificationNames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSNotificationNames.m; sourceTree = "<group>"; };
-		531B33481E24CF8B00811187 /* libSubImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libSubImports.h; sourceTree = "<group>"; };
-		531B334D1E24CF8B00811187 /* SUSErrorDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUSErrorDomain.h; sourceTree = "<group>"; };
 		531B334E1E24CF8B00811187 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITraitEnvironment.swift; sourceTree = "<group>"; };
 		531B33D41E24CFAF00811187 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
@@ -972,8 +966,6 @@
 		531B34521E24D28D00811187 /* FMDatabasePoolAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePoolAdditions.h; sourceTree = "<group>"; };
 		531B34531E24D28D00811187 /* FMDatabasePoolAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePoolAdditions.m; sourceTree = "<group>"; };
 		531B34591E24D30500811187 /* NetworkStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkStatus.swift; sourceTree = "<group>"; };
-		531B345C1E24D34C00811187 /* NSError+ISMSError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+ISMSError.h"; sourceTree = "<group>"; };
-		531B345D1E24D34C00811187 /* NSError+ISMSError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+ISMSError.m"; sourceTree = "<group>"; };
 		531B34601E24D37300811187 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
 		531B34611E24D37300811187 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		531B34641E24D3D500811187 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
@@ -1015,6 +1007,7 @@
 		5355BFA61E2D955C00C6D27F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		5355BFA91E2D9EE000C6D27F /* PlaylistRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistRepository.swift; sourceTree = "<group>"; };
 		5355BFAC1E2DAA7300C6D27F /* UINavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBar.swift; sourceTree = "<group>"; };
+		5355BFAF1E2DB59D00C6D27F /* NSError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSError.swift; sourceTree = "<group>"; };
 		5358DBD51E0B780E0024A0D4 /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
 		5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JASidePanelController.m; sourceTree = "<group>"; };
 		5358DBD71E0B780E0024A0D4 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
@@ -1655,10 +1648,9 @@
 				531B33D41E24CFAF00811187 /* UIView.swift */,
 				531B33D51E24CFAF00811187 /* URL.swift */,
 				5355BFAC1E2DAA7300C6D27F /* UINavigationBar.swift */,
-				531B345C1E24D34C00811187 /* NSError+ISMSError.h */,
-				531B345D1E24D34C00811187 /* NSError+ISMSError.m */,
 				53CFBB651E2AE203005895F4 /* RXMLElement.swift */,
 				53D959101E2C774200A1667F /* Error.swift */,
+				5355BFAF1E2DB59D00C6D27F /* NSError.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1735,12 +1727,8 @@
 			children = (
 				531B334E1E24CF8B00811187 /* Utils.swift */,
 				531B34641E24D3D500811187 /* Defines.swift */,
-				531B33431E24CF8B00811187 /* ISMSErrorDomain.h */,
-				531B33441E24CF8B00811187 /* ISMSErrorDomain.m */,
 				531B33451E24CF8B00811187 /* ISMSNotificationNames.h */,
 				531B33461E24CF8B00811187 /* ISMSNotificationNames.m */,
-				531B33481E24CF8B00811187 /* libSubImports.h */,
-				531B334D1E24CF8B00811187 /* SUSErrorDomain.h */,
 				531B34681E24D41300811187 /* Imports.h */,
 			);
 			path = "Supporting Files";
@@ -2769,7 +2757,6 @@
 				531B33591E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				533B69D81E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
-				531B345E1E24D34C00811187 /* NSError+ISMSError.m in Sources */,
 				531B337D1E24CF8B00811187 /* CacheQueueManager.swift in Sources */,
 				532862DB11C573AD00B40FF0 /* UAApplication.m in Sources */,
 				5355BFA41E2D81D900C6D27F /* AppDelegate.swift in Sources */,
@@ -2839,6 +2826,7 @@
 				53835CF71E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				531B338D1E24CF8B00811187 /* CachedAlbumLoader.swift in Sources */,
 				53835CA21E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
+				5355BFB01E2DB59D00C6D27F /* NSError.swift in Sources */,
 				531B33951E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
 				531B342B1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m in Sources */,
 				531B33531E24CF8B00811187 /* BassStream.m in Sources */,
@@ -2872,7 +2860,6 @@
 				53D59A831E1DCEAA00071ABD /* NSString+Clean.m in Sources */,
 				531B34181E24D12300811187 /* HelpTabViewController.m in Sources */,
 				5358DF7E1E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
-				531B33C91E24CF8B00811187 /* ISMSErrorDomain.m in Sources */,
 				531B33571E24CF8B00811187 /* BassEffectDAO.m in Sources */,
 				531B34651E24D3D500811187 /* Defines.swift in Sources */,
 				53835CED1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
@@ -3022,7 +3009,6 @@
 				531B335A1E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
-				531B345F1E24D34C00811187 /* NSError+ISMSError.m in Sources */,
 				531B337E1E24CF8B00811187 /* CacheQueueManager.swift in Sources */,
 				53BC27D6139AF0DD00A825F1 /* UAApplication.m in Sources */,
 				5355BFA51E2D81D900C6D27F /* AppDelegate.swift in Sources */,
@@ -3092,6 +3078,7 @@
 				53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */,
 				531B338E1E24CF8B00811187 /* CachedAlbumLoader.swift in Sources */,
 				53835CA41E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
+				5355BFB11E2DB59D00C6D27F /* NSError.swift in Sources */,
 				531B33961E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
 				531B342C1E24D1DA00811187 /* IDTwitterAccountChooserViewController.m in Sources */,
 				531B33541E24CF8B00811187 /* BassStream.m in Sources */,
@@ -3125,7 +3112,6 @@
 				53D59A851E1DCEAA00071ABD /* NSString+Clean.m in Sources */,
 				531B34191E24D12300811187 /* HelpTabViewController.m in Sources */,
 				5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
-				531B33CA1E24CF8B00811187 /* ISMSErrorDomain.m in Sources */,
 				531B33581E24CF8B00811187 /* BassEffectDAO.m in Sources */,
 				531B34661E24D3D500811187 /* Defines.swift in Sources */,
 				53835CEF1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,

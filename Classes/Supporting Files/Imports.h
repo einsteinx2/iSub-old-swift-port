@@ -9,7 +9,29 @@
 #ifndef iSub_Imports_h
 #define iSub_Imports_h
 
-#import "Defines.h"
-#import "libSubImports.h"
+#import "ISMSNotificationNames.h"
+
+// Frameworks
+#import "EX2Kit.h"
+#import "ZipKit.h"
+#import "CocoaLumberjack.h"
+#import "FMDatabasePoolAdditions.h"
+
+// Singletons
+#import "AudioEngine.h"
+#import "SavedSettings.h"
+#import "CacheSingleton.h"
+#import "LoadingScreen.h"
+
+// Other
+#import "BassEffectValue.h"
+#import "CLIColor.h"
+#import "DDAbstractDatabaseLogger.h"
+#import "DDContextFilterLogFormatter.h"
+#import "DDDispatchQueueLogFormatter.h"
+#import "DDLog+LOGV.h"
+#import "DDMultiFormatter.h"
+#import "sqlite3.h"
+#import "RXMLElement.h"
 
 #endif

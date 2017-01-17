@@ -177,7 +177,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
         } else {
             var message = ""
             var textField: UITextField?
-            if let error = error, error.code == ISMSErrorCode_IncorrectCredentials {
+            if let error = error, error.domain == iSubErrorDomain, error.code == iSubErrorCode.invalidCredentials.rawValue {
                 message = "Either your username or password is incorrect. Please try again"
                 textField = usernameField
             } else {

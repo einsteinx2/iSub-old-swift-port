@@ -39,7 +39,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         segmentedControl.autoresizingMask = .flexibleWidth
         segmentedControl.addTarget(self, action: #selector(ServerListViewController.segmentAction), for: .valueChanged)
         segmentedControl.frame = CGRect(x: 5, y: 2, width: 310, height: 36)
-        segmentedControl.tintColor = [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:206.0/255.0 alpha:1]
+        segmentedControl.tintColor = UIColor(red: 200.0/255.0, green: 200.0/255.0, blue: 206.0/255.0, alpha: 1)
         segmentedControl.selectedSegmentIndex = 0;
         headerView.addSubview(self.segmentedControl)
         
@@ -273,7 +273,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
     
     public func loadingFailed(_ loader: ApiLoader, withError error: Error?) {
         var message: String
-        if let error = error as? NSError, error.code == ISMSErrorCode_IncorrectCredentials {
+        if let error = error, error.domain == iSubErrorDomain, error.code == iSubErrorCode.invalidCredentials.rawValue {
             message = "Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆"
         } else {
             message = "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆"

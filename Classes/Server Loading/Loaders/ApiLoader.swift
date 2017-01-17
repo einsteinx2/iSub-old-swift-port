@@ -178,7 +178,7 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
         } else {
             guard let root = RXMLElement(fromXMLData: receivedData), root.isValid else {
                 Async.main {
-                    self.failed(error: NSError(ismsCode: ISMSErrorCode_NotXML))
+                    self.failed(error: NSError(iSubCode: .notXML))
                 }
                 return
             }
@@ -186,7 +186,7 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
             if let error = root.child("error"), error.isValid {
                 let code = error.attribute("code") ?? "-1"
                 let message = error.attribute("message") ?? ""
-                let error = NSError(domain: SUSErrorDomain, code: Int(code) ?? -1, userInfo: [NSLocalizedDescriptionKey: message])
+                let error = NSError(domain: SubsonicErrorDomain, code: Int(code) ?? -1, userInfo: [NSLocalizedDescriptionKey: message])
                 Async.main {
                     self.failed(error: error)
                 }
