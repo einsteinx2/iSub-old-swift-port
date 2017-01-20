@@ -83,9 +83,9 @@ import Nuke
     var previousSong: Song? { return playlist.song(atIndex: previousIndex) }
     var nextSong: Song? { return playlist.song(atIndex: nextIndex) }
     var songCount: Int { return playlist.songCount }
-    var isPlaying: Bool { return audioEngine.isPlaying() }
-    var isStarted: Bool { return audioEngine.isStarted() }
-    var currentSongProgress: Double { return audioEngine.progress() }
+    var isPlaying: Bool { return audioEngine.isPlaying }
+    var isStarted: Bool { return audioEngine.isStarted }
+    var currentSongProgress: Double { return audioEngine.progress }
     var playlist: Playlist { return Playlist.playQueue }
     var songs: [Song] {
         // TODO: Figure out what to do about the way playlist models hold songs and how we regenerate the model in this class
@@ -94,7 +94,7 @@ import Nuke
         return playlist.songs
     }
     
-    fileprivate var audioEngine: AudioEngine { return AudioEngine.si() }
+    fileprivate var audioEngine: AudioEngine { return AudioEngine.si }
     
     override init() {
         super.init()
@@ -228,7 +228,7 @@ import Nuke
     }
 
     func playPreviousSong() {
-        if audioEngine.progress() > 10.0 {
+        if audioEngine.progress > 10.0 {
             // Past 10 seconds in the song, so restart playback instead of changing songs
             playSong(atIndex: self.currentIndex)
         } else {
@@ -258,7 +258,7 @@ import Nuke
     }
     
     fileprivate var startSongDelayTimer: DispatchSourceTimer?
-    func startSong(byteOffset: Int = 0) {
+    func startSong(byteOffset: Int64 = 0) {
         if let startSongDelayTimer = startSongDelayTimer {
             startSongDelayTimer.cancel()
             self.startSongDelayTimer = nil
@@ -278,7 +278,7 @@ import Nuke
         }
     }
     
-    fileprivate func startSongDelayed(byteOffset: Int) {
+    fileprivate func startSongDelayed(byteOffset: Int64) {
         // Destroy the streamer to start a new song
         audioEngine.stop()
         
@@ -289,16 +289,16 @@ import Nuke
             // Check to see if the song is already cached
             if currentSong.isFullyCached {
                 // The song is fully cached, start streaming from the local copy
-                audioEngine.start(currentSong, index: currentIndex, byteOffset: byteOffset)
+                audioEngine.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
             } else {
                 if let currentSong = CacheQueueManager.si.currentSong, currentSong.isEqual(currentSong) {
                     // If the Cache Queue is downloading it and it's ready for playback, start the player
                     if CacheQueueManager.si.streamHandler?.isReadyForPlayback == true {
-                        audioEngine.start(currentSong, index: currentIndex, byteOffset: byteOffset)
+                        audioEngine.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
                     }
                 } else {
                     if StreamManager.si.streamHandler?.isReadyForPlayback == true {
-                        audioEngine.start(currentSong, index: currentIndex, byteOffset: byteOffset)
+                        audioEngine.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
                     }
                 }
             }
@@ -333,7 +333,7 @@ import Nuke
                 }
                 trackInfo[MPNowPlayingInfoPropertyPlaybackQueueIndex] = currentIndex as AnyObject?
                 trackInfo[MPNowPlayingInfoPropertyPlaybackQueueCount] = songCount as AnyObject?
-                trackInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioEngine.progress() as AnyObject?
+                trackInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioEngine.progress as AnyObject?
                 trackInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0 as AnyObject?
                 
                 trackInfo[MPMediaItemPropertyArtwork] = defaultItemArtwork
@@ -398,7 +398,7 @@ extension PlayQueue: BassGaplessPlayerDelegate {
         updateLockScreenInfo()
     }
     
-    public func bassRetrySongAtOffset(inBytes bytes: Int, player: BassGaplessPlayer) {
+    public func bassRetrySongAtOffset(inBytes bytes: Int64, player: BassGaplessPlayer) {
         startSong(byteOffset: bytes)
     }
     

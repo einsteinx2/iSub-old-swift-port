@@ -143,13 +143,7 @@ void CALLBACK MyFileCloseProc(void *user)
 		// Tell the read wait loop to break in case it's waiting
 		userInfo.shouldBreakWaitLoop = YES;
 		userInfo.shouldBreakWaitLoopForever = YES;
-		
-		// Close the file handle
-		if (userInfo.fileHandle)
-        {
-			[userInfo.fileHandle closeFile];
-            userInfo.fileHandle = nil;
-        }
+		[userInfo.fileHandle closeFile];
 	}
 }
 
@@ -720,11 +714,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	if (aSong.fileExists)
 	{	
 		// Create the user info object for the stream
-		BassStream *userInfo = [[BassStream alloc] init];
-		userInfo.song = aSong;
-		userInfo.writePath = aSong.currentPath;
-		userInfo.isTempCached = aSong.isTempCached;
-		userInfo.fileHandle = [NSFileHandle fileHandleForReadingAtPath:userInfo.writePath];
+        BassStream *userInfo = [[BassStream alloc] initWithSong: aSong];
 		if (!userInfo.fileHandle)
 		{
 			// File failed to open
@@ -782,7 +772,7 @@ DWORD CALLBACK MyStreamProc(HSTREAM handle, void *buffer, DWORD length, void *us
 	return nil;
 }
 
-- (void)startSong:(Song *)aSong atIndex:(NSInteger)index byteOffset:(NSInteger)byteOffset
+- (void)startSong:(Song *)aSong atIndex:(NSInteger)index byteOffset:(long long)byteOffset
 {
     if (!aSong)
         return;

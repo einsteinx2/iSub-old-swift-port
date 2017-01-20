@@ -85,7 +85,7 @@ extension Song: Item {
     var localFileSize: Int64 {
         if fileExists {
             let attributes = try? FileManager.default.attributesOfItem(atPath: currentPath)
-            return attributes?[.size] as? Int64 ?? Int64(0)
+            return attributes?[.size] as? Int64 ?? 0
         }
         return 0
     }

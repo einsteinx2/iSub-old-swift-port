@@ -14,7 +14,7 @@
 {
     NSUserDefaults *_userDefaults;
     
-    NSInteger _currentServerId;
+    long long _currentServerId;
     Server *_currentServer;
     
     // State Saving
@@ -224,7 +224,7 @@
     {
         _currentServer = [Server serverWithServerId: currentServerId];
         _currentServerId = _currentServer.serverId;
-        [_userDefaults setInteger:_currentServerId forKey:@"currentServerId"];
+        [_userDefaults setObject:@(_currentServerId) forKey:@"currentServerId"];
         [_userDefaults synchronize];
     }
 }

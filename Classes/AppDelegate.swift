@@ -41,7 +41,7 @@ import Async
         // Perfect example of why using singletons is bad practice!
         SavedSettings.si().setup()
         DatabaseSingleton.si.setup()
-        AudioEngine.si().setup()
+        AudioEngine.si.setup()
         CacheSingleton.si().setup()
         
         #if DebugBuild

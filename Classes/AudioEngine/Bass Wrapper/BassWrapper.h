@@ -17,8 +17,8 @@
 #import "bassopus.h"
 #import "basswv.h"
 #import <AudioToolbox/AudioToolbox.h>
-#import "BassStream.h"
 
+@class BassStream;
 @interface BassWrapper : NSObject
 
 + (NSInteger)bassOutputBufferLengthMillis;

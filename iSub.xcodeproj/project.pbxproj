@@ -158,12 +158,8 @@
 		5315A3F2156F7064001B0268 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
 		5315A3F6156F7064001B0268 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
 		53191DF01167CFDC00E1C08A /* current-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 53191DEF1167CFDC00E1C08A /* current-server.png */; };
-		531B334F1E24CF8B00811187 /* AudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32D31E24CF8A00811187 /* AudioEngine.m */; };
-		531B33501E24CF8B00811187 /* AudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32D31E24CF8A00811187 /* AudioEngine.m */; };
 		531B33511E24CF8B00811187 /* BassGaplessPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32D61E24CF8A00811187 /* BassGaplessPlayer.m */; };
 		531B33521E24CF8B00811187 /* BassGaplessPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32D61E24CF8A00811187 /* BassGaplessPlayer.m */; };
-		531B33531E24CF8B00811187 /* BassStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32D91E24CF8A00811187 /* BassStream.m */; };
-		531B33541E24CF8B00811187 /* BassStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32D91E24CF8A00811187 /* BassStream.m */; };
 		531B33551E24CF8B00811187 /* BassWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DB1E24CF8A00811187 /* BassWrapper.m */; };
 		531B33561E24CF8B00811187 /* BassWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DB1E24CF8A00811187 /* BassWrapper.m */; };
 		531B33571E24CF8B00811187 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DE1E24CF8A00811187 /* BassEffectDAO.m */; };
@@ -358,6 +354,10 @@
 		5349AD061613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
 		5349DF87161E408A0044A781 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		534E443F1155AD01000B4134 /* default-album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 534E443E1155AD01000B4134 /* default-album-art-small.png */; };
+		534FACEB1E3199D000BF12D9 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FACEA1E3199D000BF12D9 /* AudioEngine.swift */; };
+		534FACEC1E3199D000BF12D9 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FACEA1E3199D000BF12D9 /* AudioEngine.swift */; };
+		534FACEE1E328D3200BF12D9 /* BassStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FACED1E328D3200BF12D9 /* BassStream.swift */; };
+		534FACEF1E328D3200BF12D9 /* BassStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FACED1E328D3200BF12D9 /* BassStream.swift */; };
 		53544D8A1187DED400B63DB9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
 		5354914B11B03FC900928E0F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
 		5355BFA11E2D671C00C6D27F /* StreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA01E2D671C00C6D27F /* StreamManager.swift */; };
@@ -862,13 +862,9 @@
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5315A405156F7064001B0268 /* iSub Unit Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Unit Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
-		531B32D21E24CF8A00811187 /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
-		531B32D31E24CF8A00811187 /* AudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioEngine.m; sourceTree = "<group>"; };
 		531B32D51E24CF8A00811187 /* BassGaplessPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassGaplessPlayer.h; sourceTree = "<group>"; };
 		531B32D61E24CF8A00811187 /* BassGaplessPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassGaplessPlayer.m; sourceTree = "<group>"; };
 		531B32D71E24CF8A00811187 /* BassGaplessPlayerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassGaplessPlayerDelegate.h; sourceTree = "<group>"; };
-		531B32D81E24CF8A00811187 /* BassStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassStream.h; sourceTree = "<group>"; };
-		531B32D91E24CF8A00811187 /* BassStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassStream.m; sourceTree = "<group>"; };
 		531B32DA1E24CF8A00811187 /* BassWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassWrapper.h; sourceTree = "<group>"; };
 		531B32DB1E24CF8A00811187 /* BassWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassWrapper.m; sourceTree = "<group>"; };
 		531B32DD1E24CF8A00811187 /* BassEffectDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectDAO.h; sourceTree = "<group>"; };
@@ -995,6 +991,8 @@
 		53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = BassEffectDefaultPresets.plist; path = Other/BassEffectDefaultPresets.plist; sourceTree = "<group>"; };
 		5349AD031613724D003603AF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Images/Other/Default-568h@2x.png"; sourceTree = "<group>"; };
 		534E443E1155AD01000B4134 /* default-album-art-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small.png"; path = "Images/Other/default-album-art-small.png"; sourceTree = "<group>"; };
+		534FACEA1E3199D000BF12D9 /* AudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
+		534FACED1E328D3200BF12D9 /* BassStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BassStream.swift; sourceTree = "<group>"; };
 		53544D891187DED400B63DB9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5354914A11B03FC900928E0F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		5355BFA01E2D671C00C6D27F /* StreamManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamManager.swift; sourceTree = "<group>"; };
@@ -1574,8 +1572,7 @@
 		531B32D11E24CF8A00811187 /* AudioEngine */ = {
 			isa = PBXGroup;
 			children = (
-				531B32D21E24CF8A00811187 /* AudioEngine.h */,
-				531B32D31E24CF8A00811187 /* AudioEngine.m */,
+				534FACEA1E3199D000BF12D9 /* AudioEngine.swift */,
 				531B32D41E24CF8A00811187 /* Bass Wrapper */,
 				531B32DC1E24CF8A00811187 /* Equalizer */,
 				531B32E51E24CF8A00811187 /* Visualizer */,
@@ -1589,8 +1586,7 @@
 				531B32D51E24CF8A00811187 /* BassGaplessPlayer.h */,
 				531B32D61E24CF8A00811187 /* BassGaplessPlayer.m */,
 				531B32D71E24CF8A00811187 /* BassGaplessPlayerDelegate.h */,
-				531B32D81E24CF8A00811187 /* BassStream.h */,
-				531B32D91E24CF8A00811187 /* BassStream.m */,
+				534FACED1E328D3200BF12D9 /* BassStream.swift */,
 				531B32DA1E24CF8A00811187 /* BassWrapper.h */,
 				531B32DB1E24CF8A00811187 /* BassWrapper.m */,
 			);
@@ -2730,6 +2726,7 @@
 				531B33F21E24D0B600811187 /* DraggableTableViewController.swift in Sources */,
 				5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				530D5A131E2C047500C9ED43 /* Song.swift in Sources */,
+				534FACEE1E328D3200BF12D9 /* BassStream.swift in Sources */,
 				53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				53D959141E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */,
 				530F04AF1E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
@@ -2814,6 +2811,7 @@
 				53835C981E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				531B33A71E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
 				53D59A7C1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
+				534FACEB1E3199D000BF12D9 /* AudioEngine.swift in Sources */,
 				531B33511E24CF8B00811187 /* BassGaplessPlayer.m in Sources */,
 				531B33731E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FC1E24D0B600811187 /* CacheViewController.swift in Sources */,
@@ -2823,7 +2821,6 @@
 				53835CA21E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
 				5355BFB01E2DB59D00C6D27F /* NSError.swift in Sources */,
 				531B33951E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
-				531B33531E24CF8B00811187 /* BassStream.m in Sources */,
 				531B33A51E24CF8B00811187 /* RootArtistsLoader.swift in Sources */,
 				53F107A21E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
 				531B33AB1E24CF8B00811187 /* StatusLoader.swift in Sources */,
@@ -2849,7 +2846,6 @@
 				53CFBB721E2B164F005895F4 /* Artist.swift in Sources */,
 				531B34201E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCA1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
-				531B334F1E24CF8B00811187 /* AudioEngine.m in Sources */,
 				5358DF9C1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				53D59A831E1DCEAA00071ABD /* NSString+Clean.m in Sources */,
 				531B34181E24D12300811187 /* HelpTabViewController.m in Sources */,
@@ -2981,6 +2977,7 @@
 				531B33F31E24D0B600811187 /* DraggableTableViewController.swift in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				530D5A141E2C047500C9ED43 /* Song.swift in Sources */,
+				534FACEF1E328D3200BF12D9 /* BassStream.swift in Sources */,
 				53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				53D959151E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */,
 				530F04B01E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
@@ -3065,6 +3062,7 @@
 				53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				531B33A81E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
 				53D59A7E1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
+				534FACEC1E3199D000BF12D9 /* AudioEngine.swift in Sources */,
 				531B33521E24CF8B00811187 /* BassGaplessPlayer.m in Sources */,
 				531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FD1E24D0B600811187 /* CacheViewController.swift in Sources */,
@@ -3074,7 +3072,6 @@
 				53835CA41E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
 				5355BFB11E2DB59D00C6D27F /* NSError.swift in Sources */,
 				531B33961E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
-				531B33541E24CF8B00811187 /* BassStream.m in Sources */,
 				531B33A61E24CF8B00811187 /* RootArtistsLoader.swift in Sources */,
 				53F107A31E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
 				531B33AC1E24CF8B00811187 /* StatusLoader.swift in Sources */,
@@ -3100,7 +3097,6 @@
 				53CFBB731E2B164F005895F4 /* Artist.swift in Sources */,
 				531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
-				531B33501E24CF8B00811187 /* AudioEngine.m in Sources */,
 				5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				53D59A851E1DCEAA00071ABD /* NSString+Clean.m in Sources */,
 				531B34191E24D12300811187 /* HelpTabViewController.m in Sources */,

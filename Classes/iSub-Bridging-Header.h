@@ -15,3 +15,11 @@
 #import "RXMLElement.h"
 #import "BCCKeychain.h"
 #import "INTUAnimationEngine.h"
+
+#import "bass.h"
+#import "bass_fx.h"
+#import "bassmix.h"
+#import "BassWrapper.h"
+#import "BassEqualizer.h"
+#import "BassVisualizer.h"
+#import "BassGaplessPlayer.h"

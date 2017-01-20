@@ -11,12 +11,11 @@
 #import "bassmix.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "BassWrapper.h"
-#import "BassStream.h"
 #import "BassEqualizer.h"
 #import "BassVisualizer.h"
 #import "BassGaplessPlayerDelegate.h"
 
-@class EX2RingBuffer, SUSRegisterActionLoader;
+@class EX2RingBuffer, SUSRegisterActionLoader, BassStream;
 @interface BassGaplessPlayer : NSObject
 
 @property (weak) id<BassGaplessPlayerDelegate> delegate;
@@ -53,7 +52,7 @@
 // BASS methods
 //
 - (DWORD)bassGetOutputData:(void *)buffer length:(DWORD)length;
-- (void)startSong:(Song *)aSong atIndex:(NSInteger)index byteOffset:(NSInteger)byteOffset;
+- (void)startSong:(Song *)aSong atIndex:(NSInteger)index byteOffset:(long long)byteOffset;
 
 + (NSInteger)bytesToBufferForKiloBitrate:(NSInteger)rate speedInBytesPerSec:(NSInteger)speedInBytesPerSec;
 

@@ -10,6 +10,7 @@
 #import "BassEffectValue.h"
 #import "BassParamEqValue.h"
 #import "Imports.h"
+#import "iSub-Swift.h"
 
 @implementation BassEffectDAO
 

@@ -9,6 +9,7 @@
 #import "BassWrapper.h"
 #import "Imports.h"
 #import "iSub-Swift.h"
+#import <AVFoundation/AVFoundation.h>
 
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
