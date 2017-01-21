@@ -168,8 +168,6 @@
 		531B335C1E24CF8B00811187 /* BassEqualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E21E24CF8A00811187 /* BassEqualizer.m */; };
 		531B335D1E24CF8B00811187 /* BassParamEqValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E41E24CF8A00811187 /* BassParamEqValue.m */; };
 		531B335E1E24CF8B00811187 /* BassParamEqValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E41E24CF8A00811187 /* BassParamEqValue.m */; };
-		531B335F1E24CF8B00811187 /* BassVisualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E71E24CF8A00811187 /* BassVisualizer.m */; };
-		531B33601E24CF8B00811187 /* BassVisualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E71E24CF8A00811187 /* BassVisualizer.m */; };
 		531B33611E24CF8B00811187 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E91E24CF8A00811187 /* CachedImage.swift */; };
 		531B33621E24CF8B00811187 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E91E24CF8A00811187 /* CachedImage.swift */; };
 		531B33711E24CF8B00811187 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FB1E24CF8A00811187 /* Playlist.swift */; };
@@ -515,6 +513,8 @@
 		537FB2FA1E33065E001D3FBB /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F81E33065E001D3FBB /* ObjC.m */; };
 		537FB2FC1E33E435001D3FBB /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */; };
 		537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */; };
+		537FB2FF1E33EEC1001D3FBB /* BassVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */; };
+		537FB3001E33EEC1001D3FBB /* BassVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */; };
 		537FCC5412F8F7F400F1D996 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 537FCC5312F8F7F400F1D996 /* iTunesArtwork */; };
 		53835C981E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */; };
 		53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */; };
@@ -872,8 +872,6 @@
 		531B32E21E24CF8A00811187 /* BassEqualizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEqualizer.m; sourceTree = "<group>"; };
 		531B32E31E24CF8A00811187 /* BassParamEqValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassParamEqValue.h; sourceTree = "<group>"; };
 		531B32E41E24CF8A00811187 /* BassParamEqValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassParamEqValue.m; sourceTree = "<group>"; };
-		531B32E61E24CF8A00811187 /* BassVisualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassVisualizer.h; sourceTree = "<group>"; };
-		531B32E71E24CF8A00811187 /* BassVisualizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassVisualizer.m; sourceTree = "<group>"; };
 		531B32E91E24CF8A00811187 /* CachedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImage.swift; sourceTree = "<group>"; };
 		531B32FB1E24CF8A00811187 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		531B32FC1E24CF8A00811187 /* SectionIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionIndex.swift; sourceTree = "<group>"; };
@@ -1079,6 +1077,7 @@
 		537FB2F71E33065E001D3FBB /* ObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		537FB2F81E33065E001D3FBB /* ObjC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
 		537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
+		537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassVisualizer.swift; path = ../Visualizer/BassVisualizer.swift; sourceTree = "<group>"; };
 		537FCC5312F8F7F400F1D996 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = "Images/App Icons/iTunesArtwork"; sourceTree = "<group>"; };
 		53835C6F1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GMAppleDouble+ZKAdditions.h"; sourceTree = "<group>"; };
 		53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GMAppleDouble+ZKAdditions.m"; sourceTree = "<group>"; };
@@ -1580,10 +1579,11 @@
 		531B32D41E24CF8A00811187 /* Bass Wrapper */ = {
 			isa = PBXGroup;
 			children = (
-				537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */,
-				534FACED1E328D3200BF12D9 /* BassStream.swift */,
 				531B32DA1E24CF8A00811187 /* BassWrapper.h */,
 				531B32DB1E24CF8A00811187 /* BassWrapper.m */,
+				537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */,
+				534FACED1E328D3200BF12D9 /* BassStream.swift */,
+				537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */,
 			);
 			path = "Bass Wrapper";
 			sourceTree = "<group>";
@@ -1606,8 +1606,6 @@
 		531B32E51E24CF8A00811187 /* Visualizer */ = {
 			isa = PBXGroup;
 			children = (
-				531B32E61E24CF8A00811187 /* BassVisualizer.h */,
-				531B32E71E24CF8A00811187 /* BassVisualizer.m */,
 			);
 			path = Visualizer;
 			sourceTree = "<group>";
@@ -2731,6 +2729,7 @@
 				531B34441E24D24600811187 /* FMDatabaseAdditions.m in Sources */,
 				53835CD91E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358DF791E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
+				537FB2FF1E33EEC1001D3FBB /* BassVisualizer.swift in Sources */,
 				53CFBB751E2B1E3B005895F4 /* Folder.swift in Sources */,
 				531B34481E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				531B339D1E24CF8B00811187 /* FolderLoader.swift in Sources */,
@@ -2794,7 +2793,6 @@
 				53D59A861E1DCEAA00071ABD /* NSString+MD5.m in Sources */,
 				531B33F01E24D0B600811187 /* DraggableTableView.swift in Sources */,
 				5358DBDE1E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
-				531B335F1E24CF8B00811187 /* BassVisualizer.m in Sources */,
 				531B341E1E24D12300811187 /* ServerListViewController.swift in Sources */,
 				53835CAC1E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
 				5358DFA11E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
@@ -2982,6 +2980,7 @@
 				531B34451E24D24600811187 /* FMDatabaseAdditions.m in Sources */,
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358DF7B1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
+				537FB3001E33EEC1001D3FBB /* BassVisualizer.swift in Sources */,
 				53CFBB761E2B1E3B005895F4 /* Folder.swift in Sources */,
 				531B34491E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				531B339E1E24CF8B00811187 /* FolderLoader.swift in Sources */,
@@ -3045,7 +3044,6 @@
 				53D59A881E1DCEAA00071ABD /* NSString+MD5.m in Sources */,
 				531B33F11E24D0B600811187 /* DraggableTableView.swift in Sources */,
 				5358DBE01E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
-				531B33601E24CF8B00811187 /* BassVisualizer.m in Sources */,
 				531B341F1E24D12300811187 /* ServerListViewController.swift in Sources */,
 				53835CAE1E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
 				5358DFA31E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,

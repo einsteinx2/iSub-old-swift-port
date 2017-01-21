@@ -21,6 +21,5 @@
 #import "bassmix.h"
 #import "BassWrapper.h"
 #import "BassEqualizer.h"
-#import "BassVisualizer.h"
 
 #import "ObjC.h"
