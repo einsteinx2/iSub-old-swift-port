@@ -20,176 +20,6 @@ fileprivate let defaultSampleRate = 44100
 fileprivate let retryDelay = 2.0
 fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
 
-func closeProc(userInfo: UnsafeMutableRawPointer?) {
-    guard let userInfo = userInfo else {
-        return
-    }
-
-    autoreleasepool {
-        // Get the user info object
-        let bassStream: BassStream = bridge(ptr: userInfo)
-        
-        // Tell the read wait loop to break in case it's waiting
-        bassStream.shouldBreakWaitLoop = true
-        bassStream.shouldBreakWaitLoopForever = true
-        
-        do {
-            try ObjC.catchException {
-                bassStream.fileHandle.closeFile()
-            }
-        } catch {
-            printError(error)
-        }
-    }
-}
-
-func lengthProc(userInfo: UnsafeMutableRawPointer?) -> UInt64 {
-    guard let userInfo = userInfo else {
-        return 0
-    }
-    
-    var length: Int64 = 0
-    autoreleasepool {
-        let bassStream: BassStream = bridge(ptr: userInfo)
-        if bassStream.shouldBreakWaitLoopForever {
-            length = 0
-        } else if bassStream.song.isFullyCached || bassStream.isTempCached {
-            // Return actual file size on disk
-            length = bassStream.song.localFileSize
-        } else {
-            // Return server reported file size
-            length = bassStream.song.size
-        }
-    }
-    
-    return UInt64(length)
-}
-
-func readProc(buffer: UnsafeMutableRawPointer?, length: UInt32, userInfo: UnsafeMutableRawPointer?) -> UInt32 {
-    guard let buffer = buffer, let userInfo = userInfo else {
-        return 0
-    }
-    
-    let bufferPointer = UnsafeMutableBufferPointer(start: buffer.assumingMemoryBound(to: UInt8.self), count: Int(length))
-    var bytesRead: UInt32 = 0
-    autoreleasepool {
-        let bassStream: BassStream = bridge(ptr: userInfo)
-        
-        // Read from the file
-        var readData = Data()
-        do {
-            try ObjC.catchException {
-                readData = bassStream.fileHandle.readData(ofLength: Int(length))
-            }
-        } catch {
-            printError(error)
-        }
-        
-        bytesRead = UInt32(readData.count)
-        if bytesRead > 0 {
-            // Copy the data to the buffer
-            bytesRead = UInt32(readData.copyBytes(to: bufferPointer))
-        }
-        
-        if bytesRead < length && bassStream.isSongStarted && !bassStream.wasFileJustUnderrun {
-            bassStream.isFileUnderrun = true
-        }
-        
-        bassStream.wasFileJustUnderrun = false
-    }
-    
-    return bytesRead
-}
-
-func seekProc(offset: UInt64, userInfo: UnsafeMutableRawPointer?) -> ObjCBool {
-    guard let userInfo = userInfo else {
-        return false
-    }
-    
-    var success = false
-    autoreleasepool {
-        // Seek to the requested offset (returns false if data not downloaded that far)
-        let userInfo: BassStream = bridge(ptr: userInfo)
-        
-        // First check the file size to make sure we don't try and skip past the end of the file
-        if userInfo.song.localFileSize >= Int64(offset) {
-            // File size is valid, so assume success unless the seek operation throws an exception
-            success = true
-            do {
-                try ObjC.catchException {
-                    userInfo.fileHandle.seek(toFileOffset: offset)
-                }
-            } catch {
-                success = false
-            }
-        }
-    }
-    return ObjCBool(success)
-}
-
-var fileProcs = BASS_FILEPROCS(close: closeProc, length: lengthProc, read: readProc, seek: seekProc)
-
-func endSyncProc(handle: HSYNC, channel: UInt32, data: UInt32, userInfo: UnsafeMutableRawPointer?) {
-    guard let userInfo = userInfo else {
-        return
-    }
-    
-    // Make sure we're using the right device
-    BASS_SetDevice(deviceNumber)
-    
-    autoreleasepool {
-        // This must be done in the stream GCD queue because if we do it in this thread
-        // it will pause the audio output momentarily while it's loading the stream
-        let bassStream: BassStream = bridge(ptr: userInfo)
-        if let player = bassStream.player, let nextSong = player.nextSong {
-            player.streamQueue.async {
-                // Prepare the next song in the queue
-                let nextStream = player.prepareStream(forSong: nextSong)
-                if let nextStream = nextStream {
-                    player.bassStreams.append(nextStream)
-                    BASS_Mixer_StreamAddChannel(player.mixerStream, nextStream.stream, UInt32(BASS_MIXER_NORAMPIN))
-                } else {
-                    bassStream.isNextSongStreamFailed = true
-                }
-                
-                // Mark as ended and set the buffer space til end for the UI
-                bassStream.bufferSpaceTilSongEnd = player.ringBuffer.filledSpaceLength
-                bassStream.isEnded = true
-            }
-        }
-    }
-}
-
-func slideSyncProc(handle: HSYNC, channel: UInt32, data: UInt32, userInfo: UnsafeMutableRawPointer?) {
-    guard let userInfo = userInfo else {
-        return
-    }
-    
-    BASS_SetDevice(deviceNumber)
-    
-    autoreleasepool {
-        let player: BassGaplessPlayer = bridge(ptr: userInfo)
-        
-        var volumeLevel: Float = 0
-        let success = BASS_ChannelGetAttribute(player.outStream, UInt32(BASS_ATTRIB_VOL), &volumeLevel)
-        
-        if success && volumeLevel == 0.0 {
-            BASS_ChannelSlideAttribute(player.outStream, UInt32(BASS_ATTRIB_VOL), 1, 200)
-        }
-    }
-}
-
-func streamProc(handle: HSYNC, buffer: UnsafeMutableRawPointer?, length: UInt32, userInfo: UnsafeMutableRawPointer?) -> UInt32 {
-    var bytesRead: UInt32 = 0
-    if let userInfo = userInfo {
-        autoreleasepool {
-            let player: BassGaplessPlayer = bridge(ptr: userInfo)
-            bytesRead = player.bassGetOutputData(buffer: buffer, length: length)
-        }
-    }
-    return bytesRead
-}
-
 protocol BassGaplessPlayerDelegate {
     func bassSong(for index: Int, player: BassGaplessPlayer) -> Song?
     func bassIndex(atOffset offset: Int, from index: Int, player: BassGaplessPlayer) -> Int
@@ -628,6 +458,17 @@ protocol BassGaplessPlayerDelegate {
                 if let bassStream = self.prepareStream(forSong: song) {
                     self.mixerStream = BASS_Mixer_StreamCreate(UInt32(defaultSampleRate), 2, UInt32(BASS_STREAM_DECODE))
                     BASS_Mixer_StreamAddChannel(self.mixerStream, bassStream.stream, UInt32(BASS_MIXER_NORAMPIN));
+                    
+                    func streamProc(handle: HSYNC, buffer: UnsafeMutableRawPointer?, length: UInt32, userInfo: UnsafeMutableRawPointer?) -> UInt32 {
+                        var bytesRead: UInt32 = 0
+                        if let userInfo = userInfo {
+                            autoreleasepool {
+                                let player: BassGaplessPlayer = bridge(ptr: userInfo)
+                                bytesRead = player.bassGetOutputData(buffer: buffer, length: length)
+                            }
+                        }
+                        return bytesRead
+                    }
                     self.outStream = BASS_StreamCreate(UInt32(defaultSampleRate), 2, 0, streamProc, bridge(obj: self))
                     
                     self.ringBuffer.totalBytesDrained = 0
@@ -870,3 +711,167 @@ protocol BassGaplessPlayerDelegate {
         }
     }
 }
+
+// MARK: - File Procs -
+
+var fileProcs = BASS_FILEPROCS(close: closeProc, length: lengthProc, read: readProc, seek: seekProc)
+
+func closeProc(userInfo: UnsafeMutableRawPointer?) {
+    guard let userInfo = userInfo else {
+        return
+    }
+    
+    autoreleasepool {
+        // Get the user info object
+        let bassStream: BassStream = bridge(ptr: userInfo)
+        
+        // Tell the read wait loop to break in case it's waiting
+        bassStream.shouldBreakWaitLoop = true
+        bassStream.shouldBreakWaitLoopForever = true
+        
+        do {
+            try ObjC.catchException {
+                bassStream.fileHandle.closeFile()
+            }
+        } catch {
+            printError(error)
+        }
+    }
+}
+
+func lengthProc(userInfo: UnsafeMutableRawPointer?) -> UInt64 {
+    guard let userInfo = userInfo else {
+        return 0
+    }
+    
+    var length: Int64 = 0
+    autoreleasepool {
+        let bassStream: BassStream = bridge(ptr: userInfo)
+        if bassStream.shouldBreakWaitLoopForever {
+            length = 0
+        } else if bassStream.song.isFullyCached || bassStream.isTempCached {
+            // Return actual file size on disk
+            length = bassStream.song.localFileSize
+        } else {
+            // Return server reported file size
+            length = bassStream.song.size
+        }
+    }
+    
+    return UInt64(length)
+}
+
+func readProc(buffer: UnsafeMutableRawPointer?, length: UInt32, userInfo: UnsafeMutableRawPointer?) -> UInt32 {
+    guard let buffer = buffer, let userInfo = userInfo else {
+        return 0
+    }
+    
+    let bufferPointer = UnsafeMutableBufferPointer(start: buffer.assumingMemoryBound(to: UInt8.self), count: Int(length))
+    var bytesRead: UInt32 = 0
+    autoreleasepool {
+        let bassStream: BassStream = bridge(ptr: userInfo)
+        
+        // Read from the file
+        var readData = Data()
+        do {
+            try ObjC.catchException {
+                readData = bassStream.fileHandle.readData(ofLength: Int(length))
+            }
+        } catch {
+            printError(error)
+        }
+        
+        bytesRead = UInt32(readData.count)
+        if bytesRead > 0 {
+            // Copy the data to the buffer
+            bytesRead = UInt32(readData.copyBytes(to: bufferPointer))
+        }
+        
+        if bytesRead < length && bassStream.isSongStarted && !bassStream.wasFileJustUnderrun {
+            bassStream.isFileUnderrun = true
+        }
+        
+        bassStream.wasFileJustUnderrun = false
+    }
+    
+    return bytesRead
+}
+
+func seekProc(offset: UInt64, userInfo: UnsafeMutableRawPointer?) -> ObjCBool {
+    guard let userInfo = userInfo else {
+        return false
+    }
+    
+    var success = false
+    autoreleasepool {
+        // Seek to the requested offset (returns false if data not downloaded that far)
+        let userInfo: BassStream = bridge(ptr: userInfo)
+        
+        // First check the file size to make sure we don't try and skip past the end of the file
+        if userInfo.song.localFileSize >= Int64(offset) {
+            // File size is valid, so assume success unless the seek operation throws an exception
+            success = true
+            do {
+                try ObjC.catchException {
+                    userInfo.fileHandle.seek(toFileOffset: offset)
+                }
+            } catch {
+                success = false
+            }
+        }
+    }
+    return ObjCBool(success)
+}
+
+// MARK: - Sync Procs -
+
+func slideSyncProc(handle: HSYNC, channel: UInt32, data: UInt32, userInfo: UnsafeMutableRawPointer?) {
+    guard let userInfo = userInfo else {
+        return
+    }
+    
+    BASS_SetDevice(deviceNumber)
+    
+    autoreleasepool {
+        let player: BassGaplessPlayer = bridge(ptr: userInfo)
+        
+        var volumeLevel: Float = 0
+        let success = BASS_ChannelGetAttribute(player.outStream, UInt32(BASS_ATTRIB_VOL), &volumeLevel)
+        
+        if success && volumeLevel == 0.0 {
+            BASS_ChannelSlideAttribute(player.outStream, UInt32(BASS_ATTRIB_VOL), 1, 200)
+        }
+    }
+}
+
+func endSyncProc(handle: HSYNC, channel: UInt32, data: UInt32, userInfo: UnsafeMutableRawPointer?) {
+    guard let userInfo = userInfo else {
+        return
+    }
+    
+    // Make sure we're using the right device
+    BASS_SetDevice(deviceNumber)
+    
+    autoreleasepool {
+        // This must be done in the stream GCD queue because if we do it in this thread
+        // it will pause the audio output momentarily while it's loading the stream
+        let bassStream: BassStream = bridge(ptr: userInfo)
+        if let player = bassStream.player, let nextSong = player.nextSong {
+            player.streamQueue.async {
+                // Prepare the next song in the queue
+                let nextStream = player.prepareStream(forSong: nextSong)
+                if let nextStream = nextStream {
+                    player.bassStreams.append(nextStream)
+                    BASS_Mixer_StreamAddChannel(player.mixerStream, nextStream.stream, UInt32(BASS_MIXER_NORAMPIN))
+                } else {
+                    bassStream.isNextSongStreamFailed = true
+                }
+                
+                // Mark as ended and set the buffer space til end for the UI
+                bassStream.bufferSpaceTilSongEnd = player.ringBuffer.filledSpaceLength
+                bassStream.isEnded = true
+            }
+        }
+    }
+}
+
