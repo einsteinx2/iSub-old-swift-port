@@ -151,7 +151,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
         
     }];*/
 	
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CacheSizeChecked];
+	//[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_CacheSizeChecked];
 }
 
 - (void)checkCache

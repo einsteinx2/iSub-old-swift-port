@@ -8,13 +8,12 @@
 
 import Foundation
 import AVFoundation
+import Async
 
 @objc class AudioEngine: NSObject {
     static let si = AudioEngine()
-    
-    weak var delegate: BassGaplessPlayerDelegate?
-    
-    fileprivate(set) var player: BassGaplessPlayer?
+        
+    fileprivate(set) var player: BassGaplessPlayer!
     var equalizer: BassEqualizer? { return player?.equalizer }
     var visualizer: BassVisualizer? { return player?.visualizer }
     var isStarted: Bool { return player?.isStarted ?? false }
@@ -30,14 +29,14 @@ import AVFoundation
         do {
             let audioSession = AVAudioSession.sharedInstance()
             try audioSession.setActive(true)
-            NotificationCenter.addObserver(onMainThread: self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption.rawValue, object: audioSession)
-            NotificationCenter.addObserver(onMainThread: self, selector: #selector(routeChanged(_:)), name: NSNotification.Name.AVAudioSessionRouteChange.rawValue, object: audioSession)
+            NotificationCenter.addObserverOnMainThread(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: audioSession)
+            NotificationCenter.addObserverOnMainThread(self, selector: #selector(routeChanged(_:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: audioSession)
+            NotificationCenter.addObserverOnMainThread(self, selector: #selector(bassSongEnded), name: BassGaplessPlayer.Notifications.songEnded)
         } catch {
             printError(error)
         }
         
-        delegate = PlayQueue.si
-        startEmptyPlayer()
+        player = BassGaplessPlayer(delegate: self)
     }
     
     @objc fileprivate func handleInterruption(_ notification: Notification) {
@@ -66,18 +65,22 @@ import AVFoundation
         }
     }
     
-    func start(song: Song, index: Int, byteOffset: Int64 = 0) {
-        player?.stop()
-        player?.start(song, at: index, byteOffset: byteOffset)
-        let effect = BassEffectDAO(type: .parametricEQ)!
-        effect.selectPresetId(effect.selectedPresetId)
+    @objc fileprivate func bassSongEnded() {
+        // Increment current playlist index
+        PlayQueue.si.currentIndex = PlayQueue.si.nextIndex
+        
+        // Start preloading the next song
+        StreamManager.si.start()
+        
+        // TODO: Is this the best place for this?
+        //SocialSingleton.si().playerClearSocial()
     }
     
-    func startEmptyPlayer() {
+    func start(song: Song, index: Int, byteOffset: Int64 = 0) {
         player?.stop()
-        if player == nil {
-            player = BassGaplessPlayer(delegate: delegate)
-        }
+        player?.start(song: song, index: index, byteOffset: byteOffset)
+        let effect = BassEffectDAO(type: .parametricEQ)!
+        effect.selectPresetId(effect.selectedPresetId)
     }
     
     func play() {
@@ -97,14 +100,63 @@ import AVFoundation
     }
     
     func seek(bytes: Int64, fade: Bool = true) {
-        player?.seekToPosition(inBytes: UInt64(bytes), fadeVolume: fade)
+        player?.seek(bytes: Int64(bytes), fade: fade)
     }
     
     func seek(seconds: Double, fade: Bool = true) {
-        player?.seekToPosition(inSeconds: seconds, fadeVolume: fade)
+        player?.seek(seconds: seconds, fade: fade)
     }
     
     func seek(percent: Double, fade: Bool = true) {
-        player?.seekToPosition(inPercent: percent, fadeVolume: fade)
+        player?.seek(percent: percent, fade: fade)
+    }
+}
+
+extension AudioEngine: BassGaplessPlayerDelegate {
+    
+    func bassIndex(atOffset offset: Int, from index: Int, player: BassGaplessPlayer) -> Int {
+        return PlayQueue.si.indexAtOffset(offset, fromIndex: index)
+    }
+    
+    func bassSong(for index: Int, player: BassGaplessPlayer) -> Song? {
+        return PlayQueue.si.songAtIndex(index)
+    }
+    
+    func bassCurrentPlaylistIndex(_ player: BassGaplessPlayer) -> Int {
+        return PlayQueue.si.currentIndex
+    }
+    
+    func bassRetrySong(at index: Int, player: BassGaplessPlayer) {
+        Async.main {
+            PlayQueue.si.playSong(atIndex: index)
+        }
+    }
+    
+    func bassUpdateLockScreenInfo(_ player: BassGaplessPlayer) {
+        PlayQueue.si.updateLockScreenInfo()
+    }
+    
+    func bassRetrySongAtOffset(inBytes bytes: Int64, player: BassGaplessPlayer) {
+        PlayQueue.si.startSong(byteOffset: bytes)
+    }
+    
+    func bassFailedToCreateNextStream(for index: Int, player: BassGaplessPlayer) {
+        // The song ended, and we tried to make the next stream but it failed
+        if let song = PlayQueue.si.songAtIndex(index) {
+            if let handler = StreamManager.si.streamHandler, song == StreamManager.si.song {
+                if handler.isReadyForPlayback {
+                    // If the song is downloading and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
+                    Async.main {
+                        PlayQueue.si.playSong(atIndex: index)
+                    }
+                }
+            } else if song.isFullyCached {
+                Async.main {
+                    PlayQueue.si.playSong(atIndex: index)
+                }
+            } else {
+                StreamManager.si.start()
+            }
+        }
     }
 }

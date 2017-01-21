@@ -128,27 +128,28 @@ class ItemViewController: DraggableTableViewController {
     // MARK: - Notifications -
     
     fileprivate func registerForNotifications() {
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(currentPlaylistIndexChanged(_:)), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(songPlaybackStarted(_:)), name: ISMSNotification_SongPlaybackStarted, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(cachedSongDeleted(_:)), name: ISMSNotification_CachedSongDeleted, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(currentPlaylistIndexChanged(_:)), name: PlayQueue.Notifications.indexChanged)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPlaybackStarted(_:)), name: BassGaplessPlayer.Notifications.songStarted)
+        // TODO: Make a new notification for this
+        //NotificationCenter.addObserverOnMainThread(self, selector: #selector(cachedSongDeleted(_:)), name: ISMSNotification_CachedSongDeleted)
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled)
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(forceTouchDetectionBegan(_:)), name: DraggableTableView.Notifications.forceTouchDetectionBegan, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(forceTouchDetectionBegan(_:)), name: DraggableTableView.Notifications.forceTouchDetectionBegan)
     }
     
     fileprivate func unregisterForNotifications() {
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_SongPlaybackStarted, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_CachedSongDeleted, object: nil)
+        NotificationCenter.removeObserverOnMainThread(self, name: PlayQueue.Notifications.indexChanged)
+        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
+//        NotificationCenter.removeObserverOnMainThread(self, name: ISMSNotification_CachedSongDeleted)
         
-        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingBegan, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingEnded, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+        NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingBegan)
+        NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingEnded)
+        NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingCanceled)
         
-        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.forceTouchDetectionBegan, object: nil)
+        NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.forceTouchDetectionBegan)
     }
     
     @objc fileprivate func currentPlaylistIndexChanged(_ notification: Notification?) {

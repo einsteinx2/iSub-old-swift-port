@@ -12,6 +12,13 @@ import Async
 fileprivate let maxReconnects = 5
 
 class CacheQueueManager: NSObject, StreamHandlerDelegate {
+    struct Notifications {
+        static let started        = Notification.Name("CacheQueueManager_started")
+        static let stopped        = Notification.Name("CacheQueueManager_stopped")
+        static let songDownloaded = Notification.Name("CacheQueueManager_songDownloaded")
+        static let songFailed     = Notification.Name("CacheQueueManager_songFailed")
+    }
+    
     open static let si = CacheQueueManager()
     
     fileprivate(set) var isDownloading = false
@@ -79,7 +86,7 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
             streamHandler?.start()
         }
         
-        NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_CacheQueueStarted)
+        NotificationCenter.postOnMainThread(name: Notifications.started)
     }
     
     func stop() {
@@ -89,7 +96,7 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
         streamHandler = nil
         currentSong = nil
         
-        NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_CacheQueueStopped)
+        NotificationCenter.postOnMainThread(name: Notifications.stopped)
     }
     
     func resume() {
@@ -112,7 +119,7 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
     
     fileprivate func sendSongDownloadedNotification(song: Song) {
         let userInfo = ["songId": "\(song.songId)"]
-        NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_CacheQueueSongDownloaded, userInfo: userInfo)
+        NotificationCenter.postOnMainThread(name: Notifications.songDownloaded, userInfo: userInfo)
     }
     
     fileprivate func removeFile(forHandler handler: StreamHandler) {
@@ -206,7 +213,7 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
                 removeFromDownloadQueue(song: currentSong)
             }
             
-            NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_CacheQueueSongFailed)
+            NotificationCenter.postOnMainThread(name: Notifications.songFailed)
             
             start()
         }

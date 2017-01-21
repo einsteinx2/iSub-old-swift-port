@@ -63,10 +63,10 @@ class SidePanelController: JASidePanelController {
         self.rightPanel = PlayQueueViewController(viewModel: PlayQueueViewModel())
         menu.showDefaultViewController()
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled)
     }
     
     deinit {
@@ -120,7 +120,7 @@ class SidePanelController: JASidePanelController {
     }
     
     @objc fileprivate func draggingMoved(_ notification: Notification) {
-        if let location = notification.userInfo?[DraggableTableView.Notifications.locationKey] as? NSValue {
+        if let location = notification.userInfo?[DraggableTableView.Notifications.Keys.location] as? NSValue {
             let point = location.cgPointValue
             
             if point.x > self.view.frame.width - 50 && self.state != JASidePanelRightVisible {

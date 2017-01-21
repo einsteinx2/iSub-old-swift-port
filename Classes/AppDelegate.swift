@@ -8,8 +8,14 @@
 
 import UIKit
 import Async
+import Reachability
 
 @objc class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate {
+    struct Notifications {
+        static let enteringOfflineMode = Notification.Name("AppDelegate_enteringOfflineMode")
+        static let enteringOnlineMode  = Notification.Name("AppDelegate_enteringOnlineMode")
+    }
+    
     var window: UIWindow?
     var networkStatus = NetworkStatus()
     var sidePanelController: SidePanelController!
@@ -56,11 +62,11 @@ import Async
         
         // Setup network reachability notifications
         networkStatus.startMonitoring()
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(reachabilityChanged), name: ISMSNotification_ReachabilityChanged, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(reachabilityChanged), name: ReachabilityChangedNotification)
         
         // Check battery state and register for notifications
         UIDevice.current.isBatteryMonitoringEnabled = true
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(batteryStateChanged), name: NSNotification.Name.UIDeviceBatteryStateDidChange.rawValue, object: UIDevice.current)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(batteryStateChanged), name: NSNotification.Name.UIDeviceBatteryStateDidChange, object: UIDevice.current)
         batteryStateChanged()
         
         loadHockeyApp()
@@ -257,7 +263,7 @@ import Async
             return
         }
         
-        NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_EnteringOfflineMode)
+        NotificationCenter.postOnMainThread(name: Notifications.enteringOfflineMode)
         
         SavedSettings.si().isOfflineMode = true
         PlayQueue.si.stop()
@@ -271,7 +277,7 @@ import Async
             return
         }
         
-        NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_EnteringOnlineMode)
+        NotificationCenter.postOnMainThread(name: Notifications.enteringOnlineMode)
         
         SavedSettings.si().isOfflineMode = false
         PlayQueue.si.stop()

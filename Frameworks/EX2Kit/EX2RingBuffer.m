@@ -12,6 +12,7 @@
 {
 	void *_bufferBackingStore;
     long long _totalBytesDrained;
+    NSData *_buffer;
 }
 @end
 
@@ -39,11 +40,6 @@
 	return self;
 }
 
-+ (id)ringBufferWithLength:(NSInteger)bytes
-{
-	return [[EX2RingBuffer alloc] initWithBufferLength:bytes];
-}
-
 - (void)reset
 {
     @synchronized(self)
@@ -56,7 +52,7 @@
 
 - (NSInteger)totalLength
 {
-	return self.buffer.length;
+	return _buffer.length;
 }
 
 - (NSInteger)freeSpaceLength

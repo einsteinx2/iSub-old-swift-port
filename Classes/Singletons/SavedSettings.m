@@ -8,7 +8,6 @@
 
 #import "SavedSettings.h"
 #import "iSub-Swift.h"
-#import "BassGaplessPlayer.h"
 
 @interface SavedSettings ()
 {

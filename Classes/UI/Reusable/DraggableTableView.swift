@@ -41,21 +41,23 @@ class DraggableTableView: UITableView {
     // MARK: - Notifications -
     
     struct Notifications {
-        static let draggingBegan    = "draggingBegan"
-        static let draggingMoved    = "draggingMoved"
-        static let draggingEnded    = "draggingEnded"
-        static let draggingCanceled = "draggingCanceled"
-        static let forceTouchDetectionBegan     = "forceTouchDetectionBegan"
+        static let draggingBegan            = Notification.Name("draggingBegan")
+        static let draggingMoved            = Notification.Name("draggingMoved")
+        static let draggingEnded            = Notification.Name("draggingEnded")
+        static let draggingCanceled         = Notification.Name("draggingCanceled")
+        static let forceTouchDetectionBegan = Notification.Name("forceTouchDetectionBegan")
         
-        static let locationKey            = "locationKey"
-        static let dragCellKey            = "dragCellKey"
-        static let dragSourceTableViewKey = "dragSourceTableViewKey"
+        struct Keys {
+            static let location            = "location"
+            static let dragCell            = "dragCell"
+            static let dragSourceTableView = "dragSourceTableView"
+        }
         
         static func userInfo(location: NSValue, dragSourceTableView: UITableView, dragCell: DraggableCell) -> [String: Any] {
             var userInfo = [String: Any]()
-            userInfo[dragSourceTableViewKey] = dragSourceTableView
-            userInfo[locationKey] = location
-            userInfo[dragCellKey] = dragCell
+            userInfo[Keys.dragSourceTableView] = dragSourceTableView
+            userInfo[Keys.location]            = location
+            userInfo[Keys.dragCell]            = dragCell
             return userInfo
         }
     }
@@ -258,7 +260,7 @@ class DraggableTableView: UITableView {
             
             let windowPoint = touch.location(in: nil)
             let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
-            NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingMoved, userInfo: userInfo)
+            NotificationCenter.postOnMainThread(name: Notifications.draggingMoved, userInfo: userInfo)
         }
         
         super.touchesMoved(touches, with: event)
@@ -273,7 +275,7 @@ class DraggableTableView: UITableView {
                 undimDragCell()
                 
                 let userInfo = Notifications.userInfo(location: NSValue(cgPoint: touch.location(in: nil)), dragSourceTableView: self, dragCell: dragCell)
-                NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingEnded, userInfo: userInfo)
+                NotificationCenter.postOnMainThread(name: Notifications.draggingEnded, userInfo: userInfo)
             } else {
                 // Select the cell if this was not a long press
                 let point = touch.location(in: self)
@@ -307,7 +309,7 @@ class DraggableTableView: UITableView {
             }
             
             let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
-            NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingCanceled, userInfo: userInfo)
+            NotificationCenter.postOnMainThread(name: Notifications.draggingCanceled, userInfo: userInfo)
         }
         
         self.allowsSelection = true
@@ -358,7 +360,7 @@ class DraggableTableView: UITableView {
         tapticFeedback()
         
         let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowLocation), dragSourceTableView: self, dragCell: dragCell!)
-        NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingBegan, userInfo: userInfo)
+        NotificationCenter.postOnMainThread(name: Notifications.draggingBegan, userInfo: userInfo)
     }
     
     // MARK: - Force Touch -
@@ -370,7 +372,7 @@ class DraggableTableView: UITableView {
             let offset = calculateDragImageOffset(force: touch.force)
             activateDragging(cell: draggableCell, animateToOffset: offset)
             
-            NotificationCenter.postNotificationToMainThread(withName: Notifications.forceTouchDetectionBegan)
+            NotificationCenter.postOnMainThread(name: Notifications.forceTouchDetectionBegan)
         }
     }
     
@@ -393,7 +395,7 @@ class DraggableTableView: UITableView {
                 
                 let location = NSValue(cgPoint: touch.location(in: nil))
                 let userInfo = Notifications.userInfo(location: location, dragSourceTableView: self, dragCell: dragCell!)
-                NotificationCenter.postNotificationToMainThread(withName: Notifications.draggingBegan, userInfo: userInfo)
+                NotificationCenter.postOnMainThread(name: Notifications.draggingBegan, userInfo: userInfo)
             }
             
             // Lift up the cell

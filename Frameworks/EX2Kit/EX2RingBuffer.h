@@ -11,8 +11,6 @@
 @interface EX2RingBuffer : NSObject
 
 @property NSInteger maximumLength;
-
-@property (strong) NSData *buffer;
 @property (nonatomic) NSInteger readPosition;
 @property (nonatomic) NSInteger writePosition;
 @property (nonatomic, readonly) NSInteger totalLength;
@@ -20,14 +18,13 @@
 @property (nonatomic, readonly) NSInteger filledSpaceLength;
 @property long long totalBytesDrained;
 
-- (id)initWithBufferLength:(NSInteger)bytes;
-+ (id)ringBufferWithLength:(NSInteger)bytes;
+- (nonnull instancetype)initWithBufferLength:(NSInteger)bytes;
 
-- (BOOL)fillWithBytes:(const void *)byteBuffer length:(NSInteger)bufferLength;
-- (BOOL)fillWithData:(NSData *)data;
+- (BOOL)fillWithBytes:(const void * _Nonnull)byteBuffer length:(NSInteger)bufferLength;
+- (BOOL)fillWithData:(NSData * _Nonnull)data;
 
-- (NSInteger)drainBytes:(void *)byteBuffer length:(NSInteger)bufferLength;
-- (NSData *)drainData:(NSInteger)length;
+- (NSInteger)drainBytes:(void * _Nonnull)byteBuffer length:(NSInteger)bufferLength;
+- (nonnull NSData *)drainData:(NSInteger)length;
 
 - (BOOL)hasSpace:(NSInteger)length;
 

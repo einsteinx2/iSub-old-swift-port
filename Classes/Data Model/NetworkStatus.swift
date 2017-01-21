@@ -9,7 +9,7 @@
 import Foundation
 import Reachability
 
-class NetworkStatus: NSObject {
+class NetworkStatus: NSObject {    
     let reachability = Reachability()
     
     var isReachable: Bool {
@@ -27,8 +27,6 @@ class NetworkStatus: NSObject {
     }
     
     func startMonitoring() {
-        reachability?.whenReachable = becameReachable
-        reachability?.whenUnreachable = becameUnreachable
         do {
             try reachability?.startNotifier()
         } catch {
@@ -38,13 +36,5 @@ class NetworkStatus: NSObject {
     
     func stopMonitoring() {
         reachability?.stopNotifier()
-    }
-    
-    fileprivate func becameReachable(reachability: Reachability) {
-        NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_ReachabilityChanged)
-    }
-    
-    fileprivate func becameUnreachable(reachability: Reachability) {
-        NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_ReachabilityChanged)
     }
 }

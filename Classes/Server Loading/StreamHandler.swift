@@ -16,6 +16,16 @@ import Async
 }
 
 @objc class StreamHandler: NSObject, URLSessionDataDelegate {
+    struct Notifications {
+        static let readyForPlayback = Notification.Name("StreamHandler_readyForPlayback")
+        static let downloaded       = Notification.Name("StreamHandler_downloaded")
+        static let failed           = Notification.Name("StreamHandler_failed")
+        
+        struct Keys {
+            static let song = "song"
+        }
+    }
+    
     fileprivate var selfRef: StreamHandler?
     
     var delegate: StreamHandlerDelegate?
@@ -195,7 +205,8 @@ import Async
         let bytesPerSec = Double(totalBytesTransferred) / Date().timeIntervalSince(startDate)
         if !isReadyForPlayback && totalBytesTransferred >= StreamHandler.minBytesToStartPlayback(forKiloBitrate: bitrate, speedInBytesPerSec: Int(bytesPerSec)) {
             isReadyForPlayback = true
-            NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_StreamHandlerSongReadyForPlayback, userInfo: ["song": song])
+            let userInfo = [Notifications.Keys.song: song]
+            NotificationCenter.postOnMainThread(name: Notifications.readyForPlayback, userInfo: userInfo)
         }
         
         // Get the download speed, check every 6 seconds
@@ -214,21 +225,28 @@ import Async
         terminateDownload()
         
         if let error = error {
+            let userInfo = [Notifications.Keys.song: song]
+            NotificationCenter.postOnMainThread(name: Notifications.failed, userInfo: userInfo)
             delegate?.streamHandlerConnectionFailed(self, withError: error)
         } else {
             if contentLength > 0 && song.localFileSize < contentLength {
                 print("[URLSessionStreamHandler] Connection Failed because not enough bytes were download for \(song.title)")
                 
                 // This is a failed download, it didn't download enough
+                let userInfo = [Notifications.Keys.song: song]
+                NotificationCenter.postOnMainThread(name: Notifications.failed, userInfo: userInfo)
                 delegate?.streamHandlerConnectionFailed(self, withError: nil)
             } else {
                 print("[URLSessionStreamHandler] Connection was successful because the file size matches the content length header for \(song.title)")
                 
                 if !isReadyForPlayback {
                     isReadyForPlayback = true
-                    NotificationCenter.postNotificationToMainThread(withName: ISMSNotification_StreamHandlerSongReadyForPlayback, userInfo: ["song": song])
+                    let userInfo = [Notifications.Keys.song: song]
+                    NotificationCenter.postOnMainThread(name: Notifications.readyForPlayback, userInfo: userInfo)
                 }
                 
+                let userInfo = [Notifications.Keys.song: song]
+                NotificationCenter.postOnMainThread(name: Notifications.downloaded, userInfo: userInfo)
                 delegate?.streamHandlerConnectionFinished(self)
             }
         }

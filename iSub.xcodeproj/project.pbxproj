@@ -158,8 +158,6 @@
 		5315A3F2156F7064001B0268 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
 		5315A3F6156F7064001B0268 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
 		53191DF01167CFDC00E1C08A /* current-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 53191DEF1167CFDC00E1C08A /* current-server.png */; };
-		531B33511E24CF8B00811187 /* BassGaplessPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32D61E24CF8A00811187 /* BassGaplessPlayer.m */; };
-		531B33521E24CF8B00811187 /* BassGaplessPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32D61E24CF8A00811187 /* BassGaplessPlayer.m */; };
 		531B33551E24CF8B00811187 /* BassWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DB1E24CF8A00811187 /* BassWrapper.m */; };
 		531B33561E24CF8B00811187 /* BassWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DB1E24CF8A00811187 /* BassWrapper.m */; };
 		531B33571E24CF8B00811187 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DE1E24CF8A00811187 /* BassEffectDAO.m */; };
@@ -234,8 +232,6 @@
 		531B33C01E24CF8B00811187 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33391E24CF8B00811187 /* PlayQueue.swift */; };
 		531B33C11E24CF8B00811187 /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333B1E24CF8B00811187 /* SavedSettings.m */; };
 		531B33C21E24CF8B00811187 /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333B1E24CF8B00811187 /* SavedSettings.m */; };
-		531B33CB1E24CF8B00811187 /* ISMSNotificationNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33461E24CF8B00811187 /* ISMSNotificationNames.m */; };
-		531B33CC1E24CF8B00811187 /* ISMSNotificationNames.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33461E24CF8B00811187 /* ISMSNotificationNames.m */; };
 		531B33D11E24CF8B00811187 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B334E1E24CF8B00811187 /* Utils.swift */; };
 		531B33D21E24CF8B00811187 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B334E1E24CF8B00811187 /* Utils.swift */; };
 		531B33D61E24CFAF00811187 /* UITraitEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */; };
@@ -513,6 +509,12 @@
 		536E29261E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
 		536E29271E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		537FB2F51E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */; };
+		537FB2F61E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */; };
+		537FB2F91E33065E001D3FBB /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F81E33065E001D3FBB /* ObjC.m */; };
+		537FB2FA1E33065E001D3FBB /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F81E33065E001D3FBB /* ObjC.m */; };
+		537FB2FC1E33E435001D3FBB /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */; };
+		537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */; };
 		537FCC5412F8F7F400F1D996 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 537FCC5312F8F7F400F1D996 /* iTunesArtwork */; };
 		53835C981E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */; };
 		53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */; };
@@ -755,8 +757,6 @@
 		53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */; };
 		53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */; };
 		53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */; };
-		53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A451E1DC43F00071ABD /* NSNotificationCenter+MainThread.m */; };
-		53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A451E1DC43F00071ABD /* NSNotificationCenter+MainThread.m */; };
 		53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4A1E1DC58700071ABD /* NSString+Time.m */; };
 		53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4A1E1DC58700071ABD /* NSString+Time.m */; };
 		53D59A571E1DC63800071ABD /* NSArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A541E1DC63800071ABD /* NSArray+Safe.m */; };
@@ -862,9 +862,6 @@
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5315A405156F7064001B0268 /* iSub Unit Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Unit Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
-		531B32D51E24CF8A00811187 /* BassGaplessPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassGaplessPlayer.h; sourceTree = "<group>"; };
-		531B32D61E24CF8A00811187 /* BassGaplessPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassGaplessPlayer.m; sourceTree = "<group>"; };
-		531B32D71E24CF8A00811187 /* BassGaplessPlayerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassGaplessPlayerDelegate.h; sourceTree = "<group>"; };
 		531B32DA1E24CF8A00811187 /* BassWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassWrapper.h; sourceTree = "<group>"; };
 		531B32DB1E24CF8A00811187 /* BassWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassWrapper.m; sourceTree = "<group>"; };
 		531B32DD1E24CF8A00811187 /* BassEffectDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectDAO.h; sourceTree = "<group>"; };
@@ -911,8 +908,6 @@
 		531B33391E24CF8B00811187 /* PlayQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueue.swift; sourceTree = "<group>"; };
 		531B333A1E24CF8B00811187 /* SavedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedSettings.h; sourceTree = "<group>"; };
 		531B333B1E24CF8B00811187 /* SavedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedSettings.m; sourceTree = "<group>"; };
-		531B33451E24CF8B00811187 /* ISMSNotificationNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISMSNotificationNames.h; sourceTree = "<group>"; };
-		531B33461E24CF8B00811187 /* ISMSNotificationNames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISMSNotificationNames.m; sourceTree = "<group>"; };
 		531B334E1E24CF8B00811187 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITraitEnvironment.swift; sourceTree = "<group>"; };
 		531B33D41E24CFAF00811187 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
@@ -1080,6 +1075,10 @@
 		536E29141E0B94570097C2F6 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
 		536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "entitlements-simulator.plist"; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BassGaplessPlayer.swift; sourceTree = "<group>"; };
+		537FB2F71E33065E001D3FBB /* ObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
+		537FB2F81E33065E001D3FBB /* ObjC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
+		537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		537FCC5312F8F7F400F1D996 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = "Images/App Icons/iTunesArtwork"; sourceTree = "<group>"; };
 		53835C6F1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GMAppleDouble+ZKAdditions.h"; sourceTree = "<group>"; };
 		53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GMAppleDouble+ZKAdditions.m"; sourceTree = "<group>"; };
@@ -1191,8 +1190,6 @@
 		53D59A2B1E1DC38400071ABD /* EX2RingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2RingBuffer.h; sourceTree = "<group>"; };
 		53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2RingBuffer.m; sourceTree = "<group>"; };
 		53D59A431E1DC3D000071ABD /* EX2Kit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EX2Kit.h; sourceTree = "<group>"; };
-		53D59A441E1DC43F00071ABD /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
-		53D59A451E1DC43F00071ABD /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
 		53D59A491E1DC58700071ABD /* NSString+Time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Time.h"; sourceTree = "<group>"; };
 		53D59A4A1E1DC58700071ABD /* NSString+Time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Time.m"; sourceTree = "<group>"; };
 		53D59A531E1DC63800071ABD /* NSArray+Safe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Safe.h"; sourceTree = "<group>"; };
@@ -1583,9 +1580,7 @@
 		531B32D41E24CF8A00811187 /* Bass Wrapper */ = {
 			isa = PBXGroup;
 			children = (
-				531B32D51E24CF8A00811187 /* BassGaplessPlayer.h */,
-				531B32D61E24CF8A00811187 /* BassGaplessPlayer.m */,
-				531B32D71E24CF8A00811187 /* BassGaplessPlayerDelegate.h */,
+				537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */,
 				534FACED1E328D3200BF12D9 /* BassStream.swift */,
 				531B32DA1E24CF8A00811187 /* BassWrapper.h */,
 				531B32DB1E24CF8A00811187 /* BassWrapper.m */,
@@ -1643,6 +1638,7 @@
 				53CFBB651E2AE203005895F4 /* RXMLElement.swift */,
 				53D959101E2C774200A1667F /* Error.swift */,
 				5355BFAF1E2DB59D00C6D27F /* NSError.swift */,
+				537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1719,9 +1715,9 @@
 			children = (
 				531B334E1E24CF8B00811187 /* Utils.swift */,
 				531B34641E24D3D500811187 /* Defines.swift */,
-				531B33451E24CF8B00811187 /* ISMSNotificationNames.h */,
-				531B33461E24CF8B00811187 /* ISMSNotificationNames.m */,
 				531B34681E24D41300811187 /* Imports.h */,
+				537FB2F71E33065E001D3FBB /* ObjC.h */,
+				537FB2F81E33065E001D3FBB /* ObjC.m */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -2172,8 +2168,6 @@
 			children = (
 				53D59A431E1DC3D000071ABD /* EX2Kit.h */,
 				53D59A5D1E1DC76600071ABD /* EX2Macros.h */,
-				53D59A441E1DC43F00071ABD /* NSNotificationCenter+MainThread.h */,
-				53D59A451E1DC43F00071ABD /* NSNotificationCenter+MainThread.m */,
 				53D59A491E1DC58700071ABD /* NSString+Time.h */,
 				53D59A4A1E1DC58700071ABD /* NSString+Time.m */,
 				53D59A531E1DC63800071ABD /* NSArray+Safe.h */,
@@ -2741,7 +2735,6 @@
 				531B34481E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				531B339D1E24CF8B00811187 /* FolderLoader.swift in Sources */,
 				5358DF831E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
-				531B33CB1E24CF8B00811187 /* ISMSNotificationNames.m in Sources */,
 				531B33F81E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34421E24D24600811187 /* FMDatabase.m in Sources */,
 				53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */,
@@ -2749,6 +2742,7 @@
 				531B33611E24CF8B00811187 /* CachedImage.swift in Sources */,
 				531B33591E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
+				537FB2FC1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
 				533B69D81E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				531B337D1E24CF8B00811187 /* CacheQueueManager.swift in Sources */,
 				5355BFA41E2D81D900C6D27F /* AppDelegate.swift in Sources */,
@@ -2758,6 +2752,7 @@
 				531B344E1E24D24600811187 /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				5358E1C71E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358DF881E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
+				537FB2F51E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */,
 				531B34021E24D0B600811187 /* MiniPlayerViewController.swift in Sources */,
 				531B34461E24D24600811187 /* FMDatabasePool.m in Sources */,
 				539133511E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */,
@@ -2779,6 +2774,7 @@
 				531B34001E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D831E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */,
+				537FB2F91E33065E001D3FBB /* ObjC.m in Sources */,
 				531B335D1E24CF8B00811187 /* BassParamEqValue.m in Sources */,
 				530F04AD1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				53D59A571E1DC63800071ABD /* NSArray+Safe.m in Sources */,
@@ -2812,7 +2808,6 @@
 				531B33A71E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
 				53D59A7C1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				534FACEB1E3199D000BF12D9 /* AudioEngine.swift in Sources */,
-				531B33511E24CF8B00811187 /* BassGaplessPlayer.m in Sources */,
 				531B33731E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FC1E24D0B600811187 /* CacheViewController.swift in Sources */,
 				53D959111E2C774200A1667F /* Error.swift in Sources */,
@@ -2867,7 +2862,6 @@
 				53A418041E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */,
 				539133541E29D53000B8A99E /* Data.swift in Sources */,
 				53CFBB691E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
-				53D59A461E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33771E24CF8B00811187 /* String.swift in Sources */,
 				531B33A11E24CF8B00811187 /* MediaFoldersLoader.swift in Sources */,
@@ -2992,7 +2986,6 @@
 				531B34491E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				531B339E1E24CF8B00811187 /* FolderLoader.swift in Sources */,
 				5358DF851E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
-				531B33CC1E24CF8B00811187 /* ISMSNotificationNames.m in Sources */,
 				531B33F91E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34431E24D24600811187 /* FMDatabase.m in Sources */,
 				53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */,
@@ -3000,6 +2993,7 @@
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,
 				531B335A1E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
+				537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				531B337E1E24CF8B00811187 /* CacheQueueManager.swift in Sources */,
 				5355BFA51E2D81D900C6D27F /* AppDelegate.swift in Sources */,
@@ -3009,6 +3003,7 @@
 				531B344F1E24D24600811187 /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
+				537FB2F61E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */,
 				531B34031E24D0B600811187 /* MiniPlayerViewController.swift in Sources */,
 				531B34471E24D24600811187 /* FMDatabasePool.m in Sources */,
 				539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */,
@@ -3030,6 +3025,7 @@
 				531B34011E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
+				537FB2FA1E33065E001D3FBB /* ObjC.m in Sources */,
 				531B335E1E24CF8B00811187 /* BassParamEqValue.m in Sources */,
 				530F04AE1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				53D59A591E1DC63800071ABD /* NSArray+Safe.m in Sources */,
@@ -3063,7 +3059,6 @@
 				531B33A81E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
 				53D59A7E1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				534FACEC1E3199D000BF12D9 /* AudioEngine.swift in Sources */,
-				531B33521E24CF8B00811187 /* BassGaplessPlayer.m in Sources */,
 				531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FD1E24D0B600811187 /* CacheViewController.swift in Sources */,
 				53D959121E2C774200A1667F /* Error.swift in Sources */,
@@ -3118,7 +3113,6 @@
 				53A418051E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */,
 				539133551E29D53000B8A99E /* Data.swift in Sources */,
 				53CFBB6A1E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
-				53D59A481E1DC43F00071ABD /* NSNotificationCenter+MainThread.m in Sources */,
 				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33781E24CF8B00811187 /* String.swift in Sources */,
 				531B33A21E24CF8B00811187 /* MediaFoldersLoader.swift in Sources */,

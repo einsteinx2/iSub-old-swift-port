@@ -20,7 +20,7 @@ extension Playlist: Item {
 @objc class Playlist: NSObject {
     
     struct Notifications {
-        static let playlistChanged = "playlistChanged"
+        static let playlistChanged = Notification.Name("playlistChanged")
         
         struct Keys {
             static let playlistId = "playlistId"
@@ -28,7 +28,7 @@ extension Playlist: Item {
     }
     
     func notifyPlaylistChanged() {
-        NotificationCenter.postNotificationToMainThread(withName: Playlist.Notifications.playlistChanged, object: nil, userInfo: [Notifications.Keys.playlistId: self.playlistId])
+        NotificationCenter.postOnMainThread(name: Playlist.Notifications.playlistChanged, object: nil, userInfo: [Notifications.Keys.playlistId: self.playlistId])
     }
     
     let repository: PlaylistRepository

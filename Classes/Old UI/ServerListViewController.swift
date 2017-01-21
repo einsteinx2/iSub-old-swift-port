@@ -19,7 +19,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
     fileprivate var helpTabViewController: HelpTabViewController?
     
     deinit {
-        NotificationCenter.removeObserver(onMainThread: self)
+        NotificationCenter.removeObserverOnMainThread(self)
     }
 
     override func viewDidLoad() {

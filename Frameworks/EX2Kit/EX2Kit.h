@@ -8,7 +8,6 @@
 
 #import "EX2Macros.h"
 
-#import "NSNotificationCenter+MainThread.h"
 #import "NSString+time.h"
 #import "NSArray+Safe.h"
 #import "NSMutableArray+Safe.h"

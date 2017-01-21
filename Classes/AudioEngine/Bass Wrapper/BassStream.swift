@@ -34,7 +34,7 @@ import Foundation
     var isEndedCalled = false
     var bufferSpaceTilSongEnd = 0
     
-    var isNextSongStreamFailed = 0
+    var isNextSongStreamFailed = false
     
     var localFileSize: Int64 {
         let attributes = try? FileManager.default.attributesOfItem(atPath: writePath)

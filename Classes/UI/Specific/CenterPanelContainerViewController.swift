@@ -56,11 +56,11 @@ class CenterPanelContainerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(indexChanged), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(indexChanged), name: PlayQueue.Notifications.indexChanged)
     }
     
     deinit {
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NotificationCenter.removeObserverOnMainThread(self, name: PlayQueue.Notifications.indexChanged)
     }
     
     @objc fileprivate func indexChanged() {

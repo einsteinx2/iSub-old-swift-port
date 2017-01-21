@@ -40,7 +40,7 @@ class DraggableTableViewController: UITableViewController {
         self.navigationController?.navigationBar.barStyle = .black
         self.edgesForExtendedLayout = UIRectEdge()
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(DraggableTableViewController.setupLeftBarButton), name: NSNotification.Name.UIApplicationDidBecomeActive.rawValue, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(DraggableTableViewController.setupLeftBarButton), name: NSNotification.Name.UIApplicationDidBecomeActive)
         
         setupRefreshControl()
         
@@ -61,7 +61,7 @@ class DraggableTableViewController: UITableViewController {
     }
     
     deinit {
-        NotificationCenter.removeObserver(onMainThread: self, name: NSNotification.Name.UIApplicationDidBecomeActive.rawValue, object: nil)
+        NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.UIApplicationDidBecomeActive)
     }
     
     // MARK: - UI -

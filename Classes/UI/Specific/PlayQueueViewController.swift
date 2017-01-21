@@ -31,10 +31,10 @@ class PlayQueueViewController: DraggableTableViewController {
         self.viewModel.delegate = self
         self.draggableTableView.dimDraggedCells = false
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -42,10 +42,10 @@ class PlayQueueViewController: DraggableTableViewController {
     }
     
     deinit {
-        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingBegan, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingMoved, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingEnded, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: DraggableTableView.Notifications.draggingCanceled, object: nil)
+        NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingBegan)
+        NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingMoved)
+        NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingEnded)
+        NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingCanceled)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,7 +76,7 @@ class PlayQueueViewController: DraggableTableViewController {
         singleTapRecognizer.isEnabled = false
         doubleTapRecognizer.isEnabled = false
         
-        if let userInfo = notification.userInfo, let dragSourceTableView = userInfo[DraggableTableView.Notifications.dragSourceTableViewKey] as? DraggableTableView, let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell {
+        if let userInfo = notification.userInfo, let dragSourceTableView = userInfo[DraggableTableView.Notifications.Keys.dragSourceTableView] as? DraggableTableView, let dragCell = userInfo[DraggableTableView.Notifications.Keys.dragCell] as? DraggableCell {
             
             internallyDragging = (dragSourceTableView == self.tableView)
             if internallyDragging, let indexPath = dragCell.indexPath {
@@ -94,8 +94,8 @@ class PlayQueueViewController: DraggableTableViewController {
     
     @objc fileprivate func draggingMoved(_ notification: Notification) {
         if let userInfo = notification.userInfo {
-            if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell, dragCell.dragItem is Song,
-                let location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
+            if let dragCell = userInfo[DraggableTableView.Notifications.Keys.dragCell] as? DraggableCell, dragCell.dragItem is Song,
+                let location = userInfo[DraggableTableView.Notifications.Keys.location] as? NSValue {
                 currentTouchLocation = location.cgPointValue
                 if !isAutoScrolling {
                     handleDrag(atLocation: currentTouchLocation)
@@ -116,9 +116,9 @@ class PlayQueueViewController: DraggableTableViewController {
         stopAutoScroll()
         
         if visible, let userInfo = notification.userInfo {
-            if let dragCell = userInfo[DraggableTableView.Notifications.dragCellKey] as? DraggableCell,
+            if let dragCell = userInfo[DraggableTableView.Notifications.Keys.dragCell] as? DraggableCell,
                    let song = dragCell.dragItem as? Song,
-                   let location = userInfo[DraggableTableView.Notifications.locationKey] as? NSValue {
+                   let location = userInfo[DraggableTableView.Notifications.Keys.location] as? NSValue {
                 
                 let point = location.cgPointValue
                 let localPoint = self.view.convert(point, from: nil)

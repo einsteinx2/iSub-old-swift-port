@@ -189,10 +189,10 @@ class PlayerViewController: UIViewController {
             playbackStarted()
         }
         
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playbackStarted), name: ISMSNotification_SongPlaybackStarted, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playbackPaused), name: ISMSNotification_SongPlaybackPaused, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playbackEnded), name: ISMSNotification_SongPlaybackEnded, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(indexChanged), name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackStarted), name: BassGaplessPlayer.Notifications.songStarted)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackPaused), name: BassGaplessPlayer.Notifications.songPaused)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackEnded), name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(indexChanged), name: PlayQueue.Notifications.indexChanged)
         
         tapRecognizer.addTarget(self, action: #selector(toggleZoom))
         coverArtView.addGestureRecognizer(tapRecognizer)
@@ -217,10 +217,10 @@ class PlayerViewController: UIViewController {
     }
     
     deinit {
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_SongPlaybackStarted, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_SongPlaybackPaused, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_SongPlaybackEnded, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_CurrentPlaylistIndexChanged, object: nil)
+        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
+        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songPaused)
+        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.removeObserverOnMainThread(self, name: PlayQueue.Notifications.indexChanged)
     }
     
     @objc fileprivate func playPause() {

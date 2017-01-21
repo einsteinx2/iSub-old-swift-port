@@ -243,7 +243,7 @@ static CGPoint CGPointFromString(NSString *string)
 			[AudioEngine.si.equalizer toggleEqualizer];
 	}
 	
-	[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassEffectPresetLoaded];
+	//[NSNotificationCenter postNotificationToMainThreadWithName:ISMSNotification_BassEffectPresetLoaded];
 }
 
 - (void)selectPresetAtIndex:(NSInteger)presetIndex

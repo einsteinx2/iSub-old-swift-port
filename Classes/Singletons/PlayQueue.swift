@@ -29,22 +29,24 @@ import Nuke
     //
     
     public struct Notifications {
-        public static let playQueueIndexChanged = ISMSNotification_CurrentPlaylistIndexChanged
+        public static let indexChanged = Notification.Name("PlayQueue_indexChanged")
     }
     
     fileprivate func notifyPlayQueueIndexChanged() {
-        NotificationCenter.postNotificationToMainThread(withName: PlayQueue.Notifications.playQueueIndexChanged, object: nil)
+        NotificationCenter.postOnMainThread(name: PlayQueue.Notifications.indexChanged)
     }
     
     fileprivate func registerForNotifications() {
         // Watch for changes to the play queue playlist
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(playlistChanged(_:)), name: Playlist.Notifications.playlistChanged, object: nil)
-        NotificationCenter.addObserver(onMainThread: self, selector: #selector(songReadyForPlayback(_:)), name: ISMSNotification_StreamHandlerSongReadyForPlayback, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playlistChanged(_:)), name: Playlist.Notifications.playlistChanged)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songReadyForPlayback(_:)), name: StreamHandler.Notifications.readyForPlayback)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(updateLockScreenInfo), name: BassGaplessPlayer.Notifications.updateLockScreen)
     }
     
     fileprivate func unregisterForNotifications() {
-        NotificationCenter.removeObserver(onMainThread: self, name: Playlist.Notifications.playlistChanged, object: nil)
-        NotificationCenter.removeObserver(onMainThread: self, name: ISMSNotification_StreamHandlerSongReadyForPlayback, object: nil)
+        NotificationCenter.removeObserverOnMainThread(self, name: Playlist.Notifications.playlistChanged)
+        NotificationCenter.removeObserverOnMainThread(self, name: StreamHandler.Notifications.readyForPlayback)
+        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.updateLockScreen)
     }
     
     @objc fileprivate func playlistChanged(_ notification: Notification) {
@@ -67,7 +69,8 @@ import Nuke
     var repeatMode = RepeatMode.normal
     var shuffleMode = ShuffleMode.normal { didSet { /* TODO: Do something */ } }
     
-    fileprivate(set) var currentIndex = -1 {
+    // TODO: Make fileprivate(set)
+    var currentIndex = -1 {
         didSet {
             updateLockScreenInfo()
             
@@ -315,115 +318,38 @@ import Nuke
     
     fileprivate var lockScreenUpdateTimer: Timer?
     func updateLockScreenInfo() {
-        #if os(iOS)
-            var trackInfo = [String: AnyObject]()
-            if let song = self.currentSong {
-                trackInfo[MPMediaItemPropertyTitle] = song.title as AnyObject?
-                if let albumName = song.album?.name {
-                    trackInfo[MPMediaItemPropertyAlbumTitle] = albumName as AnyObject?
-                }
-                if let artistName = song.artistDisplayName {
-                    trackInfo[MPMediaItemPropertyArtist] = artistName as AnyObject?
-                }
-                if let genre = song.genre?.name {
-                    trackInfo[MPMediaItemPropertyGenre] = genre as AnyObject?
-                }
-                if let duration = song.duration {
-                    trackInfo[MPMediaItemPropertyPlaybackDuration] = duration as AnyObject?
-                }
-                trackInfo[MPNowPlayingInfoPropertyPlaybackQueueIndex] = currentIndex as AnyObject?
-                trackInfo[MPNowPlayingInfoPropertyPlaybackQueueCount] = songCount as AnyObject?
-                trackInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioEngine.progress as AnyObject?
-                trackInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0 as AnyObject?
-                
-                trackInfo[MPMediaItemPropertyArtwork] = defaultItemArtwork
-                if let coverArtId = song.coverArtId, let image = CachedImage.cached(coverArtId: coverArtId, size: .player) {
-                    trackInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
-                }
-                
-                MPNowPlayingInfoCenter.default().nowPlayingInfo = trackInfo
+        var trackInfo = [String: AnyObject]()
+        if let song = self.currentSong {
+            trackInfo[MPMediaItemPropertyTitle] = song.title as AnyObject?
+            if let albumName = song.album?.name {
+                trackInfo[MPMediaItemPropertyAlbumTitle] = albumName as AnyObject?
+            }
+            if let artistName = song.artistDisplayName {
+                trackInfo[MPMediaItemPropertyArtist] = artistName as AnyObject?
+            }
+            if let genre = song.genre?.name {
+                trackInfo[MPMediaItemPropertyGenre] = genre as AnyObject?
+            }
+            if let duration = song.duration {
+                trackInfo[MPMediaItemPropertyPlaybackDuration] = duration as AnyObject?
+            }
+            trackInfo[MPNowPlayingInfoPropertyPlaybackQueueIndex] = currentIndex as AnyObject?
+            trackInfo[MPNowPlayingInfoPropertyPlaybackQueueCount] = songCount as AnyObject?
+            trackInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioEngine.progress as AnyObject?
+            trackInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0 as AnyObject?
+            
+            trackInfo[MPMediaItemPropertyArtwork] = defaultItemArtwork
+            if let coverArtId = song.coverArtId, let image = CachedImage.cached(coverArtId: coverArtId, size: .player) {
+                trackInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
             }
             
-            // Run this every 30 seconds to update the progress and keep it in sync
-            if let lockScreenUpdateTimer = self.lockScreenUpdateTimer {
-                lockScreenUpdateTimer.invalidate()
-            }
-            lockScreenUpdateTimer = Timer(timeInterval: 30.0, target: self, selector: #selector(PlayQueue.updateLockScreenInfo), userInfo: nil, repeats: false)
-        #endif
-    }
-}
-
-extension PlayQueue: BassGaplessPlayerDelegate {
-    
-    public func bassFirstStreamStarted(_ player: BassGaplessPlayer) {
-        // TODO: Is this the best place for this?
-        //SocialSingleton.si().playerClearSocial()
-    }
-    
-    public func bassSongEndedCalled(_ player: BassGaplessPlayer) {
-        // Increment current playlist index
-        currentIndex = nextIndex
-        
-        // Start preloading the next song
-        StreamManager.si.start()
-        
-        // TODO: Is this the best place for this?
-        //SocialSingleton.si().playerClearSocial()
-    }
-    
-    public func bassFreed(_ player: BassGaplessPlayer) {
-        // TODO: Is this the best place for this?
-        //SocialSingleton.si().playerClearSocial()
-    }
-
-    public func bassIndex(atOffset offset: Int, from index: Int, player: BassGaplessPlayer) -> Int {
-        return indexAtOffset(offset, fromIndex: index)
-    }
-    
-    public func bassSong(for index: Int, player: BassGaplessPlayer) -> Song? {
-        return songAtIndex(index)
-    }
-    
-    public func bassCurrentPlaylistIndex(_ player: BassGaplessPlayer) -> Int {
-        return currentIndex
-    }
-    
-    public func bassRetrySong(at index: Int, player: BassGaplessPlayer) {
-        Async.main {
-            self.playSong(atIndex: index)
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = trackInfo
         }
-    }
-    
-    public func bassUpdateLockScreenInfo(_ player: BassGaplessPlayer) {
-        updateLockScreenInfo()
-    }
-    
-    public func bassRetrySongAtOffset(inBytes bytes: Int64, player: BassGaplessPlayer) {
-        startSong(byteOffset: bytes)
-    }
-    
-    public func bassFailedToCreateNextStream(for index: Int, player: BassGaplessPlayer) {
-        // The song ended, and we tried to make the next stream but it failed
-        if let song = self.songAtIndex(index) {
-            if let handler = StreamManager.si.streamHandler, song == StreamManager.si.song {
-                if handler.isReadyForPlayback {
-                    // If the song is downloading and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
-                    Async.main {
-                        self.playSong(atIndex: index)
-                    }
-                }
-            } else if song.isFullyCached {
-                Async.main {
-                    self.playSong(atIndex: index)
-                }
-            } else {
-                StreamManager.si.start()
-            }
+        
+        // Run this every 30 seconds to update the progress and keep it in sync
+        if let lockScreenUpdateTimer = self.lockScreenUpdateTimer {
+            lockScreenUpdateTimer.invalidate()
         }
-    }
-    
-    public func bassRetrievingOutputData(_ player: BassGaplessPlayer) {
-        // TODO: Is this the best place for this?
-        //SocialSingleton.si().playerHandleSocial()
+        lockScreenUpdateTimer = Timer(timeInterval: 30.0, target: self, selector: #selector(PlayQueue.updateLockScreenInfo), userInfo: nil, repeats: false)
     }
 }

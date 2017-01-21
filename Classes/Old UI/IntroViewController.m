@@ -52,12 +52,12 @@
 {
     [super viewWillAppear:animated];
     
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissFast) name:ISMSNotification_EnteringOfflineMode object:nil];
+	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissFast) name:ISMSNotification_EnteringOfflineMode object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_EnteringOfflineMode object:nil];
+	//[[NSNotificationCenter defaultCenter] removeObserver:self name:ISMSNotification_EnteringOfflineMode object:nil];
 }
 
 - (void)dismissFast

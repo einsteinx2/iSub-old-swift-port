@@ -9,8 +9,6 @@
 #ifndef iSub_Imports_h
 #define iSub_Imports_h
 
-#import "ISMSNotificationNames.h"
-
 // Frameworks
 #import "EX2Kit.h"
 #import "ZipKit.h"
