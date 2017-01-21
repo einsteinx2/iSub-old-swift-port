@@ -80,3 +80,39 @@ func convertToRange<T: NumericType>(number: T, inputMin: T, inputMax: T, outputM
     let adjusted = (((number - inputMin) * outputRange) / inputRange) + outputMin
     return adjusted
 }
+
+// Immutable
+
+func bridge<T : AnyObject>(obj : T) -> UnsafeRawPointer {
+    return UnsafeRawPointer(Unmanaged.passUnretained(obj).toOpaque())
+}
+
+func bridge<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
+    return Unmanaged<T>.fromOpaque(ptr).takeUnretainedValue()
+}
+
+func bridgeRetained<T : AnyObject>(obj : T) -> UnsafeRawPointer {
+    return UnsafeRawPointer(Unmanaged.passRetained(obj).toOpaque())
+}
+
+func bridgeTransfer<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
+    return Unmanaged<T>.fromOpaque(ptr).takeRetainedValue()
+}
+
+// Mutable
+
+func bridge<T : AnyObject>(obj : T) -> UnsafeMutableRawPointer {
+    return UnsafeMutableRawPointer(mutating: UnsafeRawPointer(Unmanaged.passUnretained(obj).toOpaque()))
+}
+
+func bridge<T : AnyObject>(ptr : UnsafeMutableRawPointer) -> T {
+    return Unmanaged<T>.fromOpaque(ptr).takeUnretainedValue()
+}
+
+func bridgeRetained<T : AnyObject>(obj : T) -> UnsafeMutableRawPointer {
+    return UnsafeMutableRawPointer(mutating: UnsafeRawPointer(Unmanaged.passRetained(obj).toOpaque()))
+}
+
+func bridgeTransfer<T : AnyObject>(ptr : UnsafeMutableRawPointer) -> T {
+    return Unmanaged<T>.fromOpaque(ptr).takeRetainedValue()
+}

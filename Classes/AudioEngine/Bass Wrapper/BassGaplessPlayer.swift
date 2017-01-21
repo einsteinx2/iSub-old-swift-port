@@ -10,9 +10,6 @@ import Foundation
 import Async
 
 // TODO: Audit all numeric types, doing way too much casting
-// TODO: Uncomment delegate calls
-// TODO: Replace the EX2Dispatch timers
-// TODO: Are the autoreleasepools necessary?
 // TODO: Audit use of stream gcd queue, I left out all syncing when dealing with the streams array
 // TODO: Audit all access to PlayQueue
 
@@ -23,44 +20,27 @@ fileprivate let defaultSampleRate = 44100
 fileprivate let retryDelay = 2.0
 fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
 
-// Immutable
-
-func bridge<T : AnyObject>(obj : T) -> UnsafeRawPointer {
-    return UnsafeRawPointer(Unmanaged.passUnretained(obj).toOpaque())
-}
-
-func bridge<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
-    return Unmanaged<T>.fromOpaque(ptr).takeUnretainedValue()
-}
-
-func bridgeRetained<T : AnyObject>(obj : T) -> UnsafeRawPointer {
-    return UnsafeRawPointer(Unmanaged.passRetained(obj).toOpaque())
-}
-
-func bridgeTransfer<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
-    return Unmanaged<T>.fromOpaque(ptr).takeRetainedValue()
-}
-
-// Mutable
-
-func bridge<T : AnyObject>(obj : T) -> UnsafeMutableRawPointer {
-    return UnsafeMutableRawPointer(mutating: UnsafeRawPointer(Unmanaged.passUnretained(obj).toOpaque()))
-}
-
-func bridge<T : AnyObject>(ptr : UnsafeMutableRawPointer) -> T {
-    return Unmanaged<T>.fromOpaque(ptr).takeUnretainedValue()
-}
-
-func bridgeRetained<T : AnyObject>(obj : T) -> UnsafeMutableRawPointer {
-    return UnsafeMutableRawPointer(mutating: UnsafeRawPointer(Unmanaged.passRetained(obj).toOpaque()))
-}
-
-func bridgeTransfer<T : AnyObject>(ptr : UnsafeMutableRawPointer) -> T {
-    return Unmanaged<T>.fromOpaque(ptr).takeRetainedValue()
-}
-
 func closeProc(userInfo: UnsafeMutableRawPointer?) {
-    
+    guard let userInfo = userInfo else {
+        return
+    }
+
+    autoreleasepool {
+        // Get the user info object
+        let bassStream: BassStream = bridge(ptr: userInfo)
+        
+        // Tell the read wait loop to break in case it's waiting
+        bassStream.shouldBreakWaitLoop = true
+        bassStream.shouldBreakWaitLoopForever = true
+        
+        do {
+            try ObjC.catchException {
+                bassStream.fileHandle.closeFile()
+            }
+        } catch {
+            printError(error)
+        }
+    }
 }
 
 func lengthProc(userInfo: UnsafeMutableRawPointer?) -> UInt64 {
