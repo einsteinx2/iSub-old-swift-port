@@ -184,7 +184,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         serverType.autoresizingMask = .flexibleLeftMargin;
         cell.contentView.addSubview(serverType)
         
-        if server == SavedSettings.si().currentServer {
+        if server == SavedSettings.si.currentServer {
             let currentServerMarker = UIImageView()
             currentServerMarker.image = UIImage(named: "current-server")
             cell.contentView.addSubview(currentServerMarker)
@@ -292,8 +292,8 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
     
     func loadingFinished(_ loader: ApiLoader) {
         if let statusLoader = loader as? StatusLoader, let server = statusLoader.server {
-            SavedSettings.si().currentServerId = server.serverId
-            SavedSettings.si().redirectUrlString = redirectUrl
+            SavedSettings.si.currentServerId = server.serverId
+            SavedSettings.si.redirectUrlString = redirectUrl
             
             AppDelegate.si.switchServer(to: server, redirectUrl: redirectUrl)
             

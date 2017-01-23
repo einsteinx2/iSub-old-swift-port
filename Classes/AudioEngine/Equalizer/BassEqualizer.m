@@ -8,6 +8,7 @@
 
 #import "BassEqualizer.h"
 #import "Imports.h"
+#import "iSub-Swift.h"
 
 #define ISMS_EqualizerGainReduction 0.45
 
@@ -214,7 +215,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 	if (self.isEqActive)
 	{
 		[self clearEqualizerValues];
-		self.gain = SavedSettings.si.gainMultiplier;
+		self.gain = SavedSettings.si.preampGain;
 		return NO;
 	}
 	else
@@ -225,7 +226,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
             eqValuesTemp = [NSArray arrayWithArray:self.eqValues];
         }
 		[self applyEqualizerValues:eqValuesTemp];
-		self.gain = SavedSettings.si.gainMultiplier;
+		self.gain = SavedSettings.si.preampGain;
 		return YES;
 	}
 }
@@ -246,7 +247,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 	}
 	
 	self.volumeFx = BASS_ChannelSetFX(self.channel, BASS_FX_BFX_VOLUME, 1);
-    self.gain = SavedSettings.si.gainMultiplier;
+    self.gain = SavedSettings.si.preampGain;
 }
 
 - (void)setGain:(float)theGain

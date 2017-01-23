@@ -33,9 +33,6 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     override var shouldAutorotate: Bool {
-        if SavedSettings.si().isRotationLockEnabled && UIDevice.current.orientation != .portrait {
-            return false
-        }
         return true
     }
     

@@ -10,6 +10,9 @@
 #import "iSub-Swift.h"
 #import "Imports.h"
 
+#define documentsPath NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]
+#define cachesPath NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0]
+
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 @implementation CacheSingleton
@@ -22,8 +25,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (unsigned long long)freeSpace
 {
-	NSString *path = [SavedSettings documentsPath];
-	NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error:NULL];
+	NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:documentsPath error:NULL];
 	return [attributes[NSFileSystemFreeSize] unsignedLongLongValue];
 }
 
@@ -54,7 +56,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 - (void)adjustCacheSize
 {
 	// Only adjust if the user is using max cache size as option
-	if (SavedSettings.si.cachingType == ISMSCachingType_maxSize)
+	if (SavedSettings.si.cachingType == CachingTypeMaxSize)
 	{
 		unsigned long long possibleSize = self.freeSpace + self.cacheSize;
 		unsigned long long maxCacheSize = SavedSettings.si.maxCacheSize;
@@ -161,7 +163,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 	// Adjust the cache size if needed
 	[self adjustCacheSize];
 	
-	if (SavedSettings.si.cachingType == ISMSCachingType_minSpace && SavedSettings.si.isSongCachingEnabled)
+	if (SavedSettings.si.cachingType == CachingTypeMinSpace && SavedSettings.si.isAutoSongCachingEnabled)
 	{		
 		// Check to see if the free space left is lower than the setting
 		if (self.freeSpace < SavedSettings.si.minFreeSpace)
@@ -171,7 +173,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 			if (size + self.freeSpace < SavedSettings.si.minFreeSpace)
 			{
 				// Looks like even removing all of the cache will not be enough so turn off caching
-				SavedSettings.si.isSongCachingEnabled = NO;
+				SavedSettings.si.isAutoSongCachingEnabled = NO;
 			}
 			else
 			{
@@ -183,7 +185,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 			}
 		}
 	}
-	else if (SavedSettings.si.cachingType == ISMSCachingType_maxSize && SavedSettings.si.isSongCachingEnabled)
+	else if (SavedSettings.si.cachingType == CachingTypeMaxSize && SavedSettings.si.isAutoSongCachingEnabled)
 	{		
 		// Check to see if the cache size is higher than the max
 		if (self.cacheSize > SavedSettings.si.maxCacheSize)
@@ -194,7 +196,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 			}
 			else
 			{
-				SavedSettings.si.isSongCachingEnabled = NO;
+				SavedSettings.si.isAutoSongCachingEnabled = NO;
 			}			
 		}
 	}
@@ -247,67 +249,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 	// Make sure songCache directory exists, if not create it
 	if (![defaultManager fileExistsAtPath:[CacheSingleton songCachePath]])
 	{
-        // First check to see if it's in the old Library/Caches location
-        NSString *oldPath = [[SavedSettings cachesPath] stringByAppendingPathComponent:@"songCache"];
-        if ([defaultManager fileExistsAtPath:oldPath])
-        {
-            // It exists there, so move it to the new location
-            NSError *error;
-            [defaultManager moveItemAtPath:oldPath toPath:[CacheSingleton songCachePath] error:&error];
-            
-            if (error)
-            {
-                DDLogError(@"Error moving cache path from %@ to %@", oldPath, [CacheSingleton songCachePath]);
-            }
-            else
-            {
-                DDLogInfo(@"Moved cache path from %@ to %@", oldPath, [CacheSingleton songCachePath]);
-                
-#ifdef IOS
-                // Now set all of the files to not be backed up
-                if (!SavedSettings.si.isBackupCacheEnabled)
-                {
-                    NSArray *cachedSongNames = [defaultManager contentsOfDirectoryAtPath:[CacheSingleton songCachePath] error:nil];
-                    for (NSString *songName in cachedSongNames)
-                    {
-                        NSURL *fileUrl = [NSURL fileURLWithPath:[[CacheSingleton songCachePath] stringByAppendingPathComponent:songName]];
-                        [fileUrl addSkipBackupAttribute];
-                    }
-                }
-#endif
-            }
-        }
-        else
-        {
-            // It doesn't exist in the old location, so just create it in the new one
-            [defaultManager createDirectoryAtPath:[CacheSingleton songCachePath] withIntermediateDirectories:YES attributes:nil error:NULL];
-        }
+        [defaultManager createDirectoryAtPath:[CacheSingleton songCachePath] withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
-    
-    // Rename any cache files that still have extensions
-    NSDirectoryEnumerator *direnum = [[NSFileManager defaultManager] enumeratorAtPath:[CacheSingleton songCachePath]];
-    NSString *filename;
-    while ((filename = [direnum nextObject]))
-    {
-        // Check if it contains an extension
-        NSRange range = [filename rangeOfString:@"."];
-        if (range.location != NSNotFound)
-        {
-            NSString *filenameNew = [[filename componentsSeparatedByString:@"."] firstObjectSafe];
-            DDLogVerbose(@"[CacheSingleton] Moving filename: %@ to new filename: %@", filename, filenameNew);
-            if (filenameNew)
-            {
-                NSString *fromPath = [[CacheSingleton songCachePath] stringByAppendingPathComponent:filename];
-                NSString *toPath = [[CacheSingleton songCachePath] stringByAppendingPathComponent:filenameNew];
-                NSError *error;
-                
-                if (![[NSFileManager defaultManager] moveItemAtPath:fromPath toPath:toPath error:&error])
-                {
-                    DDLogVerbose(@"[CacheSingleton] ERROR Moving filename: %@ to new filename: %@", filename, filenameNew);
-                }
-            }
-        }
-    }
     
     // Clear the temp cache
     [self clearTempCache];
@@ -325,12 +268,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 + (NSString *)songCachePath
 {
-    return [[SavedSettings documentsPath] stringByAppendingPathComponent:@"songCache"];
+    return [documentsPath stringByAppendingPathComponent:@"songCache"];
 }
 
 + (NSString *)tempCachePath
 {
-    return [[SavedSettings documentsPath] stringByAppendingPathComponent:@"tempCache"];
+    return [cachesPath stringByAppendingPathComponent:@"tempCache"];
 }
 
 + (instancetype)si

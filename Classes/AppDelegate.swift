@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Async
 import Reachability
 
 @objc class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate {
@@ -36,18 +35,14 @@ import Reachability
     }
     
     static var shouldAutorotate: Bool {
-        if SavedSettings.si().isRotationLockEnabled && UIDevice.current.orientation != .portrait {
-            return false
-        }
         return true
     }
     
     func applicationDidFinishLaunching(_ application: UIApplication) {
         // Make sure the singletons get setup immediately and in the correct order
         // Perfect example of why using singletons is bad practice!
-        SavedSettings.si().setup()
+        SavedSettings.si.setup()
         DatabaseSingleton.si.setup()
-        AudioEngine.si.setup()
         CacheSingleton.si().setup()
         
         #if DebugBuild
@@ -74,12 +69,12 @@ import Reachability
         sidePanelController = window!.rootViewController as! SidePanelController
         
         // Handle offline mode
-        if !networkStatus.isReachable || (!networkStatus.isReachableWifi && SavedSettings.si().isDisableUsageOver3G) {
-            SavedSettings.si().isOfflineMode = true
+        if !networkStatus.isReachable || (!networkStatus.isReachableWifi && SavedSettings.si.isDisableUsageOver3G) {
+            SavedSettings.si.isOfflineMode = true
         }
         
         // Show intro if necessary
-        if SavedSettings.si().isTestServer {
+        if SavedSettings.si.isTestServer {
             showIntro = true
         }
     }
@@ -89,7 +84,7 @@ import Reachability
             showIntro = false
             
             // Delay fixes unbalanced transition warning
-            Async.main(after: 0.1) {
+            DispatchQueue.main.async(after: 0.1) {
                 self.sidePanelController.present(IntroViewController(), animated: false, completion: nil)
             }
         }
@@ -111,7 +106,7 @@ import Reachability
         }
         
         isInBackground = true
-        Async.background {
+        DispatchQueue.background.async {
             while application.backgroundTimeRemaining > 1.0 && self.isInBackground {
                 // Sleep early is nothing is happening
                 if application.backgroundTimeRemaining < 200.0 && !CacheQueueManager.si.isDownloading {
@@ -148,7 +143,7 @@ import Reachability
     
     func applicationWillTerminate(_ application: UIApplication) {
         application.endReceivingRemoteControlEvents()
-        SavedSettings.si().saveState()
+        UserDefaults.standard.synchronize()
         PlayQueue.si.stop()
     }
     
@@ -188,13 +183,13 @@ import Reachability
         // if it's not then display an alert and allow user to change settings if they want.
         // This is in case the user is, for instance, connected to a wifi network but does not
         // have internet access or if the host url entered was wrong.
-        if !SavedSettings.si().isOfflineMode {
+        if !SavedSettings.si.isOfflineMode {
             statusLoader?.cancel()
             
-            let currentServer = SavedSettings.si().currentServer
+            let currentServer = SavedSettings.si.currentServer
             statusLoader = StatusLoader(server: currentServer)
             statusLoader?.completionHandler = { success, error, loader in
-                SavedSettings.si().redirectUrlString = loader.redirectUrlString
+                SavedSettings.si.redirectUrlString = loader.redirectUrlString
                 
                 if success {
                     // TODO: Find a better way to handle this, or at least a button in the download queue to allow resuming rather
@@ -206,7 +201,7 @@ import Reachability
                         // Start the queued downloads if Wifi is available
                         CacheQueueManager.si.start()
                     }
-                } else if !SavedSettings.si().isOfflineMode {
+                } else if !SavedSettings.si.isOfflineMode {
                     self.enterOfflineMode()
                 }
                 
@@ -259,13 +254,13 @@ import Reachability
     }
     
     func enterOfflineModeForce() {
-        if SavedSettings.si().isOfflineMode {
+        if SavedSettings.si.isOfflineMode {
             return
         }
         
         NotificationCenter.postOnMainThread(name: Notifications.enteringOfflineMode)
         
-        SavedSettings.si().isOfflineMode = true
+        SavedSettings.si.isOfflineMode = true
         PlayQueue.si.stop()
         StreamManager.si.stop()
         CacheQueueManager.si.stop()
@@ -279,7 +274,7 @@ import Reachability
         
         NotificationCenter.postOnMainThread(name: Notifications.enteringOnlineMode)
         
-        SavedSettings.si().isOfflineMode = false
+        SavedSettings.si.isOfflineMode = false
         PlayQueue.si.stop()
         checkServer()
         CacheQueueManager.si.start()
@@ -288,20 +283,20 @@ import Reachability
     
     @objc fileprivate func reachabilityChanged() {
         if !networkStatus.isReachable {
-            if !SavedSettings.si().isOfflineMode {
+            if !SavedSettings.si.isOfflineMode {
                 enterOfflineMode()
             }
-        } else if !networkStatus.isReachableWifi && SavedSettings.si().isDisableUsageOver3G {
-            if !SavedSettings.si().isOfflineMode {
+        } else if !networkStatus.isReachableWifi && SavedSettings.si.isDisableUsageOver3G {
+            if !SavedSettings.si.isOfflineMode {
                 enterOfflineModeForce()
             }
         } else {
             checkServer()
             
-            if SavedSettings.si().isOfflineMode {
+            if SavedSettings.si.isOfflineMode {
                 enterOnlineMode()
             } else {
-                if networkStatus.isReachableWifi || SavedSettings.si().isManualCachingOnWWANEnabled {
+                if networkStatus.isReachableWifi || SavedSettings.si.isManualCachingOnWWANEnabled {
                     CacheQueueManager.si.start()
                 } else {
                     CacheQueueManager.si.stop()
@@ -313,7 +308,7 @@ import Reachability
     @objc fileprivate func batteryStateChanged() {
         if UIDevice.current.batteryState == .charging || UIDevice.current.batteryState == .full {
             UIApplication.shared.isIdleTimerDisabled = true
-        } else if SavedSettings.si().isScreenSleepEnabled {
+        } else if SavedSettings.si.isScreenSleepEnabled {
             UIApplication.shared.isIdleTimerDisabled = false
         }
     }
@@ -323,8 +318,8 @@ import Reachability
     }
     
     func switchServer(to server: Server, redirectUrl: String?) {
-        SavedSettings.si().currentServerId = server.serverId
-        SavedSettings.si().redirectUrlString = redirectUrl
+        SavedSettings.si.currentServerId = server.serverId
+        SavedSettings.si.redirectUrlString = redirectUrl
         
         // Create the default playlist tables
         PlaylistRepository.si.createDefaultPlaylists(serverId: server.serverId)

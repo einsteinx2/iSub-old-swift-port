@@ -25,7 +25,7 @@ class RootArtistsLoader: ApiLoader, ItemLoader {
     override func processResponse(root: RXMLElement) -> Bool {
         var artistsTemp = [Artist]()
         
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         root.iterate("artists.index") { index in
             index.iterate("artist") { artist in
                 if artist.attribute("name") != ".AppleDouble" {
@@ -48,7 +48,7 @@ class RootArtistsLoader: ApiLoader, ItemLoader {
     
     func persistModels() {
         // Remove existing artists
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         // TODO: Should only delete artists not in artists array, same for other loaders
         _ = ArtistRepository.si.deleteAllArtists(serverId: serverId)
         
@@ -57,7 +57,7 @@ class RootArtistsLoader: ApiLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         let artistsTemp = ArtistRepository.si.allArtists(serverId: serverId)
         if artistsTemp.count > 0 {
             artists = artistsTemp

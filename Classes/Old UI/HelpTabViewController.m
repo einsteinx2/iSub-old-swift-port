@@ -16,9 +16,6 @@
 
 - (BOOL)shouldAutorotate
 {
-    if (SavedSettings.si.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
     return YES;
 }
 

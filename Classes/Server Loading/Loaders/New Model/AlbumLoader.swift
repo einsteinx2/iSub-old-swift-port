@@ -29,7 +29,7 @@ class AlbumLoader: ApiLoader, ItemLoader {
     override func processResponse(root: RXMLElement) -> Bool {
         var songsTemp = [Song]()
         
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         root.iterate("album.song") { song in
             if let aSong = Song(rxmlElement: song, serverId: serverId) {
                 songsTemp.append(aSong)
@@ -88,7 +88,7 @@ class AlbumLoader: ApiLoader, ItemLoader {
     }
     
     var associatedObject: Any? {
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         return AlbumRepository.si.album(albumId: albumId, serverId: serverId)
     }
 }

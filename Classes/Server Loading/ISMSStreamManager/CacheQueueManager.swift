@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Async
 
 fileprivate let maxReconnects = 5
 
@@ -36,7 +35,7 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
         
         currentSong = Playlist.downloadQueue.song(atIndex: 0)
         
-        guard let currentSong = currentSong, (AppDelegate.si.networkStatus.isReachableWifi || SavedSettings.si().isManualCachingOnWWANEnabled), !SavedSettings.si().isOfflineMode else {
+        guard let currentSong = currentSong, (AppDelegate.si.networkStatus.isReachableWifi || SavedSettings.si.isManualCachingOnWWANEnabled), !SavedSettings.si.isOfflineMode else {
             return
         }
         
@@ -100,7 +99,7 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
     }
     
     func resume() {
-        if !SavedSettings.si().isOfflineMode {
+        if !SavedSettings.si.isOfflineMode {
             streamHandler?.start()
         }
     }
@@ -200,7 +199,7 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
             handler.numberOfReconnects += 1;
             
             // Retry connection after a delay to prevent a tight loop
-            Async.main(after: 2.0) {
+            DispatchQueue.main.async(after: 2.0) {
                 self.resume()
             }
         } else {

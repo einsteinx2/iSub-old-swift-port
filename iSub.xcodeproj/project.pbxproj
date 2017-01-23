@@ -228,8 +228,6 @@
 		531B33BC1E24CF8B00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33361E24CF8B00811187 /* LoadingScreen.m */; };
 		531B33BF1E24CF8B00811187 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33391E24CF8B00811187 /* PlayQueue.swift */; };
 		531B33C01E24CF8B00811187 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33391E24CF8B00811187 /* PlayQueue.swift */; };
-		531B33C11E24CF8B00811187 /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333B1E24CF8B00811187 /* SavedSettings.m */; };
-		531B33C21E24CF8B00811187 /* SavedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B333B1E24CF8B00811187 /* SavedSettings.m */; };
 		531B33D11E24CF8B00811187 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B334E1E24CF8B00811187 /* Utils.swift */; };
 		531B33D21E24CF8B00811187 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B334E1E24CF8B00811187 /* Utils.swift */; };
 		531B33D61E24CFAF00811187 /* UITraitEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */; };
@@ -348,8 +346,6 @@
 		5349AD061613724D003603AF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5349AD031613724D003603AF /* Default-568h@2x.png */; };
 		5349DF87161E408A0044A781 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		534E443F1155AD01000B4134 /* default-album-art-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 534E443E1155AD01000B4134 /* default-album-art-small.png */; };
-		534FACEB1E3199D000BF12D9 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FACEA1E3199D000BF12D9 /* AudioEngine.swift */; };
-		534FACEC1E3199D000BF12D9 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FACEA1E3199D000BF12D9 /* AudioEngine.swift */; };
 		534FACEE1E328D3200BF12D9 /* BassStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FACED1E328D3200BF12D9 /* BassStream.swift */; };
 		534FACEF1E328D3200BF12D9 /* BassStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FACED1E328D3200BF12D9 /* BassStream.swift */; };
 		53544D8A1187DED400B63DB9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
@@ -588,9 +584,6 @@
 		53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C971E0B7D6D0077B53D /* ZKLog.m */; };
 		53835CFA1E0B7D6D0077B53D /* ZKLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C971E0B7D6D0077B53D /* ZKLog.m */; };
 		53835CFB1E0B7D6D0077B53D /* ZKLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C971E0B7D6D0077B53D /* ZKLog.m */; };
-		53835D691E0B81B80077B53D /* Async.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53835D681E0B81B80077B53D /* Async.framework */; };
-		53835D6C1E0B81B80077B53D /* Async.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53835D681E0B81B80077B53D /* Async.framework */; };
-		53835D6D1E0B81B80077B53D /* Async.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53835D681E0B81B80077B53D /* Async.framework */; };
 		538725F217CC19B200CE92F1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538725F117CC19B200CE92F1 /* CoreTelephony.framework */; };
 		538725F417CC19CA00CE92F1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538725F117CC19B200CE92F1 /* CoreTelephony.framework */; };
 		5388A42C1198AD840049BA9E /* selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42A1198AD840049BA9E /* selected.png */; };
@@ -798,6 +791,12 @@
 		53D9D25C16DEF87B002F55F7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24516DEF839002F55F7 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53DE598314F1932C00206529 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
 		53DE598514F1933800206529 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
+		53E042831E36AB4B0009DE79 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E042821E36AB4B0009DE79 /* Synchronized.swift */; };
+		53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E042821E36AB4B0009DE79 /* Synchronized.swift */; };
+		53E042861E36AD200009DE79 /* SavedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E042851E36AD200009DE79 /* SavedSettings.swift */; };
+		53E042871E36AD200009DE79 /* SavedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E042851E36AD200009DE79 /* SavedSettings.swift */; };
+		53E042891E36C49C0009DE79 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E042881E36C49C0009DE79 /* DispatchQueue.swift */; };
+		53E0428A1E36C49C0009DE79 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E042881E36C49C0009DE79 /* DispatchQueue.swift */; };
 		53F107A21E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */; };
 		53F107A31E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */; };
 		53F107A61E2AD144003B7D59 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A51E2AD144003B7D59 /* Item.swift */; };
@@ -862,8 +861,8 @@
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5315A405156F7064001B0268 /* iSub Unit Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Unit Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
-		531B32DA1E24CF8A00811187 /* BassWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassWrapper.h; sourceTree = "<group>"; };
-		531B32DB1E24CF8A00811187 /* BassWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassWrapper.m; sourceTree = "<group>"; };
+		531B32DA1E24CF8A00811187 /* BassWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BassWrapper.h; path = "Bass Wrapper/BassWrapper.h"; sourceTree = "<group>"; };
+		531B32DB1E24CF8A00811187 /* BassWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BassWrapper.m; path = "Bass Wrapper/BassWrapper.m"; sourceTree = "<group>"; };
 		531B32DD1E24CF8A00811187 /* BassEffectDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectDAO.h; sourceTree = "<group>"; };
 		531B32DE1E24CF8A00811187 /* BassEffectDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEffectDAO.m; sourceTree = "<group>"; };
 		531B32DF1E24CF8A00811187 /* BassEffectValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectValue.h; sourceTree = "<group>"; };
@@ -904,8 +903,6 @@
 		531B33351E24CF8B00811187 /* LoadingScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScreen.h; sourceTree = "<group>"; };
 		531B33361E24CF8B00811187 /* LoadingScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingScreen.m; sourceTree = "<group>"; };
 		531B33391E24CF8B00811187 /* PlayQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueue.swift; sourceTree = "<group>"; };
-		531B333A1E24CF8B00811187 /* SavedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedSettings.h; sourceTree = "<group>"; };
-		531B333B1E24CF8B00811187 /* SavedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedSettings.m; sourceTree = "<group>"; };
 		531B334E1E24CF8B00811187 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITraitEnvironment.swift; sourceTree = "<group>"; };
 		531B33D41E24CFAF00811187 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
@@ -984,8 +981,7 @@
 		53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = BassEffectDefaultPresets.plist; path = Other/BassEffectDefaultPresets.plist; sourceTree = "<group>"; };
 		5349AD031613724D003603AF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Images/Other/Default-568h@2x.png"; sourceTree = "<group>"; };
 		534E443E1155AD01000B4134 /* default-album-art-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small.png"; path = "Images/Other/default-album-art-small.png"; sourceTree = "<group>"; };
-		534FACEA1E3199D000BF12D9 /* AudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
-		534FACED1E328D3200BF12D9 /* BassStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BassStream.swift; sourceTree = "<group>"; };
+		534FACED1E328D3200BF12D9 /* BassStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassStream.swift; path = "Bass Wrapper/BassStream.swift"; sourceTree = "<group>"; };
 		53544D891187DED400B63DB9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5354914A11B03FC900928E0F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		5355BFA01E2D671C00C6D27F /* StreamManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamManager.swift; sourceTree = "<group>"; };
@@ -1073,11 +1069,11 @@
 		536E29141E0B94570097C2F6 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
 		536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "entitlements-simulator.plist"; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BassGaplessPlayer.swift; sourceTree = "<group>"; };
+		537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassGaplessPlayer.swift; path = "Bass Wrapper/BassGaplessPlayer.swift"; sourceTree = "<group>"; };
 		537FB2F71E33065E001D3FBB /* ObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		537FB2F81E33065E001D3FBB /* ObjC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
 		537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
-		537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassVisualizer.swift; path = ../Visualizer/BassVisualizer.swift; sourceTree = "<group>"; };
+		537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassVisualizer.swift; path = Visualizer/BassVisualizer.swift; sourceTree = "<group>"; };
 		537FCC5312F8F7F400F1D996 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = "Images/App Icons/iTunesArtwork"; sourceTree = "<group>"; };
 		53835C6F1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GMAppleDouble+ZKAdditions.h"; sourceTree = "<group>"; };
 		53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GMAppleDouble+ZKAdditions.m"; sourceTree = "<group>"; };
@@ -1116,7 +1112,6 @@
 		53835C951E0B7D6D0077B53D /* ZKLFHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKLFHeader.m; sourceTree = "<group>"; };
 		53835C961E0B7D6D0077B53D /* ZKLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKLog.h; sourceTree = "<group>"; };
 		53835C971E0B7D6D0077B53D /* ZKLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKLog.m; sourceTree = "<group>"; };
-		53835D681E0B81B80077B53D /* Async.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Async.framework; path = Carthage/Build/iOS/Async.framework; sourceTree = "<group>"; };
 		538725F117CC19B200CE92F1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		5388A42A1198AD840049BA9E /* selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected.png; path = Images/Other/selected.png; sourceTree = "<group>"; };
 		5388A42B1198AD840049BA9E /* unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unselected.png; path = Images/Other/unselected.png; sourceTree = "<group>"; };
@@ -1219,6 +1214,9 @@
 		53D9D24916DEF843002F55F7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		53D9D24B16DEF847002F55F7 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		53DE598214F1932C00206529 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		53E042821E36AB4B0009DE79 /* Synchronized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronized.swift; sourceTree = "<group>"; };
+		53E042851E36AD200009DE79 /* SavedSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedSettings.swift; sourceTree = "<group>"; };
+		53E042881E36C49C0009DE79 /* DispatchQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
 		53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumRepository.swift; sourceTree = "<group>"; };
 		53F107A51E2AD144003B7D59 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		53F1412015FD550C004D00D5 /* buildnumber.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = buildnumber.xcconfig; path = Other/buildnumber.xcconfig; sourceTree = "<group>"; };
@@ -1255,7 +1253,6 @@
 				53D9D24E16DEF85F002F55F7 /* AdSupport.framework in Frameworks */,
 				5358E1901E0B789B0024A0D4 /* libbass.a in Frameworks */,
 				53D9D24F16DEF85F002F55F7 /* Accounts.framework in Frameworks */,
-				53835D691E0B81B80077B53D /* Async.framework in Frameworks */,
 				53D9D25016DEF85F002F55F7 /* Social.framework in Frameworks */,
 				5349DF87161E408A0044A781 /* Accelerate.framework in Frameworks */,
 				53DE598514F1933800206529 /* CoreText.framework in Frameworks */,
@@ -1298,7 +1295,6 @@
 				5358E1A21E0B789B0024A0D4 /* libbass_mpc.a in Frameworks */,
 				53D9D25B16DEF87B002F55F7 /* Accounts.framework in Frameworks */,
 				53D9D25C16DEF87B002F55F7 /* Social.framework in Frameworks */,
-				53835D6C1E0B81B80077B53D /* Async.framework in Frameworks */,
 				53159F4E156F69D0001B0268 /* CoreText.framework in Frameworks */,
 				5358E1B11E0B789B0024A0D4 /* libbassflac.a in Frameworks */,
 				5358E1B61E0B789B0024A0D4 /* libbassmix.a in Frameworks */,
@@ -1345,7 +1341,6 @@
 				5315A3E9156F7064001B0268 /* UIKit.framework in Frameworks */,
 				5315A3EA156F7064001B0268 /* CoreGraphics.framework in Frameworks */,
 				5358E1991E0B789B0024A0D4 /* libbass_ape.a in Frameworks */,
-				53835D6D1E0B81B80077B53D /* Async.framework in Frameworks */,
 				5315A3EB156F7064001B0268 /* MediaPlayer.framework in Frameworks */,
 				5315A3EC156F7064001B0268 /* CFNetwork.framework in Frameworks */,
 				5315A3ED156F7064001B0268 /* QuartzCore.framework in Frameworks */,
@@ -1568,24 +1563,14 @@
 		531B32D11E24CF8A00811187 /* AudioEngine */ = {
 			isa = PBXGroup;
 			children = (
-				534FACEA1E3199D000BF12D9 /* AudioEngine.swift */,
-				531B32D41E24CF8A00811187 /* Bass Wrapper */,
-				531B32DC1E24CF8A00811187 /* Equalizer */,
-				531B32E51E24CF8A00811187 /* Visualizer */,
-			);
-			path = AudioEngine;
-			sourceTree = "<group>";
-		};
-		531B32D41E24CF8A00811187 /* Bass Wrapper */ = {
-			isa = PBXGroup;
-			children = (
 				531B32DA1E24CF8A00811187 /* BassWrapper.h */,
 				531B32DB1E24CF8A00811187 /* BassWrapper.m */,
 				537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */,
 				534FACED1E328D3200BF12D9 /* BassStream.swift */,
 				537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */,
+				531B32DC1E24CF8A00811187 /* Equalizer */,
 			);
-			path = "Bass Wrapper";
+			path = AudioEngine;
 			sourceTree = "<group>";
 		};
 		531B32DC1E24CF8A00811187 /* Equalizer */ = {
@@ -1603,13 +1588,6 @@
 			path = Equalizer;
 			sourceTree = "<group>";
 		};
-		531B32E51E24CF8A00811187 /* Visualizer */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Visualizer;
-			sourceTree = "<group>";
-		};
 		531B32E81E24CF8A00811187 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -1618,6 +1596,7 @@
 				531B32FC1E24CF8A00811187 /* SectionIndex.swift */,
 				531B34591E24D30500811187 /* NetworkStatus.swift */,
 				530C2D821E2C5A6000839B7A /* ContentType.swift */,
+				53E042821E36AB4B0009DE79 /* Synchronized.swift */,
 				53CFBB611E2AE160005895F4 /* Item Models */,
 				53F107A41E2ACDDC003B7D59 /* Repositories */,
 			);
@@ -1637,6 +1616,7 @@
 				53D959101E2C774200A1667F /* Error.swift */,
 				5355BFAF1E2DB59D00C6D27F /* NSError.swift */,
 				537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */,
+				53E042881E36C49C0009DE79 /* DispatchQueue.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1699,8 +1679,7 @@
 				531B33311E24CF8B00811187 /* CacheSingleton.h */,
 				531B33321E24CF8B00811187 /* CacheSingleton.m */,
 				53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */,
-				531B333A1E24CF8B00811187 /* SavedSettings.h */,
-				531B333B1E24CF8B00811187 /* SavedSettings.m */,
+				53E042851E36AD200009DE79 /* SavedSettings.swift */,
 				531B33351E24CF8B00811187 /* LoadingScreen.h */,
 				531B33361E24CF8B00811187 /* LoadingScreen.m */,
 				5355BFA61E2D955C00C6D27F /* Logging.swift */,
@@ -1985,7 +1964,6 @@
 		5358E1CC1E0B78F80024A0D4 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
-				53835D681E0B81B80077B53D /* Async.framework */,
 				5358E1CD1E0B79210024A0D4 /* HockeySDK.framework */,
 				5358E1CE1E0B79210024A0D4 /* MBProgressHUD.framework */,
 				5358E1D01E0B79210024A0D4 /* SnapKit.framework */,
@@ -2670,7 +2648,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Nuke.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Async.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Device.framework",
 			);
 			name = "Copy Carthage Frameworks";
@@ -2737,7 +2714,6 @@
 				531B33F81E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34421E24D24600811187 /* FMDatabase.m in Sources */,
 				53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */,
-				531B33C11E24CF8B00811187 /* SavedSettings.m in Sources */,
 				531B33611E24CF8B00811187 /* CachedImage.swift in Sources */,
 				531B33591E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
@@ -2805,7 +2781,6 @@
 				53835C981E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				531B33A71E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
 				53D59A7C1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
-				534FACEB1E3199D000BF12D9 /* AudioEngine.swift in Sources */,
 				531B33731E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FC1E24D0B600811187 /* CacheViewController.swift in Sources */,
 				53D959111E2C774200A1667F /* Error.swift in Sources */,
@@ -2815,6 +2790,7 @@
 				5355BFB01E2DB59D00C6D27F /* NSError.swift in Sources */,
 				531B33951E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
 				531B33A51E24CF8B00811187 /* RootArtistsLoader.swift in Sources */,
+				53E042861E36AD200009DE79 /* SavedSettings.swift in Sources */,
 				53F107A21E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
 				531B33AB1E24CF8B00811187 /* StatusLoader.swift in Sources */,
 				53CFBB661E2AE203005895F4 /* RXMLElement.swift in Sources */,
@@ -2832,6 +2808,7 @@
 				531B346B1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */,
 				531B33F61E24D0B600811187 /* ItemTableViewCell.swift in Sources */,
 				53835CF21E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
+				53E042891E36C49C0009DE79 /* DispatchQueue.swift in Sources */,
 				5358DF8D1E0B789A0024A0D4 /* DDLog.m in Sources */,
 				53835CD41E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC01E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
@@ -2841,6 +2818,7 @@
 				53835CCA1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DF9C1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				53D59A831E1DCEAA00071ABD /* NSString+Clean.m in Sources */,
+				53E042831E36AB4B0009DE79 /* Synchronized.swift in Sources */,
 				531B34181E24D12300811187 /* HelpTabViewController.m in Sources */,
 				5358DF7E1E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				531B33571E24CF8B00811187 /* BassEffectDAO.m in Sources */,
@@ -2988,7 +2966,6 @@
 				531B33F91E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34431E24D24600811187 /* FMDatabase.m in Sources */,
 				53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */,
-				531B33C21E24CF8B00811187 /* SavedSettings.m in Sources */,
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,
 				531B335A1E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
@@ -3056,7 +3033,6 @@
 				53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				531B33A81E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
 				53D59A7E1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
-				534FACEC1E3199D000BF12D9 /* AudioEngine.swift in Sources */,
 				531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FD1E24D0B600811187 /* CacheViewController.swift in Sources */,
 				53D959121E2C774200A1667F /* Error.swift in Sources */,
@@ -3066,6 +3042,7 @@
 				5355BFB11E2DB59D00C6D27F /* NSError.swift in Sources */,
 				531B33961E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
 				531B33A61E24CF8B00811187 /* RootArtistsLoader.swift in Sources */,
+				53E042871E36AD200009DE79 /* SavedSettings.swift in Sources */,
 				53F107A31E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
 				531B33AC1E24CF8B00811187 /* StatusLoader.swift in Sources */,
 				53CFBB671E2AE203005895F4 /* RXMLElement.swift in Sources */,
@@ -3083,6 +3060,7 @@
 				531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */,
 				531B33F71E24D0B600811187 /* ItemTableViewCell.swift in Sources */,
 				53835CF41E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
+				53E0428A1E36C49C0009DE79 /* DispatchQueue.swift in Sources */,
 				5358DF8F1E0B789A0024A0D4 /* DDLog.m in Sources */,
 				53835CD61E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
@@ -3092,6 +3070,7 @@
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				53D59A851E1DCEAA00071ABD /* NSString+Clean.m in Sources */,
+				53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */,
 				531B34191E24D12300811187 /* HelpTabViewController.m in Sources */,
 				5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				531B33581E24CF8B00811187 /* BassEffectDAO.m in Sources */,

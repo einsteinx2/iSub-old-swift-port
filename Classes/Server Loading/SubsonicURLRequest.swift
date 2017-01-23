@@ -50,8 +50,8 @@ fileprivate func encodedParameter(_ value: Any) -> String {
 
 extension URLRequest {
     init(subsonicAction: SubsonicURLAction, parameters: [String: Any]? = nil, fragment: String? = nil, byteOffset: Int = 0) {
-        let baseUrl = SavedSettings.si().redirectUrlString ?? SavedSettings.si().currentServer.url
-        let currentServer = SavedSettings.si().currentServer
+        let baseUrl = SavedSettings.si.redirectUrlString ?? SavedSettings.si.currentServer.url
+        let currentServer = SavedSettings.si.currentServer
         self.init(subsonicAction: subsonicAction,
                   baseUrl: baseUrl,
                   username: currentServer.username,
@@ -103,7 +103,7 @@ extension URLRequest {
         }
         
         // Optional HTTP Basic Auth
-        if SavedSettings.si().isBasicAuthEnabled {
+        if SavedSettings.si.isBasicAuthEnabled {
             let authString = "\(username):\(encodedParameter(password))"
             let authData = authString.data(using: .ascii)
             let authValue = "Basic \(authData?.base64EncodedString())"

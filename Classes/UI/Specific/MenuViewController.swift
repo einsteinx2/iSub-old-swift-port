@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Async
 
 private class MenuItem {
     let name: String
@@ -186,7 +185,7 @@ class MenuViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let menuItem = self.menuItems[indexPath.row]
         menuItem.function(self)(menuItem)
-        Async.main(after: 0.2) {
+        DispatchQueue.main.async(after: 0.2) {
             self.sidePanelController.showCenterPanel(animated: true)
         }
     }

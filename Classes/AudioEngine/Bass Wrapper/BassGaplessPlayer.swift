@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Async
+import AVFoundation
 
 // TODO: Audit all numeric types, doing way too much casting
 // TODO: Audit use of stream gcd queue, I left out all syncing when dealing with the streams array
@@ -20,29 +20,20 @@ fileprivate let defaultSampleRate = 44100
 fileprivate let retryDelay = 2.0
 fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
 
-protocol BassGaplessPlayerDelegate {
-    func bassSong(for index: Int, player: BassGaplessPlayer) -> Song?
-    func bassIndex(atOffset offset: Int, from index: Int, player: BassGaplessPlayer) -> Int
-    func bassCurrentPlaylistIndex(_ player: BassGaplessPlayer) -> Int
-    func bassRetrySong(at index: Int, player: BassGaplessPlayer)
-    func bassRetrySongAtOffset(inBytes bytes: Int64, player: BassGaplessPlayer)
-}
-
 @objc class BassGaplessPlayer: NSObject {
     struct Notifications {
         static let songStarted          = Notification.Name("BassGaplessPlayer_songStarted")
         static let songPaused           = Notification.Name("BassGaplessPlayer_songPaused")
         static let songEnded            = Notification.Name("BassGaplessPlayer_songEnded")
-        static let updateLockScreen     = Notification.Name("BassGaplessPlayer_updateLockScreen")
-        static let nextSongStreamFailed = Notification.Name("BassGaplessPlayer_nextSongStreamFailed")
     }
     
-    let delegate: BassGaplessPlayerDelegate
+    static let si = BassGaplessPlayer()
     
+    let bassStreamsQueue = DispatchQueue(label: "com.einsteinx2.BassStreamsQueue")
     var bassStreams = [BassStream]()
     var currentBassStream: BassStream? { return bassStreams.first }
     var bitRate: Int { return currentBassStream != nil ? BassWrapper.estimateBitrate(currentBassStream!) : 0 }
-    let streamQueue = DispatchQueue(label: "com.einsteinx2.BassStreamQueue")
+    
     let ringBuffer = EX2RingBuffer(bufferLength: 640 * 1024) // 640KB
     let ringBufferFillQueue = DispatchQueue(label: "com.einsteinx2.RingBufferQueue")
     var ringBufferFillWorkItem: DispatchWorkItem?
@@ -64,9 +55,39 @@ protocol BassGaplessPlayerDelegate {
     // TODO: Get rid of this
     var previousSongForProgress: Song?
     
-    init(delegate: BassGaplessPlayerDelegate) {
-        self.delegate = delegate
+    var lastProgressSaveDate = Date.distantPast
+    let progressSaveInterval = 10.0
+    
+    override init() {
         super.init()
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(routeChanged(_:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+    }
+    
+    fileprivate var shouldResumeFromInterruption = false
+    @objc fileprivate func handleInterruption(_ notification: Notification) {
+        if notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt == AVAudioSessionInterruptionType.began.rawValue {
+            shouldResumeFromInterruption = isPlaying
+            pause()
+        } else {
+            let shouldResume = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt == AVAudioSessionInterruptionOptions.shouldResume.rawValue
+            if shouldResumeFromInterruption && shouldResume {
+                play()
+            }
+            
+            shouldResumeFromInterruption = false
+        }
+    }
+    
+    @objc fileprivate func routeChanged(_ notification: Notification) {
+        if notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt == AVAudioSessionRouteChangeReason.oldDeviceUnavailable.rawValue {
+            pause()
+        }
+    }
+    
+    deinit {
+        NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+        NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
     }
     
     // MARK: - Output Stream -
@@ -99,22 +120,28 @@ protocol BassGaplessPlayerDelegate {
             
             NotificationCenter.postOnMainThread(name: Notifications.songEnded)
             
-            Async.main {
+            DispatchQueue.main.async {
                 self.cleanup()
             }
             
             // Start the next song if for some reason this one isn't ready
-            delegate.bassRetrySong(at: PlayQueue.si.currentIndex, player: self)
+            PlayQueue.si.startSong()
             
             return BASS_STREAMPROC_END;
+        }
+        
+        let now = Date()
+        if now.timeIntervalSince(lastProgressSaveDate) > progressSaveInterval {
+            SavedSettings.si.seekTime = progress
+            lastProgressSaveDate = now
         }
         
         return UInt32(bytesRead)
     }
     
     func moveToNextSong() {
-        if nextSong != nil {
-            delegate.bassRetrySong(at: nextIndex, player: self)
+        if PlayQueue.si.nextSong != nil {
+            PlayQueue.si.playNextSong()
         } else {
             cleanup()
         }
@@ -130,17 +157,16 @@ protocol BassGaplessPlayerDelegate {
             
             bassStream.isEndedCalled = true
             
-            
-            
             // Remove the stream from the queue
             BASS_StreamFree(bassStream.stream)
             if let index = self.bassStreams.index(of: bassStream) {
-                self.bassStreams.remove(at: index)
+                self.bassStreamsQueue.async {
+                    self.bassStreams.remove(at: index)
+                }
             }
             
             // Send song end notification
             NotificationCenter.postOnMainThread(name: Notifications.songEnded)
-            NotificationCenter.postOnMainThread(name: Notifications.updateLockScreen)
             
             if self.isPlaying {
                 self.startByteOffset = 0
@@ -153,7 +179,27 @@ protocol BassGaplessPlayerDelegate {
             }
             
             if bassStream.isNextSongStreamFailed {
-                NotificationCenter.postOnMainThread(name: Notifications.nextSongStreamFailed)
+                nextSongStreamFailed()
+            }
+        }
+    }
+    
+    func nextSongStreamFailed() {
+        // The song ended, and we tried to make the next stream but it failed
+        if let song = PlayQueue.si.currentSong {
+            if let handler = StreamManager.si.streamHandler, song == StreamManager.si.song {
+                if handler.isReadyForPlayback {
+                    // If the song is downloading and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
+                    DispatchQueue.main.async {
+                        PlayQueue.si.startSong()
+                    }
+                }
+            } else if song.isFullyCached {
+                DispatchQueue.main.async {
+                    PlayQueue.si.startSong()
+                }
+            } else {
+                StreamManager.si.start()
             }
         }
     }
@@ -250,7 +296,7 @@ protocol BassGaplessPlayerDelegate {
                                             return
                                         }
                                         
-                                        if SavedSettings.si().isOfflineMode {
+                                        if SavedSettings.si.isOfflineMode {
                                             // This is offline mode and the song can not continue to play
                                             self.moveToNextSong()
                                         } else {
@@ -275,8 +321,8 @@ protocol BassGaplessPlayerDelegate {
                                             
                                             bassStream.neededSize = size + bytesToWait
                                             
-                                            // Sleep for 10000 microseconds, or 1/100th of a second
-                                            let sleepTime: UInt32 = 10000
+                                            // Sleep for 100000 microseconds, or 1/10th of a second
+                                            let sleepTime: UInt32 = 100000
                                             // Check file size every second, so 1000000 microseconds
                                             let fileSizeCheckWait: UInt32 = 1000000
                                             var totalSleepTime: UInt32 = 0
@@ -286,7 +332,7 @@ protocol BassGaplessPlayerDelegate {
                                                     return
                                                 }
                                                 
-                                                // Check if we should break every 100th of a second
+                                                // Check if we should break every 10th of a second
                                                 usleep(sleepTime)
                                                 totalSleepTime += sleepTime
                                                 if bassStream.shouldBreakWaitLoop || bassStream.shouldBreakWaitLoopForever {
@@ -312,7 +358,7 @@ protocol BassGaplessPlayerDelegate {
                                                         } else if bassStream.song.isFullyCached {
                                                             // If the song has finished caching, we can stop waiting
                                                             return
-                                                        } else if SavedSettings.si().isOfflineMode {
+                                                        } else if SavedSettings.si.isOfflineMode {
                                                             // If we're not in offline mode, stop waiting and try next song
                                                             // Bail if the thread was canceled
                                                             if workItem.isCancelled {
@@ -359,10 +405,9 @@ protocol BassGaplessPlayerDelegate {
     fileprivate func cleanup() {
         BASS_SetDevice(deviceNumber)
         
-        streamQueue.async {
+        bassStreamsQueue.async {
             autoreleasepool {
                 self.startSongRetryWorkItem.cancel()
-                
                 self.ringBufferFillThread?.cancel()
                 
                 for bassStream in self.bassStreams {
@@ -371,15 +416,19 @@ protocol BassGaplessPlayerDelegate {
                     BASS_StreamFree(bassStream.stream)
                 }
                 
-                // TODO: Why are we always recreating these streams
-                //            BASS_StreamFree(self.mixerStream);
-                //            BASS_StreamFree(self.outStream);
-                
-                self.isPlaying = false
+                BASS_StreamFree(self.mixerStream);
+                BASS_StreamFree(self.outStream);
                 
                 self.ringBuffer.reset()
-                
                 self.bassStreams.removeAll()
+                
+                do {
+                    try AVAudioSession.sharedInstance().setActive(false)
+                } catch {
+                    printError(error)
+                }
+                
+                self.isPlaying = false
             }
         }
     }
@@ -444,7 +493,7 @@ protocol BassGaplessPlayerDelegate {
     }
     
     func start(song: Song, index: Int, byteOffset: Int64) {
-        streamQueue.async {
+        bassStreamsQueue.async {
             autoreleasepool {
                 BASS_SetDevice(deviceNumber)
                 
@@ -453,6 +502,12 @@ protocol BassGaplessPlayerDelegate {
                 
                 guard song.fileExists else {
                     return
+                }
+                
+                do {
+                    try AVAudioSession.sharedInstance().setActive(true)
+                } catch {
+                    printError(error)
                 }
                 
                 if let bassStream = self.prepareStream(forSong: song) {
@@ -506,20 +561,18 @@ protocol BassGaplessPlayerDelegate {
                     // Start playback
                     BASS_ChannelPlay(self.outStream, false)
                     self.isPlaying = true
-
-                    NotificationCenter.postOnMainThread(name: Notifications.updateLockScreen)
                     
                     // Notify listeners that playback has started
                     NotificationCenter.postOnMainThread(name: Notifications.songStarted)
                     
                     song.lastPlayed = Date()
                 } else if !song.isFullyCached && song.localFileSize < minSizeToFail {
-                    if SavedSettings.si().isOfflineMode {
+                    if SavedSettings.si.isOfflineMode {
                         self.moveToNextSong()
                     } else if !song.fileExists {
                         // File was removed, so start again normally
                         _ = song.deleteCache()
-                        self.delegate.bassRetrySong(at: PlayQueue.si.currentIndex, player: self)
+                        PlayQueue.si.startSong()
                     } else {
                         // Failed to create the stream, retrying
                         self.startSongRetryWorkItem = DispatchWorkItem {
@@ -529,18 +582,10 @@ protocol BassGaplessPlayerDelegate {
                     }
                 } else {
                     _ = song.deleteCache()
-                    self.delegate.bassRetrySong(at: PlayQueue.si.currentIndex, player: self)
+                    PlayQueue.si.startSong()
                 }
             }
         }
-    }
-    
-    var nextIndex: Int {
-        return delegate.bassIndex(atOffset: 1, from: PlayQueue.si.currentIndex, player: self)
-    }
-    
-    var nextSong: Song? {
-        return delegate.bassSong(for: nextIndex, player: self)
     }
     
     // MARK: - Audio Engine Properties -
@@ -654,18 +699,17 @@ protocol BassGaplessPlayerDelegate {
         } else if currentBassStream == nil {
             // See if we're at the end of the playlist
             if PlayQueue.si.currentSong != nil {
-                delegate.bassRetrySongAtOffset(inBytes: AudioEngine.si.startByteOffset, player: self)
+                PlayQueue.si.startSong(byteOffset: BassGaplessPlayer.si.startByteOffset)
             } else {
-                let index = delegate.bassIndex(atOffset: -1, from: PlayQueue.si.currentIndex, player: self)
-                delegate.bassRetrySong(at: index, player: self)
+                DispatchQueue.main.async {
+                    PlayQueue.si.playPreviousSong()
+                }
             }
         } else {
             BASS_Start()
             isPlaying = true
             NotificationCenter.postOnMainThread(name: Notifications.songStarted)
         }
-        
-        NotificationCenter.postOnMainThread(name: Notifications.updateLockScreen)
     }
     
     func seek(bytes: Int64, fade: Bool = true) {
@@ -730,9 +774,7 @@ func closeProc(userInfo: UnsafeMutableRawPointer?) {
         bassStream.shouldBreakWaitLoopForever = true
         
         do {
-            try ObjC.catchException {
-                bassStream.fileHandle.closeFile()
-            }
+            try ObjC.catchException({bassStream.fileHandle.closeFile()})
         } catch {
             printError(error)
         }
@@ -748,6 +790,7 @@ func lengthProc(userInfo: UnsafeMutableRawPointer?) -> UInt64 {
     autoreleasepool {
         let bassStream: BassStream = bridge(ptr: userInfo)
         if bassStream.shouldBreakWaitLoopForever {
+            // TODO: Why do we return 0 here?
             length = 0
         } else if bassStream.song.isFullyCached || bassStream.isTempCached {
             // Return actual file size on disk
@@ -856,8 +899,8 @@ func endSyncProc(handle: HSYNC, channel: UInt32, data: UInt32, userInfo: UnsafeM
         // This must be done in the stream GCD queue because if we do it in this thread
         // it will pause the audio output momentarily while it's loading the stream
         let bassStream: BassStream = bridge(ptr: userInfo)
-        if let player = bassStream.player, let nextSong = player.nextSong {
-            player.streamQueue.async {
+        if let player = bassStream.player, let nextSong = PlayQueue.si.nextSong {
+            player.bassStreamsQueue.async {
                 // Prepare the next song in the queue
                 let nextStream = player.prepareStream(forSong: nextSong)
                 if let nextStream = nextStream {

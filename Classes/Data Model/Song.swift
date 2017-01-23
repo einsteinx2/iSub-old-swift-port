@@ -95,7 +95,7 @@ extension Song: Item {
     }
     
     var estimatedBitrate: Int {
-        let currentMaxBitrate = SavedSettings.si().currentMaxBitrate;
+        let currentMaxBitrate = SavedSettings.si.currentMaxBitrate;
         
         // Default to 128 if there is no bitrate for this song object (should never happen)
         var rate = (bitrate == nil || bitrate == 0) ? 128 : bitrate!

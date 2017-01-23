@@ -35,7 +35,7 @@ class FolderLoader: ApiLoader, ItemLoader {
         var foldersTemp = [Folder]()
         var songsTemp = [Song]()
         
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         root.iterate("directory.child") { child in
             if (child.attribute("isDir") as NSString).boolValue {
                 if child.attribute("title") != ".AppleDouble" {
@@ -129,7 +129,7 @@ class FolderLoader: ApiLoader, ItemLoader {
     }
     
     var associatedObject: Any? {
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         return FolderRepository.si.folder(folderId: folderId, serverId: serverId)
     }
 }

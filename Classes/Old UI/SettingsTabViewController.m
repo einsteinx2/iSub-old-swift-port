@@ -16,9 +16,6 @@
 
 - (BOOL)shouldAutorotate
 {
-    if (SavedSettings.si.isRotationLockEnabled && [UIDevice currentDevice].orientation != UIDeviceOrientationPortrait)
-        return NO;
-    
     return YES;
 }
 
@@ -41,36 +38,17 @@
 #else
 	self.versionLabel.text = [NSString stringWithFormat:@"iSub version %@", version];
 #endif
-	
-	// Main Settings
-	self.enableScrobblingSwitch.on = SavedSettings.si.isScrobbleEnabled;
-	
-	//scrobblePercentSlider.value = [[AppDelegate.si.settingsDictionary objectForKey:@"scrobblePercentSetting"] floatValue];
-	self.scrobblePercentSlider.value = SavedSettings.si.scrobblePercent;
-	[self updateScrobblePercentLabel];
-			
-	self.autoReloadArtistSwitch.on = SavedSettings.si.isAutoReloadArtistsEnabled;
-
-	self.disablePopupsSwitch.on = !SavedSettings.si.isPopupsEnabled;
-	
-	self.disableRotationSwitch.on = SavedSettings.si.isRotationLockEnabled;
-	
-	self.disableScreenSleepSwitch.on = !SavedSettings.si.isScreenSleepEnabled;
-	
-	self.enableBasicAuthSwitch.on = SavedSettings.si.isBasicAuthEnabled;
+		
+    self.enableBasicAuthSwitch.on = SavedSettings.si.isBasicAuthEnabled;
     
     self.disableCellUsageSwitch.on = SavedSettings.si.isDisableUsageOver3G;
-	
-	self.recoverSegmentedControl.selectedSegmentIndex = SavedSettings.si.recoverSetting;
-	
-	self.maxBitrateWifiSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitrateWifi;
-	self.maxBitrate3GSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitrate3G;
-			
-	self.enableCacheStatusSwitch.on = SavedSettings.si.isCacheStatusEnabled;
-	
+		
+	self.maxBitrateWifiSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitRateWifi;
+	self.maxBitrate3GSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitRate3G;
+				
 	// Cache Settings
     self.enableManualCachingOnWWANSwitch.on = SavedSettings.si.isManualCachingOnWWANEnabled;
-	self.enableSongCachingSwitch.on = SavedSettings.si.isSongCachingEnabled;
+	self.enableSongCachingSwitch.on = SavedSettings.si.isAutoSongCachingEnabled;
     self.enableBackupCacheSwitch.on = SavedSettings.si.isBackupCacheEnabled;
     
     if (SYSTEM_VERSION_LESS_THAN(@"5.0.1"))
@@ -93,9 +71,7 @@
 	self.autoDeleteCacheSwitch.on = SavedSettings.si.isAutoDeleteCacheEnabled;
 	
 	self.autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex = SavedSettings.si.autoDeleteCacheType;
-	
-	self.cacheSongCellColorSegmentedControl.selectedSegmentIndex = SavedSettings.si.cachedSongCellColorType;
-	
+		
 	switch (SavedSettings.si.quickSkipNumberOfSeconds) 
 	{
 		case 5: self.quickSkipSegmentControl.selectedSegmentIndex = 0; break;
@@ -110,35 +86,10 @@
 		default: break;
 	}
 	
-	// Twitter settings
-	if (SavedSettings.si.currentTwitterAccount)
-	{
-        ACAccountStore *store = [[ACAccountStore alloc] init];
-        ACAccount *account = [store accountWithIdentifier:SavedSettings.si.currentTwitterAccount];
-		self.twitterEnabledSwitch.enabled = YES;
-		if (SavedSettings.si.isTwitterEnabled)
-			self.twitterEnabledSwitch.on = YES;
-		else
-			self.twitterEnabledSwitch.on = NO;
-		
-		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signout"];
-		
-		self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [account username]];
-	}
-	else
-	{
-		self.twitterEnabledSwitch.on = NO;
-		self.twitterEnabledSwitch.enabled = NO;
-		
-		self.twitterSigninButton.imageView.image = [UIImage imageNamed:@"twitter-signin"];
-		
-		self.twitterStatusLabel.text = @"Signed out";
-	}
-	
 	[self.cacheSpaceLabel2 addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    self.maxVideoBitrate3GSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxVideoBitrate3G;
-    self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxVideoBitrateWifi;
+    self.maxVideoBitrate3GSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxVideoBitRate3G;
+    self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxVideoBitRateWifi;
     
     // Fix switch positions for iOS 7
     for (UISwitch *sw in self.switches)
@@ -150,43 +101,6 @@
     CGRect autoDeleteCacheSwitchFrame = self.autoDeleteCacheSwitch.frame;
     autoDeleteCacheSwitchFrame.origin.x -= 10;
     self.autoDeleteCacheSwitch.frame = autoDeleteCacheSwitchFrame;
-}
-
-- (void)reloadTwitterUIElements
-{
-    void (^enableTwitterUI)(ACAccount*) = ^(ACAccount *acct)
-    {
-        // Get account and communicate with Twitter API
-        self.twitterEnabledSwitch.enabled = YES;
-        if (SavedSettings.si.isTwitterEnabled)
-            self.twitterEnabledSwitch.on = YES;
-        else
-            self.twitterEnabledSwitch.on = NO;
-        
-        [self.twitterSigninButton setImage:[UIImage imageNamed:@"twitter-signout"] forState:UIControlStateNormal];
-        
-        self.twitterStatusLabel.text = [NSString stringWithFormat:@"%@ signed in", [acct username]];
-    };
-    
-    void (^disableTwitterUI)(void) = ^()
-    {
-        self.twitterEnabledSwitch.on = NO;
-		self.twitterEnabledSwitch.enabled = NO;
-		
-        [self.twitterSigninButton setImage:[UIImage imageNamed:@"twitter-signin"] forState:UIControlStateNormal];
-                
-		self.twitterStatusLabel.text = @"Signed out";
-    };
-    
-    if (SavedSettings.si.currentTwitterAccount)
-    {
-        ACAccount *account = [[[ACAccountStore alloc] init] accountWithIdentifier:SavedSettings.si.currentTwitterAccount];
-        enableTwitterUI(account);
-    }
-    else
-    {
-        disableTwitterUI();
-    }
 }
 
 - (void)cachingTypeToggle
@@ -213,17 +127,13 @@
 {
 	if ([[NSDate date] timeIntervalSinceDate:self.loadedTime] > 0.5)
 	{
-		if (sender == self.recoverSegmentedControl)
+		if (sender == self.maxBitrateWifiSegmentedControl)
 		{
-			SavedSettings.si.recoverSetting = self.recoverSegmentedControl.selectedSegmentIndex;
-		}
-		else if (sender == self.maxBitrateWifiSegmentedControl)
-		{
-			SavedSettings.si.maxBitrateWifi = self.maxBitrateWifiSegmentedControl.selectedSegmentIndex;
+			SavedSettings.si.maxBitRateWifi = self.maxBitrateWifiSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == self.maxBitrate3GSegmentedControl)
 		{
-			SavedSettings.si.maxBitrate3G = self.maxBitrate3GSegmentedControl.selectedSegmentIndex;
+			SavedSettings.si.maxBitRate3G = self.maxBitrate3GSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == self.cachingTypeSegmentedControl)
 		{
@@ -233,10 +143,6 @@
 		else if (sender == self.autoDeleteCacheTypeSegmentedControl)
 		{
 			SavedSettings.si.autoDeleteCacheType = self.autoDeleteCacheTypeSegmentedControl.selectedSegmentIndex;
-		}
-		else if (sender == self.cacheSongCellColorSegmentedControl)
-		{
-			SavedSettings.si.cachedSongCellColorType = self.cacheSongCellColorSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == self.quickSkipSegmentControl)
 		{
@@ -260,11 +166,11 @@
 		}
         else if (sender == self.maxVideoBitrate3GSegmentedControl)
         {
-            SavedSettings.si.maxVideoBitrate3G = self.maxVideoBitrate3GSegmentedControl.selectedSegmentIndex;
+            SavedSettings.si.maxVideoBitRate3G = self.maxVideoBitrate3GSegmentedControl.selectedSegmentIndex;
         }
         else if (sender == self.maxVideoBitrateWifiSegmentedControl)
         {
-            SavedSettings.si.maxVideoBitrateWifi = self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex;
+            SavedSettings.si.maxVideoBitRateWifi = self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex;
         }
 	}
 }
@@ -324,11 +230,7 @@
 {
 	if ([[NSDate date] timeIntervalSinceDate:self.loadedTime] > 0.5)
 	{
-		if (sender == self.enableScrobblingSwitch)
-		{
-			SavedSettings.si.isScrobbleEnabled = self.enableScrobblingSwitch.on;
-		}
-        else if (sender == self.enableManualCachingOnWWANSwitch)
+		if (sender == self.enableManualCachingOnWWANSwitch)
         {
             if (self.enableManualCachingOnWWANSwitch.on)
             {
@@ -344,7 +246,7 @@
         }
 		else if (sender == self.enableSongCachingSwitch)
 		{
-			SavedSettings.si.isSongCachingEnabled = self.enableSongCachingSwitch.on;
+			SavedSettings.si.isAutoSongCachingEnabled = self.enableSongCachingSwitch.on;
 			[self toggleCacheControlsVisibility];
 		}
 		else if (sender == self.enableNextSongCacheSwitch)
@@ -369,26 +271,6 @@
 		else if (sender == self.autoDeleteCacheSwitch)
 		{
 			SavedSettings.si.isAutoDeleteCacheEnabled = self.autoDeleteCacheSwitch.on;
-		}
-		else if (sender == self.twitterEnabledSwitch)
-		{
-			SavedSettings.si.isTwitterEnabled = self.twitterEnabledSwitch.on;
-		}
-		else if (sender == self.enableCacheStatusSwitch)
-		{
-			SavedSettings.si.isCacheStatusEnabled = self.enableCacheStatusSwitch.on;
-		}
-		else if (sender == self.autoReloadArtistSwitch)
-		{
-			SavedSettings.si.isAutoReloadArtistsEnabled = self.autoReloadArtistSwitch.on;
-		}
-		else if (sender == self.disablePopupsSwitch)
-		{
-			SavedSettings.si.isPopupsEnabled = !self.disablePopupsSwitch.on;
-		}
-		else if (sender == self.disableRotationSwitch)
-		{
-			SavedSettings.si.isRotationLockEnabled = self.disableRotationSwitch.on;
 		}
 		else if (sender == self.disableScreenSleepSwitch)
 		{
@@ -614,25 +496,6 @@
 //		}
 //	}
 //}
-
-- (IBAction)updateScrobblePercentLabel
-{
-	NSInteger percentInt = self.scrobblePercentSlider.value * 100;
-	self.scrobblePercentLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)percentInt];
-}
-
-- (IBAction)updateScrobblePercentSetting;
-{
-	SavedSettings.si.scrobblePercent = self.scrobblePercentSlider.value;
-}
-
-- (void)didReceiveMemoryWarning 
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
 
 - (void)dealloc 
 {

@@ -7,13 +7,12 @@
 //
 
 import Foundation
-import Async
 
 private func runInMainThread(_ block: @escaping () -> Void) {
     if Thread.isMainThread {
         block()
     } else {
-        Async.main(block)
+        DispatchQueue.main.async(execute: block)
     }
 }
 

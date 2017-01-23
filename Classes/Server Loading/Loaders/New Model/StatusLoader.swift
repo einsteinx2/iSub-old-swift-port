@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Async
 
 // TODO: Make sure that the status loader completes before making any other API calls, that way we have the correct redirect URL.
 class StatusLoader: ApiLoader {
@@ -57,7 +56,7 @@ class StatusLoader: ApiLoader {
         else
         {
             // This is not a Subsonic server, so fail
-            Async.main {
+            DispatchQueue.main.async {
                 self.failed(error: NSError(iSubCode: .notSubsonicServer))
             }
             return false

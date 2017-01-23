@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Async
 
 enum ApiLoaderState {
     case new
@@ -171,13 +170,13 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
             if (error as NSError).domain == NSURLErrorDomain, (error as NSError).code == NSURLErrorCancelled {
                 selfRef = nil
             } else {
-                Async.main {
+                DispatchQueue.main.async {
                     self.failed(error: error)
                 }
             }
         } else {
             guard let root = RXMLElement(fromXMLData: receivedData), root.isValid else {
-                Async.main {
+                DispatchQueue.main.async {
                     self.failed(error: NSError(iSubCode: .notXML))
                 }
                 return
@@ -187,12 +186,12 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
                 let code = error.attribute("code") ?? "-1"
                 let message = error.attribute("message") ?? ""
                 let error = NSError(domain: SubsonicErrorDomain, code: Int(code) ?? -1, userInfo: [NSLocalizedDescriptionKey: message])
-                Async.main {
+                DispatchQueue.main.async {
                     self.failed(error: error)
                 }
             } else {
                 if processResponse(root: root) {
-                    Async.main {
+                    DispatchQueue.main.async {
                         self.finished()
                     }
                 }

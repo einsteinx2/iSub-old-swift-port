@@ -9,7 +9,6 @@
 import Foundation
 
 import Foundation
-import Async
 
 class StreamManager: NSObject, StreamHandlerDelegate {
     open static let si = StreamManager()
@@ -22,8 +21,8 @@ class StreamManager: NSObject, StreamHandlerDelegate {
     
     func start() {
         //print("Stream manager starting")
-        guard let currentSong = PlayQueue.si.currentSong, song != currentSong, !SavedSettings.si().isOfflineMode else {
-            //print("Stream manager song: \(song) currentSong: \(PlayQueue.si.currentSong) isOfflineMode: \(SavedSettings.si().isOfflineMode)")
+        guard let currentSong = PlayQueue.si.currentSong, song != currentSong, !SavedSettings.si.isOfflineMode else {
+            //print("Stream manager song: \(song) currentSong: \(PlayQueue.si.currentSong) isOfflineMode: \(SavedSettings.si.isOfflineMode)")
             return
         }
         
@@ -60,6 +59,18 @@ class StreamManager: NSObject, StreamHandlerDelegate {
         streamHandler?.cancel()
         streamHandler = nil
         song = nil
+    }
+    
+    fileprivate func registerForNotifications() {
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songEnded), name: BassGaplessPlayer.Notifications.songEnded)
+    }
+    
+    fileprivate func unregisterForNotifications() {
+        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songEnded)
+    }
+    
+    @objc fileprivate func songEnded() {
+        start()
     }
     
     // MARK: - Stream Handler Delegate -

@@ -8,7 +8,6 @@
 
 import Foundation
 import MediaPlayer
-import Async
 import Nuke
 
 @objc public enum RepeatMode: Int {
@@ -40,13 +39,17 @@ import Nuke
         // Watch for changes to the play queue playlist
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(playlistChanged(_:)), name: Playlist.Notifications.playlistChanged)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songReadyForPlayback(_:)), name: StreamHandler.Notifications.readyForPlayback)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(updateLockScreenInfo), name: BassGaplessPlayer.Notifications.updateLockScreen)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songStarted), name: BassGaplessPlayer.Notifications.songStarted)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPaused), name: BassGaplessPlayer.Notifications.songPaused)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songEnded), name: BassGaplessPlayer.Notifications.songEnded)
     }
     
     fileprivate func unregisterForNotifications() {
         NotificationCenter.removeObserverOnMainThread(self, name: Playlist.Notifications.playlistChanged)
         NotificationCenter.removeObserverOnMainThread(self, name: StreamHandler.Notifications.readyForPlayback)
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.updateLockScreen)
+        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
+        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songPaused)
+        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songEnded)
     }
     
     @objc fileprivate func playlistChanged(_ notification: Notification) {
@@ -58,6 +61,18 @@ import Nuke
         if let song = notification.userInfo?["song"] as? Song, song == currentSong {
             startSong()
         }
+    }
+    @objc fileprivate func songStarted() {
+        updateLockScreenInfo()
+    }
+    
+    @objc fileprivate func songPaused() {
+        updateLockScreenInfo()
+    }
+    
+    @objc fileprivate func songEnded() {
+        incrementIndex()
+        updateLockScreenInfo()
     }
     
     //
@@ -86,9 +101,9 @@ import Nuke
     var previousSong: Song? { return playlist.song(atIndex: previousIndex) }
     var nextSong: Song? { return playlist.song(atIndex: nextIndex) }
     var songCount: Int { return playlist.songCount }
-    var isPlaying: Bool { return audioEngine.isPlaying }
-    var isStarted: Bool { return audioEngine.isStarted }
-    var currentSongProgress: Double { return audioEngine.progress }
+    var isPlaying: Bool { return player.isPlaying }
+    var isStarted: Bool { return player.isStarted }
+    var currentSongProgress: Double { return player.progress }
     var playlist: Playlist { return Playlist.playQueue }
     var songs: [Song] {
         // TODO: Figure out what to do about the way playlist models hold songs and how we regenerate the model in this class
@@ -97,7 +112,7 @@ import Nuke
         return playlist.songs
     }
     
-    fileprivate var audioEngine: AudioEngine { return AudioEngine.si }
+    fileprivate let player: BassGaplessPlayer = { return BassGaplessPlayer.si }()
     
     override init() {
         super.init()
@@ -112,9 +127,13 @@ import Nuke
     // MARK: - Play Queue -
     //
     
+    func incrementIndex() {
+        currentIndex = nextIndex
+    }
+    
     func reset() {
         playlist.removeAllSongs()
-        audioEngine.stop()
+        player.stop()
         currentIndex = -1
     }
     
@@ -122,7 +141,7 @@ import Nuke
         // Stop the music if we're removing the current song
         let containsCurrentIndex = indexes.contains(currentIndex)
         if containsCurrentIndex {
-            audioEngine.stop()
+            player.stop()
         }
         
         // Remove the songs
@@ -231,7 +250,7 @@ import Nuke
     }
 
     func playPreviousSong() {
-        if audioEngine.progress > 10.0 {
+        if player.progress > 10.0 {
             // Past 10 seconds in the song, so restart playback instead of changing songs
             playSong(atIndex: self.currentIndex)
         } else {
@@ -245,19 +264,19 @@ import Nuke
     }
     
     func play() {
-        audioEngine.play()
+        player.play()
     }
     
     func pause() {
-        audioEngine.pause()
+        player.pause()
     }
     
     func playPause() {
-        audioEngine.playPause()
+        player.playPause()
     }
     
     func stop() {
-        audioEngine.stop()
+        player.stop()
     }
     
     fileprivate var startSongDelayTimer: DispatchSourceTimer?
@@ -277,13 +296,13 @@ import Nuke
             }
             startSongDelayTimer!.resume()
         } else {
-            audioEngine.stop()
+            player.stop()
         }
     }
     
     fileprivate func startSongDelayed(byteOffset: Int64) {
         // Destroy the streamer to start a new song
-        audioEngine.stop()
+        player.stop()
         
         // Start the stream manager
         StreamManager.si.start()
@@ -292,16 +311,16 @@ import Nuke
             // Check to see if the song is already cached
             if currentSong.isFullyCached {
                 // The song is fully cached, start streaming from the local copy
-                audioEngine.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
+                player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
             } else {
                 if let currentSong = CacheQueueManager.si.currentSong, currentSong.isEqual(currentSong) {
                     // If the Cache Queue is downloading it and it's ready for playback, start the player
                     if CacheQueueManager.si.streamHandler?.isReadyForPlayback == true {
-                        audioEngine.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
+                        player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
                     }
                 } else {
                     if StreamManager.si.streamHandler?.isReadyForPlayback == true {
-                        audioEngine.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
+                        player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
                     }
                 }
             }
@@ -335,7 +354,7 @@ import Nuke
             }
             trackInfo[MPNowPlayingInfoPropertyPlaybackQueueIndex] = currentIndex as AnyObject?
             trackInfo[MPNowPlayingInfoPropertyPlaybackQueueCount] = songCount as AnyObject?
-            trackInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioEngine.progress as AnyObject?
+            trackInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.progress as AnyObject?
             trackInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0 as AnyObject?
             
             trackInfo[MPMediaItemPropertyArtwork] = defaultItemArtwork

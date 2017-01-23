@@ -29,7 +29,7 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
     override func processResponse(root: RXMLElement) -> Bool {
         var albumsTemp = [Album]()
         
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         root.iterate("albumList2.album") { album in
             if let anAlbum = Album(rxmlElement: album, serverId: serverId) {
                 albumsTemp.append(anAlbum)
@@ -56,7 +56,7 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
     
     func persistModels() {
         // Remove existing albums
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         _ = AlbumRepository.si.deleteAllAlbums(serverId: serverId)
         
         // Save the new albums
@@ -64,7 +64,7 @@ class RootAlbumsLoader: ApiLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         let albumsTemp = AlbumRepository.si.allAlbums(serverId: serverId)
         if albumsTemp.count > 0 {
             albums = albumsTemp

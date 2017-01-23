@@ -33,7 +33,7 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
         var foldersTemp = [Folder]()
         var songsTemp = [Song]()
         
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         root.iterate("indexes.index") { index in
             index.iterate("artist") { artist in
                 if artist.attribute("name") != ".AppleDouble" {
@@ -64,7 +64,7 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
     func persistModels() {
         // TODO: Only delete missing ones
         // Remove existing root folders
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         _ = FolderRepository.si.deleteRootFolders(mediaFolderId: mediaFolderId, serverId: serverId)
         _ = SongRepository.si.deleteRootSongs(mediaFolderId: mediaFolderId, serverId: serverId)
         
@@ -74,7 +74,7 @@ class RootFoldersLoader: ApiLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         folders = FolderRepository.si.rootFolders(mediaFolderId: mediaFolderId, serverId: serverId)
         songs = SongRepository.si.rootSongs(mediaFolderId: mediaFolderId, serverId: serverId)
         

@@ -185,7 +185,7 @@ class PlayerViewController: UIViewController {
         updateCurrentSong()
         updateProgress()
         
-        if AudioEngine.si.isPlaying {
+        if BassGaplessPlayer.si.isPlaying {
             playbackStarted()
         }
         
@@ -224,7 +224,7 @@ class PlayerViewController: UIViewController {
     }
     
     @objc fileprivate func playPause() {
-        if !AudioEngine.si.isStarted {
+        if !BassGaplessPlayer.si.isStarted {
             spinner.startAnimating()
         }
         
@@ -259,7 +259,7 @@ class PlayerViewController: UIViewController {
         updateCurrentSong()
     }
     
-    fileprivate func updatePlayButton(_ playing: Bool = AudioEngine.si.isPlaying) {
+    fileprivate func updatePlayButton(_ playing: Bool = BassGaplessPlayer.si.isPlaying) {
         if playing {
             playButton.setTitle("Ⅱ", for: UIControlState())
         } else {
@@ -279,8 +279,8 @@ class PlayerViewController: UIViewController {
     }
     
     @objc fileprivate func updateProgress() {
-        let progress = AudioEngine.si.progress
-        let progressPercent = AudioEngine.si.progressPercent
+        let progress = BassGaplessPlayer.si.progress
+        let progressPercent = BassGaplessPlayer.si.progressPercent
         
         progressSlider.value = Float(progressPercent)
         elapsedLabel.text = NSString.formatTime(progress)
@@ -298,7 +298,7 @@ class PlayerViewController: UIViewController {
     }
     
     @objc fileprivate func progressSliderValueChanged() {
-        AudioEngine.si.seek(percent: Double(progressSlider.value), fade: true)
+        BassGaplessPlayer.si.seek(percent: Double(progressSlider.value), fade: true)
     }
     
     @objc fileprivate func hidePlayer() {

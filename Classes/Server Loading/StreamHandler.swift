@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Async
 
 @objc protocol StreamHandlerDelegate {
     func streamHandlerStarted(_ handler: StreamHandler)
@@ -115,14 +114,14 @@ import Async
         }
         
         // Mark the new file as no backup
-        if !SavedSettings.si().isBackupCacheEnabled {
+        if !SavedSettings.si.isBackupCacheEnabled {
             var fileUrl = URL(fileURLWithPath: filePath)
             fileUrl.isExcludedFromBackup = true
         }
         
         bitrate = song.estimatedBitrate
         if maxBitrateSetting < 0 {
-            maxBitrateSetting = SavedSettings.si().currentMaxBitrate
+            maxBitrateSetting = SavedSettings.si.currentMaxBitrate
         }
         
         var parameters = ["id": "\(song.songId)"]

@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import QuartzCore
-import Async
 
 protocol View {
     // Must be a UIView or at least act like one

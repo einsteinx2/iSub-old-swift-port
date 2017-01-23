@@ -24,7 +24,7 @@ class RootPlaylistsLoader: ApiLoader, ItemLoader {
     override func processResponse(root: RXMLElement) -> Bool {
         var playlistsTemp = [Playlist]()
         
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         root.iterate("playlists.playlist") { playlist in
             if let aPlaylist = Playlist(rxmlElement: playlist, serverId: serverId) {
                 playlistsTemp.append(aPlaylist)
@@ -43,7 +43,7 @@ class RootPlaylistsLoader: ApiLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        playlists = PlaylistRepository.si.allPlaylists(serverId: SavedSettings.si().currentServerId)
+        playlists = PlaylistRepository.si.allPlaylists(serverId: SavedSettings.si.currentServerId)
         return true
     }
 }

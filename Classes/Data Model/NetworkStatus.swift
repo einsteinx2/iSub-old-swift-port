@@ -26,6 +26,13 @@ class NetworkStatus: NSObject {
         return false
     }
     
+    var isReachableWWAN: Bool {
+        if let reachability = reachability {
+            return reachability.isReachableViaWWAN
+        }
+        return false
+    }
+    
     func startMonitoring() {
         do {
             try reachability?.startNotifier()

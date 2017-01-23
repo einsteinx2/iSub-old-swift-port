@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Async
 
 class ItemLoaderOperation: Operation {
     fileprivate(set) var loader: ItemLoader

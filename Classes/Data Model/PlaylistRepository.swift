@@ -355,13 +355,13 @@ extension Playlist {
     static let downloadedSongsPlaylistId = Int64.max - 3
     
     static var playQueue: Playlist {
-        return PlaylistRepository.si.playlist(playlistId: playQueuePlaylistId, serverId: SavedSettings.si().currentServerId)!
+        return PlaylistRepository.si.playlist(playlistId: playQueuePlaylistId, serverId: SavedSettings.si.currentServerId)!
     }
     static var downloadQueue: Playlist {
-        return PlaylistRepository.si.playlist(playlistId: downloadQueuePlaylistId, serverId: SavedSettings.si().currentServerId)!
+        return PlaylistRepository.si.playlist(playlistId: downloadQueuePlaylistId, serverId: SavedSettings.si.currentServerId)!
     }
     static var downloadedSongs: Playlist {
-        return PlaylistRepository.si.playlist(playlistId: downloadedSongsPlaylistId, serverId: SavedSettings.si().currentServerId)!
+        return PlaylistRepository.si.playlist(playlistId: downloadedSongsPlaylistId, serverId: SavedSettings.si.currentServerId)!
     }
 }
 

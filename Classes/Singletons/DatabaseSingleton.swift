@@ -11,7 +11,7 @@ import Foundation
 @objc class DatabaseSingleton: NSObject {
     static let si = DatabaseSingleton()
     
-    static let databaseFolderPath = SavedSettings.documentsPath() + "/database"
+    static let databaseFolderPath = documentsPath + "/database"
     static let databasePath = databaseFolderPath + "/newSongModel.db"
     
     var write: FMDatabaseQueue!
@@ -150,7 +150,7 @@ import Foundation
         }
         
         // Create the default playlist tables
-        let serverId = SavedSettings.si().currentServerId
+        let serverId = SavedSettings.si.currentServerId
         PlaylistRepository.si.createDefaultPlaylists(serverId: serverId)
     }
     

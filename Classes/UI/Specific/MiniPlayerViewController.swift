@@ -108,7 +108,7 @@ class MiniPlayerViewController: UIViewController {
     }
     
     @objc fileprivate func playPause() {
-        if !AudioEngine.si.isStarted {
+        if !BassGaplessPlayer.si.isStarted {
             spinner.startAnimating()
         }
         
@@ -135,7 +135,7 @@ class MiniPlayerViewController: UIViewController {
         updateCurrentSong()
     }
     
-    fileprivate func updatePlayButton(_ playing: Bool = AudioEngine.si.isPlaying) {
+    fileprivate func updatePlayButton(_ playing: Bool = BassGaplessPlayer.si.isPlaying) {
         if playing {
             playButton.setTitle("| |", for: UIControlState())
         } else {
@@ -155,7 +155,7 @@ class MiniPlayerViewController: UIViewController {
     }
     
     @objc fileprivate func updateProgressView() {
-        let progress = AudioEngine.si.progressPercent
+        let progress = BassGaplessPlayer.si.progressPercent
         let width = self.view.frame.width * CGFloat(progress)
         progressView.snp.updateConstraints { make in
             make.width.equalTo(width)

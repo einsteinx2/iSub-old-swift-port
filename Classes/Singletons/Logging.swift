@@ -9,7 +9,7 @@
 import Foundation
 
 struct Logging {
-    static var logsFolder = SavedSettings.cachesPath() + "/Logs"
+    static var logsFolder = cachesPath + "/Logs"
     
     static var latestLogFileName: String? {
         if let logFiles = try? FileManager.default.contentsOfDirectory(atPath: logsFolder) {
@@ -32,14 +32,14 @@ struct Logging {
     
     static func zipAllLogFiles() -> String? {
         let zipFileName = "iSub Logs.zip"
-        let zipFilePath = SavedSettings.cachesPath() + "/" + zipFileName
+        let zipFilePath = cachesPath + "/" + zipFileName
         
         // Delete the old zip if exists
         try? FileManager.default.removeItem(atPath: zipFilePath)
 
         // Zip the logs
         let archive = ZKFileArchive(archivePath: zipFilePath)
-        let result = archive?.deflateDirectory(logsFolder, relativeToPath: SavedSettings.cachesPath(), usingResourceFork: false)
+        let result = archive?.deflateDirectory(logsFolder, relativeToPath: cachesPath, usingResourceFork: false)
         if let result = result, Int32(result) == zkSucceeded.rawValue {
             return zipFilePath
         }
