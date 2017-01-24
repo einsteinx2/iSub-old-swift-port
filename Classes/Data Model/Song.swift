@@ -67,11 +67,11 @@ extension Song: Item {
     }
     
     var localPath: String {
-        return CacheSingleton.songCachePath() + "/" + fileName
+        return songCachePath + "/" + fileName
     }
     
     var localTempPath: String {
-        return CacheSingleton.tempCachePath() + "/" + fileName
+        return tempCachePath + "/" + fileName
     }
     
     var currentPath: String {

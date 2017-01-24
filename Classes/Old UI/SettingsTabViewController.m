@@ -56,8 +56,8 @@
         self.enableBackupCacheSwitch.enabled = NO;
     }
 		
-	self.totalSpace = CacheSingleton.si.totalSpace;
-	self.freeSpace = CacheSingleton.si.freeSpace;
+	//self.totalSpace = CacheSingleton.si.totalSpace;
+	//self.freeSpace = CacheSingleton.si.freeSpace;
 	self.freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [NSString formatFileSize:self.freeSpace]];
 	self.totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [NSString formatFileSize:self.totalSpace]];
 	float percentFree = (float) self.freeSpace / (float) self.totalSpace;

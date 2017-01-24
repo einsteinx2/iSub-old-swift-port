@@ -43,7 +43,7 @@ import Reachability
         // Perfect example of why using singletons is bad practice!
         SavedSettings.si.setup()
         DatabaseSingleton.si.setup()
-        CacheSingleton.si().setup()
+        CacheSingleton.si.setup()
         
         #if DebugBuild
             // Console logging only for Xcode builds

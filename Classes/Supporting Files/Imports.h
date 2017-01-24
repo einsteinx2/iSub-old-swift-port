@@ -16,7 +16,6 @@
 #import "FMDatabasePoolAdditions.h"
 
 // Singletons
-#import "CacheSingleton.h"
 #import "LoadingScreen.h"
 
 // Other

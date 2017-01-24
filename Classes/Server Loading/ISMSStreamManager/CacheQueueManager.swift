@@ -41,7 +41,7 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
         
         // TODO: Better logic
         // For simplicity sake, just make sure we never go under 25 MB and let the cache check process take care of the rest
-        guard CacheSingleton.si().freeSpace > 25 * 1024 * 1024 else {
+        guard CacheSingleton.si.freeSpace > 25 * 1024 * 1024 else {
             /*[EX2Dispatch runInMainThread:^
              {
              [cacheS showNoFreeSpaceMessage:NSLocalizedString(@"Your device has run out of space and cannot download any more music. Please free some space and try again", @"Download manager, device out of space message")];

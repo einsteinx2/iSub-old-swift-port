@@ -104,7 +104,7 @@ import Foundation
         if !resume {
             // Clear temp cache if this is a temp file
             if isTempCache {
-                CacheSingleton.si().clearTempCache()
+                CacheSingleton.si.clearTempCache()
             }
             
             // Create the file

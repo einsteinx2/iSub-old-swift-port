@@ -49,5 +49,7 @@ let ISMSiPadCornerRadius = 5.0
 let CellHeight: CGFloat = 50.0
 let CellHeaderHeight: CGFloat = 20.0
 
-let documentsPath: String = { return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] }()
-let cachesPath: String = { return NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] }()
+let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+let cachesPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
+let songCachePath = documentsPath + "/songCache"
+let tempCachePath = cachesPath + "/tempCache"

@@ -170,20 +170,16 @@ import Foundation
     
     var isBackupCacheEnabled: Bool {
         get { return synchronizedResult { return self.storage.bool(forKey: Keys.isBackupCacheEnabled) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.isBackupCacheEnabled) }
-            if newValue {
-                // Set all cached songs to removeSkipBackup
-                CacheSingleton.si().setAllCachedSongsToBackup()
-            } else {
-                // Set all cached songs to removeSkipBackup
-                CacheSingleton.si().setAllCachedSongsToNotBackup()
-            }
+        set { synchronized {
+            self.storage.set(newValue, forKey: Keys.isBackupCacheEnabled) }
+            CacheSingleton.si.backupSongCache = newValue
         }
     }
     
     var isManualCachingOnWWANEnabled: Bool {
         get { return synchronizedResult { return self.storage.bool(forKey: Keys.isManualCachingOnWWANEnabled) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.isManualCachingOnWWANEnabled) }
+        set { synchronized {
+            self.storage.set(newValue, forKey: Keys.isManualCachingOnWWANEnabled) }
             if AppDelegate.si.networkStatus.isReachableWWAN {
                 newValue ? CacheQueueManager.si.start() : CacheQueueManager.si.stop()
             }

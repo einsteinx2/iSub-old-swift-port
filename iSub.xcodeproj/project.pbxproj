@@ -212,8 +212,6 @@
 		531B33AC1E24CF8B00811187 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33241E24CF8B00811187 /* StatusLoader.swift */; };
 		531B33B51E24CF8B00811187 /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B332E1E24CF8B00811187 /* StreamHandler.swift */; };
 		531B33B61E24CF8B00811187 /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B332E1E24CF8B00811187 /* StreamHandler.swift */; };
-		531B33B71E24CF8B00811187 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33321E24CF8B00811187 /* CacheSingleton.m */; };
-		531B33B81E24CF8B00811187 /* CacheSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33321E24CF8B00811187 /* CacheSingleton.m */; };
 		531B33BB1E24CF8B00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33361E24CF8B00811187 /* LoadingScreen.m */; };
 		531B33BC1E24CF8B00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33361E24CF8B00811187 /* LoadingScreen.m */; };
 		531B33BF1E24CF8B00811187 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33391E24CF8B00811187 /* PlayQueue.swift */; };
@@ -798,6 +796,8 @@
 		53F7A128131B7F3B002C829D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
 		53FD71E51E36E73600460B44 /* BassEqualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E41E36E73600460B44 /* BassEqualizer.swift */; };
 		53FD71E61E36E73600460B44 /* BassEqualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E41E36E73600460B44 /* BassEqualizer.swift */; };
+		53FD71E81E36F95400460B44 /* CacheSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E71E36F95400460B44 /* CacheSingleton.swift */; };
+		53FD71E91E36F95400460B44 /* CacheSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E71E36F95400460B44 /* CacheSingleton.swift */; };
 		53FDEE2611E822CC00FE3ECD /* current-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2511E822CC00FE3ECD /* current-server@2x.png */; };
 		53FDEE2911E823A100FE3ECD /* default-album-art-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */; };
 		53FDEE2A11E823A100FE3ECD /* default-album-art@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */; };
@@ -880,8 +880,6 @@
 		531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootPlaylistsLoader.swift; path = "New Model/RootPlaylistsLoader.swift"; sourceTree = "<group>"; };
 		531B33241E24CF8B00811187 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusLoader.swift; path = "New Model/StatusLoader.swift"; sourceTree = "<group>"; };
 		531B332E1E24CF8B00811187 /* StreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamHandler.swift; path = ../StreamHandler.swift; sourceTree = "<group>"; };
-		531B33311E24CF8B00811187 /* CacheSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheSingleton.h; sourceTree = "<group>"; };
-		531B33321E24CF8B00811187 /* CacheSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheSingleton.m; sourceTree = "<group>"; };
 		531B33351E24CF8B00811187 /* LoadingScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScreen.h; sourceTree = "<group>"; };
 		531B33361E24CF8B00811187 /* LoadingScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingScreen.m; sourceTree = "<group>"; };
 		531B33391E24CF8B00811187 /* PlayQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueue.swift; sourceTree = "<group>"; };
@@ -1208,6 +1206,7 @@
 		53F675E7113B096400822059 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		53F7A127131B7F3B002C829D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		53FD71E41E36E73600460B44 /* BassEqualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BassEqualizer.swift; sourceTree = "<group>"; };
+		53FD71E71E36F95400460B44 /* CacheSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheSingleton.swift; sourceTree = "<group>"; };
 		53FDEE2511E822CC00FE3ECD /* current-server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server@2x.png"; path = "Images/Other/current-server@2x.png"; sourceTree = "<group>"; };
 		53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small@2x.png"; path = "Images/Other/default-album-art-small@2x.png"; sourceTree = "<group>"; };
 		53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art@2x.png"; path = "Images/Other/default-album-art@2x.png"; sourceTree = "<group>"; };
@@ -1642,8 +1641,7 @@
 			isa = PBXGroup;
 			children = (
 				531B33391E24CF8B00811187 /* PlayQueue.swift */,
-				531B33311E24CF8B00811187 /* CacheSingleton.h */,
-				531B33321E24CF8B00811187 /* CacheSingleton.m */,
+				53FD71E71E36F95400460B44 /* CacheSingleton.swift */,
 				53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */,
 				53E042851E36AD200009DE79 /* SavedSettings.swift */,
 				531B33351E24CF8B00811187 /* LoadingScreen.h */,
@@ -2666,6 +2664,7 @@
 				53D959141E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */,
 				530F04AF1E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				531B33D11E24CF8B00811187 /* Utils.swift in Sources */,
+				53FD71E81E36F95400460B44 /* CacheSingleton.swift in Sources */,
 				533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				53CFBB6F1E2B1628005895F4 /* ArtistRepository.swift in Sources */,
 				532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
@@ -2737,7 +2736,6 @@
 				53835CAC1E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
 				5358DFA11E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				53D59A651E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
-				531B33B71E24CF8B00811187 /* CacheSingleton.m in Sources */,
 				531B33911E24CF8B00811187 /* CachedDatabaseLoader.swift in Sources */,
 				531B34081E24D0B600811187 /* PlayQueueViewModel.swift in Sources */,
 				53835CDE1E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
@@ -2914,6 +2912,7 @@
 				53D959151E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */,
 				530F04B01E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				531B33D21E24CF8B00811187 /* Utils.swift in Sources */,
+				53FD71E91E36F95400460B44 /* CacheSingleton.swift in Sources */,
 				533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				53CFBB701E2B1628005895F4 /* ArtistRepository.swift in Sources */,
 				532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
@@ -2985,7 +2984,6 @@
 				53835CAE1E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
 				5358DFA31E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				53D59A671E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
-				531B33B81E24CF8B00811187 /* CacheSingleton.m in Sources */,
 				531B33921E24CF8B00811187 /* CachedDatabaseLoader.swift in Sources */,
 				531B34091E24D0B600811187 /* PlayQueueViewModel.swift in Sources */,
 				53835CE01E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
