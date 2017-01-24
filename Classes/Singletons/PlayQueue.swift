@@ -10,18 +10,18 @@ import Foundation
 import MediaPlayer
 import Nuke
 
-@objc public enum RepeatMode: Int {
-    case normal
-    case repeatOne
-    case repeatAll
+enum RepeatMode: Int {
+    case normal    = 0
+    case repeatOne = 1
+    case repeatAll = 2
 }
 
-@objc public enum ShuffleMode: Int {
-    case normal
-    case shuffle
+enum ShuffleMode: Int {
+    case normal  = 0
+    case shuffle = 1
 }
 
-@objc class PlayQueue: NSObject {
+class PlayQueue {
     
     //
     // MARK: - Notifications -
@@ -114,8 +114,7 @@ import Nuke
     
     fileprivate let player: BassGaplessPlayer = { return BassGaplessPlayer.si }()
     
-    override init() {
-        super.init()
+    init() {
         registerForNotifications()
     }
     
@@ -305,7 +304,7 @@ import Nuke
         player.stop()
         
         // Start the stream manager
-        StreamManager.si.start()
+        StreamQueue.si.start()
         
         if let currentSong = currentSong {
             // Check to see if the song is already cached
@@ -313,13 +312,13 @@ import Nuke
                 // The song is fully cached, start streaming from the local copy
                 player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
             } else {
-                if let currentSong = CacheQueueManager.si.currentSong, currentSong.isEqual(currentSong) {
+                if let currentSong = CacheQueue.si.currentSong, currentSong.isEqual(currentSong) {
                     // If the Cache Queue is downloading it and it's ready for playback, start the player
-                    if CacheQueueManager.si.streamHandler?.isReadyForPlayback == true {
+                    if CacheQueue.si.streamHandler?.isReadyForPlayback == true {
                         player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
                     }
                 } else {
-                    if StreamManager.si.streamHandler?.isReadyForPlayback == true {
+                    if StreamQueue.si.streamHandler?.isReadyForPlayback == true {
                         player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
                     }
                 }
@@ -336,7 +335,7 @@ import Nuke
     }()
     
     fileprivate var lockScreenUpdateTimer: Timer?
-    func updateLockScreenInfo() {
+    @objc func updateLockScreenInfo() {
         var trackInfo = [String: AnyObject]()
         if let song = self.currentSong {
             trackInfo[MPMediaItemPropertyTitle] = song.title as AnyObject?
@@ -369,6 +368,6 @@ import Nuke
         if let lockScreenUpdateTimer = self.lockScreenUpdateTimer {
             lockScreenUpdateTimer.invalidate()
         }
-        lockScreenUpdateTimer = Timer(timeInterval: 30.0, target: self, selector: #selector(PlayQueue.updateLockScreenInfo), userInfo: nil, repeats: false)
+        lockScreenUpdateTimer = Timer(timeInterval: 30.0, target: self, selector: #selector(updateLockScreenInfo), userInfo: nil, repeats: false)
     }
 }

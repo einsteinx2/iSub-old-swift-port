@@ -8,13 +8,13 @@
 
 import Foundation
 
-@objc protocol StreamHandlerDelegate {
+protocol StreamHandlerDelegate {
     func streamHandlerStarted(_ handler: StreamHandler)
     func streamHandlerConnectionFinished(_ handler: StreamHandler)
     func streamHandlerConnectionFailed(_ handler: StreamHandler, withError error: Error?)
 }
 
-@objc class StreamHandler: NSObject, URLSessionDataDelegate {
+class StreamHandler: NSObject, URLSessionDataDelegate {
     struct Notifications {
         static let readyForPlayback = Notification.Name("StreamHandler_readyForPlayback")
         static let downloaded       = Notification.Name("StreamHandler_downloaded")
@@ -104,7 +104,7 @@ import Foundation
         if !resume {
             // Clear temp cache if this is a temp file
             if isTempCache {
-                CacheSingleton.si.clearTempCache()
+                CacheManager.si.clearTempCache()
             }
             
             // Create the file

@@ -26,13 +26,13 @@ struct SectionIndex {
         
         var sectionIndexes: [SectionIndex] = []
         var lastFirstLetter: String?
-        let articles = DatabaseSingleton.si.ignoredArticles
+        let articles = Database.si.ignoredArticles
         
         var index: Int = 0
         var count: Int = 0
         for item in items {
             if item.itemName.length > 0 {
-                let name = DatabaseSingleton.si.name(item.itemName, ignoringArticles: articles).uppercased()
+                let name = Database.si.name(item.itemName, ignoringArticles: articles).uppercased()
                 let firstScalar = name.unicodeScalars.first
                 var firstLetter = name[0]
                 

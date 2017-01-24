@@ -42,7 +42,7 @@ struct MediaFolderRepository: ItemRepository {
     
     func replace(mediaFolder: MediaFolder, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?)"

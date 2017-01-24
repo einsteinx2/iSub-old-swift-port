@@ -46,7 +46,7 @@ struct FolderRepository: ItemRepository {
     
     func deleteRootFolders(mediaFolderId: Int64?, serverId: Int64, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             var query = "DELETE FROM \(table) WHERE parentFolderId IS NULL AND serverId = ?"
             do {
@@ -66,7 +66,7 @@ struct FolderRepository: ItemRepository {
     
     func rootFolders(mediaFolderId: Int64? = nil, serverId: Int64? = nil, isCachedTable: Bool = false) -> [Folder] {
         var folders = [Folder]()
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             var query = "SELECT * FROM \(table) WHERE parentFolderId IS NULL"
             do {
@@ -94,12 +94,12 @@ struct FolderRepository: ItemRepository {
             }
         }
         
-        return subsonicSorted(items: folders, ignoredArticles: DatabaseSingleton.si.ignoredArticles)
+        return subsonicSorted(items: folders, ignoredArticles: Database.si.ignoredArticles)
     }
     
     func folders(parentFolderId: Int64, serverId: Int64, isCachedTable: Bool = false) -> [Folder] {
         var folders = [Folder]()
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             let query = "SELECT * FROM \(table) WHERE parentFolderId = ? AND serverId = ?"
             do {
@@ -118,7 +118,7 @@ struct FolderRepository: ItemRepository {
     
     func replace(folder: Folder, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?)"

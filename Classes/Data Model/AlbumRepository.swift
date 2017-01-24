@@ -22,7 +22,7 @@ struct AlbumRepository: ItemRepository {
     
     func allAlbums(serverId: Int64? = nil, isCachedTable: Bool = false) -> [Album] {
         let albums: [Album] = gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
-        return subsonicSorted(items: albums, ignoredArticles: DatabaseSingleton.si.ignoredArticles)
+        return subsonicSorted(items: albums, ignoredArticles: Database.si.ignoredArticles)
     }
     
     func deleteAllAlbums(serverId: Int64?) -> Bool {
@@ -47,7 +47,7 @@ struct AlbumRepository: ItemRepository {
     
     func albums(artistId: Int64, serverId: Int64, isCachedTable: Bool = false) -> [Album] {
         var albums = [Album]()
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
             let query = "SELECT * FROM \(table) WHERE artistId = ? AND serverId = ?"
             do {
@@ -66,7 +66,7 @@ struct AlbumRepository: ItemRepository {
     
     func replace(album: Album, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"

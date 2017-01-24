@@ -1,5 +1,5 @@
 //
-//  DatabaseSingleton.swift
+//  Database.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 1/15/17.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-@objc class DatabaseSingleton: NSObject {
-    static let si = DatabaseSingleton()
+class Database {
+    static let si = Database()
     
     static let databaseFolderPath = documentsPath + "/database"
     static let databasePath = databaseFolderPath + "/newSongModel.db"
@@ -18,21 +18,22 @@ import Foundation
     var read: FMDatabasePool!
     
     func setup() {
-        if !FileManager.default.fileExists(atPath: DatabaseSingleton.databaseFolderPath) {
-            try? FileManager.default.createDirectory(atPath: DatabaseSingleton.databaseFolderPath, withIntermediateDirectories: true, attributes: nil)
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: Database.databaseFolderPath) {
+            try? fileManager.createDirectory(atPath: Database.databaseFolderPath, withIntermediateDirectories: true, attributes: nil)
         }
         
         setupDatabases()
     }
     
     func setupDatabases() {
-        print("sqlite3 \(DatabaseSingleton.databasePath)")
+        print("sqlite3 \(Database.databasePath)")
         
-        read = FMDatabasePool(path: DatabaseSingleton.databasePath)
+        read = FMDatabasePool(path: Database.databasePath)
         read.maximumNumberOfDatabasesToCreate = 20
         read.delegate = self
         
-        write = FMDatabaseQueue(path: DatabaseSingleton.databasePath)
+        write = FMDatabaseQueue(path: Database.databasePath)
         
         write.inDatabase { db in
             db.executeStatements("PRAGMA journal_mode=WAL")

@@ -1,5 +1,5 @@
 //
-//  CacheQueueManager.swift
+//  CacheQueue.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 1/9/17.
@@ -10,15 +10,15 @@ import Foundation
 
 fileprivate let maxReconnects = 5
 
-class CacheQueueManager: NSObject, StreamHandlerDelegate {
+class CacheQueue: StreamHandlerDelegate {
     struct Notifications {
-        static let started        = Notification.Name("CacheQueueManager_started")
-        static let stopped        = Notification.Name("CacheQueueManager_stopped")
-        static let songDownloaded = Notification.Name("CacheQueueManager_songDownloaded")
-        static let songFailed     = Notification.Name("CacheQueueManager_songFailed")
+        static let started        = Notification.Name("CacheQueue_started")
+        static let stopped        = Notification.Name("CacheQueue_stopped")
+        static let songDownloaded = Notification.Name("CacheQueue_songDownloaded")
+        static let songFailed     = Notification.Name("CacheQueue_songFailed")
     }
     
-    open static let si = CacheQueueManager()
+    open static let si = CacheQueue()
     
     fileprivate(set) var isDownloading = false
     fileprivate(set) var currentSong: Song?
@@ -41,7 +41,7 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
         
         // TODO: Better logic
         // For simplicity sake, just make sure we never go under 25 MB and let the cache check process take care of the rest
-        guard CacheSingleton.si.freeSpace > 25 * 1024 * 1024 else {
+        guard CacheManager.si.freeSpace > 25 * 1024 * 1024 else {
             /*[EX2Dispatch runInMainThread:^
              {
              [cacheS showNoFreeSpaceMessage:NSLocalizedString(@"Your device has run out of space and cannot download any more music. Please free some space and try again", @"Download manager, device out of space message")];
@@ -70,11 +70,11 @@ class CacheQueueManager: NSObject, StreamHandlerDelegate {
         // TODO: Download the art
         
         // Create the stream handler
-        if StreamManager.si.song == currentSong, let handler = StreamManager.si.streamHandler {
+        if StreamQueue.si.song == currentSong, let handler = StreamQueue.si.streamHandler {
             // It's in the stream queue so steal the handler
-            StreamManager.si.streamHandler = nil
-            StreamManager.si.stop()
-            StreamManager.si.start()
+            StreamQueue.si.streamHandler = nil
+            StreamQueue.si.stop()
+            StreamQueue.si.start()
             
             handler.delegate = self
             if !handler.isDownloading {

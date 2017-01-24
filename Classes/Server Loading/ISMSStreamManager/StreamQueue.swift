@@ -1,5 +1,5 @@
 //
-//  StreamManager.swift
+//  StreamQueue.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 1/16/17.
@@ -8,10 +8,8 @@
 
 import Foundation
 
-import Foundation
-
-class StreamManager: NSObject, StreamHandlerDelegate {
-    open static let si = StreamManager()
+class StreamQueue: StreamHandlerDelegate {
+    open static let si = StreamQueue()
     
     fileprivate let maxReconnects = 5
     
@@ -28,10 +26,10 @@ class StreamManager: NSObject, StreamHandlerDelegate {
         
         stop()
         
-        if currentSong.basicType == .audio && !currentSong.isFullyCached && CacheQueueManager.si.currentSong != currentSong {
+        if currentSong.basicType == .audio && !currentSong.isFullyCached && CacheQueue.si.currentSong != currentSong {
             //print("Stream manager using current song")
             song = currentSong
-        } else if let nextSong = PlayQueue.si.nextSong, nextSong.basicType == .audio && !nextSong.isFullyCached &&  CacheQueueManager.si.currentSong != nextSong {
+        } else if let nextSong = PlayQueue.si.nextSong, nextSong.basicType == .audio && !nextSong.isFullyCached &&  CacheQueue.si.currentSong != nextSong {
             //print("Stream manager using next song")
             song = nextSong
         } else {

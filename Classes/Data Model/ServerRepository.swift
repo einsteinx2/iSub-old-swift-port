@@ -38,7 +38,7 @@ struct ServerRepository: ItemRepository {
     
     func replace(server: Server) -> Bool {
         var success = true
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let query = "REPLACE INTO \(self.table) VALUES (?, ?, ?, ?)"
                 try db.executeUpdate(query, server.serverId, server.type.rawValue, server.url, server.username)
@@ -54,7 +54,7 @@ struct ServerRepository: ItemRepository {
     func server(type: ServerType, url: String, username: String, password: String) -> Server? {
         var success = true
         var serverId: Int64 = -1
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let query = "INSERT INTO servers VALUES (?, ?, ?, ?)"
                 try db.executeUpdate(query, NSNull(), type.rawValue, url, username)

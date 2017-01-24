@@ -188,7 +188,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
     func nextSongStreamFailed() {
         // The song ended, and we tried to make the next stream but it failed
         if let song = PlayQueue.si.currentSong {
-            if let handler = StreamManager.si.streamHandler, song == StreamManager.si.song {
+            if let handler = StreamQueue.si.streamHandler, song == StreamQueue.si.song {
                 if handler.isReadyForPlayback {
                     // If the song is downloading and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
                     DispatchQueue.main.async {
@@ -200,7 +200,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                     PlayQueue.si.startSong()
                 }
             } else {
-                StreamManager.si.start()
+                StreamQueue.si.start()
             }
         }
     }
@@ -310,9 +310,9 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                                             
                                             // Get the stream for this song
                                             var recentDownloadSpeedInBytesPerSec = 0
-                                            if StreamManager.si.song == bassStream.song, let handler = StreamManager.si.streamHandler {
+                                            if StreamQueue.si.song == bassStream.song, let handler = StreamQueue.si.streamHandler {
                                                 recentDownloadSpeedInBytesPerSec = handler.recentDownloadSpeedInBytesPerSec
-                                            } else if CacheQueueManager.si.currentSong == bassStream.song, let handler = CacheQueueManager.si.streamHandler {
+                                            } else if CacheQueue.si.currentSong == bassStream.song, let handler = CacheQueue.si.streamHandler {
                                                 recentDownloadSpeedInBytesPerSec = handler.recentDownloadSpeedInBytesPerSec
                                             }
                                             
@@ -353,7 +353,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                                                         if bassStream.localFileSize >= bassStream.neededSize {
                                                             // If enough of the file has downloaded, break the loop
                                                             return
-                                                        } else if bassStream.song.isTempCached && bassStream.song != StreamManager.si.song {
+                                                        } else if bassStream.song.isTempCached && bassStream.song != StreamQueue.si.song {
                                                             // Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
                                                             return
                                                         } else if bassStream.song.isFullyCached {

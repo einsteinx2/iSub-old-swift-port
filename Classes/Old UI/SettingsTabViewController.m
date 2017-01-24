@@ -56,8 +56,8 @@
         self.enableBackupCacheSwitch.enabled = NO;
     }
 		
-	//self.totalSpace = CacheSingleton.si.totalSpace;
-	//self.freeSpace = CacheSingleton.si.freeSpace;
+	//self.totalSpace = CacheManager.si.totalSpace;
+	//self.freeSpace = CacheManager.si.freeSpace;
 	self.freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [NSString formatFileSize:self.freeSpace]];
 	self.totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [NSString formatFileSize:self.totalSpace]];
 	float percentFree = (float) self.freeSpace / (float) self.totalSpace;
@@ -308,7 +308,7 @@
 
 - (void)resetFolderCache
 {
-	[DatabaseSingleton.si resetFolderCache];
+	//[Database.si resetFolderCache];
 	[LoadingScreen hideLoadingScreen];
 	[self popFoldersTab];
 }
@@ -316,7 +316,7 @@
 - (void)resetAlbumArtCache
 {
     // TODO: Reimplement
-//	[DatabaseSingleton.si resetCoverArtCache];
+//	[Database.si resetCoverArtCache];
 //	[AppDelegate.si hideLoadingScreen];
 //	[self popFoldersTab];
 }

@@ -168,8 +168,8 @@
 		531B33761E24CF8B00811187 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FD1E24CF8A00811187 /* Server.swift */; };
 		531B33771E24CF8B00811187 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FF1E24CF8A00811187 /* String.swift */; };
 		531B33781E24CF8B00811187 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FF1E24CF8A00811187 /* String.swift */; };
-		531B337D1E24CF8B00811187 /* CacheQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33061E24CF8A00811187 /* CacheQueueManager.swift */; };
-		531B337E1E24CF8B00811187 /* CacheQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33061E24CF8A00811187 /* CacheQueueManager.swift */; };
+		531B337D1E24CF8B00811187 /* CacheQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33061E24CF8A00811187 /* CacheQueue.swift */; };
+		531B337E1E24CF8B00811187 /* CacheQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33061E24CF8A00811187 /* CacheQueue.swift */; };
 		531B33851E24CF8B00811187 /* ApiLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B330F1E24CF8A00811187 /* ApiLoader.swift */; };
 		531B33861E24CF8B00811187 /* ApiLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B330F1E24CF8A00811187 /* ApiLoader.swift */; };
 		531B33871E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33111E24CF8A00811187 /* ItemLoaderOperation.swift */; };
@@ -338,8 +338,8 @@
 		534FACEF1E328D3200BF12D9 /* BassStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FACED1E328D3200BF12D9 /* BassStream.swift */; };
 		53544D8A1187DED400B63DB9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53544D891187DED400B63DB9 /* CoreLocation.framework */; };
 		5354914B11B03FC900928E0F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
-		5355BFA11E2D671C00C6D27F /* StreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA01E2D671C00C6D27F /* StreamManager.swift */; };
-		5355BFA21E2D671C00C6D27F /* StreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA01E2D671C00C6D27F /* StreamManager.swift */; };
+		5355BFA11E2D671C00C6D27F /* StreamQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA01E2D671C00C6D27F /* StreamQueue.swift */; };
+		5355BFA21E2D671C00C6D27F /* StreamQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA01E2D671C00C6D27F /* StreamQueue.swift */; };
 		5355BFA41E2D81D900C6D27F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA31E2D81D900C6D27F /* AppDelegate.swift */; };
 		5355BFA51E2D81D900C6D27F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA31E2D81D900C6D27F /* AppDelegate.swift */; };
 		5355BFA71E2D955C00C6D27F /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA61E2D955C00C6D27F /* Logging.swift */; };
@@ -763,8 +763,8 @@
 		53D9590F1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */; };
 		53D959111E2C774200A1667F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959101E2C774200A1667F /* Error.swift */; };
 		53D959121E2C774200A1667F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959101E2C774200A1667F /* Error.swift */; };
-		53D959141E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */; };
-		53D959151E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */; };
+		53D959141E2C7A7700A1667F /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959131E2C7A7700A1667F /* Database.swift */; };
+		53D959151E2C7A7700A1667F /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959131E2C7A7700A1667F /* Database.swift */; };
 		53D9D24D16DEF85F002F55F7 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24B16DEF847002F55F7 /* Twitter.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53D9D24E16DEF85F002F55F7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24916DEF843002F55F7 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53D9D24F16DEF85F002F55F7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24716DEF83E002F55F7 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -796,8 +796,8 @@
 		53F7A128131B7F3B002C829D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
 		53FD71E51E36E73600460B44 /* BassEqualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E41E36E73600460B44 /* BassEqualizer.swift */; };
 		53FD71E61E36E73600460B44 /* BassEqualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E41E36E73600460B44 /* BassEqualizer.swift */; };
-		53FD71E81E36F95400460B44 /* CacheSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E71E36F95400460B44 /* CacheSingleton.swift */; };
-		53FD71E91E36F95400460B44 /* CacheSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E71E36F95400460B44 /* CacheSingleton.swift */; };
+		53FD71E81E36F95400460B44 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E71E36F95400460B44 /* CacheManager.swift */; };
+		53FD71E91E36F95400460B44 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E71E36F95400460B44 /* CacheManager.swift */; };
 		53FDEE2611E822CC00FE3ECD /* current-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2511E822CC00FE3ECD /* current-server@2x.png */; };
 		53FDEE2911E823A100FE3ECD /* default-album-art-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */; };
 		53FDEE2A11E823A100FE3ECD /* default-album-art@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */; };
@@ -858,7 +858,7 @@
 		531B32FC1E24CF8A00811187 /* SectionIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionIndex.swift; sourceTree = "<group>"; };
 		531B32FD1E24CF8A00811187 /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		531B32FF1E24CF8A00811187 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		531B33061E24CF8A00811187 /* CacheQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheQueueManager.swift; sourceTree = "<group>"; };
+		531B33061E24CF8A00811187 /* CacheQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CacheQueue.swift; path = "../Server Loading/ISMSStreamManager/CacheQueue.swift"; sourceTree = "<group>"; };
 		531B330F1E24CF8A00811187 /* ApiLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiLoader.swift; sourceTree = "<group>"; };
 		531B33111E24CF8A00811187 /* ItemLoaderOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemLoaderOperation.swift; sourceTree = "<group>"; };
 		531B33131E24CF8A00811187 /* AlbumLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlbumLoader.swift; path = "New Model/AlbumLoader.swift"; sourceTree = "<group>"; };
@@ -879,7 +879,7 @@
 		531B33221E24CF8B00811187 /* RootFoldersLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootFoldersLoader.swift; path = "New Model/RootFoldersLoader.swift"; sourceTree = "<group>"; };
 		531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootPlaylistsLoader.swift; path = "New Model/RootPlaylistsLoader.swift"; sourceTree = "<group>"; };
 		531B33241E24CF8B00811187 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusLoader.swift; path = "New Model/StatusLoader.swift"; sourceTree = "<group>"; };
-		531B332E1E24CF8B00811187 /* StreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamHandler.swift; path = ../StreamHandler.swift; sourceTree = "<group>"; };
+		531B332E1E24CF8B00811187 /* StreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamHandler.swift; sourceTree = "<group>"; };
 		531B33351E24CF8B00811187 /* LoadingScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScreen.h; sourceTree = "<group>"; };
 		531B33361E24CF8B00811187 /* LoadingScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingScreen.m; sourceTree = "<group>"; };
 		531B33391E24CF8B00811187 /* PlayQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueue.swift; sourceTree = "<group>"; };
@@ -964,7 +964,7 @@
 		534FACED1E328D3200BF12D9 /* BassStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassStream.swift; path = "Bass Wrapper/BassStream.swift"; sourceTree = "<group>"; };
 		53544D891187DED400B63DB9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5354914A11B03FC900928E0F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		5355BFA01E2D671C00C6D27F /* StreamManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamManager.swift; sourceTree = "<group>"; };
+		5355BFA01E2D671C00C6D27F /* StreamQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamQueue.swift; path = "../Server Loading/ISMSStreamManager/StreamQueue.swift"; sourceTree = "<group>"; };
 		5355BFA31E2D81D900C6D27F /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5355BFA61E2D955C00C6D27F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		5355BFA91E2D9EE000C6D27F /* PlaylistRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistRepository.swift; sourceTree = "<group>"; };
@@ -1188,7 +1188,7 @@
 		53D59A821E1DCEAA00071ABD /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubsonicServerEditViewController.swift; sourceTree = "<group>"; };
 		53D959101E2C774200A1667F /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
-		53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseSingleton.swift; sourceTree = "<group>"; };
+		53D959131E2C7A7700A1667F /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		53D9D24516DEF839002F55F7 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		53D9D24716DEF83E002F55F7 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		53D9D24916DEF843002F55F7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -1206,7 +1206,7 @@
 		53F675E7113B096400822059 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		53F7A127131B7F3B002C829D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		53FD71E41E36E73600460B44 /* BassEqualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BassEqualizer.swift; sourceTree = "<group>"; };
-		53FD71E71E36F95400460B44 /* CacheSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheSingleton.swift; sourceTree = "<group>"; };
+		53FD71E71E36F95400460B44 /* CacheManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		53FDEE2511E822CC00FE3ECD /* current-server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server@2x.png"; path = "Images/Other/current-server@2x.png"; sourceTree = "<group>"; };
 		53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small@2x.png"; path = "Images/Other/default-album-art-small@2x.png"; sourceTree = "<group>"; };
 		53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art@2x.png"; path = "Images/Other/default-album-art@2x.png"; sourceTree = "<group>"; };
@@ -1590,6 +1590,7 @@
 			isa = PBXGroup;
 			children = (
 				539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */,
+				531B332E1E24CF8B00811187 /* StreamHandler.swift */,
 				531B33051E24CF8A00811187 /* Song Streams */,
 				531B330E1E24CF8A00811187 /* Api Loaders */,
 			);
@@ -1599,9 +1600,6 @@
 		531B33051E24CF8A00811187 /* Song Streams */ = {
 			isa = PBXGroup;
 			children = (
-				531B33061E24CF8A00811187 /* CacheQueueManager.swift */,
-				5355BFA01E2D671C00C6D27F /* StreamManager.swift */,
-				531B332E1E24CF8B00811187 /* StreamHandler.swift */,
 			);
 			name = "Song Streams";
 			path = ISMSStreamManager;
@@ -1641,8 +1639,10 @@
 			isa = PBXGroup;
 			children = (
 				531B33391E24CF8B00811187 /* PlayQueue.swift */,
-				53FD71E71E36F95400460B44 /* CacheSingleton.swift */,
-				53D959131E2C7A7700A1667F /* DatabaseSingleton.swift */,
+				531B33061E24CF8A00811187 /* CacheQueue.swift */,
+				5355BFA01E2D671C00C6D27F /* StreamQueue.swift */,
+				53FD71E71E36F95400460B44 /* CacheManager.swift */,
+				53D959131E2C7A7700A1667F /* Database.swift */,
 				53E042851E36AD200009DE79 /* SavedSettings.swift */,
 				531B33351E24CF8B00811187 /* LoadingScreen.h */,
 				531B33361E24CF8B00811187 /* LoadingScreen.m */,
@@ -2661,10 +2661,10 @@
 				530D5A131E2C047500C9ED43 /* Song.swift in Sources */,
 				534FACEE1E328D3200BF12D9 /* BassStream.swift in Sources */,
 				53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
-				53D959141E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */,
+				53D959141E2C7A7700A1667F /* Database.swift in Sources */,
 				530F04AF1E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				531B33D11E24CF8B00811187 /* Utils.swift in Sources */,
-				53FD71E81E36F95400460B44 /* CacheSingleton.swift in Sources */,
+				53FD71E81E36F95400460B44 /* CacheManager.swift in Sources */,
 				533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				53CFBB6F1E2B1628005895F4 /* ArtistRepository.swift in Sources */,
 				532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
@@ -2684,7 +2684,7 @@
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				537FB2FC1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
 				533B69D81E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
-				531B337D1E24CF8B00811187 /* CacheQueueManager.swift in Sources */,
+				531B337D1E24CF8B00811187 /* CacheQueue.swift in Sources */,
 				5355BFA41E2D81D900C6D27F /* AppDelegate.swift in Sources */,
 				531B34041E24D0B600811187 /* PlayerViewController.swift in Sources */,
 				531B339F1E24CF8B00811187 /* ItemLoader.swift in Sources */,
@@ -2755,7 +2755,7 @@
 				53F107A21E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
 				531B33AB1E24CF8B00811187 /* StatusLoader.swift in Sources */,
 				53CFBB661E2AE203005895F4 /* RXMLElement.swift in Sources */,
-				5355BFA11E2D671C00C6D27F /* StreamManager.swift in Sources */,
+				5355BFA11E2D671C00C6D27F /* StreamQueue.swift in Sources */,
 				531B33BF1E24CF8B00811187 /* PlayQueue.swift in Sources */,
 				531B33B51E24CF8B00811187 /* StreamHandler.swift in Sources */,
 				53CFBB811E2B3075005895F4 /* GenreRepository.swift in Sources */,
@@ -2909,10 +2909,10 @@
 				530D5A141E2C047500C9ED43 /* Song.swift in Sources */,
 				534FACEF1E328D3200BF12D9 /* BassStream.swift in Sources */,
 				53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
-				53D959151E2C7A7700A1667F /* DatabaseSingleton.swift in Sources */,
+				53D959151E2C7A7700A1667F /* Database.swift in Sources */,
 				530F04B01E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				531B33D21E24CF8B00811187 /* Utils.swift in Sources */,
-				53FD71E91E36F95400460B44 /* CacheSingleton.swift in Sources */,
+				53FD71E91E36F95400460B44 /* CacheManager.swift in Sources */,
 				533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				53CFBB701E2B1628005895F4 /* ArtistRepository.swift in Sources */,
 				532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
@@ -2932,7 +2932,7 @@
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
-				531B337E1E24CF8B00811187 /* CacheQueueManager.swift in Sources */,
+				531B337E1E24CF8B00811187 /* CacheQueue.swift in Sources */,
 				5355BFA51E2D81D900C6D27F /* AppDelegate.swift in Sources */,
 				531B34051E24D0B600811187 /* PlayerViewController.swift in Sources */,
 				531B33A01E24CF8B00811187 /* ItemLoader.swift in Sources */,
@@ -3003,7 +3003,7 @@
 				53F107A31E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
 				531B33AC1E24CF8B00811187 /* StatusLoader.swift in Sources */,
 				53CFBB671E2AE203005895F4 /* RXMLElement.swift in Sources */,
-				5355BFA21E2D671C00C6D27F /* StreamManager.swift in Sources */,
+				5355BFA21E2D671C00C6D27F /* StreamQueue.swift in Sources */,
 				531B33C01E24CF8B00811187 /* PlayQueue.swift in Sources */,
 				531B33B61E24CF8B00811187 /* StreamHandler.swift in Sources */,
 				53CFBB821E2B3075005895F4 /* GenreRepository.swift in Sources */,

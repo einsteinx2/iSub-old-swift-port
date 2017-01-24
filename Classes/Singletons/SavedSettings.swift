@@ -172,7 +172,7 @@ import Foundation
         get { return synchronizedResult { return self.storage.bool(forKey: Keys.isBackupCacheEnabled) }}
         set { synchronized {
             self.storage.set(newValue, forKey: Keys.isBackupCacheEnabled) }
-            CacheSingleton.si.backupSongCache = newValue
+            CacheManager.si.backupSongCache = newValue
         }
     }
     
@@ -181,7 +181,7 @@ import Foundation
         set { synchronized {
             self.storage.set(newValue, forKey: Keys.isManualCachingOnWWANEnabled) }
             if AppDelegate.si.networkStatus.isReachableWWAN {
-                newValue ? CacheQueueManager.si.start() : CacheQueueManager.si.stop()
+                newValue ? CacheQueue.si.start() : CacheQueue.si.stop()
             }
         }
     }

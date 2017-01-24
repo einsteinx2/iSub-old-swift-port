@@ -36,7 +36,7 @@ class ContentTypeRepository {
     
     func contentType(contentTypeId: Int64) -> ContentType? {
         var contentType: ContentType? = nil
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let query = "SELECT * FROM contentTypes WHERE contentTypeId = ?"
             do {
                 let result = try db.executeQuery(query, contentTypeId)
@@ -53,7 +53,7 @@ class ContentTypeRepository {
     
     func contentType(mimeType: String) -> ContentType? {
         var contentType: ContentType? = nil
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let query = "SELECT * FROM contentTypes WHERE mimeType = ?"
             do {
                 let result = try db.executeQuery(query, mimeType)

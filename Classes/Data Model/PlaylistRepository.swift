@@ -44,7 +44,7 @@ struct PlaylistRepository: ItemRepository {
     
     func replace(playlist: Playlist, isCachedTable: Bool = false) -> Bool {
         var success = true
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let query = "REPLACE INTO \(self.table) VALUES (?, ?, ?, ?)"
                 try db.executeUpdate(query, playlist.playlistId, playlist.serverId, playlist.name, n2N(playlist.coverArtId))
@@ -60,7 +60,7 @@ struct PlaylistRepository: ItemRepository {
     func hasCachedSubItems(playlist: Playlist) -> Bool {
         let tableName = playlistTableName(playlistId: playlist.playlistId, serverId: playlist.serverId)
         let query = "SELECT COUNT(*) FROM \(tableName) JOIN cachedSongs where \(tableName).songId = cachedSongs.songId"
-        return DatabaseSingleton.si.read.boolForQuery(query)
+        return Database.si.read.boolForQuery(query)
     }
     
     fileprivate func createPlaylistTable(db: FMDatabase, playlistId: Int64, serverId: Int64, name: String) throws {
@@ -75,7 +75,7 @@ struct PlaylistRepository: ItemRepository {
                 return playlist
             }
             
-            DatabaseSingleton.si.write.inDatabase { db in
+            Database.si.write.inDatabase { db in
                 try? db.executeUpdate("INSERT INTO playlists VALUES (?, ?, ?, ?)", playlistId, serverId, name, NSNull())
                 try? self.createPlaylistTable(db: db, playlistId: playlistId, serverId: serverId, name: name)
             }
@@ -85,7 +85,7 @@ struct PlaylistRepository: ItemRepository {
             var newPlaylistId: Int64 = -1
             
             // Get the ID and create the playlist table in the same block to avoid threading issues
-            DatabaseSingleton.si.write.inDatabase { db in
+            Database.si.write.inDatabase { db in
                 // Find the first available playlist id. Local playlists (before being synced) start from NSIntegerMax and count down.
                 // So since NSIntegerMax is so huge, look for the lowest ID above NSIntegerMax - 1,000,000 to give room for virtually
                 // unlimited local playlists without ever hitting the server playlists which start from 0 and go up.
@@ -103,7 +103,7 @@ struct PlaylistRepository: ItemRepository {
     
     func loadSubItems(playlist: Playlist) {
         var songs = [Song]()
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             do {
                 let query = "SELECT songId, serverId FROM \(playlist.tableName)"
                 let result = try db.executeQuery(query)
@@ -122,7 +122,7 @@ struct PlaylistRepository: ItemRepository {
     }
     
     func overwriteSubItems(playlist: Playlist) {
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let query = "DELETE FROM \(playlist.tableName)"
                 try db.executeUpdate(query)
@@ -154,7 +154,7 @@ extension Playlist {
         // Since songIndex is our primary key field, it's an alias
         // for rowId. So SELECT MAX instead of SELECT COUNT here.
         var maxId = 0
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let query = "SELECT MAX(songIndex) FROM \(self.tableName)"
             maxId = db.intForQuery(query)
         }
@@ -168,7 +168,7 @@ extension Playlist {
     
     func contains(songId: Int64, serverId: Int64) -> Bool {
         var count = 0
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let query = "SELECT COUNT(*) FROM \(self.tableName) WHERE songId = ? AND serverId = ?"
             count = db.intForQuery(query, songId, serverId)
         }
@@ -177,7 +177,7 @@ extension Playlist {
     
     func indexOf(songId: Int64, serverId: Int64) -> Int? {
         var index: Int?
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let query = "SELECT songIndex FROM \(self.tableName) WHERE songId = ? AND serverId = ?"
             index = db.intOptionalForQuery(query, songId, serverId)
         }
@@ -195,7 +195,7 @@ extension Playlist {
         
         var songId: Int64?
         var serverId: Int64?
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             let query = "SELECT songId, serverId FROM \(self.tableName) WHERE songIndex = ?"
             do {
                 let result = try db.executeQuery(query, index + 1)
@@ -222,7 +222,7 @@ extension Playlist {
     
     func add(songId: Int64, serverId: Int64, notify: Bool = false) {
         let query = "INSERT INTO \(self.tableName) (songId, serverId) VALUES (?, ?)"
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 try db.executeUpdate(query, songId, serverId)
             } catch {
@@ -251,7 +251,7 @@ extension Playlist {
     
     func insert(songId: Int64, serverId: Int64, index: Int, notify: Bool = false) {
         // TODO: See if this can be simplified by using sort by
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let query1 = "UPDATE \(self.tableName) SET songIndex = -songIndex WHERE songIndex >= ?"
                 try db.executeUpdate(query1, index + 1)
@@ -272,7 +272,7 @@ extension Playlist {
     }
     
     func remove(songAtIndex index: Int, notify: Bool = false) {
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName) WHERE songIndex = ?"
                 try db.executeUpdate(query1, index + 1)
@@ -321,7 +321,7 @@ extension Playlist {
     }
     
     func removeAllSongs(_ notify: Bool = false) {
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let query1 = "DELETE FROM \(self.tableName)"
                 try db.executeUpdate(query1)

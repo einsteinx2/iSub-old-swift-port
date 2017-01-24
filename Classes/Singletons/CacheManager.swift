@@ -1,5 +1,5 @@
 //
-//  CacheSingleton.swift
+//  CacheManager.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 1/23/17.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-class CacheSingleton {
-    static let si = CacheSingleton()
+class CacheManager {
+    static let si = CacheManager()
     
     let cacheCheckInterval = 60.0
     
@@ -25,7 +25,7 @@ class CacheSingleton {
     
     var numberOfCachedSongs: Int {
         let query = "SELECT COUNT(*) FROM cachedSongsMetadata WHERE fullyCached = 1"
-        return DatabaseSingleton.si.read.intForQuery(query)
+        return Database.si.read.intForQuery(query)
     }
     
     var backupSongCache: Bool = SavedSettings.si.isBackupCacheEnabled {
@@ -77,9 +77,9 @@ class CacheSingleton {
 //                @autoreleasepool
 //                {
 //                    if (SavedSettings.si.autoDeleteCacheType == 0)
-//                    songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+//                    songMD5 = [Database.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 //                    else
-//                    songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
+//                    songMD5 = [Database.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 //                    //DLog(@"removing %@", songMD5);
 //                    [Song removeSongFromCacheDbQueueByMD5:songMD5];
 //                }
@@ -95,13 +95,13 @@ class CacheSingleton {
 //                {
 //                    if (SavedSettings.si.autoDeleteCacheType == 0)
 //                    {
-//                        songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
+//                        songMD5 = [Database.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY playedDate ASC LIMIT 1"];
 //                    }
 //                    else
 //                    {
-//                        songMD5 = [DatabaseSingleton.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
+//                        songMD5 = [Database.si.songCacheDbQueue stringForQuery:@"SELECT md5 FROM cachedSongs WHERE finished = 'YES' ORDER BY cachedDate ASC LIMIT 1"];
 //                    }
-//                    //songSize = [DatabaseSingleton.si.songCacheDbQueue intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
+//                    //songSize = [Database.si.songCacheDbQueue intForQuery:@"SELECT size FROM cachedSongs WHERE md5 = ?", songMD5];
 //                    Song *aSong = [Song songFromCacheDbQueue:songMD5];
 //                    // Determine the name of the file we are downloading.
 //                    //DLog(@"currentSongObject.path: %@", currentSongObject.path);
@@ -118,13 +118,13 @@ class CacheSingleton {
 //        }
         
         findCacheSize()
-        CacheQueueManager.si.start()
+        CacheQueue.si.start()
     }
     
     func findCacheSize() {
         // TODO: Rewrite this with new data model
         
-//        [DatabaseSingleton.si.songCacheDbQueue inDatabase:^(FMDatabase *db)
+//        [Database.si.songCacheDbQueue inDatabase:^(FMDatabase *db)
 //            {
 //            unsigned long long size = [[db stringForQuery:@"SELECT sum(size) FROM sizesSongs"] longLongValue];
 //            

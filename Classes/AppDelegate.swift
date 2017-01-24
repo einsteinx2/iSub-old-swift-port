@@ -42,8 +42,8 @@ import Reachability
         // Make sure the singletons get setup immediately and in the correct order
         // Perfect example of why using singletons is bad practice!
         SavedSettings.si.setup()
-        DatabaseSingleton.si.setup()
-        CacheSingleton.si.setup()
+        Database.si.setup()
+        CacheManager.si.setup()
         
         #if DebugBuild
             // Console logging only for Xcode builds
@@ -96,8 +96,8 @@ import Reachability
         backgroundTask = application.beginBackgroundTask {
             // App is about to be put to sleep, stop the cache download queue
             
-            if CacheQueueManager.si.isDownloading {
-                CacheQueueManager.si.stop()
+            if CacheQueue.si.isDownloading {
+                CacheQueue.si.stop()
             }
             
             // Make sure to end the background so we don't get killed by the OS
@@ -109,14 +109,14 @@ import Reachability
         DispatchQueue.background.async {
             while application.backgroundTimeRemaining > 1.0 && self.isInBackground {
                 // Sleep early is nothing is happening
-                if application.backgroundTimeRemaining < 200.0 && !CacheQueueManager.si.isDownloading {
+                if application.backgroundTimeRemaining < 200.0 && !CacheQueue.si.isDownloading {
                     application.endBackgroundTask(self.backgroundTask)
                     self.backgroundTask = UIBackgroundTaskInvalid;
                     break;
                 }
                 
                 // Warn at 2 minute mark if cache queue is downloading
-                if application.backgroundTimeRemaining < 120.0 && CacheQueueManager.si.isDownloading {
+                if application.backgroundTimeRemaining < 120.0 && CacheQueue.si.isDownloading {
                     let local = UILocalNotification()
                     local.alertBody = "Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused."
                     local.alertAction = "Open iSub"
@@ -199,7 +199,7 @@ import Reachability
                     // potentially resulting in a crash loop, do NOT start the download queue automatically if the app crashed on last launch.
                     if !BITHockeyManager.shared().crashManager.didCrashInLastSession {
                         // Start the queued downloads if Wifi is available
-                        CacheQueueManager.si.start()
+                        CacheQueue.si.start()
                     }
                 } else if !SavedSettings.si.isOfflineMode {
                     self.enterOfflineMode()
@@ -262,8 +262,8 @@ import Reachability
         
         SavedSettings.si.isOfflineMode = true
         PlayQueue.si.stop()
-        StreamManager.si.stop()
-        CacheQueueManager.si.stop()
+        StreamQueue.si.stop()
+        CacheQueue.si.stop()
         PlayQueue.si.updateLockScreenInfo()
     }
     
@@ -277,7 +277,7 @@ import Reachability
         SavedSettings.si.isOfflineMode = false
         PlayQueue.si.stop()
         checkServer()
-        CacheQueueManager.si.start()
+        CacheQueue.si.start()
         PlayQueue.si.updateLockScreenInfo()
     }
     
@@ -297,9 +297,9 @@ import Reachability
                 enterOnlineMode()
             } else {
                 if networkStatus.isReachableWifi || SavedSettings.si.isManualCachingOnWWANEnabled {
-                    CacheQueueManager.si.start()
+                    CacheQueue.si.start()
                 } else {
-                    CacheQueueManager.si.stop()
+                    CacheQueue.si.stop()
                 }
             }
         }
@@ -325,8 +325,8 @@ import Reachability
         PlaylistRepository.si.createDefaultPlaylists(serverId: server.serverId)
         
         // Cancel any caching
-        StreamManager.si.stop()
-        CacheQueueManager.si.stop()
+        StreamQueue.si.stop()
+        CacheQueue.si.stop()
         
         // Reset UI
         menuController.resetMenuItems()

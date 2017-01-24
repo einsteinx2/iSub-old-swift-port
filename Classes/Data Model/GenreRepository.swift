@@ -30,7 +30,7 @@ struct GenreRepository: ItemRepository {
     
     func replace(genre: Genre) -> Bool {
         var success = true
-        DatabaseSingleton.si.write.inDatabase { db in
+        Database.si.write.inDatabase { db in
             do {
                 let query = "REPLACE INTO \(self.table) VALUES (?, ?)"
                 try db.executeUpdate(query, genre.genreId, genre.name)
@@ -44,7 +44,7 @@ struct GenreRepository: ItemRepository {
     
     func genre(name: String) -> Genre? {
         var genre: Genre?
-        DatabaseSingleton.si.read.inDatabase { db in
+        Database.si.read.inDatabase { db in
             do {
                 // First check if a record already exists
                 let query = "SELECT * FROM \(self.table) WHERE name = ?"
