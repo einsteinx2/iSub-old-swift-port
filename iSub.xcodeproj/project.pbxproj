@@ -158,8 +158,6 @@
 		5315A3F2156F7064001B0268 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
 		5315A3F6156F7064001B0268 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
 		53191DF01167CFDC00E1C08A /* current-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 53191DEF1167CFDC00E1C08A /* current-server.png */; };
-		531B33551E24CF8B00811187 /* BassWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DB1E24CF8A00811187 /* BassWrapper.m */; };
-		531B33561E24CF8B00811187 /* BassWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DB1E24CF8A00811187 /* BassWrapper.m */; };
 		531B33571E24CF8B00811187 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DE1E24CF8A00811187 /* BassEffectDAO.m */; };
 		531B33581E24CF8B00811187 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DE1E24CF8A00811187 /* BassEffectDAO.m */; };
 		531B33591E24CF8B00811187 /* BassEffectValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E01E24CF8A00811187 /* BassEffectValue.m */; };
@@ -861,8 +859,6 @@
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5315A405156F7064001B0268 /* iSub Unit Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Unit Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
-		531B32DA1E24CF8A00811187 /* BassWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BassWrapper.h; path = "Bass Wrapper/BassWrapper.h"; sourceTree = "<group>"; };
-		531B32DB1E24CF8A00811187 /* BassWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BassWrapper.m; path = "Bass Wrapper/BassWrapper.m"; sourceTree = "<group>"; };
 		531B32DD1E24CF8A00811187 /* BassEffectDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectDAO.h; sourceTree = "<group>"; };
 		531B32DE1E24CF8A00811187 /* BassEffectDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEffectDAO.m; sourceTree = "<group>"; };
 		531B32DF1E24CF8A00811187 /* BassEffectValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectValue.h; sourceTree = "<group>"; };
@@ -1563,8 +1559,6 @@
 		531B32D11E24CF8A00811187 /* AudioEngine */ = {
 			isa = PBXGroup;
 			children = (
-				531B32DA1E24CF8A00811187 /* BassWrapper.h */,
-				531B32DB1E24CF8A00811187 /* BassWrapper.m */,
 				537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */,
 				534FACED1E328D3200BF12D9 /* BassStream.swift */,
 				537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */,
@@ -2774,7 +2768,6 @@
 				5358DFA11E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				53D59A651E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
 				531B33B71E24CF8B00811187 /* CacheSingleton.m in Sources */,
-				531B33551E24CF8B00811187 /* BassWrapper.m in Sources */,
 				531B33911E24CF8B00811187 /* CachedDatabaseLoader.swift in Sources */,
 				531B34081E24D0B600811187 /* PlayQueueViewModel.swift in Sources */,
 				53835CDE1E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
@@ -3026,7 +3019,6 @@
 				5358DFA31E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				53D59A671E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
 				531B33B81E24CF8B00811187 /* CacheSingleton.m in Sources */,
-				531B33561E24CF8B00811187 /* BassWrapper.m in Sources */,
 				531B33921E24CF8B00811187 /* CachedDatabaseLoader.swift in Sources */,
 				531B34091E24D0B600811187 /* PlayQueueViewModel.swift in Sources */,
 				53835CE01E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,

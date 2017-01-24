@@ -17,9 +17,18 @@
 #import "INTUAnimationEngine.h"
 
 #import "bass.h"
-#import "bass_fx.h"
 #import "bassmix.h"
-#import "BassWrapper.h"
+#import "bass_fx.h"
+#import "bass_ape.h"
+#import "bass_mpc.h"
+#import "bass_tta.h"
+#import "bassdsd.h"
+#import "bassflac.h"
+#import "bassopus.h"
+#import "basswv.h"
 #import "BassEqualizer.h"
+#import <AudioToolbox/AudioToolbox.h>
+
+extern void *BASSFLACplugin, *BASSWVplugin, *BASS_APEplugin, *BASS_MPCplugin, *BASSOPUSplugin;
 
 #import "ObjC.h"

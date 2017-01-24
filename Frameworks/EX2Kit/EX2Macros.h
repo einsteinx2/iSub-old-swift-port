@@ -95,7 +95,7 @@
 
 #define NSStringFromBOOL(value) (value ? @"YES" : @"NO")
 
-#define BytesForSecondsAtBitrate(seconds, bitrate) ((bitrate / 8) * 1024 * seconds)
+#define BytesForSecondsAtBitRate(seconds, bitRate) ((bitRate / 8) * 1024 * seconds)
 
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)

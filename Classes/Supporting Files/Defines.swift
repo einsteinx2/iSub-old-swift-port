@@ -35,8 +35,8 @@ var portraitScreenSize: CGSize {
     return CGSize(width: width, height: height)
 }
 
-func BytesForSecondsAtBitrate(seconds: Int, bitrate: Int) -> Int64 {
-    return (Int64(bitrate) / 8) * 1024 * Int64(seconds)
+func BytesForSecondsAtBitRate(seconds: Int, bitRate: Int) -> Int64 {
+    return (Int64(bitRate) / 8) * 1024 * Int64(seconds)
 }
 
 let ISMSHeaderColor = UIColor(red: 200.0/255.0, green: 200.0/255.0, blue: 206.0/255.0, alpha: 1.0)

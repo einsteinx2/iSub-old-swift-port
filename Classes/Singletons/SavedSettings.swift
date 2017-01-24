@@ -21,10 +21,10 @@ import Foundation
         // TODO: isBasicAuthEnabled should be a server specific setting stored in servers table
         static let isBasicAuthEnabled           = "isBasicAuthEnabled"
         
-        static let maxBitrateWifi               = "maxBitrateWifiSetting"
-        static let maxBitrate3G                 = "maxBitrate3GSetting"
-        static let maxVideoBitrateWifi          = "maxVideoBitrateWifi"
-        static let maxVideoBitrate3G            = "maxVideoBitrate3G"
+        static let maxBitRateWifi               = "maxBitrateWifiSetting"
+        static let maxBitRate3G                 = "maxBitrate3GSetting"
+        static let maxVideoBitRateWifi          = "maxVideoBitrateWifi"
+        static let maxVideoBitRate3G            = "maxVideoBitrate3G"
         
         static let isAutoSongCachingEnabled     = "isSongCachingEnabled"
         static let isNextSongCacheEnabled       = "enableNextSongCacheSetting"
@@ -64,8 +64,8 @@ import Foundation
     
     fileprivate func createInitialSettings() {
         let defaults: [String: Any] =
-            [Keys.maxBitrateWifi: 7,
-             Keys.maxBitrate3G: 7,
+            [Keys.maxBitRateWifi: 7,
+             Keys.maxBitRate3G: 7,
              Keys.isAutoSongCachingEnabled: true,
              Keys.isNextSongCacheEnabled: true,
              Keys.cachingType: CachingType.minSpace.rawValue,
@@ -75,8 +75,8 @@ import Foundation
              Keys.autoDeleteCacheType: 0,
              Keys.isScreenSleepEnabled: true,
              Keys.isBasicAuthEnabled: false,
-             Keys.maxVideoBitrateWifi: 5,
-             Keys.maxVideoBitrate3G: 5,
+             Keys.maxVideoBitRateWifi: 5,
+             Keys.maxVideoBitRate3G: 5,
              Keys.currentServerId: Server.testServerId]
         
         storage.register(defaults: defaults)
@@ -108,16 +108,16 @@ import Foundation
     var isOfflineMode: Bool = false
     
     var maxBitRateWifi: Int {
-        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxBitrateWifi) }}
-        set { synchronized { self.storage.set(newValue, forKey: Keys.maxBitrateWifi) }}
+        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxBitRateWifi) }}
+        set { synchronized { self.storage.set(newValue, forKey: Keys.maxBitRateWifi) }}
     }
     
     var maxBitRate3G: Int {
-        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxBitrate3G) }}
-        set { synchronized { self.storage.set(newValue, forKey: Keys.maxBitrate3G) }}
+        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxBitRate3G) }}
+        set { synchronized { self.storage.set(newValue, forKey: Keys.maxBitRate3G) }}
     }
     
-    var currentMaxBitrate: Int {
+    var currentMaxBitRate: Int {
         get {
             return synchronizedResult {
                 let maxBitRate = AppDelegate.si.networkStatus.isReachableWifi ? maxBitRateWifi : maxBitRate3G
@@ -136,13 +136,13 @@ import Foundation
     }
     
     var maxVideoBitRateWifi: Int {
-        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxVideoBitrateWifi) }}
-        set { synchronized { self.storage.set(newValue, forKey: Keys.maxVideoBitrateWifi) }}
+        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxVideoBitRateWifi) }}
+        set { synchronized { self.storage.set(newValue, forKey: Keys.maxVideoBitRateWifi) }}
     }
     
     var maxVideoBitRate3G: Int {
-        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxVideoBitrate3G) }}
-        set { synchronized { self.storage.set(newValue, forKey: Keys.maxVideoBitrate3G) }}
+        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxVideoBitRate3G) }}
+        set { synchronized { self.storage.set(newValue, forKey: Keys.maxVideoBitRate3G) }}
     }
     
     var currentVideoBitRates: [Int] {

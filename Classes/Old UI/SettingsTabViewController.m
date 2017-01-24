@@ -43,8 +43,8 @@
     
     self.disableCellUsageSwitch.on = SavedSettings.si.isDisableUsageOver3G;
 		
-	self.maxBitrateWifiSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitRateWifi;
-	self.maxBitrate3GSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitRate3G;
+	self.maxBitRateWifiSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitRateWifi;
+	self.maxBitRate3GSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxBitRate3G;
 				
 	// Cache Settings
     self.enableManualCachingOnWWANSwitch.on = SavedSettings.si.isManualCachingOnWWANEnabled;
@@ -88,8 +88,8 @@
 	
 	[self.cacheSpaceLabel2 addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    self.maxVideoBitrate3GSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxVideoBitRate3G;
-    self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxVideoBitRateWifi;
+    self.maxVideoBitRate3GSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxVideoBitRate3G;
+    self.maxVideoBitRateWifiSegmentedControl.selectedSegmentIndex = SavedSettings.si.maxVideoBitRateWifi;
     
     // Fix switch positions for iOS 7
     for (UISwitch *sw in self.switches)
@@ -127,13 +127,13 @@
 {
 	if ([[NSDate date] timeIntervalSinceDate:self.loadedTime] > 0.5)
 	{
-		if (sender == self.maxBitrateWifiSegmentedControl)
+		if (sender == self.maxBitRateWifiSegmentedControl)
 		{
-			SavedSettings.si.maxBitRateWifi = self.maxBitrateWifiSegmentedControl.selectedSegmentIndex;
+			SavedSettings.si.maxBitRateWifi = self.maxBitRateWifiSegmentedControl.selectedSegmentIndex;
 		}
-		else if (sender == self.maxBitrate3GSegmentedControl)
+		else if (sender == self.maxBitRate3GSegmentedControl)
 		{
-			SavedSettings.si.maxBitRate3G = self.maxBitrate3GSegmentedControl.selectedSegmentIndex;
+			SavedSettings.si.maxBitRate3G = self.maxBitRate3GSegmentedControl.selectedSegmentIndex;
 		}
 		else if (sender == self.cachingTypeSegmentedControl)
 		{
@@ -164,13 +164,13 @@
 //			if (IS_IPAD())
 //				[AppDelegate.si.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
 		}
-        else if (sender == self.maxVideoBitrate3GSegmentedControl)
+        else if (sender == self.maxVideoBitRate3GSegmentedControl)
         {
-            SavedSettings.si.maxVideoBitRate3G = self.maxVideoBitrate3GSegmentedControl.selectedSegmentIndex;
+            SavedSettings.si.maxVideoBitRate3G = self.maxVideoBitRate3GSegmentedControl.selectedSegmentIndex;
         }
-        else if (sender == self.maxVideoBitrateWifiSegmentedControl)
+        else if (sender == self.maxVideoBitRateWifiSegmentedControl)
         {
-            SavedSettings.si.maxVideoBitRateWifi = self.maxVideoBitrateWifiSegmentedControl.selectedSegmentIndex;
+            SavedSettings.si.maxVideoBitRateWifi = self.maxVideoBitRateWifiSegmentedControl.selectedSegmentIndex;
         }
 	}
 }

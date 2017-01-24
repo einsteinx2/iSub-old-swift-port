@@ -42,12 +42,12 @@ import Foundation
     var speedLoggingLastSize: Int64 = 0
     var recentDownloadSpeedInBytesPerSec: Int = 0
     var isTempCache: Bool = false
-    var bitrate: Int = 0
+    var bitRate: Int = 0
     var isDownloading: Bool = false
     var isCanceled: Bool = false
     
     var contentLength: Int64 = -1
-    var maxBitrateSetting: Int = -1
+    var maxBitRateSetting: Int = -1
     var fileHandle: FileHandle?
     var startDate = Date.distantPast
     
@@ -119,14 +119,14 @@ import Foundation
             fileUrl.isExcludedFromBackup = true
         }
         
-        bitrate = song.estimatedBitrate
-        if maxBitrateSetting < 0 {
-            maxBitrateSetting = SavedSettings.si.currentMaxBitrate
+        bitRate = song.estimatedBitRate
+        if maxBitRateSetting < 0 {
+            maxBitRateSetting = SavedSettings.si.currentMaxBitRate
         }
         
         var parameters = ["id": "\(song.songId)"]
-        if maxBitrateSetting > 0 {
-            parameters["maxBitRate"] = "\(maxBitrateSetting)"
+        if maxBitRateSetting > 0 {
+            parameters["maxBitRate"] = "\(maxBitRateSetting)"
         }
         let request = URLRequest(subsonicAction: .stream, parameters: parameters)
         
@@ -202,7 +202,7 @@ import Foundation
         
         // Notify delegate if enough bytes received to start playback
         let bytesPerSec = Double(totalBytesTransferred) / Date().timeIntervalSince(startDate)
-        if !isReadyForPlayback && totalBytesTransferred >= StreamHandler.minBytesToStartPlayback(forKiloBitrate: bitrate, speedInBytesPerSec: Int(bytesPerSec)) {
+        if !isReadyForPlayback && totalBytesTransferred >= StreamHandler.minBytesToStartPlayback(forKiloBitRate: bitRate, speedInBytesPerSec: Int(bytesPerSec)) {
             isReadyForPlayback = true
             let userInfo = [Notifications.Keys.song: song]
             NotificationCenter.postOnMainThread(name: Notifications.readyForPlayback, userInfo: userInfo)
@@ -251,17 +251,17 @@ import Foundation
         }
     }
     
-    class func minBytesToStartPlayback(forKiloBitrate rate: Int, speedInBytesPerSec bytesPerSec: Int) -> Int64 {
+    class func minBytesToStartPlayback(forKiloBitRate rate: Int, speedInBytesPerSec bytesPerSec: Int) -> Int64 {
         // If start date is nil somehow, or total bytes transferred is 0 somehow,
         if rate == 0 || bytesPerSec == 0 {
-            return BytesForSecondsAtBitrate(seconds: 10, bitrate: rate)
+            return BytesForSecondsAtBitRate(seconds: 10, bitRate: rate)
         }
         
         // Get the download speed so far
         let kiloBytesPerSec = Double(bytesPerSec) / 1024.0
         
         // Find out out many bytes equals 1 second of audio
-        let bytesForOneSecond = Double(BytesForSecondsAtBitrate(seconds: 1, bitrate: rate))
+        let bytesForOneSecond = Double(BytesForSecondsAtBitRate(seconds: 1, bitRate: rate))
         let kiloBytesForOneSecond = bytesForOneSecond / 1024.0;
         
         // Calculate the amount of seconds to start as a factor of how many seconds of audio are being downloaded per second

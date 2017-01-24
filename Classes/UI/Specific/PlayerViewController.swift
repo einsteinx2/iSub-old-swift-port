@@ -12,7 +12,7 @@ import SnapKit
 class PlayerViewController: UIViewController {
     let coverArtView = CachedImageView()
     
-    let bitrateLabel = UILabel()
+    let bitRateLabel = UILabel()
     let formatLabel = UILabel()
     
     let titleLabel = UILabel()
@@ -55,11 +55,11 @@ class PlayerViewController: UIViewController {
             make.top.equalToSuperview().offset(coverArtViewTopOffset)
         }
         
-        bitrateLabel.textColor = .black
-        bitrateLabel.font = .systemFont(ofSize: 13)
-        bitrateLabel.textAlignment = .left
-        self.view.addSubview(bitrateLabel)
-        bitrateLabel.snp.makeConstraints { make in
+        bitRateLabel.textColor = .black
+        bitRateLabel.font = .systemFont(ofSize: 13)
+        bitRateLabel.textAlignment = .left
+        self.view.addSubview(bitRateLabel)
+        bitRateLabel.snp.makeConstraints { make in
             make.top.equalTo(coverArtView.snp.bottom).offset(5)
             make.left.equalTo(coverArtView)
             make.width.equalToSuperview().dividedBy(2)
@@ -309,7 +309,7 @@ class PlayerViewController: UIViewController {
         if isZoomed {
             UIView.animate(withDuration: 0.3, animations: {
                 self.formatLabel.alpha = 1.0
-                self.bitrateLabel.alpha = 1.0
+                self.bitRateLabel.alpha = 1.0
                 
                 self.coverArtView.transform = .identity
                 self.titleLabel.transform = .identity
@@ -329,7 +329,7 @@ class PlayerViewController: UIViewController {
         } else {
             UIView.animate(withDuration: 0.3) {
                 self.formatLabel.alpha = 0.0
-                self.bitrateLabel.alpha = 0.0
+                self.bitRateLabel.alpha = 0.0
                 
                 var coverTransform = self.coverArtView.transform.scaledBy(x: 1.2, y: 1.2)
                 coverTransform = coverTransform.translatedBy(x: 0, y: -10)

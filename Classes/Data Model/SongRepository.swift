@@ -144,7 +144,7 @@ struct SongRepository: ItemRepository {
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                try db.executeUpdate(query, song.songId, song.serverId, song.contentTypeId, n2N(song.transcodedContentTypeId), n2N(song.mediaFolderId), n2N(song.folderId), n2N(song.artistId), n2N(song.albumId), n2N(song.genreId), n2N(song.coverArtId), song.title, n2N(song.duration), n2N(song.bitrate), n2N(song.trackNumber), n2N(song.discNumber), n2N(song.year), song.size, song.path, n2N(song.lastPlayed), n2N(song.artistName), n2N(song.albumName))
+                try db.executeUpdate(query, song.songId, song.serverId, song.contentTypeId, n2N(song.transcodedContentTypeId), n2N(song.mediaFolderId), n2N(song.folderId), n2N(song.artistId), n2N(song.albumId), n2N(song.genreId), n2N(song.coverArtId), song.title, n2N(song.duration), n2N(song.bitRate), n2N(song.trackNumber), n2N(song.discNumber), n2N(song.year), song.size, song.path, n2N(song.lastPlayed), n2N(song.artistName), n2N(song.albumName))
             } catch {
                 success = false
                 printError(error)

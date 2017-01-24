@@ -14,8 +14,8 @@ import AVFoundation
 // TODO: Audit all access to PlayQueue
 
 fileprivate let deviceNumber: UInt32 = 1
-fileprivate let bufferSize = 800
-fileprivate let defaultSampleRate = 44100
+fileprivate let bufferSize: UInt32 = 800
+fileprivate let defaultSampleRate: UInt32 = 44100
 
 fileprivate let retryDelay = 2.0
 fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
@@ -32,7 +32,8 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
     let bassStreamsQueue = DispatchQueue(label: "com.einsteinx2.BassStreamsQueue")
     var bassStreams = [BassStream]()
     var currentBassStream: BassStream? { return bassStreams.first }
-    var bitRate: Int { return currentBassStream != nil ? BassWrapper.estimateBitrate(currentBassStream!) : 0 }
+    var bitRate: Int { return currentBassStream != nil ? estimateBitRate(bassStream: currentBassStream!) : 0 }
+    var bassOutputBufferLengthMillis: UInt32 = 0
     
     let ringBuffer = EX2RingBuffer(bufferLength: 640 * 1024) // 640KB
     let ringBufferFillQueue = DispatchQueue(label: "com.einsteinx2.RingBufferQueue")
@@ -127,7 +128,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
             // Start the next song if for some reason this one isn't ready
             PlayQueue.si.startSong()
             
-            return BASS_STREAMPROC_END;
+            return BASS_STREAMPROC_END
         }
         
         let now = Date()
@@ -152,8 +153,8 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
         BASS_SetDevice(deviceNumber)
         
         autoreleasepool {
-            self.previousSongForProgress = bassStream.song;
-            self.ringBuffer.totalBytesDrained = 0;
+            self.previousSongForProgress = bassStream.song
+            self.ringBuffer.totalBytesDrained = 0
             
             bassStream.isEndedCalled = true
             
@@ -207,14 +208,14 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
     func bytesToBuffer(forKiloBitRate rate: Int, speedInBytesPerSec: Int) -> Int {
         // If start date is nil somehow, or total bytes transferred is 0 somehow, return the default of 10 seconds worth of audio
         if rate == 0 || speedInBytesPerSec == 0 {
-            return Int(BytesForSecondsAtBitrate(seconds: 10, bitrate: rate))
+            return Int(BytesForSecondsAtBitRate(seconds: 10, bitRate: rate))
         }
         
         // Get the download speed in KB/sec
         let kiloBytesPerSec = Double(speedInBytesPerSec) / 1024.0
         
         // Find out out many bytes equals 1 second of audio
-        let bytesForOneSecond = Double(BytesForSecondsAtBitrate(seconds: 1, bitrate: rate))
+        let bytesForOneSecond = Double(BytesForSecondsAtBitRate(seconds: 1, bitRate: rate))
         let kiloBytesForOneSecond = bytesForOneSecond / 1024.0
         
         // Calculate the amount of seconds to start as a factor of how many seconds of audio are being downloaded per second
@@ -267,7 +268,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                             
                             if let bassStream = self.currentBassStream {
                                 let tempBuffer = UnsafeMutablePointer<CChar>.allocate(capacity: readSize)
-                                let tempLength = BASS_ChannelGetData(mixerStream, tempBuffer, UInt32(readSize));
+                                let tempLength = BASS_ChannelGetData(mixerStream, tempBuffer, UInt32(readSize))
                                 if tempLength > 0 {
                                     bassStream.isSongStarted = true
                                     ringBuffer.fill(withBytes: tempBuffer, length: Int(tempLength))
@@ -301,11 +302,11 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                                             self.moveToNextSong()
                                         } else {
                                             // Calculate the needed size:
-                                            // Choose either the current player bitrate, or if for some reason it is not detected properly,
-                                            // use the best estimated bitrate. Then use that to determine how much data to let download to continue.
+                                            // Choose either the current player bitRate, or if for some reason it is not detected properly,
+                                            // use the best estimated bitRate. Then use that to determine how much data to let download to continue.
                                             
                                             let size = bassStream.song.localFileSize
-                                            let bitrate = BassWrapper.estimateBitrate(bassStream)
+                                            let bitRate = self.estimateBitRate(bassStream: bassStream)
                                             
                                             // Get the stream for this song
                                             var recentDownloadSpeedInBytesPerSec = 0
@@ -317,7 +318,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                                             
                                             // Calculate the bytes to wait based on the recent download speed. If the handler is nil or recent download speed is 0
                                             // it will just use the default (currently 10 seconds)
-                                            let bytesToWait = self.bytesToBuffer(forKiloBitRate: bitrate, speedInBytesPerSec: recentDownloadSpeedInBytesPerSec)
+                                            let bytesToWait = self.bytesToBuffer(forKiloBitRate: bitRate, speedInBytesPerSec: recentDownloadSpeedInBytesPerSec)
                                             
                                             bassStream.neededSize = size + bytesToWait
                                             
@@ -402,6 +403,253 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
     
     // MARK: - BASS Methods -
     
+    fileprivate func bassInit() {
+        // Free BASS just in case we use this after launch
+        BASS_Free()
+        
+        // Disable mixing. To be called before BASS_Init.
+        BASS_SetConfig(UInt32(BASS_CONFIG_IOS_MIXAUDIO), 0)
+        // Set the buffer length to the minimum amount + bufferSize
+        BASS_SetConfig(UInt32(BASS_CONFIG_BUFFER), BASS_GetConfig(UInt32(BASS_CONFIG_UPDATEPERIOD)) + bufferSize)
+        // Set DSP effects to use floating point math to avoid clipping within the effects chain
+        BASS_SetConfig(UInt32(BASS_CONFIG_FLOATDSP), 1)
+        // Initialize default device.
+        if (BASS_Init(1, defaultSampleRate, 0, nil, nil))
+        {
+            bassOutputBufferLengthMillis = BASS_GetConfig(UInt32(BASS_CONFIG_BUFFER))
+            
+            // Load the Flac plugin
+            BASS_PluginLoad(BASSFLACplugin.assumingMemoryBound(to: Int8.self), 0)
+            // Load the WavePack plugin
+            BASS_PluginLoad(BASSWVplugin.assumingMemoryBound(to: Int8.self), 0)
+            // Load the Monkey's Audio plugin
+            BASS_PluginLoad(BASS_APEplugin.assumingMemoryBound(to: Int8.self), 0)
+            // Load the MusePack plugin
+            //BASS_PluginLoad(BASS_MPCplugin.assumingMemoryBound(to: Int8.self), 0)
+            // load the OPUS plugin
+            BASS_PluginLoad(BASSOPUSplugin.assumingMemoryBound(to: Int8.self), 0)
+        }
+        else
+        {
+            bassOutputBufferLengthMillis = 0
+            printError("Can't initialize device")
+            printBassError()
+        }
+
+    }
+    
+    fileprivate func printChannelInfo(_ channel: HSTREAM) {
+        var i = BASS_CHANNELINFO()
+        BASS_ChannelGetInfo(channel, &i)
+        let bytes = BASS_ChannelGetLength(channel, UInt32(BASS_POS_BYTE))
+        let time = BASS_ChannelBytes2Seconds(channel, bytes)
+        print("channel type = \(i.ctype) (\(formatForChannel(channel)))\nlength = \(bytes) (seconds: \(time)  flags: \(i.flags)  freq: \(i.freq)  origres: \(i.origres)")
+    }
+    
+    fileprivate func formatForChannel(_ channel: HSTREAM) -> String {
+        var i = BASS_CHANNELINFO()
+        BASS_ChannelGetInfo(channel, &i)
+        
+        /*if (plugin)
+         {
+         // using a plugin
+         const BASS_PLUGININFO *pinfo=BASS_PluginGetInfo(plugin) // get plugin info
+         int a
+         for (a=0a<pinfo->formatca++)
+         {
+         if (pinfo->formats[a].ctype==ctype) // found a "ctype" match...
+         return [NSString stringWithFormat:"%s", pinfo->formats[a].name] // return it's name
+         }
+         }*/
+        
+        switch Int32(i.ctype) {
+        case BASS_CTYPE_STREAM_WV:        return "WV"
+        case BASS_CTYPE_STREAM_MPC:       return "MPC"
+        case BASS_CTYPE_STREAM_APE:       return "APE"
+        case BASS_CTYPE_STREAM_FLAC:      return "FLAC"
+        case BASS_CTYPE_STREAM_FLAC_OGG:  return "FLAC"
+        case BASS_CTYPE_STREAM_OGG:       return "OGG"
+        case BASS_CTYPE_STREAM_MP1:       return "MP1"
+        case BASS_CTYPE_STREAM_MP2:       return "MP2"
+        case BASS_CTYPE_STREAM_MP3:       return "MP3"
+        case BASS_CTYPE_STREAM_AIFF:      return "AIFF"
+        case BASS_CTYPE_STREAM_OPUS:      return "Opus"
+        case BASS_CTYPE_STREAM_WAV_PCM:   return "PCM WAV"
+        case BASS_CTYPE_STREAM_WAV_FLOAT: return "Float WAV"
+        // Check if WAV case works
+        case BASS_CTYPE_STREAM_WAV: return "WAV"
+        case BASS_CTYPE_STREAM_CA:
+            // CoreAudio codec
+            guard let tags = BASS_ChannelGetTags(channel, UInt32(BASS_TAG_CA_CODEC)) else {
+                return ""
+            }
+            
+            return tags.withMemoryRebound(to: TAG_CA_CODEC.self, capacity: 1) { pointer in
+                let codec: TAG_CA_CODEC = pointer.pointee
+                switch codec.atype {
+                case kAudioFormatLinearPCM:            return "LPCM"
+                case kAudioFormatAC3:                  return "AC3"
+                case kAudioFormat60958AC3:             return "AC3"
+                case kAudioFormatAppleIMA4:            return "IMA4"
+                case kAudioFormatMPEG4AAC:             return "AAC"
+                case kAudioFormatMPEG4CELP:            return "CELP"
+                case kAudioFormatMPEG4HVXC:            return "HVXC"
+                case kAudioFormatMPEG4TwinVQ:          return "TwinVQ"
+                case kAudioFormatMACE3:                return "MACE 3:1"
+                case kAudioFormatMACE6:                return "MACE 6:1"
+                case kAudioFormatULaw:                 return "μLaw 2:1"
+                case kAudioFormatALaw:                 return "aLaw 2:1"
+                case kAudioFormatQDesign:              return "QDMC"
+                case kAudioFormatQDesign2:             return "QDM2"
+                case kAudioFormatQUALCOMM:             return "QCPV"
+                case kAudioFormatMPEGLayer1:           return "MP1"
+                case kAudioFormatMPEGLayer2:           return "MP2"
+                case kAudioFormatMPEGLayer3:           return "MP3"
+                case kAudioFormatTimeCode:             return "TIME"
+                case kAudioFormatMIDIStream:           return "MIDI"
+                case kAudioFormatParameterValueStream: return "APVS"
+                case kAudioFormatAppleLossless:        return "ALAC"
+                case kAudioFormatMPEG4AAC_HE:          return "AAC-HE"
+                case kAudioFormatMPEG4AAC_LD:          return "AAC-LD"
+                case kAudioFormatMPEG4AAC_ELD:         return "AAC-ELD"
+                case kAudioFormatMPEG4AAC_ELD_SBR:     return "AAC-SBR"
+                case kAudioFormatMPEG4AAC_HE_V2:       return "AAC-HEv2"
+                case kAudioFormatMPEG4AAC_Spatial:     return "AAC-S"
+                case kAudioFormatAMR:                  return "AMR"
+                case kAudioFormatAudible:              return "AUDB"
+                case kAudioFormatiLBC:                 return "iLBC"
+                case kAudioFormatDVIIntelIMA:          return "ADPCM"
+                case kAudioFormatMicrosoftGSM:         return "GSM"
+                case kAudioFormatAES3:                 return "AES3"
+                default: return ""
+                }
+            }
+        default: return ""
+        }
+    }
+    
+    // TODO: Double check this logic
+    func estimateBitRate(bassStream: BassStream) -> Int {
+        // Default to the player bitRate
+        let startFilePosition: UInt64 = 0
+        let currentFilePosition = BASS_StreamGetFilePosition(bassStream.stream, UInt32(BASS_FILEPOS_CURRENT))
+        let filePosition = currentFilePosition - startFilePosition
+        let decodedPosition = BASS_ChannelGetPosition(bassStream.stream, UInt32(BASS_POS_BYTE|BASS_POS_DECODE)) // decoded PCM position
+        let bitRateDouble = Double(filePosition) * 8.0 / Double(BASS_ChannelBytes2Seconds(bassStream.stream, decodedPosition))
+        var bitRate = Int(bitRateDouble / 1000.0)
+        bitRate = bitRate > 1000000 ? -1 : bitRate
+        
+        var i = BASS_CHANNELINFO()
+        BASS_ChannelGetInfo(bassStream.stream, &i)
+        
+        // Check the current stream format, and make sure that the bitRate is in the correct range
+        // otherwise use the song's estimated bitRate instead (to keep something like a 10000 kbitRate on an mp3 from being used for buffering)
+        switch Int32(i.ctype) {
+        case BASS_CTYPE_STREAM_WAV_PCM,
+             BASS_CTYPE_STREAM_WAV_FLOAT,
+             BASS_CTYPE_STREAM_WAV,
+             BASS_CTYPE_STREAM_AIFF,
+             BASS_CTYPE_STREAM_WV,
+             BASS_CTYPE_STREAM_FLAC,
+             BASS_CTYPE_STREAM_FLAC_OGG:
+            if bitRate < 330 || bitRate > 12000 {
+                bitRate = bassStream.song.estimatedBitRate
+            }
+        case BASS_CTYPE_STREAM_OGG,
+             BASS_CTYPE_STREAM_MP1,
+             BASS_CTYPE_STREAM_MP2,
+             BASS_CTYPE_STREAM_MP3,
+             BASS_CTYPE_STREAM_MPC:
+            if bitRate > 450 {
+                bitRate = bassStream.song.estimatedBitRate
+            }
+        case BASS_CTYPE_STREAM_CA:
+            // CoreAudio codec
+            guard let tags = BASS_ChannelGetTags(bassStream.stream, UInt32(BASS_TAG_CA_CODEC)) else {
+                bitRate = bassStream.song.estimatedBitRate
+                break
+            }
+            
+            tags.withMemoryRebound(to: TAG_CA_CODEC.self, capacity: 1) { pointer in
+                let codec: TAG_CA_CODEC = pointer.pointee
+                switch codec.atype {
+                case kAudioFormatLinearPCM,
+                     kAudioFormatAppleLossless:
+                    if bitRate < 330 || bitRate > 12000 {
+                        bitRate = bassStream.song.estimatedBitRate
+                    }
+                case kAudioFormatMPEG4AAC,
+                     kAudioFormatMPEG4AAC_HE,
+                     kAudioFormatMPEG4AAC_LD,
+                     kAudioFormatMPEG4AAC_ELD,
+                     kAudioFormatMPEG4AAC_ELD_SBR,
+                     kAudioFormatMPEG4AAC_HE_V2,
+                     kAudioFormatMPEG4AAC_Spatial,
+                     kAudioFormatMPEGLayer1,
+                     kAudioFormatMPEGLayer2,
+                     kAudioFormatMPEGLayer3:
+                    if bitRate > 450 {
+                        bitRate = bassStream.song.estimatedBitRate;
+                    }
+                default:
+                    // If we can't detect the format, use the estimated bitRate instead of player to be safe
+                    bitRate = bassStream.song.estimatedBitRate
+                }
+            }
+        default:
+            // If we can't detect the format, use the estimated bitRate instead of player to be safe
+            bitRate = bassStream.song.estimatedBitRate
+        }
+        
+        return bitRate
+    }
+    
+    func string(fromErrorCode errorCode: Int32) -> String {
+        switch errorCode {
+        case BASS_OK:             return "No error! All OK"
+        case BASS_ERROR_MEM:      return "Memory error"
+        case BASS_ERROR_FILEOPEN: return "Can't open the file"
+        case BASS_ERROR_DRIVER:   return "Can't find a free/valid driver"
+        case BASS_ERROR_BUFLOST:  return "The sample buffer was lost"
+        case BASS_ERROR_HANDLE:   return "Invalid handle"
+        case BASS_ERROR_FORMAT:   return "Unsupported sample format"
+        case BASS_ERROR_POSITION: return "Invalid position"
+        case BASS_ERROR_INIT:     return "BASS_Init has not been successfully called"
+        case BASS_ERROR_START:    return "BASS_Start has not been successfully called"
+        case BASS_ERROR_ALREADY:  return "Already initialized/paused/whatever"
+        case BASS_ERROR_NOCHAN:   return "Can't get a free channel"
+        case BASS_ERROR_ILLTYPE:  return "An illegal type was specified"
+        case BASS_ERROR_ILLPARAM: return "An illegal parameter was specified"
+        case BASS_ERROR_NO3D:     return "No 3D support"
+        case BASS_ERROR_NOEAX:    return "No EAX support"
+        case BASS_ERROR_DEVICE:   return "Illegal device number"
+        case BASS_ERROR_NOPLAY:   return "Not playing"
+        case BASS_ERROR_FREQ:     return "Illegal sample rate"
+        case BASS_ERROR_NOTFILE:  return "The stream is not a file stream"
+        case BASS_ERROR_NOHW:     return "No hardware voices available"
+        case BASS_ERROR_EMPTY:    return "The MOD music has no sequence data"
+        case BASS_ERROR_NONET:    return "No internet connection could be opened"
+        case BASS_ERROR_CREATE:   return "Couldn't create the file"
+        case BASS_ERROR_NOFX:     return "Effects are not available"
+        case BASS_ERROR_NOTAVAIL: return "Requested data is not available"
+        case BASS_ERROR_DECODE:   return "The channel is a 'decoding channel'"
+        case BASS_ERROR_DX:       return "A sufficient DirectX version is not installed"
+        case BASS_ERROR_TIMEOUT:  return "Connection timedout"
+        case BASS_ERROR_FILEFORM: return "Unsupported file format"
+        case BASS_ERROR_SPEAKER:  return "Unavailable speaker"
+        case BASS_ERROR_VERSION:  return "Invalid BASS version (used by add-ons)"
+        case BASS_ERROR_CODEC:    return "Codec is not available/supported"
+        case BASS_ERROR_ENDED:    return "The channel/file has ended"
+        case BASS_ERROR_BUSY:     return "The device is busy"
+        default:                  return "Unknown error."
+        }
+    }
+    
+    func printBassError(file: String = #file, line: Int = #line, function: String = #function) {
+        let errorCode = BASS_ErrorGetCode()
+        printError("BASS error: \(errorCode) - \(string(fromErrorCode: errorCode))", file: file, line: line, function: function)
+    }
+    
     fileprivate func cleanup() {
         BASS_SetDevice(deviceNumber)
         
@@ -416,8 +664,8 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                     BASS_StreamFree(bassStream.stream)
                 }
                 
-                BASS_StreamFree(self.mixerStream);
-                BASS_StreamFree(self.outStream);
+                BASS_StreamFree(self.mixerStream)
+                BASS_StreamFree(self.outStream)
                 
                 self.ringBuffer.reset()
                 self.bassStreams.removeAll()
@@ -444,7 +692,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
         song.currentPath.withCString { unsafePointer in
             fileStream = BASS_StreamCreateFile(false, unsafePointer, 0, UInt64(song.size), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT))
             if fileStream == 0 {
-                fileStream = BASS_StreamCreateFile(false, unsafePointer, 0, UInt64(song.size), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT));
+                fileStream = BASS_StreamCreateFile(false, unsafePointer, 0, UInt64(song.size), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT))
             }
         }
         return fileStream > 0
@@ -462,18 +710,18 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
         // First check if the stream failed because of a BASS_Init error
         if fileStream == 0 && BASS_ErrorGetCode() == BASS_ERROR_INIT {
             // Retry the regular hardware sampling stream
-            BassWrapper.bassInit()
-            fileStream = BASS_StreamCreateFileUser(UInt32(STREAMFILE_NOBUFFER), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT), &fileProcs, bridge(obj: bassStream));
+            bassInit()
+            fileStream = BASS_StreamCreateFileUser(UInt32(STREAMFILE_NOBUFFER), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT), &fileProcs, bridge(obj: bassStream))
         }
         
         if fileStream == 0 {
-            BassWrapper.logError()
+            printBassError()
             fileStream = BASS_StreamCreateFileUser(UInt32(STREAMFILE_NOBUFFER), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT), &fileProcs, bridge(obj: bassStream))
         }
         
         if fileStream > 0 {
             // Add the stream free callback
-            BASS_ChannelSetSync(fileStream, UInt32(BASS_SYNC_END|BASS_SYNC_MIXTIME), 0, endSyncProc, bridge(obj: bassStream));
+            BASS_ChannelSetSync(fileStream, UInt32(BASS_SYNC_END|BASS_SYNC_MIXTIME), 0, endSyncProc, bridge(obj: bassStream))
             
             // Ask BASS how many channels are on this stream
             var info = BASS_CHANNELINFO()
@@ -488,7 +736,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
             return bassStream
         }
         
-        BassWrapper.logError()
+        printBassError()
         return nil
     }
     
@@ -512,7 +760,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                 
                 if let bassStream = self.prepareStream(forSong: song) {
                     self.mixerStream = BASS_Mixer_StreamCreate(UInt32(defaultSampleRate), 2, UInt32(BASS_STREAM_DECODE))
-                    BASS_Mixer_StreamAddChannel(self.mixerStream, bassStream.stream, UInt32(BASS_MIXER_NORAMPIN));
+                    BASS_Mixer_StreamAddChannel(self.mixerStream, bassStream.stream, UInt32(BASS_MIXER_NORAMPIN))
                     
                     func streamProc(handle: HSYNC, buffer: UnsafeMutableRawPointer?, length: UInt32, userInfo: UnsafeMutableRawPointer?) -> UInt32 {
                         var bytesRead: UInt32 = 0
@@ -542,8 +790,8 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                     //                // Prepare the EQ
                     //                // This will load the values, and if the EQ was previously enabled, will automatically
                     //                // add the EQ values to the stream
-                    //                BassEffectDAO *effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ];
-                    //                [effectDAO selectPresetId:effectDAO.selectedPresetId];
+                    //                BassEffectDAO *effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ]
+                    //                [effectDAO selectPresetId:effectDAO.selectedPresetId]
                     
                     // Add the stream to the queue
                     self.bassStreams.append(bassStream)
@@ -623,7 +871,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
         pcmBytePosition = pcmBytePosition < 0 ? 0 : pcmBytePosition
         let seconds = BASS_ChannelBytes2Seconds(currentBassStream.stream, UInt64(Double(ringBuffer.totalBytesDrained) * sampleRateRatio * Double(chanCount)))
         
-        return seconds;
+        return seconds
     }
     
     // TODO: Prevent divide by 0
@@ -650,7 +898,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
         var seconds = rawProgress
         if seconds < 0 {
             if let duration = previousSongForProgress?.duration {
-                seconds = Double(duration) + seconds;
+                seconds = Double(duration) + seconds
                 return seconds / Double(duration)
             }
             return 0
@@ -730,12 +978,12 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
             ringBuffer.reset()
             
             if fade {
-                BASS_ChannelSlideAttribute(outStream, UInt32(BASS_ATTRIB_VOL), 0, UInt32(BassWrapper.bassOutputBufferLengthMillis()));
+                BASS_ChannelSlideAttribute(outStream, UInt32(BASS_ATTRIB_VOL), 0, bassOutputBufferLengthMillis)
             }
             
             ringBuffer.totalBytesDrained = Int64(Double(bytes) / Double(currentBassStream.channelCount) / (Double(currentBassStream.sampleRate) / Double(defaultSampleRate)))
         } else {
-            BassWrapper.logError()
+            printBassError()
         }
     }
     

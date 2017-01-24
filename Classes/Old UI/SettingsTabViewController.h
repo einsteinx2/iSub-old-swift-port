@@ -21,8 +21,8 @@
 @property (nonatomic, strong) IBOutlet UILabel *enableSongsTabLabel;
 @property (nonatomic, strong) IBOutlet UILabel *enableSongsTabDesc;
 @property (nonatomic, strong) IBOutlet UISegmentedControl *recoverSegmentedControl;
-@property (nonatomic, strong) IBOutlet UISegmentedControl *maxBitrateWifiSegmentedControl;
-@property (nonatomic, strong) IBOutlet UISegmentedControl *maxBitrate3GSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxBitRateWifiSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxBitRate3GSegmentedControl;
 @property (nonatomic, strong) IBOutlet UISwitch *enableLyricsSwitch;
 @property (nonatomic, strong) IBOutlet UISwitch *enableCacheStatusSwitch;
 @property (nonatomic, strong) IBOutlet UISwitch *autoPlayerInfoSwitch;
@@ -66,8 +66,8 @@
 @property (nonatomic, strong) IBOutlet UILabel *enableLockArtLabel;
 @property (nonatomic, strong) IBOutlet UILabel *swipeCellsLabel;
 @property (nonatomic, strong) IBOutlet UILabel *tapHoldCellsLabel;
-@property (nonatomic, strong) IBOutlet UISegmentedControl *maxVideoBitrateWifiSegmentedControl;
-@property (nonatomic, strong) IBOutlet UISegmentedControl *maxVideoBitrate3GSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxVideoBitRateWifiSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxVideoBitRate3GSegmentedControl;
 @property (nonatomic, strong) NSDate *loadedTime;
 
 @property (nonatomic, strong) IBOutletCollection(UISwitch) NSArray *switches;

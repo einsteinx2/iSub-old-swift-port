@@ -32,7 +32,7 @@ extension Song: Item {
     let coverArtId: String?
     let title: String
     let duration: Int?
-    let bitrate: Int?
+    let bitRate: Int?
     let trackNumber: Int?
     let discNumber: Int?
     let year: Int?
@@ -94,24 +94,24 @@ extension Song: Item {
         return FileManager.default.fileExists(atPath: currentPath)
     }
     
-    var estimatedBitrate: Int {
-        let currentMaxBitrate = SavedSettings.si.currentMaxBitrate;
+    var estimatedBitRate: Int {
+        let currentMaxBitRate = SavedSettings.si.currentMaxBitRate;
         
-        // Default to 128 if there is no bitrate for this song object (should never happen)
-        var rate = (bitrate == nil || bitrate == 0) ? 128 : bitrate!
+        // Default to 128 if there is no bitRate for this song object (should never happen)
+        var rate = (bitRate == nil || bitRate == 0) ? 128 : bitRate!
         
         // Check if this is being transcoded to the best of our knowledge
         if transcodedContentType == nil {
-            // This is not being transcoded between formats, however bitrate limiting may be active
-            if rate > currentMaxBitrate && currentMaxBitrate != 0 {
-                rate = currentMaxBitrate
+            // This is not being transcoded between formats, however bitRate limiting may be active
+            if rate > currentMaxBitRate && currentMaxBitRate != 0 {
+                rate = currentMaxBitRate
             }
         } else {
-            // This is probably being transcoded, so attempt to determine the bitrate
-            if rate > 128 && currentMaxBitrate == 0 {
-                rate = 128 // Subsonic default transcoding bitrate
-            } else if rate > currentMaxBitrate && currentMaxBitrate != 0 {
-                rate = currentMaxBitrate
+            // This is probably being transcoded, so attempt to determine the bitRate
+            if rate > 128 && currentMaxBitRate == 0 {
+                rate = 128 // Subsonic default transcoding bitRate
+            } else if rate > currentMaxBitRate && currentMaxBitRate != 0 {
+                rate = currentMaxBitRate
             }
         }
         
@@ -132,7 +132,7 @@ extension Song: Item {
         
         self.title = title.clean
         self.duration = element.attribute(asIntOptional: "duration")
-        self.bitrate = element.attribute(asIntOptional: "bitRate")
+        self.bitRate = element.attribute(asIntOptional: "bitRate")
         self.trackNumber = element.attribute(asIntOptional: "track")
         self.discNumber = element.attribute(asIntOptional: "discNumber")
         self.year = element.attribute(asIntOptional: "year")
@@ -188,7 +188,7 @@ extension Song: Item {
         self.coverArtId              = result.string(forColumnIndex: 9)
         self.title                   = result.string(forColumnIndex: 10) ?? ""
         self.duration                = result.object(forColumnIndex: 11) as? Int
-        self.bitrate                 = result.object(forColumnIndex: 12) as? Int
+        self.bitRate                 = result.object(forColumnIndex: 12) as? Int
         self.trackNumber             = result.object(forColumnIndex: 13) as? Int
         self.discNumber              = result.object(forColumnIndex: 14) as? Int
         self.year                    = result.object(forColumnIndex: 15) as? Int
