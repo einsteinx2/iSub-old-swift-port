@@ -158,14 +158,6 @@
 		5315A3F2156F7064001B0268 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354914A11B03FC900928E0F /* MobileCoreServices.framework */; };
 		5315A3F6156F7064001B0268 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
 		53191DF01167CFDC00E1C08A /* current-server.png in Resources */ = {isa = PBXBuildFile; fileRef = 53191DEF1167CFDC00E1C08A /* current-server.png */; };
-		531B33571E24CF8B00811187 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DE1E24CF8A00811187 /* BassEffectDAO.m */; };
-		531B33581E24CF8B00811187 /* BassEffectDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32DE1E24CF8A00811187 /* BassEffectDAO.m */; };
-		531B33591E24CF8B00811187 /* BassEffectValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E01E24CF8A00811187 /* BassEffectValue.m */; };
-		531B335A1E24CF8B00811187 /* BassEffectValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E01E24CF8A00811187 /* BassEffectValue.m */; };
-		531B335B1E24CF8B00811187 /* BassEqualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E21E24CF8A00811187 /* BassEqualizer.m */; };
-		531B335C1E24CF8B00811187 /* BassEqualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E21E24CF8A00811187 /* BassEqualizer.m */; };
-		531B335D1E24CF8B00811187 /* BassParamEqValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E41E24CF8A00811187 /* BassParamEqValue.m */; };
-		531B335E1E24CF8B00811187 /* BassParamEqValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E41E24CF8A00811187 /* BassParamEqValue.m */; };
 		531B33611E24CF8B00811187 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E91E24CF8A00811187 /* CachedImage.swift */; };
 		531B33621E24CF8B00811187 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E91E24CF8A00811187 /* CachedImage.swift */; };
 		531B33711E24CF8B00811187 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FB1E24CF8A00811187 /* Playlist.swift */; };
@@ -804,6 +796,8 @@
 		53F675E2113B095900822059 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E1113B095900822059 /* QuartzCore.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53F675E8113B096400822059 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F675E7113B096400822059 /* AudioToolbox.framework */; };
 		53F7A128131B7F3B002C829D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F7A127131B7F3B002C829D /* Security.framework */; };
+		53FD71E51E36E73600460B44 /* BassEqualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E41E36E73600460B44 /* BassEqualizer.swift */; };
+		53FD71E61E36E73600460B44 /* BassEqualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E41E36E73600460B44 /* BassEqualizer.swift */; };
 		53FDEE2611E822CC00FE3ECD /* current-server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2511E822CC00FE3ECD /* current-server@2x.png */; };
 		53FDEE2911E823A100FE3ECD /* default-album-art-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */; };
 		53FDEE2A11E823A100FE3ECD /* default-album-art@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */; };
@@ -859,14 +853,6 @@
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5315A405156F7064001B0268 /* iSub Unit Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Unit Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
-		531B32DD1E24CF8A00811187 /* BassEffectDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectDAO.h; sourceTree = "<group>"; };
-		531B32DE1E24CF8A00811187 /* BassEffectDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEffectDAO.m; sourceTree = "<group>"; };
-		531B32DF1E24CF8A00811187 /* BassEffectValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEffectValue.h; sourceTree = "<group>"; };
-		531B32E01E24CF8A00811187 /* BassEffectValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEffectValue.m; sourceTree = "<group>"; };
-		531B32E11E24CF8A00811187 /* BassEqualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassEqualizer.h; sourceTree = "<group>"; };
-		531B32E21E24CF8A00811187 /* BassEqualizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassEqualizer.m; sourceTree = "<group>"; };
-		531B32E31E24CF8A00811187 /* BassParamEqValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassParamEqValue.h; sourceTree = "<group>"; };
-		531B32E41E24CF8A00811187 /* BassParamEqValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BassParamEqValue.m; sourceTree = "<group>"; };
 		531B32E91E24CF8A00811187 /* CachedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImage.swift; sourceTree = "<group>"; };
 		531B32FB1E24CF8A00811187 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		531B32FC1E24CF8A00811187 /* SectionIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionIndex.swift; sourceTree = "<group>"; };
@@ -1221,6 +1207,7 @@
 		53F675E1113B095900822059 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		53F675E7113B096400822059 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		53F7A127131B7F3B002C829D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		53FD71E41E36E73600460B44 /* BassEqualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BassEqualizer.swift; sourceTree = "<group>"; };
 		53FDEE2511E822CC00FE3ECD /* current-server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server@2x.png"; path = "Images/Other/current-server@2x.png"; sourceTree = "<group>"; };
 		53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small@2x.png"; path = "Images/Other/default-album-art-small@2x.png"; sourceTree = "<group>"; };
 		53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art@2x.png"; path = "Images/Other/default-album-art@2x.png"; sourceTree = "<group>"; };
@@ -1562,24 +1549,9 @@
 				537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */,
 				534FACED1E328D3200BF12D9 /* BassStream.swift */,
 				537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */,
-				531B32DC1E24CF8A00811187 /* Equalizer */,
+				53FD71E41E36E73600460B44 /* BassEqualizer.swift */,
 			);
 			path = AudioEngine;
-			sourceTree = "<group>";
-		};
-		531B32DC1E24CF8A00811187 /* Equalizer */ = {
-			isa = PBXGroup;
-			children = (
-				531B32DD1E24CF8A00811187 /* BassEffectDAO.h */,
-				531B32DE1E24CF8A00811187 /* BassEffectDAO.m */,
-				531B32DF1E24CF8A00811187 /* BassEffectValue.h */,
-				531B32E01E24CF8A00811187 /* BassEffectValue.m */,
-				531B32E11E24CF8A00811187 /* BassEqualizer.h */,
-				531B32E21E24CF8A00811187 /* BassEqualizer.m */,
-				531B32E31E24CF8A00811187 /* BassParamEqValue.h */,
-				531B32E41E24CF8A00811187 /* BassParamEqValue.m */,
-			);
-			path = Equalizer;
 			sourceTree = "<group>";
 		};
 		531B32E81E24CF8A00811187 /* Data Model */ = {
@@ -2705,11 +2677,11 @@
 				531B34481E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				531B339D1E24CF8B00811187 /* FolderLoader.swift in Sources */,
 				5358DF831E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
+				53FD71E51E36E73600460B44 /* BassEqualizer.swift in Sources */,
 				531B33F81E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34421E24D24600811187 /* FMDatabase.m in Sources */,
 				53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */,
 				531B33611E24CF8B00811187 /* CachedImage.swift in Sources */,
-				531B33591E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				537FB2FC1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
 				533B69D81E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
@@ -2717,7 +2689,6 @@
 				5355BFA41E2D81D900C6D27F /* AppDelegate.swift in Sources */,
 				531B34041E24D0B600811187 /* PlayerViewController.swift in Sources */,
 				531B339F1E24CF8B00811187 /* ItemLoader.swift in Sources */,
-				531B335B1E24CF8B00811187 /* BassEqualizer.m in Sources */,
 				531B344E1E24D24600811187 /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				5358E1C71E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358DF881E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
@@ -2744,7 +2715,6 @@
 				530C2D831E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				537FB2F91E33065E001D3FBB /* ObjC.m in Sources */,
-				531B335D1E24CF8B00811187 /* BassParamEqValue.m in Sources */,
 				530F04AD1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				53D59A571E1DC63800071ABD /* NSArray+Safe.m in Sources */,
 				531B34621E24D37300811187 /* sqlite3.c in Sources */,
@@ -2814,7 +2784,6 @@
 				53E042831E36AB4B0009DE79 /* Synchronized.swift in Sources */,
 				531B34181E24D12300811187 /* HelpTabViewController.m in Sources */,
 				5358DF7E1E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
-				531B33571E24CF8B00811187 /* BassEffectDAO.m in Sources */,
 				531B34651E24D3D500811187 /* Defines.swift in Sources */,
 				53835CED1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				531B33851E24CF8B00811187 /* ApiLoader.swift in Sources */,
@@ -2956,11 +2925,11 @@
 				531B34491E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				531B339E1E24CF8B00811187 /* FolderLoader.swift in Sources */,
 				5358DF851E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
+				53FD71E61E36E73600460B44 /* BassEqualizer.swift in Sources */,
 				531B33F91E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34431E24D24600811187 /* FMDatabase.m in Sources */,
 				53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */,
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,
-				531B335A1E24CF8B00811187 /* BassEffectValue.m in Sources */,
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
@@ -2968,7 +2937,6 @@
 				5355BFA51E2D81D900C6D27F /* AppDelegate.swift in Sources */,
 				531B34051E24D0B600811187 /* PlayerViewController.swift in Sources */,
 				531B33A01E24CF8B00811187 /* ItemLoader.swift in Sources */,
-				531B335C1E24CF8B00811187 /* BassEqualizer.m in Sources */,
 				531B344F1E24D24600811187 /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
@@ -2995,7 +2963,6 @@
 				530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				537FB2FA1E33065E001D3FBB /* ObjC.m in Sources */,
-				531B335E1E24CF8B00811187 /* BassParamEqValue.m in Sources */,
 				530F04AE1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				53D59A591E1DC63800071ABD /* NSArray+Safe.m in Sources */,
 				531B34631E24D37300811187 /* sqlite3.c in Sources */,
@@ -3065,7 +3032,6 @@
 				53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */,
 				531B34191E24D12300811187 /* HelpTabViewController.m in Sources */,
 				5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
-				531B33581E24CF8B00811187 /* BassEffectDAO.m in Sources */,
 				531B34661E24D3D500811187 /* Defines.swift in Sources */,
 				53835CEF1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				531B33861E24CF8B00811187 /* ApiLoader.swift in Sources */,

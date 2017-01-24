@@ -26,7 +26,6 @@
 #import "bassflac.h"
 #import "bassopus.h"
 #import "basswv.h"
-#import "BassEqualizer.h"
 #import <AudioToolbox/AudioToolbox.h>
 
 extern void *BASSFLACplugin, *BASSWVplugin, *BASS_APEplugin, *BASS_MPCplugin, *BASSOPUSplugin;

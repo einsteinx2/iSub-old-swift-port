@@ -664,6 +664,8 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                     BASS_StreamFree(bassStream.stream)
                 }
                 
+                self.equalizer.removeValues()
+                
                 BASS_StreamFree(self.mixerStream)
                 BASS_StreamFree(self.outStream)
                 
@@ -774,6 +776,11 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                     }
                     self.outStream = BASS_StreamCreate(UInt32(defaultSampleRate), 2, 0, streamProc, bridge(obj: self))
                     
+                    if SavedSettings.si.isEqualizerOn {
+                        self.equalizer.channel  = self.outStream
+                        self.equalizer.applyValues()
+                    }
+                    
                     self.ringBuffer.totalBytesDrained = 0
                     
                     BASS_Start()
@@ -785,13 +792,7 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
                     self.equalizer.channel = self.outStream
                     
                     // Add gain amplification
-                    self.equalizer.createVolumeFx()
-                    
-                    //                // Prepare the EQ
-                    //                // This will load the values, and if the EQ was previously enabled, will automatically
-                    //                // add the EQ values to the stream
-                    //                BassEffectDAO *effectDAO = [[BassEffectDAO alloc] initWithType:BassEffectType_ParametricEQ]
-                    //                [effectDAO selectPresetId:effectDAO.selectedPresetId]
+                    //self.equalizer.createVolumeFx()
                     
                     // Add the stream to the queue
                     self.bassStreams.append(bassStream)

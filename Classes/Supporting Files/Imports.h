@@ -20,7 +20,6 @@
 #import "LoadingScreen.h"
 
 // Other
-#import "BassEffectValue.h"
 #import "CLIColor.h"
 #import "DDAbstractDatabaseLogger.h"
 #import "DDContextFilterLogFormatter.h"
