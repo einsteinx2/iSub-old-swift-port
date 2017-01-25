@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MediaFoldersLoader: ApiLoader, ItemLoader {
+final class MediaFoldersLoader: ApiLoader, ItemLoader {
     var mediaFolders = [MediaFolder]()
     
     var associatedObject: Any?

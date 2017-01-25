@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CachedRootAlbumsLoader: CachedDatabaseLoader {
+final class CachedRootAlbumsLoader: CachedDatabaseLoader {
     var albums = [Album]()
     
     override var items: [Item] {

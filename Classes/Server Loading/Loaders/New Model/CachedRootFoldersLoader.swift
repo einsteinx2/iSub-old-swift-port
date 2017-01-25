@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CachedRootFoldersLoader: CachedDatabaseLoader {
+final class CachedRootFoldersLoader: CachedDatabaseLoader {
     var folders = [Folder]()
 
     override var items: [Item] {

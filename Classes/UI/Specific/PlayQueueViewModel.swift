@@ -63,7 +63,7 @@ class PlayQueueViewModel: NSObject {
             delegate?.currentIndexChanged()
         }
         
-        if let oldSong = oldSong, let currentSong = currentSong, !oldSong.isEqual(currentSong) {
+        if let oldSong = oldSong, let currentSong = currentSong, oldSong != currentSong {
             delegate?.currentSongChanged()
         } else if (oldSong == nil && currentSong != nil) || (oldSong != nil && currentSong == nil) {
             delegate?.currentSongChanged()

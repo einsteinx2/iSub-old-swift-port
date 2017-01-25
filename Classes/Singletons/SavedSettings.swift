@@ -8,12 +8,12 @@
 
 import Foundation
 
-@objc enum CachingType: Int {
+enum CachingType: Int {
     case minSpace = 0
     case maxSize = 1
 };
 
-@objc class SavedSettings: NSObject {
+final class SavedSettings: NSObject {
     struct Keys {
         static let currentServerId              = "currentServerId"
         static let currentServer                = "currentServer"

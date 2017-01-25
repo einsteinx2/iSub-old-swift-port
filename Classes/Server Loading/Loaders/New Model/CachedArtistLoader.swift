@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CachedArtistLoader: CachedDatabaseLoader {
+final class CachedArtistLoader: CachedDatabaseLoader {
     let artistId: Int64
     let serverId: Int64
     

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RootArtistsLoader: ApiLoader, ItemLoader {
+final class RootArtistsLoader: ApiLoader, ItemLoader {
     var artists = [Artist]()
     var ignoredArticles = [String]()
     

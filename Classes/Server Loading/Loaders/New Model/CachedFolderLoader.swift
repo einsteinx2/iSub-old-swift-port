@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CachedFolderLoader: CachedDatabaseLoader {
+final class CachedFolderLoader: CachedDatabaseLoader {
     fileprivate static var operationQueues = [OperationQueue]()
     
     let folderId: Int64

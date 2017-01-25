@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc class BassStream: NSObject {
+final class BassStream: Equatable {
     weak var player: BassGaplessPlayer?
     
     var stream: HSTREAM = 0
@@ -45,7 +45,6 @@ import Foundation
         self.song = song
         if let fileHandle = FileHandle(forReadingAtPath: song.currentPath) {
             self.fileHandle = fileHandle
-            super.init()
         } else {
             return nil
         }
@@ -55,5 +54,7 @@ import Foundation
         fileHandle.closeFile()
     }
     
-    
+    static func ==(lhs: BassStream, rhs: BassStream) -> Bool {
+        return lhs === rhs
+    }
 }

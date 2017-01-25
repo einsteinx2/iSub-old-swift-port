@@ -8,17 +8,17 @@
 
 import Foundation
 
-@objc enum ServerType: Int {
+enum ServerType: Int {
     case subsonic = 1
     case waveBox  = 2
 }
 
-extension Server: Item {
+extension Server: Item, Equatable {
     var itemId: Int64 { return serverId }
     var itemName: String { return url }
 }
 
-@objc class Server: NSObject {
+final class Server {
     static let testServerId = Int64.max
     static var testServer: Server {
         // Return model directly rather than storing in the database

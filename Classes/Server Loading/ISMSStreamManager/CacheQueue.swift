@@ -10,7 +10,7 @@ import Foundation
 
 fileprivate let maxReconnects = 5
 
-class CacheQueue: StreamHandlerDelegate {
+final class CacheQueue: StreamHandlerDelegate {
     struct Notifications {
         static let started        = Notification.Name("CacheQueue_started")
         static let stopped        = Notification.Name("CacheQueue_stopped")

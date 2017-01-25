@@ -8,12 +8,12 @@
 
 import Foundation
 
-extension Album: Item {
+extension Album: Item, Equatable {
     var itemId: Int64 { return albumId }
     var itemName: String { return name }
 }
 
-class Album {
+final class Album {
     let repository: AlbumRepository
     
     let albumId: Int64

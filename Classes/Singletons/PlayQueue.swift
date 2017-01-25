@@ -21,11 +21,8 @@ enum ShuffleMode: Int {
     case shuffle = 1
 }
 
-class PlayQueue {
-    
-    //
+final class PlayQueue {
     // MARK: - Notifications -
-    //
     
     public struct Notifications {
         public static let indexChanged = Notification.Name("PlayQueue_indexChanged")
@@ -75,9 +72,7 @@ class PlayQueue {
         updateLockScreenInfo()
     }
     
-    //
     // MARK: - Properties -
-    //
     
     static let si = PlayQueue()
     
@@ -122,9 +117,7 @@ class PlayQueue {
         unregisterForNotifications()
     }
     
-    //
     // MARK: - Play Queue -
-    //
     
     func incrementIndex() {
         currentIndex = nextIndex
@@ -229,9 +222,7 @@ class PlayQueue {
         return indexAtOffset(offset, fromIndex: self.currentIndex)
     }
     
-    //
     // MARK: - Player Control -
-    //
     
     func playSongs(_ songs: [Song], playIndex: Int) {
         reset()
@@ -312,7 +303,7 @@ class PlayQueue {
                 // The song is fully cached, start streaming from the local copy
                 player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
             } else {
-                if let currentSong = CacheQueue.si.currentSong, currentSong.isEqual(currentSong) {
+                if let currentCachingSong = CacheQueue.si.currentSong, currentCachingSong == currentSong {
                     // If the Cache Queue is downloading it and it's ready for playback, start the player
                     if CacheQueue.si.streamHandler?.isReadyForPlayback == true {
                         player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
@@ -326,9 +317,7 @@ class PlayQueue {
         }
     }
     
-    //
     // MARK: - Lock Screen -
-    //
     
     fileprivate var defaultItemArtwork: MPMediaItemArtwork = {
         MPMediaItemArtwork(image: CachedImage.default(forSize: .player))

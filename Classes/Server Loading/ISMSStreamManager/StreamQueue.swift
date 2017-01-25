@@ -8,7 +8,7 @@
 
 import Foundation
 
-class StreamQueue: StreamHandlerDelegate {
+final class StreamQueue: StreamHandlerDelegate {
     open static let si = StreamQueue()
     
     fileprivate let maxReconnects = 5

@@ -9,11 +9,6 @@
 import Foundation
 import UIKit
 
-@objc protocol ItemTableViewCellDelegate {
-    @objc optional func tableCellDeleteButtonPressed(_ cell: ItemTableViewCell)
-    @objc optional func tableCellDeleteToggled(_ cell: ItemTableViewCell, markedForDelete: Bool)
-}
-
 class ItemTableViewCell: DroppableCell {
     
     var indexPath: IndexPath? {
@@ -25,7 +20,6 @@ class ItemTableViewCell: DroppableCell {
     // Disabled for now until optimized
     let shouldRepositionLabels = false
         
-    weak var delegate: ItemTableViewCellDelegate?
     var associatedObject: AnyObject?
     
     var indexShowing = false

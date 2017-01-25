@@ -20,7 +20,7 @@ fileprivate let defaultSampleRate: UInt32 = 44100
 fileprivate let retryDelay = 2.0
 fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
 
-@objc class BassGaplessPlayer: NSObject {
+final class BassGaplessPlayer {
     struct Notifications {
         static let songStarted          = Notification.Name("BassGaplessPlayer_songStarted")
         static let songPaused           = Notification.Name("BassGaplessPlayer_songPaused")
@@ -53,14 +53,13 @@ fileprivate let minSizeToFail: Int64 = 15 * 1024 * 1024 // 15MB
     
     var startSongRetryWorkItem = DispatchWorkItem(block: {})
     
-    // TODO: Get rid of this
+    // TODO: Get rid of this?
     var previousSongForProgress: Song?
     
     var lastProgressSaveDate = Date.distantPast
     let progressSaveInterval = 10.0
     
-    override init() {
-        super.init()
+    init() {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(routeChanged(_:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
     }

@@ -12,12 +12,12 @@
 
 import Foundation
 
-extension Playlist: Item {
+extension Playlist: Item, Equatable {
     var itemId: Int64 { return playlistId }
     var itemName: String { return name }
 }
 
-@objc class Playlist: NSObject {
+final class Playlist {
     
     struct Notifications {
         static let playlistChanged = Notification.Name("playlistChanged")

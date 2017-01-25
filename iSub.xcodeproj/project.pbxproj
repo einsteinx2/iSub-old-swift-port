@@ -907,7 +907,6 @@
 		531B340F1E24D12300811187 /* HelpTabViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpTabViewController.xib; sourceTree = "<group>"; };
 		531B34101E24D12300811187 /* IntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntroViewController.h; sourceTree = "<group>"; };
 		531B34111E24D12300811187 /* IntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntroViewController.m; sourceTree = "<group>"; };
-		531B34121E24D12300811187 /* ServerEditDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerEditDelegate.h; sourceTree = "<group>"; };
 		531B34131E24D12300811187 /* ServerListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerListViewController.swift; sourceTree = "<group>"; };
 		531B34141E24D12300811187 /* SettingsTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTabViewController.h; sourceTree = "<group>"; };
 		531B34151E24D12300811187 /* SettingsTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTabViewController.m; sourceTree = "<group>"; };
@@ -1710,7 +1709,6 @@
 				531B34101E24D12300811187 /* IntroViewController.h */,
 				531B34111E24D12300811187 /* IntroViewController.m */,
 				533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */,
-				531B34121E24D12300811187 /* ServerEditDelegate.h */,
 				531B34131E24D12300811187 /* ServerListViewController.swift */,
 				53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */,
 				533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */,

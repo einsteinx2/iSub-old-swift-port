@@ -27,3 +27,19 @@ protocol PersistedItem: Item {
     static func item(itemId: Int64, serverId: Int64, repository: ItemRepository) -> Item?
     init(result: FMResultSet, repository: ItemRepository)
 }
+
+func ==<T: Item>(lhs: T, rhs: T) -> Bool {
+    return lhs.itemId == rhs.itemId
+}
+
+//func !=<T: Item>(lhs: T, rhs: T) -> Bool {
+//    return lhs.identifier() != rhs.identifier()
+//}
+
+func ==<T: Item, U:Item>(lhs: T, rhs: U) -> Bool {
+    return lhs.itemId == rhs.itemId
+}
+
+//func !=<T:Item, U:Item>(lhs: T, rhs: U) -> Bool {
+//    return lhs.identifier() != rhs.identifier()
+//}

@@ -8,13 +8,13 @@
 
 import Foundation
 
-extension Genre: Item {
+extension Genre: Item, Equatable {
     var itemId: Int64 { return genreId }
     var itemName: String { return name }
     var serverId: Int64 { return -1 }
 }
 
-class Genre {
+final class Genre {
     let repository: GenreRepository
     
     let genreId: Int64

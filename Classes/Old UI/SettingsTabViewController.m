@@ -64,7 +64,7 @@
 	CGRect frame = self.freeSpaceBackground.frame;
 	frame.size.width = frame.size.width * percentFree;
 	self.freeSpaceBackground.frame = frame;
-	self.cachingTypeSegmentedControl.selectedSegmentIndex = SavedSettings.si.cachingType;
+	//self.cachingTypeSegmentedControl.selectedSegmentIndex = SavedSettings.si.cachingType;
 	[self toggleCacheControlsVisibility];
 	[self cachingTypeToggle];
 	
@@ -137,8 +137,8 @@
 		}
 		else if (sender == self.cachingTypeSegmentedControl)
 		{
-			SavedSettings.si.cachingType = self.cachingTypeSegmentedControl.selectedSegmentIndex;
-			[self cachingTypeToggle];
+			//SavedSettings.si.cachingType = self.cachingTypeSegmentedControl.selectedSegmentIndex;
+			//[self cachingTypeToggle];
 		}
 		else if (sender == self.autoDeleteCacheTypeSegmentedControl)
 		{

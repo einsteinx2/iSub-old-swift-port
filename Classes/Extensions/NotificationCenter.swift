@@ -34,6 +34,11 @@ extension NotificationCenter {
         }
     }
     
+    // TODO: Test this works when called from a background thread
+    static func addObserverOnMainThread(name: NSNotification.Name, object: Any? = nil, block: @escaping (Notification) -> Swift.Void) -> NSObjectProtocol {
+        return `default`.addObserver(forName: name, object: object, queue: OperationQueue.main, using: block)
+    }
+    
     static func removeObserverOnMainThread(_ observer: AnyObject) {
         runInMainThread {
             `default`.removeObserver(observer)

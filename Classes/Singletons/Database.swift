@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Database {
+final class Database {
     static let si = Database()
     
     static let databaseFolderPath = documentsPath + "/database"

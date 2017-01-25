@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RootAlbumsLoader: ApiLoader, ItemLoader {
+final class RootAlbumsLoader: ApiLoader, ItemLoader {
     // 500 is the maximum size supported by Subsonic
     fileprivate let size = 500
     fileprivate var offset = 0

@@ -8,12 +8,12 @@
 
 import Foundation
 
-extension Song: Item {
+extension Song: Item, Equatable {
     var itemId: Int64 { return songId }
     var itemName: String { return title }
 }
 
-@objc class Song: NSObject {
+final class Song {
     let repository: SongRepository
     
     let songId: Int64
@@ -204,17 +204,6 @@ extension Song: Item {
         if let transcodedContentTypeId = self.transcodedContentTypeId {
             self.transcodedContentType = ContentTypeRepository.si.contentType(contentTypeId: transcodedContentTypeId)
         }
-    }
-    
-    override func isEqual(_ object: Any?) -> Bool {
-        if let song = object as? Song {
-            return self == song
-        }
-        return false
-    }
-    
-    static func ==(lhs: Song, rhs: Song) -> Bool {
-        return lhs.songId == rhs.songId && lhs.serverId == rhs.serverId
     }
 }
 

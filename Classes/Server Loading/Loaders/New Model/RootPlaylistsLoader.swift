@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RootPlaylistsLoader: ApiLoader, ItemLoader {
+final class RootPlaylistsLoader: ApiLoader, ItemLoader {
     var playlists = [Playlist]()
     
     var associatedObject: Any?

@@ -8,12 +8,12 @@
 
 import Foundation
 
-extension MediaFolder: Item {
+extension MediaFolder: Item, Equatable {
     var itemId: Int64 { return mediaFolderId }
     var itemName: String { return name }
 }
 
-class MediaFolder {
+final class MediaFolder {
     let repository: MediaFolderRepository
     
     let mediaFolderId: Int64

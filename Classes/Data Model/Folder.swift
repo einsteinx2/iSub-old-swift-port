@@ -8,12 +8,12 @@
 
 import Foundation
 
-extension Folder: Item {
+extension Folder: Item, Equatable {
     var itemId: Int64 { return folderId }
     var itemName: String { return name }
 }
 
-class Folder {
+final class Folder {
     let repository: FolderRepository
     
     let folderId: Int64

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CacheManager {
+final class CacheManager {
     static let si = CacheManager()
     
     let cacheCheckInterval = 60.0
