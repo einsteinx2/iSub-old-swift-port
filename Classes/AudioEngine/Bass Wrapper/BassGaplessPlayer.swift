@@ -910,7 +910,6 @@ final class BassGaplessPlayer {
         if isPlaying {
             BASS_Pause()
             isPlaying = false
-            NotificationCenter.postOnMainThread(name: Notifications.songEnded)
         }
         
         cleanup()
