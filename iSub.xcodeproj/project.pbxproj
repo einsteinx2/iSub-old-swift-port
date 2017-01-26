@@ -586,6 +586,8 @@
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
 		53A232351E39944C005214DD /* BassPluginLoad.c in Sources */ = {isa = PBXBuildFile; fileRef = 53A232331E39944C005214DD /* BassPluginLoad.c */; };
 		53A232361E39944C005214DD /* BassPluginLoad.c in Sources */ = {isa = PBXBuildFile; fileRef = 53A232331E39944C005214DD /* BassPluginLoad.c */; };
+		53A232381E39CACA005214DD /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A232371E39CACA005214DD /* CGRect.swift */; };
+		53A232391E39CACA005214DD /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A232371E39CACA005214DD /* CGRect.swift */; };
 		53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A418011E2C1D8500671330 /* MediaFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A418001E2C1D8500671330 /* MediaFolder.swift */; };
@@ -1104,6 +1106,7 @@
 		539799781163084200F41D8B /* loading-screen-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image.png"; path = "Images/Other/loading-screen-image.png"; sourceTree = "<group>"; };
 		53A232331E39944C005214DD /* BassPluginLoad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BassPluginLoad.c; sourceTree = "<group>"; };
 		53A232341E39944C005214DD /* BassPluginLoad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassPluginLoad.h; sourceTree = "<group>"; };
+		53A232371E39CACA005214DD /* CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
 		53A2BE27147DF13600E44822 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		53A418001E2C1D8500671330 /* MediaFolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaFolder.swift; sourceTree = "<group>"; };
 		53A418031E2C1DAE00671330 /* MediaFolderRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaFolderRepository.swift; sourceTree = "<group>"; };
@@ -1578,6 +1581,7 @@
 				539133531E29D53000B8A99E /* Data.swift */,
 				531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */,
 				531B33D41E24CFAF00811187 /* UIView.swift */,
+				53A232371E39CACA005214DD /* CGRect.swift */,
 				531B33D51E24CFAF00811187 /* URL.swift */,
 				5355BFAC1E2DAA7300C6D27F /* UINavigationBar.swift */,
 				53CFBB651E2AE203005895F4 /* RXMLElement.swift */,
@@ -2713,6 +2717,7 @@
 				531B33871E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */,
 				533B69D61E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				531B33DA1E24CFAF00811187 /* URL.swift in Sources */,
+				53A232381E39CACA005214DD /* CGRect.swift in Sources */,
 				53CFBB7E1E2B3038005895F4 /* Genre.swift in Sources */,
 				531B34001E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D831E2C5A6000839B7A /* ContentType.swift in Sources */,
@@ -2962,6 +2967,7 @@
 				531B33881E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */,
 				533B69D71E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				531B33DB1E24CFAF00811187 /* URL.swift in Sources */,
+				53A232391E39CACA005214DD /* CGRect.swift in Sources */,
 				53CFBB7F1E2B3038005895F4 /* Genre.swift in Sources */,
 				531B34011E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */,

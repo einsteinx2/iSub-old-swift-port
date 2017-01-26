@@ -16,4 +16,13 @@ extension UIView {
         UIGraphicsEndImageContext()
         return image
     }
+    
+    func scaledFrame(x: CGFloat, y: CGFloat) -> CGRect {
+        var scaledFrame = self.frame
+        scaledFrame.size.width *= x
+        scaledFrame.size.height *= y
+        scaledFrame.origin.x = self.frame.origin.x - (((self.frame.size.width * x) - self.frame.size.width) / 2)
+        scaledFrame.origin.y = self.frame.origin.y - (((self.frame.size.height * y) - self.frame.size.height) / 2)
+        return scaledFrame
+    }
 }
