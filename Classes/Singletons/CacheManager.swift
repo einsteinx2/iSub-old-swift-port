@@ -199,10 +199,10 @@ final class CacheManager {
     }
     
     func clearTempCache() {
+        try? FileManager.default.removeItem(atPath: tempCachePath)
+        
         do {
-            let fileManager = FileManager.default
-            try fileManager.removeItem(atPath: tempCachePath)
-            try fileManager.createDirectory(atPath: tempCachePath, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(atPath: tempCachePath, withIntermediateDirectories: true, attributes: nil)
         } catch {
             printError(error)
         }

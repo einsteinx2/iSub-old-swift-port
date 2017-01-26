@@ -49,7 +49,7 @@ final class SavedSettings: NSObject {
     static let si = SavedSettings()
     fileprivate let storage = UserDefaults.standard
     
-    fileprivate let lock = NSRecursiveLock()
+    fileprivate let lock = SpinLock()
     fileprivate func synchronizedResult<T>(criticalSection: () -> T) -> T {
         return iSub.synchronizedResult(lockable: lock, criticalSection: criticalSection)
     }
@@ -118,20 +118,16 @@ final class SavedSettings: NSObject {
     }
     
     var currentMaxBitRate: Int {
-        get {
-            return synchronizedResult {
-                let maxBitRate = AppDelegate.si.networkStatus.isReachableWifi ? maxBitRateWifi : maxBitRate3G
-                switch maxBitRate {
-                case 0: return  64;
-                case 1: return  96;
-                case 2: return 128;
-                case 3: return 160;
-                case 4: return 192;
-                case 5: return 256;
-                case 6: return 320;
-                default: return 0;
-                }
-            }
+        let maxBitRate = AppDelegate.si.networkStatus.isReachableWifi ? maxBitRateWifi : maxBitRate3G
+        switch maxBitRate {
+        case 0: return  64;
+        case 1: return  96;
+        case 2: return 128;
+        case 3: return 160;
+        case 4: return 192;
+        case 5: return 256;
+        case 6: return 320;
+        default: return 0;
         }
     }
     

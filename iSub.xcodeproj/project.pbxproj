@@ -584,6 +584,8 @@
 		539133541E29D53000B8A99E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133531E29D53000B8A99E /* Data.swift */; };
 		539133551E29D53000B8A99E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133531E29D53000B8A99E /* Data.swift */; };
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
+		53A232351E39944C005214DD /* BassPluginLoad.c in Sources */ = {isa = PBXBuildFile; fileRef = 53A232331E39944C005214DD /* BassPluginLoad.c */; };
+		53A232361E39944C005214DD /* BassPluginLoad.c in Sources */ = {isa = PBXBuildFile; fileRef = 53A232331E39944C005214DD /* BassPluginLoad.c */; };
 		53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A2BE2A147DF14600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A418011E2C1D8500671330 /* MediaFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A418001E2C1D8500671330 /* MediaFolder.swift */; };
@@ -1100,6 +1102,8 @@
 		539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubsonicURLRequest.swift; sourceTree = "<group>"; };
 		539133531E29D53000B8A99E /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		539799781163084200F41D8B /* loading-screen-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image.png"; path = "Images/Other/loading-screen-image.png"; sourceTree = "<group>"; };
+		53A232331E39944C005214DD /* BassPluginLoad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BassPluginLoad.c; sourceTree = "<group>"; };
+		53A232341E39944C005214DD /* BassPluginLoad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassPluginLoad.h; sourceTree = "<group>"; };
 		53A2BE27147DF13600E44822 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		53A418001E2C1D8500671330 /* MediaFolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaFolder.swift; sourceTree = "<group>"; };
 		53A418031E2C1DAE00671330 /* MediaFolderRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaFolderRepository.swift; sourceTree = "<group>"; };
@@ -1888,6 +1892,8 @@
 		5358DEED1E0B78990024A0D4 /* libBASS */ = {
 			isa = PBXGroup;
 			children = (
+				53A232341E39944C005214DD /* BassPluginLoad.h */,
+				53A232331E39944C005214DD /* BassPluginLoad.c */,
 				5358DEEE1E0B78990024A0D4 /* bass.h */,
 				5358DEEF1E0B78990024A0D4 /* bass_ape.h */,
 				5358DEF01E0B78990024A0D4 /* bass_fx.h */,
@@ -2769,6 +2775,7 @@
 				53835CF21E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
 				53E042891E36C49C0009DE79 /* DispatchQueue.swift in Sources */,
 				5358DF8D1E0B789A0024A0D4 /* DDLog.m in Sources */,
+				53A232351E39944C005214DD /* BassPluginLoad.c in Sources */,
 				53835CD41E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC01E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				53493F2715FC6AC40059492E /* main.m in Sources */,
@@ -3017,6 +3024,7 @@
 				53835CF41E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
 				53E0428A1E36C49C0009DE79 /* DispatchQueue.swift in Sources */,
 				5358DF8F1E0B789A0024A0D4 /* DDLog.m in Sources */,
+				53A232361E39944C005214DD /* BassPluginLoad.c in Sources */,
 				53835CD61E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				53493F2915FC6AC40059492E /* main.m in Sources */,

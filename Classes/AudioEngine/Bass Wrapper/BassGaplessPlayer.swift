@@ -36,12 +36,11 @@ final class BassGaplessPlayer {
     var bassOutputBufferLengthMillis: UInt32 = 0
     
     let ringBuffer = EX2RingBuffer(bufferLength: 640 * 1024) // 640KB
-    let ringBufferFillQueue = DispatchQueue(label: "com.einsteinx2.RingBufferQueue")
     var ringBufferFillWorkItem: DispatchWorkItem?
     var waitLoopBassStream: BassStream?
     
-    var outStream: HSTREAM = 0
     var mixerStream: HSTREAM = 0
+    var outStream: HSTREAM = 0
     
     let equalizer = BassEqualizer()
     let visualizer = BassVisualizer()
@@ -49,11 +48,8 @@ final class BassGaplessPlayer {
     var isPlaying = false
     var startByteOffset: Int64 = 0
     
-    var ringBufferFillThread: Thread?
-    
     var startSongRetryWorkItem = DispatchWorkItem(block: {})
     
-    // TODO: Get rid of this?
     var previousSongForProgress: Song?
     
     var lastProgressSaveDate = Date.distantPast
@@ -160,8 +156,8 @@ final class BassGaplessPlayer {
             // Remove the stream from the queue
             BASS_StreamFree(bassStream.stream)
             if let index = self.bassStreams.index(of: bassStream) {
-                self.bassStreamsQueue.async {
-                    self.bassStreams.remove(at: index)
+                self.bassStreamsQueue.sync {
+                    _ = self.bassStreams.remove(at: index)
                 }
             }
             
@@ -242,9 +238,17 @@ final class BassGaplessPlayer {
         let numberOfBytesToBuffer = numberOfSecondsToBuffer * bytesForOneSecond
         return Int(numberOfBytesToBuffer)
     }
+
+    func stopFillingRingBuffer() {
+        ringBufferFillWorkItem?.cancel()
+        ringBufferFillWorkItem = nil
+    }
     
-    func keepRingBufferFilled() {
-        // TODO: Will this self referencing of the work item actually work?
+    func startFillingRingBuffer() {
+        guard ringBufferFillWorkItem == nil else {
+            return
+        }
+        
         var workItem: DispatchWorkItem! = nil
         workItem = DispatchWorkItem {
             // Make sure we're using the right device
@@ -255,157 +259,153 @@ final class BassGaplessPlayer {
             let ringBuffer = self.ringBuffer
             let mixerStream = self.mixerStream
             
-            autoreleasepool {
-                let readSize = 64 * 1024
-                while !workItem.isCancelled {
-                    // Fill the buffer if there is empty space
-                    if ringBuffer.freeSpaceLength > readSize {
-                        autoreleasepool {
+            let readSize = 64 * 1024
+            while !workItem.isCancelled {
+                // Fill the buffer if there is empty space
+                if ringBuffer.freeSpaceLength > readSize {
+                    autoreleasepool {
+                        /*
+                         * Read data to fill the buffer
+                         */
+                        
+                        if let bassStream = self.currentBassStream {
+                            let tempBuffer = UnsafeMutablePointer<CChar>.allocate(capacity: readSize)
+                            let tempLength = BASS_ChannelGetData(mixerStream, tempBuffer, UInt32(readSize))
+                            if tempLength > 0 {
+                                bassStream.isSongStarted = true
+                                ringBuffer.fill(withBytes: tempBuffer, length: Int(tempLength))
+                            }
+                            tempBuffer.deallocate(capacity: readSize)
+                            
                             /*
-                             * Read data to fill the buffer
+                             * Handle pausing to wait for more data
                              */
                             
-                            if let bassStream = self.currentBassStream {
-                                let tempBuffer = UnsafeMutablePointer<CChar>.allocate(capacity: readSize)
-                                let tempLength = BASS_ChannelGetData(mixerStream, tempBuffer, UInt32(readSize))
-                                if tempLength > 0 {
-                                    bassStream.isSongStarted = true
-                                    ringBuffer.fill(withBytes: tempBuffer, length: Int(tempLength))
-                                }
-                                tempBuffer.deallocate(capacity: readSize)
+                            if bassStream.isFileUnderrun && BASS_ChannelIsActive(bassStream.stream) != UInt32(BASS_ACTIVE_STOPPED) {
+                                // Get a strong reference to the current song's userInfo object, so that
+                                // if the stream is freed while the wait loop is sleeping, the object will
+                                // still be around to respond to shouldBreakWaitLoop
+                                self.waitLoopBassStream = bassStream
                                 
-                                /*
-                                 * Handle pausing to wait for more data
-                                 */
+                                // Mark the stream as waiting
+                                bassStream.isWaiting = true
+                                bassStream.isFileUnderrun = false
+                                bassStream.wasFileJustUnderrun = true
                                 
-                                if bassStream.isFileUnderrun && BASS_ChannelIsActive(bassStream.stream) != UInt32(BASS_ACTIVE_STOPPED) {
-                                    // Get a strong reference to the current song's userInfo object, so that
-                                    // if the stream is freed while the wait loop is sleeping, the object will
-                                    // still be around to respond to shouldBreakWaitLoop
-                                    self.waitLoopBassStream = bassStream
-                                    
-                                    // Mark the stream as waiting
-                                    bassStream.isWaiting = true
-                                    bassStream.isFileUnderrun = false
-                                    bassStream.wasFileJustUnderrun = true
-                                    
-                                    // Handle waiting for additional data
-                                    if !bassStream.song.isFullyCached {
-                                        // Bail if the thread was canceled
-                                        if workItem.isCancelled {
-                                            return
-                                        }
-                                        
-                                        if SavedSettings.si.isOfflineMode {
-                                            // This is offline mode and the song can not continue to play
-                                            self.moveToNextSong()
-                                        } else {
-                                            // Calculate the needed size:
-                                            // Choose either the current player bitRate, or if for some reason it is not detected properly,
-                                            // use the best estimated bitRate. Then use that to determine how much data to let download to continue.
-                                            
-                                            let size = bassStream.song.localFileSize
-                                            let bitRate = self.estimateBitRate(bassStream: bassStream)
-                                            
-                                            // Get the stream for this song
-                                            var recentDownloadSpeedInBytesPerSec = 0
-                                            if StreamQueue.si.song == bassStream.song, let handler = StreamQueue.si.streamHandler {
-                                                recentDownloadSpeedInBytesPerSec = handler.recentDownloadSpeedInBytesPerSec
-                                            } else if CacheQueue.si.currentSong == bassStream.song, let handler = CacheQueue.si.streamHandler {
-                                                recentDownloadSpeedInBytesPerSec = handler.recentDownloadSpeedInBytesPerSec
-                                            }
-                                            
-                                            // Calculate the bytes to wait based on the recent download speed. If the handler is nil or recent download speed is 0
-                                            // it will just use the default (currently 10 seconds)
-                                            let bytesToWait = self.bytesToBuffer(forKiloBitRate: bitRate, speedInBytesPerSec: recentDownloadSpeedInBytesPerSec)
-                                            
-                                            bassStream.neededSize = size + bytesToWait
-                                            
-                                            // Sleep for 100000 microseconds, or 1/10th of a second
-                                            let sleepTime: UInt32 = 100000
-                                            // Check file size every second, so 1000000 microseconds
-                                            let fileSizeCheckWait: UInt32 = 1000000
-                                            var totalSleepTime: UInt32 = 0
-                                            while true {
-                                                // Bail if the thread was canceled
-                                                if workItem.isCancelled {
-                                                    return
-                                                }
-                                                
-                                                // Check if we should break every 10th of a second
-                                                usleep(sleepTime)
-                                                totalSleepTime += sleepTime
-                                                if bassStream.shouldBreakWaitLoop || bassStream.shouldBreakWaitLoopForever {
-                                                    return
-                                                }
-                                                
-                                                // Bail if the thread was canceled
-                                                if workItem.isCancelled {
-                                                    return
-                                                }
-                                                
-                                                // Only check the file size every second
-                                                if totalSleepTime >= fileSizeCheckWait {
-                                                    autoreleasepool {
-                                                        totalSleepTime = 0
-                                                        
-                                                        if bassStream.localFileSize >= bassStream.neededSize {
-                                                            // If enough of the file has downloaded, break the loop
-                                                            return
-                                                        } else if bassStream.song.isTempCached && bassStream.song != StreamQueue.si.song {
-                                                            // Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
-                                                            return
-                                                        } else if bassStream.song.isFullyCached {
-                                                            // If the song has finished caching, we can stop waiting
-                                                            return
-                                                        } else if SavedSettings.si.isOfflineMode {
-                                                            // If we're not in offline mode, stop waiting and try next song
-                                                            // Bail if the thread was canceled
-                                                            if workItem.isCancelled {
-                                                                return
-                                                            }
-                                                            
-                                                            self.moveToNextSong()
-                                                            return
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    
+                                // Handle waiting for additional data
+                                if !bassStream.song.isFullyCached {
                                     // Bail if the thread was canceled
                                     if workItem.isCancelled {
                                         return
                                     }
                                     
-                                    bassStream.isWaiting = false
-                                    bassStream.shouldBreakWaitLoop = false
-                                    self.waitLoopBassStream = nil
+                                    if SavedSettings.si.isOfflineMode {
+                                        // This is offline mode and the song can not continue to play
+                                        self.moveToNextSong()
+                                    } else {
+                                        // Calculate the needed size:
+                                        // Choose either the current player bitRate, or if for some reason it is not detected properly,
+                                        // use the best estimated bitRate. Then use that to determine how much data to let download to continue.
+                                        let size = bassStream.song.localFileSize
+                                        let bitRate = self.estimateBitRate(bassStream: bassStream)
+                                        
+                                        // Get the stream for this song
+                                        var recentDownloadSpeedInBytesPerSec = 0
+                                        if StreamQueue.si.song == bassStream.song, let handler = StreamQueue.si.streamHandler {
+                                            recentDownloadSpeedInBytesPerSec = handler.recentDownloadSpeedInBytesPerSec
+                                        } else if CacheQueue.si.currentSong == bassStream.song, let handler = CacheQueue.si.streamHandler {
+                                            recentDownloadSpeedInBytesPerSec = handler.recentDownloadSpeedInBytesPerSec
+                                        }
+                                        
+                                        // Calculate the bytes to wait based on the recent download speed. If the handler is nil or recent download speed is 0
+                                        // it will just use the default (currently 10 seconds)
+                                        let bytesToWait = self.bytesToBuffer(forKiloBitRate: bitRate, speedInBytesPerSec: recentDownloadSpeedInBytesPerSec)
+                                        
+                                        bassStream.neededSize = size + bytesToWait
+                                        
+                                        // Sleep for 100000 microseconds, or 1/10th of a second
+                                        let sleepTime: UInt32 = 100000
+                                        // Check file size every second, so 1000000 microseconds
+                                        let fileSizeCheckWait: UInt32 = 1000000
+                                        var totalSleepTime: UInt32 = 0
+                                        while true {
+                                            // Bail if the thread was canceled
+                                            if workItem.isCancelled {
+                                                return
+                                            }
+                                            
+                                            // Check if we should break every 10th of a second
+                                            usleep(sleepTime)
+                                            totalSleepTime += sleepTime
+                                            if bassStream.shouldBreakWaitLoop || bassStream.shouldBreakWaitLoopForever {
+                                                return
+                                            }
+                                            
+                                            // Bail if the thread was canceled
+                                            if workItem.isCancelled {
+                                                return
+                                            }
+                                            
+                                            // Only check the file size every second
+                                            if totalSleepTime >= fileSizeCheckWait {
+                                                autoreleasepool {
+                                                    totalSleepTime = 0
+                                                    
+                                                    if bassStream.localFileSize >= bassStream.neededSize {
+                                                        // If enough of the file has downloaded, break the loop
+                                                        return
+                                                    } else if bassStream.song.isTempCached && bassStream.song != StreamQueue.si.song {
+                                                        // Handle temp cached songs ending. When they end, they are set as the last temp cached song, so we know it's done and can stop waiting for data.
+                                                        return
+                                                    } else if bassStream.song.isFullyCached {
+                                                        // If the song has finished caching, we can stop waiting
+                                                        return
+                                                    } else if SavedSettings.si.isOfflineMode {
+                                                        // If we're not in offline mode, stop waiting and try next song
+                                                        // Bail if the thread was canceled
+                                                        if workItem.isCancelled {
+                                                            return
+                                                        }
+                                                        
+                                                        self.moveToNextSong()
+                                                        return
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
+                                
+                                // Bail if the thread was canceled
+                                if workItem.isCancelled {
+                                    return
+                                }
+                                
+                                bassStream.isWaiting = false
+                                bassStream.shouldBreakWaitLoop = false
+                                self.waitLoopBassStream = nil
                             }
                         }
                     }
-                    
-                    // Bail if the thread was canceled
-                    if workItem.isCancelled {
-                        return
-                    }
-                    
-                    // Sleep for 1/4th of a second to prevent a tight loop
-                    usleep(150000)
                 }
+                
+                // Bail if the thread was canceled
+                if workItem.isCancelled {
+                    return
+                }
+                
+                // Sleep for 1/4th of a second to prevent a tight loop
+                usleep(150000)
             }
         }
+        
         ringBufferFillWorkItem = workItem
+        DispatchQueue.global(qos: .utility).async(execute: workItem)
     }
     
     // MARK: - BASS Methods -
     
     fileprivate func bassInit() {
-        // Free BASS just in case we use this after launch
-        BASS_Free()
-        
         // Disable mixing. To be called before BASS_Init.
         BASS_SetConfig(UInt32(BASS_CONFIG_IOS_MIXAUDIO), 0)
         // Set the buffer length to the minimum amount + bufferSize
@@ -417,16 +417,8 @@ final class BassGaplessPlayer {
         {
             bassOutputBufferLengthMillis = BASS_GetConfig(UInt32(BASS_CONFIG_BUFFER))
             
-            // Load the Flac plugin
-            BASS_PluginLoad(BASSFLACplugin.assumingMemoryBound(to: Int8.self), 0)
-            // Load the WavePack plugin
-            BASS_PluginLoad(BASSWVplugin.assumingMemoryBound(to: Int8.self), 0)
-            // Load the Monkey's Audio plugin
-            BASS_PluginLoad(BASS_APEplugin.assumingMemoryBound(to: Int8.self), 0)
-            // Load the MusePack plugin
-            //BASS_PluginLoad(BASS_MPCplugin.assumingMemoryBound(to: Int8.self), 0)
-            // load the OPUS plugin
-            BASS_PluginLoad(BASSOPUSplugin.assumingMemoryBound(to: Int8.self), 0)
+            // TODO: Replace this workaround with pure Swift
+            bassLoadPlugins()
         }
         else
         {
@@ -435,6 +427,27 @@ final class BassGaplessPlayer {
             printBassError()
         }
 
+        func streamProc(handle: HSYNC, buffer: UnsafeMutableRawPointer?, length: UInt32, userInfo: UnsafeMutableRawPointer?) -> UInt32 {
+            var bytesRead: UInt32 = 0
+            if let userInfo = userInfo {
+                autoreleasepool {
+                    let player: BassGaplessPlayer = bridge(ptr: userInfo)
+                    bytesRead = player.bassGetOutputData(buffer: buffer, length: length)
+                }
+            }
+            return bytesRead
+        }
+        mixerStream = BASS_Mixer_StreamCreate(UInt32(defaultSampleRate), 2, UInt32(BASS_STREAM_DECODE))
+        outStream = BASS_StreamCreate(UInt32(defaultSampleRate), 2, 0, streamProc, bridge(obj: self))
+        
+        // Add the slide callback to handle fades
+        BASS_ChannelSetSync(outStream, UInt32(BASS_SYNC_SLIDE), 0, slideSyncProc, bridge(obj: self))
+        
+        visualizer.channel = outStream
+        equalizer.channel = outStream
+        if SavedSettings.si.isEqualizerOn {
+            equalizer.applyValues()
+        }
     }
     
     fileprivate func printChannelInfo(_ channel: HSTREAM) {
@@ -652,34 +665,29 @@ final class BassGaplessPlayer {
     fileprivate func cleanup() {
         BASS_SetDevice(deviceNumber)
         
-        bassStreamsQueue.async {
-            autoreleasepool {
-                self.startSongRetryWorkItem.cancel()
-                self.ringBufferFillThread?.cancel()
-                
-                for bassStream in self.bassStreams {
-                    bassStream.shouldBreakWaitLoopForever = true
-                    BASS_Mixer_ChannelRemove(bassStream.stream)
-                    BASS_StreamFree(bassStream.stream)
-                }
-                
-                self.equalizer.removeValues()
-                
-                BASS_StreamFree(self.mixerStream)
-                BASS_StreamFree(self.outStream)
-                
-                self.ringBuffer.reset()
-                self.bassStreams.removeAll()
-                
-                do {
-                    try AVAudioSession.sharedInstance().setActive(false)
-                } catch {
-                    printError(error)
-                }
-                
-                self.isPlaying = false
-            }
+        startSongRetryWorkItem.cancel()
+        ringBufferFillWorkItem?.cancel()
+        ringBufferFillWorkItem = nil
+        
+        for bassStream in bassStreams {
+            bassStream.shouldBreakWaitLoopForever = true
+            BASS_Mixer_ChannelRemove(bassStream.stream)
+            BASS_StreamFree(bassStream.stream)
         }
+        
+        ringBuffer.reset()
+        bassStreamsQueue.sync {
+            self.bassStreams.removeAll()
+        }
+        BASS_ChannelStop(outStream)
+        
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            printError(error)
+        }
+        
+        isPlaying = false
     }
     
     func testStream(forSong song: Song) -> Bool {
@@ -696,7 +704,12 @@ final class BassGaplessPlayer {
                 fileStream = BASS_StreamCreateFile(false, unsafePointer, 0, UInt64(song.size), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT))
             }
         }
-        return fileStream > 0
+        
+        if fileStream > 0 {
+            BASS_StreamFree(fileStream)
+            return true
+        }
+        return false
     }
     
     func prepareStream(forSong song: Song) -> BassStream? {
@@ -706,18 +719,27 @@ final class BassGaplessPlayer {
         
         BASS_SetDevice(deviceNumber)
         
-        var fileStream = BASS_StreamCreateFileUser(UInt32(STREAMFILE_NOBUFFER), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT), &fileProcs, bridge(obj: bassStream))
-        
-        // First check if the stream failed because of a BASS_Init error
-        if fileStream == 0 && BASS_ErrorGetCode() == BASS_ERROR_INIT {
-            // Retry the regular hardware sampling stream
-            bassInit()
-            fileStream = BASS_StreamCreateFileUser(UInt32(STREAMFILE_NOBUFFER), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_FLOAT), &fileProcs, bridge(obj: bassStream))
+        func createStream(softwareDecoding: Bool = false) -> HSTREAM {
+            var flags = BASS_STREAM_DECODE | BASS_SAMPLE_FLOAT
+            if softwareDecoding {
+                flags = flags | BASS_SAMPLE_SOFTWARE
+            }
+            return BASS_StreamCreateFileUser(UInt32(STREAMFILE_NOBUFFER), UInt32(flags), &fileProcs, bridge(obj: bassStream))
         }
         
+        // Try and create the stream
+        var fileStream = createStream()
+        
+        // Check if the stream failed because of a BASS_Init error and init if needed
+        if fileStream == 0 && BASS_ErrorGetCode() == BASS_ERROR_INIT {
+            bassInit()
+            fileStream = createStream()
+        }
+        
+        // If the stream failed, try with softrware decoding
         if fileStream == 0 {
             printBassError()
-            fileStream = BASS_StreamCreateFileUser(UInt32(STREAMFILE_NOBUFFER), UInt32(BASS_STREAM_DECODE|BASS_SAMPLE_SOFTWARE|BASS_SAMPLE_FLOAT), &fileProcs, bridge(obj: bassStream))
+            fileStream = createStream(softwareDecoding: true)
         }
         
         if fileStream > 0 {
@@ -732,8 +754,7 @@ final class BassGaplessPlayer {
             
             // Stream successfully created
             bassStream.stream = fileStream
-            // TODO: Uncomment
-//            bassStream.player = self
+            bassStream.player = self
             return bassStream
         }
         
@@ -742,97 +763,69 @@ final class BassGaplessPlayer {
     }
     
     func start(song: Song, index: Int, byteOffset: Int64) {
-        bassStreamsQueue.async {
-            autoreleasepool {
-                BASS_SetDevice(deviceNumber)
-                
-                self.startByteOffset = 0
-                self.cleanup()
-                
-                guard song.fileExists else {
-                    return
-                }
-                
-                do {
-                    try AVAudioSession.sharedInstance().setActive(true)
-                } catch {
-                    printError(error)
-                }
-                
-                if let bassStream = self.prepareStream(forSong: song) {
-                    self.mixerStream = BASS_Mixer_StreamCreate(UInt32(defaultSampleRate), 2, UInt32(BASS_STREAM_DECODE))
-                    BASS_Mixer_StreamAddChannel(self.mixerStream, bassStream.stream, UInt32(BASS_MIXER_NORAMPIN))
-                    
-                    func streamProc(handle: HSYNC, buffer: UnsafeMutableRawPointer?, length: UInt32, userInfo: UnsafeMutableRawPointer?) -> UInt32 {
-                        var bytesRead: UInt32 = 0
-                        if let userInfo = userInfo {
-                            autoreleasepool {
-                                let player: BassGaplessPlayer = bridge(ptr: userInfo)
-                                bytesRead = player.bassGetOutputData(buffer: buffer, length: length)
-                            }
-                        }
-                        return bytesRead
-                    }
-                    self.outStream = BASS_StreamCreate(UInt32(defaultSampleRate), 2, 0, streamProc, bridge(obj: self))
-                    
-                    if SavedSettings.si.isEqualizerOn {
-                        self.equalizer.channel  = self.outStream
-                        self.equalizer.applyValues()
-                    }
-                    
-                    self.ringBuffer.totalBytesDrained = 0
-                    
-                    BASS_Start()
-                    
-                    // Add the slide callback to handle fades
-                    BASS_ChannelSetSync(self.outStream, UInt32(BASS_SYNC_SLIDE), 0, slideSyncProc, bridge(obj: self))
-                    
-                    self.visualizer.channel = self.outStream
-                    self.equalizer.channel = self.outStream
-                    
-                    // Add gain amplification
-                    //self.equalizer.createVolumeFx()
-                    
-                    // Add the stream to the queue
-                    self.bassStreams.append(bassStream)
-                    
-                    // Skip to the byte offset
-                    self.startByteOffset = byteOffset
-                    self.ringBuffer.totalBytesDrained = byteOffset
-                    if byteOffset > 0 {
-                        self.seek(bytes: byteOffset, fade: false)
-                    }
-                    
-                    // Start filling the ring buffer
-                    self.keepRingBufferFilled()
-                    
-                    // Start playback
-                    BASS_ChannelPlay(self.outStream, false)
-                    self.isPlaying = true
-                    
-                    // Notify listeners that playback has started
-                    NotificationCenter.postOnMainThread(name: Notifications.songStarted)
-                    
-                    song.lastPlayed = Date()
-                } else if !song.isFullyCached && song.localFileSize < minSizeToFail {
-                    if SavedSettings.si.isOfflineMode {
-                        self.moveToNextSong()
-                    } else if !song.fileExists {
-                        // File was removed, so start again normally
-                        _ = song.deleteCache()
-                        PlayQueue.si.startSong()
-                    } else {
-                        // Failed to create the stream, retrying
-                        self.startSongRetryWorkItem = DispatchWorkItem {
-                            self.start(song: song, index: index, byteOffset: byteOffset)
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: self.startSongRetryWorkItem)
-                    }
-                } else {
-                    _ = song.deleteCache()
-                    PlayQueue.si.startSong()
-                }
+        BASS_SetDevice(deviceNumber)
+        
+        startByteOffset = 0
+        cleanup()
+        
+        guard song.fileExists else {
+            return
+        }
+        
+        if let bassStream = self.prepareStream(forSong: song) {
+            // Activate audio session
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+            } catch {
+                printError(error)
             }
+            
+            BASS_Mixer_StreamAddChannel(mixerStream, bassStream.stream, UInt32(BASS_MIXER_NORAMPIN))
+            
+            ringBuffer.totalBytesDrained = 0
+            
+            BASS_Start()
+            
+            // Add the stream to the queue
+            bassStreamsQueue.sync {
+                self.bassStreams.append(bassStream)
+            }
+            
+            // Skip to the byte offset
+            startByteOffset = byteOffset
+            ringBuffer.totalBytesDrained = byteOffset
+            if byteOffset > 0 {
+                seek(bytes: byteOffset, fade: false)
+            }
+            
+            // Start filling the ring buffer
+            startFillingRingBuffer()
+            
+            // Start playback
+            BASS_ChannelPlay(outStream, false)
+            isPlaying = true
+            
+            // Notify listeners that playback has started
+            NotificationCenter.postOnMainThread(name: Notifications.songStarted)
+            
+            song.lastPlayed = Date()
+        } else if !song.isFullyCached && song.localFileSize < minSizeToFail {
+            if SavedSettings.si.isOfflineMode {
+                moveToNextSong()
+            } else if !song.fileExists {
+                // File was removed, so start again normally
+                _ = song.deleteCache()
+                PlayQueue.si.startSong()
+            } else {
+                // Failed to create the stream, retrying
+                startSongRetryWorkItem = DispatchWorkItem {
+                    self.start(song: song, index: index, byteOffset: byteOffset)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: startSongRetryWorkItem)
+            }
+        } else {
+            _ = song.deleteCache()
+            PlayQueue.si.startSong()
         }
     }
     
@@ -874,7 +867,6 @@ final class BassGaplessPlayer {
         return seconds
     }
     
-    // TODO: Prevent divide by 0
     var progress: Double {
         guard let currentBassStream = currentBassStream else {
             return 0
@@ -897,14 +889,14 @@ final class BassGaplessPlayer {
         
         var seconds = rawProgress
         if seconds < 0 {
-            if let duration = previousSongForProgress?.duration {
+            if let duration = previousSongForProgress?.duration, duration > 0 {
                 seconds = Double(duration) + seconds
                 return seconds / Double(duration)
             }
             return 0
         }
         
-        if let duration = currentBassStream.song.duration {
+        if let duration = currentBassStream.song.duration, duration > 0 {
             return seconds / Double(duration)
         }
         return 0
@@ -936,7 +928,6 @@ final class BassGaplessPlayer {
         }
     }
     
-    // TODO: Refactor how this delegate shit works
     func playPause() {
         BASS_SetDevice(deviceNumber)
         
@@ -1038,7 +1029,7 @@ func lengthProc(userInfo: UnsafeMutableRawPointer?) -> UInt64 {
     autoreleasepool {
         let bassStream: BassStream = bridge(ptr: userInfo)
         if bassStream.shouldBreakWaitLoopForever {
-            // TODO: Why do we return 0 here?
+            // m: Why do we return 0 here?
             length = 0
         } else if bassStream.song.isFullyCached || bassStream.isTempCached {
             // Return actual file size on disk
@@ -1143,25 +1134,24 @@ func endSyncProc(handle: HSYNC, channel: UInt32, data: UInt32, userInfo: UnsafeM
     // Make sure we're using the right device
     BASS_SetDevice(deviceNumber)
     
-    autoreleasepool {
-        // This must be done in the stream GCD queue because if we do it in this thread
-        // it will pause the audio output momentarily while it's loading the stream
-        let bassStream: BassStream = bridge(ptr: userInfo)
-        if let player = bassStream.player, let nextSong = PlayQueue.si.nextSong {
-            player.bassStreamsQueue.async {
-                // Prepare the next song in the queue
-                let nextStream = player.prepareStream(forSong: nextSong)
-                if let nextStream = nextStream {
+    // This must be done in the stream GCD queue because if we do it in this thread
+    // it will pause the audio output momentarily while it's loading the stream
+    let bassStream: BassStream = bridge(ptr: userInfo)
+    if let player = bassStream.player, let nextSong = PlayQueue.si.nextSong {
+        DispatchQueue.global(qos: .background).async {
+            let nextStream = player.prepareStream(forSong: nextSong)
+            if let nextStream = nextStream {
+                player.bassStreamsQueue.sync {
                     player.bassStreams.append(nextStream)
-                    BASS_Mixer_StreamAddChannel(player.mixerStream, nextStream.stream, UInt32(BASS_MIXER_NORAMPIN))
-                } else {
-                    bassStream.isNextSongStreamFailed = true
                 }
-                
-                // Mark as ended and set the buffer space til end for the UI
-                bassStream.bufferSpaceTilSongEnd = player.ringBuffer.filledSpaceLength
-                bassStream.isEnded = true
+                BASS_Mixer_StreamAddChannel(player.mixerStream, nextStream.stream, UInt32(BASS_MIXER_NORAMPIN))
+            } else {
+                bassStream.isNextSongStreamFailed = true
             }
+            
+            // Mark as ended and set the buffer space til end for the UI
+            bassStream.bufferSpaceTilSongEnd = player.ringBuffer.filledSpaceLength
+            bassStream.isEnded = true
         }
     }
 }

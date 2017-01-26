@@ -80,6 +80,11 @@ class BassEqualizer {
         self.channel = channel
     }
     
+    func updateValues() {
+        removeValues()
+        applyValues()
+    }
+    
     func applyValues() {
         if !isActive {
             for frequency in EqualizerFrequency.all {
