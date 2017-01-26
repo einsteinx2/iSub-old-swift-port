@@ -273,8 +273,10 @@ class DraggableTableView: UITableView {
             if let dragCell = dragCell {
                 undimDragCell()
                 
-                let userInfo = Notifications.userInfo(location: NSValue(cgPoint: touch.location(in: nil)), dragSourceTableView: self, dragCell: dragCell)
-                NotificationCenter.postOnMainThread(name: Notifications.draggingEnded, userInfo: userInfo)
+                if isDraggingCell {
+                    let userInfo = Notifications.userInfo(location: NSValue(cgPoint: touch.location(in: nil)), dragSourceTableView: self, dragCell: dragCell)
+                    NotificationCenter.postOnMainThread(name: Notifications.draggingEnded, userInfo: userInfo)
+                }
             } else {
                 // Select the cell if this was not a long press
                 let point = touch.location(in: self)
@@ -302,13 +304,15 @@ class DraggableTableView: UITableView {
         if let dragCell = dragCell {
             undimDragCell()
             
-            var windowPoint = CGPoint.zero
-            if let touch = touches?.first {
-                windowPoint = touch.location(in: nil)
+            if isDraggingCell {
+                var windowPoint = CGPoint.zero
+                if let touch = touches?.first {
+                    windowPoint = touch.location(in: nil)
+                }
+                
+                let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
+                NotificationCenter.postOnMainThread(name: Notifications.draggingCanceled, userInfo: userInfo)
             }
-            
-            let userInfo = Notifications.userInfo(location: NSValue(cgPoint: windowPoint), dragSourceTableView: self, dragCell: dragCell)
-            NotificationCenter.postOnMainThread(name: Notifications.draggingCanceled, userInfo: userInfo)
         }
         
         self.allowsSelection = true
