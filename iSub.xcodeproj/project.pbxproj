@@ -290,8 +290,6 @@
 		531B34661E24D3D500811187 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34641E24D3D500811187 /* Defines.swift */; };
 		531B346B1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
 		531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
-		532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A1ACF1E1DD2C400A8502A /* NSString+HasValue.m */; };
-		532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A1ACF1E1DD2C400A8502A /* NSString+HasValue.m */; };
 		532A1AD61E1DD33600A8502A /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A1AD51E1DD33600A8502A /* GTMNSString+HTML.m */; };
 		532A1AD81E1DD33600A8502A /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A1AD51E1DD33600A8502A /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D59A6D1E1DC9CE00071ABD /* Reachability.framework */; };
@@ -742,25 +740,11 @@
 		53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
 		53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4A1E1DC58700071ABD /* NSString+Time.m */; };
 		53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4A1E1DC58700071ABD /* NSString+Time.m */; };
-		53D59A571E1DC63800071ABD /* NSArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A541E1DC63800071ABD /* NSArray+Safe.m */; };
-		53D59A591E1DC63800071ABD /* NSArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A541E1DC63800071ABD /* NSArray+Safe.m */; };
-		53D59A5A1E1DC63800071ABD /* NSMutableArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A561E1DC63800071ABD /* NSMutableArray+Safe.m */; };
-		53D59A5C1E1DC63800071ABD /* NSMutableArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A561E1DC63800071ABD /* NSMutableArray+Safe.m */; };
-		53D59A601E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A5F1E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m */; };
-		53D59A621E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A5F1E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m */; };
 		53D59A651E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A641E1DC85300071ABD /* NSURL+QueryParameterDictionary.m */; };
 		53D59A671E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A641E1DC85300071ABD /* NSURL+QueryParameterDictionary.m */; };
-		53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A691E1DC87D00071ABD /* NSObject+UserInfo.m */; };
-		53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A691E1DC87D00071ABD /* NSObject+UserInfo.m */; };
 		53D59A6E1E1DC9CE00071ABD /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D59A6D1E1DC9CE00071ABD /* Reachability.framework */; };
 		53D59A771E1DCDD700071ABD /* NSString+FileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A761E1DCDD700071ABD /* NSString+FileSize.m */; };
 		53D59A791E1DCDD700071ABD /* NSString+FileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A761E1DCDD700071ABD /* NSString+FileSize.m */; };
-		53D59A7C1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A7B1E1DCE1000071ABD /* NSString+URLEncode.m */; };
-		53D59A7E1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A7B1E1DCE1000071ABD /* NSString+URLEncode.m */; };
-		53D59A831E1DCEAA00071ABD /* NSString+Clean.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A801E1DCEAA00071ABD /* NSString+Clean.m */; };
-		53D59A851E1DCEAA00071ABD /* NSString+Clean.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A801E1DCEAA00071ABD /* NSString+Clean.m */; };
-		53D59A861E1DCEAA00071ABD /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A821E1DCEAA00071ABD /* NSString+MD5.m */; };
-		53D59A881E1DCEAA00071ABD /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A821E1DCEAA00071ABD /* NSString+MD5.m */; };
 		53D9590E1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */; };
 		53D9590F1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */; };
 		53D959111E2C774200A1667F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D959101E2C774200A1667F /* Error.swift */; };
@@ -935,8 +919,6 @@
 		531B34641E24D3D500811187 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
 		531B34681E24D41300811187 /* Imports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Imports.h; sourceTree = "<group>"; };
 		531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
-		532A1ACE1E1DD2C400A8502A /* NSString+HasValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HasValue.h"; sourceTree = "<group>"; };
-		532A1ACF1E1DD2C400A8502A /* NSString+HasValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HasValue.m"; sourceTree = "<group>"; };
 		532A1AD31E1DD33600A8502A /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		532A1AD41E1DD33600A8502A /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		532A1AD51E1DD33600A8502A /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
@@ -1166,26 +1148,11 @@
 		53D59A431E1DC3D000071ABD /* EX2Kit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EX2Kit.h; sourceTree = "<group>"; };
 		53D59A491E1DC58700071ABD /* NSString+Time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Time.h"; sourceTree = "<group>"; };
 		53D59A4A1E1DC58700071ABD /* NSString+Time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Time.m"; sourceTree = "<group>"; };
-		53D59A531E1DC63800071ABD /* NSArray+Safe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Safe.h"; sourceTree = "<group>"; };
-		53D59A541E1DC63800071ABD /* NSArray+Safe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Safe.m"; sourceTree = "<group>"; };
-		53D59A551E1DC63800071ABD /* NSMutableArray+Safe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Safe.h"; sourceTree = "<group>"; };
-		53D59A561E1DC63800071ABD /* NSMutableArray+Safe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Safe.m"; sourceTree = "<group>"; };
-		53D59A5D1E1DC76600071ABD /* EX2Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EX2Macros.h; sourceTree = "<group>"; };
-		53D59A5E1E1DC7C800071ABD /* NSURL+SkipBackupAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+SkipBackupAttribute.h"; sourceTree = "<group>"; };
-		53D59A5F1E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+SkipBackupAttribute.m"; sourceTree = "<group>"; };
 		53D59A631E1DC85300071ABD /* NSURL+QueryParameterDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+QueryParameterDictionary.h"; sourceTree = "<group>"; };
 		53D59A641E1DC85300071ABD /* NSURL+QueryParameterDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+QueryParameterDictionary.m"; sourceTree = "<group>"; };
-		53D59A681E1DC87D00071ABD /* NSObject+UserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+UserInfo.h"; sourceTree = "<group>"; };
-		53D59A691E1DC87D00071ABD /* NSObject+UserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+UserInfo.m"; sourceTree = "<group>"; };
 		53D59A6D1E1DC9CE00071ABD /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		53D59A751E1DCDD700071ABD /* NSString+FileSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FileSize.h"; sourceTree = "<group>"; };
 		53D59A761E1DCDD700071ABD /* NSString+FileSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FileSize.m"; sourceTree = "<group>"; };
-		53D59A7A1E1DCE1000071ABD /* NSString+URLEncode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+URLEncode.h"; sourceTree = "<group>"; };
-		53D59A7B1E1DCE1000071ABD /* NSString+URLEncode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLEncode.m"; sourceTree = "<group>"; };
-		53D59A7F1E1DCEAA00071ABD /* NSString+Clean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Clean.h"; sourceTree = "<group>"; };
-		53D59A801E1DCEAA00071ABD /* NSString+Clean.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Clean.m"; sourceTree = "<group>"; };
-		53D59A811E1DCEAA00071ABD /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
-		53D59A821E1DCEAA00071ABD /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubsonicServerEditViewController.swift; sourceTree = "<group>"; };
 		53D959101E2C774200A1667F /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		53D959131E2C7A7700A1667F /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
@@ -2112,29 +2079,12 @@
 			isa = PBXGroup;
 			children = (
 				53D59A431E1DC3D000071ABD /* EX2Kit.h */,
-				53D59A5D1E1DC76600071ABD /* EX2Macros.h */,
 				53D59A491E1DC58700071ABD /* NSString+Time.h */,
 				53D59A4A1E1DC58700071ABD /* NSString+Time.m */,
-				53D59A531E1DC63800071ABD /* NSArray+Safe.h */,
-				53D59A541E1DC63800071ABD /* NSArray+Safe.m */,
-				53D59A551E1DC63800071ABD /* NSMutableArray+Safe.h */,
-				53D59A561E1DC63800071ABD /* NSMutableArray+Safe.m */,
-				53D59A5E1E1DC7C800071ABD /* NSURL+SkipBackupAttribute.h */,
-				53D59A5F1E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m */,
 				53D59A631E1DC85300071ABD /* NSURL+QueryParameterDictionary.h */,
 				53D59A641E1DC85300071ABD /* NSURL+QueryParameterDictionary.m */,
-				53D59A681E1DC87D00071ABD /* NSObject+UserInfo.h */,
-				53D59A691E1DC87D00071ABD /* NSObject+UserInfo.m */,
 				53D59A751E1DCDD700071ABD /* NSString+FileSize.h */,
 				53D59A761E1DCDD700071ABD /* NSString+FileSize.m */,
-				53D59A7A1E1DCE1000071ABD /* NSString+URLEncode.h */,
-				53D59A7B1E1DCE1000071ABD /* NSString+URLEncode.m */,
-				53D59A7F1E1DCEAA00071ABD /* NSString+Clean.h */,
-				53D59A801E1DCEAA00071ABD /* NSString+Clean.m */,
-				53D59A811E1DCEAA00071ABD /* NSString+MD5.h */,
-				53D59A821E1DCEAA00071ABD /* NSString+MD5.m */,
-				532A1ACE1E1DD2C400A8502A /* NSString+HasValue.h */,
-				532A1ACF1E1DD2C400A8502A /* NSString+HasValue.m */,
 				532A1AD31E1DD33600A8502A /* GTMDefines.h */,
 				532A1AD41E1DD33600A8502A /* GTMNSString+HTML.h */,
 				532A1AD51E1DD33600A8502A /* GTMNSString+HTML.m */,
@@ -2665,7 +2615,6 @@
 				53FD71E81E36F95400460B44 /* CacheManager.swift in Sources */,
 				533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				53CFBB6F1E2B1628005895F4 /* ArtistRepository.swift in Sources */,
-				532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
 				531B34441E24D24600811187 /* FMDatabaseAdditions.m in Sources */,
 				5377D6491E3A84CC003BFFB9 /* RingBuffer.swift in Sources */,
 				53835CD91E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
@@ -2679,7 +2628,6 @@
 				531B33F81E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34421E24D24600811187 /* FMDatabase.m in Sources */,
 				531B33611E24CF8B00811187 /* CachedImage.swift in Sources */,
-				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				537FB2FC1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
 				533B69D81E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				531B337D1E24CF8B00811187 /* CacheQueue.swift in Sources */,
@@ -2700,7 +2648,6 @@
 				5358DF971E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				530D5A101E2C044700C9ED43 /* SongRepository.swift in Sources */,
 				531B338F1E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
-				53D59A601E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
 				5355BFA71E2D955C00C6D27F /* Logging.swift in Sources */,
 				531B33F41E24D0B600811187 /* DroppableCell.swift in Sources */,
 				531B33891E24CF8B00811187 /* AlbumLoader.swift in Sources */,
@@ -2715,7 +2662,6 @@
 				53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				537FB2F91E33065E001D3FBB /* ObjC.m in Sources */,
 				530F04AD1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
-				53D59A571E1DC63800071ABD /* NSArray+Safe.m in Sources */,
 				531B34621E24D37300811187 /* sqlite3.c in Sources */,
 				53D9590E1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */,
 				531B33EE1E24D0B600811187 /* CachedImageView.swift in Sources */,
@@ -2728,8 +2674,6 @@
 				531B34501E24D24600811187 /* FMDatabaseVariadic.swift in Sources */,
 				53835CB11E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				531B339B1E24CF8B00811187 /* CachedRootSongsLoader.swift in Sources */,
-				53D59A5A1E1DC63800071ABD /* NSMutableArray+Safe.m in Sources */,
-				53D59A861E1DCEAA00071ABD /* NSString+MD5.m in Sources */,
 				531B33F01E24D0B600811187 /* DraggableTableView.swift in Sources */,
 				5358DBDE1E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				531B341E1E24D12300811187 /* ServerListViewController.swift in Sources */,
@@ -2741,7 +2685,6 @@
 				53835CDE1E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
 				53835C981E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				531B33A71E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
-				53D59A7C1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				531B33731E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FC1E24D0B600811187 /* CacheViewController.swift in Sources */,
 				53D959111E2C774200A1667F /* Error.swift in Sources */,
@@ -2779,7 +2722,6 @@
 				531B34201E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCA1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DF9C1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
-				53D59A831E1DCEAA00071ABD /* NSString+Clean.m in Sources */,
 				53E042831E36AB4B0009DE79 /* Synchronized.swift in Sources */,
 				531B34181E24D12300811187 /* HelpTabViewController.m in Sources */,
 				5358DF7E1E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
@@ -2914,7 +2856,6 @@
 				53FD71E91E36F95400460B44 /* CacheManager.swift in Sources */,
 				533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */,
 				53CFBB701E2B1628005895F4 /* ArtistRepository.swift in Sources */,
-				532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
 				531B34451E24D24600811187 /* FMDatabaseAdditions.m in Sources */,
 				5377D64A1E3A84CC003BFFB9 /* RingBuffer.swift in Sources */,
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
@@ -2928,7 +2869,6 @@
 				531B33F91E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34431E24D24600811187 /* FMDatabase.m in Sources */,
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,
-				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				531B337E1E24CF8B00811187 /* CacheQueue.swift in Sources */,
@@ -2949,7 +2889,6 @@
 				5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				530D5A111E2C044700C9ED43 /* SongRepository.swift in Sources */,
 				531B33901E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
-				53D59A621E1DC7C800071ABD /* NSURL+SkipBackupAttribute.m in Sources */,
 				5355BFA81E2D955C00C6D27F /* Logging.swift in Sources */,
 				531B33F51E24D0B600811187 /* DroppableCell.swift in Sources */,
 				531B338A1E24CF8B00811187 /* AlbumLoader.swift in Sources */,
@@ -2964,7 +2903,6 @@
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				537FB2FA1E33065E001D3FBB /* ObjC.m in Sources */,
 				530F04AE1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
-				53D59A591E1DC63800071ABD /* NSArray+Safe.m in Sources */,
 				531B34631E24D37300811187 /* sqlite3.c in Sources */,
 				53D9590F1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */,
 				531B33EF1E24D0B600811187 /* CachedImageView.swift in Sources */,
@@ -2977,8 +2915,6 @@
 				531B34511E24D24600811187 /* FMDatabaseVariadic.swift in Sources */,
 				53835CB31E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				531B339C1E24CF8B00811187 /* CachedRootSongsLoader.swift in Sources */,
-				53D59A5C1E1DC63800071ABD /* NSMutableArray+Safe.m in Sources */,
-				53D59A881E1DCEAA00071ABD /* NSString+MD5.m in Sources */,
 				531B33F11E24D0B600811187 /* DraggableTableView.swift in Sources */,
 				5358DBE01E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				531B341F1E24D12300811187 /* ServerListViewController.swift in Sources */,
@@ -2990,7 +2926,6 @@
 				53835CE01E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
 				53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				531B33A81E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
-				53D59A7E1E1DCE1000071ABD /* NSString+URLEncode.m in Sources */,
 				531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				531B33FD1E24D0B600811187 /* CacheViewController.swift in Sources */,
 				53D959121E2C774200A1667F /* Error.swift in Sources */,
@@ -3028,7 +2963,6 @@
 				531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
-				53D59A851E1DCEAA00071ABD /* NSString+Clean.m in Sources */,
 				53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */,
 				531B34191E24D12300811187 /* HelpTabViewController.m in Sources */,
 				5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,

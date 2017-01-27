@@ -37,14 +37,6 @@
     // Release any cached data, images, etc. that aren't in use.
 }
 
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
-	
-	if (IS_IPAD())
-		sunkenLogo.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -67,9 +59,7 @@
 	if (sender == self.introVideo)
 	{
 		NSURL *introUrl = nil;
-		if (IS_IPAD())
-			introUrl = [NSURL URLWithString:@"http://isubapp.com/intro/ipad/prog_index.m3u8"];
-		else if (SCREEN_SCALE() == 2.0)
+		if ([[UIScreen mainScreen] scale] == 2.0)
 			introUrl = [NSURL URLWithString:@"http://isubapp.com/intro/iphone4/prog_index.m3u8"];
 		else
 			introUrl = [NSURL URLWithString:@"http://isubapp.com/intro/iphone/prog_index.m3u8"];

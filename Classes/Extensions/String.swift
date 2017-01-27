@@ -97,6 +97,6 @@ public extension String {
     }
     
     var clean: String {
-        return (self as NSString).clean()
+        return (self as NSString).gtm_stringByUnescapingFromHTML()?.removingPercentEncoding ?? self
     }
 }

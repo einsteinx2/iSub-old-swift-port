@@ -7,7 +7,6 @@
 //
 
 #import "NSURL+QueryParameterDictionary.h"
-#import "NSArray+Safe.h"
 
 @implementation NSURL (QueryParameterDictionary)
 
@@ -26,7 +25,7 @@
         NSArray *parts = [temp componentsSeparatedByString:@"="];
         if(parts.count == 2)
         {
-            [dict setObject:[parts objectAtIndexSafe:1] forKey:[parts objectAtIndexSafe:0]];
+            [dict setObject:[parts objectAtIndex:1] forKey:[parts objectAtIndex:0]];
         }
     }
     

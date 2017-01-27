@@ -50,11 +50,6 @@
     self.enableManualCachingOnWWANSwitch.on = SavedSettings.si.isManualCachingOnWWANEnabled;
 	self.enableSongCachingSwitch.on = SavedSettings.si.isAutoSongCachingEnabled;
     self.enableBackupCacheSwitch.on = SavedSettings.si.isBackupCacheEnabled;
-    
-    if (SYSTEM_VERSION_LESS_THAN(@"5.0.1"))
-    {
-        self.enableBackupCacheSwitch.enabled = NO;
-    }
 		
 	//self.totalSpace = CacheManager.si.totalSpace;
 	//self.freeSpace = CacheManager.si.freeSpace;

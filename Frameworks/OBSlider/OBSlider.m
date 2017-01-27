@@ -52,7 +52,7 @@
     CGRect bounds = self.bounds;
     bounds = CGRectInset(bounds, 0, SIZE_EXTENSION_Y);
 	
-	if (IS_IPAD())
+	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 		bounds = CGRectInset(bounds, 0, SIZE_EXTENSION_Y_IPAD);
 	
     return CGRectContainsPoint(bounds, point);

@@ -7,9 +7,11 @@
 //
 
 #import "LoadingScreen.h"
-#import "EX2Macros.h"
 #import "iSub-Swift.h"
 #import <MBProgressHUD/MBProgressHUD.h>
+
+#define n2N(value) (value ? value : [NSNull null])
+#define N2n(value) (value == [NSNull null] ? nil : value)
 
 @implementation LoadingScreen
 
