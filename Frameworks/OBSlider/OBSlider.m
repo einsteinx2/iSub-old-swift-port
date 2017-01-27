@@ -6,7 +6,6 @@
 //
 
 #import "OBSlider.h"
-#import "Imports.h"
 
 @interface OBSlider ()
 

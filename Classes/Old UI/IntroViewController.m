@@ -8,7 +8,6 @@
 
 #import "iSub-Swift.h"
 #import "IntroViewController.h"
-#import "Imports.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 @implementation IntroViewController

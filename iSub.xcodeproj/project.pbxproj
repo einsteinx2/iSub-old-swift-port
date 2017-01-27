@@ -60,6 +60,8 @@
 		53114E061E3B0BE200D8589B /* MBFingerTipWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 53114E041E3B0BE200D8589B /* MBFingerTipWindow.m */; };
 		53114E0A1E3B22A400D8589B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53114E091E3B22A400D8589B /* ObjC.m */; };
 		53114E0B1E3B22A400D8589B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53114E091E3B22A400D8589B /* ObjC.m */; };
+		53114E0D1E3B23F100D8589B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53114E0C1E3B23F100D8589B /* main.swift */; };
+		53114E0E1E3B23F100D8589B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53114E0C1E3B23F100D8589B /* main.swift */; };
 		5311C32F1A3510A500054941 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5311C32E1A3510A500054941 /* AssetsLibrary.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5311C3321A3510F800054941 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5311C3311A3510F800054941 /* QuickLook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5311C3341A35112500054941 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5311C3311A3510F800054941 /* QuickLook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -330,8 +332,6 @@
 		53493F0E15FC6A0F0059492E /* twitter-signout.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493F0415FC6A0F0059492E /* twitter-signout.png */; };
 		53493F0F15FC6A0F0059492E /* twitter-signout@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493F0515FC6A0F0059492E /* twitter-signout@2x.png */; };
 		53493F1115FC6A0F0059492E /* twitter-signout@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493F0515FC6A0F0059492E /* twitter-signout@2x.png */; };
-		53493F2715FC6AC40059492E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F2615FC6AC40059492E /* main.m */; };
-		53493F2915FC6AC40059492E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53493F2615FC6AC40059492E /* main.m */; };
 		53493F3015FC6BD90059492E /* KeychainAccessGroups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F2C15FC6BD90059492E /* KeychainAccessGroups.plist */; };
 		53493F3215FC6BD90059492E /* KeychainAccessGroups.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F2C15FC6BD90059492E /* KeychainAccessGroups.plist */; };
 		53493F3815FC6C3A0059492E /* BassEffectDefaultPresets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */; };
@@ -848,6 +848,7 @@
 		53114E041E3B0BE200D8589B /* MBFingerTipWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBFingerTipWindow.m; sourceTree = "<group>"; };
 		53114E081E3B22A400D8589B /* ObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		53114E091E3B22A400D8589B /* ObjC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
+		53114E0C1E3B23F100D8589B /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		5311C32E1A3510A500054941 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		5311C3311A3510F800054941 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -931,7 +932,6 @@
 		531B34601E24D37300811187 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
 		531B34611E24D37300811187 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		531B34641E24D3D500811187 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
-		531B34681E24D41300811187 /* Imports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Imports.h; sourceTree = "<group>"; };
 		531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackCell.swift; sourceTree = "<group>"; };
@@ -948,7 +948,6 @@
 		53493F0515FC6A0F0059492E /* twitter-signout@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "twitter-signout@2x.png"; path = "Images/Other/twitter-signout@2x.png"; sourceTree = "<group>"; };
 		53493F1A15FC6AA60059492E /* iSub-Info-Beta.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "iSub-Info-Beta.plist"; path = "Other/iSub-Info-Beta.plist"; sourceTree = "<group>"; };
 		53493F1C15FC6AA60059492E /* iSub-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "iSub-Info.plist"; path = "Other/iSub-Info.plist"; sourceTree = "<group>"; };
-		53493F2615FC6AC40059492E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Other/main.m; sourceTree = "<group>"; };
 		53493F2A15FC6AD20059492E /* iSub_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iSub_Prefix.pch; path = Other/iSub_Prefix.pch; sourceTree = "<group>"; };
 		53493F2C15FC6BD90059492E /* KeychainAccessGroups.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = KeychainAccessGroups.plist; path = Other/KeychainAccessGroups.plist; sourceTree = "<group>"; };
 		53493F3715FC6C3A0059492E /* BassEffectDefaultPresets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = BassEffectDefaultPresets.plist; path = Other/BassEffectDefaultPresets.plist; sourceTree = "<group>"; };
@@ -1410,9 +1409,9 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				53493F2A15FC6AD20059492E /* iSub_Prefix.pch */,
-				53493F2615FC6AC40059492E /* main.m */,
 				5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */,
+				53493F2A15FC6AD20059492E /* iSub_Prefix.pch */,
+				53114E0C1E3B23F100D8589B /* main.swift */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -1669,7 +1668,6 @@
 			children = (
 				531B334E1E24CF8B00811187 /* Utils.swift */,
 				531B34641E24D3D500811187 /* Defines.swift */,
-				531B34681E24D41300811187 /* Imports.h */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -2697,6 +2695,7 @@
 				531B33DA1E24CFAF00811187 /* URL.swift in Sources */,
 				53A232381E39CACA005214DD /* CGRect.swift in Sources */,
 				53CFBB7E1E2B3038005895F4 /* Genre.swift in Sources */,
+				53114E0D1E3B23F100D8589B /* main.swift in Sources */,
 				531B34001E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D831E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */,
@@ -2756,7 +2755,6 @@
 				53A232351E39944C005214DD /* BassPluginLoad.c in Sources */,
 				53835CD41E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC01E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
-				53493F2715FC6AC40059492E /* main.m in Sources */,
 				53CFBB721E2B164F005895F4 /* Artist.swift in Sources */,
 				531B34201E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCA1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
@@ -2942,6 +2940,7 @@
 				531B33DB1E24CFAF00811187 /* URL.swift in Sources */,
 				53A232391E39CACA005214DD /* CGRect.swift in Sources */,
 				53CFBB7F1E2B3038005895F4 /* Genre.swift in Sources */,
+				53114E0E1E3B23F100D8589B /* main.swift in Sources */,
 				531B34011E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
@@ -3001,7 +3000,6 @@
 				53A232361E39944C005214DD /* BassPluginLoad.c in Sources */,
 				53835CD61E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
-				53493F2915FC6AC40059492E /* main.m in Sources */,
 				53CFBB731E2B164F005895F4 /* Artist.swift in Sources */,
 				531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,

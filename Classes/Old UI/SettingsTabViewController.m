@@ -7,7 +7,6 @@
 //
 
 #import "SettingsTabViewController.h"
-#import "Imports.h"
 #import <Accounts/Accounts.h>
 #import <Social/Social.h>
 #import "iSub-Swift.h"

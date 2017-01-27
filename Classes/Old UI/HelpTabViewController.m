@@ -7,7 +7,6 @@
 //
 
 #import "HelpTabViewController.h"
-#import "Imports.h"
 #import "iSub-Swift.h"
 
 @implementation HelpTabViewController
