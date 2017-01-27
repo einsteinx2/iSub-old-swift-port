@@ -58,6 +58,8 @@
 		53114E011E3B06D800D8589B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53114DF91E3B06D800D8589B /* Utilities.swift */; };
 		53114E051E3B0BE200D8589B /* MBFingerTipWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 53114E041E3B0BE200D8589B /* MBFingerTipWindow.m */; };
 		53114E061E3B0BE200D8589B /* MBFingerTipWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 53114E041E3B0BE200D8589B /* MBFingerTipWindow.m */; };
+		53114E0A1E3B22A400D8589B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53114E091E3B22A400D8589B /* ObjC.m */; };
+		53114E0B1E3B22A400D8589B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53114E091E3B22A400D8589B /* ObjC.m */; };
 		5311C32F1A3510A500054941 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5311C32E1A3510A500054941 /* AssetsLibrary.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5311C3321A3510F800054941 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5311C3311A3510F800054941 /* QuickLook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5311C3341A35112500054941 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5311C3311A3510F800054941 /* QuickLook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -501,8 +503,6 @@
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		537FB2F51E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */; };
 		537FB2F61E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */; };
-		537FB2F91E33065E001D3FBB /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F81E33065E001D3FBB /* ObjC.m */; };
-		537FB2FA1E33065E001D3FBB /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F81E33065E001D3FBB /* ObjC.m */; };
 		537FB2FC1E33E435001D3FBB /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */; };
 		537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */; };
 		537FB2FF1E33EEC1001D3FBB /* BassVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */; };
@@ -846,6 +846,8 @@
 		53114DF91E3B06D800D8589B /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		53114E031E3B0BE200D8589B /* MBFingerTipWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBFingerTipWindow.h; sourceTree = "<group>"; };
 		53114E041E3B0BE200D8589B /* MBFingerTipWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBFingerTipWindow.m; sourceTree = "<group>"; };
+		53114E081E3B22A400D8589B /* ObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
+		53114E091E3B22A400D8589B /* ObjC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
 		5311C32E1A3510A500054941 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		5311C3311A3510F800054941 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		53159F6F156F69D0001B0268 /* iSub Integration Tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iSub Integration Tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1043,8 +1045,6 @@
 		5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RingBuffer.swift; path = ../../Frameworks/EX2Kit/RingBuffer.swift; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassGaplessPlayer.swift; path = "Bass Wrapper/BassGaplessPlayer.swift"; sourceTree = "<group>"; };
-		537FB2F71E33065E001D3FBB /* ObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
-		537FB2F81E33065E001D3FBB /* ObjC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
 		537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassVisualizer.swift; path = Visualizer/BassVisualizer.swift; sourceTree = "<group>"; };
 		537FCC5312F8F7F400F1D996 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = "Images/App Icons/iTunesArtwork"; sourceTree = "<group>"; };
@@ -1459,6 +1459,7 @@
 				531B34241E24D1C300811187 /* OBSlider */,
 				53114DF51E3B06D800D8589B /* HTMLEntities */,
 				53114E021E3B0BE200D8589B /* MBFingerTipWindow */,
+				53114E071E3B22A400D8589B /* ObjC */,
 				5311C3311A3510F800054941 /* QuickLook.framework */,
 				5311C32E1A3510A500054941 /* AssetsLibrary.framework */,
 				538725F117CC19B200CE92F1 /* CoreTelephony.framework */,
@@ -1537,6 +1538,16 @@
 			);
 			name = MBFingerTipWindow;
 			path = Frameworks/MBFingerTipWindow;
+			sourceTree = "<group>";
+		};
+		53114E071E3B22A400D8589B /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				53114E081E3B22A400D8589B /* ObjC.h */,
+				53114E091E3B22A400D8589B /* ObjC.m */,
+			);
+			name = ObjC;
+			path = Frameworks/ObjC;
 			sourceTree = "<group>";
 		};
 		531B32D11E24CF8A00811187 /* Player */ = {
@@ -1659,8 +1670,6 @@
 				531B334E1E24CF8B00811187 /* Utils.swift */,
 				531B34641E24D3D500811187 /* Defines.swift */,
 				531B34681E24D41300811187 /* Imports.h */,
-				537FB2F71E33065E001D3FBB /* ObjC.h */,
-				537FB2F81E33065E001D3FBB /* ObjC.m */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -2618,6 +2627,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				531B33D81E24CFAF00811187 /* UIView.swift in Sources */,
+				53114E0A1E3B22A400D8589B /* ObjC.m in Sources */,
 				53835CB61E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				531B33971E24CF8B00811187 /* CachedRootArtistsLoader.swift in Sources */,
 				53835CBB1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
@@ -2690,7 +2700,6 @@
 				531B34001E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D831E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */,
-				537FB2F91E33065E001D3FBB /* ObjC.m in Sources */,
 				530F04AD1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				531B34621E24D37300811187 /* sqlite3.c in Sources */,
 				53D9590E1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */,
@@ -2863,6 +2872,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				531B33D91E24CFAF00811187 /* UIView.swift in Sources */,
+				53114E0B1E3B22A400D8589B /* ObjC.m in Sources */,
 				53835CB81E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
 				531B33981E24CF8B00811187 /* CachedRootArtistsLoader.swift in Sources */,
 				53835CBD1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
@@ -2935,7 +2945,6 @@
 				531B34011E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
-				537FB2FA1E33065E001D3FBB /* ObjC.m in Sources */,
 				530F04AE1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				531B34631E24D37300811187 /* sqlite3.c in Sources */,
 				53D9590F1E2C6F7600A1667F /* SubsonicServerEditViewController.swift in Sources */,
