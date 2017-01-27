@@ -68,7 +68,7 @@ import Reachability
         loadHockeyApp()
         
         let fingerTipWindow = MBFingerTipWindow(frame: UIScreen.main.bounds)
-        fingerTipWindow.alwaysShowTouches = true
+        //fingerTipWindow.alwaysShowTouches = true
         window = fingerTipWindow
         window?.backgroundColor = .black
         window?.makeKeyAndVisible()
