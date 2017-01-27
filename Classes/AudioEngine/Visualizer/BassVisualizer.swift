@@ -38,11 +38,15 @@ class BassVisualizer {
     
     init(channel: HCHANNEL) {
         self.channel = channel
+        
     }
     
     deinit {
         fftBuffer.deinitialize()
+        fftBuffer.deallocate(capacity: 1024)
+        
         lineBuffer.deinitialize()
+        lineBuffer.deallocate(capacity: 1024)
     }
     
     func fftData(index: Int) -> Float {

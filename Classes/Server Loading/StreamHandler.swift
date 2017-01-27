@@ -136,7 +136,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
         
         isDownloading = true
         
-        EX2NetworkIndicator.usingNetwork()
+        NetworkIndicator.usingNetwork()
     }
     
     func cancel() {
@@ -159,7 +159,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
     
     fileprivate func terminateDownload() {
         if isDownloading {
-            EX2NetworkIndicator.doneUsingNetwork()
+            NetworkIndicator.doneUsingNetwork()
         }
         
         isDownloading = false

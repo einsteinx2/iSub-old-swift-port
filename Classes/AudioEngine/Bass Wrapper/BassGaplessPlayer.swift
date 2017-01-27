@@ -35,7 +35,8 @@ final class BassGaplessPlayer {
     var bitRate: Int { return currentBassStream != nil ? estimateBitRate(bassStream: currentBassStream!) : 0 }
     var bassOutputBufferLengthMillis: UInt32 = 0
     
-    let ringBuffer = EX2RingBuffer(bufferLength: 640 * 1024) // 640KB
+    let ringBuffer = RingBuffer(size: 640 * 1024) // 640KB
+    var totalBytesDrained = 0
     var ringBufferFillWorkItem: DispatchWorkItem?
     var waitLoopBassStream: BassStream?
     
@@ -93,7 +94,8 @@ final class BassGaplessPlayer {
             return 0
         }
         
-        let bytesRead = ringBuffer.drainBytes(buffer, length: Int(length))
+        let bytesRead = ringBuffer.drain(into: buffer, length: Int(length))
+        totalBytesDrained += bytesRead
         
         if currentBassStream.isEnded {
             currentBassStream.bufferSpaceTilSongEnd -= bytesRead
@@ -149,7 +151,7 @@ final class BassGaplessPlayer {
         
         autoreleasepool {
             self.previousSongForProgress = bassStream.song
-            self.ringBuffer.totalBytesDrained = 0
+            self.totalBytesDrained = 0
             
             bassStream.isEndedCalled = true
             
@@ -262,7 +264,7 @@ final class BassGaplessPlayer {
             let readSize = 64 * 1024
             while !workItem.isCancelled {
                 // Fill the buffer if there is empty space
-                if ringBuffer.freeSpaceLength > readSize {
+                if ringBuffer.freeSpace > readSize {
                     autoreleasepool {
                         /*
                          * Read data to fill the buffer
@@ -273,7 +275,9 @@ final class BassGaplessPlayer {
                             let tempLength = BASS_ChannelGetData(mixerStream, tempBuffer, UInt32(readSize))
                             if tempLength > 0 {
                                 bassStream.isSongStarted = true
-                                ringBuffer.fill(withBytes: tempBuffer, length: Int(tempLength))
+                                if !ringBuffer.fill(with: tempBuffer, length: Int(tempLength)) {
+                                    printError("Overran ring buffer and it was unable to expand")
+                                }
                             }
                             tempBuffer.deallocate(capacity: readSize)
                             
@@ -400,7 +404,7 @@ final class BassGaplessPlayer {
         }
         
         ringBufferFillWorkItem = workItem
-        DispatchQueue.global(qos: .utility).async(execute: workItem)
+        DispatchQueue.utility.async(execute: workItem)
     }
     
     // MARK: - BASS Methods -
@@ -548,6 +552,11 @@ final class BassGaplessPlayer {
         let filePosition = currentFilePosition - startFilePosition
         let decodedPosition = BASS_ChannelGetPosition(bassStream.stream, UInt32(BASS_POS_BYTE|BASS_POS_DECODE)) // decoded PCM position
         let bitRateDouble = Double(filePosition) * 8.0 / Double(BASS_ChannelBytes2Seconds(bassStream.stream, decodedPosition))
+        
+        guard bitRateDouble != Double.infinity && bitRateDouble != Double.nan else {
+            return bassStream.song.estimatedBitRate
+        }
+        
         var bitRate = Int(bitRateDouble / 1000.0)
         bitRate = bitRate > 1000000 ? -1 : bitRate
         
@@ -782,7 +791,7 @@ final class BassGaplessPlayer {
             
             BASS_Mixer_StreamAddChannel(mixerStream, bassStream.stream, UInt32(BASS_MIXER_NORAMPIN))
             
-            ringBuffer.totalBytesDrained = 0
+            totalBytesDrained = 0
             
             BASS_Start()
             
@@ -793,9 +802,9 @@ final class BassGaplessPlayer {
             
             // Skip to the byte offset
             startByteOffset = byteOffset
-            ringBuffer.totalBytesDrained = byteOffset
+            totalBytesDrained = Int(byteOffset)
             if byteOffset > 0 {
-                seek(bytes: byteOffset, fade: false)
+                seek(bytes: byteOffset)
             }
             
             // Start filling the ring buffer
@@ -856,13 +865,13 @@ final class BassGaplessPlayer {
         
         let chanCount = currentBassStream.channelCount
         let denom = (2.0 * (1.0 / Double(chanCount)))
-        let realPosition = pcmBytePosition - Int64(Double(ringBuffer.filledSpaceLength) / denom)
+        let realPosition = pcmBytePosition - Int64(Double(ringBuffer.filledSpace) / denom)
         
         let sampleRateRatio = Double(currentBassStream.sampleRate) / Double(defaultSampleRate)
         
         pcmBytePosition = realPosition
         pcmBytePosition = pcmBytePosition < 0 ? 0 : pcmBytePosition
-        let seconds = BASS_ChannelBytes2Seconds(currentBassStream.stream, UInt64(Double(ringBuffer.totalBytesDrained) * sampleRateRatio * Double(chanCount)))
+        let seconds = BASS_ChannelBytes2Seconds(currentBassStream.stream, UInt64(Double(totalBytesDrained) * sampleRateRatio * Double(chanCount)))
         
         return seconds
     }
@@ -950,7 +959,7 @@ final class BassGaplessPlayer {
         }
     }
     
-    func seek(bytes: Int64, fade: Bool = true) {
+    func seek(bytes: Int64, fadeDuration: TimeInterval = 0.0) {
         BASS_SetDevice(deviceNumber)
         
         guard let currentBassStream = currentBassStream else {
@@ -967,29 +976,33 @@ final class BassGaplessPlayer {
             
             ringBuffer.reset()
             
-            if fade {
-                BASS_ChannelSlideAttribute(outStream, UInt32(BASS_ATTRIB_VOL), 0, bassOutputBufferLengthMillis)
+            if fadeDuration > 0.0 {
+                let fadeDurationMillis = UInt32(fadeDuration * 1000)
+                BASS_ChannelSlideAttribute(outStream, UInt32(BASS_ATTRIB_VOL), 0, fadeDurationMillis)
+            } else {
+                BASS_ChannelStop(outStream)
+                BASS_ChannelPlay(outStream, false)
             }
             
-            ringBuffer.totalBytesDrained = Int64(Double(bytes) / Double(currentBassStream.channelCount) / (Double(currentBassStream.sampleRate) / Double(defaultSampleRate)))
+            totalBytesDrained = Int(Double(bytes) / Double(currentBassStream.channelCount) / (Double(currentBassStream.sampleRate) / Double(defaultSampleRate)))
         } else {
             printBassError()
         }
     }
     
-    func seek(seconds: Double, fade: Bool = true) {
+    func seek(seconds: Double, fadeDuration: TimeInterval = 0.0) {
         if let currentBassStream = currentBassStream {
             BASS_SetDevice(deviceNumber)
             
             let bytes = BASS_ChannelSeconds2Bytes(currentBassStream.stream, seconds)
-            seek(bytes: Int64(bytes), fade: fade)
+            seek(bytes: Int64(bytes), fadeDuration: fadeDuration)
         }
     }
     
-    func seek(percent: Double, fade: Bool = true) {
+    func seek(percent: Double, fadeDuration: TimeInterval = 0.0) {
         if let currentBassStream = currentBassStream, let duration = currentBassStream.song.duration {
             let seconds = Double(duration) * percent
-            seek(seconds: seconds, fade: fade)
+            seek(seconds: seconds, fadeDuration: fadeDuration)
         }
     }
 }
@@ -1149,7 +1162,7 @@ func endSyncProc(handle: HSYNC, channel: UInt32, data: UInt32, userInfo: UnsafeM
             }
             
             // Mark as ended and set the buffer space til end for the UI
-            bassStream.bufferSpaceTilSongEnd = player.ringBuffer.filledSpaceLength
+            bassStream.bufferSpaceTilSongEnd = player.ringBuffer.filledSpace
             bassStream.isEnded = true
         }
     }

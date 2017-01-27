@@ -106,7 +106,7 @@ import Reachability
         }
         
         isInBackground = true
-        DispatchQueue.background.async {
+        DispatchQueue.utility.async {
             while application.backgroundTimeRemaining > 1.0 && self.isInBackground {
                 // Sleep early is nothing is happening
                 if application.backgroundTimeRemaining < 200.0 && !CacheQueue.si.isDownloading {

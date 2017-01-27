@@ -16,7 +16,7 @@ protocol ItemViewModelDelegate {
 
 typealias LoadModelsCompletion = (_ success: Bool, _ error: Error?) -> Void
 
-class ItemViewModel : NSObject {
+class ItemViewModel: NSObject {
     
     fileprivate var loader: ItemLoader
     
@@ -32,7 +32,7 @@ class ItemViewModel : NSObject {
         return loader is AlbumLoader
     }
     
-    fileprivate(set) var isSongsAlphabetized = false
+    fileprivate(set) var songSortOrder = SongSortOrder.track
     var isShowTrackNumbers = true
     
     var delegate: ItemViewModelDelegate?
@@ -61,6 +61,10 @@ class ItemViewModel : NSObject {
         self.loader = loader
         self.rootItem = loader.associatedObject as? Item
         self.navigationTitle = self.rootItem?.itemName
+        
+        if let folder = loader.associatedObject as? Folder {
+            self.songSortOrder = folder.songSortOrder
+        }
     }
     
     func loadModelsFromDatabase() -> Bool {
@@ -123,26 +127,31 @@ class ItemViewModel : NSObject {
         }
         songsDuration = duration
         
-        if isSongsAlphabetized {
-            alphabetizeSongs()
-        } else {
-            createSectionIndexes()
-        }
+        sort(by: songSortOrder)
     }
     
     fileprivate func createSectionIndexes() {
         let minAmountForIndexes = 50
         if folders.count >= minAmountForIndexes {
-            sectionIndexes = SectionIndex.sectionIndexesForItems(folders)
+            sectionIndexes = SectionIndex.sectionIndexes(forItems: folders)
             sectionIndexesSection = 0
         } else if artists.count >= minAmountForIndexes {
-            sectionIndexes = SectionIndex.sectionIndexesForItems(artists)
+            sectionIndexes = SectionIndex.sectionIndexes(forItems: artists)
             sectionIndexesSection = 1
         } else if albums.count >= minAmountForIndexes {
-            sectionIndexes = SectionIndex.sectionIndexesForItems(albums)
+            sectionIndexes = SectionIndex.sectionIndexes(forItems: albums)
             sectionIndexesSection = 2
-        } else if isSongsAlphabetized && songs.count >= minAmountForIndexes {
-            sectionIndexes = SectionIndex.sectionIndexesForItems(songs)
+        } else if songSortOrder != .track && songs.count >= minAmountForIndexes {
+            switch songSortOrder {
+            case .title:
+                sectionIndexes = SectionIndex.sectionIndexes(forItems: songs)
+            case .artist:
+                sectionIndexes = SectionIndex.sectionIndexes(forNames: songs.map({$0.artistDisplayName ?? ""}))
+            case .album:
+                sectionIndexes = SectionIndex.sectionIndexes(forNames: songs.map({$0.albumDisplayName ?? ""}))
+            default:
+                break
+            }
             sectionIndexesSection = 3
         } else {
             sectionIndexes = []
@@ -193,13 +202,23 @@ class ItemViewModel : NSObject {
         PlayQueue.si.playSongs(songs, playIndex: index)
     }
     
-    func alphabetizeSongs() {
-        // TODO: Save this setting per folder id
-        // TODO: Allow to alphabetize by artist
-        songs.sort { lhs, rhs -> Bool in
-            return lhs.title.lowercased() < rhs.title.lowercased()
+    func sort(by sortOrder: SongSortOrder) {
+        self.songSortOrder = sortOrder
+        // TODO: How can I assign to a constant here? It's not an Obj-C object...
+        if let folder = loader.associatedObject as? Folder {
+            folder.songSortOrder = sortOrder
+            _ = folder.replace()
         }
-        isSongsAlphabetized = true
+        
+        // TODO: Save this setting per folder id
+        songs.sort { lhs, rhs -> Bool in
+            switch sortOrder {
+            case .track: return lhs.trackNumber ?? 0 < rhs.trackNumber ?? 0
+            case .title: return lhs.title.lowercased() < rhs.title.lowercased()
+            case .artist: return lhs.artistDisplayName?.lowercased() ?? "" < rhs.artistDisplayName?.lowercased() ?? ""
+            case .album: return lhs.albumDisplayName?.lowercased() ?? "" < rhs.albumDisplayName?.lowercased() ?? ""
+            }
+        }
         createSectionIndexes()
         delegate?.itemsChanged()
     }

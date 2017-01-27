@@ -19,8 +19,8 @@ struct SectionIndex {
         self.letter = letter
     }
     
-    static func sectionIndexesForItems(_ items: [Item]?) -> [SectionIndex] {
-        guard let items = items else {
+    static func sectionIndexes(forNames names: [String]?) -> [SectionIndex] {
+        guard let names = names else {
             return []
         }
         
@@ -30,11 +30,11 @@ struct SectionIndex {
         
         var index: Int = 0
         var count: Int = 0
-        for item in items {
-            if item.itemName.length > 0 {
-                let name = Database.si.name(item.itemName, ignoringArticles: articles).uppercased()
-                let firstScalar = name.unicodeScalars.first
-                var firstLetter = name[0]
+        for name in names {
+            if name.length > 0 {
+                let nameIgnoringArticles = Database.si.name(name, ignoringArticles: articles).uppercased()
+                let firstScalar = nameIgnoringArticles.unicodeScalars.first
+                var firstLetter = nameIgnoringArticles[0]
                 
                 if let firstScalar = firstScalar, !CharacterSet.letters.contains(firstScalar) {
                     firstLetter = "#"
@@ -70,5 +70,14 @@ struct SectionIndex {
         }
         
         return sectionIndexes
+    }
+    
+    static func sectionIndexes(forItems items: [Item]?) -> [SectionIndex] {
+        guard let items = items else {
+            return []
+        }
+        
+        let names = items.map({$0.itemName})
+        return sectionIndexes(forNames: names)
     }
 }

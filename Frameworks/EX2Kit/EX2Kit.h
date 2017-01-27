@@ -22,6 +22,4 @@
 #import "GTMDefines.h"
 #import "GTMNSString+HTML.h"
 
-#import "EX2Dispatch.h"
-#import "EX2NetworkIndicator.h"
 #import "EX2RingBuffer.h"

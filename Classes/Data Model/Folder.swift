@@ -8,6 +8,13 @@
 
 import Foundation
 
+enum SongSortOrder: Int {
+    case track  = 0
+    case title  = 1
+    case artist = 2
+    case album  = 3
+}
+
 extension Folder: Item, Equatable {
     var itemId: Int64 { return folderId }
     var itemName: String { return name }
@@ -24,6 +31,8 @@ final class Folder {
     let coverArtId: String?
     
     let name: String
+    
+    var songSortOrder: SongSortOrder = .track
     
     var folders = [Folder]()
     var songs = [Song]()
@@ -55,6 +64,7 @@ final class Folder {
         self.mediaFolderId  = result.object(forColumnIndex: 3) as? Int64
         self.coverArtId     = result.string(forColumnIndex: 4)
         self.name           = result.string(forColumnIndex: 5) ?? ""
+        self.songSortOrder  = SongSortOrder(rawValue: result.long(forColumnIndex: 6)) ?? .track
         self.repository     = repository as! FolderRepository
     }
 }

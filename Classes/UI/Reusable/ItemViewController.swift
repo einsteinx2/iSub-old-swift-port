@@ -113,8 +113,17 @@ class ItemViewController: DraggableTableViewController {
     
     @objc fileprivate func showOptions() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alertController.addAction(UIAlertAction(title: "Alphabetize Songs", style: .default) { action in
-            self.viewModel.alphabetizeSongs()
+        alertController.addAction(UIAlertAction(title: "Sort By Track Number", style: .default) { action in
+            self.viewModel.sort(by: .track)
+        })
+        alertController.addAction(UIAlertAction(title: "Sort By Song Title", style: .default) { action in
+            self.viewModel.sort(by: .title)
+        })
+        alertController.addAction(UIAlertAction(title: "Sort By Artist", style: .default) { action in
+            self.viewModel.sort(by: .artist)
+        })
+        alertController.addAction(UIAlertAction(title: "Sort By Album", style: .default) { action in
+            self.viewModel.sort(by: .album)
         })
         let trackNumbersTitle = self.viewModel.isShowTrackNumbers ? "Hide Track Numbers" : "Show Track Numbers"
         alertController.addAction(UIAlertAction(title: trackNumbersTitle, style: .default) { action in

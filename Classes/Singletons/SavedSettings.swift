@@ -50,13 +50,7 @@ final class SavedSettings: NSObject {
     fileprivate let storage = UserDefaults.standard
     
     fileprivate let lock = SpinLock()
-    fileprivate func synchronizedResult<T>(criticalSection: () -> T) -> T {
-        return iSub.synchronizedResult(lockable: lock, criticalSection: criticalSection)
-    }
-    fileprivate func synchronized(criticalSection: () -> ()) {
-        iSub.synchronized(lockable: lock, criticalSection: criticalSection)
-    }
-    
+
     func setup() {
         UIApplication.shared.isIdleTimerDisabled = !isScreenSleepEnabled
         createInitialSettings()
@@ -83,8 +77,8 @@ final class SavedSettings: NSObject {
     }
     
     var currentServerId: Int64 {
-        get { return synchronizedResult { return self.storage.object(forKey: Keys.currentServerId) as? Int64 ?? -1 }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.currentServerId) }}
+        get { return lock.synchronizedResult { return self.storage.object(forKey: Keys.currentServerId) as? Int64 ?? -1 }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.currentServerId) }}
     }
     
     var isTestServer: Bool {
@@ -101,20 +95,20 @@ final class SavedSettings: NSObject {
     }
     
     var redirectUrlString: String? {
-        get { return synchronizedResult { return self.storage.string(forKey: Keys.redirectUrlString) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.redirectUrlString) }}
+        get { return lock.synchronizedResult { return self.storage.string(forKey: Keys.redirectUrlString) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.redirectUrlString) }}
     }
     
     var isOfflineMode: Bool = false
     
     var maxBitRateWifi: Int {
-        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxBitRateWifi) }}
-        set { synchronized { self.storage.set(newValue, forKey: Keys.maxBitRateWifi) }}
+        get { return lock.synchronizedResult { return self.storage.integer(forKey: Keys.maxBitRateWifi) }}
+        set { lock.synchronized { self.storage.set(newValue, forKey: Keys.maxBitRateWifi) }}
     }
     
     var maxBitRate3G: Int {
-        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxBitRate3G) }}
-        set { synchronized { self.storage.set(newValue, forKey: Keys.maxBitRate3G) }}
+        get { return lock.synchronizedResult { return self.storage.integer(forKey: Keys.maxBitRate3G) }}
+        set { lock.synchronized { self.storage.set(newValue, forKey: Keys.maxBitRate3G) }}
     }
     
     var currentMaxBitRate: Int {
@@ -132,13 +126,13 @@ final class SavedSettings: NSObject {
     }
     
     var maxVideoBitRateWifi: Int {
-        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxVideoBitRateWifi) }}
-        set { synchronized { self.storage.set(newValue, forKey: Keys.maxVideoBitRateWifi) }}
+        get { return lock.synchronizedResult { return self.storage.integer(forKey: Keys.maxVideoBitRateWifi) }}
+        set { lock.synchronized { self.storage.set(newValue, forKey: Keys.maxVideoBitRateWifi) }}
     }
     
     var maxVideoBitRate3G: Int {
-        get { return synchronizedResult { return self.storage.integer(forKey: Keys.maxVideoBitRate3G) }}
-        set { synchronized { self.storage.set(newValue, forKey: Keys.maxVideoBitRate3G) }}
+        get { return lock.synchronizedResult { return self.storage.integer(forKey: Keys.maxVideoBitRate3G) }}
+        set { lock.synchronized { self.storage.set(newValue, forKey: Keys.maxVideoBitRate3G) }}
     }
     
     var currentVideoBitRates: [Int] {
@@ -155,26 +149,26 @@ final class SavedSettings: NSObject {
     }
     
     var isAutoSongCachingEnabled: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.isAutoSongCachingEnabled) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.isAutoSongCachingEnabled) }}
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isAutoSongCachingEnabled) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isAutoSongCachingEnabled) }}
     }
     
     var isNextSongCacheEnabled: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.isNextSongCacheEnabled) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.isNextSongCacheEnabled) }}
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isNextSongCacheEnabled) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isNextSongCacheEnabled) }}
     }
     
     var isBackupCacheEnabled: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.isBackupCacheEnabled) }}
-        set { synchronized {
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isBackupCacheEnabled) }}
+        set { lock.synchronized {
             self.storage.set(newValue, forKey: Keys.isBackupCacheEnabled) }
             CacheManager.si.backupSongCache = newValue
         }
     }
     
     var isManualCachingOnWWANEnabled: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.isManualCachingOnWWANEnabled) }}
-        set { synchronized {
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isManualCachingOnWWANEnabled) }}
+        set { lock.synchronized {
             self.storage.set(newValue, forKey: Keys.isManualCachingOnWWANEnabled) }
             if AppDelegate.si.networkStatus.isReachableWWAN {
                 newValue ? CacheQueue.si.start() : CacheQueue.si.stop()
@@ -183,70 +177,70 @@ final class SavedSettings: NSObject {
     }
     
     var cachingType: CachingType {
-        get { return synchronizedResult { return CachingType(rawValue: self.storage.integer(forKey: Keys.cachingType)) ?? .minSpace }}
-        set { synchronized { self.storage.set(newValue.rawValue, forKey: Keys.cachingType) }}
+        get { return lock.synchronizedResult { return CachingType(rawValue: self.storage.integer(forKey: Keys.cachingType)) ?? .minSpace }}
+        set { lock.synchronized { self.storage.set(newValue.rawValue, forKey: Keys.cachingType) }}
     }
     
     var maxCacheSize: Int64 {
-        get { return synchronizedResult { return self.storage.object(forKey: Keys.maxCacheSize) as? Int64 ?? -1 }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.maxCacheSize) }}
+        get { return lock.synchronizedResult { return self.storage.object(forKey: Keys.maxCacheSize) as? Int64 ?? -1 }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.maxCacheSize) }}
     }
     
     var minFreeSpace: Int64 {
-        get { return synchronizedResult { return self.storage.object(forKey: Keys.minFreeSpace) as? Int64 ?? -1 }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.minFreeSpace) }}
+        get { return lock.synchronizedResult { return self.storage.object(forKey: Keys.minFreeSpace) as? Int64 ?? -1 }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.minFreeSpace) }}
     }
     
     var isAutoDeleteCacheEnabled: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.isAutoDeleteCacheEnabled) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.isAutoDeleteCacheEnabled) }}
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isAutoDeleteCacheEnabled) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isAutoDeleteCacheEnabled) }}
     }
     
     var autoDeleteCacheType: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.autoDeleteCacheType) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.autoDeleteCacheType) }}
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.autoDeleteCacheType) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.autoDeleteCacheType) }}
     }
     
     var isScreenSleepEnabled: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.isScreenSleepEnabled) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.isScreenSleepEnabled) }}
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isScreenSleepEnabled) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isScreenSleepEnabled) }}
     }
     
     var isBasicAuthEnabled: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.isBasicAuthEnabled) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.isBasicAuthEnabled) }}
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isBasicAuthEnabled) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isBasicAuthEnabled) }}
     }
     
     var quickSkipNumberOfSeconds: Int {
-        get { return synchronizedResult { return self.storage.integer(forKey: Keys.quickSkipNumberOfSeconds) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.quickSkipNumberOfSeconds) }}
+        get { return lock.synchronizedResult { return self.storage.integer(forKey: Keys.quickSkipNumberOfSeconds) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.quickSkipNumberOfSeconds) }}
     }
     
     var isDisableUsageOver3G: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.isDisableUsageOver3G) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.isDisableUsageOver3G) }}
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isDisableUsageOver3G) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isDisableUsageOver3G) }}
     }
     
     // MARK: - State Saving -
     
     var seekTime: Double {
-        get { return synchronizedResult { return self.storage.double(forKey: Keys.seekTime) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.seekTime) }}
+        get { return lock.synchronizedResult { return self.storage.double(forKey: Keys.seekTime) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.seekTime) }}
     }
     
     var byteOffset: Int64 {
-        get { return synchronizedResult { return self.storage.object(forKey: Keys.byteOffset) as? Int64 ?? 0 }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.byteOffset) }}
+        get { return lock.synchronizedResult { return self.storage.object(forKey: Keys.byteOffset) as? Int64 ?? 0 }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.byteOffset) }}
     }
     
     var isEqualizerOn: Bool {
-        get { return synchronizedResult { return self.storage.bool(forKey: Keys.isEqualizerOn) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.isEqualizerOn) }}
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isEqualizerOn) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isEqualizerOn) }}
     }
     
     var preampGain: Float {
-        get { return synchronizedResult { return self.storage.float(forKey: Keys.preampGain) }}
-        set { synchronized {              self.storage.set(newValue, forKey: Keys.preampGain) }}
+        get { return lock.synchronizedResult { return self.storage.float(forKey: Keys.preampGain) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.preampGain) }}
     }
 }
 

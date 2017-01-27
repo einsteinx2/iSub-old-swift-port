@@ -61,7 +61,7 @@ class PlayQueueViewController: DraggableTableViewController {
         if currentIndex >= 0 && currentIndex < viewModel.numberOfRows {
             let indexPath = IndexPath(row: self.viewModel.currentIndex, section: 0)
             if visible {
-                EX2Dispatch.runInMainThread(afterDelay: 0.2) {
+                DispatchQueue.main.async(after: 0.2) {
                     self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 }
             } else {

@@ -121,8 +121,8 @@ struct FolderRepository: ItemRepository {
         Database.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
-                let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?)"
-                try db.executeUpdate(query, folder.folderId, folder.serverId, n2N(folder.parentFolderId), n2N(folder.mediaFolderId), n2N(folder.coverArtId), folder.name)
+                let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                try db.executeUpdate(query, folder.folderId, folder.serverId, n2N(folder.parentFolderId), n2N(folder.mediaFolderId), n2N(folder.coverArtId), folder.name, folder.songSortOrder.rawValue)
             } catch {
                 success = false
                 printError(error)

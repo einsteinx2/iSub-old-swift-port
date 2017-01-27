@@ -327,7 +327,7 @@ class PlayerViewController: UIViewController {
     }
     
     @objc fileprivate func progressSliderValueChanged() {
-        BassGaplessPlayer.si.seek(percent: Double(progressSlider.value), fade: true)
+        BassGaplessPlayer.si.seek(percent: Double(progressSlider.value), fadeDuration: 0.5)
     }
     
     @objc fileprivate func hidePlayer() {

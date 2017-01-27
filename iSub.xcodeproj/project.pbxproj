@@ -490,6 +490,10 @@
 		536E29251E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
 		536E29261E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
 		536E29271E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
+		5377D6461E3A8221003BFFB9 /* NetworkIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5377D6451E3A8221003BFFB9 /* NetworkIndicator.swift */; };
+		5377D6471E3A8226003BFFB9 /* NetworkIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5377D6451E3A8221003BFFB9 /* NetworkIndicator.swift */; };
+		5377D6491E3A84CC003BFFB9 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */; };
+		5377D64A1E3A84CC003BFFB9 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */; };
 		537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DE2D8113F008C00875852 /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		537FB2F51E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */; };
 		537FB2F61E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */; };
@@ -736,12 +740,6 @@
 		53CFBB811E2B3075005895F4 /* GenreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB801E2B3075005895F4 /* GenreRepository.swift */; };
 		53CFBB821E2B3075005895F4 /* GenreRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CFBB801E2B3075005895F4 /* GenreRepository.swift */; };
 		53D44F8515AA621B00CDD3B8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D44F8415AA621A00CDD3B8 /* Accelerate.framework */; };
-		53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A261E1DC38400071ABD /* EX2Dispatch.m */; };
-		53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A261E1DC38400071ABD /* EX2Dispatch.m */; };
-		53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */; };
-		53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */; };
-		53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */; };
-		53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */; };
 		53D59A4B1E1DC58700071ABD /* NSString+Time.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4A1E1DC58700071ABD /* NSString+Time.m */; };
 		53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A4A1E1DC58700071ABD /* NSString+Time.m */; };
 		53D59A571E1DC63800071ABD /* NSArray+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D59A541E1DC63800071ABD /* NSArray+Safe.m */; };
@@ -1051,6 +1049,8 @@
 		536E29121E0B94500097C2F6 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		536E29141E0B94570097C2F6 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
 		536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "entitlements-simulator.plist"; sourceTree = "<group>"; };
+		5377D6451E3A8221003BFFB9 /* NetworkIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkIndicator.swift; path = ../../Frameworks/EX2Kit/NetworkIndicator.swift; sourceTree = "<group>"; };
+		5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RingBuffer.swift; path = ../../Frameworks/EX2Kit/RingBuffer.swift; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassGaplessPlayer.swift; path = "Bass Wrapper/BassGaplessPlayer.swift"; sourceTree = "<group>"; };
 		537FB2F71E33065E001D3FBB /* ObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
@@ -1163,12 +1163,6 @@
 		53CFBB7D1E2B3038005895F4 /* Genre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
 		53CFBB801E2B3075005895F4 /* GenreRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenreRepository.swift; sourceTree = "<group>"; };
 		53D44F8415AA621A00CDD3B8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		53D59A251E1DC38400071ABD /* EX2Dispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2Dispatch.h; sourceTree = "<group>"; };
-		53D59A261E1DC38400071ABD /* EX2Dispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2Dispatch.m; sourceTree = "<group>"; };
-		53D59A271E1DC38400071ABD /* EX2NetworkIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2NetworkIndicator.h; sourceTree = "<group>"; };
-		53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2NetworkIndicator.m; sourceTree = "<group>"; };
-		53D59A2B1E1DC38400071ABD /* EX2RingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EX2RingBuffer.h; sourceTree = "<group>"; };
-		53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EX2RingBuffer.m; sourceTree = "<group>"; };
 		53D59A431E1DC3D000071ABD /* EX2Kit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EX2Kit.h; sourceTree = "<group>"; };
 		53D59A491E1DC58700071ABD /* NSString+Time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Time.h"; sourceTree = "<group>"; };
 		53D59A4A1E1DC58700071ABD /* NSString+Time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Time.m"; sourceTree = "<group>"; };
@@ -1405,7 +1399,6 @@
 				5355BFB21E2DB88200C6D27F /* Application.swift */,
 				531B33DC1E24D0B600811187 /* UI */,
 				531B340C1E24D12300811187 /* Old UI */,
-				531B32D11E24CF8A00811187 /* AudioEngine */,
 				531B32E81E24CF8A00811187 /* Data Model */,
 				531B33001E24CF8A00811187 /* Server Loading */,
 				531B32FE1E24CF8A00811187 /* Extensions */,
@@ -1548,15 +1541,17 @@
 			path = SpringSolver;
 			sourceTree = "<group>";
 		};
-		531B32D11E24CF8A00811187 /* AudioEngine */ = {
+		531B32D11E24CF8A00811187 /* Player */ = {
 			isa = PBXGroup;
 			children = (
+				5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */,
 				537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */,
 				534FACED1E328D3200BF12D9 /* BassStream.swift */,
 				537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */,
 				53FD71E41E36E73600460B44 /* BassEqualizer.swift */,
 			);
-			path = AudioEngine;
+			name = Player;
+			path = ../AudioEngine;
 			sourceTree = "<group>";
 		};
 		531B32E81E24CF8A00811187 /* Data Model */ = {
@@ -1568,6 +1563,8 @@
 				531B34591E24D30500811187 /* NetworkStatus.swift */,
 				530C2D821E2C5A6000839B7A /* ContentType.swift */,
 				53E042821E36AB4B0009DE79 /* Synchronized.swift */,
+				5377D6451E3A8221003BFFB9 /* NetworkIndicator.swift */,
+				531B32D11E24CF8A00811187 /* Player */,
 				53CFBB611E2AE160005895F4 /* Item Models */,
 				53F107A41E2ACDDC003B7D59 /* Repositories */,
 			);
@@ -2141,12 +2138,6 @@
 				532A1AD31E1DD33600A8502A /* GTMDefines.h */,
 				532A1AD41E1DD33600A8502A /* GTMNSString+HTML.h */,
 				532A1AD51E1DD33600A8502A /* GTMNSString+HTML.m */,
-				53D59A251E1DC38400071ABD /* EX2Dispatch.h */,
-				53D59A261E1DC38400071ABD /* EX2Dispatch.m */,
-				53D59A271E1DC38400071ABD /* EX2NetworkIndicator.h */,
-				53D59A281E1DC38400071ABD /* EX2NetworkIndicator.m */,
-				53D59A2B1E1DC38400071ABD /* EX2RingBuffer.h */,
-				53D59A2C1E1DC38400071ABD /* EX2RingBuffer.m */,
 			);
 			name = EX2Kit;
 			path = Frameworks/EX2Kit;
@@ -2668,7 +2659,6 @@
 				5358DBD91E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				530D5A131E2C047500C9ED43 /* Song.swift in Sources */,
 				534FACEE1E328D3200BF12D9 /* BassStream.swift in Sources */,
-				53D59A321E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				53D959141E2C7A7700A1667F /* Database.swift in Sources */,
 				530F04AF1E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				531B33D11E24CF8B00811187 /* Utils.swift in Sources */,
@@ -2677,6 +2667,7 @@
 				53CFBB6F1E2B1628005895F4 /* ArtistRepository.swift in Sources */,
 				532A1AD01E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
 				531B34441E24D24600811187 /* FMDatabaseAdditions.m in Sources */,
+				5377D6491E3A84CC003BFFB9 /* RingBuffer.swift in Sources */,
 				53835CD91E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358DF791E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				537FB2FF1E33EEC1001D3FBB /* BassVisualizer.swift in Sources */,
@@ -2687,7 +2678,6 @@
 				53FD71E51E36E73600460B44 /* BassEqualizer.swift in Sources */,
 				531B33F81E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34421E24D24600811187 /* FMDatabase.m in Sources */,
-				53D59A2F1E1DC38400071ABD /* EX2Dispatch.m in Sources */,
 				531B33611E24CF8B00811187 /* CachedImage.swift in Sources */,
 				53D59A6A1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				537FB2FC1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
@@ -2703,6 +2693,7 @@
 				531B34021E24D0B600811187 /* MiniPlayerViewController.swift in Sources */,
 				531B34461E24D24600811187 /* FMDatabasePool.m in Sources */,
 				539133511E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */,
+				5377D6461E3A8221003BFFB9 /* NetworkIndicator.swift in Sources */,
 				531B33D61E24CFAF00811187 /* UITraitEnvironment.swift in Sources */,
 				5358DF741E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
 				531B33A31E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
@@ -2808,7 +2799,6 @@
 				53A418041E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */,
 				539133541E29D53000B8A99E /* Data.swift in Sources */,
 				53CFBB691E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
-				53D59A381E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33771E24CF8B00811187 /* String.swift in Sources */,
 				531B33A11E24CF8B00811187 /* MediaFoldersLoader.swift in Sources */,
 				530C2D861E2C623000839B7A /* ServerRepository.swift in Sources */,
@@ -2918,7 +2908,6 @@
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				530D5A141E2C047500C9ED43 /* Song.swift in Sources */,
 				534FACEF1E328D3200BF12D9 /* BassStream.swift in Sources */,
-				53D59A341E1DC38500071ABD /* EX2NetworkIndicator.m in Sources */,
 				53D959151E2C7A7700A1667F /* Database.swift in Sources */,
 				530F04B01E237EB700CBBB3E /* INTUSpringSolver.c in Sources */,
 				531B33D21E24CF8B00811187 /* Utils.swift in Sources */,
@@ -2927,6 +2916,7 @@
 				53CFBB701E2B1628005895F4 /* ArtistRepository.swift in Sources */,
 				532A1AD21E1DD2C400A8502A /* NSString+HasValue.m in Sources */,
 				531B34451E24D24600811187 /* FMDatabaseAdditions.m in Sources */,
+				5377D64A1E3A84CC003BFFB9 /* RingBuffer.swift in Sources */,
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358DF7B1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				537FB3001E33EEC1001D3FBB /* BassVisualizer.swift in Sources */,
@@ -2937,7 +2927,6 @@
 				53FD71E61E36E73600460B44 /* BassEqualizer.swift in Sources */,
 				531B33F91E24D0B600811187 /* ItemViewController.swift in Sources */,
 				531B34431E24D24600811187 /* FMDatabase.m in Sources */,
-				53D59A311E1DC38500071ABD /* EX2Dispatch.m in Sources */,
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,
 				53D59A6C1E1DC87D00071ABD /* NSObject+UserInfo.m in Sources */,
 				537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
@@ -2953,6 +2942,7 @@
 				531B34031E24D0B600811187 /* MiniPlayerViewController.swift in Sources */,
 				531B34471E24D24600811187 /* FMDatabasePool.m in Sources */,
 				539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */,
+				5377D6471E3A8226003BFFB9 /* NetworkIndicator.swift in Sources */,
 				531B33D71E24CFAF00811187 /* UITraitEnvironment.swift in Sources */,
 				5358DF761E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
 				531B33A41E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
@@ -3058,7 +3048,6 @@
 				53A418051E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */,
 				539133551E29D53000B8A99E /* Data.swift in Sources */,
 				53CFBB6A1E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
-				53D59A3A1E1DC38500071ABD /* EX2RingBuffer.m in Sources */,
 				531B33781E24CF8B00811187 /* String.swift in Sources */,
 				531B33A21E24CF8B00811187 /* MediaFoldersLoader.swift in Sources */,
 				530C2D871E2C623000839B7A /* ServerRepository.swift in Sources */,

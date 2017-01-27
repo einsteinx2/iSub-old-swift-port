@@ -91,17 +91,17 @@ final class Database {
             }
             
             if !db.tableExists("folders") {
-                try? db.executeUpdate("CREATE TABLE folders (folderId INTEGER, serverId INTEGER, parentFolderId INTEGER, mediaFolderId INTEGER, coverArtId TEXT, name TEXT, PRIMARY KEY (folderId, serverId))")
+                try? db.executeUpdate("CREATE TABLE folders (folderId INTEGER, serverId INTEGER, parentFolderId INTEGER, mediaFolderId INTEGER, coverArtId TEXT, name TEXT, songSortOrder INTEGER, PRIMARY KEY (folderId, serverId))")
                 try? db.executeUpdate("CREATE INDEX folders_parentFolderId ON folders (parentFolderId)")
                 try? db.executeUpdate("CREATE INDEX folders_mediaFolderId ON folders (mediaFolderId)")
             }
             
             if !db.tableExists("cachedFolders") {
-                try? db.executeUpdate("CREATE TABLE cachedFolders (folderId INTEGER, serverId INTEGER, parentFolderId INTEGER, mediaFolderId INTEGER, coverArtId TEXT, name TEXT, PRIMARY KEY (folderId, serverId))")
+                try? db.executeUpdate("CREATE TABLE cachedFolders (folderId INTEGER, serverId INTEGER, parentFolderId INTEGER, mediaFolderId INTEGER, coverArtId TEXT, name TEXT, songSortOrder INTEGER, PRIMARY KEY (folderId, serverId))")
                 try? db.executeUpdate("CREATE INDEX cachedFolders_parentFolderId ON cachedFolders (parentFolderId)")
                 try? db.executeUpdate("CREATE INDEX cachedFolders_mediaFolderId ON cachedFolders (mediaFolderId)")
             }
-            
+                        
             if !db.tableExists("artists") {
                 try? db.executeUpdate("CREATE TABLE artists (artistId INTEGER, serverId INTEGER, name TEXT, coverArtid TEXT, albumCount INTEGER, PRIMARY KEY (artistId, serverId))")
             }

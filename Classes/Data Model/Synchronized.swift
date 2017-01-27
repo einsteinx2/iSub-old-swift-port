@@ -12,71 +12,58 @@
 import Foundation
 import Darwin
 
-/// Protocol for NSLocking objects that also provide try()
 protocol TryLockable: NSLocking {
     func `try`() -> Bool
 }
-
-// These Cocoa classes have tryLock()
 extension NSLock: TryLockable {}
 extension NSRecursiveLock: TryLockable {}
 extension NSConditionLock: TryLockable {}
 
-
-/// Protocol for NSLocking objects that also provide lock(before limit: Date)
 protocol BeforeDateLockable: NSLocking {
     func lock(before limit: Date) -> Bool
 }
-
-// These Cocoa classes have lockBeforeDate()
 extension NSLock: BeforeDateLockable {}
 extension NSRecursiveLock: BeforeDateLockable {}
 extension NSConditionLock: BeforeDateLockable {}
 
-
-/// Use an NSLocking object as a mutex for a critical section of code
-func synchronized<L: NSLocking>(lockable: L, criticalSection: () -> ()) {
-    lockable.lock()
-    criticalSection()
-    lockable.unlock()
-}
-
-/// Use an NSLocking object as a mutex for a critical section of code that returns a result
-func synchronizedResult<L: NSLocking, T>(lockable: L, criticalSection: () -> T) -> T {
-    lockable.lock()
-    let result = criticalSection()
-    lockable.unlock()
-    return result
-}
-
-/// Use a TryLockable object as a mutex for a critical section of code
-///
-/// Return true if the critical section was executed, or false if tryLock() failed
-func trySynchronized<L: TryLockable>(lockable: L, criticalSection: () -> ()) -> Bool {
-    if !lockable.try() {
-        return false
+extension NSLocking {
+    func synchronized(execute: () -> ()) {
+        lock()
+        execute()
+        unlock()
     }
-    criticalSection()
-    lockable.unlock()
-    return true
-}
-
-/// Use a BeforeDateLockable object as a mutex for a critical section of code
-///
-/// Return true if the critical section was executed, or false if lockBeforeDate() failed
-func synchronizedBeforeDate<L: BeforeDateLockable>(limit: Date, lockable: L, criticalSection: () -> ()) -> Bool {
-    if !lockable.lock(before: limit) {
-        return false
+    
+    func synchronizedResult<T>(execute: () -> T) -> T {
+        lock()
+        let result = execute()
+        unlock()
+        return result
     }
-    criticalSection()
-    lockable.unlock()
-    return true
 }
 
-// MARK: OSSpinLock implementation
-// OSSpinLock is much faster when there is infrequent contention
+extension TryLockable {
+    func trySynchronized(execute: () -> ()) -> Bool {
+        if !`try`() {
+            return false
+        }
+        execute()
+        unlock()
+        return true
+    }
+}
+
+extension BeforeDateLockable {
+    func trySynchronized(before: Date, execute: () -> ()) -> Bool {
+        if !lock(before: before) {
+            return false
+        }
+        unlock()
+        return true
+    }
+}
+
+// OSSpinLock is much faster than other options when there is infrequent contention
 // https://gist.github.com/steipete/36350a8a60693d440954b95ea6cbbafc
-
 class SpinLock: TryLockable {
     private var spinLock = OS_SPINLOCK_INIT
     
