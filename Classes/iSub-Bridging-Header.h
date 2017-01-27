@@ -7,6 +7,7 @@
 #import <HockeySDK/HockeySDK.h>
 
 #import "Imports.h"
+#import "MBFingerTipWindow.h"
 #import "IntroViewController.h"
 #import "HelpTabViewController.h"
 #import "SettingsTabViewController.h"

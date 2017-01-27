@@ -1,5 +1,4 @@
-github "duemunk/Async" "2.0.1"
-github "schickling/Device.swift" "0.4"
+github "schickling/Device.swift" "0.5"
 github "bitstadium/HockeySDK-iOS" "4.1.3"
 github "jdg/MBProgressHUD" "1.0.0"
 github "einsteinx2/Nuke" "fd734f77a4c152fc8305de0372a7d1e7478a6257"

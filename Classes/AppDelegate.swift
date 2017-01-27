@@ -15,9 +15,10 @@ import Reachability
         static let enteringOnlineMode  = Notification.Name("AppDelegate_enteringOnlineMode")
     }
     
+    let networkStatus = NetworkStatus()
+    
     var window: UIWindow?
-    var networkStatus = NetworkStatus()
-    var sidePanelController: SidePanelController!
+    let sidePanelController = SidePanelController()
     var menuController: MenuViewController {
         return sidePanelController.leftPanel as! MenuViewController
     }
@@ -66,7 +67,12 @@ import Reachability
         
         loadHockeyApp()
         
-        sidePanelController = window!.rootViewController as! SidePanelController
+        let fingerTipWindow = MBFingerTipWindow(frame: UIScreen.main.bounds)
+        fingerTipWindow.alwaysShowTouches = true
+        window = fingerTipWindow
+        window?.backgroundColor = .black
+        window?.makeKeyAndVisible()
+        window?.rootViewController = sidePanelController
         
         // Handle offline mode
         if !networkStatus.isReachable || (!networkStatus.isReachableWifi && SavedSettings.si.isDisableUsageOver3G) {

@@ -9,5 +9,3 @@
 #import "NSString+time.h"
 #import "NSURL+QueryParameterDictionary.h"
 #import "NSString+FileSize.h"
-#import "GTMDefines.h"
-#import "GTMNSString+HTML.h"
