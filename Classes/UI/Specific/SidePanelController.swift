@@ -15,11 +15,6 @@ private var kvoContext = 0
 
 class SidePanelController: JASidePanelController {
     
-    var panelGapPercentage: CGFloat {
-        //return UIDevice.current.orientation.isLandscape ? 0.5 : 0.8
-        return 0.8
-    }
-    
     // MARK: - Status Bar -
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -46,8 +41,10 @@ class SidePanelController: JASidePanelController {
         // Setup KVO to hide and show the status bar when opening the side panels
         self.addObserver(self, forKeyPath: "state", options: .new, context: &kvoContext)
         
-        self.leftGapPercentage = panelGapPercentage
-        self.rightGapPercentage = panelGapPercentage
+        self.leftFixedWidth = 200
+        self.rightFixedWidth = 300
+        self.allowLeftOverpan = false
+        self.allowRightOverpan = false
         self.pushesSidePanels = true
         self.bounceOnSidePanelOpen = false
         
