@@ -11,6 +11,45 @@
 #import <Social/Social.h>
 #import "iSub-Swift.h"
 
+@interface SettingsTabViewController() <UITextFieldDelegate>
+@property (nonatomic, strong) IBOutlet UILabel *versionLabel;
+@property (nonatomic, strong) IBOutlet UISwitch *disableScreenSleepSwitch;
+@property (nonatomic, strong) IBOutlet UISwitch *disableCellUsageSwitch;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxBitRateWifiSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxBitRate3GSegmentedControl;
+@property (nonatomic, strong) IBOutlet UILabel *enableManualCachingOnWWANLabel;
+@property (nonatomic, strong) IBOutlet UISwitch *enableManualCachingOnWWANSwitch;
+@property (nonatomic, strong) IBOutlet UILabel *enableSongCachingLabel;
+@property (nonatomic, strong) IBOutlet UISwitch *enableSongCachingSwitch;
+@property (nonatomic, strong) IBOutlet UILabel *enableNextSongCacheLabel;
+@property (nonatomic, strong) IBOutlet UISwitch *enableNextSongCacheSwitch;
+@property (nonatomic, strong) IBOutlet UILabel *enableBackupCacheLabel;
+@property (nonatomic, strong) IBOutlet UISwitch *enableBackupCacheSwitch;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *cachingTypeSegmentedControl;
+@property (nonatomic) unsigned long long int totalSpace;
+@property (nonatomic) unsigned long long int freeSpace;
+@property (nonatomic) IBOutlet UILabel *cacheSpaceLabel1;
+@property (nonatomic, strong) IBOutlet UITextField *cacheSpaceLabel2;
+@property (nonatomic, strong) IBOutlet UILabel *freeSpaceLabel;
+@property (nonatomic, strong) IBOutlet UILabel *totalSpaceLabel;
+@property (nonatomic, strong) IBOutlet UIView *totalSpaceBackground;
+@property (nonatomic, strong) IBOutlet UIView *freeSpaceBackground;
+@property (nonatomic, strong) IBOutlet UISlider *cacheSpaceSlider;
+@property (nonatomic, strong) IBOutlet UISwitch *autoDeleteCacheSwitch;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *autoDeleteCacheTypeSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *quickSkipSegmentControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxVideoBitRateWifiSegmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *maxVideoBitRate3GSegmentedControl;
+@property (nonatomic, strong) NSDate *loadedTime;
+
+@property (nonatomic, strong) IBOutletCollection(UISwitch) NSArray *switches;
+
+- (IBAction)segmentAction:(id)sender;
+- (IBAction)switchAction:(id)sender;
+- (IBAction)updateMinFreeSpaceLabel;
+- (IBAction)updateMinFreeSpaceSetting;
+@end
+
 @implementation SettingsTabViewController
 
 - (BOOL)shouldAutorotate
@@ -37,8 +76,6 @@
 #else
 	self.versionLabel.text = [NSString stringWithFormat:@"iSub version %@", version];
 #endif
-		
-    self.enableBasicAuthSwitch.on = SavedSettings.si.isBasicAuthEnabled;
     
     self.disableCellUsageSwitch.on = SavedSettings.si.isDisableUsageOver3G;
 		
@@ -50,8 +87,8 @@
 	self.enableSongCachingSwitch.on = SavedSettings.si.isAutoSongCachingEnabled;
     self.enableBackupCacheSwitch.on = SavedSettings.si.isBackupCacheEnabled;
 		
-	//self.totalSpace = CacheManager.si.totalSpace;
-	//self.freeSpace = CacheManager.si.freeSpace;
+	self.totalSpace = CacheManager.si.totalSpace;
+	self.freeSpace = CacheManager.si.freeSpace;
 	self.freeSpaceLabel.text = [NSString stringWithFormat:@"Free space: %@", [NSString formatFileSize:self.freeSpace]];
 	self.totalSpaceLabel.text = [NSString stringWithFormat:@"Total space: %@", [NSString formatFileSize:self.totalSpace]];
 	float percentFree = (float) self.freeSpace / (float) self.totalSpace;
@@ -102,7 +139,7 @@
 	if (self.cachingTypeSegmentedControl.selectedSegmentIndex == 0)
 	{
 		self.cacheSpaceLabel1.text = @"Minimum free space:";
-		//self.cacheSpaceLabel2.text = [settings formatFileSize:[[AppDelegate.si.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
+        //self.cacheSpaceLabel2.text = [settings formatFileSize:[[AppDelegate.si.settingsDictionary objectForKey:@"minFreeSpace"] unsignedLongLongValue]];
 		self.cacheSpaceLabel2.text = [NSString formatFileSize:SavedSettings.si.minFreeSpace];
 		//self.cacheSpaceSlider.value = [[AppDelegate.si.settingsDictionary objectForKey:@"minFreeSpace"] floatValue] / totalSpace;
 		self.cacheSpaceSlider.value = (float)SavedSettings.si.minFreeSpace / self.totalSpace;
@@ -176,9 +213,6 @@
 		self.enableNextSongCacheLabel.alpha = 1;
 		self.enableNextSongCacheSwitch.enabled = YES;
 		self.enableNextSongCacheSwitch.alpha = 1;
-		self.enableNextSongPartialCacheLabel.alpha = 1;
-		self.enableNextSongPartialCacheSwitch.enabled = YES;
-		self.enableNextSongPartialCacheSwitch.alpha = 1;
 		self.cachingTypeSegmentedControl.enabled = YES;
 		self.cachingTypeSegmentedControl.alpha = 1;
 		self.cacheSpaceLabel1.alpha = 1;
@@ -189,23 +223,12 @@
 		self.freeSpaceBackground.alpha = .7;
 		self.cacheSpaceSlider.enabled = YES;
 		self.cacheSpaceSlider.alpha = 1;
-		self.cacheSpaceDescLabel.alpha = 1;
-		
-		if (!self.enableNextSongCacheSwitch.on)
-		{
-			self.enableNextSongPartialCacheLabel.alpha = .5;
-			self.enableNextSongPartialCacheSwitch.enabled = NO;
-			self.enableNextSongPartialCacheSwitch.alpha = .5;
-		}
-	}
+    }
 	else
 	{
 		self.enableNextSongCacheLabel.alpha = .5;
 		self.enableNextSongCacheSwitch.enabled = NO;
 		self.enableNextSongCacheSwitch.alpha = .5;
-		self.enableNextSongPartialCacheLabel.alpha = .5;
-		self.enableNextSongPartialCacheSwitch.enabled = NO;
-		self.enableNextSongPartialCacheSwitch.alpha = .5;
 		self.cachingTypeSegmentedControl.enabled = NO;
 		self.cachingTypeSegmentedControl.alpha = .5;
 		self.cacheSpaceLabel1.alpha = .5;
@@ -216,7 +239,6 @@
 		self.freeSpaceBackground.alpha = .3;
 		self.cacheSpaceSlider.enabled = NO;
 		self.cacheSpaceSlider.alpha = .5;
-		self.cacheSpaceDescLabel.alpha = .5;
 	}
 }
 
@@ -271,10 +293,6 @@
 			SavedSettings.si.isScreenSleepEnabled = !self.disableScreenSleepSwitch.on;
 			[UIApplication sharedApplication].idleTimerDisabled = self.disableScreenSleepSwitch.on;
 		}
-		else if (sender == self.enableBasicAuthSwitch)
-		{
-			SavedSettings.si.isBasicAuthEnabled = self.enableBasicAuthSwitch.on;
-		}
         else if (sender == self.disableCellUsageSwitch)
         {
             SavedSettings.si.isDisableUsageOver3G = self.disableCellUsageSwitch.on;
@@ -298,30 +316,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset Album Art Cache" message:@"Are you sure you want to do this? This will clear all saved album art." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
 	alert.tag = 1;
 	[alert show];
-}
-
-- (void)resetFolderCache
-{
-	//[Database.si resetFolderCache];
-	[LoadingScreen hideLoadingScreen];
-	[self popFoldersTab];
-}
-
-- (void)resetAlbumArtCache
-{
-    // TODO: Reimplement
-//	[Database.si resetCoverArtCache];
-//	[AppDelegate.si hideLoadingScreen];
-//	[self popFoldersTab];
-}
-
-- (void)popFoldersTab
-{
-    // TODO: Do in new UI
-//	if (IS_IPAD())
-//		[AppDelegate.si.artistsNavigationController popToRootViewControllerAnimated:NO];
-//	else
-//		[AppDelegate.si.rootViewController.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

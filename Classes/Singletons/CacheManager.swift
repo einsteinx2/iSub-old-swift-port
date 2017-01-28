@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class CacheManager {
+@objc final class CacheManager: NSObject {
     static let si = CacheManager()
     
     let cacheCheckInterval = 60.0
