@@ -22,17 +22,18 @@ final class Server {
     static let testServerId = Int64.max
     static var testServer: Server {
         // Return model directly rather than storing in the database
-        let testServer = Server(serverId: self.testServerId, type: .subsonic, url: "https://isubapp.com:9002", username: "isub-guest")
+        let testServer = Server(serverId: self.testServerId, type: .subsonic, url: "https://isubapp.com:9002", username: "isub-guest", basicAuth: false)
         testServer.password = "1sub1snumb3r0n3"
         return testServer
     }
     
     let repository: ServerRepository
     
-    var serverId: Int64
-    var type: ServerType
+    let serverId: Int64
+    let type: ServerType
     var url: String
     var username: String
+    var basicAuth: Bool
     
     // Passwords stored in the keychain
     var password: String? {
@@ -57,11 +58,12 @@ final class Server {
         }
     }
     
-    init(serverId: Int64, type: ServerType, url: String, username: String, repository: ServerRepository = ServerRepository.si) {
+    init(serverId: Int64, type: ServerType, url: String, username: String, basicAuth: Bool, repository: ServerRepository = ServerRepository.si) {
         self.serverId = serverId
         self.type = type
         self.url = url
         self.username = username
+        self.basicAuth = basicAuth
         self.repository = repository
     }
     
@@ -71,6 +73,7 @@ final class Server {
         self.type = ServerType(rawValue: result.long(forColumnIndex: 1)) ?? .subsonic
         self.url = result.string(forColumnIndex: 2) ?? ""
         self.username = result.string(forColumnIndex: 3) ?? ""
+        self.basicAuth = result.bool(forColumnIndex: 4)
         self.repository = repository as! ServerRepository
     }
     

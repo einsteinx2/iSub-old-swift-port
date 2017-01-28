@@ -22,6 +22,8 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
         return statusLoader?.redirectUrlString
     }
     
+    fileprivate var retriedStatusLoader = false
+    
     @IBOutlet weak var urlField: UITextField!
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -154,24 +156,39 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        LoadingScreen.hide()
-        
         if success {
+            LoadingScreen.hide()
             if let server = server {
                 // Update existing server
                 server.url = statusLoader.url;
                 server.username = statusLoader.username;
                 server.password = statusLoader.password;
+                server.basicAuth = statusLoader.basicAuth;
                 _ = server.replace()
             } else {
                 // Create new server
-                server = ServerRepository.si.server(type: .subsonic, url: statusLoader.url, username: statusLoader.username, password: statusLoader.password)
+                server = ServerRepository.si.server(type: .subsonic, url: statusLoader.url, username: statusLoader.username, password: statusLoader.password, basicAuth: statusLoader.basicAuth)
             }
             
             delegate?.serverEdited(server!)
             self.dismiss(animated: true, completion: nil)
             AppDelegate.si.switchServer(to: server!, redirectUrl: redirectUrl)
         } else {
+            if !retriedStatusLoader, let error = error, error.domain == iSubErrorDomain && error.code == iSubErrorCode.requiresBasicAuth.rawValue {
+                var basicAuth = true
+                if let server = server {
+                    basicAuth = !server.basicAuth
+                }
+                
+                // Try again with basic auth (or without if the server already had it)
+                self.statusLoader = StatusLoader(url: urlField.text!, username: usernameField.text!, password: passwordField.text!, basicAuth: basicAuth)
+                self.statusLoader!.completionHandler = loadingCompletionHandler
+                self.statusLoader!.start()
+                retriedStatusLoader = true
+                return
+            }
+            
+            LoadingScreen.hide()
             var message = ""
             var textField: UITextField?
             if let error = error, error.domain == iSubErrorDomain, error.code == iSubErrorCode.invalidCredentials.rawValue {

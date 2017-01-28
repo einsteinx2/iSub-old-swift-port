@@ -58,10 +58,11 @@ extension URLRequest {
                   password: currentServer.password ?? "",
                   parameters: parameters,
                   fragment: fragment,
-                  byteOffset: byteOffset)
+                  byteOffset: byteOffset,
+                  basicAuth: currentServer.basicAuth)
     }
     
-    init(subsonicAction: SubsonicURLAction, baseUrl: String, username: String, password: String, parameters: [String: Any]? = nil, fragment: String? = nil, byteOffset: Int = 0) {
+    init(subsonicAction: SubsonicURLAction, baseUrl: String, username: String, password: String, parameters: [String: Any]? = nil, fragment: String? = nil, byteOffset: Int = 0, basicAuth: Bool = false) {
         
         var urlString = "\(baseUrl)/rest/\(subsonicAction.rawValue).\(subsonicAction.urlExtension)"
         
@@ -103,11 +104,12 @@ extension URLRequest {
         }
         
         // Optional HTTP Basic Auth
-        if SavedSettings.si.isBasicAuthEnabled {
+        if basicAuth {
             let authString = "\(username):\(encodedParameter(password))"
-            let authData = authString.data(using: .ascii)
-            let authValue = "Basic \(authData?.base64EncodedString())"
-            self.setValue(authValue, forHTTPHeaderField: "Authorization")
+            if let authData = authString.data(using: .ascii) {
+                let authValue = "Basic \(authData.base64EncodedString())"
+                self.setValue(authValue, forHTTPHeaderField: "Authorization")
+            }
         }        
     }
 }

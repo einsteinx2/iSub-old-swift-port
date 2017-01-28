@@ -148,6 +148,9 @@ final class Database {
             if !db.tableExists("servers") {
                 try? db.executeUpdate("CREATE TABLE servers (serverId INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER, url TEXT, username TEXT)")
             }
+            if !db.columnExists("basicAuth", inTableWithName: "servers") {
+                try? db.executeUpdate("ALTER TABLE servers ADD COLUMN basicAuth INTEGER")
+            }
         }
         
         // Create the default playlist tables

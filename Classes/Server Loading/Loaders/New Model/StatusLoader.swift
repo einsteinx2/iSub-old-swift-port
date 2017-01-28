@@ -16,6 +16,7 @@ final class StatusLoader: ApiLoader {
     fileprivate(set) var url: String
     fileprivate(set) var username: String
     fileprivate(set) var password: String
+    fileprivate(set) var basicAuth: Bool
 
     fileprivate(set) var versionString: String?
     fileprivate(set) var majorVersion: Int?
@@ -23,19 +24,20 @@ final class StatusLoader: ApiLoader {
     
     convenience init(server: Server) {
         let password = server.password ?? ""
-        self.init(url: server.url, username: server.username, password: password)
+        self.init(url: server.url, username: server.username, password: password, basicAuth: server.basicAuth)
         self.server = server
     }
     
-    init(url: String, username: String, password: String) {
+    init(url: String, username: String, password: String, basicAuth: Bool = false) {
         self.url = url
         self.username = username
         self.password = password
+        self.basicAuth = basicAuth
         super.init()
     }
     
     override func createRequest() -> URLRequest {
-        return URLRequest(subsonicAction: .ping, baseUrl: url, username: username, password: password)    
+        return URLRequest(subsonicAction: .ping, baseUrl: url, username: username, password: password, basicAuth: basicAuth)
     }
     
     override func processResponse(root: RXMLElement) -> Bool {

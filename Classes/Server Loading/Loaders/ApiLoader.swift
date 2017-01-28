@@ -175,6 +175,13 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
                 }
             }
         } else {
+            if let response = task.response as? HTTPURLResponse, response.statusCode == 401 {
+                DispatchQueue.main.async {
+                    self.failed(error: NSError(iSubCode: .requiresBasicAuth))
+                }
+                return
+            }
+            
             guard let root = RXMLElement(fromXMLData: receivedData), root.isValid else {
                 DispatchQueue.main.async {
                     self.failed(error: NSError(iSubCode: .notXML))

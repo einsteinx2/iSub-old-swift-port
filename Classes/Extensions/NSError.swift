@@ -17,6 +17,7 @@ enum iSubErrorCode: Int {
     case invalidCredentials = 4
     case couldNotReachServer = 5
     case subsonicTrialExpired = 6
+    case requiresBasicAuth = 7
     
     var description: String {
         switch self {
@@ -26,6 +27,7 @@ enum iSubErrorCode: Int {
         case .invalidCredentials: return "Incorrect username or password"
         case .couldNotReachServer: return "Could not reach the server"
         case .subsonicTrialExpired: return "Subsonic API Trial Expired"
+        case .requiresBasicAuth: return "Requires HTTP Basic Authentication"
         }
     }
 }

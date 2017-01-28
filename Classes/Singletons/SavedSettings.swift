@@ -18,8 +18,6 @@ final class SavedSettings: NSObject {
         static let currentServerId              = "currentServerId"
         static let currentServer                = "currentServer"
         static let redirectUrlString            = "redirectUrlString"
-        // TODO: isBasicAuthEnabled should be a server specific setting stored in servers table
-        static let isBasicAuthEnabled           = "isBasicAuthEnabled"
         
         static let maxBitRateWifi               = "maxBitrateWifiSetting"
         static let maxBitRate3G                 = "maxBitrate3GSetting"
@@ -68,7 +66,6 @@ final class SavedSettings: NSObject {
              Keys.isAutoDeleteCacheEnabled: true,
              Keys.autoDeleteCacheType: 0,
              Keys.isScreenSleepEnabled: true,
-             Keys.isBasicAuthEnabled: false,
              Keys.maxVideoBitRateWifi: 5,
              Keys.maxVideoBitRate3G: 5,
              Keys.currentServerId: Server.testServerId]
@@ -204,11 +201,6 @@ final class SavedSettings: NSObject {
     var isScreenSleepEnabled: Bool {
         get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isScreenSleepEnabled) }}
         set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isScreenSleepEnabled) }}
-    }
-    
-    var isBasicAuthEnabled: Bool {
-        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isBasicAuthEnabled) }}
-        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isBasicAuthEnabled) }}
     }
     
     var quickSkipNumberOfSeconds: Int {
