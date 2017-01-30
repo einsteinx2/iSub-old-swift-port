@@ -226,7 +226,7 @@ import Reachability
         hockeyManager.crashManager.crashManagerStatus = .autoSend;
         
         // HockyApp Kits
-        #if (BetaBuild && AdHocBuild)
+        #if (BetaTarget && AdHocBuild)
             hockeyManager.configure(withIdentifier: "ada15ac4ffe3befbc66f0a00ef3d96af", delegate: self)
             hockeyManager.start()
         #elseif ReleaseBuild
