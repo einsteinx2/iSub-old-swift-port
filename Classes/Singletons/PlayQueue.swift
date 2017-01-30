@@ -82,7 +82,14 @@ final class PlayQueue {
     // TODO: Make fileprivate(set)
     var currentIndex = -1 {
         didSet {
+            preheadArt()
             updateLockScreenInfo()
+            
+            // Prefetch the art
+            if let coverArtId = currentSong?.coverArtId {
+                CachedImage.preheat(coverArtId: coverArtId, size: .player)
+                CachedImage.preheat(coverArtId: coverArtId, size: .cell)
+            }
             
             if currentIndex != oldValue {
                 notifyPlayQueueIndexChanged()
@@ -319,6 +326,18 @@ final class PlayQueue {
     
     // MARK: - Lock Screen -
     
+    fileprivate func preheadArt() {
+        if let coverArtId = currentSong?.coverArtId {
+            CachedImage.preheat(coverArtId: coverArtId, size: .player)
+            CachedImage.preheat(coverArtId: coverArtId, size: .cell)
+        }
+        
+        if let coverArtId = nextSong?.coverArtId {
+            CachedImage.preheat(coverArtId: coverArtId, size: .player)
+            CachedImage.preheat(coverArtId: coverArtId, size: .cell)
+        }
+    }
+    
     fileprivate var defaultItemArtwork: MPMediaItemArtwork = {
         MPMediaItemArtwork(image: CachedImage.default(forSize: .player))
     }()
@@ -353,10 +372,10 @@ final class PlayQueue {
             MPNowPlayingInfoCenter.default().nowPlayingInfo = trackInfo
         }
         
-        // Run this every 30 seconds to update the progress and keep it in sync
+        // Run this every 15 seconds to update the progress and keep it in sync
         if let lockScreenUpdateTimer = self.lockScreenUpdateTimer {
             lockScreenUpdateTimer.invalidate()
         }
-        lockScreenUpdateTimer = Timer(timeInterval: 30.0, target: self, selector: #selector(updateLockScreenInfo), userInfo: nil, repeats: false)
+        lockScreenUpdateTimer = Timer(timeInterval: 15.0, target: self, selector: #selector(updateLockScreenInfo), userInfo: nil, repeats: false)
     }
 }

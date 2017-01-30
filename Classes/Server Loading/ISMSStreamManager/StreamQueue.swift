@@ -18,33 +18,22 @@ final class StreamQueue: StreamHandlerDelegate {
     var streamHandler: StreamHandler?
     
     func start() {
-        //print("Stream manager starting")
         guard let currentSong = PlayQueue.si.currentSong, song != currentSong, !SavedSettings.si.isOfflineMode else {
-            //print("Stream manager song: \(song) currentSong: \(PlayQueue.si.currentSong) isOfflineMode: \(SavedSettings.si.isOfflineMode)")
             return
         }
         
         stop()
         
         if currentSong.basicType == .audio && !currentSong.isFullyCached && CacheQueue.si.currentSong != currentSong {
-            //print("Stream manager using current song")
             song = currentSong
         } else if let nextSong = PlayQueue.si.nextSong, nextSong.basicType == .audio && !nextSong.isFullyCached &&  CacheQueue.si.currentSong != nextSong {
-            //print("Stream manager using next song")
             song = nextSong
         } else {
-            //print("Stream manager no song to stream so stopping")
             return
         }
         
         isDownloading = true
-        
-        // Prefetch the art
-        if let coverArtId = song!.coverArtId {
-            CachedImage.preheat(coverArtId: coverArtId, size: .player)
-            CachedImage.preheat(coverArtId: coverArtId, size: .cell)
-        }
-        
+
         // Create the stream handler
         streamHandler = StreamHandler(song: song!, isTemp: false, delegate: self)
         streamHandler!.allowReconnects = true

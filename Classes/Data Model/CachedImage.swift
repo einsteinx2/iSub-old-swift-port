@@ -39,9 +39,12 @@ struct CachedImage {
         if size != .original {
             parameters["size"] = "\(size.pixelSize)"
         }
-        let fragment = "id_\(coverArtId)_size_\(size.name)"
+        let fragment = "s_\(SavedSettings.si.currentServerId)_id_\(coverArtId)_size_\(size.name)"
         let urlRequest = URLRequest(subsonicAction: .getCoverArt, parameters: parameters, fragment: fragment)
-        return Request(urlRequest: urlRequest)
+        var request = Request(urlRequest: urlRequest)
+        request.cacheKey = fragment
+        request.loadKey = fragment
+        return request
     }
     
     static func preheat(coverArtId: String, size: CachedImageSize) {

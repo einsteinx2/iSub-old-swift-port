@@ -4,31 +4,33 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "04101981B66E318109934C9516F88D824BB96459" : 0,
-    "4862FA1173344F6A396F21D7284E96917CD5DAD4" : 0,
-    "EDDBE35C55B96EE65EED71066DE634B275D9D12C" : 0,
-    "8EDE57C2999432B02AF3774C49AC60A079783175" : 0,
     "0CA27A43414FB33F98B16BE18013A983CABB105E" : 0,
-    "C89CD2C0054CCA944685E223F174A6C59B00D5B5" : 0,
-    "A7973AE81FD825536D76937743B598D9C1BC9353" : 0,
-    "D33C95C0A843CCBB42C08B5806EBF028432E18CD" : 0,
     "71CFC0DE1DEFC877B0C5B9F98B971EBA2921D608" : 0,
+    "C89CD2C0054CCA944685E223F174A6C59B00D5B5" : 0,
     "940F78D5F98A404F0CE03A452F2871238905218C" : 0,
-    "AA3724F8AD565DB2089C5757B6B76FDB09E52E51" : 0
+    "04101981B66E318109934C9516F88D824BB96459" : 0,
+    "AA3724F8AD565DB2089C5757B6B76FDB09E52E51" : 0,
+    "8EDE57C2999432B02AF3774C49AC60A079783175" : 0,
+    "17FB51EC7B87DC25DD21E28FDFD877B479CFFAC1" : 9223372036854775807,
+    "EDDBE35C55B96EE65EED71066DE634B275D9D12C" : 0,
+    "D33C95C0A843CCBB42C08B5806EBF028432E18CD" : 0,
+    "A7973AE81FD825536D76937743B598D9C1BC9353" : 0,
+    "4862FA1173344F6A396F21D7284E96917CD5DAD4" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "ABCCCEF7-502F-4707-998A-84A4A6E7259A",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "04101981B66E318109934C9516F88D824BB96459" : "iSubFrameworks\/libSub\/Frameworks\/FMDB",
-    "4862FA1173344F6A396F21D7284E96917CD5DAD4" : "iSub\/Frameworks\/libSub\/Frameworks\/RaptureXML",
-    "EDDBE35C55B96EE65EED71066DE634B275D9D12C" : "iSub\/Frameworks\/libSub\/",
-    "8EDE57C2999432B02AF3774C49AC60A079783175" : "iSubFrameworks\/libSub\/Frameworks\/EX2Kit",
     "0CA27A43414FB33F98B16BE18013A983CABB105E" : "iSubFrameworks\/HockeySDK",
-    "C89CD2C0054CCA944685E223F174A6C59B00D5B5" : "iSub\/",
-    "A7973AE81FD825536D76937743B598D9C1BC9353" : "iSubFrameworks\/libSub\/Frameworks\/ZipKit",
-    "D33C95C0A843CCBB42C08B5806EBF028432E18CD" : "iSubFrameworks\/libSub\/Frameworks\/TBXML",
     "71CFC0DE1DEFC877B0C5B9F98B971EBA2921D608" : "iSubFrameworks\/libSub\/Frameworks\/CocoaHTTPServer",
+    "C89CD2C0054CCA944685E223F174A6C59B00D5B5" : "iSub\/",
     "940F78D5F98A404F0CE03A452F2871238905218C" : "iSub\/Frameworks\/libSub\/Frameworks\/ZipKit\/",
-    "AA3724F8AD565DB2089C5757B6B76FDB09E52E51" : "iSubFrameworks\/libSub\/Frameworks\/SBJson"
+    "04101981B66E318109934C9516F88D824BB96459" : "iSubFrameworks\/libSub\/Frameworks\/FMDB",
+    "AA3724F8AD565DB2089C5757B6B76FDB09E52E51" : "iSubFrameworks\/libSub\/Frameworks\/SBJson",
+    "8EDE57C2999432B02AF3774C49AC60A079783175" : "iSubFrameworks\/libSub\/Frameworks\/EX2Kit",
+    "17FB51EC7B87DC25DD21E28FDFD877B479CFFAC1" : "Kingfisher\/",
+    "EDDBE35C55B96EE65EED71066DE634B275D9D12C" : "iSub\/Frameworks\/libSub\/",
+    "D33C95C0A843CCBB42C08B5806EBF028432E18CD" : "iSubFrameworks\/libSub\/Frameworks\/TBXML",
+    "A7973AE81FD825536D76937743B598D9C1BC9353" : "iSubFrameworks\/libSub\/Frameworks\/ZipKit",
+    "4862FA1173344F6A396F21D7284E96917CD5DAD4" : "iSub\/Frameworks\/libSub\/Frameworks\/RaptureXML"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "iSub",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -43,6 +45,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/github.com\/bitstadium\/HockeySDK-iOS.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0CA27A43414FB33F98B16BE18013A983CABB105E"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:einsteinx2\/Kingfisher.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "17FB51EC7B87DC25DD21E28FDFD877B479CFFAC1"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:einsteinx2\/RaptureXML.git",

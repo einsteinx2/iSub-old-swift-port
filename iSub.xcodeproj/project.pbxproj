@@ -305,6 +305,8 @@
 		531B346B1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
 		531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
 		532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D59A6D1E1DC9CE00071ABD /* Reachability.framework */; };
+		53368DD21E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
+		53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
 		533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
 		533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
 		533B69D61E206031001FF3BF /* CollectionStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D01E206031001FF3BF /* CollectionStackViewController.swift */; };
@@ -584,7 +586,6 @@
 		538725F417CC19CA00CE92F1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538725F117CC19B200CE92F1 /* CoreTelephony.framework */; };
 		5388A42C1198AD840049BA9E /* selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42A1198AD840049BA9E /* selected.png */; };
 		5388A42D1198AD840049BA9E /* unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5388A42B1198AD840049BA9E /* unselected.png */; };
-		538B4D101E1DA68B00847152 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538B4D0F1E1DA68B00847152 /* Nuke.framework */; };
 		538C01B012C3DCC40061545B /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AE12C3DCC40061545B /* back.png */; };
 		538C01B112C3DCC40061545B /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 538C01AF12C3DCC40061545B /* back@2x.png */; };
 		539133511E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */; };
@@ -934,6 +935,7 @@
 		531B34641E24D3D500811187 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
 		531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
+		53368DD11E3F169500B7A199 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackCell.swift; sourceTree = "<group>"; };
 		533B69D01E206031001FF3BF /* CollectionStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionStackViewController.swift; sourceTree = "<group>"; };
 		533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackFlowLayout.swift; sourceTree = "<group>"; };
@@ -1087,7 +1089,6 @@
 		538725F117CC19B200CE92F1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		5388A42A1198AD840049BA9E /* selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected.png; path = Images/Other/selected.png; sourceTree = "<group>"; };
 		5388A42B1198AD840049BA9E /* unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unselected.png; path = Images/Other/unselected.png; sourceTree = "<group>"; };
-		538B4D0F1E1DA68B00847152 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
 		538C01AF12C3DCC40061545B /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Images/Other/back@2x.png"; sourceTree = "<group>"; };
 		539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubsonicURLRequest.swift; sourceTree = "<group>"; };
@@ -1219,7 +1220,6 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				5358E1A91E0B789B0024A0D4 /* libbassdsd.a in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
-				538B4D101E1DA68B00847152 /* Nuke.framework in Frameworks */,
 				53F675D8113B092C00822059 /* MediaPlayer.framework in Frameworks */,
 				5358E1B81E0B789B0024A0D4 /* libbassopus.a in Frameworks */,
 				5358E1AE1E0B789B0024A0D4 /* libbassflac.a in Frameworks */,
@@ -1234,6 +1234,7 @@
 				5354914B11B03FC900928E0F /* MobileCoreServices.framework in Frameworks */,
 				5358E19F1E0B789B0024A0D4 /* libbass_mpc.a in Frameworks */,
 				53D59A6E1E1DC9CE00071ABD /* Reachability.framework in Frameworks */,
+				53368DD21E3F169500B7A199 /* Nuke.framework in Frameworks */,
 				5358E1951E0B789B0024A0D4 /* libbass_ape.a in Frameworks */,
 				53F7A128131B7F3B002C829D /* Security.framework in Frameworks */,
 			);
@@ -1344,6 +1345,7 @@
 				53BC2851139AF0DD00A825F1 /* UIKit.framework in Frameworks */,
 				53BC2852139AF0DD00A825F1 /* CoreGraphics.framework in Frameworks */,
 				5358E1AB1E0B789B0024A0D4 /* libbassdsd.a in Frameworks */,
+				53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */,
 				53BC2853139AF0DD00A825F1 /* MediaPlayer.framework in Frameworks */,
 				53BC2854139AF0DD00A825F1 /* CFNetwork.framework in Frameworks */,
 				5358E1BA1E0B789B0024A0D4 /* libbassopus.a in Frameworks */,
@@ -1938,10 +1940,10 @@
 		5358E1CC1E0B78F80024A0D4 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
+				53368DD11E3F169500B7A199 /* Nuke.framework */,
 				5358E1CD1E0B79210024A0D4 /* HockeySDK.framework */,
 				5358E1CE1E0B79210024A0D4 /* MBProgressHUD.framework */,
 				5358E1D01E0B79210024A0D4 /* SnapKit.framework */,
-				538B4D0F1E1DA68B00847152 /* Nuke.framework */,
 				53D59A6D1E1DC9CE00071ABD /* Reachability.framework */,
 				5308D92E1E243D270026E6BD /* Device.framework */,
 			);
@@ -2591,10 +2593,10 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/HockeySDK.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/MBProgressHUD.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Nuke.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Device.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Nuke.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (

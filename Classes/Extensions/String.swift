@@ -69,31 +69,20 @@ public extension String {
     // a problem because it won't handle, for example, a password containing an & character. So we need to remove
     // those characters from the character set. Then the stringByAddingPercentEncodingWithAllowedCharacters method
     // will work as expected.
-    static fileprivate var queryCharSet: CharacterSet = CharacterSet.urlQueryAllowed
-    static fileprivate var queryCharSetToken: Int = 0
     static public var URLQueryEncodedValueAllowedCharacters: CharacterSet = {
-        let mutableCharSet = (queryCharSet as NSCharacterSet).mutableCopy() as! NSMutableCharacterSet
-        mutableCharSet.removeCharacters(in: "?&=@+/'")
-        queryCharSet = mutableCharSet as CharacterSet
-        return queryCharSet
+        var charSet = CharacterSet.urlQueryAllowed
+        charSet.remove(charactersIn: "?&=@+/'")
+        return charSet
     }()
     
     // Used to encode individual query parameters
     var URLQueryParameterEncodedValue: String {
-        if let encodedValue = self.addingPercentEncoding(withAllowedCharacters: String.URLQueryEncodedValueAllowedCharacters) {
-            return encodedValue
-        } else {
-            return self
-        }
+        return self.addingPercentEncoding(withAllowedCharacters: String.URLQueryEncodedValueAllowedCharacters) ?? self
     }
     
     // Used to encode entire query strings
     var URLQueryStringEncodedValue: String {
-        if let encodedValue = self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
-            return encodedValue
-        } else {
-            return self
-        }
+        return self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? self
     }
     
     var clean: String {
