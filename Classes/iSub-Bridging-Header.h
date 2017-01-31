@@ -6,6 +6,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <CommonCrypto/CommonCrypto.h>
 #import <HockeySDK/HockeySDK.h>
+#import <sys/stat.h>
 #import "EX2Kit.h"
 #import "ZipKit.h"
 #import "CocoaLumberjack.h"

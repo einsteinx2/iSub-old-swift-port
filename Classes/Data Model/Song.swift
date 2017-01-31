@@ -84,8 +84,13 @@ final class Song {
     
     var localFileSize: Int64 {
         if fileExists {
-            let attributes = try? FileManager.default.attributesOfItem(atPath: currentPath)
-            return attributes?[.size] as? Int64 ?? 0
+            // Using C instead of FileManager because of a weird crash on iOS 5 and up devices in the audio engine
+            // Asked question here: http://stackoverflow.com/questions/10289536/sigsegv-segv-accerr-crash-in-nsfileattributes-dealloc-when-autoreleasepool-is-dr
+            // Still waiting on Apple to fix their bug, so this is my (now 5 years old) "temporary" solution
+            
+            var fileInfo = stat()
+            stat(currentPath, &fileInfo)
+            return fileInfo.st_size
         }
         return 0
     }
