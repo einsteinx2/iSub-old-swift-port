@@ -513,4 +513,21 @@
 //DLog(@"file size: %llu   formatted: %@", [textField.text fileSizeFromFormat], [NSString formatFileSize:[textField.text fileSizeFromFormat]]);
 }
 
+// Fix for panel sliding while using sliders
+- (IBAction)touchDown:(id)sender
+{
+    AppDelegate.si.sidePanelController.allowLeftSwipe = NO;
+    AppDelegate.si.sidePanelController.allowRightSwipe = NO;
+}
+- (IBAction)touchUpInside:(id)sender
+{
+    AppDelegate.si.sidePanelController.allowLeftSwipe = YES;
+    AppDelegate.si.sidePanelController.allowRightSwipe = YES;
+}
+- (IBAction)touchUpOutside:(id)sender
+{
+    AppDelegate.si.sidePanelController.allowLeftSwipe = YES;
+    AppDelegate.si.sidePanelController.allowRightSwipe = YES;
+}
+
 @end
