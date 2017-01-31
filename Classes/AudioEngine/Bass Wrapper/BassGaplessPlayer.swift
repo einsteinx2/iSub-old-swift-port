@@ -551,14 +551,18 @@ final class BassGaplessPlayer {
         let currentFilePosition = BASS_StreamGetFilePosition(bassStream.stream, UInt32(BASS_FILEPOS_CURRENT))
         let filePosition = currentFilePosition - startFilePosition
         let decodedPosition = BASS_ChannelGetPosition(bassStream.stream, UInt32(BASS_POS_BYTE|BASS_POS_DECODE)) // decoded PCM position
-        let bitRateDouble = Double(filePosition) * 8.0 / Double(BASS_ChannelBytes2Seconds(bassStream.stream, decodedPosition))
-        
-        guard bitRateDouble != Double.infinity && bitRateDouble != Double.nan else {
+        let decodedSeconds = BASS_ChannelBytes2Seconds(bassStream.stream, decodedPosition)
+        guard decodedPosition > 0 && decodedSeconds > 0 else {
             return bassStream.song.estimatedBitRate
         }
         
-        var bitRate = Int(bitRateDouble / 1000.0)
-        bitRate = bitRate > 1000000 ? -1 : bitRate
+        let bitRateFloat = (Float(filePosition) * 8.0) / Float(decodedSeconds)
+        guard bitRateFloat < Float(Int.max) && bitRateFloat > Float(Int.min) else {
+            return bassStream.song.estimatedBitRate
+        }
+        
+        var bitRate = Int(bitRateFloat / 1000.0)
+        bitRate = bitRate > 1000000 ? 1 : bitRate
         
         var i = BASS_CHANNELINFO()
         BASS_ChannelGetInfo(bassStream.stream, &i)
