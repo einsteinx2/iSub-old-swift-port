@@ -225,14 +225,27 @@ import Reachability
         let hockeyManager = BITHockeyManager.shared()
         hockeyManager.crashManager.crashManagerStatus = .autoSend;
         
-        // HockyApp Kits
-        #if (BetaTarget && AdHocBuild)
-            hockeyManager.configure(withIdentifier: "ada15ac4ffe3befbc66f0a00ef3d96af", delegate: self)
-            hockeyManager.start()
-        #elseif ReleaseBuild
-            hockeyManager.configure(withIdentifier: "7c9cb46dad4165c9d3919390b651f6bb", delegate: self)
-            hockeyManager.start()
+        #if BetaTarget
+            NSLog("BetaTarget")
         #endif
+        #if AdHocBuild
+            NSLog("AdHocBuild")
+        #endif
+        #if (BetaTarget && AdHocBuild)
+            NSLog("(BetaTarget && AdHocBuild)")
+        #endif
+        
+//        // HockyApp Kits
+//        #if (BetaTarget && AdHocBuild)
+//            hockeyManager.configure(withIdentifier: "ada15ac4ffe3befbc66f0a00ef3d96af", delegate: self)
+//            hockeyManager.start()
+//        #elseif ReleaseBuild
+//            hockeyManager.configure(withIdentifier: "7c9cb46dad4165c9d3919390b651f6bb", delegate: self)
+//            hockeyManager.start()
+//        #endif
+        
+        hockeyManager.configure(withIdentifier: "ada15ac4ffe3befbc66f0a00ef3d96af", delegate: self)
+        hockeyManager.start()
     }
     
     func applicationLog(for crashManager: BITCrashManager!) -> String! {
