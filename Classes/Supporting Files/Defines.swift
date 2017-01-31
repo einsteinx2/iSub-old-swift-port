@@ -53,3 +53,4 @@ let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .use
 let cachesPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
 let songCachePath = documentsPath + "/songCache"
 let tempCachePath = cachesPath + "/tempCache"
+let imageCachePath = documentsPath + "/imageCache"

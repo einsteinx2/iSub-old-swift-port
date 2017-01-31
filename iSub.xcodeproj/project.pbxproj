@@ -307,6 +307,8 @@
 		532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D59A6D1E1DC9CE00071ABD /* Reachability.framework */; };
 		53368DD21E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
 		53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
+		53368DD51E3F9BE000B7A199 /* AwesomeCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */; };
+		53368DD61E3F9BE000B7A199 /* AwesomeCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */; };
 		533B69D41E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
 		533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
 		533B69D61E206031001FF3BF /* CollectionStackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D01E206031001FF3BF /* CollectionStackViewController.swift */; };
@@ -936,6 +938,7 @@
 		531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		53368DD11E3F169500B7A199 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
+		53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwesomeCache.framework; path = Carthage/Build/iOS/AwesomeCache.framework; sourceTree = "<group>"; };
 		533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackCell.swift; sourceTree = "<group>"; };
 		533B69D01E206031001FF3BF /* CollectionStackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionStackViewController.swift; sourceTree = "<group>"; };
 		533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackFlowLayout.swift; sourceTree = "<group>"; };
@@ -1229,6 +1232,7 @@
 				5358E1D21E0B79210024A0D4 /* HockeySDK.framework in Frameworks */,
 				5358E1B31E0B789B0024A0D4 /* libbassmix.a in Frameworks */,
 				537DE2D9113F008C00875852 /* CoreFoundation.framework in Frameworks */,
+				53368DD51E3F9BE000B7A199 /* AwesomeCache.framework in Frameworks */,
 				536D620B1144495400DFCE56 /* SystemConfiguration.framework in Frameworks */,
 				53544D8A1187DED400B63DB9 /* CoreLocation.framework in Frameworks */,
 				5354914B11B03FC900928E0F /* MobileCoreServices.framework in Frameworks */,
@@ -1347,6 +1351,7 @@
 				5358E1AB1E0B789B0024A0D4 /* libbassdsd.a in Frameworks */,
 				53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */,
 				53BC2853139AF0DD00A825F1 /* MediaPlayer.framework in Frameworks */,
+				53368DD61E3F9BE000B7A199 /* AwesomeCache.framework in Frameworks */,
 				53BC2854139AF0DD00A825F1 /* CFNetwork.framework in Frameworks */,
 				5358E1BA1E0B789B0024A0D4 /* libbassopus.a in Frameworks */,
 				5358E1B01E0B789B0024A0D4 /* libbassflac.a in Frameworks */,
@@ -1941,6 +1946,7 @@
 			isa = PBXGroup;
 			children = (
 				53368DD11E3F169500B7A199 /* Nuke.framework */,
+				53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */,
 				5358E1CD1E0B79210024A0D4 /* HockeySDK.framework */,
 				5358E1CE1E0B79210024A0D4 /* MBProgressHUD.framework */,
 				5358E1D01E0B79210024A0D4 /* SnapKit.framework */,
@@ -2597,6 +2603,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Device.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Nuke.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/AwesomeCache.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (

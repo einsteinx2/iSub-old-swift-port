@@ -64,4 +64,12 @@ struct CachedImage {
         case .player, .original: return UIImage(named: "default-album-art")!
         }
     }
+    
+//    static fileprivate func key(forCoverArtId coverArtId: String, serverId: Int, size: CachedImageSize) -> String {
+//        let fragment = "s_\(serverId)_id_\(coverArtId)_size_\(size.name)"
+//    }
+//    
+//    static fileprivate func imageFromDiskCache(coverArtId: String) -> UIImage {
+//        return CacheManager.si.imageCache?.object(forKey: coverArtId)
+//    }
 }

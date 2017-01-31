@@ -1,0 +1,10 @@
+framework module AwesomeCache {
+  umbrella header "AwesomeCache.h"
+
+  export *
+  module * { export * }
+}
+
+module AwesomeCache.Swift {
+    header "AwesomeCache-Swift.h"
+}

@@ -7,11 +7,14 @@
 //
 
 import Foundation
+import AwesomeCache
 
 @objc final class CacheManager: NSObject {
     static let si = CacheManager()
     
     let cacheCheckInterval = 60.0
+    
+    var imageCache: Cache<UIImage>?
     
     var totalSpace: Int64 {
         let attributes = try? FileManager.default.attributesOfFileSystem(forPath: songCachePath)
@@ -33,9 +36,15 @@ import Foundation
             if oldValue != backupSongCache {
                 let fileManager = FileManager.default
                 do {
-                    let fileNames = try fileManager.contentsOfDirectory(atPath: songCachePath)
-                    for fileName in fileNames {
+                    let songFileNames = try fileManager.contentsOfDirectory(atPath: songCachePath)
+                    for fileName in songFileNames {
                         var fileUrl = URL(fileURLWithPath: songCachePath + "/" + fileName)
+                        fileUrl.isExcludedFromBackup = !backupSongCache
+                    }
+                    
+                    let imageFileNames = try fileManager.contentsOfDirectory(atPath: imageCachePath)
+                    for fileName in imageFileNames {
+                        var fileUrl = URL(fileURLWithPath: imageCachePath + "/" + fileName)
                         fileUrl.isExcludedFromBackup = !backupSongCache
                     }
                 } catch {
@@ -43,6 +52,15 @@ import Foundation
                 }
             }
         }
+    }
+    
+    override init() {
+        do {
+            self.imageCache = try Cache<UIImage>(name: "imageCache", directory: URL(fileURLWithPath:imageCachePath))
+        } catch {
+            printError(error)
+        }
+        super.init()
     }
     
     func setup() {
