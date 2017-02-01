@@ -1106,7 +1106,8 @@ func seekProc(offset: UInt64, userInfo: UnsafeMutableRawPointer?) -> ObjCBool {
         let userInfo: BassStream = bridge(ptr: userInfo)
         
         // First check the file size to make sure we don't try and skip past the end of the file
-        if userInfo.song.localFileSize >= Int64(offset) {
+        let localFileSize = userInfo.song.localFileSize
+        if localFileSize >= 0 && UInt64(localFileSize) >= offset {
             // File size is valid, so assume success unless the seek operation throws an exception
             success = true
             do {
