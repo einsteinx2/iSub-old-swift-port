@@ -595,6 +595,8 @@
 		539133541E29D53000B8A99E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133531E29D53000B8A99E /* Data.swift */; };
 		539133551E29D53000B8A99E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133531E29D53000B8A99E /* Data.swift */; };
 		539799791163084200F41D8B /* loading-screen-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 539799781163084200F41D8B /* loading-screen-image.png */; };
+		539D2BB81E5E0B1A0059D233 /* SafeNumberCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */; };
+		539D2BB91E5E0B1A0059D233 /* SafeNumberCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */; };
 		53A232351E39944C005214DD /* BassPluginLoad.c in Sources */ = {isa = PBXBuildFile; fileRef = 53A232331E39944C005214DD /* BassPluginLoad.c */; };
 		53A232361E39944C005214DD /* BassPluginLoad.c in Sources */ = {isa = PBXBuildFile; fileRef = 53A232331E39944C005214DD /* BassPluginLoad.c */; };
 		53A232381E39CACA005214DD /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A232371E39CACA005214DD /* CGRect.swift */; };
@@ -1097,6 +1099,7 @@
 		539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubsonicURLRequest.swift; sourceTree = "<group>"; };
 		539133531E29D53000B8A99E /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		539799781163084200F41D8B /* loading-screen-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image.png"; path = "Images/Other/loading-screen-image.png"; sourceTree = "<group>"; };
+		539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeNumberCasting.swift; sourceTree = "<group>"; };
 		53A232331E39944C005214DD /* BassPluginLoad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BassPluginLoad.c; sourceTree = "<group>"; };
 		53A232341E39944C005214DD /* BassPluginLoad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassPluginLoad.h; sourceTree = "<group>"; };
 		53A232371E39CACA005214DD /* CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
@@ -1601,6 +1604,7 @@
 				5355BFAF1E2DB59D00C6D27F /* NSError.swift */,
 				537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */,
 				53E042881E36C49C0009DE79 /* DispatchQueue.swift */,
+				539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2704,6 +2708,7 @@
 				531B33DA1E24CFAF00811187 /* URL.swift in Sources */,
 				53A232381E39CACA005214DD /* CGRect.swift in Sources */,
 				53CFBB7E1E2B3038005895F4 /* Genre.swift in Sources */,
+				539D2BB81E5E0B1A0059D233 /* SafeNumberCasting.swift in Sources */,
 				53114E0D1E3B23F100D8589B /* main.swift in Sources */,
 				531B34001E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D831E2C5A6000839B7A /* ContentType.swift in Sources */,
@@ -2949,6 +2954,7 @@
 				531B33DB1E24CFAF00811187 /* URL.swift in Sources */,
 				53A232391E39CACA005214DD /* CGRect.swift in Sources */,
 				53CFBB7F1E2B3038005895F4 /* Genre.swift in Sources */,
+				539D2BB91E5E0B1A0059D233 /* SafeNumberCasting.swift in Sources */,
 				53114E0E1E3B23F100D8589B /* main.swift in Sources */,
 				531B34011E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */,

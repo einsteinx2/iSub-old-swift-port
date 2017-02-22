@@ -102,19 +102,6 @@ final class BassGaplessPlayer {
         }
     }
     
-    func startAudioSession() {
-        guard isAudioSessionActive else {
-            return
-        }
-        
-        do {
-            try AVAudioSession.sharedInstance().setActive(false)
-            isAudioSessionActive = false
-        } catch {
-            printError(error)
-        }
-    }
-    
     // MARK: - Output Stream -
     
     func bassGetOutputData(buffer: UnsafeMutableRawPointer?, length: UInt32) -> UInt32 {
@@ -230,10 +217,10 @@ final class BassGaplessPlayer {
         }
     }
     
-    func bytesToBuffer(forKiloBitRate rate: Int, speedInBytesPerSec: Int) -> Int {
+    func bytesToBuffer(forKiloBitRate rate: Int, speedInBytesPerSec: Int) -> Int64 {
         // If start date is nil somehow, or total bytes transferred is 0 somehow, return the default of 10 seconds worth of audio
         if rate == 0 || speedInBytesPerSec == 0 {
-            return Int(BytesForSecondsAtBitRate(seconds: 10, bitRate: rate))
+            return BytesForSecondsAtBitRate(seconds: 10, bitRate: rate)
         }
         
         // Get the download speed in KB/sec
@@ -266,7 +253,7 @@ final class BassGaplessPlayer {
         
         // Convert from seconds to bytes
         let numberOfBytesToBuffer = numberOfSecondsToBuffer * bytesForOneSecond
-        return Int(numberOfBytesToBuffer)
+        return Int64(numberOfBytesToBuffer)
     }
 
     func stopFillingRingBuffer() {
@@ -882,19 +869,26 @@ final class BassGaplessPlayer {
         
         BASS_SetDevice(deviceNumber)
         
-        var pcmBytePosition = Int64(BASS_Mixer_ChannelGetPosition(currentBassStream.stream, DWORD(BASS_POS_BYTE)))
+        var pcmBytePosition = Double(BASS_Mixer_ChannelGetPosition(currentBassStream.stream, DWORD(BASS_POS_BYTE)))
+        let chanCount = Double(currentBassStream.channelCount)
+        let filledSpace = Double(ringBuffer.filledSpace)
+        let sampleRate = Double(currentBassStream.sampleRate)
+        let defaultRate = Double(defaultSampleRate)
+        let totalDrained = Double(totalBytesDrained)
         
-        let chanCount = currentBassStream.channelCount
-        let denom = (2.0 * (1.0 / Double(chanCount)))
-        let realPosition = pcmBytePosition - Int64(Double(ringBuffer.filledSpace) / denom)
-        
-        let sampleRateRatio = Double(currentBassStream.sampleRate) / Double(defaultSampleRate)
+        let denom = (2.0 * (1.0 / chanCount))
+        let realPosition = pcmBytePosition - (filledSpace / denom)
+        let sampleRateRatio = sampleRate / defaultRate
         
         pcmBytePosition = realPosition
         pcmBytePosition = pcmBytePosition < 0 ? 0 : pcmBytePosition
-        let seconds = BASS_ChannelBytes2Seconds(currentBassStream.stream, UInt64(Double(totalBytesDrained) * sampleRateRatio * Double(chanCount)))
+        let position = totalDrained * sampleRateRatio * chanCount
+        if let position = UInt64(exactly: position) {
+            let seconds = BASS_ChannelBytes2Seconds(currentBassStream.stream, position)
+            return seconds
+        }
         
-        return seconds
+        return 0
     }
     
     var progress: Double {
@@ -917,18 +911,22 @@ final class BassGaplessPlayer {
             return 0
         }
         
-        var seconds = rawProgress
-        if seconds < 0 {
-            if let duration = previousSongForProgress?.duration, duration > 0 {
-                seconds = Double(duration) + seconds
-                return seconds / Double(duration)
+        if let durationInt = previousSongForProgress?.duration {
+            let duration = Double(durationInt)
+            var seconds = rawProgress
+            if seconds < 0 {
+                if duration > 0 {
+                    seconds = duration + seconds
+                    return seconds / duration
+                }
+                return 0
             }
-            return 0
         }
         
         if let duration = currentBassStream.song.duration, duration > 0 {
             return seconds / Double(duration)
         }
+        
         return 0
     }
     
