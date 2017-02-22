@@ -39,8 +39,6 @@ class ItemLoaderOperation: Operation {
         }
     }
     
-    
-    
     fileprivate var isFinishedInternal = false {
         willSet {
             willChangeValue(forKey: "isFinished")

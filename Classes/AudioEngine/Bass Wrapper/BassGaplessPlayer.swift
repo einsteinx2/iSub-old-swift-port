@@ -56,6 +56,8 @@ final class BassGaplessPlayer {
     var lastProgressSaveDate = Date.distantPast
     let progressSaveInterval = 10.0
     
+    fileprivate(set) var isAudioSessionActive = false
+    
     init() {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(routeChanged(_:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
@@ -85,6 +87,32 @@ final class BassGaplessPlayer {
     deinit {
         NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
         NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+    }
+    
+    func startAudioSession() {
+        guard !isAudioSessionActive else {
+            return
+        }
+        
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+            isAudioSessionActive = true
+        } catch {
+            printError(error)
+        }
+    }
+    
+    func startAudioSession() {
+        guard isAudioSessionActive else {
+            return
+        }
+        
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+            isAudioSessionActive = false
+        } catch {
+            printError(error)
+        }
     }
     
     // MARK: - Output Stream -
@@ -694,12 +722,6 @@ final class BassGaplessPlayer {
         }
         BASS_ChannelStop(outStream)
         
-        do {
-            try AVAudioSession.sharedInstance().setActive(false)
-        } catch {
-            printError(error)
-        }
-        
         isPlaying = false
     }
     
@@ -786,12 +808,7 @@ final class BassGaplessPlayer {
         }
         
         if let bassStream = self.prepareStream(forSong: song) {
-            // Activate audio session
-            do {
-                try AVAudioSession.sharedInstance().setActive(true)
-            } catch {
-                printError(error)
-            }
+            startAudioSession()
             
             BASS_Mixer_StreamAddChannel(mixerStream, bassStream.stream, UInt32(BASS_MIXER_NORAMPIN))
             

@@ -6,6 +6,6 @@
 
 @interface ObjC : NSObject
 
-+ (BOOL)catchException:(void(^)())tryBlock error:(__autoreleasing NSError **)error;
++ (BOOL)catchException:(__attribute__((noescape)) void(^)())tryBlock error:(__autoreleasing NSError **)error;
 
 @end
