@@ -911,9 +911,10 @@ final class BassGaplessPlayer {
             return 0
         }
         
+        var seconds = rawProgress
+        
         if let durationInt = previousSongForProgress?.duration {
             let duration = Double(durationInt)
-            var seconds = rawProgress
             if seconds < 0 {
                 if duration > 0 {
                     seconds = duration + seconds
