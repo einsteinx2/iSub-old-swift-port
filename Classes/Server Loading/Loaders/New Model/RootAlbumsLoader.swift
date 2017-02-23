@@ -8,11 +8,13 @@
 
 import Foundation
 
-final class RootAlbumsLoader: ApiLoader, ItemLoader {
+final class RootAlbumsLoader: ApiLoader, RootItemLoader {
     // 500 is the maximum size supported by Subsonic
     fileprivate let size = 500
     fileprivate var offset = 0
-    
+
+    var mediaFolderId: Int64?
+
     var albums = [Album]()
     
     var associatedObject: Any?
@@ -22,7 +24,10 @@ final class RootAlbumsLoader: ApiLoader, ItemLoader {
     }
     
     override func createRequest() -> URLRequest {
-        let parameters = ["type": "alphabeticalByName", "offset": "\(offset)", "size":"\(size)"]
+        var parameters = ["type": "alphabeticalByName", "offset": "\(offset)", "size":"\(size)"]
+        if let mediaFolderId = mediaFolderId, mediaFolderId >= 0 {
+            parameters["musicFolderId"] = "\(mediaFolderId)"
+        }
         return URLRequest(subsonicAction: .getAlbumList2, parameters: parameters)
     }
     

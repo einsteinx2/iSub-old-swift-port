@@ -306,7 +306,7 @@ extension Playlist {
     
     func remove(songId: Int64, serverId: Int64, notify: Bool = false) {
         if let index = indexOf(songId: songId, serverId: serverId) {
-            remove(songAtIndex: index + 1, notify: notify)
+            remove(songAtIndex: index, notify: notify)
         }
     }
     

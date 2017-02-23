@@ -24,3 +24,7 @@ protocol ItemLoader {
     func start()
     func cancel()
 }
+
+protocol RootItemLoader: ItemLoader {
+    var mediaFolderId: Int64? { get set }
+}

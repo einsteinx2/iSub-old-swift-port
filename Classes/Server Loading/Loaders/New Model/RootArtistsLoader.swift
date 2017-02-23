@@ -8,7 +8,9 @@
 
 import Foundation
 
-final class RootArtistsLoader: ApiLoader, ItemLoader {
+final class RootArtistsLoader: ApiLoader, RootItemLoader {
+    var mediaFolderId: Int64?
+
     var artists = [Artist]()
     var ignoredArticles = [String]()
     
@@ -19,7 +21,11 @@ final class RootArtistsLoader: ApiLoader, ItemLoader {
     }
     
     override func createRequest() -> URLRequest {
-        return URLRequest(subsonicAction: .getArtists)
+        var parameters: [String: String]?
+        if let mediaFolderId = mediaFolderId, mediaFolderId >= 0 {
+            parameters = ["musicFolderId": "\(mediaFolderId)"]
+        }
+        return URLRequest(subsonicAction: .getArtists, parameters: parameters)
     }
     
     override func processResponse(root: RXMLElement) -> Bool {

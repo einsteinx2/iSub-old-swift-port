@@ -209,6 +209,10 @@ import Reachability
                         // Start the queued downloads if Wifi is available
                         CacheQueue.si.start()
                     }
+                    
+                    // Load media folders
+                    MediaFoldersLoader().start()
+                    
                 } else if !SavedSettings.si.isOfflineMode {
                     self.enterOfflineMode()
                 }
@@ -351,5 +355,8 @@ import Reachability
         
         // Reset UI
         menuController.resetMenuItems()
+        
+        // Load media folders
+        MediaFoldersLoader().start()
     }
 }

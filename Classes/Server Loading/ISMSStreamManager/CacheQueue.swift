@@ -24,6 +24,11 @@ final class CacheQueue: StreamHandlerDelegate {
     fileprivate(set) var currentSong: Song?
     fileprivate(set) var streamHandler: StreamHandler?
     
+    func add(song: Song) {
+        Playlist.downloadQueue.add(song: song)
+        start()
+    }
+    
     func contains(song: Song) -> Bool {
         return Playlist.downloadQueue.contains(song: song)
     }
@@ -59,8 +64,8 @@ final class CacheQueue: StreamHandlerDelegate {
         
         // Make sure it's not already cached
         guard !currentSong.isFullyCached else {
-            Playlist.downloadQueue.remove(song: currentSong, notify: true)
-            sendSongDownloadedNotification(song: currentSong)
+            removeFromDownloadQueue(song: currentSong)
+            //sendSongDownloadedNotification(song: currentSong)
             start()
             return
         }

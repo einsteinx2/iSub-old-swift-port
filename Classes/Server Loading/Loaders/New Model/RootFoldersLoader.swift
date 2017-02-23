@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RootFoldersLoader: ApiLoader, ItemLoader {
+final class RootFoldersLoader: ApiLoader, RootItemLoader {
     var mediaFolderId: Int64?
     
     var ignoredArticles = [String]()

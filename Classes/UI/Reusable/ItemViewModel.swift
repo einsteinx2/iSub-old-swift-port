@@ -20,6 +20,10 @@ class ItemViewModel: NSObject {
     
     fileprivate var loader: ItemLoader
     
+    var isRootItemLoader: Bool {
+        return loader is RootItemLoader
+    }
+    
     var isBrowsingCache: Bool {
         return loader is CachedDatabaseLoader
     }
@@ -39,6 +43,14 @@ class ItemViewModel: NSObject {
     
     var topLevelController = false
     var navigationTitle: String?
+    
+    var mediaFolderId: Int64? {
+        didSet {
+            if var rootItemLoader = loader as? RootItemLoader {
+                rootItemLoader.mediaFolderId = mediaFolderId
+            }
+        }
+    }
     
     var shouldSetupRefreshControl: Bool {
         return !isBrowsingCache
@@ -76,7 +88,7 @@ class ItemViewModel: NSObject {
         return success
     }
     
-    func loadModelsFromWeb(_ completion: LoadModelsCompletion?) {
+    func loadModelsFromWeb(completion: LoadModelsCompletion? = nil) {
         if loader.state != .loading {
             loader.completionHandler = { success, error, loader in
                 completion?(success, error)

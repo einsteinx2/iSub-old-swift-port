@@ -50,7 +50,7 @@ class ItemViewController: DraggableTableViewController {
         
         viewModel.delegate = self
         _ = viewModel.loadModelsFromDatabase()
-        viewModel.loadModelsFromWeb(nil)
+        viewModel.loadModelsFromWeb()
         
         self.navigationItem.title = viewModel.navigationTitle
         self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 64))
@@ -104,15 +104,18 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func setupRightBarButton() -> UIBarButtonItem {
-        if viewModel.isBrowsingFolder && viewModel.songs.count > 0 {
-            return UIBarButtonItem(title: "•••", style: .plain, target: self, action: #selector(showOptions))
-        } else {
-            return super.setupRightBarButton()
-        }
+        return UIBarButtonItem(title: "•••", style: .plain, target: self, action: #selector(showOptions))
     }
     
     @objc fileprivate func showOptions() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        if viewModel.isRootItemLoader && MediaFolderRepository.si.allMediaFolders().count > 1 {
+            alertController.addAction(UIAlertAction(title: "Choose Media Folder", style: .default) { action in
+                self.chooseMediaFolder()
+            })
+        }
+        
         alertController.addAction(UIAlertAction(title: "Sort By Track Number", style: .default) { action in
             self.viewModel.sort(by: .track)
         })
@@ -134,11 +137,38 @@ class ItemViewController: DraggableTableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    fileprivate func chooseMediaFolder() {
+        let mediaFolders = MediaFolderRepository.si.allMediaFolders()
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "All", style: .default) { action in
+            self.loadMediaFolder(nil)
+        })
+        for mediaFolder in mediaFolders {
+            alertController.addAction(UIAlertAction(title: mediaFolder.name, style: .default) { action in
+                self.loadMediaFolder(mediaFolder)
+            })
+        }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    fileprivate func loadMediaFolder(_ mediaFolder: MediaFolder?) {
+        viewModel.mediaFolderId = mediaFolder?.mediaFolderId
+        _ = viewModel.loadModelsFromDatabase()
+        viewModel.loadModelsFromWeb()
+    }
+    
     // MARK: - Notifications -
     
     fileprivate func registerForNotifications() {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(currentPlaylistIndexChanged(_:)), name: PlayQueue.Notifications.indexChanged)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPlaybackStarted(_:)), name: BassGaplessPlayer.Notifications.songStarted)
+        
+        // TODO: When we have a visual marker for this, we should always reload the table even if not browsing cache
+        if viewModel.isBrowsingCache {
+            NotificationCenter.addObserverOnMainThread(self, selector: #selector(songDownloaded(_:)), name: CacheQueue.Notifications.songDownloaded)
+        }
+        
         // TODO: Make a new notification for this
         //NotificationCenter.addObserverOnMainThread(self, selector: #selector(cachedSongDeleted(_:)), name: ISMSNotification_CachedSongDeleted)
         
@@ -152,6 +182,11 @@ class ItemViewController: DraggableTableViewController {
     fileprivate func unregisterForNotifications() {
         NotificationCenter.removeObserverOnMainThread(self, name: PlayQueue.Notifications.indexChanged)
         NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
+        
+        if viewModel.isBrowsingCache {
+            NotificationCenter.removeObserverOnMainThread(self, name: CacheQueue.Notifications.songDownloaded)
+        }
+        
 //        NotificationCenter.removeObserverOnMainThread(self, name: ISMSNotification_CachedSongDeleted)
         
         NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingBegan)
@@ -166,6 +201,10 @@ class ItemViewController: DraggableTableViewController {
     }
     
     @objc fileprivate func songPlaybackStarted(_ notification: Notification?) {
+        self.tableView.reloadData()
+    }
+    
+    @objc fileprivate func songDownloaded(_ notification: Notification?) {
         self.tableView.reloadData()
     }
     
@@ -211,7 +250,7 @@ class ItemViewController: DraggableTableViewController {
     override func didPullToRefresh() {
         if !reloading {
             reloading = true
-            viewModel.loadModelsFromWeb(nil)
+            viewModel.loadModelsFromWeb()
         }
     }
     
@@ -439,6 +478,19 @@ class ItemViewController: DraggableTableViewController {
                     _ = self.viewModel.loadModelsFromDatabase()
                     self.tableView.reloadData()
                 })
+            } else {
+                if song.isFullyCached {
+                    alertController.addAction(UIAlertAction(title: "Remove from Downloads", style: .destructive) { action in
+                        _ = song.deleteCache()
+                    })
+                } else {
+                    alertController.addAction(UIAlertAction(title: "Download", style: .default) { action in
+                        CacheQueue.si.add(song: song)
+                        _ = song.deleteCache()
+                        _ = self.viewModel.loadModelsFromDatabase()
+                        self.tableView.reloadData()
+                    })
+                }
             }
             
             alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
