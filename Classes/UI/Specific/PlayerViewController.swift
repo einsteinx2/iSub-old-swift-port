@@ -298,7 +298,7 @@ class PlayerViewController: UIViewController {
         }
         
         bitRateLabel.text = ""
-        formatLabel.text = currentSong?.contentType?.fileExtension.uppercased()
+        formatLabel.text = currentSong?.currentContentType?.fileExtension.uppercased()
         
         titleLabel.text = currentSong?.title
         albumLabel.text = currentSong?.albumDisplayName

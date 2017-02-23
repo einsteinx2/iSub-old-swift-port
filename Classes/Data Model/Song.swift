@@ -45,8 +45,12 @@ final class Song {
     var artist: Artist?
     var album: Album?
     var genre: Genre?
+    
     var contentType: ContentType?
     var transcodedContentType: ContentType?
+    var currentContentType: ContentType? {
+        return transcodedContentType ?? contentType
+    }
     
     var basicType: BasicContentType? {
         return contentType?.basicType
