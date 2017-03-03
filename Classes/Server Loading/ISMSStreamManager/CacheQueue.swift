@@ -28,6 +28,14 @@ final class CacheQueue: StreamHandlerDelegate {
         start()
     }
     
+    func remove(song: Song) {
+        Playlist.downloadQueue.remove(song: song)
+        if song == currentSong {
+            stop()
+            start()
+        }
+    }
+    
     func contains(song: Song) -> Bool {
         return Playlist.downloadQueue.contains(song: song)
     }
@@ -38,6 +46,7 @@ final class CacheQueue: StreamHandlerDelegate {
         }
         
         currentSong = Playlist.downloadQueue.song(atIndex: 0)
+        print("CacheQueue currentSong: \(currentSong)")
         
         guard let currentSong = currentSong, (AppDelegate.si.networkStatus.isReachableWifi || SavedSettings.si.isManualCachingOnWWANEnabled), !SavedSettings.si.isOfflineMode else {
             return
@@ -74,6 +83,7 @@ final class CacheQueue: StreamHandlerDelegate {
         
         // Create the stream handler
         if StreamQueue.si.song == currentSong, let handler = StreamQueue.si.streamHandler {
+            print("CacheQueue stealing handler from StreamQueue")
             // It's in the stream queue so steal the handler
             StreamQueue.si.streamHandler = nil
             StreamQueue.si.stop()
@@ -84,6 +94,7 @@ final class CacheQueue: StreamHandlerDelegate {
                 handler.start()
             }
         } else {
+            print("CacheQueue creating handler")
             streamHandler = StreamHandler(song: currentSong, isTemp: false, delegate: self)
             streamHandler?.start()
         }
@@ -135,6 +146,8 @@ final class CacheQueue: StreamHandlerDelegate {
     }
     
     func streamHandlerConnectionFinished(_ handler: StreamHandler) {
+        isDownloading = false
+        
         var isSuccess = true
         if handler.totalBytesTransferred == 0 {
             let alert = UIAlertController(title: "Uh oh!",
@@ -190,6 +203,8 @@ final class CacheQueue: StreamHandlerDelegate {
     }
     
     func streamHandlerConnectionFailed(_ handler: StreamHandler, withError error: Error?) {
+        isDownloading = false
+        
         if handler.allowReconnects && handler.numberOfReconnects < maxReconnects {
             // Less than max number of reconnections, so try again
             handler.numberOfReconnects += 1;

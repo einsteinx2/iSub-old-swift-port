@@ -197,6 +197,9 @@ class ItemViewController: DraggableTableViewController {
     }
     
     @objc fileprivate func songDownloaded(_ notification: Notification?) {
+        if viewModel.isDownloadQueue {
+            _ = viewModel.loadModelsFromDatabase()
+        }
         self.tableView.reloadData()
     }
     
@@ -457,7 +460,7 @@ class ItemViewController: DraggableTableViewController {
                 let loader = RecursiveSongLoader(item: item)
                 loader.completionHandler = { success, _, _ in
                     if success {
-                        //PlayQueue.si.playSongs(loader.songs, playIndex: 0)
+                        PlayQueue.si.playSongs(loader.songs, playIndex: 0)
                     }
                 }
                 loader.start()
@@ -472,7 +475,7 @@ class ItemViewController: DraggableTableViewController {
                 loader.completionHandler = { success, _, _ in
                     if success {
                         for song in loader.songs.reversed() {
-                            //PlayQueue.si.insertSongNext(song: song, notify: false)
+                            PlayQueue.si.insertSongNext(song: song, notify: false)
                         }
                         PlayQueue.si.notifyPlayQueueIndexChanged()
                     }
@@ -489,7 +492,7 @@ class ItemViewController: DraggableTableViewController {
                 loader.completionHandler = { success, _, _ in
                     if success {
                         for song in loader.songs {
-                            //PlayQueue.si.insertSong(song: song, index: PlayQueue.si.songCount, notify: false)
+                            PlayQueue.si.insertSong(song: song, index: PlayQueue.si.songCount, notify: false)
                         }
                         PlayQueue.si.notifyPlayQueueIndexChanged()
                     }
@@ -520,15 +523,28 @@ class ItemViewController: DraggableTableViewController {
                 })
             }
             
-            if viewModel.isBrowsingCache {
+            if viewModel.isDownloadQueue {
                 alertController.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
-                    CacheManager.si.removeSong(song: song)
+                    CacheQueue.si.remove(song: song)
                     _ = self.viewModel.loadModelsFromDatabase()
                     self.tableView.reloadData()
                 })
                 alertController.addAction(UIAlertAction(title: "Remove All", style: .destructive) { action in
                     for songToRemove in self.viewModel.songs {
-                        CacheManager.si.removeSong(song: songToRemove)
+                        CacheQueue.si.remove(song: songToRemove)
+                    }
+                    _ = self.viewModel.loadModelsFromDatabase()
+                    self.tableView.reloadData()
+                })
+            } else if viewModel.isBrowsingCache {
+                alertController.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
+                    CacheManager.si.remove(song: song)
+                    _ = self.viewModel.loadModelsFromDatabase()
+                    self.tableView.reloadData()
+                })
+                alertController.addAction(UIAlertAction(title: "Remove All", style: .destructive) { action in
+                    for songToRemove in self.viewModel.songs {
+                        CacheManager.si.remove(song: songToRemove)
                     }
                     _ = self.viewModel.loadModelsFromDatabase()
                     self.tableView.reloadData()
@@ -536,7 +552,7 @@ class ItemViewController: DraggableTableViewController {
             } else {
                 if song.isFullyCached {
                     alertController.addAction(UIAlertAction(title: "Remove from Downloads", style: .destructive) { action in
-                        CacheManager.si.removeSong(song: song)
+                        CacheManager.si.remove(song: song)
                         _ = self.viewModel.loadModelsFromDatabase()
                         self.tableView.reloadData()
                     })
@@ -552,7 +568,7 @@ class ItemViewController: DraggableTableViewController {
                 loader.completionHandler = { success, _, _ in
                     if success {
                         for song in loader.songs {
-                            //CacheQueue.si.add(song: song)
+                            CacheQueue.si.add(song: song)
                         }
                     }
                 }

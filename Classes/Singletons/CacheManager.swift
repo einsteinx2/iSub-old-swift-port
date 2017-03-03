@@ -91,7 +91,7 @@ import AwesomeCache
         }
     }
     
-    func removeSong(song: Song) {
+    func remove(song: Song) {
         if !PlayQueue.si.isPlaying || song != PlayQueue.si.currentSong {
             do {
                 try FileManager.default.removeItem(atPath: song.currentPath)

@@ -86,11 +86,15 @@ final class BassGaplessPlayer {
     }
     
     @objc fileprivate func readyForPlayback(_ notification: Notification) {
-        if !isPlaying, let song = notification.userInfo?[StreamHandler.Notifications.Keys.song] as? Song {
-            if currentBassStream?.song == nil || currentBassStream?.song == song {
-                start(song: song, byteOffset: 0)
-            }
+        guard !isPlaying, let song = notification.userInfo?[StreamHandler.Notifications.Keys.song] as? Song else {
+            return
         }
+        
+        guard song == PlayQueue.si.currentSong && (currentBassStream?.song == nil || currentBassStream?.song == song) else {
+            return
+        }
+        
+        start(song: song, byteOffset: 0)
     }
     
     deinit {
@@ -841,7 +845,7 @@ final class BassGaplessPlayer {
                 moveToNextSong()
             } else if !song.fileExists {
                 // File was removed, so start again normally
-                CacheManager.si.removeSong(song: song)
+                CacheManager.si.remove(song: song)
                 PlayQueue.si.startSong()
             } else {
                 // Failed to create the stream, retrying
@@ -851,7 +855,7 @@ final class BassGaplessPlayer {
                 DispatchQueue.main.async(after: 2.0, execute: startSongRetryWorkItem)
             }
         } else {
-            CacheManager.si.removeSong(song: song)
+            CacheManager.si.remove(song: song)
             PlayQueue.si.startSong()
         }
     }

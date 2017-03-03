@@ -20,6 +20,13 @@ class ItemViewModel: NSObject {
     
     fileprivate var loader: ItemLoader
     
+    var isDownloadQueue: Bool {
+        if let loader = loader as? CachedPlaylistLoader, loader.playlistId == Playlist.downloadQueuePlaylistId {
+            return true
+        }
+        return false
+    }
+    
     var isRootItemLoader: Bool {
         return loader is RootItemLoader
     }

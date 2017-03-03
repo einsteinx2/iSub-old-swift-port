@@ -67,7 +67,7 @@ class RecursiveSongLoader: ApiLoader, ItemLoader {
     }
     
     fileprivate func processItem(item: Item) {
-        print("Processing item: \(item.itemId) - \(item.itemName)")
+        print("Processing item: \(item)")//\(item.itemId) - \(item.itemName)")
         
         var loader: ItemLoader?
         switch item {

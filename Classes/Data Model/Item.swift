@@ -8,10 +8,16 @@
 
 import Foundation
 
-protocol Item {
+protocol Item: CustomStringConvertible {
     var itemId: Int64 { get }
     var itemName: String { get }
     var serverId: Int64 { get }
+}
+
+extension Item {
+    var description: String {
+        return "[\(String(describing: type(of: self)))] \(itemId) - \(itemName)"
+    }
 }
 
 protocol PersistedItem: Item {
