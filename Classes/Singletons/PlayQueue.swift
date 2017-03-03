@@ -28,7 +28,7 @@ final class PlayQueue {
         public static let indexChanged = Notification.Name("PlayQueue_indexChanged")
     }
     
-    fileprivate func notifyPlayQueueIndexChanged() {
+    func notifyPlayQueueIndexChanged() {
         NotificationCenter.postOnMainThread(name: PlayQueue.Notifications.indexChanged)
     }
     

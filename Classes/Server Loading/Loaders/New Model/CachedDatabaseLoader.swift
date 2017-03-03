@@ -9,10 +9,9 @@
 import Foundation
 
 class CachedDatabaseLoader: ItemLoader {
-    weak var delegate: ApiLoaderDelegate?
-    var completionHandler: ApiLoaderCompletionHandler?
+     var completionHandler: ApiLoaderCompletionHandler?
     
-    var associatedObject: Any? {
+    var associatedItem: Item? {
         return nil
     }
     

@@ -14,7 +14,7 @@ class ItemLoaderOperation: Operation {
     
     init(loader: ItemLoader, onlyLoadIfNotExists: Bool = true) {
         self.loader = loader
-        self.onlyLoadIfNotExists = true
+        self.onlyLoadIfNotExists = onlyLoadIfNotExists
         super.init()
     }
     
@@ -58,7 +58,7 @@ class ItemLoaderOperation: Operation {
         var shouldLoad = true
         if onlyLoadIfNotExists {
             // Only load if it's not persisted
-            if let persistedItem = loader.associatedObject as? PersistedItem {
+            if let persistedItem = loader.associatedItem as? PersistedItem {
                 // If we have duplicate loaders in the queue, the first one should have a nil associated object
                 // and the second one should have isPersisted = true, so should skip loading.
                 shouldLoad = !persistedItem.isPersisted
@@ -66,8 +66,10 @@ class ItemLoaderOperation: Operation {
         }
         
         if shouldLoad {
-            loader.completionHandler = { _, _, _ in
+            let existingCompletionHandler = loader.completionHandler
+            loader.completionHandler = { success, error, loader in
                 self.finish()
+                existingCompletionHandler?(success, error, loader)
             }
             loader.start()
         } else {

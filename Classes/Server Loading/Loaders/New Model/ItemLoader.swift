@@ -9,10 +9,9 @@
 import Foundation
 
 protocol ItemLoader {
-    weak var delegate: ApiLoaderDelegate? { get set }
     var completionHandler: ApiLoaderCompletionHandler? { get set }
     
-    var associatedObject: Any? { get }
+    var associatedItem: Item? { get }
     
     var items: [Item] { get }
     

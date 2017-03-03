@@ -15,7 +15,7 @@ final class CachedRootFoldersLoader: CachedDatabaseLoader {
         return folders
     }
     
-    override var associatedObject: Any? {
+    override var associatedItem: Item? {
         return nil
     }
     

@@ -71,12 +71,12 @@ final class FolderLoader: ApiLoader, ItemLoader {
         folders.forEach({_ = $0.replace()})
         songs.forEach({_ = $0.replace()})
         
-        if let folder = associatedObject as? Folder {
+        if let folder = associatedItem as? Folder {
             // Persist if needed
             _ = folder.replace()
             
             // Add to cache table if needed
-            if let folder = associatedObject as? Folder, folder.hasCachedSubItems {
+            if let folder = associatedItem as? Folder, folder.hasCachedSubItems {
                 _ = folder.cache()
             }
         }
@@ -113,7 +113,7 @@ final class FolderLoader: ApiLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        if let folder = associatedObject as? Folder {
+        if let folder = associatedItem as? Folder {
             folder.loadSubItems()
             folders = folder.folders
             songs = folder.songs
@@ -128,7 +128,7 @@ final class FolderLoader: ApiLoader, ItemLoader {
         return false
     }
     
-    var associatedObject: Any? {
+    var associatedItem: Item? {
         let serverId = SavedSettings.si.currentServerId
         return FolderRepository.si.folder(folderId: folderId, serverId: serverId)
     }

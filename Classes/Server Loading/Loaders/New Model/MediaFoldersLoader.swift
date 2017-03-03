@@ -11,7 +11,7 @@ import Foundation
 final class MediaFoldersLoader: ApiLoader, ItemLoader {
     var mediaFolders = [MediaFolder]()
     
-    var associatedObject: Any?
+    var associatedItem: Item?
     
     var items: [Item] {
         return mediaFolders

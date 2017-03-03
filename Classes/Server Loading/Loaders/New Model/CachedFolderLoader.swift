@@ -22,7 +22,7 @@ final class CachedFolderLoader: CachedDatabaseLoader {
         return folders as [Item] + songs as [Item]
     }
     
-    override var associatedObject: Any? {
+    override var associatedItem: Item? {
         return FolderRepository.si.folder(folderId: folderId, serverId: serverId)
     }
     

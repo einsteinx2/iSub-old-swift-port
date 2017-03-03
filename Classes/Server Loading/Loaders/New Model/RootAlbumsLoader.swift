@@ -17,7 +17,7 @@ final class RootAlbumsLoader: ApiLoader, RootItemLoader {
 
     var albums = [Album]()
     
-    var associatedObject: Any?
+    var associatedItem: Item?
     
     var items: [Item] {
         return albums

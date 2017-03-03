@@ -299,7 +299,7 @@ class PlayQueueViewController: DraggableTableViewController {
             cell.accessoryType = .none
             cell.selectionStyle = .none
             cell.indexPath = indexPath
-            cell.associatedObject = viewModel.song(atIndex: indexPath.row)
+            cell.associatedItem = viewModel.song(atIndex: indexPath.row)
             
             return cell
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: itemReuseIdentifier, for: indexPath) as? ItemTableViewCell {
@@ -310,7 +310,7 @@ class PlayQueueViewController: DraggableTableViewController {
             cell.selectionStyle = .none
             
             let song = viewModel.song(atIndex: indexPath.row)
-            cell.associatedObject = song
+            cell.associatedItem = song
             cell.coverArtId = nil
             cell.title = song.title
             cell.subTitle = song.artistDisplayName
@@ -410,9 +410,9 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
 
 @objc class CurrentItemCell: DroppableCell, DraggableCell {
     var indexPath: IndexPath?
-    var associatedObject: Any? {
+    var associatedItem: Item? {
         didSet {
-            if let song = associatedObject as? Song {
+            if let song = associatedItem as? Song {
                 if let coverArtId = song.coverArtId {
                     coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
                 } else {
@@ -475,6 +475,6 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
     }
     
     var dragItem: Item? {
-        return associatedObject as? Item
+        return associatedItem
     }
 }

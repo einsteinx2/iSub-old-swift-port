@@ -103,7 +103,6 @@ import Reachability
     func applicationDidEnterBackground(_ application: UIApplication) {
         backgroundTask = application.beginBackgroundTask {
             // App is about to be put to sleep, stop the cache download queue
-            
             if CacheQueue.si.isDownloading {
                 CacheQueue.si.stop()
             }

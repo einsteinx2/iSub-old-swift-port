@@ -13,6 +13,7 @@ class CacheViewController: DraggableTableViewController {
     fileprivate let artistsRowIndex   = 1
     fileprivate let albumsRowIndex    = 2
     fileprivate let songsRowIndex     = 3
+    fileprivate let queueRowIndex     = 4
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
         return .lightContent
@@ -40,7 +41,7 @@ class CacheViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 5
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -52,6 +53,7 @@ class CacheViewController: DraggableTableViewController {
         case artistsRowIndex: cell.textLabel?.text = "Artists"
         case albumsRowIndex: cell.textLabel?.text = "Albums"
         case songsRowIndex: cell.textLabel?.text = "Songs"
+        case queueRowIndex: cell.textLabel?.text = "Download Queue"
         default: break
         }
 
@@ -76,6 +78,9 @@ class CacheViewController: DraggableTableViewController {
         case songsRowIndex:
             let loader = CachedRootSongsLoader()
             pushItemController(loader: loader, title: "Downloaded Songs")
+        case queueRowIndex:
+            let loader = CachedPlaylistLoader(playlistId: Playlist.downloadQueue.playlistId, serverId: SavedSettings.si.currentServerId)
+            pushItemController(loader: loader, title: "Download Queue")
         default:
             break
         }

@@ -16,13 +16,8 @@ enum ApiLoaderState {
     case finished
 }
 
+typealias ApiLoaderRedirectionHandler = (_ redirectUrl: URL, _ loader: ApiLoader) -> Void
 typealias ApiLoaderCompletionHandler = (_ success: Bool, _ error: Error?, _ loader: ApiLoader) -> Void
-
-@objc protocol ApiLoaderDelegate {
-    @objc optional func loadingRedirected(_ loader: ApiLoader, redirectUrl url: URL)
-    func loadingFailed(_ loader: ApiLoader, withError error: Error?)
-    func loadingFinished(_ loader: ApiLoader)
-}
 
 class ApiLoader: NSObject, URLSessionDataDelegate {
     // Queue for background loading of additional models. I.e. If you load a folder, 
@@ -35,7 +30,7 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
     }()
     
     var completionHandler: ApiLoaderCompletionHandler?
-    var delegate: ApiLoaderDelegate?
+    var redirectionHandler: ApiLoaderRedirectionHandler?
     
     var state: ApiLoaderState = .new
     fileprivate(set) var redirectUrl: URL?
@@ -73,13 +68,9 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
         super.init()
     }
     
-    init(delegate: ApiLoaderDelegate) {
-        self.delegate = delegate
-        super.init()
-    }
-    
-    init(completionHandler: @escaping ApiLoaderCompletionHandler) {
+    init(completionHandler: @escaping ApiLoaderCompletionHandler, redirectionHandler: ApiLoaderRedirectionHandler? = nil) {
         self.completionHandler = completionHandler
+        self.redirectionHandler = redirectionHandler
         super.init()
     }
     
@@ -122,17 +113,12 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
     
     func finished() {
         state = .finished
-        
-        delegate?.loadingFinished(self)
         completionHandler?(true, nil, self)
     }
     
     func failed(error: Error?) {
         state = .failed
-        
-        delegate?.loadingFailed(self, withError: error)
         completionHandler?(false, error, self)
-        
         selfRef = nil
     }
     
@@ -141,7 +127,7 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
     @objc(URLSession:task:willPerformHTTPRedirection:newRequest:completionHandler:) func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler completion: @escaping (URLRequest?) -> Void) {
         if let url = request.url {
             redirectUrl = url
-            delegate?.loadingRedirected?(self, redirectUrl: url)
+            redirectionHandler?(url, self)
         }
         completion(request)
     }

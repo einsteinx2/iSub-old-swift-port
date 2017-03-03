@@ -15,7 +15,7 @@ final class CachedRootArtistsLoader: CachedDatabaseLoader {
         return artists
     }
     
-    override var associatedObject: Any? {
+    override var associatedItem: Item? {
         return nil
     }
     

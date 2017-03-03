@@ -54,13 +54,13 @@ final class ArtistLoader: ApiLoader, ItemLoader {
         albums.forEach({_ = $0.replace()})
         
         // Add to cache table if needed
-        if let artist = associatedObject as? Artist, artist.hasCachedSubItems {
+        if let artist = associatedItem as? Artist, artist.hasCachedSubItems {
             _ = artist.cache()
         }
     }
     
     func loadModelsFromDatabase() -> Bool {
-        if let artist = associatedObject as? Artist {
+        if let artist = associatedItem as? Artist {
             artist.loadSubItems()
             albums = artist.albums
             return albums.count > 0
@@ -68,7 +68,7 @@ final class ArtistLoader: ApiLoader, ItemLoader {
         return false
     }
     
-    var associatedObject: Any? {
+    var associatedItem: Item? {
         let serverId = SavedSettings.si.currentServerId
         return ArtistRepository.si.artist(artistId: artistId, serverId: serverId)
     }

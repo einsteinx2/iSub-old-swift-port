@@ -48,7 +48,7 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
         
         // Update the playlist table
         // TODO: This will need to be rewritten to handle two way syncing
-        if var playlist = associatedObject as? Playlist {
+        if var playlist = associatedItem as? Playlist {
             playlist.overwriteSubItems()
         }
         
@@ -99,7 +99,7 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        if let playlist = associatedObject as? Playlist {
+        if let playlist = associatedItem as? Playlist {
             playlist.loadSubItems()
             songs = playlist.songs
             return songs.count > 0
@@ -107,7 +107,7 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
         return false
     }
     
-    var associatedObject: Any? {
+    var associatedItem: Item? {
         let serverId = SavedSettings.si.currentServerId
         return PlaylistRepository.si.playlist(playlistId: playlistId, serverId: serverId)
     }

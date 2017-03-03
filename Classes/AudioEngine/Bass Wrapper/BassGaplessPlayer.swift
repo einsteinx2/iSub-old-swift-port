@@ -831,17 +831,17 @@ final class BassGaplessPlayer {
                 moveToNextSong()
             } else if !song.fileExists {
                 // File was removed, so start again normally
-                _ = song.deleteCache()
+                CacheManager.si.removeSong(song: song)
                 PlayQueue.si.startSong()
             } else {
                 // Failed to create the stream, retrying
                 startSongRetryWorkItem = DispatchWorkItem {
                     self.start(song: song, index: index, byteOffset: byteOffset)
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: startSongRetryWorkItem)
+                DispatchQueue.main.async(after: 2.0, execute: startSongRetryWorkItem)
             }
         } else {
-            _ = song.deleteCache()
+            CacheManager.si.removeSong(song: song)
             PlayQueue.si.startSong()
         }
     }

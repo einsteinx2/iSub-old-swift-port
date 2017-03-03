@@ -240,7 +240,6 @@ extension Song: PersistedItem {
     }
     
     func deleteCache() -> Bool {
-        // TODO: Use a transaction
         var success = true
         Database.si.write.inDatabase { db in
             var queries = [String]()

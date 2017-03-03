@@ -15,7 +15,7 @@ final class RootFoldersLoader: ApiLoader, RootItemLoader {
     var folders = [Folder]()
     var songs = [Song]()
     
-    var associatedObject: Any?
+    var associatedItem: Item?
     
     var items: [Item] {
         return folders as [Item] + songs as [Item]

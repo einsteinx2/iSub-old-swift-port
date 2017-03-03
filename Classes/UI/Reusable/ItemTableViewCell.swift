@@ -20,7 +20,7 @@ class ItemTableViewCell: DroppableCell {
     // Disabled for now until optimized
     let shouldRepositionLabels = false
         
-    var associatedObject: AnyObject?
+    var associatedItem: Item?
     
     var indexShowing = false
     
@@ -278,15 +278,20 @@ class ItemTableViewCell: DroppableCell {
         }
         
         titlesScrollView.frame = scrollViewFrame
+        
+        backgroundColor = .white
+        if let song = associatedItem as? Song, song.isFullyCached {
+            backgroundColor = .lightGray
+        }
     }
 }
 
 extension ItemTableViewCell: DraggableCell {
     var isDraggable: Bool {
-        return associatedObject is Song
+        return associatedItem is Song
     }
     
     var dragItem: Item? {
-        return associatedObject as? Item
+        return associatedItem
     }
 }

@@ -11,7 +11,7 @@ import Foundation
 final class RootPlaylistsLoader: ApiLoader, ItemLoader {
     var playlists = [Playlist]()
     
-    var associatedObject: Any?
+    var associatedItem: Item?
     
     var items: [Item] {
         return playlists

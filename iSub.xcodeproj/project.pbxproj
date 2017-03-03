@@ -479,6 +479,8 @@
 		535CB48C12E2664700389DA1 /* server-button-ubuntu.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48812E2664700389DA1 /* server-button-ubuntu.png */; };
 		535CB48D12E2664700389DA1 /* server-button-ubuntu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */; };
 		535CB58412E27A5400389DA1 /* default-album-art-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 535CB58312E27A5400389DA1 /* default-album-art-ipad.png */; };
+		536007341E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536007331E69159100F68EAE /* CachedPlaylistLoader.swift */; };
+		536007351E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536007331E69159100F68EAE /* CachedPlaylistLoader.swift */; };
 		53649DCD184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
 		53649DCF184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
 		53649DD2184DA99B00E600EC /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD0184DA99B00E600EC /* Icon-76.png */; };
@@ -698,6 +700,8 @@
 		53BC286C139AF17B00A825F1 /* Icon-72-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC2869139AF17B00A825F1 /* Icon-72-Beta.png */; };
 		53BC286D139AF17B00A825F1 /* Icon-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286A139AF17B00A825F1 /* Icon-Beta.png */; };
 		53BC286E139AF17B00A825F1 /* Icon@2x-Beta.png in Resources */ = {isa = PBXBuildFile; fileRef = 53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */; };
+		53C23BD91E5F222A00DA1281 /* RecursiveSongLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C23BD81E5F222A00DA1281 /* RecursiveSongLoader.swift */; };
+		53C23BDA1E5F222A00DA1281 /* RecursiveSongLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C23BD81E5F222A00DA1281 /* RecursiveSongLoader.swift */; };
 		53C6052212F1EFD4003C6895 /* intro-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051A12F1EFD4003C6895 /* intro-bottom.png */; };
 		53C6052312F1EFD4003C6895 /* intro-bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */; };
 		53C6052412F1EFD4003C6895 /* intro-foreground.png in Resources */ = {isa = PBXBuildFile; fileRef = 53C6051C12F1EFD4003C6895 /* intro-foreground.png */; };
@@ -1036,6 +1040,7 @@
 		535CB48812E2664700389DA1 /* server-button-ubuntu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "server-button-ubuntu.png"; path = "Images/Other/server-button-ubuntu.png"; sourceTree = "<group>"; };
 		535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "server-button-ubuntu@2x.png"; path = "Images/Other/server-button-ubuntu@2x.png"; sourceTree = "<group>"; };
 		535CB58312E27A5400389DA1 /* default-album-art-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-ipad.png"; path = "Images/Other/default-album-art-ipad.png"; sourceTree = "<group>"; };
+		536007331E69159100F68EAE /* CachedPlaylistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedPlaylistLoader.swift; sourceTree = "<group>"; };
 		53649DCC184DA90600E600EC /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-120.png"; path = "Images/App Icons/Icon-120.png"; sourceTree = "<group>"; };
 		53649DD0184DA99B00E600EC /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Images/App Icons/Icon-76.png"; sourceTree = "<group>"; };
 		53649DD1184DA99B00E600EC /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Images/App Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
@@ -1122,6 +1127,7 @@
 		53BC2869139AF17B00A825F1 /* Icon-72-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72-Beta.png"; path = "Images/App Icons/Icon-72-Beta.png"; sourceTree = "<group>"; };
 		53BC286A139AF17B00A825F1 /* Icon-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Beta.png"; path = "Images/App Icons/Icon-Beta.png"; sourceTree = "<group>"; };
 		53BC286B139AF17B00A825F1 /* Icon@2x-Beta.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x-Beta.png"; path = "Images/App Icons/Icon@2x-Beta.png"; sourceTree = "<group>"; };
+		53C23BD81E5F222A00DA1281 /* RecursiveSongLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecursiveSongLoader.swift; sourceTree = "<group>"; };
 		53C6051A12F1EFD4003C6895 /* intro-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom.png"; path = "Images/Intro Screen/intro-bottom.png"; sourceTree = "<group>"; };
 		53C6051B12F1EFD4003C6895 /* intro-bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-bottom@2x.png"; path = "Images/Intro Screen/intro-bottom@2x.png"; sourceTree = "<group>"; };
 		53C6051C12F1EFD4003C6895 /* intro-foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "intro-foreground.png"; path = "Images/Intro Screen/intro-foreground.png"; sourceTree = "<group>"; };
@@ -1649,6 +1655,7 @@
 				531B33151E24CF8A00811187 /* CachedAlbumLoader.swift */,
 				531B33161E24CF8A00811187 /* CachedArtistLoader.swift */,
 				531B33181E24CF8A00811187 /* CachedFolderLoader.swift */,
+				536007331E69159100F68EAE /* CachedPlaylistLoader.swift */,
 				531B33191E24CF8A00811187 /* CachedRootAlbumsLoader.swift */,
 				531B331A1E24CF8A00811187 /* CachedRootArtistsLoader.swift */,
 				531B331B1E24CF8A00811187 /* CachedRootFoldersLoader.swift */,
@@ -1804,6 +1811,7 @@
 			isa = PBXGroup;
 			children = (
 				531B33241E24CF8B00811187 /* StatusLoader.swift */,
+				53C23BD81E5F222A00DA1281 /* RecursiveSongLoader.swift */,
 			);
 			name = "Other Loaders";
 			sourceTree = "<group>";
@@ -2671,11 +2679,13 @@
 				537FB2FF1E33EEC1001D3FBB /* BassVisualizer.swift in Sources */,
 				53CFBB751E2B1E3B005895F4 /* Folder.swift in Sources */,
 				531B34481E24D24600811187 /* FMDatabaseQueue.m in Sources */,
+				53C23BD91E5F222A00DA1281 /* RecursiveSongLoader.swift in Sources */,
 				531B339D1E24CF8B00811187 /* FolderLoader.swift in Sources */,
 				5358DF831E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53FD71E51E36E73600460B44 /* BassEqualizer.swift in Sources */,
 				53114DFE1E3B06D800D8589B /* String+HTMLEntities.swift in Sources */,
 				531B33F81E24D0B600811187 /* ItemViewController.swift in Sources */,
+				536007341E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */,
 				531B34421E24D24600811187 /* FMDatabase.m in Sources */,
 				53114E001E3B06D800D8589B /* Utilities.swift in Sources */,
 				531B33611E24CF8B00811187 /* CachedImage.swift in Sources */,
@@ -2917,11 +2927,13 @@
 				537FB3001E33EEC1001D3FBB /* BassVisualizer.swift in Sources */,
 				53CFBB761E2B1E3B005895F4 /* Folder.swift in Sources */,
 				531B34491E24D24600811187 /* FMDatabaseQueue.m in Sources */,
+				53C23BDA1E5F222A00DA1281 /* RecursiveSongLoader.swift in Sources */,
 				531B339E1E24CF8B00811187 /* FolderLoader.swift in Sources */,
 				5358DF851E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53FD71E61E36E73600460B44 /* BassEqualizer.swift in Sources */,
 				53114DFF1E3B06D800D8589B /* String+HTMLEntities.swift in Sources */,
 				531B33F91E24D0B600811187 /* ItemViewController.swift in Sources */,
+				536007351E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */,
 				531B34431E24D24600811187 /* FMDatabase.m in Sources */,
 				53114E011E3B06D800D8589B /* Utilities.swift in Sources */,
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,

@@ -14,7 +14,7 @@ final class RootArtistsLoader: ApiLoader, RootItemLoader {
     var artists = [Artist]()
     var ignoredArticles = [String]()
     
-    var associatedObject: Any?
+    var associatedItem: Item?
     
     var items: [Item] {
         return artists

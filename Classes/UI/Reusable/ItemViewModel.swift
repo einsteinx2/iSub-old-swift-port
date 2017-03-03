@@ -71,10 +71,10 @@ class ItemViewModel: NSObject {
     
     init(loader: ItemLoader) {
         self.loader = loader
-        self.rootItem = loader.associatedObject as? Item
+        self.rootItem = loader.associatedItem
         self.navigationTitle = self.rootItem?.itemName
         
-        if let folder = loader.associatedObject as? Folder {
+        if let folder = loader.associatedItem as? Folder {
             self.songSortOrder = folder.songSortOrder
         }
     }
@@ -217,7 +217,7 @@ class ItemViewModel: NSObject {
     func sort(by sortOrder: SongSortOrder) {
         self.songSortOrder = sortOrder
         // TODO: How can I assign to a constant here? It's not an Obj-C object...
-        if let folder = loader.associatedObject as? Folder {
+        if let folder = loader.associatedItem as? Folder {
             folder.songSortOrder = sortOrder
             _ = folder.replace()
         }

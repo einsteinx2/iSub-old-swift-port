@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate, ServerEditDelegate {
+class ServerListViewController: DraggableTableViewController, ServerEditDelegate {
     fileprivate let headerView = UIView()
     fileprivate let segmentedControl = UISegmentedControl(items: ["Servers", "Settings", "Help"])
     
@@ -216,7 +216,8 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
             LoadingScreen.showOnMainWindow(withMessage: "Checking Server")
             
             let statusLoader = StatusLoader(server: server)
-            statusLoader.delegate = self;
+            statusLoader.completionHandler = loadingCompleted
+            statusLoader.redirectionHandler = loadingRedirected
             statusLoader.start()
         }
     }
@@ -252,7 +253,7 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         }
     }
     
-    func loadingRedirected(_ loader: ApiLoader, redirectUrl url: URL) {
+    fileprivate func loadingRedirected(redirectUrl url: URL, loader: ApiLoader) {
         var redirectUrlString = "\(url.scheme)://\(url.host)"
         if let port = url.port {
             redirectUrlString += "\(port)"
@@ -271,31 +272,31 @@ class ServerListViewController: DraggableTableViewController, ApiLoaderDelegate,
         redirectUrl = redirectUrlString
     }
     
-    public func loadingFailed(_ loader: ApiLoader, withError error: Error?) {
-        var message: String
-        if let error = error, error.domain == iSubErrorDomain, error.code == iSubErrorCode.invalidCredentials.rawValue {
-            message = "Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆"
-        } else {
-            message = "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆"
-            
-            if let error = error as? NSError {
-                message += "\n\nError code \(error.code):\n\(error.description)"
+    fileprivate func loadingCompleted(success: Bool, error: Error?, loader: ApiLoader) {
+        if success {
+            if let statusLoader = loader as? StatusLoader, let server = statusLoader.server {
+                SavedSettings.si.currentServerId = server.serverId
+                SavedSettings.si.redirectUrlString = redirectUrl
+                
+                AppDelegate.si.switchServer(to: server, redirectUrl: redirectUrl)
+                
+                LoadingScreen.hide()
             }
-        }
-        
-        let alert = UIAlertController(title: "Server Unavailable", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-        
-        LoadingScreen.hide()
-    }
-    
-    func loadingFinished(_ loader: ApiLoader) {
-        if let statusLoader = loader as? StatusLoader, let server = statusLoader.server {
-            SavedSettings.si.currentServerId = server.serverId
-            SavedSettings.si.redirectUrlString = redirectUrl
+        } else {
+            var message: String
+            if let error = error, error.domain == iSubErrorDomain, error.code == iSubErrorCode.invalidCredentials.rawValue {
+                message = "Either your username or password is incorrect\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆"
+            } else {
+                message = "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆"
+                
+                if let error = error as? NSError {
+                    message += "\n\nError code \(error.code):\n\(error.description)"
+                }
+            }
             
-            AppDelegate.si.switchServer(to: server, redirectUrl: redirectUrl)
+            let alert = UIAlertController(title: "Server Unavailable", message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
             
             LoadingScreen.hide()
         }

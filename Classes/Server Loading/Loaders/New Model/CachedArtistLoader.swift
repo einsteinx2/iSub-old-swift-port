@@ -18,7 +18,7 @@ final class CachedArtistLoader: CachedDatabaseLoader {
         return albums
     }
     
-    override var associatedObject: Any? {
+    override var associatedItem: Item? {
         return ArtistRepository.si.artist(artistId: artistId, serverId: serverId)
     }
     

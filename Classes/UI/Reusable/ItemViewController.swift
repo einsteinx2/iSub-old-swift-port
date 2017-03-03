@@ -164,13 +164,8 @@ class ItemViewController: DraggableTableViewController {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(currentPlaylistIndexChanged(_:)), name: PlayQueue.Notifications.indexChanged)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPlaybackStarted(_:)), name: BassGaplessPlayer.Notifications.songStarted)
         
-        // TODO: When we have a visual marker for this, we should always reload the table even if not browsing cache
-        if viewModel.isBrowsingCache {
-            NotificationCenter.addObserverOnMainThread(self, selector: #selector(songDownloaded(_:)), name: CacheQueue.Notifications.songDownloaded)
-        }
-        
-        // TODO: Make a new notification for this
-        //NotificationCenter.addObserverOnMainThread(self, selector: #selector(cachedSongDeleted(_:)), name: ISMSNotification_CachedSongDeleted)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songDownloaded(_:)), name: CacheQueue.Notifications.songDownloaded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songRemoved(_:)), name: CacheManager.Notifications.songRemoved)
         
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded)
@@ -183,11 +178,8 @@ class ItemViewController: DraggableTableViewController {
         NotificationCenter.removeObserverOnMainThread(self, name: PlayQueue.Notifications.indexChanged)
         NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
         
-        if viewModel.isBrowsingCache {
-            NotificationCenter.removeObserverOnMainThread(self, name: CacheQueue.Notifications.songDownloaded)
-        }
-        
-//        NotificationCenter.removeObserverOnMainThread(self, name: ISMSNotification_CachedSongDeleted)
+        NotificationCenter.removeObserverOnMainThread(self, name: CacheQueue.Notifications.songDownloaded)
+        NotificationCenter.removeObserverOnMainThread(self, name: CacheManager.Notifications.songRemoved)
         
         NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingBegan)
         NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingEnded)
@@ -205,6 +197,10 @@ class ItemViewController: DraggableTableViewController {
     }
     
     @objc fileprivate func songDownloaded(_ notification: Notification?) {
+        self.tableView.reloadData()
+    }
+    
+    @objc fileprivate func songRemoved(_ notification: Notification?) {
         self.tableView.reloadData()
     }
     
@@ -324,7 +320,7 @@ class ItemViewController: DraggableTableViewController {
             }
             
             let folder = viewModel.folders[indexPath.row]
-            cell.associatedObject = folder
+            cell.associatedItem = folder
             cell.coverArtId = folder.coverArtId
             cell.title = folder.name
         case artistsSectionIndex:
@@ -332,7 +328,7 @@ class ItemViewController: DraggableTableViewController {
             cell.alwaysShowCoverArt = true
             
             let artist = viewModel.artists[indexPath.row]
-            cell.associatedObject = artist
+            cell.associatedItem = artist
             cell.coverArtId = artist.coverArtId
             cell.title = artist.name
         case albumsSectionIndex:
@@ -340,7 +336,7 @@ class ItemViewController: DraggableTableViewController {
             cell.alwaysShowCoverArt = true
             
             let album = viewModel.albums[indexPath.row]
-            cell.associatedObject = album
+            cell.associatedItem = album
             cell.coverArtId = album.coverArtId
             cell.title = album.name
         case songsSectionIndex:
@@ -349,7 +345,7 @@ class ItemViewController: DraggableTableViewController {
             cell.alwaysShowSubtitle = true
             
             let song = viewModel.songs[indexPath.row]
-            cell.associatedObject = song
+            cell.associatedItem = song
             cell.coverArtId = nil
             cell.title = song.title
             cell.trackNumber = viewModel.isShowTrackNumbers ? song.trackNumber : nil
@@ -361,7 +357,7 @@ class ItemViewController: DraggableTableViewController {
             cell.alwaysShowCoverArt = true
             
             let playlist = viewModel.playlists[indexPath.row]
-            cell.associatedObject = playlist
+            cell.associatedItem = playlist
             cell.coverArtId = playlist.coverArtId
             cell.title = playlist.name
         default:
@@ -386,8 +382,28 @@ class ItemViewController: DraggableTableViewController {
             case songsSectionIndex:
                 let song = self.viewModel.songs[indexPath.row]
                 showActionSheet(item: song, indexPath: indexPath)
+            case foldersSectionIndex:
+                let folder = self.viewModel.folders[indexPath.row]
+                if let loader = viewModel.loaderForFolder(folder) {
+                    pushItemController(loader: loader)
+                }
+            case artistsSectionIndex:
+                let artist = self.viewModel.artists[indexPath.row]
+                if let loader = viewModel.loaderForArtist(artist) {
+                    pushItemController(loader: loader)
+                }
+            case albumsSectionIndex:
+                let album = self.viewModel.albums[indexPath.row]
+                if let loader = viewModel.loaderForAlbum(album) {
+                    pushItemController(loader: loader)
+                }
+            case playlistsSectionIndex:
+                let playlist = self.viewModel.playlists[indexPath.row]
+                if let loader = viewModel.loaderForPlaylist(playlist) {
+                    pushItemController(loader: loader)
+                }
             default:
-                break
+                tableView.deselectRow(at: indexPath, animated: false)
             }
         }
     }
@@ -402,6 +418,18 @@ class ItemViewController: DraggableTableViewController {
             switch indexPath.section {
             case songsSectionIndex:
                 viewModel.playSong(atIndex: indexPath.row)
+            case foldersSectionIndex:
+                let folder = self.viewModel.folders[indexPath.row]
+                showActionSheet(item: folder, indexPath: indexPath)
+            case artistsSectionIndex:
+                let artist = self.viewModel.artists[indexPath.row]
+                showActionSheet(item: artist, indexPath: indexPath)
+            case albumsSectionIndex:
+                let album = self.viewModel.albums[indexPath.row]
+                showActionSheet(item: album, indexPath: indexPath)
+            case playlistsSectionIndex:
+                let playlist = self.viewModel.playlists[indexPath.row]
+                showActionSheet(item: playlist, indexPath: indexPath)
             default:
                 break
             }
@@ -409,48 +437,63 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case foldersSectionIndex:
-            let folder = self.viewModel.folders[indexPath.row]
-            if let loader = viewModel.loaderForFolder(folder) {
-                pushItemController(loader: loader)
-            }
-        case artistsSectionIndex:
-            let artist = self.viewModel.artists[indexPath.row]
-            if let loader = viewModel.loaderForArtist(artist) {
-                pushItemController(loader: loader)
-            }
-        case albumsSectionIndex:
-            let album = self.viewModel.albums[indexPath.row]
-            if let loader = viewModel.loaderForAlbum(album) {
-                pushItemController(loader: loader)
-            }
-        case playlistsSectionIndex:
-            let playlist = self.viewModel.playlists[indexPath.row]
-            if let loader = viewModel.loaderForPlaylist(playlist) {
-                pushItemController(loader: loader)
-            }
-        default:
+        if indexPath.section == songsSectionIndex {
             tableView.deselectRow(at: indexPath, animated: false)
         }
     }
     
     fileprivate func showActionSheet(item: Item, indexPath: IndexPath) {
-        if let song = item as? Song {
-            let alertController = UIAlertController(title: item.itemName, message: nil, preferredStyle: .actionSheet)
-            
-            alertController.addAction(UIAlertAction(title: "Play All", style: .default) { action in
+        let alertController = UIAlertController(title: item.itemName, message: nil, preferredStyle: .actionSheet)
+        
+        alertController.addAction(UIAlertAction(title: "Play All", style: .default) { action in
+            if item is Song {
                 self.viewModel.playSong(atIndex: indexPath.row)
-            })
-            
-            alertController.addAction(UIAlertAction(title: "Queue Next", style: .default) { action in
+            } else {
+                let loader = RecursiveSongLoader(item: item)
+                loader.completionHandler = { success, _, _ in
+                    if success {
+                        //PlayQueue.si.playSongs(loader.songs, playIndex: 0)
+                    }
+                }
+                loader.start()
+            }
+        })
+        
+        alertController.addAction(UIAlertAction(title: "Queue Next", style: .default) { action in
+            if let song = item as? Song {
                 PlayQueue.si.insertSongNext(song: song, notify: true)
-            })
-            
-            alertController.addAction(UIAlertAction(title: "Queue Last", style: .default) { action in
+            } else {
+                let loader = RecursiveSongLoader(item: item)
+                loader.completionHandler = { success, _, _ in
+                    if success {
+                        for song in loader.songs.reversed() {
+                            //PlayQueue.si.insertSongNext(song: song, notify: false)
+                        }
+                        PlayQueue.si.notifyPlayQueueIndexChanged()
+                    }
+                }
+                loader.start()
+            }
+        })
+        
+        alertController.addAction(UIAlertAction(title: "Queue Last", style: .default) { action in
+            if let song = item as? Song {
                 PlayQueue.si.insertSong(song: song, index: PlayQueue.si.songCount, notify: true)
-            })
-            
+            } else {
+                let loader = RecursiveSongLoader(item: item)
+                loader.completionHandler = { success, _, _ in
+                    if success {
+                        for song in loader.songs {
+                            //PlayQueue.si.insertSong(song: song, index: PlayQueue.si.songCount, notify: false)
+                        }
+                        PlayQueue.si.notifyPlayQueueIndexChanged()
+                    }
+                }
+                loader.start()
+            }
+        })
+        
+        if let song = item as? Song {
             if !viewModel.isBrowsingFolder, let folderId = song.folderId, let mediaFolderId = song.mediaFolderId {
                 alertController.addAction(UIAlertAction(title: "Go to Folder", style: .default) { action in
                     let loader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
@@ -474,29 +517,40 @@ class ItemViewController: DraggableTableViewController {
             
             if viewModel.isBrowsingCache {
                 alertController.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
-                    _ = song.deleteCache()
+                    CacheManager.si.removeSong(song: song)
                     _ = self.viewModel.loadModelsFromDatabase()
                     self.tableView.reloadData()
                 })
             } else {
                 if song.isFullyCached {
                     alertController.addAction(UIAlertAction(title: "Remove from Downloads", style: .destructive) { action in
-                        _ = song.deleteCache()
+                        CacheManager.si.removeSong(song: song)
+                        _ = self.viewModel.loadModelsFromDatabase()
+                        self.tableView.reloadData()
                     })
                 } else {
                     alertController.addAction(UIAlertAction(title: "Download", style: .default) { action in
                         CacheQueue.si.add(song: song)
-                        _ = song.deleteCache()
-                        _ = self.viewModel.loadModelsFromDatabase()
-                        self.tableView.reloadData()
                     })
                 }
             }
-            
-            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            
-            self.present(alertController, animated: true, completion: nil)
+        } else if !viewModel.isBrowsingCache {
+            alertController.addAction(UIAlertAction(title: "Download", style: .default) { action in
+                let loader = RecursiveSongLoader(item: item)
+                loader.completionHandler = { success, _, _ in
+                    if success {
+                        for song in loader.songs {
+                            //CacheQueue.si.add(song: song)
+                        }
+                    }
+                }
+                loader.start()
+            })
         }
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(alertController, animated: true, completion: nil)
     }
     
     fileprivate func pushItemController(loader: ItemLoader) {

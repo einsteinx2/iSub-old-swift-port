@@ -10,6 +10,14 @@ import Foundation
 import AwesomeCache
 
 @objc final class CacheManager: NSObject {
+    struct Notifications {
+        static let songRemoved = Notification.Name("CacheManager_songRemoved")
+        
+        struct Keys {
+            static let song = "song"
+        }
+    }
+    
     static let si = CacheManager()
     
     let cacheCheckInterval = 60.0
@@ -81,6 +89,21 @@ import AwesomeCache
         DispatchQueue.main.async {
             self.checkCache()
         }
+    }
+    
+    func removeSong(song: Song) {
+        if !PlayQueue.si.isPlaying || song != PlayQueue.si.currentSong {
+            do {
+                try FileManager.default.removeItem(atPath: song.currentPath)
+            } catch {
+                printError(error)
+            }
+        }
+        
+        _ = song.deleteCache()
+        
+        let userInfo = [Notifications.Keys.song: song]
+        NotificationCenter.postOnMainThread(name: Notifications.songRemoved, userInfo: userInfo)
     }
     
     func removeOldestCachedSongs() {
