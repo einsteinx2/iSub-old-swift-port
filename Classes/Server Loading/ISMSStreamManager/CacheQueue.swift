@@ -14,7 +14,6 @@ final class CacheQueue: StreamHandlerDelegate {
     struct Notifications {
         static let started        = Notification.Name("CacheQueue_started")
         static let stopped        = Notification.Name("CacheQueue_stopped")
-        static let songDownloaded = Notification.Name("CacheQueue_songDownloaded")
         static let songFailed     = Notification.Name("CacheQueue_songFailed")
     }
     
@@ -65,7 +64,6 @@ final class CacheQueue: StreamHandlerDelegate {
         // Make sure it's not already cached
         guard !currentSong.isFullyCached else {
             removeFromDownloadQueue(song: currentSong)
-            //sendSongDownloadedNotification(song: currentSong)
             start()
             return
         }
@@ -120,11 +118,6 @@ final class CacheQueue: StreamHandlerDelegate {
     }
     
     // MARK: - Helper Functions -
-    
-    fileprivate func sendSongDownloadedNotification(song: Song) {
-        let userInfo = ["songId": "\(song.songId)"]
-        NotificationCenter.postOnMainThread(name: Notifications.songDownloaded, userInfo: userInfo)
-    }
     
     fileprivate func removeFile(forHandler handler: StreamHandler) {
         // TODO: Error handling
@@ -191,9 +184,7 @@ final class CacheQueue: StreamHandlerDelegate {
             
             currentSong = nil
             streamHandler = nil
-            
-            sendSongDownloadedNotification(song: handler.song)
-            
+                        
             start()
         }
     }

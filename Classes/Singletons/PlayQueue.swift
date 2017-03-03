@@ -35,7 +35,6 @@ final class PlayQueue {
     fileprivate func registerForNotifications() {
         // Watch for changes to the play queue playlist
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(playlistChanged(_:)), name: Playlist.Notifications.playlistChanged)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songReadyForPlayback(_:)), name: StreamHandler.Notifications.readyForPlayback)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songStarted), name: BassGaplessPlayer.Notifications.songStarted)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPaused), name: BassGaplessPlayer.Notifications.songPaused)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songEnded), name: BassGaplessPlayer.Notifications.songEnded)
@@ -43,7 +42,6 @@ final class PlayQueue {
     
     fileprivate func unregisterForNotifications() {
         NotificationCenter.removeObserverOnMainThread(self, name: Playlist.Notifications.playlistChanged)
-        NotificationCenter.removeObserverOnMainThread(self, name: StreamHandler.Notifications.readyForPlayback)
         NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
         NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songPaused)
         NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songEnded)
@@ -53,12 +51,6 @@ final class PlayQueue {
         
     }
     
-    @objc fileprivate func songReadyForPlayback(_ notification: Notification) {
-        //print("PlayQueue song ready for playback, song: \(notification.userInfo?["song"]) currentSong: \(currentSong)")
-        if let song = notification.userInfo?["song"] as? Song, song == currentSong {
-            startSong()
-        }
-    }
     @objc fileprivate func songStarted() {
         updateLockScreenInfo()
     }
@@ -70,6 +62,7 @@ final class PlayQueue {
     @objc fileprivate func songEnded() {
         incrementIndex()
         updateLockScreenInfo()
+        StreamQueue.si.start()
     }
     
     // MARK: - Properties -
@@ -308,16 +301,16 @@ final class PlayQueue {
             // Check to see if the song is already cached
             if currentSong.isFullyCached {
                 // The song is fully cached, start streaming from the local copy
-                player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
+                player.start(song: currentSong, byteOffset: byteOffset)
             } else {
                 if let currentCachingSong = CacheQueue.si.currentSong, currentCachingSong == currentSong {
                     // If the Cache Queue is downloading it and it's ready for playback, start the player
                     if CacheQueue.si.streamHandler?.isReadyForPlayback == true {
-                        player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
+                        player.start(song: currentSong, byteOffset: byteOffset)
                     }
                 } else {
                     if StreamQueue.si.streamHandler?.isReadyForPlayback == true {
-                        player.start(song: currentSong, index: currentIndex, byteOffset: byteOffset)
+                        player.start(song: currentSong, byteOffset: byteOffset)
                     }
                 }
             }

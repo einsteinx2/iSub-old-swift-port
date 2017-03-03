@@ -144,7 +144,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             return
         }
         
-        print("[URLSessionStreamHandler] Stream handler request canceled for %@", song)
+        print("[URLSessionStreamHandler] Stream handler request canceled for \(song)")
         
         isCanceled = true
         

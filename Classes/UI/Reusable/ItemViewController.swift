@@ -164,7 +164,7 @@ class ItemViewController: DraggableTableViewController {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(currentPlaylistIndexChanged(_:)), name: PlayQueue.Notifications.indexChanged)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPlaybackStarted(_:)), name: BassGaplessPlayer.Notifications.songStarted)
         
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songDownloaded(_:)), name: CacheQueue.Notifications.songDownloaded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songDownloaded(_:)), name: StreamHandler.Notifications.downloaded)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songRemoved(_:)), name: CacheManager.Notifications.songRemoved)
         
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingBegan(_:)), name: DraggableTableView.Notifications.draggingBegan)
@@ -178,7 +178,7 @@ class ItemViewController: DraggableTableViewController {
         NotificationCenter.removeObserverOnMainThread(self, name: PlayQueue.Notifications.indexChanged)
         NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
         
-        NotificationCenter.removeObserverOnMainThread(self, name: CacheQueue.Notifications.songDownloaded)
+        NotificationCenter.removeObserverOnMainThread(self, name: StreamHandler.Notifications.downloaded)
         NotificationCenter.removeObserverOnMainThread(self, name: CacheManager.Notifications.songRemoved)
         
         NotificationCenter.removeObserverOnMainThread(self, name: DraggableTableView.Notifications.draggingBegan)
@@ -247,6 +247,11 @@ class ItemViewController: DraggableTableViewController {
         if !reloading {
             reloading = true
             viewModel.loadModelsFromWeb()
+            
+            if viewModel.isRootItemLoader {
+                // Load media folders
+                MediaFoldersLoader().start()
+            }
         }
     }
     
@@ -518,6 +523,13 @@ class ItemViewController: DraggableTableViewController {
             if viewModel.isBrowsingCache {
                 alertController.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
                     CacheManager.si.removeSong(song: song)
+                    _ = self.viewModel.loadModelsFromDatabase()
+                    self.tableView.reloadData()
+                })
+                alertController.addAction(UIAlertAction(title: "Remove All", style: .destructive) { action in
+                    for songToRemove in self.viewModel.songs {
+                        CacheManager.si.removeSong(song: songToRemove)
+                    }
                     _ = self.viewModel.loadModelsFromDatabase()
                     self.tableView.reloadData()
                 })

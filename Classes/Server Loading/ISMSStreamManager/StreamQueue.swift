@@ -21,9 +21,7 @@ final class StreamQueue: StreamHandlerDelegate {
         guard let currentSong = PlayQueue.si.currentSong, song != currentSong, !SavedSettings.si.isOfflineMode else {
             return
         }
-        
-        stop()
-        
+                
         if currentSong.basicType == .audio && !currentSong.isFullyCached && CacheQueue.si.currentSong != currentSong {
             song = currentSong
         } else if let nextSong = PlayQueue.si.nextSong, nextSong.basicType == .audio && !nextSong.isFullyCached &&  CacheQueue.si.currentSong != nextSong {
@@ -35,6 +33,7 @@ final class StreamQueue: StreamHandlerDelegate {
         isDownloading = true
 
         // Create the stream handler
+        streamHandler?.cancel()
         streamHandler = StreamHandler(song: song!, isTemp: false, delegate: self)
         streamHandler!.allowReconnects = true
         streamHandler!.start()
@@ -46,18 +45,6 @@ final class StreamQueue: StreamHandlerDelegate {
         streamHandler?.cancel()
         streamHandler = nil
         song = nil
-    }
-    
-    fileprivate func registerForNotifications() {
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songEnded), name: BassGaplessPlayer.Notifications.songEnded)
-    }
-    
-    fileprivate func unregisterForNotifications() {
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songEnded)
-    }
-    
-    @objc fileprivate func songEnded() {
-        start()
     }
     
     // MARK: - Stream Handler Delegate -

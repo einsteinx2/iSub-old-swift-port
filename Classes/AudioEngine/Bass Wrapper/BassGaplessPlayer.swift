@@ -61,6 +61,7 @@ final class BassGaplessPlayer {
     init() {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(routeChanged(_:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(readyForPlayback(_:)), name: StreamHandler.Notifications.readyForPlayback)
     }
     
     fileprivate var shouldResumeFromInterruption = false
@@ -84,9 +85,18 @@ final class BassGaplessPlayer {
         }
     }
     
+    @objc fileprivate func readyForPlayback(_ notification: Notification) {
+        if !isPlaying, let song = notification.userInfo?[StreamHandler.Notifications.Keys.song] as? Song {
+            if currentBassStream?.song == nil || currentBassStream?.song == song {
+                start(song: song, byteOffset: 0)
+            }
+        }
+    }
+    
     deinit {
         NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
         NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+        NotificationCenter.removeObserverOnMainThread(self, name: StreamHandler.Notifications.readyForPlayback, object: nil)
     }
     
     func startAudioSession() {
@@ -100,6 +110,8 @@ final class BassGaplessPlayer {
         } catch {
             printError(error)
         }
+        
+        bassInit()
     }
     
     // MARK: - Output Stream -
@@ -708,8 +720,6 @@ final class BassGaplessPlayer {
             self.bassStreams.removeAll()
         }
         BASS_ChannelStop(outStream)
-        
-        isPlaying = false
     }
     
     func testStream(forSong song: Song) -> Bool {
@@ -784,7 +794,7 @@ final class BassGaplessPlayer {
         return nil
     }
     
-    func start(song: Song, index: Int, byteOffset: Int64) {
+    func start(song: Song, byteOffset: Int64) {
         BASS_SetDevice(deviceNumber)
         
         startByteOffset = 0
@@ -794,9 +804,9 @@ final class BassGaplessPlayer {
             return
         }
         
+        startAudioSession()
+        
         if let bassStream = self.prepareStream(forSong: song) {
-            startAudioSession()
-            
             BASS_Mixer_StreamAddChannel(mixerStream, bassStream.stream, UInt32(BASS_MIXER_NORAMPIN))
             
             totalBytesDrained = 0
@@ -836,7 +846,7 @@ final class BassGaplessPlayer {
             } else {
                 // Failed to create the stream, retrying
                 startSongRetryWorkItem = DispatchWorkItem {
-                    self.start(song: song, index: index, byteOffset: byteOffset)
+                    self.start(song: song, byteOffset: byteOffset)
                 }
                 DispatchQueue.main.async(after: 2.0, execute: startSongRetryWorkItem)
             }
