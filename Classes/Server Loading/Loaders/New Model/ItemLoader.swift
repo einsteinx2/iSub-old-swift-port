@@ -11,6 +11,8 @@ import Foundation
 protocol ItemLoader {
     var completionHandler: ApiLoaderCompletionHandler? { get set }
     
+    var serverId: Int64 { get }
+    
     var associatedItem: Item? { get }
     
     var items: [Item] { get }

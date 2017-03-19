@@ -17,21 +17,20 @@ final class AlbumLoader: ApiLoader, ItemLoader {
         return songs
     }
     
-    init(albumId: Int64) {
+    init(albumId: Int64, serverId: Int64) {
         self.albumId = albumId
-        super.init()
+        super.init(serverId: serverId)
     }
     
-    override func createRequest() -> URLRequest {
-        return URLRequest(subsonicAction: .getAlbum, parameters: ["id": albumId])
+    override func createRequest() -> URLRequest? {
+        return URLRequest(subsonicAction: .getAlbum, serverId: serverId, parameters: ["id": albumId])
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
         var songsTemp = [Song]()
         
-        let serverId = SavedSettings.si.currentServerId
         root.iterate("album.song") { song in
-            if let aSong = Song(rxmlElement: song, serverId: serverId) {
+            if let aSong = Song(rxmlElement: song, serverId: self.serverId) {
                 songsTemp.append(aSong)
             }
         }
@@ -64,7 +63,7 @@ final class AlbumLoader: ApiLoader, ItemLoader {
             func performOperation(folderId: Int64, mediaFolderId: Int64) {
                 if !folderIds.contains(folderId) {
                     folderIds.insert(folderId)
-                    let loader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
+                    let loader = FolderLoader(folderId: folderId, serverId: serverId, mediaFolderId: mediaFolderId)
                     let operation = ItemLoaderOperation(loader: loader)
                     ApiLoader.backgroundLoadingQueue.addOperation(operation)
                 }
@@ -88,7 +87,6 @@ final class AlbumLoader: ApiLoader, ItemLoader {
     }
     
     var associatedItem: Item? {
-        let serverId = SavedSettings.si.currentServerId
         return AlbumRepository.si.album(albumId: albumId, serverId: serverId)
     }
 }

@@ -21,23 +21,22 @@ final class RootFoldersLoader: ApiLoader, RootItemLoader {
         return folders as [Item] + songs as [Item]
     }
     
-    override func createRequest() -> URLRequest {
+    override func createRequest() -> URLRequest? {
         var parameters: [String: String]?
         if let mediaFolderId = mediaFolderId, mediaFolderId >= 0 {
             parameters = ["musicFolderId": "\(mediaFolderId)"]
         }
-        return URLRequest(subsonicAction: .getIndexes, parameters: parameters)
+        return URLRequest(subsonicAction: .getIndexes, serverId: serverId, parameters: parameters)
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
         var foldersTemp = [Folder]()
         var songsTemp = [Song]()
         
-        let serverId = SavedSettings.si.currentServerId
         root.iterate("indexes.index") { index in
             index.iterate("artist") { artist in
                 if artist.attribute("name") != ".AppleDouble" {
-                    if let aFolder = Folder(rxmlElement: artist, serverId: serverId, mediaFolderId: self.mediaFolderId ?? 0) {
+                    if let aFolder = Folder(rxmlElement: artist, serverId: self.serverId, mediaFolderId: self.mediaFolderId ?? 0) {
                         foldersTemp.append(aFolder)
                     }
                 }
@@ -45,7 +44,7 @@ final class RootFoldersLoader: ApiLoader, RootItemLoader {
         }
         
         root.iterate("indexes.child") { child in
-            if let aSong = Song(rxmlElement: child, serverId: serverId), aSong.contentType != nil {
+            if let aSong = Song(rxmlElement: child, serverId: self.serverId), aSong.contentType != nil {
                 songsTemp.append(aSong)
             }
         }
@@ -64,7 +63,6 @@ final class RootFoldersLoader: ApiLoader, RootItemLoader {
     func persistModels() {
         // TODO: Only delete missing ones
         // Remove existing root folders
-        let serverId = SavedSettings.si.currentServerId
         _ = FolderRepository.si.deleteRootFolders(mediaFolderId: mediaFolderId, serverId: serverId)
         _ = SongRepository.si.deleteRootSongs(mediaFolderId: mediaFolderId, serverId: serverId)
         
@@ -74,7 +72,6 @@ final class RootFoldersLoader: ApiLoader, RootItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.si.currentServerId
         folders = FolderRepository.si.rootFolders(mediaFolderId: mediaFolderId, serverId: serverId)
         songs = SongRepository.si.rootSongs(mediaFolderId: mediaFolderId, serverId: serverId)
         

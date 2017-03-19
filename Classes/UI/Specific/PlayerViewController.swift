@@ -291,8 +291,8 @@ class PlayerViewController: UIViewController {
     
     fileprivate func updateCurrentSong() {
         let currentSong = PlayQueue.si.currentDisplaySong
-        if let coverArtId = currentSong?.coverArtId {
-            coverArtView.loadImage(coverArtId: coverArtId, size: .player)
+        if let coverArtId = currentSong?.coverArtId, let serverId = currentSong?.serverId {
+            coverArtView.loadImage(coverArtId: coverArtId, serverId: serverId, size: .player)
         } else {
             coverArtView.setDefaultImage(forSize: .player)
         }

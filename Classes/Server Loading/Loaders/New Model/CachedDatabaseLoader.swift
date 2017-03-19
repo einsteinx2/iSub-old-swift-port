@@ -9,7 +9,9 @@
 import Foundation
 
 class CachedDatabaseLoader: ItemLoader {
-     var completionHandler: ApiLoaderCompletionHandler?
+    var completionHandler: ApiLoaderCompletionHandler?
+    
+    let serverId: Int64
     
     var associatedItem: Item? {
         return nil
@@ -29,4 +31,8 @@ class CachedDatabaseLoader: ItemLoader {
     func persistModels() {}
     func start() {}
     func cancel() {}
+    
+    init(serverId: Int64) {
+        self.serverId = serverId
+    }
 }

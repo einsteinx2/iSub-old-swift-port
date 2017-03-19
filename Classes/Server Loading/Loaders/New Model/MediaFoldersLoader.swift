@@ -17,16 +17,15 @@ final class MediaFoldersLoader: ApiLoader, ItemLoader {
         return mediaFolders
     }
     
-    override func createRequest() -> URLRequest {
-        return URLRequest(subsonicAction: .getMusicFolders)
+    override func createRequest() -> URLRequest? {
+        return URLRequest(subsonicAction: .getMusicFolders, serverId: serverId)
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
         var mediaFoldersTemp = [MediaFolder]()
         
-        let serverId = SavedSettings.si.currentServerId
         root.iterate("musicFolders.musicFolder") { musicFolder in
-            if let aMediaFolder = MediaFolder(rxmlElement: musicFolder, serverId: serverId) {
+            if let aMediaFolder = MediaFolder(rxmlElement: musicFolder, serverId: self.serverId) {
                 mediaFoldersTemp.append(aMediaFolder)
             }
         }
@@ -39,13 +38,11 @@ final class MediaFoldersLoader: ApiLoader, ItemLoader {
     
     func persistModels() {
         // TODO: Only delete missing ones
-        let serverId = SavedSettings.si.currentServerId
         _ = MediaFolderRepository.si.deleteAllMediaFolders(serverId: serverId)
         mediaFolders.forEach({_ = $0.replace()})
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.si.currentServerId
         mediaFolders = MediaFolderRepository.si.allMediaFolders(serverId: serverId)
         return mediaFolders.count > 0
     }

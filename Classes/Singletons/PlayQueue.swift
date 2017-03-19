@@ -79,9 +79,9 @@ final class PlayQueue {
             updateLockScreenInfo()
             
             // Prefetch the art
-            if let coverArtId = currentSong?.coverArtId {
-                CachedImage.preheat(coverArtId: coverArtId, size: .player)
-                CachedImage.preheat(coverArtId: coverArtId, size: .cell)
+            if let coverArtId = currentSong?.coverArtId, let serverId = currentSong?.serverId {
+                CachedImage.preheat(coverArtId: coverArtId, serverId: serverId, size: .player)
+                CachedImage.preheat(coverArtId: coverArtId, serverId: serverId, size: .cell)
             }
             
             if currentIndex != oldValue {
@@ -320,14 +320,14 @@ final class PlayQueue {
     // MARK: - Lock Screen -
     
     fileprivate func preheadArt() {
-        if let coverArtId = currentSong?.coverArtId {
-            CachedImage.preheat(coverArtId: coverArtId, size: .player)
-            CachedImage.preheat(coverArtId: coverArtId, size: .cell)
+        if let coverArtId = currentSong?.coverArtId, let serverId = currentSong?.serverId {
+            CachedImage.preheat(coverArtId: coverArtId, serverId: serverId, size: .player)
+            CachedImage.preheat(coverArtId: coverArtId, serverId: serverId, size: .cell)
         }
         
-        if let coverArtId = nextSong?.coverArtId {
-            CachedImage.preheat(coverArtId: coverArtId, size: .player)
-            CachedImage.preheat(coverArtId: coverArtId, size: .cell)
+        if let coverArtId = nextSong?.coverArtId, let serverId = currentSong?.serverId {
+            CachedImage.preheat(coverArtId: coverArtId, serverId: serverId, size: .player)
+            CachedImage.preheat(coverArtId: coverArtId, serverId: serverId, size: .cell)
         }
     }
     
@@ -358,7 +358,7 @@ final class PlayQueue {
             trackInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0 as AnyObject?
             
             trackInfo[MPMediaItemPropertyArtwork] = defaultItemArtwork
-            if let coverArtId = song.coverArtId, let image = CachedImage.cached(coverArtId: coverArtId, size: .player) {
+            if let coverArtId = song.coverArtId, let image = CachedImage.cached(coverArtId: coverArtId, serverId: song.serverId, size: .player) {
                 trackInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
             }
             

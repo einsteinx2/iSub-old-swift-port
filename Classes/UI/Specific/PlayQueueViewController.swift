@@ -414,7 +414,7 @@ extension PlayQueueViewController: PlayQueueViewModelDelegate {
         didSet {
             if let song = associatedItem as? Song {
                 if let coverArtId = song.coverArtId {
-                    coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
+                    coverArtView.loadImage(coverArtId: coverArtId, serverId: song.serverId, size: .cell)
                 } else {
                     coverArtView.setDefaultImage(forSize: .cell)
                 }

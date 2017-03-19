@@ -20,14 +20,14 @@ final class FolderLoader: ApiLoader, ItemLoader {
         return folders as [Item] + songs as [Item]
     }
     
-    init(folderId: Int64, mediaFolderId: Int64 = 0) {
+    init(folderId: Int64, serverId: Int64, mediaFolderId: Int64 = 0) {
         self.folderId = folderId
         self.mediaFolderId = mediaFolderId
-        super.init()
+        super.init(serverId: serverId)
     }
     
-    override func createRequest() -> URLRequest {
-        return URLRequest(subsonicAction: .getMusicDirectory, parameters: ["id": folderId])
+    override func createRequest() -> URLRequest? {
+        return URLRequest(subsonicAction: .getMusicDirectory, serverId: serverId, parameters: ["id": folderId])
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
@@ -35,16 +35,15 @@ final class FolderLoader: ApiLoader, ItemLoader {
         var foldersTemp = [Folder]()
         var songsTemp = [Song]()
         
-        let serverId = SavedSettings.si.currentServerId
         root.iterate("directory.child") { child in
             if (child.attribute("isDir") as NSString).boolValue {
                 if child.attribute("title") != ".AppleDouble" {
-                    if let aFolder = Folder(rxmlElement: child, serverId: serverId, mediaFolderId: self.mediaFolderId) {
+                    if let aFolder = Folder(rxmlElement: child, serverId: self.serverId, mediaFolderId: self.mediaFolderId) {
                         foldersTemp.append(aFolder)
                     }
                 }
             } else {
-                if let aSong = Song(rxmlElement: child, serverId: serverId) {
+                if let aSong = Song(rxmlElement: child, serverId: self.serverId) {
                     if let duration = aSong.duration {
                         songsDurationTemp += duration
                     }
@@ -100,13 +99,13 @@ final class FolderLoader: ApiLoader, ItemLoader {
         
         // Load any needed models (ensure that artists load first)
         for artistId in artistIds {
-            let loader = ArtistLoader(artistId: artistId)
+            let loader = ArtistLoader(artistId: artistId, serverId: serverId)
             let operation = ItemLoaderOperation(loader: loader)
             ApiLoader.backgroundLoadingQueue.addOperation(operation)
         }
         
         for albumId in albumIds {
-            let loader = AlbumLoader(albumId: albumId)
+            let loader = AlbumLoader(albumId: albumId, serverId: serverId)
             let operation = ItemLoaderOperation(loader: loader)
             ApiLoader.backgroundLoadingQueue.addOperation(operation)
         }
@@ -129,7 +128,6 @@ final class FolderLoader: ApiLoader, ItemLoader {
     }
     
     var associatedItem: Item? {
-        let serverId = SavedSettings.si.currentServerId
         return FolderRepository.si.folder(folderId: folderId, serverId: serverId)
     }
 }

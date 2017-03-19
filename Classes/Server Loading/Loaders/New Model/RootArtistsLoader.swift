@@ -20,22 +20,21 @@ final class RootArtistsLoader: ApiLoader, RootItemLoader {
         return artists
     }
     
-    override func createRequest() -> URLRequest {
+    override func createRequest() -> URLRequest? {
         var parameters: [String: String]?
         if let mediaFolderId = mediaFolderId, mediaFolderId >= 0 {
             parameters = ["musicFolderId": "\(mediaFolderId)"]
         }
-        return URLRequest(subsonicAction: .getArtists, parameters: parameters)
+        return URLRequest(subsonicAction: .getArtists, serverId: serverId, parameters: parameters)
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
         var artistsTemp = [Artist]()
         
-        let serverId = SavedSettings.si.currentServerId
         root.iterate("artists.index") { index in
             index.iterate("artist") { artist in
                 if artist.attribute("name") != ".AppleDouble" {
-                    if let anArtist = Artist(rxmlElement: artist, serverId: serverId) {
+                    if let anArtist = Artist(rxmlElement: artist, serverId: self.serverId) {
                         artistsTemp.append(anArtist)
                     }
                 }
@@ -54,7 +53,6 @@ final class RootArtistsLoader: ApiLoader, RootItemLoader {
     
     func persistModels() {
         // Remove existing artists
-        let serverId = SavedSettings.si.currentServerId
         // TODO: Should only delete artists not in artists array, same for other loaders
         _ = ArtistRepository.si.deleteAllArtists(serverId: serverId)
         
@@ -63,7 +61,6 @@ final class RootArtistsLoader: ApiLoader, RootItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.si.currentServerId
         let artistsTemp = ArtistRepository.si.allArtists(serverId: serverId)
         if artistsTemp.count > 0 {
             artists = artistsTemp

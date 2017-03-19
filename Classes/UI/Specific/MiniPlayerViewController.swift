@@ -145,8 +145,8 @@ class MiniPlayerViewController: UIViewController {
     
     fileprivate func updateCurrentSong() {
         let currentSong = PlayQueue.si.currentDisplaySong
-        if let coverArtId = currentSong?.coverArtId {
-            coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
+        if let coverArtId = currentSong?.coverArtId, let serverId = currentSong?.serverId {
+            coverArtView.loadImage(coverArtId: coverArtId, serverId: serverId, size: .cell)
         } else {
             coverArtView.setDefaultImage(forSize: .cell)
         }

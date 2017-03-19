@@ -14,11 +14,12 @@ class CachedImageView: UIImageView {
         self.image = CachedImage.default(forSize: size)
     }
     
-    func loadImage(coverArtId: String, size: CachedImageSize) {
+    func loadImage(coverArtId: String, serverId: Int64, size: CachedImageSize) {
         setDefaultImage(forSize: size)
         
-        let request = CachedImage.request(coverArtId: coverArtId, size: size)
-        Nuke.loadImage(with: request, into: self)
+        if let request = CachedImage.request(coverArtId: coverArtId, serverId: serverId, size: size) {
+            Nuke.loadImage(with: request, into: self)
+        }
     }
     
     func cancelLoading() {

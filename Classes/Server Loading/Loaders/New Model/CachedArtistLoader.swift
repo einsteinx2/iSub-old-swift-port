@@ -10,7 +10,6 @@ import Foundation
 
 final class CachedArtistLoader: CachedDatabaseLoader {
     let artistId: Int64
-    let serverId: Int64
     
     var albums = [Album]()
     
@@ -24,8 +23,7 @@ final class CachedArtistLoader: CachedDatabaseLoader {
     
     init(artistId: Int64, serverId: Int64) {
         self.artistId = artistId
-        self.serverId = serverId
-        super.init()
+        super.init(serverId: serverId)
     }
     
     override func loadModelsFromDatabase() -> Bool {

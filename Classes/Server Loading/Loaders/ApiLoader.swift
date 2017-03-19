@@ -57,6 +57,8 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
         return nil
     }
     
+    let serverId: Int64
+    
     fileprivate var request: URLRequest?
     fileprivate var session: URLSession?
     fileprivate var task: URLSessionDataTask?
@@ -65,16 +67,23 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
     fileprivate var selfRef: ApiLoader?
     
     override init() {
+        self.serverId = SavedSettings.si.currentServerId
         super.init()
     }
     
-    init(completionHandler: @escaping ApiLoaderCompletionHandler, redirectionHandler: ApiLoaderRedirectionHandler? = nil) {
+    init(serverId: Int64 = SavedSettings.si.currentServerId) {
+        self.serverId = serverId
+        super.init()
+    }
+    
+    init(serverId: Int64 = SavedSettings.si.currentServerId, completionHandler: @escaping ApiLoaderCompletionHandler, redirectionHandler: ApiLoaderRedirectionHandler? = nil) {
+        self.serverId = serverId
         self.completionHandler = completionHandler
         self.redirectionHandler = redirectionHandler
         super.init()
     }
     
-    func createRequest() -> URLRequest {
+    func createRequest() -> URLRequest? {
         fatalError("Must override in subclass")
     }
     
@@ -89,14 +98,19 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
         }
         
         request = createRequest()
-        session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
-        task = session!.dataTask(with: request!)
-        task!.resume()
-        
-        state = .loading
-        
-        if selfRef == nil {
-            selfRef = self
+        if let request = request {
+            session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            task = session!.dataTask(with: request)
+            task!.resume()
+            
+            state = .loading
+            
+            if selfRef == nil {
+                selfRef = self
+            }
+        } else {
+            state = .failed
+            completionHandler?(false, NSError(iSubCode: .serverNotInDb), self)
         }
     }
     

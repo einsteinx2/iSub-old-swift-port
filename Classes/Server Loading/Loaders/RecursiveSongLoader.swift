@@ -22,7 +22,7 @@ class RecursiveSongLoader: ApiLoader, ItemLoader {
     fileprivate let operationQueue = OperationQueue()
     
     init(item: Item) {
-        super.init()
+        super.init(serverId: item.serverId)
         self.associatedItem = item
         operationQueue.maxConcurrentOperationCount = 1
     }
@@ -74,13 +74,13 @@ class RecursiveSongLoader: ApiLoader, ItemLoader {
         case let song as Song:
             songs.append(song)
         case let folder as Folder:
-            loader = FolderLoader(folderId: folder.folderId)
+            loader = FolderLoader(folderId: folder.folderId, serverId: folder.serverId)
         case let artist as Artist:
-            loader = ArtistLoader(artistId: artist.artistId)
+            loader = ArtistLoader(artistId: artist.artistId, serverId: artist.serverId)
         case let album as Album:
-            loader = AlbumLoader(albumId: album.albumId)
+            loader = AlbumLoader(albumId: album.albumId, serverId: album.serverId)
         case let playlist as Playlist:
-            loader = PlaylistLoader(playlistId: playlist.playlistId)
+            loader = PlaylistLoader(playlistId: playlist.playlistId, serverId: playlist.serverId)
         default:
             break
         }

@@ -31,8 +31,8 @@ class ItemTableViewCell: DroppableCell {
     
     var coverArtId: String? {
         didSet {
-            if let coverArtId = coverArtId {
-                coverArtView.loadImage(coverArtId: coverArtId, size: .cell)
+            if let coverArtId = coverArtId, let serverId = associatedItem?.serverId {
+                coverArtView.loadImage(coverArtId: coverArtId, serverId: serverId, size: .cell)
             } else {
                 coverArtView.setDefaultImage(forSize: .cell)
             }

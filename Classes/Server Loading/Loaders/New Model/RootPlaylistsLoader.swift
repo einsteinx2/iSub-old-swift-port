@@ -17,16 +17,15 @@ final class RootPlaylistsLoader: ApiLoader, ItemLoader {
         return playlists
     }
     
-    override func createRequest() -> URLRequest {
-        return URLRequest(subsonicAction: .getPlaylists)
+    override func createRequest() -> URLRequest? {
+        return URLRequest(subsonicAction: .getPlaylists, serverId: serverId)
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
         var playlistsTemp = [Playlist]()
         
-        let serverId = SavedSettings.si.currentServerId
         root.iterate("playlists.playlist") { playlist in
-            if let aPlaylist = Playlist(rxmlElement: playlist, serverId: serverId) {
+            if let aPlaylist = Playlist(rxmlElement: playlist, serverId: self.serverId) {
                 playlistsTemp.append(aPlaylist)
             }
         }
@@ -43,7 +42,7 @@ final class RootPlaylistsLoader: ApiLoader, ItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        playlists = PlaylistRepository.si.allPlaylists(serverId: SavedSettings.si.currentServerId)
+        playlists = PlaylistRepository.si.allPlaylists(serverId: serverId)
         return true
     }
 }

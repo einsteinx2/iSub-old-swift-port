@@ -17,21 +17,20 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
         return songs
     }
     
-    init(playlistId: Int64) {
+    init(playlistId: Int64, serverId: Int64) {
         self.playlistId = playlistId
-        super.init()
+        super.init(serverId: serverId)
     }
     
-    override func createRequest() -> URLRequest {
-        return URLRequest(subsonicAction: .getPlaylist, parameters: ["id": playlistId])
+    override func createRequest() -> URLRequest? {
+        return URLRequest(subsonicAction: .getPlaylist, serverId: serverId, parameters: ["id": playlistId])
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
         var songsTemp = [Song]()
         
-        let serverId = SavedSettings.si.currentServerId
         root.iterate("playlist.entry") { song in
-            if let aSong = Song(rxmlElement: song, serverId: serverId) {
+            if let aSong = Song(rxmlElement: song, serverId: self.serverId) {
                 songsTemp.append(aSong)
             }
         }
@@ -60,7 +59,7 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
             func performOperation(folderId: Int64, mediaFolderId: Int64) {
                 if !folderIds.contains(folderId) {
                     folderIds.insert(folderId)
-                    let loader = FolderLoader(folderId: folderId, mediaFolderId: mediaFolderId)
+                    let loader = FolderLoader(folderId: folderId, serverId: serverId, mediaFolderId: mediaFolderId)
                     let operation = ItemLoaderOperation(loader: loader)
                     ApiLoader.backgroundLoadingQueue.addOperation(operation)
                 }
@@ -86,13 +85,13 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
         }
         
         for artistId in artistIds {
-            let loader = ArtistLoader(artistId: artistId)
+            let loader = ArtistLoader(artistId: artistId, serverId: serverId)
             let operation = ItemLoaderOperation(loader: loader)
             ApiLoader.backgroundLoadingQueue.addOperation(operation)
         }
         
         for albumId in albumIds {
-            let loader = AlbumLoader(albumId: albumId)
+            let loader = AlbumLoader(albumId: albumId, serverId: serverId)
             let operation = ItemLoaderOperation(loader: loader)
             ApiLoader.backgroundLoadingQueue.addOperation(operation)
         }
@@ -108,7 +107,6 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
     }
     
     var associatedItem: Item? {
-        let serverId = SavedSettings.si.currentServerId
         return PlaylistRepository.si.playlist(playlistId: playlistId, serverId: serverId)
     }
 }

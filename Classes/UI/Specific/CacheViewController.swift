@@ -67,18 +67,19 @@ class CacheViewController: DraggableTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case foldersRowIndex:
-            let loader = CachedRootFoldersLoader()
+            let loader = CachedRootFoldersLoader(serverId: SavedSettings.si.currentServerId)
             pushItemController(loader: loader, title: "Downloaded Folders")
         case artistsRowIndex:
-            let loader = CachedRootArtistsLoader()
+            let loader = CachedRootArtistsLoader(serverId: SavedSettings.si.currentServerId)
             pushItemController(loader: loader, title: "Downloaded Artists")
         case albumsRowIndex:
-            let loader = CachedRootAlbumsLoader()
+            let loader = CachedRootAlbumsLoader(serverId: SavedSettings.si.currentServerId)
             pushItemController(loader: loader, title: "Downloaded Albums")
         case songsRowIndex:
-            let loader = CachedRootSongsLoader()
+            let loader = CachedRootSongsLoader(serverId: SavedSettings.si.currentServerId)
             pushItemController(loader: loader, title: "Downloaded Songs")
         case queueRowIndex:
+            // TODO: Maybe find a way to merge this between servers
             let loader = CachedPlaylistLoader(playlistId: Playlist.downloadQueue.playlistId, serverId: SavedSettings.si.currentServerId)
             pushItemController(loader: loader, title: "Download Queue")
         default:

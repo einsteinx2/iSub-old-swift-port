@@ -49,17 +49,31 @@ fileprivate func encodedParameter(_ value: Any) -> String {
 }
 
 extension URLRequest {
-    init(subsonicAction: SubsonicURLAction, parameters: [String: Any]? = nil, fragment: String? = nil, byteOffset: Int = 0) {
-        let baseUrl = SavedSettings.si.redirectUrlString ?? SavedSettings.si.currentServer.url
-        let currentServer = SavedSettings.si.currentServer
-        self.init(subsonicAction: subsonicAction,
-                  baseUrl: baseUrl,
-                  username: currentServer.username,
-                  password: currentServer.password ?? "",
-                  parameters: parameters,
-                  fragment: fragment,
-                  byteOffset: byteOffset,
-                  basicAuth: currentServer.basicAuth)
+    init?(subsonicAction: SubsonicURLAction, serverId: Int64, parameters: [String: Any]? = nil, fragment: String? = nil, byteOffset: Int = 0) {
+        var server: Server?
+        if serverId == Server.testServerId {
+            server = Server.testServer
+        } else {
+            server = ServerRepository.si.server(serverId: serverId)
+        }
+        
+        if let server = server {
+            var baseUrl = server.url
+            if serverId == SavedSettings.si.currentServerId, let redirectUrl = SavedSettings.si.redirectUrlString {
+                baseUrl = redirectUrl
+            }
+            
+            self.init(subsonicAction: subsonicAction,
+                      baseUrl: baseUrl,
+                      username: server.username,
+                      password: server.password ?? "",
+                      parameters: parameters,
+                      fragment: fragment,
+                      byteOffset: byteOffset,
+                      basicAuth: server.basicAuth)
+        } else {
+             return nil
+        }
     }
     
     init(subsonicAction: SubsonicURLAction, baseUrl: String, username: String, password: String, parameters: [String: Any]? = nil, fragment: String? = nil, byteOffset: Int = 0, basicAuth: Bool = false) {

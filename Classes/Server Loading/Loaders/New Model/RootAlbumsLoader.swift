@@ -23,20 +23,19 @@ final class RootAlbumsLoader: ApiLoader, RootItemLoader {
         return albums
     }
     
-    override func createRequest() -> URLRequest {
+    override func createRequest() -> URLRequest? {
         var parameters = ["type": "alphabeticalByName", "offset": "\(offset)", "size":"\(size)"]
         if let mediaFolderId = mediaFolderId, mediaFolderId >= 0 {
             parameters["musicFolderId"] = "\(mediaFolderId)"
         }
-        return URLRequest(subsonicAction: .getAlbumList2, parameters: parameters)
+        return URLRequest(subsonicAction: .getAlbumList2, serverId: serverId, parameters: parameters)
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
         var albumsTemp = [Album]()
         
-        let serverId = SavedSettings.si.currentServerId
         root.iterate("albumList2.album") { album in
-            if let anAlbum = Album(rxmlElement: album, serverId: serverId) {
+            if let anAlbum = Album(rxmlElement: album, serverId: self.serverId) {
                 albumsTemp.append(anAlbum)
             }
         }
@@ -61,7 +60,6 @@ final class RootAlbumsLoader: ApiLoader, RootItemLoader {
     
     func persistModels() {
         // Remove existing albums
-        let serverId = SavedSettings.si.currentServerId
         _ = AlbumRepository.si.deleteAllAlbums(serverId: serverId)
         
         // Save the new albums
@@ -69,7 +67,6 @@ final class RootAlbumsLoader: ApiLoader, RootItemLoader {
     }
     
     func loadModelsFromDatabase() -> Bool {
-        let serverId = SavedSettings.si.currentServerId
         let albumsTemp = AlbumRepository.si.allAlbums(serverId: serverId)
         if albumsTemp.count > 0 {
             albums = albumsTemp

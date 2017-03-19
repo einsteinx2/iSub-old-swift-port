@@ -34,28 +34,33 @@ enum CachedImageSize {
 struct CachedImage {
     static let preheater = Preheater()
     
-    static func request(coverArtId: String, size: CachedImageSize) -> Request {
+    static func request(coverArtId: String, serverId: Int64, size: CachedImageSize) -> Request? {
         var parameters = ["id": coverArtId]
         if size != .original {
             parameters["size"] = "\(size.pixelSize)"
         }
-        let fragment = "s_\(SavedSettings.si.currentServerId)_id_\(coverArtId)_size_\(size.name)"
-        let urlRequest = URLRequest(subsonicAction: .getCoverArt, parameters: parameters, fragment: fragment)
-        var request = Request(urlRequest: urlRequest)
-        request.cacheKey = fragment
-        request.loadKey = fragment
-        return request
+        let fragment = "s_\(serverId)_id_\(coverArtId)_size_\(size.name)"
+        if let urlRequest = URLRequest(subsonicAction: .getCoverArt, serverId: serverId, parameters: parameters, fragment: fragment) {
+            var request = Request(urlRequest: urlRequest)
+            request.cacheKey = fragment
+            request.loadKey = fragment
+            return request
+        }
+        return nil
     }
     
-    static func preheat(coverArtId: String, size: CachedImageSize) {
-        let request = self.request(coverArtId: coverArtId, size: size)
-        preheater.startPreheating(with: [request])
+    static func preheat(coverArtId: String, serverId: Int64, size: CachedImageSize) {
+        if let request = self.request(coverArtId: coverArtId, serverId: serverId, size: size) {
+            preheater.startPreheating(with: [request])
+        }
     }
     
-    static func cached(coverArtId: String, size: CachedImageSize) -> UIImage? {
-        let request = self.request(coverArtId: coverArtId, size: size)
-        let image = Cache.shared[request]
-        return image
+    static func cached(coverArtId: String, serverId: Int64, size: CachedImageSize) -> UIImage? {
+        if let request = self.request(coverArtId: coverArtId, serverId: serverId, size: size) {
+            let image = Cache.shared[request]
+            return image
+        }
+        return nil
     }
     
     static func `default`(forSize size: CachedImageSize) -> UIImage {

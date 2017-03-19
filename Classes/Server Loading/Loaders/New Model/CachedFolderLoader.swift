@@ -12,7 +12,6 @@ final class CachedFolderLoader: CachedDatabaseLoader {
     fileprivate static var operationQueues = [OperationQueue]()
     
     let folderId: Int64
-    let serverId: Int64
     
     var folders = [Folder]()
     var songs = [Song]()
@@ -28,8 +27,7 @@ final class CachedFolderLoader: CachedDatabaseLoader {
     
     init(folderId: Int64, serverId: Int64) {
         self.folderId = folderId
-        self.serverId = serverId
-        super.init()
+        super.init(serverId: serverId)
     }
     
     override func loadModelsFromDatabase() -> Bool {

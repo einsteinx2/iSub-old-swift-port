@@ -210,7 +210,7 @@ import Reachability
                     }
                     
                     // Load media folders
-                    MediaFoldersLoader().start()
+                    MediaFoldersLoader(serverId: currentServer.serverId).start()
                     
                 } else if !SavedSettings.si.isOfflineMode {
                     self.enterOfflineMode()
@@ -356,6 +356,6 @@ import Reachability
         menuController.resetMenuItems()
         
         // Load media folders
-        MediaFoldersLoader().start()
+        MediaFoldersLoader(serverId: server.serverId).start()
     }
 }

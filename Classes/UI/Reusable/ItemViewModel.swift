@@ -9,16 +9,24 @@
 import Foundation
 
 protocol ItemViewModelDelegate {
-    func itemsChanged()
-    func loadingFinished()
-    func loadingError(_ error: String)
+    func itemsChanged(viewModel: ItemViewModel)
+    func loadingFinished(viewModel: ItemViewModel)
+    func loadingError(_ error: String, viewModel: ItemViewModel)
+    func presentActionSheet(_ actionSheet: UIAlertController, viewModel: ItemViewModel)
+    func pushItemController(forLoader loader: ItemLoader, viewModel: ItemViewModel)
 }
 
 typealias LoadModelsCompletion = (_ success: Bool, _ error: Error?) -> Void
 
 class ItemViewModel: NSObject {
     
+    // MARK: - Properties -
+    
     fileprivate var loader: ItemLoader
+    
+    var serverId: Int64 {
+        return loader.serverId
+    }
     
     var isDownloadQueue: Bool {
         if let loader = loader as? CachedPlaylistLoader, loader.playlistId == Playlist.downloadQueuePlaylistId {
@@ -76,6 +84,8 @@ class ItemViewModel: NSObject {
     fileprivate(set) var sectionIndexes = [SectionIndex]()
     fileprivate(set) var sectionIndexesSection = -1
     
+    // MARK - Lifecycle -
+    
     init(loader: ItemLoader) {
         self.loader = loader
         self.rootItem = loader.associatedItem
@@ -85,6 +95,8 @@ class ItemViewModel: NSObject {
             self.songSortOrder = folder.songSortOrder
         }
     }
+    
+    // MARK - Loading -
     
     func loadModelsFromDatabase() -> Bool {
         let success = loader.loadModelsFromDatabase()
@@ -100,21 +112,25 @@ class ItemViewModel: NSObject {
             loader.completionHandler = { success, error, loader in
                 completion?(success, error)
                 if success {
-                    self.delegate?.loadingFinished()
+                    self.delegate?.loadingFinished(viewModel: self)
                     
                     // May have some false positives, but prevents UI pauses
                     if self.items.count != self.loader.items.count {
                         self.processModels()
-                        self.delegate?.itemsChanged()
+                        self.delegate?.itemsChanged(viewModel: self)
                     }
                 } else {
                     let errorString = error == nil ? "Unknown error" : error!.localizedDescription
-                    self.delegate?.loadingError(errorString)
+                    self.delegate?.loadingError(errorString, viewModel: self)
                 }
             }
             
             loader.start()
         }
+    }
+    
+    func cancelLoad() {
+        loader.cancel()
     }
     
     func processModels() {
@@ -178,43 +194,7 @@ class ItemViewModel: NSObject {
         }
     }
     
-    func cancelLoad() {
-        loader.cancel()
-    }
-    
-    func loaderForFolder(_ folder: Folder) -> ItemLoader? {
-        var folderLoader: ItemLoader?
-        if isBrowsingCache {
-            folderLoader = CachedFolderLoader(folderId: folder.folderId, serverId: folder.serverId)
-        } else if let mediaFolderId = folder.mediaFolderId {
-            folderLoader = FolderLoader(folderId: folder.folderId, mediaFolderId: mediaFolderId)
-        }
-        return folderLoader
-    }
-    
-    func loaderForArtist(_ artist: Artist) -> ItemLoader? {
-        var artistLoader: ItemLoader?
-        if isBrowsingCache {
-            artistLoader = CachedArtistLoader(artistId: artist.artistId, serverId: artist.serverId)
-        } else{
-            artistLoader = ArtistLoader(artistId: artist.artistId)
-        }
-        return artistLoader
-    }
-    
-    func loaderForAlbum(_ album: Album) -> ItemLoader? {
-        var albumLoader: ItemLoader?
-        if isBrowsingCache {
-            albumLoader = CachedAlbumLoader(albumId: album.albumId, serverId: album.serverId)
-        } else {
-            albumLoader = AlbumLoader(albumId: album.albumId)
-        }
-        return albumLoader
-    }
-    
-    func loaderForPlaylist(_ playlist: Playlist) -> ItemLoader? {
-        return PlaylistLoader(playlistId: playlist.playlistId)
-    }
+    // MARK - Actions -
     
     func playSong(atIndex index: Int) {
         // TODO: Implement a way to just switch play index when we're playing from the same array to save time
@@ -239,6 +219,132 @@ class ItemViewModel: NSObject {
             }
         }
         createSectionIndexes()
-        delegate?.itemsChanged()
+        delegate?.itemsChanged(viewModel: self)
+    }
+    
+    // MARK: - Action Sheets -
+    
+    func addCancelAction(toActionSheet actionSheet: UIAlertController) {
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+    }
+    
+    // MARK: Cell
+    
+    func cellActionSheet(forItem item: Item, indexPath: IndexPath) -> UIAlertController {
+        let alertController = UIAlertController(title: item.itemName, message: nil, preferredStyle: .actionSheet)
+        return alertController
+    }
+    
+    func addPlayQueueActions(toActionSheet actionSheet: UIAlertController, forItem item: Item, indexPath: IndexPath) {
+        actionSheet.addAction(UIAlertAction(title: "Play All", style: .default) { action in
+            if item is Song {
+                self.playSong(atIndex: indexPath.row)
+            } else {
+                let loader = RecursiveSongLoader(item: item)
+                loader.completionHandler = { success, _, _ in
+                    if success {
+                        PlayQueue.si.playSongs(loader.songs, playIndex: 0)
+                    }
+                }
+                loader.start()
+            }
+        })
+        
+        actionSheet.addAction(UIAlertAction(title: "Queue Next", style: .default) { action in
+            if let song = item as? Song {
+                PlayQueue.si.insertSongNext(song: song, notify: true)
+            } else {
+                let loader = RecursiveSongLoader(item: item)
+                loader.completionHandler = { success, _, _ in
+                    if success {
+                        for song in loader.songs.reversed() {
+                            PlayQueue.si.insertSongNext(song: song, notify: false)
+                        }
+                        PlayQueue.si.notifyPlayQueueIndexChanged()
+                    }
+                }
+                loader.start()
+            }
+        })
+        
+        actionSheet.addAction(UIAlertAction(title: "Queue Last", style: .default) { action in
+            if let song = item as? Song {
+                PlayQueue.si.insertSong(song: song, index: PlayQueue.si.songCount, notify: true)
+            } else {
+                let loader = RecursiveSongLoader(item: item)
+                loader.completionHandler = { success, _, _ in
+                    if success {
+                        for song in loader.songs {
+                            PlayQueue.si.insertSong(song: song, index: PlayQueue.si.songCount, notify: false)
+                        }
+                        PlayQueue.si.notifyPlayQueueIndexChanged()
+                    }
+                }
+                loader.start()
+            }
+        })
+    }
+    
+    func addGoToRelatedActions(toActionSheet actionSheet: UIAlertController, forItem item: Item, indexPath: IndexPath) {
+        if !isBrowsingCache, let song = item as? Song {
+            if !isBrowsingFolder, let folderId = song.folderId, let mediaFolderId = song.mediaFolderId {
+                actionSheet.addAction(UIAlertAction(title: "Go to Folder", style: .default) { action in
+                    let loader = FolderLoader(folderId: folderId, serverId: self.serverId, mediaFolderId: mediaFolderId)
+                    self.delegate?.pushItemController(forLoader: loader, viewModel: self)
+                })
+            }
+            
+            if let artistId = song.artistId {
+                actionSheet.addAction(UIAlertAction(title: "Go to Artist", style: .default) { action in
+                    let loader = ArtistLoader(artistId: artistId, serverId: self.serverId)
+                    self.delegate?.pushItemController(forLoader: loader, viewModel: self)
+                })
+            }
+            
+            if !isBrowsingAlbum, let albumId = song.albumId {
+                actionSheet.addAction(UIAlertAction(title: "Go to Album", style: .default) { action in
+                    let loader = AlbumLoader(albumId: albumId, serverId: self.serverId)
+                    self.delegate?.pushItemController(forLoader: loader, viewModel: self)
+                })
+            }
+        }
+    }
+    
+    // MARK: View Options
+    
+    func viewOptionsActionSheet() -> UIAlertController {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        return alertController
+    }
+    
+    func addSortOptions(toActionSheet actionSheet: UIAlertController) {
+        if songs.count > 0 {
+            actionSheet.addAction(UIAlertAction(title: "Sort By Track Number", style: .default) { action in
+                self.sort(by: .track)
+            })
+            actionSheet.addAction(UIAlertAction(title: "Sort By Song Title", style: .default) { action in
+                self.sort(by: .title)
+            })
+            actionSheet.addAction(UIAlertAction(title: "Sort By Artist", style: .default) { action in
+                self.sort(by: .artist)
+            })
+            actionSheet.addAction(UIAlertAction(title: "Sort By Album", style: .default) { action in
+                self.sort(by: .album)
+            })
+        }
+    }
+    
+    func addDisplayOptions(toActionSheet actionSheet: UIAlertController) {
+        if songs.count > 0 {
+            let trackNumbersTitle = self.isShowTrackNumbers ? "Hide Track Numbers" : "Show Track Numbers"
+            actionSheet.addAction(UIAlertAction(title: trackNumbersTitle, style: .default) { action in
+                self.isShowTrackNumbers = !self.isShowTrackNumbers
+                self.delegate?.itemsChanged(viewModel: self)
+            })
+        }
     }
 }

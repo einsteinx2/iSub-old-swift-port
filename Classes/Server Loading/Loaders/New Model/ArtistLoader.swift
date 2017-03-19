@@ -17,21 +17,20 @@ final class ArtistLoader: ApiLoader, ItemLoader {
         return albums
     }
     
-    init(artistId: Int64) {
+    init(artistId: Int64, serverId: Int64) {
         self.artistId = artistId
-        super.init()
+        super.init(serverId: serverId)
     }
     
-    override func createRequest() -> URLRequest {
-        return URLRequest(subsonicAction: .getArtist, parameters: ["id": artistId])
+    override func createRequest() -> URLRequest? {
+        return URLRequest(subsonicAction: .getArtist, serverId: serverId, parameters: ["id": artistId])
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
         var albumsTemp = [Album]()
         
-        let serverId = SavedSettings.si.currentServerId
         root.iterate("artist.album") { album in
-            if let anAlbum = Album(rxmlElement: album, serverId: serverId) {
+            if let anAlbum = Album(rxmlElement: album, serverId: self.serverId) {
                 albumsTemp.append(anAlbum)
             }
         }
@@ -69,7 +68,6 @@ final class ArtistLoader: ApiLoader, ItemLoader {
     }
     
     var associatedItem: Item? {
-        let serverId = SavedSettings.si.currentServerId
         return ArtistRepository.si.artist(artistId: artistId, serverId: serverId)
     }
 }

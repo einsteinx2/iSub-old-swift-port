@@ -9,6 +9,7 @@
 import Foundation
 
 // TODO: Make sure that the status loader completes before making any other API calls, that way we have the correct redirect URL.
+// TODO: Handle serverId for new servers
 final class StatusLoader: ApiLoader {
     
     fileprivate(set) var server: Server?
@@ -28,15 +29,19 @@ final class StatusLoader: ApiLoader {
         self.server = server
     }
     
-    init(url: String, username: String, password: String, basicAuth: Bool = false) {
+    init(url: String, username: String, password: String, basicAuth: Bool = false, serverId: Int64? = nil) {
         self.url = url
         self.username = username
         self.password = password
         self.basicAuth = basicAuth
-        super.init()
+        if let serverId = serverId {
+            super.init(serverId: serverId)
+        } else {
+            super.init()
+        }
     }
     
-    override func createRequest() -> URLRequest {
+    override func createRequest() -> URLRequest? {
         return URLRequest(subsonicAction: .ping, baseUrl: url, username: username, password: password, basicAuth: basicAuth)
     }
     

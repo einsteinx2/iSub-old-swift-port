@@ -128,15 +128,16 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
         if maxBitRateSetting > 0 {
             parameters["maxBitRate"] = "\(maxBitRateSetting)"
         }
-        let request = URLRequest(subsonicAction: .stream, parameters: parameters)
         
-        session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
-        task = session?.dataTask(with: request)
-        task?.resume()
-        
-        isDownloading = true
-        
-        NetworkIndicator.usingNetwork()
+        if let request = URLRequest(subsonicAction: .stream, serverId: song.serverId, parameters: parameters) {
+            session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            task = session?.dataTask(with: request)
+            task?.resume()
+            
+            isDownloading = true
+            
+            NetworkIndicator.usingNetwork()
+        }
     }
     
     func cancel() {
