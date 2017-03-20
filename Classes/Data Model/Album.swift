@@ -30,8 +30,14 @@ final class Album {
     
     let created: Date?
     
+    let artistName: String?
+    
     var artist: Artist?
     var genre: Genre?
+    
+    var artistDisplayName: String? {
+        return artist?.name ?? artistName
+    }
     
     var songs = [Song]()
     
@@ -58,6 +64,8 @@ final class Album {
             self.created = nil
         }
         
+        self.artistName = element.attribute(asStringOptional: "artist")
+        
         if let genreString = element.attribute(asStringOptional: "genre") {
             genre = GenreRepository.si.genre(name: genreString)
             self.genreId = genre!.genreId
@@ -77,6 +85,7 @@ final class Album {
         self.duration    = result.object(forColumnIndex: 7) as? Int
         self.year        = result.object(forColumnIndex: 8) as? Int
         self.created     = result.date(forColumnIndex: 9)
+        self.artistName  = result.string(forColumnIndex: 10)
         self.repository  = repository as! AlbumRepository
     }
 }

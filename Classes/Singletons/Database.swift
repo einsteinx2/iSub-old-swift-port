@@ -113,9 +113,15 @@ final class Database {
             if !db.tableExists("albums") {
                 try? db.executeUpdate("CREATE TABLE albums (albumId INTEGER, serverId INTEGER, artistId INTEGER, genreId INTEGER, coverArtId TEXT, name TEXT, songCount INTEGER, duration INTEGER, year INTEGER, created REAL, PRIMARY KEY (albumId, serverId))")
             }
+            if !db.columnExists("artistName", inTableWithName: "albums") {
+                try? db.executeUpdate("ALTER TABLE albums ADD COLUMN artistName TEXT")
+            }
             
             if !db.tableExists("cachedAlbums") {
                 try? db.executeUpdate("CREATE TABLE cachedAlbums (albumId INTEGER, serverId INTEGER, artistId INTEGER, genreId INTEGER, coverArtId TEXT, name TEXT, songCount INTEGER, duration INTEGER, year INTEGER, created REAL, PRIMARY KEY (albumId, serverId))")
+            }
+            if !db.columnExists("artistName", inTableWithName: "cachedAlbums") {
+                try? db.executeUpdate("ALTER TABLE cachedAlbums ADD COLUMN artistName TEXT")
             }
             
             if !db.tableExists("songs") {

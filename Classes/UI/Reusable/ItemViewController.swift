@@ -309,6 +309,7 @@ class ItemViewController: DraggableTableViewController {
             cell.associatedItem = album
             cell.coverArtId = album.coverArtId
             cell.title = album.name
+            cell.subTitle = subTitle(album: album)
         case songsSectionIndex:
             cell.selectionStyle = .none
             cell.accessoryType = UITableViewCellAccessoryType.none
@@ -335,6 +336,25 @@ class ItemViewController: DraggableTableViewController {
         }
         
         return cell
+    }
+    
+    fileprivate func subTitle(album: Album) -> String? {
+        var subTitle = ""
+        if viewModel.isRootItemLoader {
+            // Main albums list, show artist name and genre first
+            if let artistName = album.artist?.name {
+                subTitle += "\(artistName) "
+            }
+            if let genreName = album.genre?.name {
+                subTitle += "[\(genreName)] "
+            }
+        }
+        
+        if let year = album.year {
+            subTitle += "(\(year))"
+        }
+        
+        return subTitle.length > 0 ? subTitle : nil
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

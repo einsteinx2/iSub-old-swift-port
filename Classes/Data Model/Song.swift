@@ -60,10 +60,10 @@ final class Song {
     // NOTE: Not every song has an Artist or Album object in Subsonic. So when folder browsing this is especially
     // important.
     var artistDisplayName: String? {
-        return artist?.name ?? artistName;
+        return artist?.name ?? artistName
     }
     var albumDisplayName: String? {
-        return album?.name ?? albumName;
+        return album?.name ?? albumName
     }
     
     var fileName: String {
