@@ -11,6 +11,7 @@ import Foundation
 extension MediaFolder: Item, Equatable {
     var itemId: Int64 { return mediaFolderId }
     var itemName: String { return name }
+    var coverArtId: String? { return nil }
 }
 
 final class MediaFolder {

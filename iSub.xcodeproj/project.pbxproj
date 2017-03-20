@@ -306,6 +306,8 @@
 		531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
 		53200C931E7F605900426A48 /* SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C921E7F605900426A48 /* SortOrder.swift */; };
 		53200C941E7F605900426A48 /* SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C921E7F605900426A48 /* SortOrder.swift */; };
+		53200C961E7F777700426A48 /* ItemTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C951E7F777700426A48 /* ItemTableHeaderView.swift */; };
+		53200C971E7F777700426A48 /* ItemTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C951E7F777700426A48 /* ItemTableHeaderView.swift */; };
 		532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D59A6D1E1DC9CE00071ABD /* Reachability.framework */; };
 		53368DD21E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
 		53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
@@ -963,6 +965,7 @@
 		531B34641E24D3D500811187 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
 		531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
 		53200C921E7F605900426A48 /* SortOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOrder.swift; sourceTree = "<group>"; };
+		53200C951E7F777700426A48 /* ItemTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableHeaderView.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		53368DD11E3F169500B7A199 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwesomeCache.framework; path = Carthage/Build/iOS/AwesomeCache.framework; sourceTree = "<group>"; };
@@ -1544,6 +1547,7 @@
 				531B33E31E24D0B600811187 /* ItemViewController.swift */,
 				531B33E41E24D0B600811187 /* ItemViewModel.swift */,
 				531B33E21E24D0B600811187 /* ItemTableViewCell.swift */,
+				53200C951E7F777700426A48 /* ItemTableHeaderView.swift */,
 				53808D2A1E7DE4FE0063B6D9 /* View Controllers */,
 				53200C911E7F4E3100426A48 /* View Models */,
 			);
@@ -2808,6 +2812,7 @@
 				531B339B1E24CF8B00811187 /* CachedRootSongsLoader.swift in Sources */,
 				53808D3F1E7DF23F0063B6D9 /* PlaylistViewController.swift in Sources */,
 				531B33F01E24D0B600811187 /* DraggableTableView.swift in Sources */,
+				53200C961E7F777700426A48 /* ItemTableHeaderView.swift in Sources */,
 				5358DBDE1E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				531B341E1E24D12300811187 /* ServerListViewController.swift in Sources */,
 				53835CAC1E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
@@ -3066,6 +3071,7 @@
 				531B33F11E24D0B600811187 /* DraggableTableView.swift in Sources */,
 				53808D401E7DF23F0063B6D9 /* PlaylistViewController.swift in Sources */,
 				5358DBE01E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
+				53200C971E7F777700426A48 /* ItemTableHeaderView.swift in Sources */,
 				531B341F1E24D12300811187 /* ServerListViewController.swift in Sources */,
 				53835CAE1E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
 				5358DFA31E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,

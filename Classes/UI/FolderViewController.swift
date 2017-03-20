@@ -9,7 +9,5 @@
 import Foundation
 
 class FolderViewController: ItemViewController {
-    override func setupHeaderView() -> UIView? {
-        return nil
-    }
+
 }

@@ -11,6 +11,7 @@ import Foundation
 extension Genre: Item, Equatable {
     var itemId: Int64 { return genreId }
     var itemName: String { return name }
+    var coverArtId: String? { return nil }
     var serverId: Int64 { return -1 }
 }
 

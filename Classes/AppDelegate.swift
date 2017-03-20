@@ -119,7 +119,7 @@ import Reachability
                 if application.backgroundTimeRemaining < 200.0 && !CacheQueue.si.isDownloading {
                     application.endBackgroundTask(self.backgroundTask)
                     self.backgroundTask = UIBackgroundTaskInvalid;
-                    break;
+                    break
                 }
                 
                 // Warn at 2 minute mark if cache queue is downloading
@@ -128,7 +128,7 @@ import Reachability
                     local.alertBody = "Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused."
                     local.alertAction = "Open iSub"
                     application.presentLocalNotificationNow(local)
-                    break;
+                    break
                 }
                 
                 // Sleep for a second to avoid a fast loop eating all cpu cycles

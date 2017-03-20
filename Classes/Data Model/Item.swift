@@ -11,6 +11,7 @@ import Foundation
 protocol Item: CustomStringConvertible {
     var itemId: Int64 { get }
     var itemName: String { get }
+    var coverArtId: String? { get }
     var serverId: Int64 { get }
 }
 

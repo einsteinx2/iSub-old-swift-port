@@ -16,6 +16,7 @@ enum ServerType: Int {
 extension Server: Item, Equatable {
     var itemId: Int64 { return serverId }
     var itemName: String { return url }
+    var coverArtId: String? { return nil }
 }
 
 final class Server {

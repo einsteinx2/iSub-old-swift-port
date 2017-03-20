@@ -81,6 +81,20 @@ class ItemViewController: DraggableTableViewController {
         unregisterForNotifications()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        // Doesn't work correctly
+//        if let itemHeaderView = tableView.tableHeaderView as? ItemTableHeaderView {
+//            let offsetY: CGFloat = itemHeaderView.coverArtId == nil ? 0 : tableView.frame.size.width - itemHeaderView.labelContainerHeight
+//            if offsetY != 0 {
+//                tableView.scrollRectToVisible(CGPoint(x: 0, y: offsetY), animated: false)
+////                DispatchQueue.main.async(after: 0.25) {
+////                    self.tableView.setContentOffset(CGPoint(x: 0, y: offsetY), animated: false)
+////                }
+//            }
+//        }
+    }
+    
     override func setupLeftBarButton() -> UIBarButtonItem {
         if viewModel.isTopLevelController {
             return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(showMenu))
@@ -97,6 +111,50 @@ class ItemViewController: DraggableTableViewController {
         let actionSheet = viewModel.viewOptionsActionSheet()
         viewModel.addCancelAction(toActionSheet: actionSheet)
         self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    override func setupHeaderView() -> UIView? {
+        if let rootItem = viewModel.rootItem {
+            let itemHeaderView = ItemTableHeaderView()
+            itemHeaderView.associatedItem = rootItem
+            itemHeaderView.coverArtId = rootItem.coverArtId
+            itemHeaderView.title = rootItem.itemName
+            itemHeaderView.subTitle = headerSubtitle(item: rootItem)
+            return itemHeaderView
+        }
+        return nil
+    }
+    
+    fileprivate func headerSubtitle(item: Item) -> String? {
+        var subTitle = ""
+        switch item {
+        case let item as Artist:
+            if let albumCount = item.albumCount {
+                if albumCount == 1 {
+                    subTitle += "1 album"
+                } else {
+                    subTitle += "\(albumCount) albums"
+                }
+            }
+        case let item as Album:
+            if let year = item.year {
+                subTitle += "(\(year)) "
+            }
+            if let songsCount = item.songCount {
+                if songsCount == 1 {
+                    subTitle += "1 song "
+                } else {
+                    subTitle += "\(songsCount) songs "
+                }
+            }
+            if let duration = item.duration {
+                subTitle += NSString.formatTime(Double(duration))
+            }
+        default:
+            break
+        }
+        
+        return subTitle.length > 0 ? subTitle : nil
     }
     
     // MARK: - Notifications -

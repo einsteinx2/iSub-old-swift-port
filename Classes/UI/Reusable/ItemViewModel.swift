@@ -94,7 +94,7 @@ class ItemViewModel: NSObject {
     init(loader: ItemLoader, title: String? = nil) {
         self.loader = loader
         self.rootItem = loader.associatedItem
-        self.navigationTitle = title ?? loader.associatedItem?.itemName
+        self.navigationTitle = title //?? loader.associatedItem?.itemName
         
         if let folder = loader.associatedItem as? Folder {
             self.songSortOrder = folder.songSortOrder
