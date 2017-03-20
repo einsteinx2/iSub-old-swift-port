@@ -304,6 +304,8 @@
 		531B34661E24D3D500811187 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34641E24D3D500811187 /* Defines.swift */; };
 		531B346B1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
 		531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
+		53200C931E7F605900426A48 /* SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C921E7F605900426A48 /* SortOrder.swift */; };
+		53200C941E7F605900426A48 /* SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C921E7F605900426A48 /* SortOrder.swift */; };
 		532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D59A6D1E1DC9CE00071ABD /* Reachability.framework */; };
 		53368DD21E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
 		53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
@@ -960,6 +962,7 @@
 		531B34611E24D37300811187 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		531B34641E24D3D500811187 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
 		531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
+		53200C921E7F605900426A48 /* SortOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOrder.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		53368DD11E3F169500B7A199 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwesomeCache.framework; path = Carthage/Build/iOS/AwesomeCache.framework; sourceTree = "<group>"; };
@@ -1537,10 +1540,12 @@
 		530EBB7A1E7DCE20002E3B11 /* Item View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				53808D281E7DE4D80063B6D9 /* ItemViewControllerProvider.swift */,
 				531B33E31E24D0B600811187 /* ItemViewController.swift */,
 				531B33E41E24D0B600811187 /* ItemViewModel.swift */,
 				531B33E21E24D0B600811187 /* ItemTableViewCell.swift */,
-				53808D2A1E7DE4FE0063B6D9 /* Subclasses */,
+				53808D2A1E7DE4FE0063B6D9 /* View Controllers */,
+				53200C911E7F4E3100426A48 /* View Models */,
 			);
 			name = "Item View Controllers";
 			sourceTree = "<group>";
@@ -1731,8 +1736,8 @@
 		531B33DC1E24D0B600811187 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				530EBB7A1E7DCE20002E3B11 /* Item View Controllers */,
 				531B33E51E24D0B600811187 /* Main or Top Level Controllers */,
+				530EBB7A1E7DCE20002E3B11 /* Item View Controllers */,
 				531B33DD1E24D0B600811187 /* Reusable */,
 			);
 			path = UI;
@@ -1851,6 +1856,17 @@
 				53C23BD81E5F222A00DA1281 /* RecursiveSongLoader.swift */,
 			);
 			name = "Other Loaders";
+			sourceTree = "<group>";
+		};
+		53200C911E7F4E3100426A48 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				53808D3B1E7DEAD20063B6D9 /* ServerItemViewModel.swift */,
+				53808D411E7DF2D80063B6D9 /* RootServerItemViewModel.swift */,
+				53808D351E7DE9500063B6D9 /* CachedItemViewModel.swift */,
+				53808D381E7DEA5B0063B6D9 /* DownloadQueueViewModel.swift */,
+			);
+			name = "View Models";
 			sourceTree = "<group>";
 		};
 		533B69CC1E206031001FF3BF /* NavigationStack */ = {
@@ -2005,20 +2021,15 @@
 			name = Carthage;
 			sourceTree = "<group>";
 		};
-		53808D2A1E7DE4FE0063B6D9 /* Subclasses */ = {
+		53808D2A1E7DE4FE0063B6D9 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				53808D281E7DE4D80063B6D9 /* ItemViewControllerProvider.swift */,
 				53808D2B1E7DE50E0063B6D9 /* FolderViewController.swift */,
 				53808D2F1E7DE5DC0063B6D9 /* ArtistViewController.swift */,
 				53808D321E7DE5F70063B6D9 /* AlbumViewController.swift */,
 				53808D3E1E7DF23F0063B6D9 /* PlaylistViewController.swift */,
-				53808D3B1E7DEAD20063B6D9 /* ServerItemViewModel.swift */,
-				53808D411E7DF2D80063B6D9 /* RootServerItemViewModel.swift */,
-				53808D351E7DE9500063B6D9 /* CachedItemViewModel.swift */,
-				53808D381E7DEA5B0063B6D9 /* DownloadQueueViewModel.swift */,
 			);
-			name = Subclasses;
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 		53835C6E1E0B7D6D0077B53D /* ZipKit */ = {
@@ -2182,6 +2193,7 @@
 				53CFBB7D1E2B3038005895F4 /* Genre.swift */,
 				531B32FB1E24CF8A00811187 /* Playlist.swift */,
 				531B32FD1E24CF8A00811187 /* Server.swift */,
+				53200C921E7F605900426A48 /* SortOrder.swift */,
 			);
 			name = "Item Models";
 			sourceTree = "<group>";
@@ -2741,6 +2753,7 @@
 				531B33F81E24D0B600811187 /* ItemViewController.swift in Sources */,
 				536007341E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */,
 				53808D2C1E7DE50E0063B6D9 /* FolderViewController.swift in Sources */,
+				53200C931E7F605900426A48 /* SortOrder.swift in Sources */,
 				531B34421E24D24600811187 /* FMDatabase.m in Sources */,
 				53114E001E3B06D800D8589B /* Utilities.swift in Sources */,
 				531B33611E24CF8B00811187 /* CachedImage.swift in Sources */,
@@ -2998,6 +3011,7 @@
 				531B33F91E24D0B600811187 /* ItemViewController.swift in Sources */,
 				536007351E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */,
 				531B34431E24D24600811187 /* FMDatabase.m in Sources */,
+				53200C941E7F605900426A48 /* SortOrder.swift in Sources */,
 				53114E011E3B06D800D8589B /* Utilities.swift in Sources */,
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,
 				537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */,

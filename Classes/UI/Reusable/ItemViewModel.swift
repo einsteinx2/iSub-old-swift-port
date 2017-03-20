@@ -13,7 +13,7 @@ protocol ItemViewModelDelegate {
     func loadingFinished(viewModel: ItemViewModel)
     func loadingError(_ error: String, viewModel: ItemViewModel)
     func presentActionSheet(_ actionSheet: UIAlertController, viewModel: ItemViewModel)
-    func pushItemController(forLoader loader: ItemLoader, viewModel: ItemViewModel)
+    func pushViewController(_ viewController: UIViewController, viewModel: ItemViewModel)
 }
 
 typealias LoadModelsCompletion = (_ success: Bool, _ error: Error?) -> Void
@@ -51,12 +51,17 @@ class ItemViewModel: NSObject {
         return loader is AlbumLoader
     }
     
+    var isTopLevelController: Bool {
+        return false
+    }
+    
+    fileprivate(set) var artistSortOrder = ArtistSortOrder.name
+    fileprivate(set) var albumSortOrder = AlbumSortOrder.year
     fileprivate(set) var songSortOrder = SongSortOrder.track
     var isShowTrackNumbers = true
     
     var delegate: ItemViewModelDelegate?
     
-    var topLevelController = false
     var navigationTitle: String?
     
     var mediaFolderId: Int64? {
@@ -86,10 +91,10 @@ class ItemViewModel: NSObject {
     
     // MARK - Lifecycle -
     
-    init(loader: ItemLoader) {
+    init(loader: ItemLoader, title: String? = nil) {
         self.loader = loader
         self.rootItem = loader.associatedItem
-        self.navigationTitle = self.rootItem?.itemName
+        self.navigationTitle = title ?? loader.associatedItem?.itemName
         
         if let folder = loader.associatedItem as? Folder {
             self.songSortOrder = folder.songSortOrder
@@ -145,11 +150,11 @@ class ItemViewModel: NSObject {
         
         for item in items {
             switch item {
-            case is Folder:   folders.append(item as! Folder)
-            case is Artist:   artists.append(item as! Artist)
-            case is Album:    albums.append(item as! Album)
-            case is Song:     songs.append(item as! Song)
-            case is Playlist: playlists.append(item as! Playlist)
+            case let item as Folder:   folders.append(item)
+            case let item as Artist:   artists.append(item)
+            case let item as Album:    albums.append(item)
+            case let item as Song:     songs.append(item)
+            case let item as Playlist: playlists.append(item)
             default: assertionFailure("WHY YOU NO ITEM?")
             }
         }
@@ -162,7 +167,7 @@ class ItemViewModel: NSObject {
         }
         songsDuration = duration
         
-        sort(by: songSortOrder)
+        sortAll()
     }
     
     fileprivate func createSectionIndexes() {
@@ -201,15 +206,65 @@ class ItemViewModel: NSObject {
         PlayQueue.si.playSongs(songs, playIndex: index)
     }
     
-    func sort(by sortOrder: SongSortOrder) {
+    func sortAll() {
+        sortArtists(by: artistSortOrder, createIndexes: false, notify: false)
+        sortAlbums(by: albumSortOrder, createIndexes: false, notify: false)
+        sortSongs(by: songSortOrder, createIndexes: false, notify: false)
+        createSectionIndexes()
+        delegate?.itemsChanged(viewModel: self)
+    }
+    
+    func sortArtists(by sortOrder: ArtistSortOrder, createIndexes: Bool = true, notify: Bool = true) {
+        // TODO: Store in user defaults
+        self.artistSortOrder = sortOrder
+        
+        artists.sort { lhs, rhs -> Bool in
+            switch sortOrder {
+            case .name: return lhs.name.lowercased() < rhs.name.lowercased()
+            case .albumCount: return lhs.albumCount ?? 0 < rhs.albumCount ?? 0
+            }
+        }
+        
+        if createIndexes {
+            createSectionIndexes()
+        }
+        
+        if notify {
+            delegate?.itemsChanged(viewModel: self)
+        }
+    }
+    
+    func sortAlbums(by sortOrder: AlbumSortOrder, createIndexes: Bool = true, notify: Bool = true) {
+        // TODO: Store in database per artist
+        self.albumSortOrder = sortOrder
+        
+        albums.sort { lhs, rhs -> Bool in
+            switch sortOrder {
+            case .year: return lhs.year ?? 0 < rhs.year ?? 0
+            case .name: return lhs.name.lowercased() < rhs.name.lowercased()
+            case .artist: return lhs.artist?.name ?? "" < rhs.artist?.name ?? ""
+            case .genre: return lhs.genre?.name ?? "" < rhs.genre?.name ?? ""
+            case .songCount: return lhs.songCount ?? 0 < rhs.songCount ?? 0
+            case .duration: return lhs.duration ?? 0 < rhs.duration ?? 0
+            }
+        }
+        
+        if createIndexes {
+            createSectionIndexes()
+        }
+        
+        if notify {
+            delegate?.itemsChanged(viewModel: self)
+        }
+    }
+    
+    func sortSongs(by sortOrder: SongSortOrder, createIndexes: Bool = true, notify: Bool = true) {
         self.songSortOrder = sortOrder
-        // TODO: How can I assign to a constant here? It's not an Obj-C object...
         if let folder = loader.associatedItem as? Folder {
             folder.songSortOrder = sortOrder
             _ = folder.replace()
         }
         
-        // TODO: Save this setting per folder id
         songs.sort { lhs, rhs -> Bool in
             switch sortOrder {
             case .track: return lhs.trackNumber ?? 0 < rhs.trackNumber ?? 0
@@ -218,8 +273,14 @@ class ItemViewModel: NSObject {
             case .album: return lhs.albumDisplayName?.lowercased() ?? "" < rhs.albumDisplayName?.lowercased() ?? ""
             }
         }
-        createSectionIndexes()
-        delegate?.itemsChanged(viewModel: self)
+        
+        if createIndexes {
+            createSectionIndexes()
+        }
+        
+        if notify {
+            delegate?.itemsChanged(viewModel: self)
+        }
     }
     
     // MARK: - Action Sheets -
@@ -290,21 +351,27 @@ class ItemViewModel: NSObject {
             if !isBrowsingFolder, let folderId = song.folderId, let mediaFolderId = song.mediaFolderId {
                 actionSheet.addAction(UIAlertAction(title: "Go to Folder", style: .default) { action in
                     let loader = FolderLoader(folderId: folderId, serverId: self.serverId, mediaFolderId: mediaFolderId)
-                    self.delegate?.pushItemController(forLoader: loader, viewModel: self)
+                    if let controller = itemViewController(forLoader: loader) {
+                        self.delegate?.pushViewController(controller, viewModel: self)
+                    }
                 })
             }
             
             if let artistId = song.artistId {
                 actionSheet.addAction(UIAlertAction(title: "Go to Artist", style: .default) { action in
                     let loader = ArtistLoader(artistId: artistId, serverId: self.serverId)
-                    self.delegate?.pushItemController(forLoader: loader, viewModel: self)
+                    if let controller = itemViewController(forLoader: loader) {
+                        self.delegate?.pushViewController(controller, viewModel: self)
+                    }
                 })
             }
             
             if !isBrowsingAlbum, let albumId = song.albumId {
                 actionSheet.addAction(UIAlertAction(title: "Go to Album", style: .default) { action in
                     let loader = AlbumLoader(albumId: albumId, serverId: self.serverId)
-                    self.delegate?.pushItemController(forLoader: loader, viewModel: self)
+                    if let controller = itemViewController(forLoader: loader) {
+                        self.delegate?.pushViewController(controller, viewModel: self)
+                    }
                 })
             }
         }
@@ -313,29 +380,78 @@ class ItemViewModel: NSObject {
     // MARK: View Options
     
     func viewOptionsActionSheet() -> UIAlertController {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
-        return alertController
+        return UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
     }
     
     func addSortOptions(toActionSheet actionSheet: UIAlertController) {
-        if songs.count > 0 {
-            actionSheet.addAction(UIAlertAction(title: "Sort By Track Number", style: .default) { action in
-                self.sort(by: .track)
-            })
-            actionSheet.addAction(UIAlertAction(title: "Sort By Song Title", style: .default) { action in
-                self.sort(by: .title)
-            })
-            actionSheet.addAction(UIAlertAction(title: "Sort By Artist", style: .default) { action in
-                self.sort(by: .artist)
-            })
-            actionSheet.addAction(UIAlertAction(title: "Sort By Album", style: .default) { action in
-                self.sort(by: .album)
+        if artists.count > 1 {
+            actionSheet.addAction(UIAlertAction(title: "Sort Artists", style: .default) { action in
+                self.delegate?.presentActionSheet(self.sortArtistsActionsSheet(), viewModel: self)
             })
         }
+        
+        if albums.count > 1 {
+            actionSheet.addAction(UIAlertAction(title: "Sort Albums", style: .default) { action in
+                self.delegate?.presentActionSheet(self.sortAlbumsActionsSheet(), viewModel: self)
+            })
+        }
+        
+        if songs.count > 1 {
+            actionSheet.addAction(UIAlertAction(title: "Sort Songs", style: .default) { action in
+                self.delegate?.presentActionSheet(self.sortSongsActionsSheet(), viewModel: self)
+            })
+        }
+    }
+    
+    func sortArtistsActionsSheet() -> UIAlertController {
+        let actionSheet = UIAlertController(title: "Sort Artists By:", message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Name", style: .default) { action in
+            self.sortArtists(by: .name)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Album Count", style: .default) { action in
+            self.sortArtists(by: .albumCount)
+        })
+        return actionSheet
+    }
+    
+    func sortAlbumsActionsSheet() -> UIAlertController {
+        let actionSheet = UIAlertController(title: "Sort Albums By:", message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Year", style: .default) { action in
+            self.sortAlbums(by: .year)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Name", style: .default) { action in
+            self.sortAlbums(by: .name)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Artist", style: .default) { action in
+            self.sortAlbums(by: .artist)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Genre", style: .default) { action in
+            self.sortAlbums(by: .genre)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Song Count", style: .default) { action in
+            self.sortAlbums(by: .songCount)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Duration", style: .default) { action in
+            self.sortAlbums(by: .duration)
+        })
+        return actionSheet
+    }
+    
+    func sortSongsActionsSheet() -> UIAlertController {
+        let actionSheet = UIAlertController(title: "Sort Songs By:", message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Track Number", style: .default) { action in
+            self.sortSongs(by: .track)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Title", style: .default) { action in
+            self.sortSongs(by: .title)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Artist", style: .default) { action in
+            self.sortSongs(by: .artist)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Album", style: .default) { action in
+            self.sortSongs(by: .album)
+        })
+        return actionSheet
     }
     
     func addDisplayOptions(toActionSheet actionSheet: UIAlertController) {

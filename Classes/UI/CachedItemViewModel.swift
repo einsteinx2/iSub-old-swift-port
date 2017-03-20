@@ -28,9 +28,7 @@ class CachedItemViewModel: ItemViewModel {
                 self.delegate?.itemsChanged(viewModel: self)
             })
         }
-        
-        self.addCancelAction(toActionSheet: actionSheet)
-        
+                
         return actionSheet
     }
 }

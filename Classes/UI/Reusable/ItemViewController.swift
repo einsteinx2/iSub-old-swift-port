@@ -82,7 +82,7 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func setupLeftBarButton() -> UIBarButtonItem {
-        if viewModel.topLevelController {
+        if viewModel.isTopLevelController {
             return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(showMenu))
         } else {
             return super.setupLeftBarButton()
@@ -95,6 +95,7 @@ class ItemViewController: DraggableTableViewController {
     
     @objc fileprivate func showOptions() {
         let actionSheet = viewModel.viewOptionsActionSheet()
+        viewModel.addCancelAction(toActionSheet: actionSheet)
         self.present(actionSheet, animated: true, completion: nil)
     }
     
@@ -415,16 +416,11 @@ class ItemViewController: DraggableTableViewController {
     
     fileprivate func showCellActionSheet(item: Item, indexPath: IndexPath) {
         let actionSheet = viewModel.cellActionSheet(forItem: item, indexPath: indexPath)
+        viewModel.addCancelAction(toActionSheet: actionSheet)
         self.present(actionSheet, animated: true, completion: nil)
     }
     
     fileprivate func pushViewController(_ viewController: UIViewController) {
-        self.navigationController?.pushViewController(viewController, animated: true)
-    }
-    
-    fileprivate func pushItemController(loader: ItemLoader) {
-        let viewModel = ItemViewModel(loader: loader)
-        let viewController = ItemViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -455,7 +451,7 @@ extension ItemViewController : ItemViewModelDelegate {
         self.present(actionSheet, animated: true, completion: nil)
     }
     
-    func pushItemController(forLoader loader: ItemLoader, viewModel: ItemViewModel) {
-        pushItemController(loader: loader)
+    func pushViewController(_ viewController: UIViewController, viewModel: ItemViewModel) {
+        pushViewController(viewController)
     }
 }

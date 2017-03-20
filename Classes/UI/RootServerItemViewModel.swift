@@ -9,6 +9,10 @@
 import Foundation
 
 class RootServerItemViewModel: ServerItemViewModel {
+    override var isTopLevelController: Bool {
+        return true
+    }
+    
     override func viewOptionsActionSheet() -> UIAlertController {
         let actionSheet = super.viewOptionsActionSheet()
         
@@ -17,9 +21,7 @@ class RootServerItemViewModel: ServerItemViewModel {
                 self.chooseMediaFolder()
             })
         }
-        
-        self.addCancelAction(toActionSheet: actionSheet)
-        
+                
         return actionSheet
     }
     

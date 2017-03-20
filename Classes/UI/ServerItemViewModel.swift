@@ -40,9 +40,7 @@ class ServerItemViewModel: ItemViewModel {
                 loader.start()
             })
         }
-        
-        self.addCancelAction(toActionSheet: actionSheet)
-        
+                
         return actionSheet
     }
     
@@ -51,9 +49,7 @@ class ServerItemViewModel: ItemViewModel {
         
         self.addSortOptions(toActionSheet: actionSheet)
         self.addDisplayOptions(toActionSheet: actionSheet)
-        
-        self.addCancelAction(toActionSheet: actionSheet)
-        
+                
         return actionSheet
     }
 }

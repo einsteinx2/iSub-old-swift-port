@@ -55,18 +55,18 @@ class MenuViewController: UITableViewController {
         defaultMenuItem.function(self)(defaultMenuItem)
     }
     
+    fileprivate func navController(rootController: UIViewController) -> UINavigationController {
+        let navController = NavigationStack(rootViewController: rootController)
+        navController.navigationBar.barStyle = .black
+        navController.navigationBar.fixedHeightWhenStatusBarHidden = true
+        navController.interactivePopGestureRecognizer?.delegate = rootController as? UIGestureRecognizerDelegate
+        return navController
+    }
+    
     fileprivate func showFolders(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
-            let loader = RootFoldersLoader()
-            let viewModel = ItemViewModel(loader: loader)
-            viewModel.topLevelController = true
-            viewModel.navigationTitle = "Folders"
-            let viewController = ItemViewController(viewModel: viewModel)
-            let navController = NavigationStack(rootViewController: viewController)
-            navController.navigationBar.barStyle = .black
-            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
-            navController.interactivePopGestureRecognizer?.delegate = viewController
-            menuItem.navController = navController
+            let viewModel = RootServerItemViewModel(loader: RootFoldersLoader(), title: "Folders")
+            menuItem.navController = navController(rootController: ItemViewController(viewModel: viewModel))
         }
         
         centerController.contentController = menuItem.navController
@@ -74,16 +74,8 @@ class MenuViewController: UITableViewController {
     
     fileprivate func showArtists(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
-            let loader = RootArtistsLoader()
-            let viewModel = ItemViewModel(loader: loader)
-            viewModel.topLevelController = true
-            viewModel.navigationTitle = "Artists"
-            let viewController = ItemViewController(viewModel: viewModel)
-            let navController = NavigationStack(rootViewController: viewController)
-            navController.navigationBar.barStyle = .black
-            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
-            navController.interactivePopGestureRecognizer?.delegate = viewController
-            menuItem.navController = navController
+            let viewModel = RootServerItemViewModel(loader: RootArtistsLoader(), title: "Artists")
+            menuItem.navController = navController(rootController: ItemViewController(viewModel: viewModel))
         }
         
         centerController.contentController = menuItem.navController
@@ -91,16 +83,8 @@ class MenuViewController: UITableViewController {
     
     fileprivate func showAlbums(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
-            let loader = RootAlbumsLoader()
-            let viewModel = ItemViewModel(loader: loader)
-            viewModel.topLevelController = true
-            viewModel.navigationTitle = "Albums"
-            let viewController = ItemViewController(viewModel: viewModel)
-            let navController = NavigationStack(rootViewController: viewController)
-            navController.navigationBar.barStyle = .black
-            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
-            navController.interactivePopGestureRecognizer?.delegate = viewController
-            menuItem.navController = navController
+            let viewModel = RootServerItemViewModel(loader: RootAlbumsLoader(), title: "Albums")
+            menuItem.navController = navController(rootController: ItemViewController(viewModel: viewModel))
         }
         
         centerController.contentController = menuItem.navController
@@ -108,16 +92,8 @@ class MenuViewController: UITableViewController {
     
     fileprivate func showPlaylists(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
-            let loader = RootPlaylistsLoader()
-            let viewModel = ItemViewModel(loader: loader)
-            viewModel.topLevelController = true
-            viewModel.navigationTitle = "Playlists"
-            let viewController = ItemViewController(viewModel: viewModel)
-            let navController = NavigationStack(rootViewController: viewController)
-            navController.navigationBar.barStyle = .black
-            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
-            navController.interactivePopGestureRecognizer?.delegate = viewController
-            menuItem.navController = navController
+            let viewModel = RootServerItemViewModel(loader: RootPlaylistsLoader(), title: "Playlists")
+            menuItem.navController = navController(rootController: ItemViewController(viewModel: viewModel))
         }
         
         centerController.contentController = menuItem.navController
@@ -125,12 +101,7 @@ class MenuViewController: UITableViewController {
     
     fileprivate func showDownloads(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
-            let viewController = CacheViewController()
-            let navController = NavigationStack(rootViewController: viewController)
-            navController.navigationBar.barStyle = .black
-            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
-            navController.interactivePopGestureRecognizer?.delegate = viewController
-            menuItem.navController = navController
+            menuItem.navController = navController(rootController: CacheViewController())
         }
         
         centerController.contentController = menuItem.navController
@@ -138,12 +109,7 @@ class MenuViewController: UITableViewController {
 
     fileprivate func showSettings(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
-            let viewController = ServerListViewController()
-            let navController = NavigationStack(rootViewController: viewController)
-            navController.navigationBar.barStyle = .black
-            navController.navigationBar.fixedHeightWhenStatusBarHidden = true
-            navController.interactivePopGestureRecognizer?.delegate = viewController
-            menuItem.navController = navController
+            menuItem.navController = navController(rootController: ServerListViewController())
         }
         
         centerController.contentController = menuItem.navController

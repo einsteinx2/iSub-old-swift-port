@@ -8,13 +8,6 @@
 
 import Foundation
 
-enum SongSortOrder: Int {
-    case track  = 0
-    case title  = 1
-    case artist = 2
-    case album  = 3
-}
-
 extension Folder: Item, Equatable {
     var itemId: Int64 { return folderId }
     var itemName: String { return name }

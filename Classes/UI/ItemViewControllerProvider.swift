@@ -8,21 +8,15 @@
 
 import Foundation
 
-func itemViewController(forItem item: Item, isBrowsingCache: Bool) -> ItemViewController? {
+fileprivate func loader(forItem item: Item, isBrowsingCache: Bool) -> ItemLoader? {
     if isBrowsingCache {
         switch item {
         case let item as Folder:
-            let loader = CachedFolderLoader(folderId: item.itemId, serverId: item.serverId)
-            let viewModel = CachedItemViewModel(loader: loader)
-            return FolderViewController(viewModel: viewModel)
+            return CachedFolderLoader(folderId: item.itemId, serverId: item.serverId)
         case let item as Artist:
-            let loader = CachedArtistLoader(artistId: item.itemId, serverId: item.serverId)
-            let viewModel = CachedItemViewModel(loader: loader)
-            return ArtistViewController(viewModel: viewModel)
+            return CachedArtistLoader(artistId: item.itemId, serverId: item.serverId)
         case let item as Album:
-            let loader = CachedAlbumLoader(albumId: item.itemId, serverId: item.serverId)
-            let viewModel = CachedItemViewModel(loader: loader)
-            return AlbumViewController(viewModel: viewModel)
+            return CachedAlbumLoader(albumId: item.itemId, serverId: item.serverId)
         default:
             break
         }
@@ -30,26 +24,42 @@ func itemViewController(forItem item: Item, isBrowsingCache: Bool) -> ItemViewCo
         switch item {
         case let item as Folder:
             if let mediaFolderId = item.mediaFolderId {
-                let loader = FolderLoader(folderId: item.itemId, serverId: item.serverId, mediaFolderId: mediaFolderId)
-                let viewModel = ServerItemViewModel(loader: loader)
-                return FolderViewController(viewModel: viewModel)
+                return FolderLoader(folderId: item.itemId, serverId: item.serverId, mediaFolderId: mediaFolderId)
             }
         case let item as Artist:
-            let loader = ArtistLoader(artistId: item.itemId, serverId: item.serverId)//, mediaFolderId: mediaFolderId)
-            let viewModel = ServerItemViewModel(loader: loader)
-            return ArtistViewController(viewModel: viewModel)
+            return ArtistLoader(artistId: item.itemId, serverId: item.serverId)//, mediaFolderId: mediaFolderId)
         case let item as Album:
-            let loader = AlbumLoader(albumId: item.itemId, serverId: item.serverId)//, mediaFolderId: mediaFolderId)
-            let viewModel = ServerItemViewModel(loader: loader)
-            return AlbumViewController(viewModel: viewModel)
+            return AlbumLoader(albumId: item.itemId, serverId: item.serverId)//, mediaFolderId: mediaFolderId)
         case let item as Playlist:
-            let loader = PlaylistLoader(playlistId: item.itemId, serverId: item.serverId)
-            let viewModel = ServerItemViewModel(loader: loader)
-            return PlaylistViewController(viewModel: viewModel)
+            return PlaylistLoader(playlistId: item.itemId, serverId: item.serverId)
         default:
             break
         }
     }
     
+    return nil
+}
+
+func itemViewController(forLoader loader: ItemLoader) -> ItemViewController? {
+    let viewModel = loader is CachedDatabaseLoader ? CachedItemViewModel(loader: loader) : ServerItemViewModel(loader: loader)
+    
+    switch viewModel.rootItem {
+    case is Folder:
+        return FolderViewController(viewModel: viewModel)
+    case is Artist:
+        return ArtistViewController(viewModel: viewModel)
+    case is Album:
+        return AlbumViewController(viewModel: viewModel)
+    case is Playlist:
+        return PlaylistViewController(viewModel: viewModel)
+    default:
+        return nil
+    }
+}
+
+func itemViewController(forItem item: Item, isBrowsingCache: Bool) -> ItemViewController? {
+    if let loader = loader(forItem: item, isBrowsingCache: isBrowsingCache) {
+        return itemViewController(forLoader: loader)
+    }
     return nil
 }
