@@ -9,10 +9,6 @@
 import Foundation
 import AVFoundation
 
-// TODO: Audit all numeric types, doing way too much casting
-// TODO: Audit use of stream gcd queue, I left out all syncing when dealing with the streams array
-// TODO: Audit all access to PlayQueue
-
 fileprivate let deviceNumber: UInt32 = 1
 fileprivate let bufferSize: UInt32 = 800
 fileprivate let defaultSampleRate: UInt32 = 44100
@@ -31,8 +27,16 @@ final class BassGaplessPlayer {
     
     let bassStreamsQueue = DispatchQueue(label: "com.einsteinx2.BassStreamsQueue")
     var bassStreams = [BassStream]()
-    var currentBassStream: BassStream? { return bassStreams.first }
-    var bitRate: Int { return currentBassStream != nil ? estimateBitRate(bassStream: currentBassStream!) : 0 }
+    var currentBassStream: BassStream? {
+        var currentBassStream: BassStream?
+        bassStreamsQueue.sync {
+            currentBassStream = bassStreams.first
+        }
+        return currentBassStream
+    }
+    var bitRate: Int {
+        return currentBassStream != nil ? estimateBitRate(bassStream: currentBassStream!) : 0
+    }
     var bassOutputBufferLengthMillis: UInt32 = 0
     
     let ringBuffer = RingBuffer(size: 640 * 1024) // 640KB
@@ -188,8 +192,8 @@ final class BassGaplessPlayer {
             
             // Remove the stream from the queue
             BASS_StreamFree(bassStream.stream)
-            if let index = self.bassStreams.index(of: bassStream) {
-                self.bassStreamsQueue.sync {
+            self.bassStreamsQueue.sync {
+                if let index = self.bassStreams.index(of: bassStream) {
                     _ = self.bassStreams.remove(at: index)
                 }
             }
@@ -713,17 +717,18 @@ final class BassGaplessPlayer {
         ringBufferFillWorkItem?.cancel()
         ringBufferFillWorkItem = nil
         
-        for bassStream in bassStreams {
-            bassStream.shouldBreakWaitLoopForever = true
-            BASS_Mixer_ChannelRemove(bassStream.stream)
-            BASS_StreamFree(bassStream.stream)
+        bassStreamsQueue.sync {
+            BASS_SetDevice(deviceNumber)
+            for bassStream in bassStreams {
+                bassStream.shouldBreakWaitLoopForever = true
+                BASS_Mixer_ChannelRemove(bassStream.stream)
+                BASS_StreamFree(bassStream.stream)
+            }
+            bassStreams.removeAll()
         }
         
-        ringBuffer.reset()
-        bassStreamsQueue.sync {
-            self.bassStreams.removeAll()
-        }
         BASS_ChannelStop(outStream)
+        ringBuffer.reset()
     }
     
     func testStream(forSong song: Song) -> Bool {
@@ -819,7 +824,7 @@ final class BassGaplessPlayer {
             
             // Add the stream to the queue
             bassStreamsQueue.sync {
-                self.bassStreams.append(bassStream)
+                bassStreams.append(bassStream)
             }
             
             // Skip to the byte offset
