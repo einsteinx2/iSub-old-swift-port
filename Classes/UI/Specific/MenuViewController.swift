@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MessageUI
+import SnapKit
 
 private class MenuItem {
     let name: String
@@ -19,7 +21,7 @@ private class MenuItem {
     }
 }
 
-class MenuViewController: UITableViewController {
+class MenuViewController: UITableViewController, MFMailComposeViewControllerDelegate {
     
     fileprivate let reuseIdentifier = "Menu Cell"
     fileprivate let menuItems = [MenuItem(name: "Folders", function: showFolders),
@@ -30,13 +32,78 @@ class MenuViewController: UITableViewController {
                                  MenuItem(name: "Settings", function: showSettings)];
     
     fileprivate let centerController = CenterPanelContainerViewController()
+    
+    fileprivate let emailLogsButton = UIButton(type: .custom)
+    fileprivate var composeController: MFMailComposeViewController!
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.black
+        self.view.backgroundColor = .black
         
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         self.tableView.separatorStyle = .none
+        self.tableView.alwaysBounceVertical = false
+        
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height:100))
+//        footerView.snp.makeConstraints { make in
+//
+//            make.height.equalTo(100)
+//        }
+        emailLogsButton.setTitle("Email Logs", for: .normal)
+        emailLogsButton.addTarget(self, action: #selector(emailLogs), for: .touchUpInside)
+        footerView.addSubview(emailLogsButton)
+        emailLogsButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+        self.tableView.tableFooterView = footerView
+    }
+    
+    func emailLogs() {
+        guard composeController == nil else {
+            return
+        }
+        
+        guard MFMailComposeViewController.canSendMail() else {
+            log.error("Can't send mail, so can't email the logs")
+            let alert = UIAlertController(title: "Can't send mail",
+                                          message: "iOS is saying we can't send mail. Do you have an email account setup?",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            AppDelegate.si.sidePanelController.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        composeController = MFMailComposeViewController()
+        composeController.mailComposeDelegate = self
+        composeController.setToRecipients(["logs@isubapp.com"])
+        composeController.setSubject("iSub Logs")
+        composeController.setMessageBody("See attached zip file", isHTML: false)
+        if let zipPath = Logging.zipAllLogFiles() {
+            let zipUrl = URL(fileURLWithPath: zipPath)
+            do {
+                let zipData = try Data(contentsOf: zipUrl)
+                composeController.addAttachmentData(zipData, mimeType: "application/zip", fileName: "isublogs.zip")
+            } catch {
+                log.error("Couldn't read the log zip data: \(error)")
+                let alert = UIAlertController(title: "Couldn't read logs zip file",
+                                              message: "Error: \(error)",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+                composeController = nil
+            }
+        } else {
+            log.error("Couldn't zip the log files")
+        }
+        
+        // Present the view controller modally.
+        self.present(composeController, animated: true)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        composeController = nil
+        self.dismiss(animated: true)
     }
     
     // Dispose of any existing controllers

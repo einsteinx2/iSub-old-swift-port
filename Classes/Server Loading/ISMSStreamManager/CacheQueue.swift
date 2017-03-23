@@ -46,7 +46,7 @@ final class CacheQueue: StreamHandlerDelegate {
         }
         
         currentSong = Playlist.downloadQueue.song(atIndex: 0)
-        print("CacheQueue currentSong: \(currentSong)")
+        log.debug("currentSong: \(self.currentSong)")
         
         guard let currentSong = currentSong, (AppDelegate.si.networkStatus.isReachableWifi || SavedSettings.si.isManualCachingOnWWANEnabled), !SavedSettings.si.isOfflineMode else {
             return
@@ -83,7 +83,7 @@ final class CacheQueue: StreamHandlerDelegate {
         
         // Create the stream handler
         if StreamQueue.si.song == currentSong, let handler = StreamQueue.si.streamHandler {
-            print("CacheQueue stealing handler from StreamQueue")
+            log.debug("stealing handler from StreamQueue")
             // It's in the stream queue so steal the handler
             StreamQueue.si.streamHandler = nil
             StreamQueue.si.stop()
@@ -94,7 +94,7 @@ final class CacheQueue: StreamHandlerDelegate {
                 handler.start()
             }
         } else {
-            print("CacheQueue creating handler")
+            log.debug("creating handler")
             streamHandler = StreamHandler(song: currentSong, isTemp: false, delegate: self)
             streamHandler?.start()
         }

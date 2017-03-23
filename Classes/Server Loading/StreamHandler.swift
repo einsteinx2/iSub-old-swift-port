@@ -145,7 +145,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             return
         }
         
-        print("[URLSessionStreamHandler] Stream handler request canceled for \(song)")
+        log.debug("request canceled for \(self.song)")
         
         isCanceled = true
         
@@ -231,14 +231,14 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             NotificationCenter.postOnMainThread(name: Notifications.failed, userInfo: userInfo)
         } else {
             if contentLength > 0 && song.localFileSize < contentLength {
-                print("[URLSessionStreamHandler] Connection Failed because not enough bytes were download for \(song.title)")
+                log.debug("connection Failed because not enough bytes were download for \(self.song.title)")
                 
                 // This is a failed download, it didn't download enough
                 let userInfo = [Notifications.Keys.song: song]
                 NotificationCenter.postOnMainThread(name: Notifications.failed, userInfo: userInfo)
                 delegate?.streamHandlerConnectionFailed(self, withError: nil)
             } else {
-                print("[URLSessionStreamHandler] Connection was successful because the file size matches the content length header for \(song.title)")
+                log.debug("connection was successful because the file size matches the content length header for \(self.song.title)")
                 
                 if !isReadyForPlayback {
                     isReadyForPlayback = true

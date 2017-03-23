@@ -44,6 +44,7 @@ import Reachability
     func applicationDidFinishLaunching(_ application: UIApplication) {
         // Make sure the singletons get setup immediately and in the correct order
         // Perfect example of why using singletons is bad practice!
+        Logging.setupLogger()
         SavedSettings.si.setup()
         Database.si.setup()
         CacheManager.si.setup()
@@ -88,6 +89,8 @@ import Reachability
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
+        log.debug("became active")
+        
         if showIntro {
             showIntro = false
             
@@ -101,7 +104,11 @@ import Reachability
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
+        log.debug("entered background")
+        
         backgroundTask = application.beginBackgroundTask {
+            log.debug("background task ending, going to sleep")
+            
             // App is about to be put to sleep, stop the cache download queue
             if CacheQueue.si.isDownloading {
                 CacheQueue.si.stop()
@@ -117,6 +124,7 @@ import Reachability
             while application.backgroundTimeRemaining > 1.0 && self.isInBackground {
                 // Sleep early is nothing is happening
                 if application.backgroundTimeRemaining < 200.0 && !CacheQueue.si.isDownloading {
+                    log.debug("sleeping early")
                     application.endBackgroundTask(self.backgroundTask)
                     self.backgroundTask = UIBackgroundTaskInvalid;
                     break
@@ -124,6 +132,7 @@ import Reachability
                 
                 // Warn at 2 minute mark if cache queue is downloading
                 if application.backgroundTimeRemaining < 120.0 && CacheQueue.si.isDownloading {
+                    log.debug("warning 2 minutes left before forced sleep")
                     let local = UILocalNotification()
                     local.alertBody = "Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused."
                     local.alertAction = "Open iSub"
@@ -158,7 +167,7 @@ import Reachability
     // TODO: Double check play function on new app launch
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         // Handle being openned by a URL
-        print("url host: \(url.host) path components: \(url.pathComponents)")
+        log.debug("url host: \(url.host) path components: \(url.pathComponents)")
         
         if let host = url.host?.lowercased() {
             switch host {
@@ -254,14 +263,10 @@ import Reachability
     }
     
     func applicationLog(for crashManager: BITCrashManager!) -> String! {
-        let logsFolder = Logging.logsFolder
-        if let fileName = Logging.latestLogFileName {
-            let path = logsFolder + "/" + fileName
-            if let contents = try? String(contentsOfFile: path) {
-                return contents
-            }
+        if let contents = try? String(contentsOfFile: Logging.logFilePath) {
+            return contents
         }
-        return ""
+        return "Couldn't read log file"
     }
     
     // TODO: Implement offline mode

@@ -27,7 +27,7 @@ final class Database {
     }
     
     func setupDatabases() {
-        print("sqlite3 \(Database.databasePath)")
+        log.debug("sqlite3 \(Database.databasePath)")
         
         read = FMDatabasePool(path: Database.databasePath)
         read.maximumNumberOfDatabasesToCreate = 20

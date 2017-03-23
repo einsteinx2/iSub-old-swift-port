@@ -32,6 +32,8 @@ class RecursiveSongLoader: ApiLoader, ItemLoader {
             return
         }
         
+        log.debug("recursive loading started for \(associatedItem)")
+        
         songs = [Song]()
         
         processItem(item: associatedItem)
@@ -52,11 +54,11 @@ class RecursiveSongLoader: ApiLoader, ItemLoader {
                 }
             }
             
-            print("subloader finished, \(operationQueue.operationCount) currently in queue")
+            log.debug("subloader finished, \(self.operationQueue.operationCount) currently in queue")
             
             // We're done
             if operationQueue.operationCount == 0 {
-                print("all subloaders finished, done")
+                log.debug("all subloaders finished, done")
                 finished()
             }
         } else {
@@ -67,7 +69,7 @@ class RecursiveSongLoader: ApiLoader, ItemLoader {
     }
     
     fileprivate func processItem(item: Item) {
-        print("Processing item: \(item)")//\(item.itemId) - \(item.itemName)")
+        log.debug("processing item: \(item)")//\(item.itemId) - \(item.itemName)")
         
         var loader: ItemLoader?
         switch item {

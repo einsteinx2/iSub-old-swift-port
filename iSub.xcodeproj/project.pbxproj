@@ -308,6 +308,8 @@
 		53200C941E7F605900426A48 /* SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C921E7F605900426A48 /* SortOrder.swift */; };
 		53200C961E7F777700426A48 /* ItemTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C951E7F777700426A48 /* ItemTableHeaderView.swift */; };
 		53200C971E7F777700426A48 /* ItemTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C951E7F777700426A48 /* ItemTableHeaderView.swift */; };
+		5325CCC71E84700300F16C6B /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5325CCC61E84700300F16C6B /* XCGLogger.framework */; };
+		5325CCC81E84700300F16C6B /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5325CCC61E84700300F16C6B /* XCGLogger.framework */; };
 		532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D59A6D1E1DC9CE00071ABD /* Reachability.framework */; };
 		53368DD21E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
 		53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
@@ -966,6 +968,7 @@
 		531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
 		53200C921E7F605900426A48 /* SortOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOrder.swift; sourceTree = "<group>"; };
 		53200C951E7F777700426A48 /* ItemTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableHeaderView.swift; sourceTree = "<group>"; };
+		5325CCC61E84700300F16C6B /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		53368DD11E3F169500B7A199 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwesomeCache.framework; path = Carthage/Build/iOS/AwesomeCache.framework; sourceTree = "<group>"; };
@@ -1265,6 +1268,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				5358E1A91E0B789B0024A0D4 /* libbassdsd.a in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
+				5325CCC71E84700300F16C6B /* XCGLogger.framework in Frameworks */,
 				53F675D8113B092C00822059 /* MediaPlayer.framework in Frameworks */,
 				5358E1B81E0B789B0024A0D4 /* libbassopus.a in Frameworks */,
 				5358E1AE1E0B789B0024A0D4 /* libbassflac.a in Frameworks */,
@@ -1366,6 +1370,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53C7FD9E150F0EA9008DA51C /* MessageUI.framework in Frameworks */,
+				5325CCC81E84700300F16C6B /* XCGLogger.framework in Frameworks */,
 				536E291B1E0B94870097C2F6 /* libz.tbd in Frameworks */,
 				536E291A1E0B94810097C2F6 /* libxml2.tbd in Frameworks */,
 				532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */,
@@ -1373,7 +1379,6 @@
 				536E290D1E0B942E0097C2F6 /* libiconv.tbd in Frameworks */,
 				5311C3321A3510F800054941 /* QuickLook.framework in Frameworks */,
 				538725F217CC19B200CE92F1 /* CoreTelephony.framework in Frameworks */,
-				53C7FD9E150F0EA9008DA51C /* MessageUI.framework in Frameworks */,
 				53D9D25516DEF86F002F55F7 /* Twitter.framework in Frameworks */,
 				5358E19C1E0B789B0024A0D4 /* libbass_fx.a in Frameworks */,
 				53D9D25616DEF86F002F55F7 /* AdSupport.framework in Frameworks */,
@@ -2014,6 +2019,7 @@
 		5358E1CC1E0B78F80024A0D4 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
+				5325CCC61E84700300F16C6B /* XCGLogger.framework */,
 				53368DD11E3F169500B7A199 /* Nuke.framework */,
 				53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */,
 				5358E1CD1E0B79210024A0D4 /* HockeySDK.framework */,
@@ -2685,6 +2691,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Device.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Nuke.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AwesomeCache.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (

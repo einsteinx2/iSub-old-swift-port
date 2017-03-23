@@ -174,8 +174,10 @@ final class BassGaplessPlayer {
     
     func moveToNextSong() {
         if PlayQueue.si.nextSong != nil {
+            log.debug("playing next song")
             PlayQueue.si.playNextSong()
         } else {
+            log.debug("calling cleanup")
             cleanup()
         }
     }
@@ -189,6 +191,8 @@ final class BassGaplessPlayer {
             self.totalBytesDrained = 0
             
             bassStream.isEndedCalled = true
+            
+            log.debug("song ended: \(bassStream.song)")
             
             // Remove the stream from the queue
             BASS_StreamFree(bassStream.stream)
@@ -218,20 +222,27 @@ final class BassGaplessPlayer {
     }
     
     func nextSongStreamFailed() {
+        log.debug("next song stream failed")
+        
         // The song ended, and we tried to make the next stream but it failed
         if let song = PlayQueue.si.currentSong {
+            log.debug("song: \(song)")
             if let handler = StreamQueue.si.streamHandler, song == StreamQueue.si.song {
+                log.debug("handler and song exist")
                 if handler.isReadyForPlayback {
                     // If the song is downloading and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
+                    log.debug("song is ready for playback, asynchronously calling startSong")
                     DispatchQueue.main.async {
                         PlayQueue.si.startSong()
                     }
                 }
             } else if song.isFullyCached {
+                log.debug("song is fully cached, asynchronously calling startSong")
                 DispatchQueue.main.async {
                     PlayQueue.si.startSong()
                 }
             } else {
+                log.debug("calling start on StreamQueue")
                 StreamQueue.si.start()
             }
         }
@@ -277,6 +288,7 @@ final class BassGaplessPlayer {
     }
 
     func stopFillingRingBuffer() {
+        log.debug("stopFillingRingBuffer")
         ringBufferFillWorkItem?.cancel()
         ringBufferFillWorkItem = nil
     }
@@ -285,6 +297,8 @@ final class BassGaplessPlayer {
         guard ringBufferFillWorkItem == nil else {
             return
         }
+        
+        log.debug("startFillingRingBuffer")
         
         var workItem: DispatchWorkItem! = nil
         workItem = DispatchWorkItem {
@@ -445,6 +459,8 @@ final class BassGaplessPlayer {
     // MARK: - BASS Methods -
     
     fileprivate func bassInit() {
+        log.debug("bassInit")
+            
         // Disable mixing. To be called before BASS_Init.
         BASS_SetConfig(UInt32(BASS_CONFIG_IOS_MIXAUDIO), 0)
         // Set the buffer length to the minimum amount + bufferSize
@@ -494,7 +510,7 @@ final class BassGaplessPlayer {
         BASS_ChannelGetInfo(channel, &i)
         let bytes = BASS_ChannelGetLength(channel, UInt32(BASS_POS_BYTE))
         let time = BASS_ChannelBytes2Seconds(channel, bytes)
-        print("channel type = \(i.ctype) (\(formatForChannel(channel)))\nlength = \(bytes) (seconds: \(time)  flags: \(i.flags)  freq: \(i.freq)  origres: \(i.origres)")
+        log.debug("channel type = \(i.ctype) (\(self.formatForChannel(channel)))\nlength = \(bytes) (seconds: \(time)  flags: \(i.flags)  freq: \(i.freq)  origres: \(i.origres)")
     }
     
     fileprivate func formatForChannel(_ channel: HSTREAM) -> String {
@@ -711,6 +727,8 @@ final class BassGaplessPlayer {
     }
     
     fileprivate func cleanup() {
+        log.debug("cleanup")
+            
         BASS_SetDevice(deviceNumber)
         
         startSongRetryWorkItem.cancel()
@@ -754,7 +772,14 @@ final class BassGaplessPlayer {
     }
     
     func prepareStream(forSong song: Song) -> BassStream? {
+        log.debug("preparing stream for song: \(song)")
         guard song.fileExists, let bassStream = BassStream(song: song) else {
+            if song.fileExists {
+                log.debug("couldn't create bass stream")
+            } else {
+                log.debug("file doesn't exist")
+            }
+            
             return nil
         }
         
@@ -773,6 +798,7 @@ final class BassGaplessPlayer {
         
         // Check if the stream failed because of a BASS_Init error and init if needed
         if fileStream == 0 && BASS_ErrorGetCode() == BASS_ERROR_INIT {
+            log.debug("bass not initialized, calling bassInit")
             bassInit()
             fileStream = createStream()
         }
@@ -780,6 +806,7 @@ final class BassGaplessPlayer {
         // If the stream failed, try with softrware decoding
         if fileStream == 0 {
             printBassError()
+            log.debug("failed to create stream, trying again with software decoding")
             fileStream = createStream(softwareDecoding: true)
         }
         
@@ -800,22 +827,26 @@ final class BassGaplessPlayer {
         }
         
         printBassError()
+        log.debug("failed to create stream")
         return nil
     }
     
     func start(song: Song, byteOffset: Int64) {
+        log.debug("start song: \(song)")
         BASS_SetDevice(deviceNumber)
         
         startByteOffset = 0
         cleanup()
         
         guard song.fileExists else {
+            log.debug("file doesn't exist")
             return
         }
         
         startAudioSession()
         
         if let bassStream = self.prepareStream(forSong: song) {
+            log.debug("stream created, starting playback")
             BASS_Mixer_StreamAddChannel(mixerStream, bassStream.stream, UInt32(BASS_MIXER_NORAMPIN))
             
             totalBytesDrained = 0
@@ -846,13 +877,17 @@ final class BassGaplessPlayer {
             
             song.lastPlayed = Date()
         } else if !song.isFullyCached && song.localFileSize < minSizeToFail {
+            log.debug("failed to create stream")
             if SavedSettings.si.isOfflineMode {
                 moveToNextSong()
+                log.debug("offline so moving to next song")
             } else if !song.fileExists {
+                log.debug("file doesn't exist somehow, so restarting playback")
                 // File was removed, so start again normally
                 CacheManager.si.remove(song: song)
                 PlayQueue.si.startSong()
             } else {
+                log.debug("retrying stream in 2 seconds")
                 // Failed to create the stream, retrying
                 startSongRetryWorkItem = DispatchWorkItem {
                     self.start(song: song, byteOffset: byteOffset)
@@ -1059,6 +1094,8 @@ func closeProc(userInfo: UnsafeMutableRawPointer?) {
         // Get the user info object
         let bassStream: BassStream = bridge(ptr: userInfo)
         
+        log.debug("close proc called for song: \(bassStream.song)")
+        
         // Tell the read wait loop to break in case it's waiting
         bassStream.shouldBreakWaitLoop = true
         bassStream.shouldBreakWaitLoopForever = true
@@ -1089,6 +1126,8 @@ func lengthProc(userInfo: UnsafeMutableRawPointer?) -> UInt64 {
             // Return server reported file size
             length = bassStream.song.size
         }
+        
+        log.debug("close proc called for song: \(bassStream.song) len: \(length)")
     }
     
     return UInt64(length)
@@ -1138,21 +1177,23 @@ func seekProc(offset: UInt64, userInfo: UnsafeMutableRawPointer?) -> ObjCBool {
     var success = false
     autoreleasepool {
         // Seek to the requested offset (returns false if data not downloaded that far)
-        let userInfo: BassStream = bridge(ptr: userInfo)
+        let bassStream: BassStream = bridge(ptr: userInfo)
         
         // First check the file size to make sure we don't try and skip past the end of the file
-        let localFileSize = userInfo.song.localFileSize
+        let localFileSize = bassStream.song.localFileSize
         if localFileSize >= 0 && UInt64(localFileSize) >= offset {
             // File size is valid, so assume success unless the seek operation throws an exception
             success = true
             do {
                 try ObjC.catchException {
-                    userInfo.fileHandle.seek(toFileOffset: offset)
+                    bassStream.fileHandle.seek(toFileOffset: offset)
                 }
             } catch {
                 success = false
             }
         }
+        
+        log.debug("seekProc called for song: \(bassStream.song) success: \(success) localFileSize: \(localFileSize)")
     }
     return ObjCBool(success)
 }
@@ -1188,22 +1229,25 @@ func endSyncProc(handle: HSYNC, channel: UInt32, data: UInt32, userInfo: UnsafeM
     
     // This must be done in the stream GCD queue because if we do it in this thread
     // it will pause the audio output momentarily while it's loading the stream
-    let bassStream: BassStream = bridge(ptr: userInfo)
-    if let player = bassStream.player, let nextSong = PlayQueue.si.nextSong {
-        DispatchQueue.global(qos: .background).async {
-            let nextStream = player.prepareStream(forSong: nextSong)
-            if let nextStream = nextStream {
-                player.bassStreamsQueue.sync {
-                    player.bassStreams.append(nextStream)
-                }
-                BASS_Mixer_StreamAddChannel(player.mixerStream, nextStream.stream, UInt32(BASS_MIXER_NORAMPIN))
-            } else {
-                bassStream.isNextSongStreamFailed = true
+    autoreleasepool {
+        let bassStream: BassStream = bridge(ptr: userInfo)
+        if let player = bassStream.player, let nextSong = PlayQueue.si.nextSong {
+            log.debug("endSynxProc called for song: \(bassStream.song)")
+                DispatchQueue.global(qos: .background).async {
+                    let nextStream = player.prepareStream(forSong: nextSong)
+                    if let nextStream = nextStream {
+                        player.bassStreamsQueue.sync {
+                            player.bassStreams.append(nextStream)
+                        }
+                        BASS_Mixer_StreamAddChannel(player.mixerStream, nextStream.stream, UInt32(BASS_MIXER_NORAMPIN))
+                    } else {
+                        bassStream.isNextSongStreamFailed = true
+                    }
+                    
+                    // Mark as ended and set the buffer space til end for the UI
+                    bassStream.bufferSpaceTilSongEnd = player.ringBuffer.filledSpace
+                    bassStream.isEnded = true
             }
-            
-            // Mark as ended and set the buffer space til end for the UI
-            bassStream.bufferSpaceTilSongEnd = player.ringBuffer.filledSpace
-            bassStream.isEnded = true
         }
     }
 }
