@@ -190,10 +190,6 @@
 				case 8: SavedSettings.si.quickSkipNumberOfSeconds = 1200; break;
 				default: break;
 			}
-
-            // TODO: Update for new UI
-//			if (IS_IPAD())
-//				[AppDelegate.si.ipadRootViewController.menuViewController.playerController quickSecondsSetLabels];
 		}
         else if (sender == self.maxVideoBitRate3GSegmentedControl)
         {

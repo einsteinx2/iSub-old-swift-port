@@ -45,10 +45,6 @@ class MenuViewController: UITableViewController, MFMailComposeViewControllerDele
         self.tableView.alwaysBounceVertical = false
         
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height:100))
-//        footerView.snp.makeConstraints { make in
-//
-//            make.height.equalTo(100)
-//        }
         emailLogsButton.setTitle("Email Logs", for: .normal)
         emailLogsButton.addTarget(self, action: #selector(emailLogs), for: .touchUpInside)
         footerView.addSubview(emailLogsButton)
