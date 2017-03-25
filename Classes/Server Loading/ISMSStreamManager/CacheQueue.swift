@@ -183,7 +183,6 @@ final class CacheQueue: StreamHandlerDelegate {
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 AppDelegate.si.sidePanelController.present(alert, animated: true, completion: nil)
                 
-                // TODO: Error handling
                 removeFile(forHandler: handler)
                 isSuccess = false
             }

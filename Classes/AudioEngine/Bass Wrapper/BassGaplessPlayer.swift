@@ -146,7 +146,6 @@ final class BassGaplessPlayer {
             
             if !currentBassStream.isEndedCalled {
                 // Somehow songEnded: was never called
-                // TODO: Is this necessary?
                 songEnded(bassStream: currentBassStream)
                 currentBassStream.isEndedCalled = true
             }
@@ -472,7 +471,7 @@ final class BassGaplessPlayer {
         {
             bassOutputBufferLengthMillis = BASS_GetConfig(UInt32(BASS_CONFIG_BUFFER))
             
-            // TODO: Replace this workaround with pure Swift
+            // Eventually replace this workaround with pure Swift
             bassLoadPlugins()
         }
         else

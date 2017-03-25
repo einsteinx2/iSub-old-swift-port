@@ -230,9 +230,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         return true
     }
     
-    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        // TODO: Figure out how to implement this using the new data model. Or turn off move support.
-        
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {        
         //	NSArray *server = [ SavedSettings.si.serverList objectAtIndexSafe:fromIndexPath.row];
         //	[SavedSettings.si.serverList removeObjectAtIndex:fromIndexPath.row];
         //	[SavedSettings.si.serverList insertObject:server atIndex:toIndexPath.row];

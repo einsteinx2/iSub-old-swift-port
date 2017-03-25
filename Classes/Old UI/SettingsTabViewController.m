@@ -413,7 +413,6 @@
 
 - (IBAction)twitterButtonAction
 {
-    // TODO: Rewrite all this
 //    ACAccountStore *account = [[ACAccountStore alloc] init];
 //    ACAccountType *accountType = [account accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
 //    

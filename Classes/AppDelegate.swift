@@ -6,8 +6,6 @@
 //  Copyright © 2017 Ben Baron. All rights reserved.
 //
 
-// TODO: Check all number casts in app, an out of range cast will cause a crash. We should use/make some safe casting functions.
-
 import UIKit
 import Reachability
 

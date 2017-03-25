@@ -21,7 +21,6 @@ final class Song {
     
     let contentTypeId: Int64
     let transcodedContentTypeId: Int64?
-    // TODO: See if mediaFolderId should be nullable
     let mediaFolderId: Int64?
     let folderId: Int64?
     let artistId: Int64?

@@ -9,7 +9,6 @@
 import Foundation
 
 // TODO: Make sure that the status loader completes before making any other API calls, that way we have the correct redirect URL.
-// TODO: Handle serverId for new servers
 final class StatusLoader: ApiLoader {
     
     fileprivate(set) var server: Server?

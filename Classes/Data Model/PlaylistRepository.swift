@@ -250,7 +250,6 @@ extension Playlist {
     }
     
     func insert(songId: Int64, serverId: Int64, index: Int, notify: Bool = false) {
-        // TODO: See if this can be simplified by using sort by
         Database.si.write.inDatabase { db in
             do {
                 let query1 = "UPDATE \(self.tableName) SET songIndex = -songIndex WHERE songIndex >= ?"
@@ -290,7 +289,6 @@ extension Playlist {
     }
     
     func remove(songsAtIndexes indexes: IndexSet, notify: Bool = false) {
-        // TODO: Improve performance
         for index in indexes {
             remove(songAtIndex: index, notify: false)
         }
