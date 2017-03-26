@@ -151,6 +151,8 @@
 		5358E1BF1E0B789B0024A0D4 /* libbasswv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5358DF011E0B78990024A0D4 /* libbasswv.a */; };
 		5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DF051E0B78990024A0D4 /* RXMLElement.m */; };
 		536007351E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536007331E69159100F68EAE /* CachedPlaylistLoader.swift */; };
+		53609CD31E883F49005C26D0 /* VisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53609CD21E883F49005C26D0 /* VisualizerView.swift */; };
+		53609CDB1E8840B6005C26D0 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53609CDA1E8840B6005C26D0 /* GLKit.framework */; };
 		53649DCF184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
 		53649DD4184DA99B00E600EC /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD0184DA99B00E600EC /* Icon-76.png */; };
 		53649DD7184DA99B00E600EC /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD1184DA99B00E600EC /* Icon-76@2x.png */; };
@@ -163,7 +165,7 @@
 		5377D64A1E3A84CC003BFFB9 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */; };
 		537FB2F61E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */; };
 		537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */; };
-		537FB3001E33EEC1001D3FBB /* BassVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */; };
+		537FB3001E33EEC1001D3FBB /* Visualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FE1E33EEC1001D3FBB /* Visualizer.swift */; };
 		53808D2D1E7DE5140063B6D9 /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53808D2B1E7DE50E0063B6D9 /* FolderViewController.swift */; };
 		53808D2E1E7DE5160063B6D9 /* ItemViewControllerProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53808D281E7DE4D80063B6D9 /* ItemViewControllerProvider.swift */; };
 		53808D311E7DE5DF0063B6D9 /* ArtistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53808D2F1E7DE5DC0063B6D9 /* ArtistViewController.swift */; };
@@ -309,7 +311,7 @@
 		53E0428A1E36C49C0009DE79 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E042881E36C49C0009DE79 /* DispatchQueue.swift */; };
 		53F107A31E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A11E2ACDD7003B7D59 /* AlbumRepository.swift */; };
 		53F107A71E2AD144003B7D59 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A51E2AD144003B7D59 /* Item.swift */; };
-		53FD71E61E36E73600460B44 /* BassEqualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E41E36E73600460B44 /* BassEqualizer.swift */; };
+		53FD71E61E36E73600460B44 /* Equalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E41E36E73600460B44 /* Equalizer.swift */; };
 		53FD71E91E36F95400460B44 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E71E36F95400460B44 /* CacheManager.swift */; };
 		D09496D41C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D91C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -541,6 +543,10 @@
 		535CB48912E2664700389DA1 /* server-button-ubuntu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "server-button-ubuntu@2x.png"; path = "Images/Other/server-button-ubuntu@2x.png"; sourceTree = "<group>"; };
 		535CB58312E27A5400389DA1 /* default-album-art-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-ipad.png"; path = "Images/Other/default-album-art-ipad.png"; sourceTree = "<group>"; };
 		536007331E69159100F68EAE /* CachedPlaylistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedPlaylistLoader.swift; sourceTree = "<group>"; };
+		53609CD21E883F49005C26D0 /* VisualizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualizerView.swift; sourceTree = "<group>"; };
+		53609CD71E883F9F005C26D0 /* EqualizerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EqualizerView.h; path = ../../../../../Desktop/iSub/Classes/EqualizerView.h; sourceTree = "<group>"; };
+		53609CD81E883F9F005C26D0 /* EqualizerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EqualizerView.m; path = ../../../../../Desktop/iSub/Classes/EqualizerView.m; sourceTree = "<group>"; };
+		53609CDA1E8840B6005C26D0 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		53649DCC184DA90600E600EC /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-120.png"; path = "Images/App Icons/Icon-120.png"; sourceTree = "<group>"; };
 		53649DD0184DA99B00E600EC /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Images/App Icons/Icon-76.png"; sourceTree = "<group>"; };
 		53649DD1184DA99B00E600EC /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Images/App Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
@@ -557,7 +563,7 @@
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassGaplessPlayer.swift; path = "Bass Wrapper/BassGaplessPlayer.swift"; sourceTree = "<group>"; };
 		537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
-		537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassVisualizer.swift; path = Visualizer/BassVisualizer.swift; sourceTree = "<group>"; };
+		537FB2FE1E33EEC1001D3FBB /* Visualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Visualizer.swift; path = Visualizer/Visualizer.swift; sourceTree = "<group>"; };
 		537FCC5312F8F7F400F1D996 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = "Images/App Icons/iTunesArtwork"; sourceTree = "<group>"; };
 		53808D281E7DE4D80063B6D9 /* ItemViewControllerProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewControllerProvider.swift; sourceTree = "<group>"; };
 		53808D2B1E7DE50E0063B6D9 /* FolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderViewController.swift; sourceTree = "<group>"; };
@@ -701,7 +707,7 @@
 		53F675E1113B095900822059 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		53F675E7113B096400822059 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		53F7A127131B7F3B002C829D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		53FD71E41E36E73600460B44 /* BassEqualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BassEqualizer.swift; sourceTree = "<group>"; };
+		53FD71E41E36E73600460B44 /* Equalizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Equalizer.swift; sourceTree = "<group>"; };
 		53FD71E71E36F95400460B44 /* CacheManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		53FDEE2511E822CC00FE3ECD /* current-server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server@2x.png"; path = "Images/Other/current-server@2x.png"; sourceTree = "<group>"; };
 		53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small@2x.png"; path = "Images/Other/default-album-art-small@2x.png"; sourceTree = "<group>"; };
@@ -714,6 +720,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53609CDB1E8840B6005C26D0 /* GLKit.framework in Frameworks */,
 				53C7FD9E150F0EA9008DA51C /* MessageUI.framework in Frameworks */,
 				5325CCC81E84700300F16C6B /* XCGLogger.framework in Frameworks */,
 				536E291B1E0B94870097C2F6 /* libz.tbd in Frameworks */,
@@ -839,6 +846,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53609CDA1E8840B6005C26D0 /* GLKit.framework */,
 				5358E1CC1E0B78F80024A0D4 /* Carthage */,
 				531B34311E24D24600811187 /* FMDB */,
 				53835C6E1E0B7D6D0077B53D /* ZipKit */,
@@ -964,8 +972,8 @@
 				5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */,
 				537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */,
 				534FACED1E328D3200BF12D9 /* BassStream.swift */,
-				537FB2FE1E33EEC1001D3FBB /* BassVisualizer.swift */,
-				53FD71E41E36E73600460B44 /* BassEqualizer.swift */,
+				537FB2FE1E33EEC1001D3FBB /* Visualizer.swift */,
+				53FD71E41E36E73600460B44 /* Equalizer.swift */,
 			);
 			name = Player;
 			path = ../AudioEngine;
@@ -1100,6 +1108,9 @@
 				531B33DF1E24D0B600811187 /* DraggableTableView.swift */,
 				531B33E01E24D0B600811187 /* DraggableTableViewController.swift */,
 				531B33E11E24D0B600811187 /* DroppableCell.swift */,
+				53609CD21E883F49005C26D0 /* VisualizerView.swift */,
+				53609CD71E883F9F005C26D0 /* EqualizerView.h */,
+				53609CD81E883F9F005C26D0 /* EqualizerView.m */,
 			);
 			path = Reusable;
 			sourceTree = "<group>";
@@ -1810,6 +1821,7 @@
 				53CE50411E20194100E5DC68 /* BCCKeychain.m in Sources */,
 				531B33BC1E24CF8B00811187 /* LoadingScreen.m in Sources */,
 				531B33AA1E24CF8B00811187 /* RootPlaylistsLoader.swift in Sources */,
+				53609CD31E883F49005C26D0 /* VisualizerView.swift in Sources */,
 				53F107A71E2AD144003B7D59 /* Item.swift in Sources */,
 				530F04AA1E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
 				530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
@@ -1832,13 +1844,13 @@
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
 				5358DF7B1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				53114E061E3B0BE200D8589B /* MBFingerTipWindow.m in Sources */,
-				537FB3001E33EEC1001D3FBB /* BassVisualizer.swift in Sources */,
+				537FB3001E33EEC1001D3FBB /* Visualizer.swift in Sources */,
 				53CFBB761E2B1E3B005895F4 /* Folder.swift in Sources */,
 				531B34491E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				53C23BDA1E5F222A00DA1281 /* RecursiveSongLoader.swift in Sources */,
 				531B339E1E24CF8B00811187 /* FolderLoader.swift in Sources */,
 				5358DF851E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
-				53FD71E61E36E73600460B44 /* BassEqualizer.swift in Sources */,
+				53FD71E61E36E73600460B44 /* Equalizer.swift in Sources */,
 				53114DFF1E3B06D800D8589B /* String+HTMLEntities.swift in Sources */,
 				531B33F91E24D0B600811187 /* ItemViewController.swift in Sources */,
 				536007351E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */,

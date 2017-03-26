@@ -26,7 +26,7 @@ enum VisualizerType: Int {
     case line = 2
 }
 
-class BassVisualizer {
+class Visualizer {
     fileprivate let fftBuffer = UnsafeMutablePointer<Float>.allocate(capacity: 1024)
     fileprivate let lineBuffer = UnsafeMutablePointer<Int16>.allocate(capacity: 1024)
     

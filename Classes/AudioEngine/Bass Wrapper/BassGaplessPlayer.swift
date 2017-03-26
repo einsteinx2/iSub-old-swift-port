@@ -47,8 +47,8 @@ final class BassGaplessPlayer {
     var mixerStream: HSTREAM = 0
     var outStream: HSTREAM = 0
     
-    let equalizer = BassEqualizer()
-    let visualizer = BassVisualizer()
+    let equalizer = Equalizer()
+    let visualizer = Visualizer()
     
     var isPlaying = false
     var startByteOffset: Int64 = 0
@@ -500,7 +500,7 @@ final class BassGaplessPlayer {
         visualizer.channel = outStream
         equalizer.channel = outStream
         if SavedSettings.si.isEqualizerOn {
-            equalizer.applyValues()
+            equalizer.enable()
         }
     }
     
