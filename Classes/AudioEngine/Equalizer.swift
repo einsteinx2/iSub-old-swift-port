@@ -20,6 +20,14 @@ enum EqualizerFrequency: Int {
     case hertz8k  = 8
     case hertz16k = 9
     
+    static let all: [EqualizerFrequency] = [.hertz32, .hertz64, .hertz128, .hertz256, .hertz512,
+                                            .hertz1k, .hertz2k, .hertz4k, .hertz8k, .hertz16k]
+    
+    static let frequencies: [Float] = [32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384]
+    var centerFrequency: Float {
+        return EqualizerFrequency.frequencies[self.rawValue]
+    }
+    
     var defaultBassParameters: BASS_DX8_PARAMEQ {
         var params = BASS_DX8_PARAMEQ()
         params.fCenter    = centerFrequency // Center frequency, in hertz
@@ -28,13 +36,20 @@ enum EqualizerFrequency: Int {
         return params
     }
     
-    static var frequencies: [Float] = [32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384]
-    var centerFrequency: Float {
-        return EqualizerFrequency.frequencies[self.rawValue]
+    var label: String {
+        switch self {
+        case .hertz32:  return "32"
+        case .hertz64:  return "64"
+        case .hertz128: return "128"
+        case .hertz256: return "256"
+        case .hertz512: return "512"
+        case .hertz1k:  return "1k"
+        case .hertz2k:  return "2k"
+        case .hertz4k:  return "4k"
+        case .hertz8k:  return "8k"
+        case .hertz16k: return "16k"
+        }
     }
-    
-    static let all: [EqualizerFrequency] = [.hertz32, .hertz64, .hertz128, .hertz256, .hertz512,
-                                            .hertz1k, .hertz2k, .hertz4k, .hertz8k, .hertz16k]
     
     func bassParameters(gain: Float) -> BASS_DX8_PARAMEQ {
         var bassParameters = defaultBassParameters
@@ -108,21 +123,38 @@ class EqualizerPreset {
     func update(value: Float, forFrequency frequency: EqualizerFrequency) {
         values[frequency.rawValue] = value
     }
+    
+    static func ==(lhs: EqualizerPreset, rhs: EqualizerPreset) -> Bool {
+        return lhs.values == rhs.values
+    }
+    
+    static func !=(lhs: EqualizerPreset, rhs: EqualizerPreset) -> Bool {
+        return lhs.values != rhs.values
+    }
 }
 
-// TODO: Add preamp gain support
 class Equalizer {
     fileprivate(set) var isActive = false
-    var preampGain: Float = 0.0
-    fileprivate var values = [EqualizerValue]()
+    fileprivate(set) var values = [EqualizerValue]()
+    fileprivate var preampHandle: HFX?
+    
+    var preampGain: Float = 1.0 {
+        didSet {
+            if preampGain != oldValue {
+                updatePreampGain(gain: preampGain)
+            }
+        }
+    }
     
     var preset: EqualizerPreset = .flat {
         didSet {
-            let wasActive = isActive
-            removeValues()
-            createValues()
-            if wasActive {
-                enable()
+            if preset != oldValue {
+                let wasActive = isActive
+                removeValues()
+                createValues()
+                if wasActive {
+                    enable()
+                }
             }
         }
     }
@@ -130,6 +162,8 @@ class Equalizer {
     var channel: HCHANNEL? {
         didSet {
             if channel != oldValue {
+                createValues()
+                
                 for value in values {
                     value.channel = channel
                 }
@@ -164,7 +198,10 @@ class Equalizer {
     }
     
     func enable() {
-        if !isActive {
+        if !isActive, let channel = channel {
+            preampHandle = BASS_ChannelSetFX(channel, UInt32(BASS_FX_BFX_VOLUME), 1)
+            updatePreampGain(gain: preampGain)
+            
             for value in values {
                 value.enable()
             }
@@ -173,7 +210,9 @@ class Equalizer {
     }
     
     func disable() {
-        if isActive {
+        if isActive, let channel = channel, let preampHandle = preampHandle {
+            BASS_ChannelRemoveFX(channel, preampHandle)
+            
             for value in values {
                 value.disable()
             }
@@ -181,12 +220,25 @@ class Equalizer {
         }
     }
     
-    func updateValue(frequency: EqualizerFrequency, gain: Float) {
-        let index = frequency.rawValue
+    func updatePreampGain(gain: Float) {
+        if let channel = channel {
+            var preampParams = BASS_BFX_VOLUME()
+            preampParams.lChannel = Int32(bitPattern: channel)
+            preampParams.fVolume = gain // 0.0 = -unlimited dB, 0.5 = -6dB, 1.0 = 0dB, 2.0 = +6dB, etc
+            BASS_FXSetParameters(preampHandle!, &preampParams)
+        }
+    }
+    
+    func updateValue(index: Int, gain: Float) {
         if values.count > index {
             let value = values[index]
             value.gain = gain
             value.update()
         }
+    }
+    
+    func updateValue(frequency: EqualizerFrequency, gain: Float) {
+        let index = frequency.rawValue
+        updateValue(index: index, gain: gain)
     }
 }

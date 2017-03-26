@@ -42,7 +42,6 @@ class PlayerViewController: UIViewController {
     }
     
     let tapRecognizer = UITapGestureRecognizer()
-    let swipeRecognizer = UISwipeGestureRecognizer()
     
     var coverArtViewSize: CGFloat {
         return UIDevice.current.orientation.isLandscape ? 150 : 320
@@ -218,10 +217,6 @@ class PlayerViewController: UIViewController {
         
         tapRecognizer.addTarget(self, action: #selector(toggleZoom))
         coverArtView.addGestureRecognizer(tapRecognizer)
-        
-        swipeRecognizer.direction = .down
-        swipeRecognizer.addTarget(self, action: #selector(hidePlayer))
-        self.view.addGestureRecognizer(swipeRecognizer)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -328,10 +323,6 @@ class PlayerViewController: UIViewController {
     
     @objc fileprivate func progressSliderValueChanged() {
         BassGaplessPlayer.si.seek(percent: Double(progressSlider.value), fadeDuration: 0.5)
-    }
-    
-    @objc fileprivate func hidePlayer() {
-        self.dismiss(animated: true, completion: nil)
     }
     
     @objc fileprivate func toggleZoom() {

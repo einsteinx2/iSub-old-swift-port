@@ -153,6 +153,8 @@
 		536007351E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536007331E69159100F68EAE /* CachedPlaylistLoader.swift */; };
 		53609CD31E883F49005C26D0 /* VisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53609CD21E883F49005C26D0 /* VisualizerView.swift */; };
 		53609CDB1E8840B6005C26D0 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53609CDA1E8840B6005C26D0 /* GLKit.framework */; };
+		53609CDD1E885B11005C26D0 /* PlayerContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53609CDC1E885B11005C26D0 /* PlayerContainerViewController.swift */; };
+		53609CDF1E885B77005C26D0 /* EqualizerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53609CDE1E885B77005C26D0 /* EqualizerViewController.swift */; };
 		53649DCF184DA90600E600EC /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DCC184DA90600E600EC /* Icon-120.png */; };
 		53649DD4184DA99B00E600EC /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD0184DA99B00E600EC /* Icon-76.png */; };
 		53649DD7184DA99B00E600EC /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53649DD1184DA99B00E600EC /* Icon-76@2x.png */; };
@@ -547,6 +549,8 @@
 		53609CD71E883F9F005C26D0 /* EqualizerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EqualizerView.h; path = ../../../../../Desktop/iSub/Classes/EqualizerView.h; sourceTree = "<group>"; };
 		53609CD81E883F9F005C26D0 /* EqualizerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EqualizerView.m; path = ../../../../../Desktop/iSub/Classes/EqualizerView.m; sourceTree = "<group>"; };
 		53609CDA1E8840B6005C26D0 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		53609CDC1E885B11005C26D0 /* PlayerContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContainerViewController.swift; sourceTree = "<group>"; };
+		53609CDE1E885B77005C26D0 /* EqualizerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EqualizerViewController.swift; sourceTree = "<group>"; };
 		53649DCC184DA90600E600EC /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-120.png"; path = "Images/App Icons/Icon-120.png"; sourceTree = "<group>"; };
 		53649DD0184DA99B00E600EC /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Images/App Icons/Icon-76.png"; sourceTree = "<group>"; };
 		53649DD1184DA99B00E600EC /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Images/App Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
@@ -1122,10 +1126,10 @@
 				531B33E71E24D0B600811187 /* CenterPanelContainerViewController.swift */,
 				531B33E81E24D0B600811187 /* MenuViewController.swift */,
 				531B33E91E24D0B600811187 /* MiniPlayerViewController.swift */,
-				531B33EA1E24D0B600811187 /* PlayerViewController.swift */,
 				531B33EB1E24D0B600811187 /* PlayQueueViewController.swift */,
 				531B33EC1E24D0B600811187 /* PlayQueueViewModel.swift */,
 				531B33ED1E24D0B600811187 /* SidePanelController.swift */,
+				53609CE01E885B7D005C26D0 /* Player */,
 			);
 			name = "Main or Top Level Controllers";
 			path = Specific;
@@ -1381,6 +1385,16 @@
 				5308D92E1E243D270026E6BD /* Device.framework */,
 			);
 			name = Carthage;
+			sourceTree = "<group>";
+		};
+		53609CE01E885B7D005C26D0 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				53609CDC1E885B11005C26D0 /* PlayerContainerViewController.swift */,
+				531B33EA1E24D0B600811187 /* PlayerViewController.swift */,
+				53609CDE1E885B77005C26D0 /* EqualizerViewController.swift */,
+			);
+			name = Player;
 			sourceTree = "<group>";
 		};
 		53808D2A1E7DE4FE0063B6D9 /* View Controllers */ = {
@@ -1827,6 +1841,7 @@
 				530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				53A418021E2C1D8500671330 /* MediaFolder.swift in Sources */,
 				5355BFB41E2DB88200C6D27F /* Application.swift in Sources */,
+				53609CDF1E885B77005C26D0 /* EqualizerViewController.swift in Sources */,
 				531B33941E24CF8B00811187 /* CachedFolderLoader.swift in Sources */,
 				531B33F31E24D0B600811187 /* DraggableTableViewController.swift in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
@@ -1969,6 +1984,7 @@
 				53835CEF1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				531B33861E24CF8B00811187 /* ApiLoader.swift in Sources */,
 				531B339A1E24CF8B00811187 /* CachedRootFoldersLoader.swift in Sources */,
+				53609CDD1E885B11005C26D0 /* PlayerContainerViewController.swift in Sources */,
 				5355BFB71E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */,
 				531B338C1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
 				531B33721E24CF8B00811187 /* Playlist.swift in Sources */,

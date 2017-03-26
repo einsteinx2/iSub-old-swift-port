@@ -163,6 +163,6 @@ class MiniPlayerViewController: UIViewController {
     }
     
     @objc fileprivate func showPlayer() {
-        self.parent?.present(PlayerViewController(), animated: true, completion: nil)
+        self.parent?.present(PlayerContainerViewController(), animated: true, completion: nil)
     }
 }
