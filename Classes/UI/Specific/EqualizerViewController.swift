@@ -17,6 +17,8 @@ class EqualizerViewController: UIViewController {
     fileprivate var preampSlider = UISlider()
     fileprivate var enableButton = UIButton(type: .custom)
     
+    fileprivate let visualizerView = VisualizerView()
+    
     fileprivate var values: [EqualizerValue] {
         return BassGaplessPlayer.si.equalizer.values
     }
@@ -48,6 +50,14 @@ class EqualizerViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
         updateEnableButtonTitle()
+        
+        self.view.addSubview(visualizerView)
+        visualizerView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(self.view.snp.width)
+            make.top.equalToSuperview().offset(20)
+            make.left.equalToSuperview()
+        }
     }
     
     fileprivate func createSliders() {
