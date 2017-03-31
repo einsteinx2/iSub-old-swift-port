@@ -198,8 +198,8 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
         fileHandle?.write(data)
         
         let bytesRead = data.count
-        totalBytesTransferred += bytesRead
-        bytesTransferred += bytesRead
+        totalBytesTransferred += Int64(bytesRead)
+        bytesTransferred += Int64(bytesRead)
         
         // Notify delegate if enough bytes received to start playback
         let bytesPerSec = Double(totalBytesTransferred) / Date().timeIntervalSince(startDate)

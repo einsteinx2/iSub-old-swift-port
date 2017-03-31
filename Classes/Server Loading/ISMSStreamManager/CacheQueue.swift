@@ -46,7 +46,7 @@ final class CacheQueue: StreamHandlerDelegate {
         }
         
         currentSong = Playlist.downloadQueue.song(atIndex: 0)
-        log.debug("currentSong: \(self.currentSong)")
+        log.debug("currentSong: \(String(describing: self.currentSong))")
         
         guard let currentSong = currentSong, (AppDelegate.si.networkStatus.isReachableWifi || SavedSettings.si.isManualCachingOnWWANEnabled), !SavedSettings.si.isOfflineMode else {
             return

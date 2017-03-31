@@ -31,7 +31,7 @@ class Visualizer {
     fileprivate let lineBuffer = UnsafeMutablePointer<Int16>.allocate(capacity: 1024)
     
     var channel: HCHANNEL = 0
-    var visualizerType: VisualizerType = .none
+    var visualizerType: VisualizerType = .line
     
     init() {
     }

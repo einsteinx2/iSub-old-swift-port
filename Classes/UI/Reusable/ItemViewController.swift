@@ -514,7 +514,7 @@ extension ItemViewController : ItemViewModelDelegate {
     }
     
     func loadingError(_ error: String, viewModel: ItemViewModel) {
-        let message = "There was an error loading the item: \(viewModel.rootItem).\n\nError \(error)"
+        let message = "There was an error loading the item: \(String(describing: viewModel.rootItem)).\n\nError \(error)"
         
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

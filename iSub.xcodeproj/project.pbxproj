@@ -204,6 +204,7 @@
 		53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
 		53A418021E2C1D8500671330 /* MediaFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A418001E2C1D8500671330 /* MediaFolder.swift */; };
 		53A418051E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A418031E2C1DAE00671330 /* MediaFolderRepository.swift */; };
+		53B0FCE61E8EE1BD0084CEBF /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B0FCE51E8EE1BD0084CEBF /* ObjcExceptionBridging.framework */; };
 		53B38C12147593FA00CD8A99 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B38C11147593F900CD8A99 /* AVFoundation.framework */; };
 		53BC26AA139AF0DD00A825F1 /* default-album-art.png in Resources */ = {isa = PBXBuildFile; fileRef = 535A8899113F62DD00979783 /* default-album-art.png */; };
 		53BC26AB139AF0DD00A825F1 /* settings-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D612811441F5B00DFCE56 /* settings-page.png */; };
@@ -637,6 +638,7 @@
 		53AAF1E711DAA1BC00447FF7 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Images/App Icons/Icon@2x.png"; sourceTree = "<group>"; };
 		53AAF1EB11DAA21600447FF7 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Images/App Icons/Icon-72.png"; sourceTree = "<group>"; };
 		53ABE4EE1166538500197877 /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = Images/Other/gear.png; sourceTree = "<group>"; };
+		53B0FCE51E8EE1BD0084CEBF /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjcExceptionBridging.framework; path = Carthage/Build/iOS/ObjcExceptionBridging.framework; sourceTree = "<group>"; };
 		53B20D1C12C27AAA00A90DD9 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Images/Other/Default@2x.png"; sourceTree = "<group>"; };
 		53B38C11147593F900CD8A99 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		53B64B7E12C9173E007F1ED5 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Images/Other/Default-Portrait.png"; sourceTree = "<group>"; };
@@ -732,6 +734,7 @@
 				532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */,
 				536E29191E0B94790097C2F6 /* libSystem.tbd in Frameworks */,
 				536E290D1E0B942E0097C2F6 /* libiconv.tbd in Frameworks */,
+				53B0FCE61E8EE1BD0084CEBF /* ObjcExceptionBridging.framework in Frameworks */,
 				5311C3321A3510F800054941 /* QuickLook.framework in Frameworks */,
 				538725F217CC19B200CE92F1 /* CoreTelephony.framework in Frameworks */,
 				53D9D25516DEF86F002F55F7 /* Twitter.framework in Frameworks */,
@@ -1375,6 +1378,7 @@
 		5358E1CC1E0B78F80024A0D4 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
+				53B0FCE51E8EE1BD0084CEBF /* ObjcExceptionBridging.framework */,
 				5325CCC61E84700300F16C6B /* XCGLogger.framework */,
 				53368DD11E3F169500B7A199 /* Nuke.framework */,
 				53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */,
@@ -1796,6 +1800,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Nuke.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AwesomeCache.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ObjcExceptionBridging.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (

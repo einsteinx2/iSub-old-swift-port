@@ -252,7 +252,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
     }
     
     fileprivate func loadingRedirected(redirectUrl url: URL, loader: ApiLoader) {
-        var redirectUrlString = "\(url.scheme)://\(url.host)"
+        var redirectUrlString = "\(String(describing: url.scheme))://\(String(describing: url.host))"
         if let port = url.port {
             redirectUrlString += "\(port)"
         }
@@ -287,8 +287,8 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
             } else {
                 message = "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\n☆☆ Tap the gear in the top left and choose a server to return to online mode. ☆☆"
                 
-                if let error = error as? NSError {
-                    message += "\n\nError code \(error.code):\n\(error.description)"
+                if let error = error {
+                    message += "\n\nError code \(error.code):\n\(error.localizedDescription)"
                 }
             }
             

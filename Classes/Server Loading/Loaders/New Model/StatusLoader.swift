@@ -70,7 +70,7 @@ final class StatusLoader: ApiLoader {
     }
     
     override func failed(error: Error?) {
-        if let error = error as? NSError {
+        if let error = error {
             if error.code == 40 {
                 // Incorrect credentials, so fail
                 super.failed(error: NSError(iSubCode: .invalidCredentials))

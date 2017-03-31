@@ -165,7 +165,7 @@ import Reachability
     // TODO: Double check play function on new app launch
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         // Handle being openned by a URL
-        log.debug("url host: \(url.host) path components: \(url.pathComponents)")
+        log.debug("url host: \(String(describing: url.host)) path components: \(url.pathComponents)")
         
         if let host = url.host?.lowercased() {
             switch host {

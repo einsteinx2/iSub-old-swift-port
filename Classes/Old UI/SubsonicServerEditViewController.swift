@@ -195,7 +195,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
                 message = "Either your username or password is incorrect. Please try again"
                 textField = usernameField
             } else {
-                message = "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError: \(error)"
+                message = "Either the Subsonic URL is incorrect, the Subsonic server is down, or you may be connected to Wifi but do not have access to the outside Internet.\n\nError: \(String(describing: error))"
                 textField = urlField
             }
             
