@@ -234,7 +234,7 @@ class ItemViewModel: NSObject {
         }
     }
     
-    func sortArtists(by sortOrder: ArtistSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
+    @discardableResult func sortArtists(by sortOrder: ArtistSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
         artistSortOrder = sortOrder
         SavedSettings.si.rootArtistSortOrder = sortOrder
         
@@ -260,7 +260,7 @@ class ItemViewModel: NSObject {
         return true
     }
     
-    func sortAlbums(by sortOrder: AlbumSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
+    @discardableResult func sortAlbums(by sortOrder: AlbumSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
         self.albumSortOrder = sortOrder
         if isRootItemLoader {
             SavedSettings.si.rootAlbumSortOrder = sortOrder
@@ -295,7 +295,7 @@ class ItemViewModel: NSObject {
         return true
     }
     
-    func sortSongs(by sortOrder: SongSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
+    @discardableResult func sortSongs(by sortOrder: SongSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
         self.songSortOrder = sortOrder
         if let folder = loader.associatedItem as? Folder {
             folder.songSortOrder = sortOrder

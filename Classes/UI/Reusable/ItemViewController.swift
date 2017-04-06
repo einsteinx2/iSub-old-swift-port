@@ -318,13 +318,10 @@ class ItemViewController: DraggableTableViewController {
         default: break
         }
         
-        log.debug("section: \(section) count: \(count)")
         return count == nil ? 0 : count!
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        log.debug("section: \(indexPath.section) row: \(indexPath.row)")
-        
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {        
         var reuseIdentifier = ""
         switch indexPath.section {
         case foldersSectionIndex:   reuseIdentifier = folderCellIdentifier
