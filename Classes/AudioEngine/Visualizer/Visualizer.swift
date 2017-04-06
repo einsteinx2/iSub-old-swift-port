@@ -8,8 +8,6 @@
 
 import Foundation
 
-// TODO: Synchronization (is that necessary if this is rendered using CADisplayLink?)
-
 enum VisualType: Int {
     case none       = 0
     case line       = 1
