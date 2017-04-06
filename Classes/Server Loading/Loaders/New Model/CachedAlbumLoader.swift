@@ -27,7 +27,7 @@ final class CachedAlbumLoader: CachedDatabaseLoader {
         super.init(serverId: serverId)
     }
     
-    override func loadModelsFromDatabase() -> Bool {
+    @discardableResult override func loadModelsFromDatabase() -> Bool {
         songs = SongRepository.si.songs(albumId: albumId, serverId: serverId, isCachedTable: true)
         songsDuration = songs.reduce(0) { totalDuration, song -> Int in
             if let duration = song.duration {

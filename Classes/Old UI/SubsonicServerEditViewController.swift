@@ -164,7 +164,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
                 server.username = statusLoader.username;
                 server.password = statusLoader.password;
                 server.basicAuth = statusLoader.basicAuth;
-                _ = server.replace()
+                server.replace()
             } else {
                 // Create new server
                 server = ServerRepository.si.server(type: .subsonic, url: statusLoader.url, username: statusLoader.username, password: statusLoader.password, basicAuth: statusLoader.basicAuth)

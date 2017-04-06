@@ -26,7 +26,7 @@ final class CachedPlaylistLoader: CachedDatabaseLoader {
         super.init(serverId: serverId)
     }
     
-    override func loadModelsFromDatabase() -> Bool {
+    @discardableResult override func loadModelsFromDatabase() -> Bool {
         if let playlist = associatedItem as? Playlist {
             PlaylistRepository.si.loadSubItems(playlist: playlist)
             songs = playlist.songs

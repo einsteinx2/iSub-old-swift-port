@@ -54,13 +54,13 @@ final class RootArtistsLoader: ApiLoader, RootItemLoader {
     func persistModels() {
         // Remove existing artists
         // TODO: Should only delete artists not in artists array, same for other loaders
-        _ = ArtistRepository.si.deleteAllArtists(serverId: serverId)
+        ArtistRepository.si.deleteAllArtists(serverId: serverId)
         
         // Save the new artists
-        artists.forEach({_ = $0.replace()})
+        artists.forEach({$0.replace()})
     }
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         let artistsTemp = ArtistRepository.si.allArtists(serverId: serverId)
         if artistsTemp.count > 0 {
             artists = artistsTemp

@@ -17,14 +17,14 @@ class CachedItemViewModel: ItemViewModel {
         if let song = item as? Song {
             actionSheet.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
                 CacheManager.si.remove(song: song)
-                _ = self.loadModelsFromDatabase()
+                self.loadModelsFromDatabase()
                 self.delegate?.itemsChanged(viewModel: self)
             })
             actionSheet.addAction(UIAlertAction(title: "Remove All", style: .destructive) { action in
                 for songToRemove in self.songs {
                     CacheManager.si.remove(song: songToRemove)
                 }
-                _ = self.loadModelsFromDatabase()
+                self.loadModelsFromDatabase()
                 self.delegate?.itemsChanged(viewModel: self)
             })
         }

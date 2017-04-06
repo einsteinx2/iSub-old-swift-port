@@ -19,7 +19,7 @@ final class CachedRootArtistsLoader: CachedDatabaseLoader {
         return nil
     }
     
-    override func loadModelsFromDatabase() -> Bool {
+    @discardableResult override func loadModelsFromDatabase() -> Bool {
         artists = ArtistRepository.si.allArtists(isCachedTable: true)
         return true
     }

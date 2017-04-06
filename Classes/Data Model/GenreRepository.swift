@@ -80,19 +80,19 @@ extension Genre: PersistedItem {
         return false
     }
     
-    func replace() -> Bool {
+    @discardableResult func replace() -> Bool {
         return repository.replace(genre: self)
     }
     
-    func cache() -> Bool {
+    @discardableResult func cache() -> Bool {
         return false
     }
     
-    func delete() -> Bool {
+    @discardableResult func delete() -> Bool {
         return repository.delete(genre: self)
     }
     
-    func deleteCache() -> Bool {
+    @discardableResult func deleteCache() -> Bool {
         return false
     }
     

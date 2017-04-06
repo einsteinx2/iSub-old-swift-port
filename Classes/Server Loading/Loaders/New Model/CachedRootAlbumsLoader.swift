@@ -19,7 +19,7 @@ final class CachedRootAlbumsLoader: CachedDatabaseLoader {
         return nil
     }
     
-    override func loadModelsFromDatabase() -> Bool {
+    @discardableResult override func loadModelsFromDatabase() -> Bool {
         albums = AlbumRepository.si.allAlbums(isCachedTable: true)
         return true
     }

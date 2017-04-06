@@ -30,7 +30,7 @@ final class CachedFolderLoader: CachedDatabaseLoader {
         super.init(serverId: serverId)
     }
     
-    override func loadModelsFromDatabase() -> Bool {
+    @discardableResult override func loadModelsFromDatabase() -> Bool {
         folders = FolderRepository.si.folders(parentFolderId: folderId, serverId: serverId, isCachedTable: true)
         songs = SongRepository.si.songs(folderId: folderId, serverId: serverId, isCachedTable: true)
         songsDuration = songs.reduce(0) { totalDuration, song -> Int in

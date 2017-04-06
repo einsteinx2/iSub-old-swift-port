@@ -376,20 +376,20 @@ extension Playlist: PersistedItem {
         return repository.hasCachedSubItems(playlist: self)
     }
     
-    func replace() -> Bool {
+    @discardableResult func replace() -> Bool {
         return repository.replace(playlist: self)
     }
     
-    func cache() -> Bool {
+    @discardableResult func cache() -> Bool {
         // Not implemented
         return false
     }
     
-    func delete() -> Bool {
+    @discardableResult func delete() -> Bool {
         return repository.delete(playlist: self)
     }
     
-    func deleteCache() -> Bool {
+    @discardableResult func deleteCache() -> Bool {
         // Not implemented
         return false
     }

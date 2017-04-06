@@ -246,7 +246,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
             // TODO: Automatically switch to the next server. Or if it's the last server, connect to the test server
             
             // Delete the row from the data source
-            _ = servers[indexPath.row].delete()            
+            servers[indexPath.row].delete()            
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }

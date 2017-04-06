@@ -60,8 +60,8 @@ class ItemViewController: DraggableTableViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         
         viewModel.delegate = self
-        _ = viewModel.loadModelsFromDatabase()
-        viewModel.loadModelsFromWeb()
+        self.viewModel.loadModelsFromDatabase()
+        self.viewModel.loadModelsFromWeb()
         
         self.navigationItem.title = viewModel.navigationTitle
         self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 64))
@@ -69,8 +69,6 @@ class ItemViewController: DraggableTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.tableView.reloadData()
         
         registerForNotifications()
     }
@@ -197,7 +195,7 @@ class ItemViewController: DraggableTableViewController {
     
     @objc fileprivate func songDownloaded(_ notification: Notification?) {
         if viewModel.isDownloadQueue {
-            _ = viewModel.loadModelsFromDatabase()
+            viewModel.loadModelsFromDatabase()
         }
         self.tableView.reloadData()
     }
@@ -214,7 +212,7 @@ class ItemViewController: DraggableTableViewController {
     
     @objc fileprivate func cachedSongDeletedRateLimited() {
         if viewModel.isBrowsingCache {
-            _ = viewModel.loadModelsFromDatabase()
+            viewModel.loadModelsFromDatabase()
         }
         self.tableView.reloadData()
     }
@@ -320,10 +318,13 @@ class ItemViewController: DraggableTableViewController {
         default: break
         }
         
+        log.debug("section: \(section) count: \(count)")
         return count == nil ? 0 : count!
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        log.debug("section: \(indexPath.section) row: \(indexPath.row)")
+        
         var reuseIdentifier = ""
         switch indexPath.section {
         case foldersSectionIndex:   reuseIdentifier = folderCellIdentifier
@@ -506,7 +507,7 @@ class ItemViewController: DraggableTableViewController {
 extension ItemViewController : ItemViewModelDelegate {
     
     func itemsChanged(viewModel: ItemViewModel) {
-        self.tableView.reloadData()        
+        self.tableView.reloadData()
     }
     
     func loadingFinished(viewModel: ItemViewModel) {

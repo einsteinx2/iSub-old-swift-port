@@ -23,7 +23,7 @@ class CachedDatabaseLoader: ItemLoader {
     
     var state: ApiLoaderState = .new
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         fatalError("Override in subclass")
     }
     

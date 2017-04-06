@@ -38,11 +38,11 @@ final class MediaFoldersLoader: ApiLoader, ItemLoader {
     
     func persistModels() {
         // TODO: Only delete missing ones
-        _ = MediaFolderRepository.si.deleteAllMediaFolders(serverId: serverId)
-        mediaFolders.forEach({_ = $0.replace()})
+        MediaFolderRepository.si.deleteAllMediaFolders(serverId: serverId)
+        mediaFolders.forEach({$0.replace()})
     }
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         mediaFolders = MediaFolderRepository.si.allMediaFolders(serverId: serverId)
         return mediaFolders.count > 0
     }

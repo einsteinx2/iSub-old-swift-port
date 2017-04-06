@@ -24,7 +24,7 @@ struct FolderRepository: ItemRepository {
         return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
     }
     
-    func deleteAllFolders(serverId: Int64?) -> Bool {
+    @discardableResult func deleteAllFolders(serverId: Int64?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -44,7 +44,7 @@ struct FolderRepository: ItemRepository {
         return gr.delete(repository: self, item: folder, isCachedTable: isCachedTable)
     }
     
-    func deleteRootFolders(mediaFolderId: Int64?, serverId: Int64, isCachedTable: Bool = false) -> Bool {
+    @discardableResult func deleteRootFolders(mediaFolderId: Int64?, serverId: Int64, isCachedTable: Bool = false) -> Bool {
         var success = true
         Database.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
@@ -150,19 +150,19 @@ extension Folder: PersistedItem {
         return repository.hasCachedSubItems(folder: self)
     }
     
-    func replace() -> Bool {
+    @discardableResult func replace() -> Bool {
         return repository.replace(folder: self)
     }
     
-    func cache() -> Bool {
+    @discardableResult func cache() -> Bool {
         return repository.replace(folder: self, isCachedTable: true)
     }
     
-    func delete() -> Bool {
+    @discardableResult func delete() -> Bool {
         return repository.delete(folder: self)
     }
     
-    func deleteCache() -> Bool {
+    @discardableResult func deleteCache() -> Bool {
         return repository.delete(folder: self, isCachedTable: true)
     }
     

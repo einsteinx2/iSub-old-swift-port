@@ -32,9 +32,11 @@ final class Album {
     
     let artistName: String?
     
+    var songSortOrder: SongSortOrder = .track
+    
     var artist: Artist?
     var genre: Genre?
-    
+        
     var artistDisplayName: String? {
         return artist?.name ?? artistName
     }
@@ -86,6 +88,7 @@ final class Album {
         self.year        = result.object(forColumnIndex: 8) as? Int
         self.created     = result.date(forColumnIndex: 9)
         self.artistName  = result.string(forColumnIndex: 10)
+        self.songSortOrder  = SongSortOrder(rawValue: result.long(forColumnIndex: 11)) ?? .track
         self.repository  = repository as! AlbumRepository
     }
 }

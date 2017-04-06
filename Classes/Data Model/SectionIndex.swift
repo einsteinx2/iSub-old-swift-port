@@ -80,4 +80,24 @@ struct SectionIndex {
         let names = items.map({$0.itemName})
         return sectionIndexes(forNames: names)
     }
+    
+    static func sectionIndexes(forCount count: Int) -> [SectionIndex] {
+        guard count > 50 else {
+            return []
+        }
+        
+        var sectionIndexes: [SectionIndex] = []
+        
+        let clampedCount = clamp(value: count, lower: 50, upper: 1000)
+        let sectionCountDivisor = convertToRange(number: clampedCount, inputMin: 50, inputMax: 1000, outputMin: 5, outputMax: 40)
+        
+        let sectionCount = count / sectionCountDivisor
+        let sections = count / sectionCount
+        for i in 0..<sections {
+            let index = SectionIndex(firstIndex: i * sectionCount, sectionCount: sectionCount, letter: "•")
+            sectionIndexes.append(index)
+        }
+        
+        return sectionIndexes
+    }
 }

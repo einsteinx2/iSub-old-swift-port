@@ -24,7 +24,7 @@ struct MediaFolderRepository: ItemRepository {
         return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
     }
     
-    func deleteAllMediaFolders(serverId: Int64?) -> Bool {
+    @discardableResult func deleteAllMediaFolders(serverId: Int64?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -74,19 +74,19 @@ extension MediaFolder: PersistedItem {
         return repository.hasCachedSubItems(mediaFolder: self)
     }
     
-    func replace() -> Bool {
+    @discardableResult func replace() -> Bool {
         return repository.replace(mediaFolder: self)
     }
     
-    func cache() -> Bool {
+    @discardableResult func cache() -> Bool {
         return repository.replace(mediaFolder: self, isCachedTable: true)
     }
     
-    func delete() -> Bool {
+    @discardableResult func delete() -> Bool {
         return repository.delete(mediaFolder: self)
     }
     
-    func deleteCache() -> Bool {
+    @discardableResult func deleteCache() -> Bool {
         return repository.delete(mediaFolder: self, isCachedTable: true)
     }
     

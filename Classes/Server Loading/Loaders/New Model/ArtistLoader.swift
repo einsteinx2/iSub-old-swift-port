@@ -39,7 +39,7 @@ final class ArtistLoader: ApiLoader, ItemLoader {
         // Persist associated object model if needed
         if !ArtistRepository.si.isPersisted(artistId: artistId, serverId: serverId) {
             if let element = root.child("artist"), let artist = Artist(rxmlElement: element, serverId: serverId) {
-                _ = artist.replace()
+                artist.replace()
             }
         }
         
@@ -50,15 +50,15 @@ final class ArtistLoader: ApiLoader, ItemLoader {
     
     func persistModels() {
         // Save the new albums
-        albums.forEach({_ = $0.replace()})
+        albums.forEach({$0.replace()})
         
         // Add to cache table if needed
         if let artist = associatedItem as? Artist, artist.hasCachedSubItems {
-            _ = artist.cache()
+            artist.cache()
         }
     }
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         if let artist = associatedItem as? Artist {
             artist.loadSubItems()
             albums = artist.albums
