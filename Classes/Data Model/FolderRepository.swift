@@ -94,7 +94,7 @@ struct FolderRepository: ItemRepository {
             }
         }
         
-        return subsonicSorted(items: folders, ignoredArticles: Database.si.ignoredArticles)
+        return Sorting.subsonicSorted(items: folders, ignoredArticles: Sorting.ignoredArticles)
     }
     
     func folders(parentFolderId: Int64, serverId: Int64, isCachedTable: Bool = false) -> [Folder] {

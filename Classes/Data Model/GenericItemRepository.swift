@@ -59,7 +59,7 @@ class GenericItemRepository {
     }
     
     func allItems<T: PersistedItem>(repository: ItemRepository, serverId: Int64? = nil, isCachedTable: Bool = false) -> [T] {
-        let ignoredArticles = Database.si.ignoredArticles
+        let ignoredArticles = Sorting.ignoredArticles
         var items = [T]()
         var itemsNumbers = [T]()
         Database.si.read.inDatabase { db in
@@ -76,7 +76,7 @@ class GenericItemRepository {
                 
                 while result.next() {
                     let item = T(result: result, repository: repository)
-                    let name = Database.si.name(item.itemName, ignoringArticles: ignoredArticles)
+                    let name = Sorting.name(item.itemName, ignoringArticles: ignoredArticles)
                     if let firstScalar = name.unicodeScalars.first {
                         if CharacterSet.letters.contains(firstScalar) {
                             items.append(item)
@@ -91,7 +91,7 @@ class GenericItemRepository {
             }
         }
         
-        items = subsonicSorted(items: items, ignoredArticles: ignoredArticles)
+        items = Sorting.subsonicSorted(items: items, ignoredArticles: ignoredArticles)
         items.append(contentsOf: itemsNumbers)
         
         for item in items {
@@ -148,19 +148,5 @@ class GenericItemRepository {
             }
         }
         return success
-    }
-}
-
-func subsonicSorted<T: Item>(items: [T], ignoredArticles: [String]) -> [T] {
-    return items.sorted {
-        var name1 = Database.si.name($0.itemName.lowercased(), ignoringArticles: ignoredArticles)
-        name1 = name1.replacingOccurrences(of: " ", with: "")
-        name1 = name1.replacingOccurrences(of: "-", with: "")
-        
-        var name2 = Database.si.name($1.itemName.lowercased(), ignoringArticles: ignoredArticles)
-        name2 = name2.replacingOccurrences(of: " ", with: "")
-        name2 = name2.replacingOccurrences(of: "-", with: "")
-        
-        return name1 < name2
     }
 }

@@ -22,7 +22,7 @@ struct ArtistRepository: ItemRepository {
     
     func allArtists(serverId: Int64? = nil, isCachedTable: Bool = false) -> [Artist] {
         let artists: [Artist] = gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
-        return subsonicSorted(items: artists, ignoredArticles: Database.si.ignoredArticles)
+        return Sorting.subsonicSorted(items: artists, ignoredArticles: Sorting.ignoredArticles)
     }
     
     @discardableResult func deleteAllArtists(serverId: Int64?) -> Bool {

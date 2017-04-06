@@ -218,7 +218,6 @@ class ItemViewModel: NSObject {
     // MARK - Actions -
     
     func playSong(atIndex index: Int) {
-        // TODO: Implement a way to just switch play index when we're playing from the same array to save time
         PlayQueue.si.playSongs(songs, playIndex: index)
     }
     

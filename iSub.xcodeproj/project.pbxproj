@@ -101,6 +101,9 @@
 		5325CCC81E84700300F16C6B /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5325CCC61E84700300F16C6B /* XCGLogger.framework */; };
 		532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D59A6D1E1DC9CE00071ABD /* Reachability.framework */; };
 		532B6FE71E95D85C0010D81D /* Swizzling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FE61E95D85C0010D81D /* Swizzling.swift */; };
+		532B6FEA1E960A240010D81D /* Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FE91E960A240010D81D /* Bridging.swift */; };
+		532B6FEC1E960A450010D81D /* NumberUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FEB1E960A450010D81D /* NumberUtils.swift */; };
+		532B6FEE1E960A750010D81D /* Sorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FED1E960A750010D81D /* Sorting.swift */; };
 		53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
 		53368DD61E3F9BE000B7A199 /* AwesomeCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */; };
 		533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
@@ -447,7 +450,10 @@
 		53200C921E7F605900426A48 /* SortOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOrder.swift; sourceTree = "<group>"; };
 		53200C951E7F777700426A48 /* ItemTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableHeaderView.swift; sourceTree = "<group>"; };
 		5325CCC61E84700300F16C6B /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
-		532B6FE61E95D85C0010D81D /* Swizzling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swizzling.swift; sourceTree = "<group>"; };
+		532B6FE61E95D85C0010D81D /* Swizzling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Swizzling.swift; path = ../Singletons/Swizzling.swift; sourceTree = "<group>"; };
+		532B6FE91E960A240010D81D /* Bridging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bridging.swift; sourceTree = "<group>"; };
+		532B6FEB1E960A450010D81D /* NumberUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberUtils.swift; sourceTree = "<group>"; };
+		532B6FED1E960A750010D81D /* Sorting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sorting.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		53368DD11E3F169500B7A199 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwesomeCache.framework; path = Carthage/Build/iOS/AwesomeCache.framework; sourceTree = "<group>"; };
@@ -1084,7 +1090,6 @@
 				531B33351E24CF8B00811187 /* LoadingScreen.h */,
 				531B33361E24CF8B00811187 /* LoadingScreen.m */,
 				5355BFA61E2D955C00C6D27F /* Logging.swift */,
-				532B6FE61E95D85C0010D81D /* Swizzling.swift */,
 			);
 			path = Singletons;
 			sourceTree = "<group>";
@@ -1094,6 +1099,10 @@
 			children = (
 				531B334E1E24CF8B00811187 /* Utils.swift */,
 				531B34641E24D3D500811187 /* Defines.swift */,
+				532B6FE91E960A240010D81D /* Bridging.swift */,
+				532B6FEB1E960A450010D81D /* NumberUtils.swift */,
+				532B6FE61E95D85C0010D81D /* Swizzling.swift */,
+				532B6FED1E960A750010D81D /* Sorting.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -1830,6 +1839,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				532B6FEC1E960A450010D81D /* NumberUtils.swift in Sources */,
 				531B33D91E24CFAF00811187 /* UIView.swift in Sources */,
 				53114E0B1E3B22A400D8589B /* ObjC.m in Sources */,
 				53835CB81E0B7D6D0077B53D /* NSFileHandle+ZKAdditions.m in Sources */,
@@ -1929,6 +1939,7 @@
 				53835CB31E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				531B339C1E24CF8B00811187 /* CachedRootSongsLoader.swift in Sources */,
 				531B33F11E24D0B600811187 /* DraggableTableView.swift in Sources */,
+				532B6FEA1E960A240010D81D /* Bridging.swift in Sources */,
 				53808D401E7DF23F0063B6D9 /* PlaylistViewController.swift in Sources */,
 				5358DBE01E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				53200C971E7F777700426A48 /* ItemTableHeaderView.swift in Sources */,
@@ -1942,6 +1953,7 @@
 				53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
 				531B33A81E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
 				531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */,
+				532B6FEE1E960A750010D81D /* Sorting.swift in Sources */,
 				531B33FD1E24D0B600811187 /* CacheViewController.swift in Sources */,
 				53D959121E2C774200A1667F /* Error.swift in Sources */,
 				53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */,
