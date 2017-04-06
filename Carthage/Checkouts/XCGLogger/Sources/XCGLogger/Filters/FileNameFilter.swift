@@ -7,8 +7,6 @@
 //  Some rights reserved: https://github.com/DaveWoodCom/XCGLogger/blob/master/LICENSE.txt
 //
 
-import Foundation
-
 // MARK: - FileNameFilter
 /// Filter log messages by fileName
 open class FileNameFilter: FilterProtocol {
