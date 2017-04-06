@@ -45,9 +45,9 @@ struct ArtistRepository: ItemRepository {
         return gr.delete(repository: self, item: artist, isCachedTable: isCachedTable)
     }
     
-    func replace(artist: Artist, isCachedTable: Bool = false) -> Bool {
+    func replace(artist: Artist, isCachedTable: Bool = false, runInDb: FMDatabase? = nil) -> Bool {
         var success = true
-        Database.si.write.inDatabase { db in
+        func runQuery(db: FMDatabase) {
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
                 let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?)"
@@ -57,6 +57,15 @@ struct ArtistRepository: ItemRepository {
                 printError(error)
             }
         }
+        
+        if let runInDb = runInDb {
+            runQuery(db: runInDb)
+        } else {
+            Database.si.write.inDatabase { db in
+                runQuery(db: db)
+            }
+        }
+        
         return success
     }
     

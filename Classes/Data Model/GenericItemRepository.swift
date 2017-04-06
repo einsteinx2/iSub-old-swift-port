@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias ExtraQueriesFunction = (FMDatabase) -> ()
+
 protocol ItemRepository {
     var table: String { get }
     var cachedTable: String { get }
@@ -101,7 +103,28 @@ class GenericItemRepository {
         return items
     }
     
-    func deleteAllItems(repository: ItemRepository, serverId: Int64?) -> Bool {
+    func deleteAllItems(repository: ItemRepository, serverId: Int64?, extraQueries: ExtraQueriesFunction?) -> Bool {
+        var success = true
+        Database.si.write.inDatabase { db in
+            do {
+                if let serverId = serverId {
+                    let query = "DELETE FROM \(repository.table) WHERE serverId = ?"
+                    try db.executeUpdate(query, serverId)
+                } else {
+                    let query = "DELETE FROM \(repository.table)"
+                    try db.executeUpdate(query)
+                }
+            } catch {
+                success = false
+                printError(error)
+            }
+            
+            extraQueries?(db)
+        }
+        return success
+    }
+    
+    func deleteAllItems(repository: ItemRepository, serverId: Int64?, excludingIds: [Int]) -> Bool {
         var success = true
         Database.si.write.inDatabase { db in
             do {
