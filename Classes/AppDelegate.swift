@@ -31,12 +31,19 @@ import Reachability
     fileprivate var isInBackground = false
     fileprivate var referringAppUrl: URL? = nil
     
-    static var si: AppDelegate {
-        return UIApplication.shared.delegate as! AppDelegate
-    }
+    static fileprivate(set) var si: AppDelegate!
     
     static var shouldAutorotate: Bool {
         return true
+    }
+    
+    override init() {
+        super.init()
+        
+        AppDelegate.si = self
+        
+        // Swizzle all needed methods (can't use class initialize anymore since Swift 3.1)
+        swizzleMethods()
     }
     
     func applicationDidFinishLaunching(_ application: UIApplication) {

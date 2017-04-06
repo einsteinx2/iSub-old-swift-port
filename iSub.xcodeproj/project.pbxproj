@@ -100,6 +100,7 @@
 		53200C971E7F777700426A48 /* ItemTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C951E7F777700426A48 /* ItemTableHeaderView.swift */; };
 		5325CCC81E84700300F16C6B /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5325CCC61E84700300F16C6B /* XCGLogger.framework */; };
 		532A1AD91E1DD44D00A8502A /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D59A6D1E1DC9CE00071ABD /* Reachability.framework */; };
+		532B6FE71E95D85C0010D81D /* Swizzling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FE61E95D85C0010D81D /* Swizzling.swift */; };
 		53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
 		53368DD61E3F9BE000B7A199 /* AwesomeCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */; };
 		533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
@@ -122,7 +123,6 @@
 		5355BFA51E2D81D900C6D27F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA31E2D81D900C6D27F /* AppDelegate.swift */; };
 		5355BFA81E2D955C00C6D27F /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA61E2D955C00C6D27F /* Logging.swift */; };
 		5355BFAB1E2D9EE000C6D27F /* PlaylistRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFA91E2D9EE000C6D27F /* PlaylistRepository.swift */; };
-		5355BFAE1E2DAA7300C6D27F /* UINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFAC1E2DAA7300C6D27F /* UINavigationBar.swift */; };
 		5355BFB11E2DB59D00C6D27F /* NSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFAF1E2DB59D00C6D27F /* NSError.swift */; };
 		5355BFB41E2DB88200C6D27F /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFB21E2DB88200C6D27F /* Application.swift */; };
 		5355BFB71E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFB51E2DBC9B00C6D27F /* PlaylistLoader.swift */; };
@@ -447,6 +447,7 @@
 		53200C921E7F605900426A48 /* SortOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOrder.swift; sourceTree = "<group>"; };
 		53200C951E7F777700426A48 /* ItemTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableHeaderView.swift; sourceTree = "<group>"; };
 		5325CCC61E84700300F16C6B /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
+		532B6FE61E95D85C0010D81D /* Swizzling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swizzling.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		53368DD11E3F169500B7A199 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwesomeCache.framework; path = Carthage/Build/iOS/AwesomeCache.framework; sourceTree = "<group>"; };
@@ -476,7 +477,6 @@
 		5355BFA31E2D81D900C6D27F /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5355BFA61E2D955C00C6D27F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		5355BFA91E2D9EE000C6D27F /* PlaylistRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistRepository.swift; sourceTree = "<group>"; };
-		5355BFAC1E2DAA7300C6D27F /* UINavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBar.swift; sourceTree = "<group>"; };
 		5355BFAF1E2DB59D00C6D27F /* NSError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSError.swift; sourceTree = "<group>"; };
 		5355BFB21E2DB88200C6D27F /* Application.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		5355BFB51E2DBC9B00C6D27F /* PlaylistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistLoader.swift; sourceTree = "<group>"; };
@@ -1012,7 +1012,6 @@
 				531B33D41E24CFAF00811187 /* UIView.swift */,
 				53A232371E39CACA005214DD /* CGRect.swift */,
 				531B33D51E24CFAF00811187 /* URL.swift */,
-				5355BFAC1E2DAA7300C6D27F /* UINavigationBar.swift */,
 				53CFBB651E2AE203005895F4 /* RXMLElement.swift */,
 				53D959101E2C774200A1667F /* Error.swift */,
 				5355BFAF1E2DB59D00C6D27F /* NSError.swift */,
@@ -1085,6 +1084,7 @@
 				531B33351E24CF8B00811187 /* LoadingScreen.h */,
 				531B33361E24CF8B00811187 /* LoadingScreen.m */,
 				5355BFA61E2D955C00C6D27F /* Logging.swift */,
+				532B6FE61E95D85C0010D81D /* Swizzling.swift */,
 			);
 			path = Singletons;
 			sourceTree = "<group>";
@@ -1911,6 +1911,7 @@
 				53CFBB7F1E2B3038005895F4 /* Genre.swift in Sources */,
 				539D2BB91E5E0B1A0059D233 /* SafeNumberCasting.swift in Sources */,
 				53114E0E1E3B23F100D8589B /* main.swift in Sources */,
+				532B6FE71E95D85C0010D81D /* Swizzling.swift in Sources */,
 				531B34011E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */,
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
@@ -1961,7 +1962,6 @@
 				53808D2E1E7DE5160063B6D9 /* ItemViewControllerProvider.swift in Sources */,
 				53835CA91E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
 				53CFBB791E2B1E56005895F4 /* FolderRepository.swift in Sources */,
-				5355BFAE1E2DAA7300C6D27F /* UINavigationBar.swift in Sources */,
 				53CFBB7C1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */,
 				531B33FB1E24D0B600811187 /* ItemViewModel.swift in Sources */,
 				53CFBB641E2AE18A005895F4 /* Album.swift in Sources */,
