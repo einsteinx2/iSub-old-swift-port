@@ -23,6 +23,8 @@ final class Artist {
     let coverArtId: String?
     let albumCount: Int?
     
+    var albumSortOrder: AlbumSortOrder = .year
+    
     var albums = [Album]()
     
     init?(rxmlElement element: RXMLElement, serverId: Int64, repository: ArtistRepository = ArtistRepository.si) {
@@ -44,6 +46,7 @@ final class Artist {
         self.name        = result.string(forColumnIndex: 2) ?? ""
         self.coverArtId  = result.string(forColumnIndex: 3)
         self.albumCount  = result.object(forColumnIndex: 4) as? Int
+        self.albumSortOrder  = AlbumSortOrder(rawValue: result.long(forColumnIndex: 5)) ?? .year
         self.repository  = repository as! ArtistRepository
     }
 }

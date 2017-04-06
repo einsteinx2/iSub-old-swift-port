@@ -24,7 +24,7 @@ struct SongRepository: ItemRepository {
         return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
     }
     
-    func deleteAllSongs(serverId: Int64?) -> Bool {
+    @discardableResult func deleteAllSongs(serverId: Int64?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -54,7 +54,7 @@ struct SongRepository: ItemRepository {
         return lastPlayed
     }
     
-    func deleteRootSongs(mediaFolderId: Int64?, serverId: Int64, isCachedTable: Bool = false) -> Bool {
+    @discardableResult func deleteRootSongs(mediaFolderId: Int64?, serverId: Int64, isCachedTable: Bool = false) -> Bool {
         var success = true
         Database.si.read.inDatabase { db in
             let table = tableName(repository: self, isCachedTable: isCachedTable)
@@ -192,10 +192,10 @@ extension Song {
             
             // Add subItems to cache db
             loadSubItems()
-            _ = folder?.cache()
-            _ = artist?.cache()
-            _ = album?.cache()
-            _ = cache()
+            folder?.cache()
+            artist?.cache()
+            album?.cache()
+            cache()
         }
     }
     
@@ -227,19 +227,19 @@ extension Song: PersistedItem {
         return repository.hasCachedSubItems(song: self)
     }
     
-    func replace() -> Bool {
+    @discardableResult func replace() -> Bool {
         return repository.replace(song: self)
     }
     
-    func cache() -> Bool {
+    @discardableResult func cache() -> Bool {
         return repository.replace(song: self, isCachedTable: true)
     }
     
-    func delete() -> Bool {
+    @discardableResult func delete() -> Bool {
         return repository.delete(song: self)
     }
     
-    func deleteCache() -> Bool {
+    @discardableResult func deleteCache() -> Bool {
         var success = true
         Database.si.write.inDatabase { db in
             var queries = [String]()

@@ -25,7 +25,7 @@ struct AlbumRepository: ItemRepository {
         return subsonicSorted(items: albums, ignoredArticles: Database.si.ignoredArticles)
     }
     
-    func deleteAllAlbums(serverId: Int64?) -> Bool {
+    @discardableResult func deleteAllAlbums(serverId: Int64?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -69,8 +69,8 @@ struct AlbumRepository: ItemRepository {
         Database.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
-                let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                try db.executeUpdate(query, album.albumId, album.serverId, n2N(album.artistId), n2N(album.genreId), n2N(album.coverArtId), album.name, n2N(album.songCount), n2N(album.duration), n2N(album.year), n2N(album.created), n2N(album.artistName))
+                let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                try db.executeUpdate(query, album.albumId, album.serverId, n2N(album.artistId), n2N(album.genreId), n2N(album.coverArtId), album.name, n2N(album.songCount), n2N(album.duration), n2N(album.year), n2N(album.created), n2N(album.artistName), album.songSortOrder.rawValue)
             } catch {
                 success = false
                 printError(error)
@@ -105,19 +105,19 @@ extension Album: PersistedItem {
         return repository.hasCachedSubItems(album: self)
     }
     
-    func replace() -> Bool {
+    @discardableResult func replace() -> Bool {
         return repository.replace(album: self)
     }
     
-    func cache() -> Bool {
+    @discardableResult func cache() -> Bool {
         return repository.replace(album: self, isCachedTable: true)
     }
     
-    func delete() -> Bool {
+    @discardableResult func delete() -> Bool {
         return repository.delete(album: self)
     }
     
-    func deleteCache() -> Bool {
+    @discardableResult func deleteCache() -> Bool {
         return repository.delete(album: self, isCachedTable: true)
     }
     

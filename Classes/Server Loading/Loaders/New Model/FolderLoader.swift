@@ -58,7 +58,7 @@ final class FolderLoader: ApiLoader, ItemLoader {
         // Persist associated object model if needed
         if !FolderRepository.si.isPersisted(folderId: folderId, serverId: serverId) {
             if let element = root.child("directory"), let folder = Folder(rxmlElement: element, serverId: serverId, mediaFolderId: mediaFolderId) {
-                _ = folder.replace()
+                folder.replace()
             }
         }
         persistModels()
@@ -67,16 +67,16 @@ final class FolderLoader: ApiLoader, ItemLoader {
     }
     
     func persistModels() {
-        folders.forEach({_ = $0.replace()})
-        songs.forEach({_ = $0.replace()})
+        folders.forEach({$0.replace()})
+        songs.forEach({$0.replace()})
         
         if let folder = associatedItem as? Folder {
             // Persist if needed
-            _ = folder.replace()
+            folder.replace()
             
             // Add to cache table if needed
             if let folder = associatedItem as? Folder, folder.hasCachedSubItems {
-                _ = folder.cache()
+                folder.cache()
             }
         }
         
@@ -111,7 +111,7 @@ final class FolderLoader: ApiLoader, ItemLoader {
         }
     }
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         if let folder = associatedItem as? Folder {
             folder.loadSubItems()
             folders = folder.folders

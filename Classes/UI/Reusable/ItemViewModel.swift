@@ -98,12 +98,19 @@ class ItemViewModel: NSObject {
         
         if let folder = loader.associatedItem as? Folder {
             self.songSortOrder = folder.songSortOrder
+        } else if let artist = loader.associatedItem as? Artist {
+            self.albumSortOrder = artist.albumSortOrder
+        } else if let album = loader.associatedItem as? Album {
+            self.songSortOrder = album.songSortOrder
+        } else if loader is RootItemLoader {
+            self.artistSortOrder = SavedSettings.si.rootArtistSortOrder
+            self.albumSortOrder = SavedSettings.si.rootAlbumSortOrder
         }
     }
     
     // MARK - Loading -
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         let success = loader.loadModelsFromDatabase()
         if (success) {
             self.processModels()
@@ -176,10 +183,18 @@ class ItemViewModel: NSObject {
             sectionIndexes = SectionIndex.sectionIndexes(forItems: folders)
             sectionIndexesSection = 0
         } else if artists.count >= minAmountForIndexes {
-            sectionIndexes = SectionIndex.sectionIndexes(forItems: artists)
+            if artistSortOrder == .name {
+                sectionIndexes = SectionIndex.sectionIndexes(forItems: artists)
+            } else {
+                sectionIndexes = SectionIndex.sectionIndexes(forCount: artists.count)
+            }
             sectionIndexesSection = 1
         } else if albums.count >= minAmountForIndexes {
-            sectionIndexes = SectionIndex.sectionIndexes(forItems: albums)
+            if albumSortOrder == .name {
+                sectionIndexes = SectionIndex.sectionIndexes(forItems: albums)
+            } else {
+                sectionIndexes = SectionIndex.sectionIndexes(forCount: albums.count)
+            }
             sectionIndexesSection = 2
         } else if songSortOrder != .track && songs.count >= minAmountForIndexes {
             switch songSortOrder {
@@ -190,7 +205,7 @@ class ItemViewModel: NSObject {
             case .album:
                 sectionIndexes = SectionIndex.sectionIndexes(forNames: songs.map({$0.albumDisplayName ?? ""}))
             default:
-                break
+                sectionIndexes = SectionIndex.sectionIndexes(forCount: songs.count)
             }
             sectionIndexesSection = 3
         } else {
@@ -207,16 +222,24 @@ class ItemViewModel: NSObject {
     }
     
     func sortAll() {
-        sortArtists(by: artistSortOrder, createIndexes: false, notify: false)
-        sortAlbums(by: albumSortOrder, createIndexes: false, notify: false)
-        sortSongs(by: songSortOrder, createIndexes: false, notify: false)
-        createSectionIndexes()
-        delegate?.itemsChanged(viewModel: self)
+        var sorted = false
+        sorted = sorted || sortArtists(by: artistSortOrder, createIndexes: false, notify: false)
+        sorted = sorted || sortAlbums(by: albumSortOrder, createIndexes: false, notify: false)
+        sorted = sorted || sortSongs(by: songSortOrder, createIndexes: false, notify: false)
+        
+        if sorted {
+            createSectionIndexes()
+            //delegate?.itemsChanged(viewModel: self)
+        }
     }
     
-    func sortArtists(by sortOrder: ArtistSortOrder, createIndexes: Bool = true, notify: Bool = true) {
-        // TODO: Store in user defaults
-        self.artistSortOrder = sortOrder
+    func sortArtists(by sortOrder: ArtistSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
+        artistSortOrder = sortOrder
+        SavedSettings.si.rootArtistSortOrder = sortOrder
+        
+        guard artists.count > 0 else {
+            return false
+        }
         
         artists.sort { lhs, rhs -> Bool in
             switch sortOrder {
@@ -232,11 +255,22 @@ class ItemViewModel: NSObject {
         if notify {
             delegate?.itemsChanged(viewModel: self)
         }
+        
+        return true
     }
     
-    func sortAlbums(by sortOrder: AlbumSortOrder, createIndexes: Bool = true, notify: Bool = true) {
-        // TODO: Store in database per artist
+    func sortAlbums(by sortOrder: AlbumSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
         self.albumSortOrder = sortOrder
+        if isRootItemLoader {
+            SavedSettings.si.rootAlbumSortOrder = sortOrder
+        } else if let artist = loader.associatedItem as? Artist {
+            artist.albumSortOrder = sortOrder
+            artist.replace()
+        }
+        
+        guard albums.count > 0 else {
+            return false
+        }
         
         albums.sort { lhs, rhs -> Bool in
             switch sortOrder {
@@ -256,13 +290,22 @@ class ItemViewModel: NSObject {
         if notify {
             delegate?.itemsChanged(viewModel: self)
         }
+        
+        return true
     }
     
-    func sortSongs(by sortOrder: SongSortOrder, createIndexes: Bool = true, notify: Bool = true) {
+    func sortSongs(by sortOrder: SongSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
         self.songSortOrder = sortOrder
         if let folder = loader.associatedItem as? Folder {
             folder.songSortOrder = sortOrder
-            _ = folder.replace()
+            folder.replace()
+        } else if let album = loader.associatedItem as? Album {
+            album.songSortOrder = sortOrder
+            album.replace()
+        }
+        
+        guard songs.count > 0 else {
+            return false
         }
         
         songs.sort { lhs, rhs -> Bool in
@@ -281,6 +324,8 @@ class ItemViewModel: NSObject {
         if notify {
             delegate?.itemsChanged(viewModel: self)
         }
+        
+        return true
     }
     
     // MARK: - Action Sheets -

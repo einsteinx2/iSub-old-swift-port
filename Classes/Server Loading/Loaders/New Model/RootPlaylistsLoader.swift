@@ -29,7 +29,7 @@ final class RootPlaylistsLoader: ApiLoader, ItemLoader {
                 playlistsTemp.append(aPlaylist)
             }
         }
-        playlistsTemp.sort(by: { $0.name < $1.name })
+        playlistsTemp.sort(by: {$0.name < $1.name})
         playlists = playlistsTemp
         
         persistModels()
@@ -38,10 +38,10 @@ final class RootPlaylistsLoader: ApiLoader, ItemLoader {
     }
     
     func persistModels() {
-        playlists.forEach({_ = $0.replace()})
+        playlists.forEach({$0.replace()})
     }
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         playlists = PlaylistRepository.si.allPlaylists(serverId: serverId)
         return true
     }

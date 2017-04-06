@@ -19,7 +19,7 @@ class ServerItemViewModel: ItemViewModel {
             if song.isFullyCached {
                 actionSheet.addAction(UIAlertAction(title: "Remove from Downloads", style: .destructive) { action in
                     CacheManager.si.remove(song: song)
-                    _ = self.loadModelsFromDatabase()
+                    self.loadModelsFromDatabase()
                     self.delegate?.itemsChanged(viewModel: self)
                 })
             } else {

@@ -19,7 +19,7 @@ final class CachedRootFoldersLoader: CachedDatabaseLoader {
         return nil
     }
     
-    override func loadModelsFromDatabase() -> Bool {
+    @discardableResult override func loadModelsFromDatabase() -> Bool {
         folders = FolderRepository.si.rootFolders(isCachedTable: true)
         return true
     }

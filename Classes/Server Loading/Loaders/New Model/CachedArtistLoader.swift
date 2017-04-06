@@ -26,7 +26,7 @@ final class CachedArtistLoader: CachedDatabaseLoader {
         super.init(serverId: serverId)
     }
     
-    override func loadModelsFromDatabase() -> Bool {
+    @discardableResult override func loadModelsFromDatabase() -> Bool {
         albums = AlbumRepository.si.albums(artistId: artistId, serverId: serverId, isCachedTable: true)
         return true
     }

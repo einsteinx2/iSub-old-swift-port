@@ -60,13 +60,13 @@ final class RootAlbumsLoader: ApiLoader, RootItemLoader {
     
     func persistModels() {
         // Remove existing albums
-        _ = AlbumRepository.si.deleteAllAlbums(serverId: serverId)
+        AlbumRepository.si.deleteAllAlbums(serverId: serverId)
         
         // Save the new albums
-        albums.forEach({_ = $0.replace()})
+        albums.forEach({$0.replace()})
     }
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         let albumsTemp = AlbumRepository.si.allAlbums(serverId: serverId)
         if albumsTemp.count > 0 {
             albums = albumsTemp

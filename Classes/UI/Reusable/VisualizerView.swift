@@ -241,7 +241,7 @@ class VisualizerView: UIView {
         glMatrixMode(GLenum(GL_MODELVIEW))
         
         destroyFrameBuffer()
-        _ = createFrameBuffer()
+        createFrameBuffer()
         
         startDrawing()
     }
@@ -250,7 +250,7 @@ class VisualizerView: UIView {
         buffer.initialize(to: PixelRGBA())
     }
     
-    fileprivate func createFrameBuffer() -> Bool {
+    @discardableResult fileprivate func createFrameBuffer() -> Bool {
         guard let context = context, let glLayer = self.layer as? EAGLDrawable else {
             return false
         }

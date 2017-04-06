@@ -38,6 +38,9 @@ final class SavedSettings: NSObject {
         static let quickSkipNumberOfSeconds     = "quickSkipNumberOfSeconds"
         static let isDisableUsageOver3G         = "isDisableUsageOver3G"
         
+        static let rootArtistSortOrder          = "rootArtistSortOrder"
+        static let rootAlbumSortOrder              = "rootAlbumSortOrder"
+        
         static let seekTime                     = "seekTime"
         static let byteOffset                   = "byteOffset"
         static let isEqualizerOn                = "isEqualizerOn"
@@ -68,7 +71,9 @@ final class SavedSettings: NSObject {
              Keys.isScreenSleepEnabled: true,
              Keys.maxVideoBitRateWifi: 5,
              Keys.maxVideoBitRate3G: 5,
-             Keys.currentServerId: Server.testServerId]
+             Keys.currentServerId: Server.testServerId,
+             Keys.rootArtistSortOrder: ArtistSortOrder.name.rawValue,
+             Keys.rootAlbumSortOrder: AlbumSortOrder.name.rawValue]
         
         storage.register(defaults: defaults)
     }
@@ -211,6 +216,24 @@ final class SavedSettings: NSObject {
     var isDisableUsageOver3G: Bool {
         get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isDisableUsageOver3G) }}
         set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isDisableUsageOver3G) }}
+    }
+    
+    var rootArtistSortOrder: ArtistSortOrder {
+        get { return lock.synchronizedResult {
+            let rawValue = self.storage.integer(forKey: Keys.rootArtistSortOrder)
+            return ArtistSortOrder(rawValue: rawValue) ?? .name
+            }
+        }
+        set { lock.synchronized { self.storage.set(newValue.rawValue, forKey: Keys.rootArtistSortOrder) }}
+    }
+    
+    var rootAlbumSortOrder: AlbumSortOrder {
+        get { return lock.synchronizedResult {
+            let rawValue = self.storage.integer(forKey: Keys.rootAlbumSortOrder)
+            return AlbumSortOrder(rawValue: rawValue) ?? .name
+            }
+        }
+        set { lock.synchronized { self.storage.set(newValue.rawValue, forKey: Keys.rootAlbumSortOrder) }}
     }
     
     // MARK: - State Saving -

@@ -25,7 +25,7 @@ struct ArtistRepository: ItemRepository {
         return subsonicSorted(items: artists, ignoredArticles: Database.si.ignoredArticles)
     }
     
-    func deleteAllArtists(serverId: Int64?) -> Bool {
+    @discardableResult func deleteAllArtists(serverId: Int64?) -> Bool {
         return gr.deleteAllItems(repository: self, serverId: serverId)
     }
     
@@ -50,8 +50,8 @@ struct ArtistRepository: ItemRepository {
         Database.si.write.inDatabase { db in
             do {
                 let table = tableName(repository: self, isCachedTable: isCachedTable)
-                let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?)"
-                try db.executeUpdate(query, artist.artistId, artist.serverId, artist.name, n2N(artist.coverArtId), n2N(artist.albumCount))
+                let query = "REPLACE INTO \(table) VALUES (?, ?, ?, ?, ?, ?)"
+                try db.executeUpdate(query, artist.artistId, artist.serverId, artist.name, n2N(artist.coverArtId), n2N(artist.albumCount), artist.albumSortOrder.rawValue)
             } catch {
                 success = false
                 printError(error)
@@ -78,19 +78,19 @@ extension Artist: PersistedItem {
         return repository.hasCachedSubItems(artist: self)
     }
     
-    func replace() -> Bool {
+    @discardableResult func replace() -> Bool {
         return repository.replace(artist: self)
     }
     
-    func cache() -> Bool {
+    @discardableResult func cache() -> Bool {
         return repository.replace(artist: self, isCachedTable: true)
     }
     
-    func delete() -> Bool {
+    @discardableResult func delete() -> Bool {
         return repository.delete(artist: self)
     }
     
-    func deleteCache() -> Bool {
+    @discardableResult func deleteCache() -> Bool {
         return repository.delete(artist: self, isCachedTable: true)
     }
     

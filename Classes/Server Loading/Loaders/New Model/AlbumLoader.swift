@@ -39,7 +39,7 @@ final class AlbumLoader: ApiLoader, ItemLoader {
         // Persist associated object model if needed
         if !AlbumRepository.si.isPersisted(albumId: albumId, serverId: serverId) {
             if let element = root.child("album"), let album = Album(rxmlElement: element, serverId: serverId) {
-                _ = album.replace()
+                album.replace()
             }
         }
         
@@ -50,11 +50,11 @@ final class AlbumLoader: ApiLoader, ItemLoader {
     
     func persistModels() {
         // Save the new songs
-        songs.forEach({_ = $0.replace()})
+        songs.forEach({$0.replace()})
         
         // Add to cache table if needed
         if let album = associatedItem as? Album, album.hasCachedSubItems {
-            _ = album.cache()
+            album.cache()
         }
         
         // Make sure all folder records are created if needed
@@ -77,7 +77,7 @@ final class AlbumLoader: ApiLoader, ItemLoader {
         }
     }
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         if let album = associatedItem as? Album {
             album.loadSubItems()
             songs = album.songs

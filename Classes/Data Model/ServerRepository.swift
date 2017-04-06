@@ -88,20 +88,20 @@ extension Server: PersistedItem {
         return false
     }
     
-    func replace() -> Bool {
+    @discardableResult func replace() -> Bool {
         return repository.replace(server: self)
     }
     
-    func cache() -> Bool {
+    @discardableResult func cache() -> Bool {
         // Not applicable
         return false
     }
     
-    func delete() -> Bool {
+    @discardableResult func delete() -> Bool {
         return repository.delete(server: self)
     }
     
-    func deleteCache() -> Bool {
+    @discardableResult func deleteCache() -> Bool {
         // Not applicable
         return false
     }

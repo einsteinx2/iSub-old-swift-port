@@ -100,7 +100,7 @@ import AwesomeCache
             }
         }
         
-        _ = song.deleteCache()
+        song.deleteCache()
         
         let userInfo = [Notifications.Keys.song: song]
         NotificationCenter.postOnMainThread(name: Notifications.songRemoved, userInfo: userInfo)

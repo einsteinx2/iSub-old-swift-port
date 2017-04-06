@@ -42,7 +42,7 @@ class RootServerItemViewModel: ServerItemViewModel {
     
     fileprivate func loadMediaFolder(_ mediaFolder: MediaFolder?) {
         mediaFolderId = mediaFolder?.mediaFolderId
-        _ = loadModelsFromDatabase()
+        loadModelsFromDatabase()
         loadModelsFromWeb()
     }
 }

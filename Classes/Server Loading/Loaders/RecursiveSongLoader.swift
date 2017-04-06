@@ -101,7 +101,7 @@ extension RecursiveSongLoader {
         fatalError("Do not persist models from the RecursiveSongLoader, it's done by the sub-loaders")
     }
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         fatalError("Do not load models using the RecursiveSongLoader, use the appropriate repository class")
     }
 }

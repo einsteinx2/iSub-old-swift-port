@@ -43,7 +43,7 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
     
     func persistModels() {
         // Save the new songs
-        songs.forEach({_ = $0.replace()})
+        songs.forEach({$0.replace()})
         
         // Update the playlist table
         // TODO: This will need to be rewritten to handle two way syncing
@@ -97,7 +97,7 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
         }
     }
     
-    func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase() -> Bool {
         if let playlist = associatedItem as? Playlist {
             playlist.loadSubItems()
             songs = playlist.songs

@@ -105,6 +105,9 @@ final class Database {
             if !db.tableExists("artists") {
                 try? db.executeUpdate("CREATE TABLE artists (artistId INTEGER, serverId INTEGER, name TEXT, coverArtid TEXT, albumCount INTEGER, PRIMARY KEY (artistId, serverId))")
             }
+            if !db.columnExists("albumSortOrder", inTableWithName: "artists") {
+                try? db.executeUpdate("ALTER TABLE artists ADD COLUMN albumSortOrder INTEGER")
+            }
             
             if !db.tableExists("cachedArtists") {
                 try? db.executeUpdate("CREATE TABLE cachedArtists (artistId INTEGER, serverId INTEGER, name TEXT, coverArtId TEXT, albumCount INTEGER, PRIMARY KEY (artistId, serverId))")
@@ -115,6 +118,9 @@ final class Database {
             }
             if !db.columnExists("artistName", inTableWithName: "albums") {
                 try? db.executeUpdate("ALTER TABLE albums ADD COLUMN artistName TEXT")
+            }
+            if !db.columnExists("songSortOrder", inTableWithName: "albums") {
+                try? db.executeUpdate("ALTER TABLE albums ADD COLUMN songSortOrder INTEGER")
             }
             
             if !db.tableExists("cachedAlbums") {
