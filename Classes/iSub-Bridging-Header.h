@@ -31,6 +31,7 @@
 #import "SettingsTabViewController.h"
 #import "JASidePanelController.h"
 #import "UIViewController+JASidePanel.h"
+//#import "EqualizerView.h"
 
 // Bass
 #import "bass.h"
