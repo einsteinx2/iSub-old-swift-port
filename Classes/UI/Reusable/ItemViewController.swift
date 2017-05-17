@@ -59,8 +59,10 @@ class ItemViewController: DraggableTableViewController {
         self.edgesForExtendedLayout = UIRectEdge()
         self.automaticallyAdjustsScrollViewInsets = false
         
+        self.tableView.reloadData()
+        
         viewModel.delegate = self
-        self.viewModel.loadModelsFromDatabase()
+        self.viewModel.loadModelsFromDatabase(notify: false)
         self.viewModel.loadModelsFromWeb()
         
         self.navigationItem.title = viewModel.navigationTitle

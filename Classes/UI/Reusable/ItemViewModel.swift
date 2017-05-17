@@ -103,18 +103,17 @@ class ItemViewModel: NSObject {
         } else if let album = loader.associatedItem as? Album {
             self.songSortOrder = album.songSortOrder
         } else if loader is RootItemLoader {
-            // TODO: Re-enable this after figuring out the weird crash
-            //self.artistSortOrder = SavedSettings.si.rootArtistSortOrder
-            //self.albumSortOrder = SavedSettings.si.rootAlbumSortOrder
+            self.artistSortOrder = SavedSettings.si.rootArtistSortOrder
+            self.albumSortOrder = SavedSettings.si.rootAlbumSortOrder
         }
     }
     
     // MARK - Loading -
     
-    @discardableResult func loadModelsFromDatabase() -> Bool {
+    @discardableResult func loadModelsFromDatabase(notify: Bool = true) -> Bool {
         let success = loader.loadModelsFromDatabase()
         if (success) {
-            self.processModels()
+            self.processModels(notify: notify)
         }
         
         return success
@@ -130,7 +129,6 @@ class ItemViewModel: NSObject {
                     // May have some false positives, but prevents UI pauses
                     if self.items.count != self.loader.items.count {
                         self.processModels()
-                        self.delegate?.itemsChanged(viewModel: self)
                     }
                 } else {
                     let errorString = error == nil ? "Unknown error" : error!.localizedDescription
@@ -146,7 +144,7 @@ class ItemViewModel: NSObject {
         loader.cancel()
     }
     
-    func processModels() {
+    func processModels(notify: Bool = true) {
         // Reset models
         folders.removeAll()
         artists.removeAll()
@@ -175,7 +173,7 @@ class ItemViewModel: NSObject {
         }
         songsDuration = duration
         
-        sortAll()
+        sortAll(notify: notify)
     }
     
     fileprivate func createSectionIndexes() {
@@ -221,7 +219,7 @@ class ItemViewModel: NSObject {
         PlayQueue.si.playSongs(songs, playIndex: index)
     }
     
-    func sortAll() {
+    func sortAll(notify: Bool = true) {
         var sorted = false
         sorted = sorted || sortArtists(by: artistSortOrder, createIndexes: false, notify: false)
         sorted = sorted || sortAlbums(by: albumSortOrder, createIndexes: false, notify: false)
@@ -229,7 +227,9 @@ class ItemViewModel: NSObject {
         
         if sorted {
             createSectionIndexes()
-            delegate?.itemsChanged(viewModel: self)
+            if notify {
+                delegate?.itemsChanged(viewModel: self)
+            }
         }
     }
     
@@ -244,7 +244,7 @@ class ItemViewModel: NSObject {
         artists.sort { lhs, rhs -> Bool in
             switch sortOrder {
             case .name: return lhs.name.lowercased() < rhs.name.lowercased()
-            case .albumCount: return lhs.albumCount ?? 0 < rhs.albumCount ?? 0
+            case .albumCount: return lhs.albumCount ?? 0 > rhs.albumCount ?? 0
             }
         }
         
