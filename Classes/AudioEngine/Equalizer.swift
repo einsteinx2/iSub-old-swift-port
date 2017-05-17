@@ -221,11 +221,11 @@ class Equalizer {
     }
     
     func updatePreampGain(gain: Float) {
-        if let channel = channel {
+        if let channel = channel, let preampHandle = preampHandle {
             var preampParams = BASS_BFX_VOLUME()
             preampParams.lChannel = Int32(bitPattern: channel)
             preampParams.fVolume = gain // 0.0 = -unlimited dB, 0.5 = -6dB, 1.0 = 0dB, 2.0 = +6dB, etc
-            BASS_FXSetParameters(preampHandle!, &preampParams)
+            BASS_FXSetParameters(preampHandle, &preampParams)
         }
     }
     
