@@ -70,7 +70,9 @@ final class Album {
         
         if let genreString = element.attribute(asStringOptional: "genre") {
             genre = GenreRepository.si.genre(name: genreString)
-            self.genreId = genre!.genreId
+            // TODO: Figure out why this ever returns a nil genre, it should be impossible without a database error
+            // which should also be impossible
+            self.genreId = genre?.genreId
         } else {
             self.genreId = nil
         }
