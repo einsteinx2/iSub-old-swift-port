@@ -209,11 +209,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
 }
 
 - (BITFeedbackListViewController *)feedbackListViewController:(BOOL)modal {
-  if ([self isPreiOS7Environment]) {
-    return [[BITFeedbackListViewController alloc] initWithModalStyle:modal];
-  } else {
-    return [[BITFeedbackListViewController alloc] initWithStyle:UITableViewStyleGrouped modal:modal];
-  }
+  return [[BITFeedbackListViewController alloc] initWithStyle:UITableViewStyleGrouped modal:modal];
 }
 
 - (void)showFeedbackListView {
@@ -784,6 +780,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
                 int attachmentIndex = 0;
                 for (BITFeedbackMessageAttachment *attachment in matchingSendInProgressOrInConflictMessage.attachments) {
                   attachment.identifier = feedbackAttachments[attachmentIndex][@"id"];
+                  attachment.sourceURL = feedbackAttachments[attachmentIndex][@"url"];
                   attachmentIndex++;
                 }
               }
@@ -826,7 +823,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
 
     // we got a new incoming message, trigger user notification system
     if (newMessage) {
-      // check if the latest message is from the users own email address, then don't show an alert since he answered using his own email
+      // check if the latest message is from the users own email address, then don't show an alert since they answered using their own email
       BOOL latestMessageFromUser = NO;
 
       BITFeedbackMessage *latestMessage = [self lastMessageHavingID];
@@ -1218,19 +1215,13 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
 }
 
 - (void)setObservationModeOnScreenshotEnabled:(BOOL)observationModeOnScreenshotEnabled {
-  if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1) {
-    // Enable/disable screenshot notification
-    if (observationModeOnScreenshotEnabled) {
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotNotificationReceived:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
-      BITHockeyLogVerbose(@"Added observer for UIApplocationUserDidTakeScreenshotNotification.");
-    } else {
-      [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationUserDidTakeScreenshotNotification object:nil];
-      BITHockeyLogVerbose(@"Removed observer for UIApplocationUserDidTakeScreenshotNotification.");
-    }
+  // Enable/disable screenshot notification
+  if (observationModeOnScreenshotEnabled) {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotNotificationReceived:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+    BITHockeyLogVerbose(@"Added observer for UIApplocationUserDidTakeScreenshotNotification.");
   } else {
-    if (observationModeOnScreenshotEnabled) {
-      BITHockeyLogWarning(@"BITFeedbackObservationModeOnScreenshot requires iOS 7 or later.");
-    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+    BITHockeyLogVerbose(@"Removed observer for UIApplocationUserDidTakeScreenshotNotification.");
   }
 
   _observationModeOnScreenshotEnabled = observationModeOnScreenshotEnabled;

@@ -13,6 +13,7 @@ enum CachingType: Int {
     case maxSize = 1
 };
 
+@objcMembers
 final class SavedSettings: NSObject {
     struct Keys {
         static let currentServerId              = "currentServerId"

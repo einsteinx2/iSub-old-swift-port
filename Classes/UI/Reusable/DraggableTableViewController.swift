@@ -40,7 +40,7 @@ class DraggableTableViewController: UITableViewController {
         self.navigationController?.navigationBar.barStyle = .black
         self.edgesForExtendedLayout = UIRectEdge()
         
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(DraggableTableViewController.setupLeftBarButton), name: NSNotification.Name.UIApplicationDidBecomeActive)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(setupLeftBarButton), name: NSNotification.Name.UIApplicationDidBecomeActive)
         
         setupRefreshControl()
         
@@ -77,7 +77,7 @@ class DraggableTableViewController: UITableViewController {
         
     }
 
-    func setupLeftBarButton() -> UIBarButtonItem {
+    @objc func setupLeftBarButton() -> UIBarButtonItem {
         return UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(popViewController))
     }
 
@@ -95,20 +95,20 @@ class DraggableTableViewController: UITableViewController {
         if shouldSetupRefreshControl() && self.refreshControl == nil {
             let refreshControl = UIRefreshControl()
             let tintColor = UIColor.white
-            refreshControl.attributedTitle = NSAttributedString(string: "Pull down to reload...", attributes: [NSForegroundColorAttributeName: tintColor])
+            refreshControl.attributedTitle = NSAttributedString(string: "Pull down to reload...", attributes: [NSAttributedStringKey.foregroundColor: tintColor])
             refreshControl.tintColor = tintColor
-            refreshControl.addTarget(self, action: #selector(DraggableTableViewController.didPullToRefresh), for: .valueChanged)
+            refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
             self.refreshControl = refreshControl
         }
     }
     
-    func didPullToRefresh() {
+    @objc func didPullToRefresh() {
         fatalError("didPullToRefresh must be overridden")
     }
     
     // MARK - Actions -
     
-    func popViewController() {
+    @objc func popViewController() {
         if self.navigationController?.viewControllers.count ?? 0 <= 2 {
             _ = self.navigationController?.popViewController(animated: true)
         } else if let navigationController = self.navigationController as? NavigationStack {
@@ -116,11 +116,11 @@ class DraggableTableViewController: UITableViewController {
         }
     }
     
-    func showMenu() {
+    @objc func showMenu() {
         self.sidePanelController?.showLeftPanel(animated: true)
     }
     
-    func showPlayQueue() {
+    @objc func showPlayQueue() {
         self.sidePanelController?.showRightPanel(animated: true)
     }
     

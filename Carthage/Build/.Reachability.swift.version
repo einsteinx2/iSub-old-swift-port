@@ -1,0 +1,9 @@
+{
+  "commitish" : "20a5075cf65d004a36eb03fc4c62ec12db3a8718",
+  "iOS" : [
+    {
+      "hash" : "ea12f472c2d0d9f36662f17e195c58e4ddc92b84543f808559519b5c33e41cad",
+      "name" : "Reachability"
+    }
+  ]
+}

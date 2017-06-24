@@ -7,4 +7,5 @@ framework module Device {
 
 module Device.Swift {
     header "Device-Swift.h"
+    requires objc
 }

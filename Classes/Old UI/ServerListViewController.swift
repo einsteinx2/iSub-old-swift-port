@@ -37,7 +37,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         headerView.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
         
         segmentedControl.autoresizingMask = .flexibleWidth
-        segmentedControl.addTarget(self, action: #selector(ServerListViewController.segmentAction), for: .valueChanged)
+        segmentedControl.addTarget(self, action: #selector(segmentAction), for: .valueChanged)
         segmentedControl.frame = CGRect(x: 5, y: 2, width: 310, height: 36)
         segmentedControl.tintColor = UIColor(red: 200.0/255.0, green: 200.0/255.0, blue: 206.0/255.0, alpha: 1)
         segmentedControl.selectedSegmentIndex = 0;
@@ -52,11 +52,11 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
     }
     
     override func setupLeftBarButton() -> UIBarButtonItem {
-        return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(ServerListViewController.showMenu))
+        return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(showMenu))
     }
     
     override func setupRightBarButton() -> UIBarButtonItem {
-        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ServerListViewController.addAction))
+        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction))
     }
     
     func reloadTable() {
@@ -64,7 +64,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         self.tableView.reloadData()
     }
     
-    func segmentAction() {
+    @objc func segmentAction() {
         settingsTabViewController?.parentController = nil
         settingsTabViewController = nil;
         helpTabViewController = nil;
@@ -119,7 +119,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         }
     }
     
-    func addAction() {
+    @objc func addAction() {
         self.showServerEditScreen(server: nil)
     }
     

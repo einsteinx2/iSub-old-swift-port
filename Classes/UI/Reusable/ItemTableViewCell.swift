@@ -233,7 +233,7 @@ class ItemTableViewCell: DroppableCell {
             titleLabel.isHidden = false
             
             let height = subTitle == nil ? scrollViewHeight : scrollViewHeight * 0.60
-            let expectedLabelSize: CGSize = titleLabel.text!.boundingRect(with: CGSize(width: 1000, height: height), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName: titleLabel.font], context: nil).size
+            let expectedLabelSize: CGSize = titleLabel.text!.boundingRect(with: CGSize(width: 1000, height: height), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: titleLabel.font], context: nil).size
             
             titleLabel.frame = CGRect(x: 0, y: 0, width: expectedLabelSize.width, height: height)
         }
@@ -244,7 +244,7 @@ class ItemTableViewCell: DroppableCell {
             let y = scrollViewHeight * 0.57
             let height = scrollViewHeight * 0.33
             let text = subTitleLabel.text == nil ? "" : subTitleLabel.text!
-            let expectedLabelSize = text.boundingRect(with: CGSize(width: 1000, height: height), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName: subTitleLabel.font], context: nil).size
+            let expectedLabelSize = text.boundingRect(with: CGSize(width: 1000, height: height), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: subTitleLabel.font], context: nil).size
             
             subTitleLabel.frame = CGRect(x: 0, y: y, width: expectedLabelSize.width, height: height)
         }

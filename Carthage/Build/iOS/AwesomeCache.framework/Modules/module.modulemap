@@ -7,4 +7,5 @@ framework module AwesomeCache {
 
 module AwesomeCache.Swift {
     header "AwesomeCache-Swift.h"
+    requires objc
 }

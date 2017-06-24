@@ -1042,7 +1042,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     // If the top level error handler differs from our own, then at least another one was added.
     // This could cause exception crashes not to be reported to HockeyApp. See log message for details.
     if (self.exceptionHandler != currentHandler) {
-      BITHockeyLogWarning(@"[HockeySDK] WARNING: Another exception handler was added. If this invokes any kind exit() after processing the exception, which causes any subsequent error handler not to be invoked, these crashes will NOT be reported to HockeyApp!");
+      BITHockeyLogWarning(@"[HockeySDK] WARNING: Another exception handler was added. If this invokes any kind of exit() after processing the exception, which causes any subsequent error handler not to be invoked, these crashes will NOT be reported to HockeyApp!");
     }
   }
   
@@ -1240,8 +1240,11 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
           
           BITHockeyLogDebug(@"INFO: Exception handler successfully initialized.");
         } else {
-          // this should never happen, theoretically only if NSSetUncaugtExceptionHandler() has some internal issues
+          
+          // If we're running in a Xamarin Environment, the exception handler will be the one by the xamarin runtime, not ours.
+          // In other cases, this should never happen, theoretically only if NSSetUncaugtExceptionHandler() has some internal issues
           BITHockeyLogError(@"[HockeySDK] ERROR: Exception handler could not be set. Make sure there is no other exception handler set up!");
+          BITHockeyLogError(@"[HockeySDK] ERROR: If you are using the HockeySDK-Xamarin, this is expected behavior and you can ignore this message");
         }
         
         // Add the C++ uncaught exception handler, which is currently not handled by PLCrashReporter internally

@@ -9,6 +9,6 @@
 #ifndef BassPluginLoad_h
 #define BassPluginLoad_h
 
-void bassLoadPlugins();
+void bassLoadPlugins(void);
 
 #endif /* BassPluginLoad_h */

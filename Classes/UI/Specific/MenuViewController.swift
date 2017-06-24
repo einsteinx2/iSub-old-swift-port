@@ -55,7 +55,7 @@ class MenuViewController: UITableViewController, MFMailComposeViewControllerDele
         self.tableView.tableFooterView = footerView
     }
     
-    func emailLogs() {
+    @objc func emailLogs() {
         guard composeController == nil else {
             return
         }
@@ -178,7 +178,7 @@ class MenuViewController: UITableViewController, MFMailComposeViewControllerDele
         centerController.contentController = menuItem.navController
     }
     
-    func showSettings() {
+    @objc func showSettings() {
         showSettings(menuItems.last!)
     }
     

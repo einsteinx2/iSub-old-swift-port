@@ -9,7 +9,8 @@
 import Foundation
 import AwesomeCache
 
-@objc final class CacheManager: NSObject {
+@objcMembers
+final class CacheManager: NSObject {
     struct Notifications {
         static let songRemoved = Notification.Name("CacheManager_songRemoved")
         

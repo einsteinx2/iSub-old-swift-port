@@ -142,7 +142,7 @@ final class PlayQueue {
         // Adjust the current index if songs are removed below it
         if currentIndex >= 0 {
             let range = NSMakeRange(0, currentIndex)
-            let countOfIndexesBelowCurrent = indexes.count(in: range.toRange() ?? 0..<0)
+            let countOfIndexesBelowCurrent = indexes.count(in: Range(range) ?? 0..<0)
             currentIndex = currentIndex - countOfIndexesBelowCurrent
         }
         

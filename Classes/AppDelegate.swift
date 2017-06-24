@@ -9,7 +9,8 @@
 import UIKit
 import Reachability
 
-@objc final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate {
+@objcMembers
+final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate {
     struct Notifications {
         static let enteringOfflineMode = Notification.Name("AppDelegate_enteringOfflineMode")
         static let enteringOnlineMode  = Notification.Name("AppDelegate_enteringOnlineMode")

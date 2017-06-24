@@ -7,4 +7,5 @@ framework module Reachability {
 
 module Reachability.Swift {
     header "Reachability-Swift.h"
+    requires objc
 }

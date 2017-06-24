@@ -191,7 +191,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)startManager;
 
-
 #pragma mark - Public Properties
 
 ///-----------------------------------------------------------------------------
