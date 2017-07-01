@@ -55,15 +55,12 @@ class ItemViewController: DraggableTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.edgesForExtendedLayout = UIRectEdge()
         self.automaticallyAdjustsScrollViewInsets = false
         
-        self.tableView.reloadData()
-        
         viewModel.delegate = self
-        self.viewModel.loadModelsFromDatabase(notify: false)
-        self.viewModel.loadModelsFromWeb()
+        viewModel.loadModelsFromDatabase()
+        viewModel.loadModelsFromWeb()
         
         self.navigationItem.title = viewModel.navigationTitle
         self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 64))
