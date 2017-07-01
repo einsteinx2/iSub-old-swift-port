@@ -456,6 +456,7 @@ class ItemViewModel: NSObject {
         actionSheet.addAction(UIAlertAction(title: "Album Count", style: .default) { action in
             self.sortArtists(by: .albumCount)
         })
+        addCancelAction(toActionSheet: actionSheet)
         return actionSheet
     }
     
@@ -479,6 +480,7 @@ class ItemViewModel: NSObject {
         actionSheet.addAction(UIAlertAction(title: "Duration", style: .default) { action in
             self.sortAlbums(by: .duration)
         })
+        addCancelAction(toActionSheet: actionSheet)
         return actionSheet
     }
     
@@ -496,6 +498,7 @@ class ItemViewModel: NSObject {
         actionSheet.addAction(UIAlertAction(title: "Album", style: .default) { action in
             self.sortSongs(by: .album)
         })
+        addCancelAction(toActionSheet: actionSheet)
         return actionSheet
     }
     
