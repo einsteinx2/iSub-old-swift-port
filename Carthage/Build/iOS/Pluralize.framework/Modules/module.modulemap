@@ -1,0 +1,11 @@
+framework module Pluralize {
+  umbrella header "Pluralize.h"
+
+  export *
+  module * { export * }
+}
+
+module Pluralize.Swift {
+    header "Pluralize-Swift.h"
+    requires objc
+}

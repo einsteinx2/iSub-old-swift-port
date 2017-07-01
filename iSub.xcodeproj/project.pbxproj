@@ -153,6 +153,7 @@
 		5358E1BA1E0B789B0024A0D4 /* libbassopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5358DF001E0B78990024A0D4 /* libbassopus.a */; };
 		5358E1BF1E0B789B0024A0D4 /* libbasswv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5358DF011E0B78990024A0D4 /* libbasswv.a */; };
 		5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DF051E0B78990024A0D4 /* RXMLElement.m */; };
+		535BE3A01F069D8F00DEA4EF /* Pluralize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 535BE39F1F069D8F00DEA4EF /* Pluralize.framework */; };
 		536007351E69159100F68EAE /* CachedPlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536007331E69159100F68EAE /* CachedPlaylistLoader.swift */; };
 		53609CD31E883F49005C26D0 /* VisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53609CD21E883F49005C26D0 /* VisualizerView.swift */; };
 		53609CDB1E8840B6005C26D0 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53609CDA1E8840B6005C26D0 /* GLKit.framework */; };
@@ -542,6 +543,7 @@
 		5358E1CE1E0B79210024A0D4 /* MBProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MBProgressHUD.framework; path = Carthage/Build/iOS/MBProgressHUD.framework; sourceTree = "<group>"; };
 		5358E1D01E0B79210024A0D4 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		535A8899113F62DD00979783 /* default-album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art.png"; path = "Images/Other/default-album-art.png"; sourceTree = "<group>"; };
+		535BE39F1F069D8F00DEA4EF /* Pluralize.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pluralize.framework; path = Carthage/Build/iOS/Pluralize.framework; sourceTree = "<group>"; };
 		535CAC6612DC2D6D00389DA1 /* player-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "player-overlay.png"; path = "Images/Other/player-overlay.png"; sourceTree = "<group>"; };
 		535CAC6712DC2D6D00389DA1 /* player-overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "player-overlay@2x.png"; path = "Images/Other/player-overlay@2x.png"; sourceTree = "<group>"; };
 		535CB22012E0014A00389DA1 /* server-subsonic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "server-subsonic.png"; path = "Images/Other/server-subsonic.png"; sourceTree = "<group>"; };
@@ -747,6 +749,7 @@
 				5358E19C1E0B789B0024A0D4 /* libbass_fx.a in Frameworks */,
 				53D9D25616DEF86F002F55F7 /* AdSupport.framework in Frameworks */,
 				5358E1A61E0B789B0024A0D4 /* libbass_tta.a in Frameworks */,
+				535BE3A01F069D8F00DEA4EF /* Pluralize.framework in Frameworks */,
 				5308D9301E243D270026E6BD /* Device.framework in Frameworks */,
 				53D9D25716DEF86F002F55F7 /* Accounts.framework in Frameworks */,
 				5358E1921E0B789B0024A0D4 /* libbass.a in Frameworks */,
@@ -1396,6 +1399,7 @@
 				5358E1D01E0B79210024A0D4 /* SnapKit.framework */,
 				53D59A6D1E1DC9CE00071ABD /* Reachability.framework */,
 				5308D92E1E243D270026E6BD /* Device.framework */,
+				535BE39F1F069D8F00DEA4EF /* Pluralize.framework */,
 			);
 			name = Carthage;
 			sourceTree = "<group>";
@@ -1810,6 +1814,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/AwesomeCache.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ObjcExceptionBridging.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Pluralize.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (

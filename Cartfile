@@ -6,3 +6,4 @@ github "aschuch/AwesomeCache"
 github "ashleymills/Reachability.swift" "master"
 github "schickling/Device.swift"
 github "DaveWoodCom/XCGLogger" ~> 5.0.1
+github "joshualat/Pluralize.swift" "master"

@@ -5,4 +5,5 @@ github "ashleymills/Reachability.swift" "20a5075cf65d004a36eb03fc4c62ec12db3a871
 github "bitstadium/HockeySDK-iOS" "4.1.6"
 github "einsteinx2/Nuke" "fd734f77a4c152fc8305de0372a7d1e7478a6257"
 github "jdg/MBProgressHUD" "1.0.0"
+github "joshualat/Pluralize.swift" "45ec1ca1094293b4985934d8df57150fe2d417aa"
 github "schickling/Device.swift" "0.5"

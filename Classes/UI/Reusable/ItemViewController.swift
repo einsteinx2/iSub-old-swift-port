@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Pluralize
 
 class ItemViewController: DraggableTableViewController {
     
@@ -288,6 +289,10 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        guard viewModel.sectionIndexes.count > 0 else {
+            return nil
+        }
+        
         return viewModel.sectionIndexes.map({$0.letter})
     }
     
@@ -306,7 +311,7 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var count: Int? = nil
+        let count: Int
         
         switch section {
         case foldersSectionIndex:   count = viewModel.folders.count
@@ -314,10 +319,10 @@ class ItemViewController: DraggableTableViewController {
         case albumsSectionIndex:    count = viewModel.albums.count
         case songsSectionIndex:     count = viewModel.songs.count
         case playlistsSectionIndex: count = viewModel.playlists.count
-        default: break
+        default: count = 0
         }
         
-        return count == nil ? 0 : count!
+        return count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {        
@@ -356,6 +361,9 @@ class ItemViewController: DraggableTableViewController {
             cell.associatedItem = artist
             cell.coverArtId = artist.coverArtId
             cell.title = artist.name
+            if let albumCount = artist.albumCount {
+                cell.subTitle = "\(albumCount) " + "album".pluralize(count: albumCount, with: "albums")
+            }
         case albumsSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.alwaysShowCoverArt = true
