@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class PlayerViewController: UIViewController {
+class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
     let coverArtView = CachedImageView()
     
     let bitRateLabel = UILabel()
@@ -406,5 +406,9 @@ class PlayerViewController: UIViewController {
             }
         }
         isZoomed = !isZoomed
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

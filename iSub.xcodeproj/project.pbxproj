@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5301F5CF1A4938F300EEB25D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5301F5CC1A4938F300EEB25D /* Images.xcassets */; };
+		5307DE051F07AA1500EEC40A /* VisualizerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5307DE041F07AA1500EEC40A /* VisualizerViewController.swift */; };
 		5308D9301E243D270026E6BD /* Device.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5308D92E1E243D270026E6BD /* Device.framework */; };
 		530A5F871516703F0081A83A /* playing-cell-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F831516703F0081A83A /* playing-cell-icon.png */; };
 		530A5F8A1516703F0081A83A /* playing-cell-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F841516703F0081A83A /* playing-cell-icon@2x.png */; };
@@ -332,6 +333,7 @@
 		5301F5CC1A4938F300EEB25D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Images/Images.xcassets; sourceTree = "<group>"; };
 		53030314116ADF8B00B0AF5D /* reload-table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reload-table.png"; path = "Images/Other/reload-table.png"; sourceTree = "<group>"; };
 		5305C2051157F4F800BC78F0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Images/Other/Default.png; sourceTree = "<group>"; };
+		5307DE041F07AA1500EEC40A /* VisualizerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizerViewController.swift; sourceTree = "<group>"; };
 		5308D92E1E243D270026E6BD /* Device.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Device.framework; path = Carthage/Build/iOS/Device.framework; sourceTree = "<group>"; };
 		530A5F831516703F0081A83A /* playing-cell-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon.png"; path = "Images/Other/playing-cell-icon.png"; sourceTree = "<group>"; };
 		530A5F841516703F0081A83A /* playing-cell-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon@2x.png"; path = "Images/Other/playing-cell-icon@2x.png"; sourceTree = "<group>"; };
@@ -555,8 +557,6 @@
 		535CB58312E27A5400389DA1 /* default-album-art-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-ipad.png"; path = "Images/Other/default-album-art-ipad.png"; sourceTree = "<group>"; };
 		536007331E69159100F68EAE /* CachedPlaylistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedPlaylistLoader.swift; sourceTree = "<group>"; };
 		53609CD21E883F49005C26D0 /* VisualizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualizerView.swift; sourceTree = "<group>"; };
-		53609CD71E883F9F005C26D0 /* EqualizerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EqualizerView.h; path = ../../../../../Desktop/iSub/Classes/EqualizerView.h; sourceTree = "<group>"; };
-		53609CD81E883F9F005C26D0 /* EqualizerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EqualizerView.m; path = ../../../../../Desktop/iSub/Classes/EqualizerView.m; sourceTree = "<group>"; };
 		53609CDA1E8840B6005C26D0 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		53609CDC1E885B11005C26D0 /* PlayerContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContainerViewController.swift; sourceTree = "<group>"; };
 		53609CDE1E885B77005C26D0 /* EqualizerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EqualizerViewController.swift; sourceTree = "<group>"; };
@@ -1128,8 +1128,6 @@
 				531B33E01E24D0B600811187 /* DraggableTableViewController.swift */,
 				531B33E11E24D0B600811187 /* DroppableCell.swift */,
 				53609CD21E883F49005C26D0 /* VisualizerView.swift */,
-				53609CD71E883F9F005C26D0 /* EqualizerView.h */,
-				53609CD81E883F9F005C26D0 /* EqualizerView.m */,
 			);
 			path = Reusable;
 			sourceTree = "<group>";
@@ -1410,6 +1408,7 @@
 				53609CDC1E885B11005C26D0 /* PlayerContainerViewController.swift */,
 				531B33EA1E24D0B600811187 /* PlayerViewController.swift */,
 				53609CDE1E885B77005C26D0 /* EqualizerViewController.swift */,
+				5307DE041F07AA1500EEC40A /* VisualizerViewController.swift */,
 			);
 			name = Player;
 			sourceTree = "<group>";
@@ -1929,6 +1928,7 @@
 				532B6FE71E95D85C0010D81D /* Swizzling.swift in Sources */,
 				531B34011E24D0B600811187 /* MenuViewController.swift in Sources */,
 				530C2D841E2C5A6000839B7A /* ContentType.swift in Sources */,
+				5307DE051F07AA1500EEC40A /* VisualizerViewController.swift in Sources */,
 				53D59A4D1E1DC58700071ABD /* NSString+Time.m in Sources */,
 				530F04AE1E237EB700CBBB3E /* INTUInterpolationFunctions.m in Sources */,
 				531B34631E24D37300811187 /* sqlite3.c in Sources */,

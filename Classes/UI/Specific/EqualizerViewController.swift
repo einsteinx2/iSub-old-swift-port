@@ -6,9 +6,9 @@
 //  Copyright © 2017 Ben Baron. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-class EqualizerViewController: UIViewController {
+class EqualizerViewController: UIViewController, UIGestureRecognizerDelegate {
     fileprivate let sliderStackView = UIStackView()
     fileprivate var sliderContainerViews = [UIView]()
     fileprivate var sliderViews = [UISlider]()
@@ -16,8 +16,6 @@ class EqualizerViewController: UIViewController {
     
     fileprivate var preampSlider = UISlider()
     fileprivate var enableButton = UIButton(type: .custom)
-    
-    fileprivate let visualizerView = VisualizerView()
     
     fileprivate var values: [EqualizerValue] {
         return BassGaplessPlayer.si.equalizer.values
@@ -50,14 +48,6 @@ class EqualizerViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
         updateEnableButtonTitle()
-        
-        self.view.addSubview(visualizerView)
-        visualizerView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(self.view.snp.width)
-            make.top.equalToSuperview().offset(20)
-            make.left.equalToSuperview()
-        }
     }
     
     fileprivate func createSliders() {
@@ -143,5 +133,10 @@ class EqualizerViewController: UIViewController {
     
     @objc fileprivate func preampValueChanged(sender: UISlider) {
         BassGaplessPlayer.si.equalizer.updatePreampGain(gain: sender.value)
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let location = gestureRecognizer.location(in: sliderStackView)
+        return !sliderStackView.frame.contains(location)
     }
 }

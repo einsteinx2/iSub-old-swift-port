@@ -12,6 +12,7 @@ import SnapKit
 class PlayerContainerViewController: UIViewController, UIGestureRecognizerDelegate {
     let scrollView = UIScrollView()
     
+    fileprivate let visualizer = VisualizerViewController()
     fileprivate let player = PlayerViewController()
     fileprivate let equalizer = EqualizerViewController()
     fileprivate let swipeRecognizer = UISwipeGestureRecognizer()
@@ -50,6 +51,15 @@ class PlayerContainerViewController: UIViewController, UIGestureRecognizerDelega
             make.left.equalTo(player.view.snp.right)
         }
         
+        visualizer.view.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(visualizer.view)
+        visualizer.view.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalToSuperview()
+            make.top.equalToSuperview()
+            make.left.equalTo(equalizer.view.snp.right)
+        }
+        
         swipeRecognizer.direction = .down
         swipeRecognizer.addTarget(self, action: #selector(hidePlayer))
         swipeRecognizer.delegate = self
@@ -57,14 +67,26 @@ class PlayerContainerViewController: UIViewController, UIGestureRecognizerDelega
     }
     
     override func viewDidLayoutSubviews() {
-        scrollView.contentSize = CGSize(width: self.view.bounds.width * 2, height: self.view.bounds.height)
+        scrollView.contentSize = CGSize(width: self.view.bounds.width * 3, height: self.view.bounds.height)
     }
     
     @objc fileprivate func hidePlayer() {
         self.dismiss(animated: true, completion: nil)
     }
     
+    fileprivate var visibleController: UIViewController & UIGestureRecognizerDelegate {
+        let width = scrollView.frame.size.width
+        switch scrollView.contentOffset.x {
+        case width * 1:
+            return equalizer
+        case width * 2:
+            return visualizer
+        default:
+            return player
+        }
+    }
+    
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return scrollView.contentOffset.x == 0
+        return visibleController.gestureRecognizerShouldBegin?(gestureRecognizer) ?? false
     }
 }
