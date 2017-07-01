@@ -8,17 +8,39 @@
 
 import Foundation
 
-enum LineVisualizerType: Int {
-    case none       = 0
-    case line       = 1
-    case skinnyBar  = 2
-    case fatBar     = 3
-    case aphexFace  = 4
+enum VisualizerType: Int {
+    case line       = 0
+    case skinnyBar  = 1
+    case fatBar     = 2
+    case aphexFace  = 3
     
-    case maxValue   = 5
+    var dataType: VisualizerDataType {
+        switch self {
+        case .line: return .line
+        case .skinnyBar: return .fft
+        case .fatBar: return .fft
+        case .aphexFace: return .fft
+        }
+    }
+    
+    var next: VisualizerType {
+        if self == .aphexFace {
+            return .line
+        } else {
+            return VisualizerType(rawValue: self.rawValue + 1)!
+        }
+    }
+    
+    var previous: VisualizerType {
+        if self == .line {
+            return .aphexFace
+        } else {
+            return VisualizerType(rawValue: self.rawValue - 1)!
+        }
+    }
 }
 
-enum VisualizerType: Int {
+enum VisualizerDataType: Int {
     case none = 0
     case fft  = 1
     case line = 2
@@ -29,7 +51,6 @@ class Visualizer {
     fileprivate let lineBuffer = UnsafeMutablePointer<Int16>.allocate(capacity: 1024)
     
     var channel: HCHANNEL = 0
-    var visualizerType: VisualizerType = .line
     
     init() {
     }
@@ -54,14 +75,16 @@ class Visualizer {
         return lineBuffer[index]
     }
     
-    func readAudioData() {
+    func readAudioData(visualizerType: VisualizerType) {
+        let dataType = visualizerType.dataType
+        
         // Get the FFT data for visualizer
-        if visualizerType == .fft {
+        if dataType == .fft {
             BASS_ChannelGetData(channel, fftBuffer, BASS_DATA_FFT2048);
         }
         
         // Get the data for line spec visualizer
-        if visualizerType == .line {
+        if dataType == .line {
             BASS_ChannelGetData(channel, lineBuffer, 1024);
         }
     }

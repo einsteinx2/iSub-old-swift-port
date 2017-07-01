@@ -36,6 +36,8 @@ class VisualizerView: UIView {
         return UnsafeMutablePointer<PixelRGBA>.allocate(capacity: specHeight + 128)
     }()
     
+    fileprivate var specPos = 0
+    
     // The pixel dimensions of the backbuffer
     fileprivate var backingWidth: GLint = 0
     fileprivate var backingHeight: GLint = 0
@@ -48,6 +50,12 @@ class VisualizerView: UIView {
     fileprivate var depthRenderbuffer: GLuint = 0
     
     fileprivate var imageTexture: GLuint = 0
+    
+    var visualizerType: VisualizerType = .line {
+        didSet {
+            erase()
+        }
+    }
     
     override class var layerClass: AnyClass {
         get {
@@ -166,36 +174,182 @@ class VisualizerView: UIView {
         displayLink!.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
     }
     
+    // Playing around with averaging samples
+    var fftValues: [Float] = [0]//, 0, 0]
+    var fftValuesIndex = 0
+    var lineValues: [Int] = [0]//, 0, 0]
+    var lineValuesIndex = 0
+    
+    // Playing around with lowering framerate
+    var test = 0
+    
     @objc fileprivate func render() {
         guard let context = context else {
             return
         }
         
-        BassGaplessPlayer.si.visualizer.readAudioData()
+        BassGaplessPlayer.si.visualizer.readAudioData(visualizerType: visualizerType)
         
-        eraseBuffer()
+        if visualizerType != .aphexFace {
+            eraseBuffer()
+        }
         
         var y = 0
-        for x in 0..<specWidth {
-            let lineSpecData = Int(BassGaplessPlayer.si.visualizer.lineSpecData(index: x))
-            let v = (32767 - lineSpecData) * specHeight / 65536 // invert and scale to fit display
-            if x == 0 {
-                y = v
+        var y1 = 0
+        if visualizerType == .line {
+            for x in 0 ..< specWidth {
+                var lineSpecData = Int(BassGaplessPlayer.si.visualizer.lineSpecData(index: x))
+                lineValues[lineValuesIndex] = lineSpecData
+                lineValuesIndex += 1
+                if lineValuesIndex > lineValues.count - 1 {
+                    lineValuesIndex = 0
+                }
+                lineSpecData = Int(Float(lineValues.reduce(0, +)) / Float(lineValues.count))
+                
+                // Invert and scale to fit display
+                let v = (32767 - lineSpecData) * specHeight / 65536
+                if x == 0 {
+                    y = v
+                }
+                
+                repeat {
+                    // Draw line from previous sample...
+                    if y < v {
+                        y += 1
+                    } else if y > v {
+                        y -= 1
+                    }
+                    let bufferIndex = y * specWidth + x
+                    let paletteIndex = abs(y - specHeight / 2) * 2 + 1
+                    buffer[bufferIndex] = palette[paletteIndex]
+                } while y != v
             }
-            
-            repeat {
-                // draw line from previous sample...
-                if y < v {
-                    y += 1
-                } else if y > v {
+        } else if visualizerType == .skinnyBar {
+            for x in 0 ..< specWidth / 2 {
+                var fftData = BassGaplessPlayer.si.visualizer.fftData(index: x + 1)
+                fftValues[fftValuesIndex] = fftData
+                fftValuesIndex += 1
+                if fftValuesIndex > fftValues.count - 1 {
+                    fftValuesIndex = 0
+                }
+                fftData = Float(fftValues.reduce(0, +)) / Float(fftValues.count)
+                
+                // Scale it (sqrt to make low values more visible)
+                let fftSqrt = sqrt(fftData)
+                y = Int(fftSqrt * 3 * Float(specHeight) - 4)
+                
+                // Linear
+                //y = fftData * 10 * specHeight
+                
+                // Cap it
+                if y > specHeight {
+                    y = specHeight - 1
+                }
+                
+                // Interpolate from previous to make the display smoother
+                y1 = (y + y1) / 2 - 1
+                if x > 0 && y1 > 0 {
+                    while y1 >= 0 {
+                        let bufferIndex = (specHeight - 1 - y1) * specWidth + x * 2 - 1
+                        buffer[bufferIndex] = palette[y1 + 1]
+                        y1 -= 1
+                    }
+                }
+                
+                // Draw level
+                y1 = y - 1
+                while y >= 0 {
+                    let bufferIndex = (specHeight - 1 - y ) * specWidth + x * 2
+                    buffer[bufferIndex] = palette[y + 1]
                     y -= 1
                 }
-                //buffer[y * specWidth + x] = palette[Int(abs(Float(y) - Float(specHeight) / 2.0) * 2.0 + 1.0)]
-                let bufferIndex = y * specWidth + x
-                let paletteIndex = abs(y - specHeight / 2) * 2 + 1
-                buffer[bufferIndex] = palette[paletteIndex]
-            } while y != v
+            }
+        } else if visualizerType == .fatBar {
+            let bands = 28
+            var b0 = 0
+            for x in 0 ..< bands {
+                var peak: Float = 0
+                var b1 = Int(pow(2, Float(x) * 10 / (Float(bands) - 1)))
+                if b1 > 1023 {
+                    b1 = 1023
+                }
+                if b1 <= b0 {
+                    // Make sure it uses at least 1 FFT bin
+                    b1 = b0 + 1
+                }
+                
+                while b0 < b1 {
+                    var fftData = BassGaplessPlayer.si.visualizer.fftData(index: b0 + 1)
+                    fftValues[fftValuesIndex] = fftData
+                    fftValuesIndex += 1
+                    if fftValuesIndex > fftValues.count - 1 {
+                        fftValuesIndex = 0
+                    }
+                    fftData = Float(fftValues.reduce(0, +)) / Float(fftValues.count)
+                    
+                    if peak < fftData {
+                        peak = fftData
+                    }
+                    b0 += 1
+                }
+                
+                // Scale it (sqrt to make low values more visible)
+                let peakSqrt = sqrt(peak)
+                y = Int(peakSqrt * 3 * Float(specHeight) - 4)
+                
+                // Cap it
+                if y > specHeight {
+                    y = specHeight - 1
+                }
+                
+                y -= 1
+                while y >= 0
+                {
+                    for i in y1 ..< specWidth / bands - 2
+                    {
+                        // Draw bar
+                        let bufferIndex = (specHeight - 1 - y) * specWidth + x * (specWidth / bands) + i
+                        buffer[bufferIndex] = palette[y + 1]
+                    }
+                    y -= 1
+                }
+            }
+        } else if visualizerType == .aphexFace {
+            for x in 0 ..< specHeight {
+                let fftData = BassGaplessPlayer.si.visualizer.fftData(index: x + 1)
+                let fftSqrt = sqrt(fftData)
+                
+                // Scale it (sqrt to make low values more visible)
+                y = Int(fftSqrt * 3 * 127)
+                
+                // Cap it
+                if y > 127 {
+                    y = 127
+                }
+                
+                // Plot it
+                let bufferIndex = (specHeight - 1 - x) * specWidth + specPos
+                buffer[bufferIndex] = palette[specHeight - 1 + y]
+            }
+            
+            // Move marker onto next position
+            specPos = (specPos + 1) % specWidth;
+            for x in 0 ..< specHeight {
+                buffer[x * specWidth + specPos] = palette[specHeight + 126]
+                
+                // TODO: Use real scale
+                let scale = 2.0
+                if scale == 2.0 && specPos + 1 < specWidth {
+                    buffer[x * specWidth + specPos + 1] = palette[specHeight + 126]
+                }
+            }
         }
+        
+        if test < 0 {//3 {
+            test += 1
+            return
+        }
+        test = 0
         
         glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GL_RGBA, GLsizei(specWidth), GLsizei(specHeight), 0, GLenum(GL_RGBA), GLenum(GL_UNSIGNED_BYTE), buffer);
         
@@ -321,7 +475,7 @@ class VisualizerView: UIView {
         guard let context = context else {
             return
         }
-
+        
         EAGLContext.setCurrent(context)
         
         //Clear the buffer
@@ -332,6 +486,15 @@ class VisualizerView: UIView {
         //Display the buffer
         glBindRenderbufferOES(GLenum(GL_RENDERBUFFER_OES), viewRenderbuffer);
         context.presentRenderbuffer(Int(GL_RENDERBUFFER_OES))
+        
+        eraseBuffer()
+        for i in 0 ..< fftValues.count {
+            fftValues[i] = 0
+        }
+        for i in 0 ..< lineValues.count {
+            lineValues[i] = 0
+        }
+        specPos = 0
     }
 }
 
