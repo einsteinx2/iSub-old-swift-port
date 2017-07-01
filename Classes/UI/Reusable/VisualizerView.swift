@@ -18,15 +18,23 @@ struct PixelRGBA {
     var a: UInt8 = 0
 }
 
-fileprivate let specWidth = 512
-fileprivate let specHeight = 512
+fileprivate let specWidth: Int = {
+    // TODO: Modify based on screen scale
+    return 512
+}()
+fileprivate let specHeight: Int = {
+    return specWidth
+}()
 
 class VisualizerView: UIView {
     fileprivate let context = EAGLContext(api: .openGLES1)
-    
     fileprivate var displayLink: CADisplayLink?
-    fileprivate let buffer = UnsafeMutablePointer<PixelRGBA>.allocate(capacity: specWidth * specHeight)
-    fileprivate let palette = UnsafeMutablePointer<PixelRGBA>.allocate(capacity: specHeight + 128)
+    fileprivate let buffer: UnsafeMutablePointer<PixelRGBA> = {
+        return UnsafeMutablePointer<PixelRGBA>.allocate(capacity: specWidth * specHeight)
+    }()
+    fileprivate let palette: UnsafeMutablePointer<PixelRGBA> = {
+        return UnsafeMutablePointer<PixelRGBA>.allocate(capacity: specHeight + 128)
+    }()
     
     // The pixel dimensions of the backbuffer
     fileprivate var backingWidth: GLint = 0
@@ -63,21 +71,22 @@ class VisualizerView: UIView {
     }
     
     fileprivate func commonInit() {
-        palette.initialize(to: PixelRGBA())
+        palette.initialize(to: PixelRGBA(), count: specHeight + 128)
         
-        let scale = Float(UIScreen.main.scale)
+        // TODO: Use actual screen scale
+        let scale = 2
         
         // Setup palette
-        for i in 1 ..< 128 * Int(scale) {
+        for i in 1 ..< 128 * scale {
             //print("i: \(i)")
-            palette[i].b = UInt8((Float(specHeight) / 2.0) - ((2.0 / scale) * Float(i)))
-            palette[i].g = UInt8((2.0 / scale) * Float(i))
+            palette[i].b = UInt8(256 - ((2.0 / Float(scale)) * Float(i)))
+            palette[i].g = UInt8((2.0 / Float(scale)) * Float(i))
         }
-        for i in 1 ..< 128 * Int(scale) {
-            let start = 128 * Int(scale) - 1
+        for i in 1 ..< 128 * scale {
+            let start = 128 * scale - 1
             //print("start+i: \(start+i)")
-            palette[start+i].g = UInt8((Float(specHeight) / 2.0) - ((2.0 / scale) * Float(i)))
-            palette[start+i].r = UInt8((2.0 / scale) * Float(i))
+            palette[start+i].g = UInt8(256 - ((2.0 / Float(scale)) * Float(i)))
+            palette[start+i].r = UInt8((2.0 / Float(scale)) * Float(i))
         }
         
         for i in 0 ..< 32 {

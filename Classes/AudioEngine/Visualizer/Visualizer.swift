@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum VisualType: Int {
+enum LineVisualizerType: Int {
     case none       = 0
     case line       = 1
     case skinnyBar  = 2
