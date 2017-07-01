@@ -65,22 +65,22 @@ class VisualizerView: UIView {
     fileprivate func commonInit() {
         palette.initialize(to: PixelRGBA())
         
-        let scale = Float(1)//Float(UIScreen.main.scale)
+        let scale = Float(UIScreen.main.scale)
         
         // Setup palette
-        for i in 1..<(128 * Int(scale)) {
+        for i in 1 ..< 128 * Int(scale) {
             //print("i: \(i)")
             palette[i].b = UInt8((Float(specHeight) / 2.0) - ((2.0 / scale) * Float(i)))
             palette[i].g = UInt8((2.0 / scale) * Float(i))
         }
-        for i in 1..<(128 * Int(scale)) {
+        for i in 1 ..< 128 * Int(scale) {
             let start = 128 * Int(scale) - 1
             //print("start+i: \(start+i)")
             palette[start+i].g = UInt8((Float(specHeight) / 2.0) - ((2.0 / scale) * Float(i)))
             palette[start+i].r = UInt8((2.0 / scale) * Float(i))
         }
         
-        for i in 0..<32 {
+        for i in 0 ..< 32 {
             palette[specHeight + i].b      = 8 * UInt8(i)
             palette[specHeight + 32 + i].b = 255;
             palette[specHeight + 32 + i].r = 8 * UInt8(i)
@@ -165,10 +165,11 @@ class VisualizerView: UIView {
         BassGaplessPlayer.si.visualizer.readAudioData()
         
         eraseBuffer()
+        
         var y = 0
         for x in 0..<specWidth {
             let lineSpecData = Int(BassGaplessPlayer.si.visualizer.lineSpecData(index: x))
-            let v = Int((32767.0 - Float(lineSpecData)) * Float(specHeight) / 65536.0) // invert and scale to fit display
+            let v = (32767 - lineSpecData) * specHeight / 65536 // invert and scale to fit display
             if x == 0 {
                 y = v
             }
@@ -181,7 +182,9 @@ class VisualizerView: UIView {
                     y -= 1
                 }
                 //buffer[y * specWidth + x] = palette[Int(abs(Float(y) - Float(specHeight) / 2.0) * 2.0 + 1.0)]
-                buffer[y * specWidth + x] = palette[Int(abs(Float(y) - Float(specHeight) / 2.0) * 2.0 + 1.0)]
+                let bufferIndex = y * specWidth + x
+                let paletteIndex = abs(y - specHeight / 2) * 2 + 1
+                buffer[bufferIndex] = palette[paletteIndex]
             } while y != v
         }
         
@@ -247,7 +250,7 @@ class VisualizerView: UIView {
     }
     
     fileprivate func eraseBuffer() {
-        buffer.initialize(to: PixelRGBA())
+        buffer.initialize(to: PixelRGBA(), count: specWidth * specHeight)
     }
     
     @discardableResult fileprivate func createFrameBuffer() -> Bool {
