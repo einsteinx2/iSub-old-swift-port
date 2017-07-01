@@ -72,8 +72,7 @@ final class PlayQueue {
     var repeatMode = RepeatMode.normal
     var shuffleMode = ShuffleMode.normal { didSet { /* TODO: Do something */ } }
     
-    // TODO: Make fileprivate(set)
-    var currentIndex = -1 {
+    fileprivate(set) var currentIndex = -1 {
         didSet {
             preheadArt()
             updateLockScreenInfo()

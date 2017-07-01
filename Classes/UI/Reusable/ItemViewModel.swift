@@ -146,11 +146,11 @@ class ItemViewModel: NSObject {
     
     func processModels(notify: Bool = true) {
         // Reset models
-        folders.removeAll()
-        artists.removeAll()
-        albums.removeAll()
-        songs.removeAll()
-        playlists.removeAll()
+        folders = []
+        artists = []
+        albums = []
+        songs = []
+        playlists = []
         
         items = loader.items
         

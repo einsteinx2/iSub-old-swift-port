@@ -9,6 +9,7 @@
 import UIKit
 import Reachability
 
+// TODO: Remove @objcMembers once Obj-C view controllers are removed
 @objcMembers
 final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate {
     struct Notifications {

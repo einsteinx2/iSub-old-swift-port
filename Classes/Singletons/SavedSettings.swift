@@ -13,6 +13,7 @@ enum CachingType: Int {
     case maxSize = 1
 };
 
+// TODO: Remove @objcMembers and NSObject once Obj-C view controllers are removed
 @objcMembers
 final class SavedSettings: NSObject {
     struct Keys {

@@ -9,6 +9,7 @@
 import Foundation
 import AwesomeCache
 
+// TODO: Remove @objcMembers and NSObject once Obj-C view controllers are removed
 @objcMembers
 final class CacheManager: NSObject {
     struct Notifications {
