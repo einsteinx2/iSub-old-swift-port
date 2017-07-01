@@ -79,11 +79,8 @@
 		531B34071E24D0B600811187 /* PlayQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33EB1E24D0B600811187 /* PlayQueueViewController.swift */; };
 		531B34091E24D0B600811187 /* PlayQueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33EC1E24D0B600811187 /* PlayQueueViewModel.swift */; };
 		531B340B1E24D0B600811187 /* SidePanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33ED1E24D0B600811187 /* SidePanelController.swift */; };
-		531B34191E24D12300811187 /* HelpTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B340E1E24D12300811187 /* HelpTabViewController.m */; };
-		531B341B1E24D12300811187 /* HelpTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 531B340F1E24D12300811187 /* HelpTabViewController.xib */; };
 		531B341D1E24D12300811187 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34111E24D12300811187 /* IntroViewController.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B341F1E24D12300811187 /* ServerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34131E24D12300811187 /* ServerListViewController.swift */; };
-		531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34151E24D12300811187 /* SettingsTabViewController.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B34281E24D1C300811187 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34261E24D1C300811187 /* OBSlider.m */; };
 		531B34431E24D24600811187 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34331E24D24600811187 /* FMDatabase.m */; };
 		531B34451E24D24600811187 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34351E24D24600811187 /* FMDatabaseAdditions.m */; };
@@ -97,6 +94,7 @@
 		531B34631E24D37300811187 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 531B34601E24D37300811187 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B34661E24D3D500811187 /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34641E24D3D500811187 /* Defines.swift */; };
 		531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */; };
+		531D4A831F07D01D00AD0377 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 531D4A811F07D01D00AD0377 /* SubsonicServerEditViewController.xib */; };
 		53200C941E7F605900426A48 /* SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C921E7F605900426A48 /* SortOrder.swift */; };
 		53200C971E7F777700426A48 /* ItemTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53200C951E7F777700426A48 /* ItemTableHeaderView.swift */; };
 		5325CCC81E84700300F16C6B /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5325CCC61E84700300F16C6B /* XCGLogger.framework */; };
@@ -105,6 +103,7 @@
 		532B6FEA1E960A240010D81D /* Bridging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FE91E960A240010D81D /* Bridging.swift */; };
 		532B6FEC1E960A450010D81D /* NumberUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FEB1E960A450010D81D /* NumberUtils.swift */; };
 		532B6FEE1E960A750010D81D /* Sorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FED1E960A750010D81D /* Sorting.swift */; };
+		532E76111F07D93C00118AE3 /* JGSettingsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E76101F07D93C00118AE3 /* JGSettingsTableCell.swift */; };
 		53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
 		53368DD61E3F9BE000B7A199 /* AwesomeCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */; };
 		533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
@@ -112,8 +111,6 @@
 		533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */; };
 		533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D31E206031001FF3BF /* NavigationStack.swift */; };
 		533C65A815ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
-		533C65BD15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */; };
-		533C65D015ABB9D6003EAF29 /* SettingsTabViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */; };
 		53493F0115FC69C90059492E /* chat-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493EFE15FC69C90059492E /* chat-page.png */; };
 		53493F0815FC6A0F0059492E /* twitter-signin.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493F0215FC6A0F0059492E /* twitter-signin.png */; };
 		53493F0B15FC6A0F0059492E /* twitter-signin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493F0315FC6A0F0059492E /* twitter-signin@2x.png */; };
@@ -313,6 +310,7 @@
 		53D9D25616DEF86F002F55F7 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24916DEF843002F55F7 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53D9D25716DEF86F002F55F7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24716DEF83E002F55F7 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53D9D25816DEF86F002F55F7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53D9D24516DEF839002F55F7 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53DC36381F07C62B00882611 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DC36371F07C62B00882611 /* SettingsViewController.swift */; };
 		53DE598314F1932C00206529 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DE598214F1932C00206529 /* CoreText.framework */; };
 		53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E042821E36AB4B0009DE79 /* Synchronized.swift */; };
 		53E042871E36AD200009DE79 /* SavedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E042851E36AD200009DE79 /* SavedSettings.swift */; };
@@ -321,6 +319,12 @@
 		53F107A71E2AD144003B7D59 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F107A51E2AD144003B7D59 /* Item.swift */; };
 		53FD71E61E36E73600460B44 /* Equalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E41E36E73600460B44 /* Equalizer.swift */; };
 		53FD71E91E36F95400460B44 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD71E71E36F95400460B44 /* CacheManager.swift */; };
+		53FE312D1F07C594003AA6A7 /* JGSettingsTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE31261F07C594003AA6A7 /* JGSettingsTableController.swift */; };
+		53FE312E1F07C594003AA6A7 /* JGUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE31271F07C594003AA6A7 /* JGUserDefault.swift */; };
+		53FE312F1F07C594003AA6A7 /* JGSegmentedControlTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE31291F07C594003AA6A7 /* JGSegmentedControlTableCell.swift */; };
+		53FE31301F07C594003AA6A7 /* JGStepperTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE312A1F07C594003AA6A7 /* JGStepperTableCell.swift */; };
+		53FE31311F07C594003AA6A7 /* JGSwitchTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE312B1F07C594003AA6A7 /* JGSwitchTableCell.swift */; };
+		53FE31321F07C594003AA6A7 /* JGTextTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE312C1F07C594003AA6A7 /* JGTextTableCell.swift */; };
 		D09496D41C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D91C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496DE1C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -420,14 +424,9 @@
 		531B33EB1E24D0B600811187 /* PlayQueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueueViewController.swift; sourceTree = "<group>"; };
 		531B33EC1E24D0B600811187 /* PlayQueueViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueueViewModel.swift; sourceTree = "<group>"; };
 		531B33ED1E24D0B600811187 /* SidePanelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidePanelController.swift; sourceTree = "<group>"; };
-		531B340D1E24D12300811187 /* HelpTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpTabViewController.h; sourceTree = "<group>"; };
-		531B340E1E24D12300811187 /* HelpTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpTabViewController.m; sourceTree = "<group>"; };
-		531B340F1E24D12300811187 /* HelpTabViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpTabViewController.xib; sourceTree = "<group>"; };
 		531B34101E24D12300811187 /* IntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntroViewController.h; sourceTree = "<group>"; };
 		531B34111E24D12300811187 /* IntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntroViewController.m; sourceTree = "<group>"; };
 		531B34131E24D12300811187 /* ServerListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerListViewController.swift; sourceTree = "<group>"; };
-		531B34141E24D12300811187 /* SettingsTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTabViewController.h; sourceTree = "<group>"; };
-		531B34151E24D12300811187 /* SettingsTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTabViewController.m; sourceTree = "<group>"; };
 		531B34251E24D1C300811187 /* OBSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSlider.h; sourceTree = "<group>"; };
 		531B34261E24D1C300811187 /* OBSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSlider.m; sourceTree = "<group>"; };
 		531B34321E24D24600811187 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
@@ -450,6 +449,7 @@
 		531B34611E24D37300811187 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		531B34641E24D3D500811187 /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
 		531B346A1E24E51500811187 /* SelfReferencingOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfReferencingOperationQueue.swift; sourceTree = "<group>"; };
+		531D4A821F07D01D00AD0377 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = Classes/en.lproj/SubsonicServerEditViewController.xib; sourceTree = SOURCE_ROOT; };
 		53200C921E7F605900426A48 /* SortOrder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortOrder.swift; sourceTree = "<group>"; };
 		53200C951E7F777700426A48 /* ItemTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableHeaderView.swift; sourceTree = "<group>"; };
 		5325CCC61E84700300F16C6B /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
@@ -457,6 +457,7 @@
 		532B6FE91E960A240010D81D /* Bridging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bridging.swift; sourceTree = "<group>"; };
 		532B6FEB1E960A450010D81D /* NumberUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberUtils.swift; sourceTree = "<group>"; };
 		532B6FED1E960A750010D81D /* Sorting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sorting.swift; sourceTree = "<group>"; };
+		532E76101F07D93C00118AE3 /* JGSettingsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGSettingsTableCell.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		53368DD11E3F169500B7A199 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwesomeCache.framework; path = Carthage/Build/iOS/AwesomeCache.framework; sourceTree = "<group>"; };
@@ -465,8 +466,6 @@
 		533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackFlowLayout.swift; sourceTree = "<group>"; };
 		533B69D31E206031001FF3BF /* NavigationStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationStack.swift; sourceTree = "<group>"; };
 		533C65AB15ABB9BD003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IntroViewController.xib; sourceTree = "<group>"; };
-		533C65C015ABB9CC003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SubsonicServerEditViewController.xib; sourceTree = "<group>"; };
-		533C65D315ABB9D6003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SettingsTabViewController.xib; sourceTree = "<group>"; };
 		53493EFE15FC69C90059492E /* chat-page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "chat-page.png"; path = "Images/chat-page.png"; sourceTree = "<group>"; };
 		53493F0215FC6A0F0059492E /* twitter-signin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "twitter-signin.png"; path = "Images/Other/twitter-signin.png"; sourceTree = "<group>"; };
 		53493F0315FC6A0F0059492E /* twitter-signin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "twitter-signin@2x.png"; path = "Images/Other/twitter-signin@2x.png"; sourceTree = "<group>"; };
@@ -709,6 +708,7 @@
 		53D9D24716DEF83E002F55F7 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		53D9D24916DEF843002F55F7 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		53D9D24B16DEF847002F55F7 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		53DC36371F07C62B00882611 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		53DE598214F1932C00206529 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		53E042821E36AB4B0009DE79 /* Synchronized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronized.swift; sourceTree = "<group>"; };
 		53E042851E36AD200009DE79 /* SavedSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedSettings.swift; sourceTree = "<group>"; };
@@ -727,6 +727,12 @@
 		53FDEE2711E823A100FE3ECD /* default-album-art-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art-small@2x.png"; path = "Images/Other/default-album-art-small@2x.png"; sourceTree = "<group>"; };
 		53FDEE2811E823A100FE3ECD /* default-album-art@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art@2x.png"; path = "Images/Other/default-album-art@2x.png"; sourceTree = "<group>"; };
 		53FDEE4D11E827A100FE3ECD /* reload-table@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reload-table@2x.png"; path = "Images/Other/reload-table@2x.png"; sourceTree = "<group>"; };
+		53FE31261F07C594003AA6A7 /* JGSettingsTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGSettingsTableController.swift; sourceTree = "<group>"; };
+		53FE31271F07C594003AA6A7 /* JGUserDefault.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGUserDefault.swift; sourceTree = "<group>"; };
+		53FE31291F07C594003AA6A7 /* JGSegmentedControlTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGSegmentedControlTableCell.swift; sourceTree = "<group>"; };
+		53FE312A1F07C594003AA6A7 /* JGStepperTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGStepperTableCell.swift; sourceTree = "<group>"; };
+		53FE312B1F07C594003AA6A7 /* JGSwitchTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGSwitchTableCell.swift; sourceTree = "<group>"; };
+		53FE312C1F07C594003AA6A7 /* JGTextTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGTextTableCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -864,6 +870,7 @@
 			children = (
 				53609CDA1E8840B6005C26D0 /* GLKit.framework */,
 				5358E1CC1E0B78F80024A0D4 /* Carthage */,
+				53FE31251F07C594003AA6A7 /* JGSettingsManager */,
 				531B34311E24D24600811187 /* FMDB */,
 				53835C6E1E0B7D6D0077B53D /* ZipKit */,
 				5358DDF91E0B78990024A0D4 /* CocoaLumberjack */,
@@ -1142,6 +1149,7 @@
 				531B33EB1E24D0B600811187 /* PlayQueueViewController.swift */,
 				531B33EC1E24D0B600811187 /* PlayQueueViewModel.swift */,
 				531B33ED1E24D0B600811187 /* SidePanelController.swift */,
+				532E760F1F07CE6B00118AE3 /* Settings */,
 				53609CE01E885B7D005C26D0 /* Player */,
 			);
 			name = "Main or Top Level Controllers";
@@ -1151,18 +1159,9 @@
 		531B340C1E24D12300811187 /* Old UI */ = {
 			isa = PBXGroup;
 			children = (
-				531B340D1E24D12300811187 /* HelpTabViewController.h */,
-				531B340E1E24D12300811187 /* HelpTabViewController.m */,
-				531B340F1E24D12300811187 /* HelpTabViewController.xib */,
 				531B34101E24D12300811187 /* IntroViewController.h */,
 				531B34111E24D12300811187 /* IntroViewController.m */,
 				533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */,
-				531B34131E24D12300811187 /* ServerListViewController.swift */,
-				53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */,
-				533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */,
-				531B34141E24D12300811187 /* SettingsTabViewController.h */,
-				531B34151E24D12300811187 /* SettingsTabViewController.m */,
-				533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */,
 			);
 			path = "Old UI";
 			sourceTree = "<group>";
@@ -1245,6 +1244,17 @@
 				53808D381E7DEA5B0063B6D9 /* DownloadQueueViewModel.swift */,
 			);
 			name = "View Models";
+			sourceTree = "<group>";
+		};
+		532E760F1F07CE6B00118AE3 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				531B34131E24D12300811187 /* ServerListViewController.swift */,
+				53D9590D1E2C6F7600A1667F /* SubsonicServerEditViewController.swift */,
+				531D4A811F07D01D00AD0377 /* SubsonicServerEditViewController.xib */,
+				53DC36371F07C62B00882611 /* SettingsViewController.swift */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		533B69CC1E206031001FF3BF /* NavigationStack */ = {
@@ -1621,6 +1631,29 @@
 			name = Repositories;
 			sourceTree = "<group>";
 		};
+		53FE31251F07C594003AA6A7 /* JGSettingsManager */ = {
+			isa = PBXGroup;
+			children = (
+				53FE31261F07C594003AA6A7 /* JGSettingsTableController.swift */,
+				53FE31271F07C594003AA6A7 /* JGUserDefault.swift */,
+				53FE31281F07C594003AA6A7 /* Settings Cells */,
+			);
+			name = JGSettingsManager;
+			path = Frameworks/JGSettingsManager;
+			sourceTree = "<group>";
+		};
+		53FE31281F07C594003AA6A7 /* Settings Cells */ = {
+			isa = PBXGroup;
+			children = (
+				532E76101F07D93C00118AE3 /* JGSettingsTableCell.swift */,
+				53FE31291F07C594003AA6A7 /* JGSegmentedControlTableCell.swift */,
+				53FE312A1F07C594003AA6A7 /* JGStepperTableCell.swift */,
+				53FE312B1F07C594003AA6A7 /* JGSwitchTableCell.swift */,
+				53FE312C1F07C594003AA6A7 /* JGTextTableCell.swift */,
+			);
+			path = "Settings Cells";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1688,7 +1721,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				533C65BD15ABB9CC003EAF29 /* SubsonicServerEditViewController.xib in Resources */,
 				53BC26AA139AF0DD00A825F1 /* default-album-art.png in Resources */,
 				53BC26AB139AF0DD00A825F1 /* settings-page.png in Resources */,
 				53BC26B1139AF0DD00A825F1 /* Icon.png in Resources */,
@@ -1703,7 +1735,6 @@
 				53BC26CB139AF0DD00A825F1 /* play-all-note.png in Resources */,
 				53BC26CD139AF0DD00A825F1 /* selected.png in Resources */,
 				53BC26CE139AF0DD00A825F1 /* unselected.png in Resources */,
-				533C65D015ABB9D6003EAF29 /* SettingsTabViewController.xib in Resources */,
 				53BC26E6139AF0DD00A825F1 /* gear@2x.png in Resources */,
 				53BC26E7139AF0DD00A825F1 /* background@2x.png in Resources */,
 				53BC26E8139AF0DD00A825F1 /* now-playing@2x.png in Resources */,
@@ -1715,7 +1746,6 @@
 				53BC26EE139AF0DD00A825F1 /* reload-table@2x.png in Resources */,
 				53BC26F2139AF0DD00A825F1 /* selected@2x.png in Resources */,
 				53BC26F3139AF0DD00A825F1 /* unselected@2x.png in Resources */,
-				531B341B1E24D12300811187 /* HelpTabViewController.xib in Resources */,
 				53BC26F4139AF0DD00A825F1 /* play-all-note@2x.png in Resources */,
 				53BC26F5139AF0DD00A825F1 /* loading-screen-image@2x.png in Resources */,
 				53BC26F6139AF0DD00A825F1 /* settings-page@2x.png in Resources */,
@@ -1764,6 +1794,7 @@
 				5301F5CF1A4938F300EEB25D /* Images.xcassets in Resources */,
 				53C7FD74150EFF7A008DA51C /* Default-Landscape@2x.png in Resources */,
 				53C7FD77150EFF7A008DA51C /* Default-Portrait@2x.png in Resources */,
+				531D4A831F07D01D00AD0377 /* SubsonicServerEditViewController.xib in Resources */,
 				53C7FD9B150F03D6008DA51C /* Icon-72@2x.png in Resources */,
 				530A5F871516703F0081A83A /* playing-cell-icon.png in Resources */,
 				530A5F8A1516703F0081A83A /* playing-cell-icon@2x.png in Resources */,
@@ -1850,6 +1881,7 @@
 				531B33981E24CF8B00811187 /* CachedRootArtistsLoader.swift in Sources */,
 				53835CBD1E0B7D6D0077B53D /* NSFileManager+ZKAdditions.m in Sources */,
 				53114DFD1E3B06D800D8589B /* ParseError.swift in Sources */,
+				532E76111F07D93C00118AE3 /* JGSettingsTableCell.swift in Sources */,
 				531B345B1E24D30500811187 /* NetworkStatus.swift in Sources */,
 				53CE50411E20194100E5DC68 /* BCCKeychain.m in Sources */,
 				531B33BC1E24CF8B00811187 /* LoadingScreen.m in Sources */,
@@ -1894,11 +1926,14 @@
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,
 				537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
+				53FE312E1F07C594003AA6A7 /* JGUserDefault.swift in Sources */,
 				53808D371E7DE9500063B6D9 /* CachedItemViewModel.swift in Sources */,
 				531B337E1E24CF8B00811187 /* CacheQueue.swift in Sources */,
 				5355BFA51E2D81D900C6D27F /* AppDelegate.swift in Sources */,
+				53FE312F1F07C594003AA6A7 /* JGSegmentedControlTableCell.swift in Sources */,
 				531B34051E24D0B600811187 /* PlayerViewController.swift in Sources */,
 				531B33A01E24CF8B00811187 /* ItemLoader.swift in Sources */,
+				53FE312D1F07C594003AA6A7 /* JGSettingsTableController.swift in Sources */,
 				531B344F1E24D24600811187 /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */,
 				5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
@@ -1912,6 +1947,7 @@
 				531B33A41E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
 				53808D3D1E7DEAD20063B6D9 /* ServerItemViewModel.swift in Sources */,
 				5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
+				53FE31321F07C594003AA6A7 /* JGTextTableCell.swift in Sources */,
 				530D5A111E2C044700C9ED43 /* SongRepository.swift in Sources */,
 				531B33901E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
 				5355BFA81E2D955C00C6D27F /* Logging.swift in Sources */,
@@ -1992,13 +2028,11 @@
 				53835CD61E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				53CFBB731E2B164F005895F4 /* Artist.swift in Sources */,
-				531B34211E24D12300811187 /* SettingsTabViewController.m in Sources */,
 				53808D341E7DE5F70063B6D9 /* AlbumViewController.swift in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				53808D311E7DE5DF0063B6D9 /* ArtistViewController.swift in Sources */,
 				5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */,
-				531B34191E24D12300811187 /* HelpTabViewController.m in Sources */,
 				5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				531B34661E24D3D500811187 /* Defines.swift in Sources */,
 				53808D431E7DF2D80063B6D9 /* RootServerItemViewModel.swift in Sources */,
@@ -2006,6 +2040,7 @@
 				53835CEF1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				531B33861E24CF8B00811187 /* ApiLoader.swift in Sources */,
 				531B339A1E24CF8B00811187 /* CachedRootFoldersLoader.swift in Sources */,
+				53DC36381F07C62B00882611 /* SettingsViewController.swift in Sources */,
 				53609CDD1E885B11005C26D0 /* PlayerContainerViewController.swift in Sources */,
 				5355BFB71E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */,
 				531B338C1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
@@ -2017,12 +2052,14 @@
 				5355BFAB1E2D9EE000C6D27F /* PlaylistRepository.swift in Sources */,
 				531B340B1E24D0B600811187 /* SidePanelController.swift in Sources */,
 				53A418051E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */,
+				53FE31301F07C594003AA6A7 /* JGStepperTableCell.swift in Sources */,
 				539133551E29D53000B8A99E /* Data.swift in Sources */,
 				53CFBB6A1E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
 				531B33781E24CF8B00811187 /* String.swift in Sources */,
 				531B33A21E24CF8B00811187 /* MediaFoldersLoader.swift in Sources */,
 				530C2D871E2C623000839B7A /* ServerRepository.swift in Sources */,
 				531B34281E24D1C300811187 /* OBSlider.m in Sources */,
+				53FE31311F07C594003AA6A7 /* JGSwitchTableCell.swift in Sources */,
 				53D59A791E1DCDD700071ABD /* NSString+FileSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2030,30 +2067,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		531D4A811F07D01D00AD0377 /* SubsonicServerEditViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				531D4A821F07D01D00AD0377 /* en */,
+			);
+			name = SubsonicServerEditViewController.xib;
+			sourceTree = "<group>";
+		};
 		533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				533C65AB15ABB9BD003EAF29 /* en */,
 			);
 			name = IntroViewController.xib;
-			path = ..;
-			sourceTree = "<group>";
-		};
-		533C65C115ABB9CC003EAF29 /* SubsonicServerEditViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				533C65C015ABB9CC003EAF29 /* en */,
-			);
-			name = SubsonicServerEditViewController.xib;
-			path = ..;
-			sourceTree = "<group>";
-		};
-		533C65D415ABB9D6003EAF29 /* SettingsTabViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				533C65D315ABB9D6003EAF29 /* en */,
-			);
-			name = SettingsTabViewController.xib;
 			path = ..;
 			sourceTree = "<group>";
 		};

@@ -7,16 +7,17 @@
 //
 
 import UIKit
+import SnapKit
 
-class ServerListViewController: DraggableTableViewController, ServerEditDelegate {
+class ServerListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ServerEditDelegate {
     fileprivate let headerView = UIView()
-    fileprivate let segmentedControl = UISegmentedControl(items: ["Servers", "Settings", "Help"])
+    fileprivate let tableView = UITableView()
+    fileprivate let segmentedControl = UISegmentedControl(items: ["Servers", "Settings"])
     
     fileprivate var servers = ServerRepository.si.allServers()
     fileprivate var isEditingServerList = false
     fileprivate var redirectUrl: String?
-    fileprivate var settingsTabViewController: SettingsTabViewController?
-    fileprivate var helpTabViewController: HelpTabViewController?
+    fileprivate var settingsViewController: SettingsViewController?
     
     deinit {
         NotificationCenter.removeObserverOnMainThread(self)
@@ -25,38 +26,54 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.allowsSelectionDuringEditing = true
+        // Don't go under navigation bar
+        self.edgesForExtendedLayout = []
+        
         self.title = "Servers"
+        self.navigationItem.leftBarButtonItem = setupLeftBarButton()
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction))
+        
+        // Setup segmented control in the header view
+        headerView.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
+        self.view.addSubview(headerView)
+        headerView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(50)
+        }
+        
+        segmentedControl.autoresizingMask = .flexibleWidth
+        segmentedControl.addTarget(self, action: #selector(segmentAction), for: .valueChanged)
+        segmentedControl.tintColor = UIColor(red: 200.0/255.0, green: 200.0/255.0, blue: 206.0/255.0, alpha: 1)
+        segmentedControl.selectedSegmentIndex = 0;
+        headerView.addSubview(self.segmentedControl)
+        segmentedControl.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(5)
+            make.trailing.equalToSuperview().offset(-5)
+            make.centerY.equalToSuperview()
+        }
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.allowsSelectionDuringEditing = true
+        tableView.rowHeight = ISMSNormalize(50)
+        self.view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(headerView.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         
         if servers.count == 0 {
             addAction()
         }
-        
-        // Setup segmented control in the header view
-        headerView.frame = CGRect(x: 0, y: 0, width: 320, height: 40)
-        headerView.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
-        
-        segmentedControl.autoresizingMask = .flexibleWidth
-        segmentedControl.addTarget(self, action: #selector(segmentAction), for: .valueChanged)
-        segmentedControl.frame = CGRect(x: 5, y: 2, width: 310, height: 36)
-        segmentedControl.tintColor = UIColor(red: 200.0/255.0, green: 200.0/255.0, blue: 206.0/255.0, alpha: 1)
-        segmentedControl.selectedSegmentIndex = 0;
-        headerView.addSubview(self.segmentedControl)
-        
-        self.tableView.tableHeaderView = self.headerView
-        self.tableView.rowHeight = ISMSNormalize(50)
-        
-        if !IS_IPAD() && self.tableView.tableHeaderView == nil {
-            self.tableView.tableHeaderView = UIView()
-        }
     }
     
-    override func setupLeftBarButton() -> UIBarButtonItem {
+    fileprivate func setupLeftBarButton() -> UIBarButtonItem {
         return UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(showMenu))
-    }
-    
-    override func setupRightBarButton() -> UIBarButtonItem {
-        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction))
     }
     
     func reloadTable() {
@@ -64,45 +81,34 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         self.tableView.reloadData()
     }
     
+    @objc func showMenu() {
+        self.sidePanelController?.showLeftPanel(animated: true)
+    }
+    
     @objc func segmentAction() {
-        settingsTabViewController?.parentController = nil
-        settingsTabViewController = nil;
-        helpTabViewController = nil;
-        
         if self.segmentedControl.selectedSegmentIndex == 0 {
+            settingsViewController?.view?.removeFromSuperview()
+            settingsViewController = nil
+            self.tableView.isHidden = false
             self.title = "Servers"
-            self.tableView.tableFooterView = nil
+            //self.tableView.tableFooterView = UIView()
             self.tableView.isScrollEnabled = true
             self.navigationItem.rightBarButtonItem = self.editButtonItem
-            
-            if self.tableView.tableFooterView == nil {
-                self.tableView.tableFooterView = UIView()
-            }
-            
             self.tableView.reloadData()
         } else if self.segmentedControl.selectedSegmentIndex == 1 {
             self.title = "Settings"
-            self.tableView.isScrollEnabled = true
+            self.tableView.isHidden = true
             self.setEditing(false, animated: false)
             self.navigationItem.rightBarButtonItem = nil
-            settingsTabViewController = SettingsTabViewController(nibName: "SettingsTabViewController", bundle: nil)
-            settingsTabViewController!.parentController = self
-            self.tableView.tableFooterView = settingsTabViewController!.view
-            if self.tableView.tableFooterView == nil {
-                self.tableView.tableFooterView = UIView()
-            }
-            self.tableView.reloadData()
-        } else if self.segmentedControl.selectedSegmentIndex == 2 {
-            self.title = "Help"
-            self.tableView.isScrollEnabled = false
-            self.setEditing(false, animated: false)
-            self.navigationItem.rightBarButtonItem = nil
-            helpTabViewController = HelpTabViewController(nibName: "HelpTabViewController", bundle: nil)
-            helpTabViewController!.view.frame = self.view.bounds
-            helpTabViewController!.view.frame.size.height -= 40.0
-            self.tableView.tableFooterView = helpTabViewController!.view
-            if self.tableView.tableFooterView == nil {
-                self.tableView.tableFooterView = UIView()
+            settingsViewController = SettingsViewController()
+            if let view = settingsViewController?.view {
+                self.view.addSubview(view)
+                view.snp.makeConstraints { make in
+                    make.top.equalTo(headerView.snp.bottom)
+                    make.leading.equalToSuperview()
+                    make.trailing.equalToSuperview()
+                    make.bottom.equalToSuperview()
+                }
             }
             self.tableView.reloadData()
         }
@@ -112,7 +118,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         super.setEditing(editing, animated: animated)
         if editing {
             isEditingServerList = true
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ServerListViewController.addAction))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAction))
         } else {
             isEditingServerList = false
             self.navigationItem.leftBarButtonItem = setupLeftBarButton()
@@ -141,11 +147,11 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
     
     // MARK: - Table view methods -
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if segmentedControl.selectedSegmentIndex == 0 {
             return servers.count
         } else {
@@ -153,7 +159,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         }
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "ServerListCell")
         
         let server = servers[indexPath.row]
@@ -205,7 +211,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let server = servers[indexPath.row]
         
         // TODO: Figure out better way to get into edit mode, it's not intuitive
@@ -222,15 +228,15 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         }
     }
     
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {        
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         //	NSArray *server = [ SavedSettings.si.serverList objectAtIndexSafe:fromIndexPath.row];
         //	[SavedSettings.si.serverList removeObjectAtIndex:fromIndexPath.row];
         //	[SavedSettings.si.serverList insertObject:server atIndex:toIndexPath.row];
@@ -240,7 +246,7 @@ class ServerListViewController: DraggableTableViewController, ServerEditDelegate
         //	[self.tableView reloadData];
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete)
         {
             // TODO: Automatically switch to the next server. Or if it's the last server, connect to the test server

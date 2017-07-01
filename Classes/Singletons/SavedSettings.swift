@@ -8,45 +8,60 @@
 
 import Foundation
 
-enum CachingType: Int {
-    case minSpace = 0
-    case maxSize = 1
-};
-
-// TODO: Remove @objcMembers and NSObject once Obj-C view controllers are removed
-@objcMembers
-final class SavedSettings: NSObject {
+final class SavedSettings {
     struct Keys {
+        // MARK: Settings
+        
         static let currentServerId              = "currentServerId"
         static let currentServer                = "currentServer"
         static let redirectUrlString            = "redirectUrlString"
         
-        static let maxBitRateWifi               = "maxBitrateWifiSetting"
-        static let maxBitRate3G                 = "maxBitrate3GSetting"
-        static let maxVideoBitRateWifi          = "maxVideoBitrateWifi"
-        static let maxVideoBitRate3G            = "maxVideoBitrate3G"
+        static let isScreenSleepEnabled         = "isScreenSleepEnabled"
+        static let isDisableUsageOver3G         = "isDisableUsageOver3G"
         
+        static let quickSkipNumberOfSeconds     = "quickSkipNumberOfSeconds"
+        
+        static let maxBitRate3G                 = "maxBitrate3GSetting"
+        static let maxBitRateWifi               = "maxBitrateWifiSetting"
+        static let maxVideoBitRate3G            = "maxVideoBitrate3G"
+        static let maxVideoBitRateWifi          = "maxVideoBitrateWifi"
+        
+        static let isManualCachingOnWWANEnabled = "isManualCachingOnWWANEnabled"
         static let isAutoSongCachingEnabled     = "isSongCachingEnabled"
         static let isNextSongCacheEnabled       = "enableNextSongCacheSetting"
         static let isBackupCacheEnabled         = "isBackupCacheEnabled"
-        static let isManualCachingOnWWANEnabled = "isManualCachingOnWWANEnabled"
-        static let cachingType                  = "cachingTypeSetting"
-        static let maxCacheSize                 = "maxCacheSize"
-        static let minFreeSpace                 = "minFreeSpace"
-        static let isAutoDeleteCacheEnabled     = "autoDeleteCacheSetting"
-        static let autoDeleteCacheType          = "autoDeleteCacheTypeSetting"
         
-        static let isScreenSleepEnabled         = "isScreenSleepEnabled"
-        static let quickSkipNumberOfSeconds     = "quickSkipNumberOfSeconds"
-        static let isDisableUsageOver3G         = "isDisableUsageOver3G"
+        static let minFreeSpace                 = "minFreeSpace"
+        static let maxCacheSize                 = "maxCacheSize"
+        
+        // MARK: Saved state
         
         static let rootArtistSortOrder          = "rootArtistSortOrder"
-        static let rootAlbumSortOrder              = "rootAlbumSortOrder"
+        static let rootAlbumSortOrder           = "rootAlbumSortOrder"
         
         static let seekTime                     = "seekTime"
         static let byteOffset                   = "byteOffset"
         static let isEqualizerOn                = "isEqualizerOn"
         static let preampGain                   = "gainMultiplier"
+    }
+    
+    struct JGUserDefaults {
+        static let disableScreenSleep = JGUserDefault(key: Keys.isScreenSleepEnabled, defaultValue: true)
+        static let disableUsageCell = JGUserDefault(key: Keys.isDisableUsageOver3G, defaultValue: false)
+        
+        static let quickSkipLength = JGUserDefault(key: Keys.quickSkipNumberOfSeconds, defaultValue: 10)
+        
+        static let maxAudioBitrateCell = JGUserDefault(key: Keys.maxBitRate3G, defaultValue: 7)
+        static let maxAudioBitrateWifi = JGUserDefault(key: Keys.maxBitRateWifi, defaultValue: 7)
+        static let maxVideoBitrateCell = JGUserDefault(key: Keys.maxVideoBitRate3G, defaultValue: 3)
+        static let maxVideoBitrateWifi = JGUserDefault(key: Keys.maxVideoBitRateWifi, defaultValue: 3)
+        
+        static let downloadUsingCell = JGUserDefault(key: Keys.isManualCachingOnWWANEnabled, defaultValue: false)
+        static let autoSongCaching = JGUserDefault(key: Keys.isAutoSongCachingEnabled, defaultValue: true)
+        static let preloadNextSong = JGUserDefault(key: Keys.isNextSongCacheEnabled, defaultValue: true)
+        static let backupDownloads = JGUserDefault(key: Keys.isBackupCacheEnabled, defaultValue: false)
+        static let minFreeSpace = JGUserDefault(key: Keys.minFreeSpace, defaultValue: 256 * 1024 * 1024)
+        static let maxCacheSize = JGUserDefault(key: Keys.maxCacheSize, defaultValue: 1024 * 1024 * 1024)
     }
     
     static let si = SavedSettings()
@@ -65,14 +80,11 @@ final class SavedSettings: NSObject {
              Keys.maxBitRate3G: 7,
              Keys.isAutoSongCachingEnabled: true,
              Keys.isNextSongCacheEnabled: true,
-             Keys.cachingType: CachingType.minSpace.rawValue,
              Keys.maxCacheSize: 1024 * 1024 * 1024, // 1GB
              Keys.minFreeSpace: 256 * 1024 * 1024,  // 256MB
-             Keys.isAutoDeleteCacheEnabled: true,
-             Keys.autoDeleteCacheType: 0,
              Keys.isScreenSleepEnabled: true,
-             Keys.maxVideoBitRateWifi: 5,
-             Keys.maxVideoBitRate3G: 5,
+             Keys.maxVideoBitRateWifi: 3,
+             Keys.maxVideoBitRate3G: 3,
              Keys.currentServerId: Server.testServerId,
              Keys.rootArtistSortOrder: ArtistSortOrder.name.rawValue,
              Keys.rootAlbumSortOrder: AlbumSortOrder.name.rawValue]
@@ -180,11 +192,6 @@ final class SavedSettings: NSObject {
         }
     }
     
-    var cachingType: CachingType {
-        get { return lock.synchronizedResult { return CachingType(rawValue: self.storage.integer(forKey: Keys.cachingType)) ?? .minSpace }}
-        set { lock.synchronized { self.storage.set(newValue.rawValue, forKey: Keys.cachingType) }}
-    }
-    
     var maxCacheSize: Int64 {
         get { return lock.synchronizedResult { return self.storage.object(forKey: Keys.maxCacheSize) as? Int64 ?? -1 }}
         set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.maxCacheSize) }}
@@ -193,16 +200,6 @@ final class SavedSettings: NSObject {
     var minFreeSpace: Int64 {
         get { return lock.synchronizedResult { return self.storage.object(forKey: Keys.minFreeSpace) as? Int64 ?? -1 }}
         set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.minFreeSpace) }}
-    }
-    
-    var isAutoDeleteCacheEnabled: Bool {
-        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isAutoDeleteCacheEnabled) }}
-        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isAutoDeleteCacheEnabled) }}
-    }
-    
-    var autoDeleteCacheType: Bool {
-        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.autoDeleteCacheType) }}
-        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.autoDeleteCacheType) }}
     }
     
     var isScreenSleepEnabled: Bool {
@@ -260,27 +257,3 @@ final class SavedSettings: NSObject {
         set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.preampGain) }}
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

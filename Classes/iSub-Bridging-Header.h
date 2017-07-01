@@ -27,11 +27,8 @@
 #import "LoadingScreen.h"
 #import "MBFingerTipWindow.h"
 #import "IntroViewController.h"
-#import "HelpTabViewController.h"
-#import "SettingsTabViewController.h"
 #import "JASidePanelController.h"
 #import "UIViewController+JASidePanel.h"
-//#import "EqualizerView.h"
 
 // Bass
 #import "bass.h"

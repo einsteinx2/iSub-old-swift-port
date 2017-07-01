@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreText
 
 // http://stackoverflow.com/a/26775912/299262
 extension String {
@@ -87,5 +88,15 @@ public extension String {
     
     var clean: String {
         return self.htmlUnescape().removingPercentEncoding ?? self
+    }
+}
+
+public extension String {
+    func size(font: UIFont, targetSize: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)) -> CGSize {
+        let attributedString = NSAttributedString(string: self, attributes: [NSAttributedStringKey.font: font])
+        let framesetter = CTFramesetterCreateWithAttributedString(attributedString)
+        let size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, attributedString.length), nil, targetSize, nil);
+        
+        return size
     }
 }
