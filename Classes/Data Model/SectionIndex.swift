@@ -94,7 +94,9 @@ struct SectionIndex {
         let sectionCount = count / sectionCountDivisor
         let sections = count / sectionCount
         for i in 0..<sections {
-            let index = SectionIndex(firstIndex: i * sectionCount, sectionCount: sectionCount, letter: "•")
+            // Note: Due to an iOS 10/11 UITableView but, you CANNOT use the bullet character • here or it will crash, so
+            // I'm using the black circle character ● instead
+            let index = SectionIndex(firstIndex: i * sectionCount, sectionCount: sectionCount, letter: "●")
             sectionIndexes.append(index)
         }
         
