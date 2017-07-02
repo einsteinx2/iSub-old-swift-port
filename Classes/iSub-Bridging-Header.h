@@ -24,9 +24,7 @@
 #import "INTUAnimationEngine.h"
 
 // UI
-#import "LoadingScreen.h"
 #import "MBFingerTipWindow.h"
-#import "IntroViewController.h"
 #import "JASidePanelController.h"
 #import "UIViewController+JASidePanel.h"
 

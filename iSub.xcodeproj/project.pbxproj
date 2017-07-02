@@ -58,7 +58,6 @@
 		531B33AA1E24CF8B00811187 /* RootPlaylistsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */; };
 		531B33AC1E24CF8B00811187 /* StatusLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33241E24CF8B00811187 /* StatusLoader.swift */; };
 		531B33B61E24CF8B00811187 /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B332E1E24CF8B00811187 /* StreamHandler.swift */; };
-		531B33BC1E24CF8B00811187 /* LoadingScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B33361E24CF8B00811187 /* LoadingScreen.m */; };
 		531B33C01E24CF8B00811187 /* PlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33391E24CF8B00811187 /* PlayQueue.swift */; };
 		531B33D21E24CF8B00811187 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B334E1E24CF8B00811187 /* Utils.swift */; };
 		531B33D71E24CFAF00811187 /* UITraitEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */; };
@@ -79,7 +78,6 @@
 		531B34071E24D0B600811187 /* PlayQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33EB1E24D0B600811187 /* PlayQueueViewController.swift */; };
 		531B34091E24D0B600811187 /* PlayQueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33EC1E24D0B600811187 /* PlayQueueViewModel.swift */; };
 		531B340B1E24D0B600811187 /* SidePanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33ED1E24D0B600811187 /* SidePanelController.swift */; };
-		531B341D1E24D12300811187 /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34111E24D12300811187 /* IntroViewController.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		531B341F1E24D12300811187 /* ServerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B34131E24D12300811187 /* ServerListViewController.swift */; };
 		531B34281E24D1C300811187 /* OBSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34261E24D1C300811187 /* OBSlider.m */; };
 		531B34431E24D24600811187 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 531B34331E24D24600811187 /* FMDatabase.m */; };
@@ -104,6 +102,9 @@
 		532B6FEC1E960A450010D81D /* NumberUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FEB1E960A450010D81D /* NumberUtils.swift */; };
 		532B6FEE1E960A750010D81D /* Sorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532B6FED1E960A750010D81D /* Sorting.swift */; };
 		532E76111F07D93C00118AE3 /* JGSettingsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E76101F07D93C00118AE3 /* JGSettingsTableCell.swift */; };
+		532E76131F08C47600118AE3 /* JGSliderTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E76121F08C47600118AE3 /* JGSliderTableCell.swift */; };
+		532E76151F08E02300118AE3 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E76141F08E02300118AE3 /* IntroViewController.swift */; };
+		532E76191F08E5E200118AE3 /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E76181F08E5E200118AE3 /* LoadingScreen.swift */; };
 		53368DD31E3F169500B7A199 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD11E3F169500B7A199 /* Nuke.framework */; };
 		53368DD61E3F9BE000B7A199 /* AwesomeCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */; };
 		533B69D51E206031001FF3BF /* CollectionViewStackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69CF1E206031001FF3BF /* CollectionViewStackCell.swift */; };
@@ -402,8 +403,6 @@
 		531B33231E24CF8B00811187 /* RootPlaylistsLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootPlaylistsLoader.swift; path = "New Model/RootPlaylistsLoader.swift"; sourceTree = "<group>"; };
 		531B33241E24CF8B00811187 /* StatusLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusLoader.swift; path = "New Model/StatusLoader.swift"; sourceTree = "<group>"; };
 		531B332E1E24CF8B00811187 /* StreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamHandler.swift; path = ../StreamHandler.swift; sourceTree = "<group>"; };
-		531B33351E24CF8B00811187 /* LoadingScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScreen.h; sourceTree = "<group>"; };
-		531B33361E24CF8B00811187 /* LoadingScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingScreen.m; sourceTree = "<group>"; };
 		531B33391E24CF8B00811187 /* PlayQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueue.swift; sourceTree = "<group>"; };
 		531B334E1E24CF8B00811187 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITraitEnvironment.swift; sourceTree = "<group>"; };
@@ -424,8 +423,6 @@
 		531B33EB1E24D0B600811187 /* PlayQueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueueViewController.swift; sourceTree = "<group>"; };
 		531B33EC1E24D0B600811187 /* PlayQueueViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayQueueViewModel.swift; sourceTree = "<group>"; };
 		531B33ED1E24D0B600811187 /* SidePanelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidePanelController.swift; sourceTree = "<group>"; };
-		531B34101E24D12300811187 /* IntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntroViewController.h; sourceTree = "<group>"; };
-		531B34111E24D12300811187 /* IntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntroViewController.m; sourceTree = "<group>"; };
 		531B34131E24D12300811187 /* ServerListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerListViewController.swift; sourceTree = "<group>"; };
 		531B34251E24D1C300811187 /* OBSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSlider.h; sourceTree = "<group>"; };
 		531B34261E24D1C300811187 /* OBSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSlider.m; sourceTree = "<group>"; };
@@ -458,6 +455,9 @@
 		532B6FEB1E960A450010D81D /* NumberUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberUtils.swift; sourceTree = "<group>"; };
 		532B6FED1E960A750010D81D /* Sorting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sorting.swift; sourceTree = "<group>"; };
 		532E76101F07D93C00118AE3 /* JGSettingsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGSettingsTableCell.swift; sourceTree = "<group>"; };
+		532E76121F08C47600118AE3 /* JGSliderTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGSliderTableCell.swift; sourceTree = "<group>"; };
+		532E76141F08E02300118AE3 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IntroViewController.swift; path = "../../Old UI/IntroViewController.swift"; sourceTree = "<group>"; };
+		532E76181F08E5E200118AE3 /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
 		5331C5881A3EA63800458859 /* iSub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iSub-Bridging-Header.h"; path = "Classes/iSub-Bridging-Header.h"; sourceTree = "<group>"; };
 		53368DD11E3F169500B7A199 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwesomeCache.framework; path = Carthage/Build/iOS/AwesomeCache.framework; sourceTree = "<group>"; };
@@ -541,7 +541,6 @@
 		5358DF041E0B78990024A0D4 /* RXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RXMLElement.h; sourceTree = "<group>"; };
 		5358DF051E0B78990024A0D4 /* RXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RXMLElement.m; sourceTree = "<group>"; };
 		5358E1CD1E0B79210024A0D4 /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HockeySDK.framework; path = Carthage/Build/iOS/HockeySDK.framework; sourceTree = "<group>"; };
-		5358E1CE1E0B79210024A0D4 /* MBProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MBProgressHUD.framework; path = Carthage/Build/iOS/MBProgressHUD.framework; sourceTree = "<group>"; };
 		5358E1D01E0B79210024A0D4 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		535A8899113F62DD00979783 /* default-album-art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default-album-art.png"; path = "Images/Other/default-album-art.png"; sourceTree = "<group>"; };
 		535BE39F1F069D8F00DEA4EF /* Pluralize.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pluralize.framework; path = Carthage/Build/iOS/Pluralize.framework; sourceTree = "<group>"; };
@@ -1097,9 +1096,8 @@
 				53FD71E71E36F95400460B44 /* CacheManager.swift */,
 				53D959131E2C7A7700A1667F /* Database.swift */,
 				53E042851E36AD200009DE79 /* SavedSettings.swift */,
-				531B33351E24CF8B00811187 /* LoadingScreen.h */,
-				531B33361E24CF8B00811187 /* LoadingScreen.m */,
 				5355BFA61E2D955C00C6D27F /* Logging.swift */,
+				532E76181F08E5E200118AE3 /* LoadingScreen.swift */,
 			);
 			path = Singletons;
 			sourceTree = "<group>";
@@ -1142,6 +1140,8 @@
 		531B33E51E24D0B600811187 /* Main or Top Level Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				532E76141F08E02300118AE3 /* IntroViewController.swift */,
+				533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */,
 				531B33E61E24D0B600811187 /* CacheViewController.swift */,
 				531B33E71E24D0B600811187 /* CenterPanelContainerViewController.swift */,
 				531B33E81E24D0B600811187 /* MenuViewController.swift */,
@@ -1159,9 +1159,6 @@
 		531B340C1E24D12300811187 /* Old UI */ = {
 			isa = PBXGroup;
 			children = (
-				531B34101E24D12300811187 /* IntroViewController.h */,
-				531B34111E24D12300811187 /* IntroViewController.m */,
-				533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */,
 			);
 			path = "Old UI";
 			sourceTree = "<group>";
@@ -1403,7 +1400,6 @@
 				53368DD11E3F169500B7A199 /* Nuke.framework */,
 				53368DD41E3F9BE000B7A199 /* AwesomeCache.framework */,
 				5358E1CD1E0B79210024A0D4 /* HockeySDK.framework */,
-				5358E1CE1E0B79210024A0D4 /* MBProgressHUD.framework */,
 				5358E1D01E0B79210024A0D4 /* SnapKit.framework */,
 				53D59A6D1E1DC9CE00071ABD /* Reachability.framework */,
 				5308D92E1E243D270026E6BD /* Device.framework */,
@@ -1650,6 +1646,7 @@
 				53FE312A1F07C594003AA6A7 /* JGStepperTableCell.swift */,
 				53FE312B1F07C594003AA6A7 /* JGSwitchTableCell.swift */,
 				53FE312C1F07C594003AA6A7 /* JGTextTableCell.swift */,
+				532E76121F08C47600118AE3 /* JGSliderTableCell.swift */,
 			);
 			path = "Settings Cells";
 			sourceTree = "<group>";
@@ -1836,7 +1833,6 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/HockeySDK.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/MBProgressHUD.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Device.framework",
@@ -1884,11 +1880,11 @@
 				532E76111F07D93C00118AE3 /* JGSettingsTableCell.swift in Sources */,
 				531B345B1E24D30500811187 /* NetworkStatus.swift in Sources */,
 				53CE50411E20194100E5DC68 /* BCCKeychain.m in Sources */,
-				531B33BC1E24CF8B00811187 /* LoadingScreen.m in Sources */,
 				531B33AA1E24CF8B00811187 /* RootPlaylistsLoader.swift in Sources */,
 				53609CD31E883F49005C26D0 /* VisualizerView.swift in Sources */,
 				53F107A71E2AD144003B7D59 /* Item.swift in Sources */,
 				530F04AA1E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
+				532E76131F08C47600118AE3 /* JGSliderTableCell.swift in Sources */,
 				530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				53A418021E2C1D8500671330 /* MediaFolder.swift in Sources */,
 				5355BFB41E2DB88200C6D27F /* Application.swift in Sources */,
@@ -1945,6 +1941,7 @@
 				531B33D71E24CFAF00811187 /* UITraitEnvironment.swift in Sources */,
 				5358DF761E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
 				531B33A41E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
+				532E76151F08E02300118AE3 /* IntroViewController.swift in Sources */,
 				53808D3D1E7DEAD20063B6D9 /* ServerItemViewModel.swift in Sources */,
 				5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				53FE31321F07C594003AA6A7 /* JGTextTableCell.swift in Sources */,
@@ -1973,7 +1970,6 @@
 				53835CE51E0B7D6D0077B53D /* ZKDataArchive.m in Sources */,
 				53835CD11E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
 				5358DF941E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
-				531B341D1E24D12300811187 /* IntroViewController.m in Sources */,
 				531B34551E24D28D00811187 /* FMDatabasePoolAdditions.m in Sources */,
 				5358DF711E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				531B34511E24D24600811187 /* FMDatabaseVariadic.swift in Sources */,
@@ -2014,6 +2010,7 @@
 				53CFBB821E2B3075005895F4 /* GenreRepository.swift in Sources */,
 				53808D2E1E7DE5160063B6D9 /* ItemViewControllerProvider.swift in Sources */,
 				53835CA91E0B7D6D0077B53D /* NSData+ZKAdditions.m in Sources */,
+				532E76191F08E5E200118AE3 /* LoadingScreen.swift in Sources */,
 				53CFBB791E2B1E56005895F4 /* FolderRepository.swift in Sources */,
 				53CFBB7C1E2B2F9E005895F4 /* GenericItemRepository.swift in Sources */,
 				531B33FB1E24D0B600811187 /* ItemViewModel.swift in Sources */,
@@ -2081,7 +2078,7 @@
 				533C65AB15ABB9BD003EAF29 /* en */,
 			);
 			name = IntroViewController.xib;
-			path = ..;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

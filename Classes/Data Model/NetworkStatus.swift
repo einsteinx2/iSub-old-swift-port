@@ -9,9 +9,7 @@
 import Foundation
 import Reachability
 
-// TODO: Remove @objcMembers and NSObject once Obj-C view controllers are removed
-@objcMembers
-class NetworkStatus: NSObject {
+class NetworkStatus {
     let reachability = Reachability()
     
     var isReachable: Bool {
