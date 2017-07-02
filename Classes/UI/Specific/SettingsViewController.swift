@@ -14,6 +14,9 @@ class SettingsViewController: JGSettingsTableController, JGSettingsSectionsData,
         self.tableSections = loadSectionsConfiguration()
     }
     
+    fileprivate var totalSpaceInMB: Float { return Float(CacheManager.si.totalSpace / 1024 / 1024) }
+    fileprivate var totalSpaceInGB: Float { return totalSpaceInMB / 1024 }
+    
     func loadSectionsConfiguration() -> [JGSection] {
         let sections = [
             JGSection (
@@ -75,8 +78,20 @@ class SettingsViewController: JGSettingsTableController, JGSettingsSectionsData,
                     JGSwitchTableCell(data: SavedSettings.JGUserDefaults.downloadUsingCell, delegate: self, labelString: "Enable downloads over cellular"),
                     JGSwitchTableCell(data: SavedSettings.JGUserDefaults.autoSongCaching, delegate: self, labelString: "Automatically cache songs"),
                     JGSwitchTableCell(data: SavedSettings.JGUserDefaults.preloadNextSong, delegate: self, labelString: "Pre-load next song"),
-                    JGSwitchTableCell(data: SavedSettings.JGUserDefaults.backupDownloads, delegate: self, labelString: "Backup downloads and cached songs")
-                    // TODO: add slider cells
+                    JGSwitchTableCell(data: SavedSettings.JGUserDefaults.backupDownloads, delegate: self, labelString: "Backup downloads and cached songs"),
+                    JGSliderTableCell(data: SavedSettings.JGUserDefaults.minFreeSpace,
+                                      delegate: self,
+                                      title: "Minimum free space before purging",
+                                      minimumValue: 0,
+                                      maximumValue: totalSpaceInMB,
+                                      units: "MB",
+                                      decimalPlaces: 0),
+                    JGSliderTableCell(data: SavedSettings.JGUserDefaults.maxCacheSize,
+                                      delegate: self,
+                                      title: "Minimum cache size before purging",
+                                      minimumValue: 0,
+                                      maximumValue: totalSpaceInGB,
+                                      units: "GB")
                 ],
                 heightForFooter: 10.0
             )

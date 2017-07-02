@@ -30,7 +30,6 @@ final class SavedSettings {
         static let isAutoSongCachingEnabled     = "isSongCachingEnabled"
         static let isNextSongCacheEnabled       = "enableNextSongCacheSetting"
         static let isBackupCacheEnabled         = "isBackupCacheEnabled"
-        
         static let minFreeSpace                 = "minFreeSpace"
         static let maxCacheSize                 = "maxCacheSize"
         
@@ -60,8 +59,8 @@ final class SavedSettings {
         static let autoSongCaching = JGUserDefault(key: Keys.isAutoSongCachingEnabled, defaultValue: true)
         static let preloadNextSong = JGUserDefault(key: Keys.isNextSongCacheEnabled, defaultValue: true)
         static let backupDownloads = JGUserDefault(key: Keys.isBackupCacheEnabled, defaultValue: false)
-        static let minFreeSpace = JGUserDefault(key: Keys.minFreeSpace, defaultValue: 256 * 1024 * 1024)
-        static let maxCacheSize = JGUserDefault(key: Keys.maxCacheSize, defaultValue: 1024 * 1024 * 1024)
+        static let minFreeSpace = JGUserDefault(key: Keys.minFreeSpace, defaultValue: Float(256 * 1024 * 1024))
+        static let maxCacheSize = JGUserDefault(key: Keys.maxCacheSize, defaultValue: Float(1024 * 1024 * 1024))
     }
     
     static let si = SavedSettings()
