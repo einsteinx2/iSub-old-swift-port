@@ -58,8 +58,7 @@ class GenericItemRepository {
         return item
     }
     
-    func allItems<T: PersistedItem>(repository: ItemRepository, serverId: Int64? = nil, isCachedTable: Bool = false) -> [T] {
-        let ignoredArticles = Sorting.ignoredArticles
+    func allItems<T: PersistedItem>(repository: ItemRepository, serverId: Int64? = nil, isCachedTable: Bool = false, loadSubItems: Bool = false) -> [T] {
         var items = [T]()
         var itemsNumbers = [T]()
         Database.si.read.inDatabase { db in
@@ -76,7 +75,7 @@ class GenericItemRepository {
                 
                 while result.next() {
                     let item = T(result: result, repository: repository)
-                    let name = Sorting.name(item.itemName, ignoringArticles: ignoredArticles)
+                    let name = Sorting.name(item.itemName)
                     if let firstScalar = name.unicodeScalars.first {
                         if CharacterSet.letters.contains(firstScalar) {
                             items.append(item)
@@ -91,11 +90,14 @@ class GenericItemRepository {
             }
         }
         
-        items = Sorting.subsonicSorted(items: items, ignoredArticles: ignoredArticles)
+        // Disabling sorting here for now as we do it in the view controller
+        //items = Sorting.subsonicSorted(items: items)
         items.append(contentsOf: itemsNumbers)
         
-        for item in items {
-            item.loadSubItems()
+        if loadSubItems {
+            for item in items {
+                item.loadSubItems()
+            }
         }
         
         return items

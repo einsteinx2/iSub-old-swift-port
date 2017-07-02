@@ -20,8 +20,8 @@ struct FolderRepository: ItemRepository {
         return gr.item(repository: self, itemId: folderId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
-    func allFolders(serverId: Int64? = nil, isCachedTable: Bool = false) -> [Folder] {
-        return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
+    func allFolders(serverId: Int64? = nil, isCachedTable: Bool = false, loadSubItems: Bool = false) -> [Folder] {
+        return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable, loadSubItems: loadSubItems)
     }
     
     @discardableResult func deleteAllFolders(serverId: Int64?) -> Bool {
@@ -94,7 +94,9 @@ struct FolderRepository: ItemRepository {
             }
         }
         
-        return Sorting.subsonicSorted(items: folders, ignoredArticles: Sorting.ignoredArticles)
+        // Disabling sorting here for now as we do it in the view controller
+        //return Sorting.subsonicSorted(items: folders)
+        return folders
     }
     
     func folders(parentFolderId: Int64, serverId: Int64, isCachedTable: Bool = false) -> [Folder] {

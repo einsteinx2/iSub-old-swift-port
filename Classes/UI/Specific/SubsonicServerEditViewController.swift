@@ -50,6 +50,8 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        urlField.keyboardType = .URL
+        
         self.view.frame.origin.y = 20
         
         if let server = server {

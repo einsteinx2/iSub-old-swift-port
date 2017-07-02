@@ -20,8 +20,8 @@ struct SongRepository: ItemRepository {
         return gr.item(repository: self, itemId: songId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
-    func allSongs(serverId: Int64? = nil, isCachedTable: Bool = false) -> [Song] {
-        return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
+    func allSongs(serverId: Int64? = nil, isCachedTable: Bool = false, loadSubItems: Bool = false) -> [Song] {
+        return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable, loadSubItems: loadSubItems)
     }
     
     @discardableResult func deleteAllSongs(serverId: Int64?) -> Bool {

@@ -20,9 +20,8 @@ struct AlbumRepository: ItemRepository {
         return gr.item(repository: self, itemId: albumId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
-    func allAlbums(serverId: Int64? = nil, isCachedTable: Bool = false) -> [Album] {
-        let albums: [Album] = gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
-        return Sorting.subsonicSorted(items: albums, ignoredArticles: Sorting.ignoredArticles)
+    func allAlbums(serverId: Int64? = nil, isCachedTable: Bool = false, loadSubItems: Bool = false) -> [Album] {
+        return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable, loadSubItems: loadSubItems)
     }
     
     @discardableResult func deleteAllAlbums(serverId: Int64?) -> Bool {
