@@ -219,7 +219,7 @@ class ServerListViewController: UIViewController, UITableViewDelegate, UITableVi
             showServerEditScreen(server: server)
         } else {
             redirectUrl = nil
-            LoadingScreen.showOnMainWindow(withMessage: "Checking Server")
+            LoadingScreen.show(withMessage: "Checking Server")
             
             let statusLoader = StatusLoader(server: server)
             statusLoader.completionHandler = loadingCompleted

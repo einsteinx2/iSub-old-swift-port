@@ -9,9 +9,7 @@
 import Foundation
 import AwesomeCache
 
-// TODO: Remove @objcMembers and NSObject once Obj-C view controllers are removed
-@objcMembers
-final class CacheManager: NSObject {
+final class CacheManager {
     struct Notifications {
         static let songRemoved = Notification.Name("CacheManager_songRemoved")
         
@@ -64,13 +62,12 @@ final class CacheManager: NSObject {
         }
     }
     
-    override init() {
+    init() {
         do {
             self.imageCache = try Cache<UIImage>(name: "imageCache", directory: URL(fileURLWithPath:imageCachePath))
         } catch {
             printError(error)
         }
-        super.init()
     }
     
     func setup() {

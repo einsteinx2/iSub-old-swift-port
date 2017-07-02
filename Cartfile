@@ -1,5 +1,4 @@
 github "bitstadium/HockeySDK-iOS"
-github "jdg/MBProgressHUD"
 github "SnapKit/SnapKit"
 github "einsteinx2/Nuke" "master"
 github "aschuch/AwesomeCache"

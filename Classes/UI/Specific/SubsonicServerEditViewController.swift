@@ -145,7 +145,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        LoadingScreen.showOnMainWindow(withMessage: "Checking Server")
+        LoadingScreen.show(withMessage: "Checking Server")
         statusLoader = StatusLoader(url: urlField.text!, username: usernameField.text!, password: passwordField.text!)
         statusLoader!.completionHandler = loadingCompletionHandler
         statusLoader!.start()
