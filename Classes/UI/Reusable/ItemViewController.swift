@@ -58,10 +58,19 @@ class ItemViewController: DraggableTableViewController {
         super.viewDidLoad()
         self.edgesForExtendedLayout = UIRectEdge()
         self.automaticallyAdjustsScrollViewInsets = false
+        self.refreshControl?.attributedTitle = nil
         
         viewModel.delegate = self
         viewModel.loadModelsFromDatabase()
-        viewModel.loadModelsFromWeb()
+        
+        if viewModel.items.count == 0 {
+            self.refreshControl?.beginRefreshing()
+        }
+        viewModel.loadModelsFromWeb() { _, _ in
+            if self.refreshControl?.isRefreshing ?? false {
+                self.refreshControl?.endRefreshing()
+            }
+        }
         
         self.navigationItem.title = viewModel.navigationTitle
         self.tableView.tableFooterView = UIView(frame:CGRect(x: 0, y: 0, width: 320, height: 64))
@@ -70,6 +79,7 @@ class ItemViewController: DraggableTableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.tableView.reloadData()
         registerForNotifications()
     }
     
