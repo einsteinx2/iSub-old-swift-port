@@ -43,6 +43,7 @@ func ==<T: Item>(lhs: T, rhs: T) -> Bool {
 //    return lhs.identifier() != rhs.identifier()
 //}
 
+// TODO: This should be doing a type check
 func ==<T: Item, U:Item>(lhs: T, rhs: U) -> Bool {
     return lhs.itemId == rhs.itemId
 }

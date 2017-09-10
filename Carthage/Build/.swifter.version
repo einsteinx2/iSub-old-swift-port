@@ -1,0 +1,9 @@
+{
+  "commitish" : "eff40fa3db23c23cfc200c8f9701069cb827911a",
+  "iOS" : [
+    {
+      "hash" : "782b3d6974e2e561f34e45682cfef152138b8f88bb39d3f327f8c784300679c9",
+      "name" : "Swifter"
+    }
+  ]
+}

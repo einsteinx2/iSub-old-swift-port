@@ -8,6 +8,16 @@
 
 import Foundation
 
+// Convenience functions for running things asynchronously on the main thread
+
+func async(_ work: @escaping @convention(block) () -> Swift.Void) {
+    DispatchQueue.main.async { work() }
+}
+
+public func async(after timeInterval: TimeInterval, execute work: @escaping @convention(block) () -> Swift.Void) {
+    DispatchQueue.main.async(after: timeInterval) { work() }
+}
+
 extension DispatchQueue {
     // Work that is interacting with the user, such as operating on the main thread, refreshing the user interface, or performing animations. If the work doesn’t happen quickly, the user interface may appear frozen. Focuses on responsiveness and performance.
     // Work is virtually instantaneous.

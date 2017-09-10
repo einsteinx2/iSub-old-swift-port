@@ -1,8 +1,9 @@
 github "bitstadium/HockeySDK-iOS"
-github "SnapKit/SnapKit"
+github "wolffan/SnapKit" "xcode-4-mac-compatible"
 github "einsteinx2/Nuke" "master"
 github "aschuch/AwesomeCache"
 github "ashleymills/Reachability.swift" "master"
 github "schickling/Device.swift"
 github "DaveWoodCom/XCGLogger" ~> 5.0.1
 github "joshualat/Pluralize.swift" "master"
+github "glock45/swifter" "stable"

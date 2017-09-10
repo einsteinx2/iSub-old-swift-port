@@ -59,10 +59,14 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
     
     let serverId: Int64
     
+    // Override if the expected response is not XML
+    var isDataApi: Bool { return false }
+    
     fileprivate var request: URLRequest?
     fileprivate var session: URLSession?
     fileprivate var task: URLSessionDataTask?
-    fileprivate var receivedData = Data()
+    fileprivate(set) var receivedData = Data()
+    fileprivate(set) var responseHeaders = [AnyHashable: Any]()
     
     fileprivate var selfRef: ApiLoader?
     
@@ -148,6 +152,10 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
  
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         receivedData = Data()
+        if let urlResponse = response as? HTTPURLResponse {
+            responseHeaders = urlResponse.allHeaderFields
+        }
+       
         completionHandler(.allow)
     }
  
@@ -182,25 +190,31 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
                 return
             }
             
-            guard let root = RXMLElement(fromXMLData: receivedData), root.isValid else {
+            let root = RXMLElement(fromXMLData: receivedData)
+            if !isDataApi, let root = root, !root.isValid {
                 DispatchQueue.main.async {
                     self.failed(error: NSError(iSubCode: .notXML))
                 }
                 return
             }
             
-            if let error = root.child("error"), error.isValid {
-                let code = error.attribute("code") ?? "-1"
-                let message = error.attribute("message") ?? ""
-                let error = NSError(domain: SubsonicErrorDomain, code: Int(code) ?? -1, userInfo: [NSLocalizedDescriptionKey: message])
-                DispatchQueue.main.async {
-                    self.failed(error: error)
-                }
-            } else {
-                if processResponse(root: root) {
+            if let root = root, root.isValid {
+                if let error = root.child("error"), error.isValid {
+                    let code = error.attribute("code") ?? "-1"
+                    let message = error.attribute("message") ?? ""
+                    let error = NSError(domain: SubsonicErrorDomain, code: Int(code) ?? -1, userInfo: [NSLocalizedDescriptionKey: message])
+                    DispatchQueue.main.async {
+                        self.failed(error: error)
+                    }
+                } else if processResponse(root: root) {
                     DispatchQueue.main.async {
                         self.finished()
                     }
+                }
+            } else {
+                // Data API Response
+                DispatchQueue.main.async {
+                    self.finished()
                 }
             }
         }

@@ -24,8 +24,14 @@ enum ShuffleMode: Int {
 final class PlayQueue {
     // MARK: - Notifications -
     
-    public struct Notifications {
-        public static let indexChanged = Notification.Name("PlayQueue_indexChanged")
+    struct Notifications {
+        static let indexChanged = Notification.Name("PlayQueue_indexChanged")
+        static let displayVideo = Notification.Name("PlayQueue_displayVideo")
+        static let videoEnded = Notification.Name("PlayQueue_videoEnded")
+        
+        struct Keys {
+            static let avPlayer = "avPlayer"
+        }
     }
     
     func notifyPlayQueueIndexChanged() {
@@ -38,6 +44,7 @@ final class PlayQueue {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songStarted), name: BassGaplessPlayer.Notifications.songStarted)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPaused), name: BassGaplessPlayer.Notifications.songPaused)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songEnded), name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(videoEnded(_:)), name: Notifications.videoEnded)
     }
     
     fileprivate func unregisterForNotifications() {
@@ -45,6 +52,7 @@ final class PlayQueue {
         NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
         NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songPaused)
         NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.removeObserverOnMainThread(self, name: Notifications.videoEnded)
     }
     
     @objc fileprivate func playlistChanged(_ notification: Notification) {
@@ -63,6 +71,11 @@ final class PlayQueue {
         incrementIndex()
         updateLockScreenInfo()
         StreamQueue.si.start()
+    }
+    
+    @objc fileprivate func videoEnded(_ notification: Notification) {
+        songEnded()
+        playSong(atIndex: currentIndex)
     }
     
     // MARK: - Properties -
@@ -107,6 +120,7 @@ final class PlayQueue {
     }
     
     fileprivate let player: BassGaplessPlayer = { return BassGaplessPlayer.si }()
+    fileprivate var videoPlaybackManager: VideoPlaybackManager?
     
     init() {
         registerForNotifications()
@@ -232,7 +246,7 @@ final class PlayQueue {
     func playSong(atIndex index: Int) {
         currentIndex = index
         if let currentSong = currentSong {
-            if currentSong.contentType?.basicType == .audio {
+            if currentSong.contentType?.basicType == .audio || currentSong.contentType?.basicType == .video {
                 startSong()
             }
         }
@@ -292,26 +306,37 @@ final class PlayQueue {
     fileprivate func startSongDelayed(byteOffset: Int64) {
         // Destroy the streamer to start a new song
         player.stop()
+        videoPlaybackManager?.stop()
+        videoPlaybackManager = nil
         
         // Start the stream manager
         StreamQueue.si.start()
         
         if let currentSong = currentSong {
-            // Check to see if the song is already cached
-            if currentSong.isFullyCached {
-                // The song is fully cached, start streaming from the local copy
-                player.start(song: currentSong, byteOffset: byteOffset)
-            } else {
-                if let currentCachingSong = CacheQueue.si.currentSong, currentCachingSong == currentSong {
-                    // If the Cache Queue is downloading it and it's ready for playback, start the player
-                    if CacheQueue.si.streamHandler?.isReadyForPlayback == true {
-                        player.start(song: currentSong, byteOffset: byteOffset)
-                    }
+            if currentSong.contentType?.basicType == .audio {
+                // Check to see if the song is already cached
+                if currentSong.isFullyCached {
+                    // The song is fully cached, start streaming from the local copy
+                    player.start(song: currentSong, byteOffset: byteOffset)
                 } else {
-                    if StreamQueue.si.streamHandler?.isReadyForPlayback == true {
-                        player.start(song: currentSong, byteOffset: byteOffset)
+                    if let currentCachingSong = CacheQueue.si.currentSong, currentCachingSong == currentSong {
+                        // If the Cache Queue is downloading it and it's ready for playback, start the player
+                        if CacheQueue.si.streamHandler?.isReadyForPlayback == true {
+                            player.start(song: currentSong, byteOffset: byteOffset)
+                        }
+                    } else {
+                        if StreamQueue.si.streamHandler?.isReadyForPlayback == true {
+                            player.start(song: currentSong, byteOffset: byteOffset)
+                        }
                     }
                 }
+            } else if currentSong.contentType?.basicType == .video, let urlRequest = URLRequest(subsonicAction: .hls, serverId: currentSong.serverId, parameters: ["id": currentSong.songId, "bitRate": ["2048", "1024", "512", "256"]]), let url = urlRequest.url {
+                // Video, so use the video manager to handle playback and proxying
+                videoPlaybackManager = VideoPlaybackManager(url: url)
+                videoPlaybackManager?.start()
+            } else {
+                // Neither a song or video, so skip it
+                playNextSong()
             }
         }
     }
@@ -369,5 +394,90 @@ final class PlayQueue {
             lockScreenUpdateTimer.invalidate()
         }
         lockScreenUpdateTimer = Timer(timeInterval: 15.0, target: self, selector: #selector(updateLockScreenInfo), userInfo: nil, repeats: false)
+    }
+}
+
+fileprivate class VideoPlaybackManager: NSObject, HLSProxyServerDelegate {
+    let url: URL
+    let proxyServer: HLSProxyServer
+    var player: AVPlayer?
+    var playerItem: AVPlayerItem?
+    
+    var registeredForKVO = false
+    
+    init(url: URL) {
+        self.url = url
+        self.proxyServer = HLSProxyServer(playlistUrl: url, allowSelfSignedCerts: true)
+        super.init()
+    }
+    
+    deinit {
+        stop()
+    }
+    
+    func start() {
+        proxyServer.delegate = self
+        proxyServer.start()
+    }
+    
+    func stop() {
+        proxyServer.stop()
+        if registeredForKVO {
+            playerItem?.removeObserver(self, forKeyPath: "status")
+            player?.removeObserver(self, forKeyPath: "status")
+            registeredForKVO = false
+        }
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func hlsProxyServer(_ server: HLSProxyServer, streamIsReady url: URL) {
+        print("stream ready")
+        
+        let urlString = "http://localhost:9999/stream.m3u8"
+        let asset = AVURLAsset(url: URL(string: urlString)!)
+        let playerItem = AVPlayerItem(asset: asset)
+        playerItem.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions(), context: nil)
+        self.playerItem = playerItem
+        
+        let player = AVPlayer(playerItem: playerItem)
+        player.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions(), context: nil)
+        self.player = player
+        
+        registeredForKVO = true
+        
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(videoEnded(_:)), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+//        NotificationCenter.addObserverOnMainThread(self, selector: #selector(videoFailed(_:)), name: .AVPlayerItemNewErrorLogEntry, object: playerItem)
+//        NotificationCenter.addObserverOnMainThread(self, selector: #selector(videoFailed(_:)), name: .AVPlayerItemFailedToPlayToEndTime, object: playerItem)
+//        NotificationCenter.addObserverOnMainThread(self, selector: #selector(videoFailed(_:)), name: .AVPlayerItemPlaybackStalled, object: playerItem)
+        
+        let userInfo = [PlayQueue.Notifications.Keys.avPlayer: player]
+        NotificationCenter.postOnMainThread(name: PlayQueue.Notifications.displayVideo, object: nil, userInfo: userInfo)
+    }
+    
+    func hlsProxyServer(_ server: HLSProxyServer, streamDidFail error: HLSProxyError) {
+        print("stream did fail")
+    }
+    
+    func hlsProxyServer(_ server: HLSProxyServer, playlistDidEnd playlist: HLSPlaylist) {
+        print("stream playlist did end")
+    }
+    
+    @objc func videoEnded(_ notification: Notification) {
+        let userInfo: [String: Any] = player == nil ? [String: Any]() : [PlayQueue.Notifications.Keys.avPlayer: player as Any]
+        NotificationCenter.postOnMainThread(name: PlayQueue.Notifications.videoEnded, object: nil, userInfo: userInfo)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if let player = object as? AVPlayer {
+            if player.status == .readyToPlay {
+                player.play()
+            }
+        } else if let playerItem = object as? AVPlayerItem {
+            // NOTE: Add a breakpoint here to debug playback issues. Check playerItem.error and playerItem.errorLog()
+            print("playerItem: \(playerItem) keyPath: \(String(describing: keyPath)) change: \(String(describing: change))")
+            if let error = playerItem.error, let errorLog = playerItem.errorLog() {
+                 log.error("video playback error: \(error)  errorLog(): \(errorLog)")
+            }
+        }
     }
 }

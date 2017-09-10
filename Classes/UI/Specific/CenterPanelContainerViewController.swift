@@ -120,6 +120,4 @@ class CenterPanelContainerViewController: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
-    
-    
 }

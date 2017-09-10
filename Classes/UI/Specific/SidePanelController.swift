@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVKit
 
 // KVO context pointer
 // Set up non-zero-sized storage. We don't intend to mutate this variable,
@@ -64,9 +65,12 @@ class SidePanelController: JASidePanelController {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingMoved(_:)), name: DraggableTableView.Notifications.draggingMoved)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingEnded(_:)), name: DraggableTableView.Notifications.draggingEnded)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(draggingCanceled(_:)), name: DraggableTableView.Notifications.draggingCanceled)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(displayVideo(_:)), name: PlayQueue.Notifications.displayVideo, object: nil)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(videoEnded(_:)), name: PlayQueue.Notifications.videoEnded)
     }
     
     deinit {
+        NotificationCenter.default.removeObserver(self)
         self.removeObserver(self, forKeyPath: "state", context: &kvoContext)
     }
     
@@ -140,5 +144,24 @@ class SidePanelController: JASidePanelController {
         
         allowLeftSwipe = true
         allowRightSwipe = true
+    }
+    
+    // MARK: - Video Playback -
+    
+    fileprivate var playerController: AVPlayerViewController?
+    
+    @objc fileprivate func displayVideo(_ notification: Notification) {
+        if let player = notification.userInfo?[PlayQueue.Notifications.Keys.avPlayer] as? AVPlayer {
+            playerController = AVPlayerViewController()
+            playerController!.player = player
+            self.present(playerController!, animated: true)
+        }
+    }
+    
+    @objc fileprivate func videoEnded(_ notification: Notification) {
+        if playerController != nil {
+            self.dismiss(animated: true, completion: nil)
+        }
+        playerController = nil
     }
 }

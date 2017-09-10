@@ -9,9 +9,10 @@
 import Foundation
 
 fileprivate func swizzling(forClass: AnyClass, originalSelector: Selector, swizzledSelector: Selector) {
-    let originalMethod = class_getInstanceMethod(forClass, originalSelector)
-    let swizzledMethod = class_getInstanceMethod(forClass, swizzledSelector)
-    method_exchangeImplementations(originalMethod, swizzledMethod)
+    if let originalMethod = class_getInstanceMethod(forClass, originalSelector),
+       let swizzledMethod = class_getInstanceMethod(forClass, swizzledSelector) {
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }
 }
 
 fileprivate var hasSwizzled = false
@@ -22,8 +23,6 @@ func swizzleMethods() {
         UINavigationBar.swizzle()
     }
 }
-
-import Foundation
 
 fileprivate struct UINavigationBarAssociatedKeys {
     static var fixedNavigationBarSize = "sizeThatFits_fixedNavigationBarSize"

@@ -31,6 +31,7 @@
 		53114E0E1E3B23F100D8589B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53114E0C1E3B23F100D8589B /* main.swift */; };
 		5311C32F1A3510A500054941 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5311C32E1A3510A500054941 /* AssetsLibrary.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5311C3321A3510F800054941 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5311C3311A3510F800054941 /* QuickLook.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		531341441F6477B000B58C91 /* VideoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531341431F6477B000B58C91 /* VideoLoader.swift */; };
 		531B33621E24CF8B00811187 /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32E91E24CF8A00811187 /* CachedImage.swift */; };
 		531B33721E24CF8B00811187 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FB1E24CF8A00811187 /* Playlist.swift */; };
 		531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FC1E24CF8A00811187 /* SectionIndex.swift */; };
@@ -202,6 +203,13 @@
 		539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */; };
 		539133551E29D53000B8A99E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133531E29D53000B8A99E /* Data.swift */; };
 		539D2BB91E5E0B1A0059D233 /* SafeNumberCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */; };
+		53A179A51F65F0D300B46251 /* HLSProxyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A179A11F65EF9800B46251 /* HLSProxyServer.swift */; };
+		53A179A61F65F0D300B46251 /* HLSSelfSignedCertDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A179A31F65EF9800B46251 /* HLSSelfSignedCertDelegate.swift */; };
+		53A179A71F65F0D300B46251 /* HLSPlaylistDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A179A01F65EF9800B46251 /* HLSPlaylistDownloader.swift */; };
+		53A179A81F65F0D300B46251 /* HLSSegmentStreamer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A179A21F65EF9800B46251 /* HLSSegmentStreamer.swift */; };
+		53A179A91F65F0D500B46251 /* HLSPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A1799C1F65EF8800B46251 /* HLSPlaylist.swift */; };
+		53A179AA1F65F0D500B46251 /* HLSSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A1799E1F65EF8800B46251 /* HLSSegment.swift */; };
+		53A179AB1F65F0D500B46251 /* HLSProxyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A1799D1F65EF8800B46251 /* HLSProxyError.swift */; };
 		53A232361E39944C005214DD /* BassPluginLoad.c in Sources */ = {isa = PBXBuildFile; fileRef = 53A232331E39944C005214DD /* BassPluginLoad.c */; };
 		53A232391E39CACA005214DD /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A232371E39CACA005214DD /* CGRect.swift */; };
 		53A2BE28147DF13600E44822 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2BE27147DF13600E44822 /* OpenGLES.framework */; };
@@ -375,6 +383,7 @@
 		53114E0C1E3B23F100D8589B /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		5311C32E1A3510A500054941 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		5311C3311A3510F800054941 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		531341431F6477B000B58C91 /* VideoLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoLoader.swift; sourceTree = "<group>"; };
 		53191DEF1167CFDC00E1C08A /* current-server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "current-server.png"; path = "Images/Other/current-server.png"; sourceTree = "<group>"; };
 		531B32E91E24CF8A00811187 /* CachedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImage.swift; sourceTree = "<group>"; };
 		531B32FB1E24CF8A00811187 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
@@ -631,6 +640,14 @@
 		539133531E29D53000B8A99E /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		539799781163084200F41D8B /* loading-screen-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image.png"; path = "Images/Other/loading-screen-image.png"; sourceTree = "<group>"; };
 		539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeNumberCasting.swift; sourceTree = "<group>"; };
+		53A1799C1F65EF8800B46251 /* HLSPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSPlaylist.swift; sourceTree = "<group>"; };
+		53A1799D1F65EF8800B46251 /* HLSProxyError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSProxyError.swift; sourceTree = "<group>"; };
+		53A1799E1F65EF8800B46251 /* HLSSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSSegment.swift; sourceTree = "<group>"; };
+		53A179A01F65EF9800B46251 /* HLSPlaylistDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSPlaylistDownloader.swift; sourceTree = "<group>"; };
+		53A179A11F65EF9800B46251 /* HLSProxyServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSProxyServer.swift; sourceTree = "<group>"; };
+		53A179A21F65EF9800B46251 /* HLSSegmentStreamer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSSegmentStreamer.swift; sourceTree = "<group>"; };
+		53A179A31F65EF9800B46251 /* HLSSelfSignedCertDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSSelfSignedCertDelegate.swift; sourceTree = "<group>"; };
+		53A179AC1F65F72E00B46251 /* Swifter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Swifter.framework; path = Carthage/Build/iOS/Swifter.framework; sourceTree = "<group>"; };
 		53A232331E39944C005214DD /* BassPluginLoad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BassPluginLoad.c; sourceTree = "<group>"; };
 		53A232341E39944C005214DD /* BassPluginLoad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BassPluginLoad.h; sourceTree = "<group>"; };
 		53A232371E39CACA005214DD /* CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
@@ -797,7 +814,6 @@
 				5355BFA31E2D81D900C6D27F /* AppDelegate.swift */,
 				5355BFB21E2DB88200C6D27F /* Application.swift */,
 				531B33DC1E24D0B600811187 /* UI */,
-				531B340C1E24D12300811187 /* Old UI */,
 				531B32E81E24CF8A00811187 /* Data Model */,
 				531B33001E24CF8A00811187 /* Server Loading */,
 				531B32FE1E24CF8A00811187 /* Extensions */,
@@ -1042,6 +1058,7 @@
 			children = (
 				539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */,
 				531B33051E24CF8A00811187 /* Song Streams */,
+				53A1799A1F65EF6F00B46251 /* Video Streams */,
 				531B330E1E24CF8A00811187 /* Api Loaders */,
 			);
 			path = "Server Loading";
@@ -1156,13 +1173,6 @@
 			path = Specific;
 			sourceTree = "<group>";
 		};
-		531B340C1E24D12300811187 /* Old UI */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Old UI";
-			sourceTree = "<group>";
-		};
 		531B34241E24D1C300811187 /* OBSlider */ = {
 			isa = PBXGroup;
 			children = (
@@ -1226,6 +1236,7 @@
 		531B346D1E24E55C00811187 /* Other Loaders */ = {
 			isa = PBXGroup;
 			children = (
+				531341431F6477B000B58C91 /* VideoLoader.swift */,
 				531B33241E24CF8B00811187 /* StatusLoader.swift */,
 				53C23BD81E5F222A00DA1281 /* RecursiveSongLoader.swift */,
 			);
@@ -1395,6 +1406,7 @@
 		5358E1CC1E0B78F80024A0D4 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
+				53A179AC1F65F72E00B46251 /* Swifter.framework */,
 				53B0FCE51E8EE1BD0084CEBF /* ObjcExceptionBridging.framework */,
 				5325CCC61E84700300F16C6B /* XCGLogger.framework */,
 				53368DD11E3F169500B7A199 /* Nuke.framework */,
@@ -1540,6 +1552,36 @@
 				530B960811E8ED33002EA08E /* settings-page@2x.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		53A1799A1F65EF6F00B46251 /* Video Streams */ = {
+			isa = PBXGroup;
+			children = (
+				53A1799B1F65EF8800B46251 /* Models */,
+				53A1799F1F65EF9800B46251 /* Server */,
+			);
+			path = "Video Streams";
+			sourceTree = "<group>";
+		};
+		53A1799B1F65EF8800B46251 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				53A1799C1F65EF8800B46251 /* HLSPlaylist.swift */,
+				53A1799E1F65EF8800B46251 /* HLSSegment.swift */,
+				53A1799D1F65EF8800B46251 /* HLSProxyError.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		53A1799F1F65EF9800B46251 /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				53A179A11F65EF9800B46251 /* HLSProxyServer.swift */,
+				53A179A31F65EF9800B46251 /* HLSSelfSignedCertDelegate.swift */,
+				53A179A01F65EF9800B46251 /* HLSPlaylistDownloader.swift */,
+				53A179A21F65EF9800B46251 /* HLSSegmentStreamer.swift */,
+			);
+			path = Server;
 			sourceTree = "<group>";
 		};
 		53C6050812F1EF98003C6895 /* Intro screen */ = {
@@ -1841,6 +1883,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ObjcExceptionBridging.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Pluralize.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Swifter.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
@@ -1870,6 +1913,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53A179A81F65F0D300B46251 /* HLSSegmentStreamer.swift in Sources */,
 				532B6FEC1E960A450010D81D /* NumberUtils.swift in Sources */,
 				531B33D91E24CFAF00811187 /* UIView.swift in Sources */,
 				53114E0B1E3B22A400D8589B /* ObjC.m in Sources */,
@@ -1952,6 +1996,7 @@
 				531B338A1E24CF8B00811187 /* AlbumLoader.swift in Sources */,
 				531B34071E24D0B600811187 /* PlayQueueViewController.swift in Sources */,
 				531B33881E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */,
+				531341441F6477B000B58C91 /* VideoLoader.swift in Sources */,
 				533B69D71E206031001FF3BF /* CollectionStackViewController.swift in Sources */,
 				531B33DB1E24CFAF00811187 /* URL.swift in Sources */,
 				53A232391E39CACA005214DD /* CGRect.swift in Sources */,
@@ -1988,6 +2033,7 @@
 				531B34091E24D0B600811187 /* PlayQueueViewModel.swift in Sources */,
 				53835CE01E0B7D6D0077B53D /* ZKCDTrailer64Locator.m in Sources */,
 				53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */,
+				53A179A61F65F0D300B46251 /* HLSSelfSignedCertDelegate.swift in Sources */,
 				531B33A81E24CF8B00811187 /* RootFoldersLoader.swift in Sources */,
 				531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */,
 				532B6FEE1E960A750010D81D /* Sorting.swift in Sources */,
@@ -2016,6 +2062,7 @@
 				531B33FB1E24D0B600811187 /* ItemViewModel.swift in Sources */,
 				53CFBB641E2AE18A005895F4 /* Album.swift in Sources */,
 				531B33761E24CF8B00811187 /* Server.swift in Sources */,
+				53A179AB1F65F0D500B46251 /* HLSProxyError.swift in Sources */,
 				531B346C1E24E51500811187 /* SelfReferencingOperationQueue.swift in Sources */,
 				531B33F71E24D0B600811187 /* ItemTableViewCell.swift in Sources */,
 				53835CF41E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
@@ -2028,6 +2075,7 @@
 				53808D341E7DE5F70063B6D9 /* AlbumViewController.swift in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				53808D311E7DE5DF0063B6D9 /* ArtistViewController.swift in Sources */,
+				53A179A51F65F0D300B46251 /* HLSProxyServer.swift in Sources */,
 				5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */,
 				5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
@@ -2042,6 +2090,7 @@
 				5355BFB71E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */,
 				531B338C1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
 				531B33721E24CF8B00811187 /* Playlist.swift in Sources */,
+				53A179AA1F65F0D500B46251 /* HLSSegment.swift in Sources */,
 				531B33FF1E24D0B600811187 /* CenterPanelContainerViewController.swift in Sources */,
 				531B344D1E24D24600811187 /* FMResultSet.m in Sources */,
 				53835CEA1E0B7D6D0077B53D /* ZKDefs.m in Sources */,
@@ -2049,6 +2098,7 @@
 				5355BFAB1E2D9EE000C6D27F /* PlaylistRepository.swift in Sources */,
 				531B340B1E24D0B600811187 /* SidePanelController.swift in Sources */,
 				53A418051E2C1DAE00671330 /* MediaFolderRepository.swift in Sources */,
+				53A179A91F65F0D500B46251 /* HLSPlaylist.swift in Sources */,
 				53FE31301F07C594003AA6A7 /* JGStepperTableCell.swift in Sources */,
 				539133551E29D53000B8A99E /* Data.swift in Sources */,
 				53CFBB6A1E2B0E2C005895F4 /* FMDatabasePoolAdditionsVariadic.swift in Sources */,
@@ -2057,6 +2107,7 @@
 				530C2D871E2C623000839B7A /* ServerRepository.swift in Sources */,
 				531B34281E24D1C300811187 /* OBSlider.m in Sources */,
 				53FE31311F07C594003AA6A7 /* JGSwitchTableCell.swift in Sources */,
+				53A179A71F65F0D300B46251 /* HLSPlaylistDownloader.swift in Sources */,
 				53D59A791E1DCDD700071ABD /* NSString+FileSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

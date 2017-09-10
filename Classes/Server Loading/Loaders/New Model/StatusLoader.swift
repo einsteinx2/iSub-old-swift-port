@@ -57,9 +57,7 @@ final class StatusLoader: ApiLoader {
                 }
             }
             return true
-        }
-        else
-        {
+        } else {
             // This is not a Subsonic server, so fail
             DispatchQueue.main.async {
                 self.failed(error: NSError(iSubCode: .notSubsonicServer))
