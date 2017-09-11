@@ -16,7 +16,7 @@ class RootServerItemViewModel: ServerItemViewModel {
     override func viewOptionsActionSheet() -> UIAlertController {
         let actionSheet = super.viewOptionsActionSheet()
         
-        if MediaFolderRepository.si.allMediaFolders().count > 1 {
+        if MediaFolderRepository.si.allMediaFolders(serverId: SavedSettings.si.currentServerId).count > 1 {
             actionSheet.addAction(UIAlertAction(title: "Choose Media Folder", style: .default) { action in
                 self.chooseMediaFolder()
             })
@@ -26,7 +26,7 @@ class RootServerItemViewModel: ServerItemViewModel {
     }
     
     fileprivate func chooseMediaFolder() {
-        let mediaFolders = MediaFolderRepository.si.allMediaFolders()
+        let mediaFolders = MediaFolderRepository.si.allMediaFolders(serverId: SavedSettings.si.currentServerId)
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "All", style: .default) { action in
             self.loadMediaFolder(nil)

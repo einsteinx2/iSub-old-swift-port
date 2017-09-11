@@ -20,7 +20,7 @@ struct MediaFolderRepository: ItemRepository {
         return gr.item(repository: self, itemId: mediaFolderId, serverId: serverId, loadSubItems: loadSubItems)
     }
     
-    func allMediaFolders(serverId: Int64? = nil, isCachedTable: Bool = false) -> [MediaFolder] {
+    func allMediaFolders(serverId: Int64?, isCachedTable: Bool = false) -> [MediaFolder] {
         return gr.allItems(repository: self, serverId: serverId, isCachedTable: isCachedTable)
     }
     
