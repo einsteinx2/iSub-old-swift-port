@@ -1278,8 +1278,8 @@
 		533B69CD1E206031001FF3BF /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				533B69CE1E206031001FF3BF /* Cell */,
 				533B69D01E206031001FF3BF /* CollectionStackViewController.swift */,
+				533B69CE1E206031001FF3BF /* Cell */,
 				533B69D11E206031001FF3BF /* FlowLayout */,
 			);
 			path = CollectionView;
