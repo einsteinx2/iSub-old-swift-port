@@ -293,7 +293,7 @@ final class PlayQueue {
             // Only start the caching process if it's been a half second after the last request
             // Prevents crash when skipping through playlist fast
             startSongDelayTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-            startSongDelayTimer!.scheduleOneshot(deadline: .now() + .milliseconds(600), leeway: .nanoseconds(0))
+            startSongDelayTimer!.schedule(deadline: .now() + .milliseconds(600))
             startSongDelayTimer!.setEventHandler {
                 self.startSongDelayed(byteOffset: byteOffset)
             }

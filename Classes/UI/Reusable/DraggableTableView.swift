@@ -330,7 +330,7 @@ class DraggableTableView: UITableView {
         
         if let cell = cell as? DraggableCell {
             longPressTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-            longPressTimer!.scheduleOneshot(deadline: .now() + .milliseconds(longPressDelay), leeway: .nanoseconds(0))
+            longPressTimer!.schedule(deadline: .now() + .milliseconds(longPressDelay))
             longPressTimer!.setEventHandler {
                 self.longPressFired(cell: cell, windowLocation: windowLocation)
             }
