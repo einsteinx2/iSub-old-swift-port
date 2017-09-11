@@ -129,31 +129,31 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
         }
         
         isInBackground = true
-        DispatchQueue.utility.async {
-            // TODO: Not allowed to access backgroundTimeRemaining from background threads anymore apparantly
-            while application.backgroundTimeRemaining > 1.0 && self.isInBackground {
-                // Sleep early is nothing is happening
-                if application.backgroundTimeRemaining < 200.0 && !CacheQueue.si.isDownloading {
-                    log.debug("sleeping early")
-                    application.endBackgroundTask(self.backgroundTask)
-                    self.backgroundTask = UIBackgroundTaskInvalid;
-                    break
-                }
-                
-                // Warn at 2 minute mark if cache queue is downloading
-                if application.backgroundTimeRemaining < 120.0 && CacheQueue.si.isDownloading {
-                    log.debug("warning 2 minutes left before forced sleep")
-                    let local = UILocalNotification()
-                    local.alertBody = "Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused."
-                    local.alertAction = "Open iSub"
-                    application.presentLocalNotificationNow(local)
-                    break
-                }
-                
-                // Sleep for a second to avoid a fast loop eating all cpu cycles
-                sleep(1);
-            }
-        }
+        // TODO: Not allowed to access backgroundTimeRemaining from background threads anymore apparantly
+//        DispatchQueue.utility.async {
+//            while application.backgroundTimeRemaining > 1.0 && self.isInBackground {
+//                // Sleep early is nothing is happening
+//                if application.backgroundTimeRemaining < 200.0 && !CacheQueue.si.isDownloading {
+//                    log.debug("sleeping early")
+//                    application.endBackgroundTask(self.backgroundTask)
+//                    self.backgroundTask = UIBackgroundTaskInvalid;
+//                    break
+//                }
+//
+//                // Warn at 2 minute mark if cache queue is downloading
+//                if application.backgroundTimeRemaining < 120.0 && CacheQueue.si.isDownloading {
+//                    log.debug("warning 2 minutes left before forced sleep")
+//                    let local = UILocalNotification()
+//                    local.alertBody = "Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused."
+//                    local.alertAction = "Open iSub"
+//                    application.presentLocalNotificationNow(local)
+//                    break
+//                }
+//
+//                // Sleep for a second to avoid a fast loop eating all cpu cycles
+//                sleep(1);
+//            }
+//        }
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
