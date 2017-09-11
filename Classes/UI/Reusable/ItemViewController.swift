@@ -267,6 +267,7 @@ class ItemViewController: DraggableTableViewController {
     
     fileprivate func dataSourceDidFinishLoadingNewData() {
         reloading = false
+        self.tableView.reloadData()
         self.refreshControl?.endRefreshing()
     }
     

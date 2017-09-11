@@ -124,12 +124,12 @@ class ItemViewModel: NSObject {
             loader.completionHandler = { success, error, loader in
                 completion?(success, error)
                 if success {
-                    self.delegate?.loadingFinished(viewModel: self)
-                    
                     // May have some false positives, but prevents UI pauses
                     if self.items.count != self.loader.items.count {
-                        self.processModels()
+                        self.processModels(notify: false)
                     }
+                    
+                    self.delegate?.loadingFinished(viewModel: self)
                 } else {
                     let errorString = error == nil ? "Unknown error" : error!.localizedDescription
                     self.delegate?.loadingError(errorString, viewModel: self)
@@ -225,7 +225,8 @@ class ItemViewModel: NSObject {
         sorted = sorted || sortAlbums(by: albumSortOrder, createIndexes: false, notify: false)
         sorted = sorted || sortSongs(by: songSortOrder, createIndexes: false, notify: false)
         
-        if sorted {
+        // TODO: Find a better solution than this folder count hack to decide when to create section indexes
+        if sorted || folders.count > 0 {
             createSectionIndexes()
             if notify {
                 delegate?.itemsChanged(viewModel: self)
