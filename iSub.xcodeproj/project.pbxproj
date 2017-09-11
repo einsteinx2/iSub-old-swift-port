@@ -131,17 +131,6 @@
 		5355BFB71E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5355BFB51E2DBC9B00C6D27F /* PlaylistLoader.swift */; };
 		5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */; };
 		5358DBE01E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DBD81E0B780E0024A0D4 /* UIViewController+JASidePanel.m */; };
-		5358DF711E0B789A0024A0D4 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDFC1E0B78990024A0D4 /* CLIColor.m */; };
-		5358DF761E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358DDFE1E0B78990024A0D4 /* CocoaLumberjack.swift */; };
-		5358DF7B1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DE001E0B78990024A0D4 /* DDAbstractDatabaseLogger.m */; };
-		5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DE021E0B78990024A0D4 /* DDASLLogCapture.m */; };
-		5358DF851E0B789A0024A0D4 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DE041E0B78990024A0D4 /* DDASLLogger.m */; };
-		5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DE071E0B78990024A0D4 /* DDFileLogger.m */; };
-		5358DF8F1E0B789A0024A0D4 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DE0B1E0B78990024A0D4 /* DDLog.m */; };
-		5358DF941E0B789A0024A0D4 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DE0E1E0B78990024A0D4 /* DDTTYLogger.m */; };
-		5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DE111E0B78990024A0D4 /* DDContextFilterLogFormatter.m */; };
-		5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DE131E0B78990024A0D4 /* DDDispatchQueueLogFormatter.m */; };
-		5358DFA31E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5358DE151E0B78990024A0D4 /* DDMultiFormatter.m */; };
 		5358E1921E0B789B0024A0D4 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5358DEF81E0B78990024A0D4 /* libbass.a */; };
 		5358E1971E0B789B0024A0D4 /* libbass_ape.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5358DEF91E0B78990024A0D4 /* libbass_ape.a */; };
 		5358E19C1E0B789B0024A0D4 /* libbass_fx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5358DEFA1E0B78990024A0D4 /* libbass_fx.a */; };
@@ -501,32 +490,6 @@
 		5358DBD61E0B780E0024A0D4 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JASidePanelController.m; sourceTree = "<group>"; };
 		5358DBD71E0B780E0024A0D4 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
 		5358DBD81E0B780E0024A0D4 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
-		5358DDFB1E0B78990024A0D4 /* CLIColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLIColor.h; sourceTree = "<group>"; };
-		5358DDFC1E0B78990024A0D4 /* CLIColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLIColor.m; sourceTree = "<group>"; };
-		5358DDFD1E0B78990024A0D4 /* CocoaLumberjack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaLumberjack.h; sourceTree = "<group>"; };
-		5358DDFE1E0B78990024A0D4 /* CocoaLumberjack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CocoaLumberjack.swift; sourceTree = "<group>"; };
-		5358DDFF1E0B78990024A0D4 /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
-		5358DE001E0B78990024A0D4 /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
-		5358DE011E0B78990024A0D4 /* DDASLLogCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogCapture.h; sourceTree = "<group>"; };
-		5358DE021E0B78990024A0D4 /* DDASLLogCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogCapture.m; sourceTree = "<group>"; };
-		5358DE031E0B78990024A0D4 /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
-		5358DE041E0B78990024A0D4 /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
-		5358DE051E0B78990024A0D4 /* DDAssertMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAssertMacros.h; sourceTree = "<group>"; };
-		5358DE061E0B78990024A0D4 /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
-		5358DE071E0B78990024A0D4 /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
-		5358DE081E0B78990024A0D4 /* DDLegacyMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLegacyMacros.h; sourceTree = "<group>"; };
-		5358DE091E0B78990024A0D4 /* DDLog+LOGV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDLog+LOGV.h"; sourceTree = "<group>"; };
-		5358DE0A1E0B78990024A0D4 /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
-		5358DE0B1E0B78990024A0D4 /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
-		5358DE0C1E0B78990024A0D4 /* DDLogMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLogMacros.h; sourceTree = "<group>"; };
-		5358DE0D1E0B78990024A0D4 /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
-		5358DE0E1E0B78990024A0D4 /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
-		5358DE101E0B78990024A0D4 /* DDContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDContextFilterLogFormatter.h; sourceTree = "<group>"; };
-		5358DE111E0B78990024A0D4 /* DDContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDContextFilterLogFormatter.m; sourceTree = "<group>"; };
-		5358DE121E0B78990024A0D4 /* DDDispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDDispatchQueueLogFormatter.h; sourceTree = "<group>"; };
-		5358DE131E0B78990024A0D4 /* DDDispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDDispatchQueueLogFormatter.m; sourceTree = "<group>"; };
-		5358DE141E0B78990024A0D4 /* DDMultiFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMultiFormatter.h; sourceTree = "<group>"; };
-		5358DE151E0B78990024A0D4 /* DDMultiFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMultiFormatter.m; sourceTree = "<group>"; };
 		5358DEEE1E0B78990024A0D4 /* bass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bass.h; sourceTree = "<group>"; };
 		5358DEEF1E0B78990024A0D4 /* bass_ape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bass_ape.h; sourceTree = "<group>"; };
 		5358DEF01E0B78990024A0D4 /* bass_fx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bass_fx.h; sourceTree = "<group>"; };
@@ -580,6 +543,8 @@
 		536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "entitlements-simulator.plist"; sourceTree = "<group>"; };
 		5377D6451E3A8221003BFFB9 /* NetworkIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkIndicator.swift; path = ../../Frameworks/EX2Kit/NetworkIndicator.swift; sourceTree = "<group>"; };
 		5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RingBuffer.swift; path = ../../Frameworks/EX2Kit/RingBuffer.swift; sourceTree = "<group>"; };
+		537D97891F6621B20065BB14 /* CocoaLumberjackSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjackSwift.framework; path = Carthage/Build/iOS/CocoaLumberjackSwift.framework; sourceTree = "<group>"; };
+		537D978A1F6621B30065BB14 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjack.framework; path = Carthage/Build/iOS/CocoaLumberjack.framework; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassGaplessPlayer.swift; path = "Bass Wrapper/BassGaplessPlayer.swift"; sourceTree = "<group>"; };
 		537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
@@ -888,7 +853,6 @@
 				53FE31251F07C594003AA6A7 /* JGSettingsManager */,
 				531B34311E24D24600811187 /* FMDB */,
 				53835C6E1E0B7D6D0077B53D /* ZipKit */,
-				5358DDF91E0B78990024A0D4 /* CocoaLumberjack */,
 				5358DEED1E0B78990024A0D4 /* libBASS */,
 				5358DF031E0B78990024A0D4 /* RaptureXML */,
 				5358DBD41E0B780E0024A0D4 /* JASidePanels */,
@@ -1313,56 +1277,6 @@
 			path = Frameworks/JASidePanels;
 			sourceTree = "<group>";
 		};
-		5358DDF91E0B78990024A0D4 /* CocoaLumberjack */ = {
-			isa = PBXGroup;
-			children = (
-				5358DDFA1E0B78990024A0D4 /* CLI */,
-				5358DDFD1E0B78990024A0D4 /* CocoaLumberjack.h */,
-				5358DDFE1E0B78990024A0D4 /* CocoaLumberjack.swift */,
-				5358DDFF1E0B78990024A0D4 /* DDAbstractDatabaseLogger.h */,
-				5358DE001E0B78990024A0D4 /* DDAbstractDatabaseLogger.m */,
-				5358DE011E0B78990024A0D4 /* DDASLLogCapture.h */,
-				5358DE021E0B78990024A0D4 /* DDASLLogCapture.m */,
-				5358DE031E0B78990024A0D4 /* DDASLLogger.h */,
-				5358DE041E0B78990024A0D4 /* DDASLLogger.m */,
-				5358DE051E0B78990024A0D4 /* DDAssertMacros.h */,
-				5358DE061E0B78990024A0D4 /* DDFileLogger.h */,
-				5358DE071E0B78990024A0D4 /* DDFileLogger.m */,
-				5358DE081E0B78990024A0D4 /* DDLegacyMacros.h */,
-				5358DE091E0B78990024A0D4 /* DDLog+LOGV.h */,
-				5358DE0A1E0B78990024A0D4 /* DDLog.h */,
-				5358DE0B1E0B78990024A0D4 /* DDLog.m */,
-				5358DE0C1E0B78990024A0D4 /* DDLogMacros.h */,
-				5358DE0D1E0B78990024A0D4 /* DDTTYLogger.h */,
-				5358DE0E1E0B78990024A0D4 /* DDTTYLogger.m */,
-				5358DE0F1E0B78990024A0D4 /* Extensions */,
-			);
-			name = CocoaLumberjack;
-			path = Frameworks/CocoaLumberjack;
-			sourceTree = "<group>";
-		};
-		5358DDFA1E0B78990024A0D4 /* CLI */ = {
-			isa = PBXGroup;
-			children = (
-				5358DDFB1E0B78990024A0D4 /* CLIColor.h */,
-				5358DDFC1E0B78990024A0D4 /* CLIColor.m */,
-			);
-			path = CLI;
-			sourceTree = "<group>";
-		};
-		5358DE0F1E0B78990024A0D4 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				5358DE101E0B78990024A0D4 /* DDContextFilterLogFormatter.h */,
-				5358DE111E0B78990024A0D4 /* DDContextFilterLogFormatter.m */,
-				5358DE121E0B78990024A0D4 /* DDDispatchQueueLogFormatter.h */,
-				5358DE131E0B78990024A0D4 /* DDDispatchQueueLogFormatter.m */,
-				5358DE141E0B78990024A0D4 /* DDMultiFormatter.h */,
-				5358DE151E0B78990024A0D4 /* DDMultiFormatter.m */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		5358DEED1E0B78990024A0D4 /* libBASS */ = {
 			isa = PBXGroup;
 			children = (
@@ -1406,6 +1320,8 @@
 		5358E1CC1E0B78F80024A0D4 /* Carthage */ = {
 			isa = PBXGroup;
 			children = (
+				537D978A1F6621B30065BB14 /* CocoaLumberjack.framework */,
+				537D97891F6621B20065BB14 /* CocoaLumberjackSwift.framework */,
 				53A179AC1F65F72E00B46251 /* Swifter.framework */,
 				53B0FCE51E8EE1BD0084CEBF /* ObjcExceptionBridging.framework */,
 				5325CCC61E84700300F16C6B /* XCGLogger.framework */,
@@ -1884,6 +1800,8 @@
 				"$(SRCROOT)/Carthage/Build/iOS/ObjcExceptionBridging.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Pluralize.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Swifter.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjack.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjackSwift.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
@@ -1948,14 +1866,12 @@
 				531B34451E24D24600811187 /* FMDatabaseAdditions.m in Sources */,
 				5377D64A1E3A84CC003BFFB9 /* RingBuffer.swift in Sources */,
 				53835CDB1E0B7D6D0077B53D /* ZKCDTrailer64.m in Sources */,
-				5358DF7B1E0B789A0024A0D4 /* DDAbstractDatabaseLogger.m in Sources */,
 				53114E061E3B0BE200D8589B /* MBFingerTipWindow.m in Sources */,
 				537FB3001E33EEC1001D3FBB /* Visualizer.swift in Sources */,
 				53CFBB761E2B1E3B005895F4 /* Folder.swift in Sources */,
 				531B34491E24D24600811187 /* FMDatabaseQueue.m in Sources */,
 				53C23BDA1E5F222A00DA1281 /* RecursiveSongLoader.swift in Sources */,
 				531B339E1E24CF8B00811187 /* FolderLoader.swift in Sources */,
-				5358DF851E0B789A0024A0D4 /* DDASLLogger.m in Sources */,
 				53FD71E61E36E73600460B44 /* Equalizer.swift in Sources */,
 				53114DFF1E3B06D800D8589B /* String+HTMLEntities.swift in Sources */,
 				531B33F91E24D0B600811187 /* ItemViewController.swift in Sources */,
@@ -1976,18 +1892,15 @@
 				53FE312D1F07C594003AA6A7 /* JGSettingsTableController.swift in Sources */,
 				531B344F1E24D24600811187 /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */,
-				5358DF8A1E0B789A0024A0D4 /* DDFileLogger.m in Sources */,
 				537FB2F61E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */,
 				531B34031E24D0B600811187 /* MiniPlayerViewController.swift in Sources */,
 				531B34471E24D24600811187 /* FMDatabasePool.m in Sources */,
 				539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */,
 				5377D6471E3A8226003BFFB9 /* NetworkIndicator.swift in Sources */,
 				531B33D71E24CFAF00811187 /* UITraitEnvironment.swift in Sources */,
-				5358DF761E0B789A0024A0D4 /* CocoaLumberjack.swift in Sources */,
 				531B33A41E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
 				532E76151F08E02300118AE3 /* IntroViewController.swift in Sources */,
 				53808D3D1E7DEAD20063B6D9 /* ServerItemViewModel.swift in Sources */,
-				5358DF991E0B789A0024A0D4 /* DDContextFilterLogFormatter.m in Sources */,
 				53FE31321F07C594003AA6A7 /* JGTextTableCell.swift in Sources */,
 				530D5A111E2C044700C9ED43 /* SongRepository.swift in Sources */,
 				531B33901E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
@@ -2014,9 +1927,7 @@
 				531B33EF1E24D0B600811187 /* CachedImageView.swift in Sources */,
 				53835CE51E0B7D6D0077B53D /* ZKDataArchive.m in Sources */,
 				53835CD11E0B7D6D0077B53D /* ZKCDHeader.m in Sources */,
-				5358DF941E0B789A0024A0D4 /* DDTTYLogger.m in Sources */,
 				531B34551E24D28D00811187 /* FMDatabasePoolAdditions.m in Sources */,
-				5358DF711E0B789A0024A0D4 /* CLIColor.m in Sources */,
 				531B34511E24D24600811187 /* FMDatabaseVariadic.swift in Sources */,
 				53835CB31E0B7D6D0077B53D /* NSDictionary+ZKAdditions.m in Sources */,
 				531B339C1E24CF8B00811187 /* CachedRootSongsLoader.swift in Sources */,
@@ -2027,7 +1938,6 @@
 				53200C971E7F777700426A48 /* ItemTableHeaderView.swift in Sources */,
 				531B341F1E24D12300811187 /* ServerListViewController.swift in Sources */,
 				53835CAE1E0B7D6D0077B53D /* NSDate+ZKAdditions.m in Sources */,
-				5358DFA31E0B789A0024A0D4 /* DDMultiFormatter.m in Sources */,
 				53D59A671E1DC85300071ABD /* NSURL+QueryParameterDictionary.m in Sources */,
 				531B33921E24CF8B00811187 /* CachedDatabaseLoader.swift in Sources */,
 				531B34091E24D0B600811187 /* PlayQueueViewModel.swift in Sources */,
@@ -2067,7 +1977,6 @@
 				531B33F71E24D0B600811187 /* ItemTableViewCell.swift in Sources */,
 				53835CF41E0B7D6D0077B53D /* ZKLFHeader.m in Sources */,
 				53E0428A1E36C49C0009DE79 /* DispatchQueue.swift in Sources */,
-				5358DF8F1E0B789A0024A0D4 /* DDLog.m in Sources */,
 				53A232361E39944C005214DD /* BassPluginLoad.c in Sources */,
 				53835CD61E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
@@ -2076,9 +1985,7 @@
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				53808D311E7DE5DF0063B6D9 /* ArtistViewController.swift in Sources */,
 				53A179A51F65F0D300B46251 /* HLSProxyServer.swift in Sources */,
-				5358DF9E1E0B789A0024A0D4 /* DDDispatchQueueLogFormatter.m in Sources */,
 				53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */,
-				5358DF801E0B789A0024A0D4 /* DDASLLogCapture.m in Sources */,
 				531B34661E24D3D500811187 /* Defines.swift in Sources */,
 				53808D431E7DF2D80063B6D9 /* RootServerItemViewModel.swift in Sources */,
 				53114DFB1E3B06D800D8589B /* Constants.swift in Sources */,

@@ -8,6 +8,7 @@
 
 import UIKit
 import Reachability
+import CocoaLumberjackSwift
 
 final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelegate, BITCrashManagerDelegate {
     struct Notifications {
@@ -56,13 +57,16 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
         
         #if DebugBuild
             // Console logging only for Xcode builds
-            DDTTYLogger.sharedInstance().colorsEnabled = true
-            DDLog.add(DDTTYLogger.sharedInstance())
+            DDTTYLogger.sharedInstance.colorsEnabled = true
+            DDLog.add(DDTTYLogger.sharedInstance)
         #endif
-        let fileLogger = DDFileLogger()
-        fileLogger?.rollingFrequency = 60.0 * 60.0 * 24.0; // 24 hour rolling
-        fileLogger?.logFileManager.maximumNumberOfLogFiles = 7
-        DDLog.add(fileLogger)
+        if let fileLogger = DDFileLogger() {
+            fileLogger.rollingFrequency = 60.0 * 60.0 * 24.0; // 24 hour rolling
+            fileLogger.logFileManager.maximumNumberOfLogFiles = 7
+            DDLog.add(fileLogger)
+        } else {
+            print("Error creating file logger")
+        }
         
         // Setup network reachability notifications
         networkStatus.startMonitoring()

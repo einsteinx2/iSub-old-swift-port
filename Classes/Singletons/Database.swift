@@ -183,5 +183,12 @@ final class Database {
     
     func resetFolderCache() {
         // TODO: Reimplement this joining the song and playlist tables to leave only records belonging to the downloaded songs
+        write.inDatabase { db in
+            try? db.executeUpdate("DELETE FROM folders")
+            try? db.executeUpdate("DELETE FROM artists")
+            try? db.executeUpdate("DELETE FROM albums")
+            try? db.executeUpdate("DELETE FROM songs")
+            try? db.executeUpdate("DELETE FROM genres")
+        }
     }
 }

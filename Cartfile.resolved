@@ -1,3 +1,4 @@
+github "CocoaLumberjack/CocoaLumberjack" "3.2.1"
 github "DaveWoodCom/XCGLogger" "5.0.1"
 github "aschuch/AwesomeCache" "5.0"
 github "ashleymills/Reachability.swift" "b93dd945e79ea32c48b668cbd0512785c71805f9"
