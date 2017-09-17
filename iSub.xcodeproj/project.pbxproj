@@ -190,6 +190,8 @@
 		53835CF41E0B7D6D0077B53D /* ZKLFHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C951E0B7D6D0077B53D /* ZKLFHeader.m */; };
 		53835CF91E0B7D6D0077B53D /* ZKLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C971E0B7D6D0077B53D /* ZKLog.m */; };
 		538725F217CC19B200CE92F1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538725F117CC19B200CE92F1 /* CoreTelephony.framework */; };
+		5388778B1F6EECF30069C85F /* IgnoredArticlesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5388778A1F6EECF30069C85F /* IgnoredArticlesRepository.swift */; };
+		5388778D1F6EEDCD0069C85F /* IgnoredArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5388778C1F6EEDCD0069C85F /* IgnoredArticle.swift */; };
 		539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */; };
 		539133551E29D53000B8A99E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133531E29D53000B8A99E /* Data.swift */; };
 		539A69171F6EC871004C514D /* Bass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539A69161F6EC871004C514D /* Bass.swift */; };
@@ -601,6 +603,8 @@
 		53835C961E0B7D6D0077B53D /* ZKLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKLog.h; sourceTree = "<group>"; };
 		53835C971E0B7D6D0077B53D /* ZKLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKLog.m; sourceTree = "<group>"; };
 		538725F117CC19B200CE92F1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		5388778A1F6EECF30069C85F /* IgnoredArticlesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IgnoredArticlesRepository.swift; sourceTree = "<group>"; };
+		5388778C1F6EEDCD0069C85F /* IgnoredArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IgnoredArticle.swift; sourceTree = "<group>"; };
 		5388A42A1198AD840049BA9E /* selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selected.png; path = Images/Other/selected.png; sourceTree = "<group>"; };
 		5388A42B1198AD840049BA9E /* unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unselected.png; path = Images/Other/unselected.png; sourceTree = "<group>"; };
 		538C01AE12C3DCC40061545B /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Images/Other/back.png; sourceTree = "<group>"; };
@@ -1559,6 +1563,7 @@
 				531B32FB1E24CF8A00811187 /* Playlist.swift */,
 				531B32FD1E24CF8A00811187 /* Server.swift */,
 				53200C921E7F605900426A48 /* SortOrder.swift */,
+				5388778C1F6EEDCD0069C85F /* IgnoredArticle.swift */,
 			);
 			name = "Item Models";
 			sourceTree = "<group>";
@@ -1590,6 +1595,7 @@
 				53CFBB801E2B3075005895F4 /* GenreRepository.swift */,
 				5355BFA91E2D9EE000C6D27F /* PlaylistRepository.swift */,
 				530C2D851E2C623000839B7A /* ServerRepository.swift */,
+				5388778A1F6EECF30069C85F /* IgnoredArticlesRepository.swift */,
 			);
 			name = Repositories;
 			sourceTree = "<group>";
@@ -1855,6 +1861,7 @@
 				53609CD31E883F49005C26D0 /* VisualizerView.swift in Sources */,
 				53F107A71E2AD144003B7D59 /* Item.swift in Sources */,
 				530F04AA1E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
+				5388778B1F6EECF30069C85F /* IgnoredArticlesRepository.swift in Sources */,
 				532E76131F08C47600118AE3 /* JGSliderTableCell.swift in Sources */,
 				530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				53A418021E2C1D8500671330 /* MediaFolder.swift in Sources */,
@@ -1864,6 +1871,7 @@
 				531B33F31E24D0B600811187 /* DraggableTableViewController.swift in Sources */,
 				539A69191F6ED5C0004C514D /* BassStreamController.swift in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
+				5388778D1F6EEDCD0069C85F /* IgnoredArticle.swift in Sources */,
 				530D5A141E2C047500C9ED43 /* Song.swift in Sources */,
 				534FACEF1E328D3200BF12D9 /* BassStream.swift in Sources */,
 				53D959151E2C7A7700A1667F /* Database.swift in Sources */,

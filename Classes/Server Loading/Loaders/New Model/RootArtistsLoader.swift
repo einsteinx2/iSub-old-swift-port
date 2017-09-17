@@ -55,9 +55,11 @@ final class RootArtistsLoader: ApiLoader, RootItemLoader {
         // Remove existing artists
         // TODO: Should only delete artists not in artists array, same for other loaders
         ArtistRepository.si.deleteAllArtists(serverId: serverId)
+        IgnoredArticleRepository.si.deleteAllArticles(serverId: serverId)
         
         // Save the new artists
         artists.forEach({$0.replace()})
+        ignoredArticles.forEach({IgnoredArticleRepository.si.insert(serverId: serverId, name: $0)})
     }
     
     @discardableResult func loadModelsFromDatabase() -> Bool {

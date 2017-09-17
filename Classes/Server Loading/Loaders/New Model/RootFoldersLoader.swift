@@ -62,13 +62,15 @@ final class RootFoldersLoader: ApiLoader, RootItemLoader {
     
     func persistModels() {
         // TODO: Only delete missing ones
-        // Remove existing root folders
+        // Remove existing root folders and articles
         FolderRepository.si.deleteRootFolders(mediaFolderId: mediaFolderId, serverId: serverId)
         SongRepository.si.deleteRootSongs(mediaFolderId: mediaFolderId, serverId: serverId)
+        IgnoredArticleRepository.si.deleteAllArticles(serverId: serverId)
         
         // Save the new folders and songs
         folders.forEach({$0.replace()})
         songs.forEach({$0.replace()})
+        ignoredArticles.forEach({IgnoredArticleRepository.si.insert(serverId: serverId, name: $0)})
     }
     
     @discardableResult func loadModelsFromDatabase() -> Bool {
