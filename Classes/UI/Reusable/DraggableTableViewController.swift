@@ -86,7 +86,7 @@ class DraggableTableViewController: UITableViewController {
         self.tableView.tableHeaderView = header
         header.setNeedsLayout()
         header.layoutIfNeeded()
-        header.frame.size.height = header.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        header.frame.size = header.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
         self.tableView.tableHeaderView = header
     }
     
