@@ -142,6 +142,7 @@ class ItemViewController: DraggableTableViewController, UISearchBarDelegate {
         let filterBar = UISearchBar()
         filterBar.delegate = self
         filterBar.placeholder = "Filter"
+        filterBar.showsCancelButton = true
         headerView.addSubview(filterBar)
         filterBar.snp.makeConstraints { make in
             make.width.equalToSuperview()
@@ -307,6 +308,11 @@ class ItemViewController: DraggableTableViewController, UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         viewModel.clearFilter()
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
     
     // MARK: - Table View -
