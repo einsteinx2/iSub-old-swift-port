@@ -8,6 +8,6 @@
 
 import Foundation
 
-class FolderViewController: ItemViewController {
+final class FolderViewController: ItemViewController {
 
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RootServerItemViewModel: ServerItemViewModel {
+final class RootServerItemViewModel: ServerItemViewModel {
     override var isTopLevelController: Bool {
         return true
     }

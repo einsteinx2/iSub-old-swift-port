@@ -8,6 +8,6 @@
 
 import Foundation
 
-class AlbumViewController: ItemViewController {
+final class AlbumViewController: ItemViewController {
     
 }

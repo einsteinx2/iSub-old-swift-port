@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CachedItemViewModel: ItemViewModel {
+final class CachedItemViewModel: ItemViewModel {
     override func cellActionSheet(forItem item: Item, indexPath: IndexPath) -> UIAlertController {
         let actionSheet = super.cellActionSheet(forItem: item, indexPath: indexPath)
         
