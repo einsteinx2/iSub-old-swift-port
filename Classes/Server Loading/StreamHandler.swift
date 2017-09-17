@@ -31,6 +31,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
     
     fileprivate var session: URLSession?
     fileprivate var task: URLSessionDataTask?
+    fileprivate var request: URLRequest?
     
     var allowReconnects = false
     var numberOfReconnects = 0
@@ -131,7 +132,9 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             parameters["maxBitRate"] = "\(maxBitRateSetting)"
         }
         
-        if let request = URLRequest(subsonicAction: .stream, serverId: song.serverId, parameters: parameters) {
+        log.debug("Creating request for song: \(song.title) serverId: \(song.serverId) parameters: \(parameters)")
+        request = URLRequest(subsonicAction: .stream, serverId: song.serverId, parameters: parameters)
+        if let request = request {
             session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
             task = session?.dataTask(with: request)
             task?.resume()
@@ -179,6 +182,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             song.isPartiallyCached = true
         }
         
+        // NOTE: Subsonic apparantly no longer returns content length headers...
         contentLength = response.expectedContentLength
         
         delegate?.streamHandlerStarted(self)
@@ -232,6 +236,10 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             let userInfo = [Notifications.Keys.song: song]
             NotificationCenter.postOnMainThread(name: Notifications.failed, userInfo: userInfo)
         } else {
+            if song.localFileSize == 209 {
+                log.debug("StreamHandler: \(self) file size is 209 for: \(song.title) request: \(request)")
+            }
+            
             if contentLength > 0 && song.localFileSize < contentLength {
                 log.debug("StreamHandler: \(self) failed for: \(song.title)")
                 
@@ -240,7 +248,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
                 NotificationCenter.postOnMainThread(name: Notifications.failed, userInfo: userInfo)
                 delegate?.streamHandlerConnectionFailed(self, withError: nil)
             } else {
-                log.debug("StreamHandler: \(self) was successful for: \(song.title)")
+                log.debug("StreamHandler: \(self) was successful for: \(song.title) localSize: \(song.localFileSize) contentLength: \(contentLength)")
                 
                 if !isReadyForPlayback {
                     isReadyForPlayback = true

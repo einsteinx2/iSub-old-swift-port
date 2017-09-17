@@ -22,7 +22,6 @@ final class BassStream: Equatable {
     var shouldBreakWaitLoopForever = false
     var neededSize = Int64.max
     var isWaiting = false
-    
 
     var isSongStarted = false
     var isFileUnderrun = false
@@ -35,11 +34,6 @@ final class BassStream: Equatable {
     var bufferSpaceTilSongEnd = 0
     
     var isNextSongStreamFailed = false
-    
-    var localFileSize: Int64 {
-        let attributes = try? FileManager.default.attributesOfItem(atPath: writePath)
-        return attributes?[.size] as? Int64 ?? 0
-    }
     
     init?(song: Song) {
         self.song = song

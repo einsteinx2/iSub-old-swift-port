@@ -467,7 +467,7 @@ final class GaplessPlayer {
                                                 autoreleasepool {
                                                     totalSleepTime = 0
                                                     
-                                                    if bassStream.localFileSize >= bassStream.neededSize {
+                                                    if bassStream.song.localFileSize >= bassStream.neededSize {
                                                         // If enough of the file has downloaded, break the loop
                                                         return
                                                     } else if bassStream.song.isTempCached && bassStream.song != StreamQueue.si.song {
@@ -693,7 +693,8 @@ final class GaplessPlayer {
                     // If the song is downloading and it already informed the player to play (i.e. the playlist will stop if we don't force a retry), then retry
                     log.debug("song is ready for playback, asynchronously calling startSong")
                     DispatchQueue.main.async {
-                        self.start(song: song)
+                        self.prepareNextStream()
+                        //self.start(song: song)
                         //PlayQueue.si.startSong()
                     }
                 }
@@ -848,24 +849,23 @@ fileprivate func lengthProc(userInfo: UnsafeMutableRawPointer?) -> UInt64 {
     guard let userInfo = userInfo else {
         return 0
     }
-    
+
     var length: Int64 = 0
     autoreleasepool {
         let bassStream: BassStream = bridge(ptr: userInfo)
-        if bassStream.shouldBreakWaitLoopForever {
-            // m: Why do we return 0 here?
-            length = 0
-        } else if bassStream.song.isFullyCached || bassStream.isTempCached {
+        if bassStream.song.isFullyCached || bassStream.isTempCached {
             // Return actual file size on disk
+            log.debug("using song.localFileSize")
             length = bassStream.song.localFileSize
         } else {
             // Return server reported file size
+            log.debug("using bassStream.song.size")
             length = bassStream.song.size
         }
-        
-        log.debug("close proc called for: \(bassStream.song.title) len: \(length)")
+
+        log.debug("length proc called for: \(bassStream.song.title) len: \(length)")
     }
-    
+
     return UInt64(length)
 }
 
@@ -886,7 +886,8 @@ fileprivate func readProc(buffer: UnsafeMutableRawPointer?, length: UInt32, user
                 readData = bassStream.fileHandle.readData(ofLength: Int(length))
             }
         } catch {
-            printError(error)
+            // NOTE: Turned this off for now as it's giving NSFileHandleOperationException logs during normal operation
+            //printError(error)
         }
         
         bytesRead = UInt32(readData.count)
