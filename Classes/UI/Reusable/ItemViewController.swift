@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Pluralize
 
-class ItemViewController: DraggableTableViewController {
+class ItemViewController: DraggableTableViewController, UISearchBarDelegate {
     
     // MARK: - Constants -
     
@@ -121,16 +121,39 @@ class ItemViewController: DraggableTableViewController {
         self.present(actionSheet, animated: true, completion: nil)
     }
     
-    override func setupHeaderView() -> UIView? {
+    override func setupHeaderView(width: CGFloat) -> UIView? {
+        let headerView = UIView()
+        
+        var itemHeaderView: ItemTableHeaderView? = nil
         if let rootItem = viewModel.rootItem {
-            let itemHeaderView = ItemTableHeaderView()
-            itemHeaderView.associatedItem = rootItem
-            itemHeaderView.coverArtId = rootItem.coverArtId
-            itemHeaderView.title = rootItem.itemName
-            itemHeaderView.subTitle = headerSubtitle(item: rootItem)
-            return itemHeaderView
+            itemHeaderView = ItemTableHeaderView(width: width)
+            itemHeaderView!.associatedItem = rootItem
+            itemHeaderView!.coverArtId = rootItem.coverArtId
+            itemHeaderView!.title = rootItem.itemName
+            itemHeaderView!.subTitle = headerSubtitle(item: rootItem)
+            headerView.addSubview(itemHeaderView!)
+            itemHeaderView!.snp.makeConstraints { make in
+                make.top.equalToSuperview()
+                make.left.equalToSuperview()
+                make.right.equalToSuperview()
+            }
         }
-        return nil
+        
+        let filterBar = UISearchBar()
+        filterBar.delegate = self
+        filterBar.placeholder = "Filter"
+        headerView.addSubview(filterBar)
+        filterBar.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            if let itemHeaderView = itemHeaderView {
+                make.top.equalTo(itemHeaderView.snp.bottom)
+            } else {
+                make.top.equalToSuperview()
+            }
+            make.bottom.equalToSuperview()
+        }
+        
+        return headerView
     }
     
     fileprivate func headerSubtitle(item: Item) -> String? {
@@ -276,11 +299,19 @@ class ItemViewController: DraggableTableViewController {
         dataSourceDidFinishLoadingNewData()
     }
     
+    // MARK: - Filtering -
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.filterModels(filterString: searchText)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        viewModel.clearFilter()
+    }
+    
     // MARK: - Table View -
     
     override func customizeTableView(_ tableView: UITableView) {
-        tableView.tableHeaderView = setupHeaderView()
-        
         doubleTapRecognizer.addTarget(self, action: #selector(doubleTap(_:)))
         doubleTapRecognizer.numberOfTapsRequired = 2
         doubleTapRecognizer.numberOfTouchesRequired = 1
@@ -300,7 +331,7 @@ class ItemViewController: DraggableTableViewController {
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        guard viewModel.sectionIndexes.count > 0 else {
+        guard !viewModel.isFiltered && viewModel.sectionIndexes.count > 0 else {
             return nil
         }
         
@@ -324,12 +355,13 @@ class ItemViewController: DraggableTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let count: Int
         
+        let isFiltered = viewModel.isFiltered
         switch section {
-        case foldersSectionIndex:   count = viewModel.folders.count
-        case artistsSectionIndex:   count = viewModel.artists.count
-        case albumsSectionIndex:    count = viewModel.albums.count
-        case songsSectionIndex:     count = viewModel.songs.count
-        case playlistsSectionIndex: count = viewModel.playlists.count
+        case foldersSectionIndex:   count = isFiltered ? viewModel.filteredFolders.count   : viewModel.folders.count
+        case artistsSectionIndex:   count = isFiltered ? viewModel.filteredArtists.count   : viewModel.artists.count
+        case albumsSectionIndex:    count = isFiltered ? viewModel.filteredAlbums.count    : viewModel.albums.count
+        case songsSectionIndex:     count = isFiltered ? viewModel.filteredSongs.count     : viewModel.songs.count
+        case playlistsSectionIndex: count = isFiltered ? viewModel.filteredPlaylists.count : viewModel.playlists.count
         default: count = 0
         }
         
@@ -351,6 +383,8 @@ class ItemViewController: DraggableTableViewController {
         cell.cellHeight = self.tableView(tableView, heightForRowAt: indexPath)
         cell.indexShowing = (viewModel.sectionIndexes.count > 0)
 
+        let isFiltered = viewModel.isFiltered
+        let row = indexPath.row
         switch indexPath.section {
         case foldersSectionIndex:
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
@@ -360,7 +394,7 @@ class ItemViewController: DraggableTableViewController {
                 cell.alwaysShowCoverArt = true
             }
             
-            let folder = viewModel.folders[indexPath.row]
+            let folder = isFiltered ? viewModel.filteredFolders[row] : viewModel.folders[row]
             cell.associatedItem = folder
             cell.coverArtId = folder.coverArtId
             cell.title = folder.name
@@ -368,7 +402,7 @@ class ItemViewController: DraggableTableViewController {
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.alwaysShowCoverArt = true
             
-            let artist = viewModel.artists[indexPath.row]
+            let artist = isFiltered ? viewModel.filteredArtists[row] : viewModel.artists[row]
             cell.associatedItem = artist
             cell.coverArtId = artist.coverArtId
             cell.title = artist.name
@@ -379,7 +413,7 @@ class ItemViewController: DraggableTableViewController {
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.alwaysShowCoverArt = true
             
-            let album = viewModel.albums[indexPath.row]
+            let album = isFiltered ? viewModel.filteredAlbums[row] : viewModel.albums[row]
             cell.associatedItem = album
             cell.coverArtId = album.coverArtId
             cell.title = album.name
@@ -389,7 +423,7 @@ class ItemViewController: DraggableTableViewController {
             cell.accessoryType = UITableViewCellAccessoryType.none
             cell.alwaysShowSubtitle = true
             
-            let song = viewModel.songs[indexPath.row]
+            let song = isFiltered ? viewModel.filteredSongs[row] : viewModel.songs[row]
             cell.associatedItem = song
             cell.coverArtId = nil
             cell.title = song.title
@@ -401,7 +435,7 @@ class ItemViewController: DraggableTableViewController {
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.alwaysShowCoverArt = true
             
-            let playlist = viewModel.playlists[indexPath.row]
+            let playlist = isFiltered ? viewModel.filteredPlaylists[row] : viewModel.playlists[row]
             cell.associatedItem = playlist
             cell.coverArtId = playlist.coverArtId
             cell.title = playlist.name

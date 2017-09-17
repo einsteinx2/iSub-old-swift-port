@@ -10,6 +10,8 @@ import Foundation
 import SnapKit
 
 class ItemTableHeaderView: UIView {
+    let width: CGFloat
+    var height: CGFloat { return coverArtId == nil ? labelContainerHeight : width }
     let titleLabelHeight: CGFloat = 30
     let subTitleLabelHeight: CGFloat = 20
     let labelContainerHeight: CGFloat = 100
@@ -25,6 +27,10 @@ class ItemTableHeaderView: UIView {
                 coverArtView.loadImage(coverArtId: coverArtId, serverId: serverId, size: .player)
             } else {
                 coverArtView.setDefaultImage(forSize: .player)
+            }
+            
+            self.snp.makeConstraints { make in
+                make.height.equalTo(height)
             }
         }
     }
@@ -50,7 +56,13 @@ class ItemTableHeaderView: UIView {
     
     // MARK: - Lifecycle -
     
+    convenience init(width: CGFloat) {
+        self.init(frame: CGRect(x: 0, y: 0, width: width, height: width))
+        commonInit()
+    }
+    
     override init(frame: CGRect) {
+        self.width = frame.size.width
         super.init(frame: frame)
         commonInit()
     }
@@ -111,7 +123,7 @@ class ItemTableHeaderView: UIView {
                 coverArtView.frame = self.bounds
                 coverArtView.isHidden = false
             }
-            
+
             let labelOffset: CGFloat = 10
             if subTitle == nil {
                 titleLabel.frame = CGRect(x: labelOffset,

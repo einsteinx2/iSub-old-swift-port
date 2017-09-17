@@ -44,20 +44,32 @@ class DraggableTableViewController: UITableViewController {
         
         setupRefreshControl()
         
-        self.tableView.tableHeaderView = setupHeaderView()
+        customizeTableView(tableView)
+        
         // Keep the table rows from showing past the bottom
         if tableView.tableFooterView == nil {
             tableView.tableFooterView = UIView()
         }
-        customizeTableView(tableView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        if self.tableView.tableHeaderView == nil, let headerView = setupHeaderView(width: self.tableView.frame.size.width) {
+            setAndLayoutTableHeaderView(header: headerView)
+        }
+        
         self.view.backgroundColor = UIColor(white: 0.3, alpha: 1)
         self.navigationItem.leftBarButtonItem = setupLeftBarButton()
         self.navigationItem.rightBarButtonItem = setupRightBarButton()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        async(after: 0.5) {
+            self.tableView.tableHeaderView = self.tableView.tableHeaderView
+        }
     }
     
     deinit {
@@ -68,7 +80,17 @@ class DraggableTableViewController: UITableViewController {
     
     // MARK: Initial Setup
     
-    func setupHeaderView() -> UIView? {
+    // Set the tableHeaderView so that the required height can be determined, update the header's frame and set it again
+    // https://stackoverflow.com/a/28102175/299262
+    fileprivate func setAndLayoutTableHeaderView(header: UIView) {
+        self.tableView.tableHeaderView = header
+        header.setNeedsLayout()
+        header.layoutIfNeeded()
+        header.frame.size.height = header.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        self.tableView.tableHeaderView = header
+    }
+    
+    func setupHeaderView(width: CGFloat) -> UIView? {
         // Override to provide a custom header
         return nil
     }

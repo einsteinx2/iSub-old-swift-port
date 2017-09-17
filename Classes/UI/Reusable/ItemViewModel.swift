@@ -18,7 +18,7 @@ protocol ItemViewModelDelegate {
 
 typealias LoadModelsCompletion = (_ success: Bool, _ error: Error?) -> Void
 
-class ItemViewModel: NSObject {
+class ItemViewModel {
     
     // MARK: - Properties -
     
@@ -84,6 +84,15 @@ class ItemViewModel: NSObject {
     fileprivate(set) var albums = [Album]()
     fileprivate(set) var songs = [Song]()
     fileprivate(set) var playlists = [Playlist]()
+    
+    fileprivate(set) var isFiltered = false
+    
+    fileprivate(set) var filteredItems = [Item]()
+    fileprivate(set) var filteredFolders = [Folder]()
+    fileprivate(set) var filteredArtists = [Artist]()
+    fileprivate(set) var filteredAlbums = [Album]()
+    fileprivate(set) var filteredSongs = [Song]()
+    fileprivate(set) var filteredPlaylists = [Playlist]()
     
     fileprivate(set) var songsDuration = 0
     fileprivate(set) var sectionIndexes = [SectionIndex]()
@@ -174,6 +183,49 @@ class ItemViewModel: NSObject {
         songsDuration = duration
         
         sortAll(notify: notify)
+    }
+    
+    func filterModels(filterString: String, notify: Bool = true) {
+        guard filterString.length > 0 else {
+            clearFilter()
+            return
+        }
+        
+        clearFilter(notify: false)
+        isFiltered = true
+        
+        let lowercaseFilteredString = filterString.lowercased()
+        filteredItems = items.filter({$0.itemName.lowercased().contains(lowercaseFilteredString)})
+        
+        for item in filteredItems {
+            switch item {
+            case let item as Folder:   filteredFolders.append(item)
+            case let item as Artist:   filteredArtists.append(item)
+            case let item as Album:    filteredAlbums.append(item)
+            case let item as Song:     filteredSongs.append(item)
+            case let item as Playlist: filteredPlaylists.append(item)
+            default: assertionFailure("WHY YOU NO ITEM?")
+            }
+        }
+        
+        if notify {
+            delegate?.itemsChanged(viewModel: self)
+        }
+    }
+    
+    func clearFilter(notify: Bool = true) {
+        filteredItems = []
+        filteredFolders = []
+        filteredArtists = []
+        filteredAlbums = []
+        filteredSongs = []
+        filteredPlaylists = []
+        
+        isFiltered = false
+        
+        if notify {
+            delegate?.itemsChanged(viewModel: self)
+        }
     }
     
     fileprivate func createSectionIndexes() {
