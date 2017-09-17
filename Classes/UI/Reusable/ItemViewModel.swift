@@ -236,7 +236,9 @@ class ItemViewModel: NSObject {
     
     @discardableResult func sortArtists(by sortOrder: ArtistSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
         artistSortOrder = sortOrder
-        SavedSettings.si.rootArtistSortOrder = sortOrder
+        if isRootItemLoader {
+            SavedSettings.si.rootArtistSortOrder = sortOrder
+        }
         
         guard artists.count > 0 else {
             return false
