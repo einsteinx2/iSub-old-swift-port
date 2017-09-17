@@ -15,7 +15,9 @@ final class NetworkIndicator {
     static func usingNetwork() {
         lock.synchronized {
             counter += 1
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            }
         }
     }
     
@@ -24,7 +26,9 @@ final class NetworkIndicator {
             if counter > 0 {
                 counter -= 1
                 if counter == 0 {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    async {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    }
                 }
             }
         }
@@ -34,7 +38,9 @@ final class NetworkIndicator {
         lock.synchronized {
             if counter > 0 {
                 counter = 0
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                async {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                }
             }
         }
     }
