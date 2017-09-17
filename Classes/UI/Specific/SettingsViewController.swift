@@ -12,6 +12,8 @@ class SettingsViewController: JGSettingsTableController, JGSettingsSectionsData,
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableSections = loadSectionsConfiguration()
+        
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 100))
     }
     
     fileprivate var totalSpaceInMB: Float { return Float(CacheManager.si.totalSpace / 1024 / 1024) }
