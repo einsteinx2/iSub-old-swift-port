@@ -27,13 +27,13 @@ extension NSRecursiveLock: BeforeDateLockable {}
 extension NSConditionLock: BeforeDateLockable {}
 
 extension NSLocking {
-    func synchronized(execute: () -> ()) {
+    func synchronized(_ execute: () -> ()) {
         lock()
         execute()
         unlock()
     }
     
-    func synchronizedResult<T>(execute: () -> T) -> T {
+    func synchronizedResult<T>(_ execute: () -> T) -> T {
         lock()
         let result = execute()
         unlock()
@@ -42,7 +42,7 @@ extension NSLocking {
 }
 
 extension TryLockable {
-    func trySynchronized(execute: () -> ()) -> Bool {
+    func trySynchronized(_ execute: () -> ()) -> Bool {
         if !`try`() {
             return false
         }
@@ -80,20 +80,22 @@ class SpinLock: TryLockable {
     }
 }
 
-/* OSSpinLock is deprecated in iOS 10, so eventually move to os_unfair_lock
+/*
+// OSSpinLock is deprecated in iOS 10, so eventually move to os_unfair_lock
 @available (iOS 10.0, *)
 class UnfairLock: TryLockable {
     private var unfairLock = OS_UNFAIR_LOCK_INIT
-    
+ 
     func lock() {
         os_unfair_lock_lock(&unfairLock)
     }
-    
+ 
     func unlock() {
         os_unfair_lock_unlock(&unfairLock)
     }
-    
+ 
     func `try`() -> Bool {
         os_unfair_lock_trylock(&unfairLock)
     }
 }*/
+

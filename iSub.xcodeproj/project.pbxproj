@@ -113,6 +113,7 @@
 		533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */; };
 		533B69DB1E206031001FF3BF /* NavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B69D31E206031001FF3BF /* NavigationStack.swift */; };
 		533C65A815ABB9BD003EAF29 /* IntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 533C65AC15ABB9BD003EAF29 /* IntroViewController.xib */; };
+		533E271F1F6EB60A00DA0979 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533E271E1F6EB60A00DA0979 /* Array.swift */; };
 		53493F0115FC69C90059492E /* chat-page.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493EFE15FC69C90059492E /* chat-page.png */; };
 		53493F0815FC6A0F0059492E /* twitter-signin.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493F0215FC6A0F0059492E /* twitter-signin.png */; };
 		53493F0B15FC6A0F0059492E /* twitter-signin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53493F0315FC6A0F0059492E /* twitter-signin@2x.png */; };
@@ -464,6 +465,7 @@
 		533B69D21E206031001FF3BF /* CollectionViewStackFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewStackFlowLayout.swift; sourceTree = "<group>"; };
 		533B69D31E206031001FF3BF /* NavigationStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationStack.swift; sourceTree = "<group>"; };
 		533C65AB15ABB9BD003EAF29 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IntroViewController.xib; sourceTree = "<group>"; };
+		533E271E1F6EB60A00DA0979 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		53493EFE15FC69C90059492E /* chat-page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "chat-page.png"; path = "Images/chat-page.png"; sourceTree = "<group>"; };
 		53493F0215FC6A0F0059492E /* twitter-signin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "twitter-signin.png"; path = "Images/Other/twitter-signin.png"; sourceTree = "<group>"; };
 		53493F0315FC6A0F0059492E /* twitter-signin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "twitter-signin@2x.png"; path = "Images/Other/twitter-signin@2x.png"; sourceTree = "<group>"; };
@@ -1001,6 +1003,7 @@
 		531B32FE1E24CF8A00811187 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				533E271E1F6EB60A00DA0979 /* Array.swift */,
 				531B32FF1E24CF8A00811187 /* String.swift */,
 				539133531E29D53000B8A99E /* Data.swift */,
 				531B33D31E24CFAF00811187 /* UITraitEnvironment.swift */,
@@ -1954,6 +1957,7 @@
 				53835CA41E0B7D6D0077B53D /* GMAppleDouble.m in Sources */,
 				5355BFB11E2DB59D00C6D27F /* NSError.swift in Sources */,
 				531B33961E24CF8B00811187 /* CachedRootAlbumsLoader.swift in Sources */,
+				533E271F1F6EB60A00DA0979 /* Array.swift in Sources */,
 				531B33A61E24CF8B00811187 /* RootArtistsLoader.swift in Sources */,
 				53E042871E36AD200009DE79 /* SavedSettings.swift in Sources */,
 				53F107A31E2ACDD7003B7D59 /* AlbumRepository.swift in Sources */,
@@ -2318,7 +2322,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				OTHER_SWIFT_FLAGS = "-D DebugBuild -Onone -Xfrontend -warn-long-function-bodies=50";
+				OTHER_SWIFT_FLAGS = "-D DebugBuild -Onone -Xfrontend -warn-long-function-bodies=75";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_MODULE_NAME = iSub;
 				SDKROOT = iphoneos;
