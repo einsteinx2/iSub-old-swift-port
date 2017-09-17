@@ -10,7 +10,7 @@ import Foundation
 
 extension Array {
     var second: Element? {
-        let element: Element? = self.count > 0 ? self[1] : nil
+        let element: Element? = self.count > 1 ? self[1] : nil
         return element
     }
 }
