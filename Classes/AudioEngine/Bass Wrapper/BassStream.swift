@@ -9,7 +9,7 @@
 import Foundation
 
 final class BassStream: Equatable {
-    weak var player: BassGaplessPlayer?
+    weak var player: GaplessPlayer?
     
     var stream: HSTREAM = 0
     

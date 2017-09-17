@@ -18,7 +18,7 @@ class EqualizerViewController: UIViewController, UIGestureRecognizerDelegate {
     fileprivate var enableButton = UIButton(type: .custom)
     
     fileprivate var values: [EqualizerValue] {
-        return BassGaplessPlayer.si.equalizer.values
+        return GaplessPlayer.si.equalizer.values
     }
     
     override func viewDidLoad() {
@@ -110,15 +110,15 @@ class EqualizerViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     fileprivate func updateEnableButtonTitle() {
-        let title = BassGaplessPlayer.si.equalizer.isActive ? "Disable" : "Enable"
+        let title = GaplessPlayer.si.equalizer.isActive ? "Disable" : "Enable"
         enableButton.setTitle(title, for: .normal)
     }
     
     @objc fileprivate func enableButtonAction(sender: UIButton) {
-        if BassGaplessPlayer.si.equalizer.isActive {
-            BassGaplessPlayer.si.equalizer.disable()
+        if GaplessPlayer.si.equalizer.isActive {
+            GaplessPlayer.si.equalizer.disable()
         } else {
-            BassGaplessPlayer.si.equalizer.enable()
+            GaplessPlayer.si.equalizer.enable()
         }
         
         updateEnableButtonTitle()
@@ -127,12 +127,12 @@ class EqualizerViewController: UIViewController, UIGestureRecognizerDelegate {
     @objc fileprivate func equalizerValueChanged(sender: UISlider) {
         if let index = sliderViews.index(of: sender) {
             // NOTE: The value must be inverted because of the way the sliders are rotated
-            BassGaplessPlayer.si.equalizer.updateValue(index: index, gain: -sender.value)
+            GaplessPlayer.si.equalizer.updateValue(index: index, gain: -sender.value)
         }
     }
     
     @objc fileprivate func preampValueChanged(sender: UISlider) {
-        BassGaplessPlayer.si.equalizer.updatePreampGain(gain: sender.value)
+        GaplessPlayer.si.equalizer.updatePreampGain(gain: sender.value)
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

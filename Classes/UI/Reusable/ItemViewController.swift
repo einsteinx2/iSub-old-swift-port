@@ -193,7 +193,7 @@ class ItemViewController: DraggableTableViewController, UISearchBarDelegate {
     
     fileprivate func registerForNotifications() {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(currentPlaylistIndexChanged(_:)), name: PlayQueue.Notifications.indexChanged)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPlaybackStarted(_:)), name: BassGaplessPlayer.Notifications.songStarted)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPlaybackStarted(_:)), name: GaplessPlayer.Notifications.songStarted)
         
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songDownloaded(_:)), name: StreamHandler.Notifications.downloaded)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(songRemoved(_:)), name: CacheManager.Notifications.songRemoved)
@@ -207,7 +207,7 @@ class ItemViewController: DraggableTableViewController, UISearchBarDelegate {
     
     fileprivate func unregisterForNotifications() {
         NotificationCenter.removeObserverOnMainThread(self, name: PlayQueue.Notifications.indexChanged)
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songStarted)
         
         NotificationCenter.removeObserverOnMainThread(self, name: StreamHandler.Notifications.downloaded)
         NotificationCenter.removeObserverOnMainThread(self, name: CacheManager.Notifications.songRemoved)

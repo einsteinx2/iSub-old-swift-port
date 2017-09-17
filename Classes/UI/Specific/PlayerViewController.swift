@@ -206,13 +206,13 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
         updateCurrentSong()
         updateProgress()
         
-        if BassGaplessPlayer.si.isPlaying {
+        if GaplessPlayer.si.isPlaying {
             playbackStarted()
         }
         
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackStarted), name: BassGaplessPlayer.Notifications.songStarted)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackPaused), name: BassGaplessPlayer.Notifications.songPaused)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackEnded), name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackStarted), name: GaplessPlayer.Notifications.songStarted)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackPaused), name: GaplessPlayer.Notifications.songPaused)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackEnded), name: GaplessPlayer.Notifications.songEnded)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(indexChanged), name: PlayQueue.Notifications.indexChanged)
         
         tapRecognizer.addTarget(self, action: #selector(toggleZoom))
@@ -238,14 +238,14 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     deinit {
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songPaused)
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songStarted)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songPaused)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songEnded)
         NotificationCenter.removeObserverOnMainThread(self, name: PlayQueue.Notifications.indexChanged)
     }
     
     @objc fileprivate func playPause() {
-        if !BassGaplessPlayer.si.isStarted {
+        if !GaplessPlayer.si.isStarted {
             spinner.startAnimating()
         }
         
@@ -280,7 +280,7 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
         updateCurrentSong()
     }
     
-    fileprivate func updatePlayButton(_ playing: Bool = BassGaplessPlayer.si.isPlaying) {
+    fileprivate func updatePlayButton(_ playing: Bool = GaplessPlayer.si.isPlaying) {
         if playing {
             playButton.setTitle("Ⅱ", for: UIControlState())
         } else {
@@ -305,8 +305,8 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @objc fileprivate func updateProgress() {
-        let progress = BassGaplessPlayer.si.progress
-        let progressPercent = BassGaplessPlayer.si.progressPercent
+        let progress = GaplessPlayer.si.progress
+        let progressPercent = GaplessPlayer.si.progressPercent
         
         progressSlider.value = Float(progressPercent)
         elapsedLabel.text = NSString.formatTime(progress)
@@ -314,7 +314,7 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
             remainingLabel.text = "-\(formattedTime)"
         }
         
-        bitRateLabel.text = "\(BassGaplessPlayer.si.bitRate) kbps"
+        bitRateLabel.text = "\(GaplessPlayer.si.bitRate) kbps"
     }
     
     @objc fileprivate func progressSliderTouchDown() {
@@ -326,7 +326,7 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @objc fileprivate func progressSliderValueChanged() {
-        BassGaplessPlayer.si.seek(percent: Double(progressSlider.value), fadeDuration: 0.5)
+        GaplessPlayer.si.seek(percent: Double(progressSlider.value), fadeDuration: 0.5)
     }
     
     fileprivate func zoom(animated: Bool = true) {

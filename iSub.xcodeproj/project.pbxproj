@@ -159,7 +159,7 @@
 		536E29251E0BA08F0097C2F6 /* entitlements-simulator.plist in Resources */ = {isa = PBXBuildFile; fileRef = 536E29221E0BA08F0097C2F6 /* entitlements-simulator.plist */; };
 		5377D6471E3A8226003BFFB9 /* NetworkIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5377D6451E3A8221003BFFB9 /* NetworkIndicator.swift */; };
 		5377D64A1E3A84CC003BFFB9 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */; };
-		537FB2F61E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */; };
+		537FB2F61E32A503001D3FBB /* GaplessPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2F41E32A503001D3FBB /* GaplessPlayer.swift */; };
 		537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */; };
 		537FB3001E33EEC1001D3FBB /* Visualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537FB2FE1E33EEC1001D3FBB /* Visualizer.swift */; };
 		53808D2D1E7DE5140063B6D9 /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53808D2B1E7DE50E0063B6D9 /* FolderViewController.swift */; };
@@ -192,6 +192,8 @@
 		538725F217CC19B200CE92F1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538725F117CC19B200CE92F1 /* CoreTelephony.framework */; };
 		539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */; };
 		539133551E29D53000B8A99E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539133531E29D53000B8A99E /* Data.swift */; };
+		539A69171F6EC871004C514D /* Bass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539A69161F6EC871004C514D /* Bass.swift */; };
+		539A69191F6ED5C0004C514D /* BassStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539A69181F6ED5C0004C514D /* BassStreamController.swift */; };
 		539D2BB91E5E0B1A0059D233 /* SafeNumberCasting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */; };
 		53A179A51F65F0D300B46251 /* HLSProxyServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A179A11F65EF9800B46251 /* HLSProxyServer.swift */; };
 		53A179A61F65F0D300B46251 /* HLSSelfSignedCertDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A179A31F65EF9800B46251 /* HLSSelfSignedCertDelegate.swift */; };
@@ -548,7 +550,7 @@
 		537D97891F6621B20065BB14 /* CocoaLumberjackSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjackSwift.framework; path = Carthage/Build/iOS/CocoaLumberjackSwift.framework; sourceTree = "<group>"; };
 		537D978A1F6621B30065BB14 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjack.framework; path = Carthage/Build/iOS/CocoaLumberjack.framework; sourceTree = "<group>"; };
 		537DE2D8113F008C00875852 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BassGaplessPlayer.swift; path = "Bass Wrapper/BassGaplessPlayer.swift"; sourceTree = "<group>"; };
+		537FB2F41E32A503001D3FBB /* GaplessPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GaplessPlayer.swift; path = "Bass Wrapper/GaplessPlayer.swift"; sourceTree = "<group>"; };
 		537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		537FB2FE1E33EEC1001D3FBB /* Visualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Visualizer.swift; path = Visualizer/Visualizer.swift; sourceTree = "<group>"; };
 		537FCC5312F8F7F400F1D996 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = "Images/App Icons/iTunesArtwork"; sourceTree = "<group>"; };
@@ -606,6 +608,8 @@
 		539133501E29D1F900B8A99E /* SubsonicURLRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubsonicURLRequest.swift; sourceTree = "<group>"; };
 		539133531E29D53000B8A99E /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		539799781163084200F41D8B /* loading-screen-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "loading-screen-image.png"; path = "Images/Other/loading-screen-image.png"; sourceTree = "<group>"; };
+		539A69161F6EC871004C514D /* Bass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Bass.swift; path = "Bass Wrapper/Bass.swift"; sourceTree = "<group>"; };
+		539A69181F6ED5C0004C514D /* BassStreamController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BassStreamController.swift; path = "Bass Wrapper/BassStreamController.swift"; sourceTree = "<group>"; };
 		539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafeNumberCasting.swift; sourceTree = "<group>"; };
 		53A1799C1F65EF8800B46251 /* HLSPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSPlaylist.swift; sourceTree = "<group>"; };
 		53A1799D1F65EF8800B46251 /* HLSProxyError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSProxyError.swift; sourceTree = "<group>"; };
@@ -974,8 +978,10 @@
 			isa = PBXGroup;
 			children = (
 				5377D6481E3A84CC003BFFB9 /* RingBuffer.swift */,
-				537FB2F41E32A503001D3FBB /* BassGaplessPlayer.swift */,
+				537FB2F41E32A503001D3FBB /* GaplessPlayer.swift */,
+				539A69161F6EC871004C514D /* Bass.swift */,
 				534FACED1E328D3200BF12D9 /* BassStream.swift */,
+				539A69181F6ED5C0004C514D /* BassStreamController.swift */,
 				537FB2FE1E33EEC1001D3FBB /* Visualizer.swift */,
 				53FD71E41E36E73600460B44 /* Equalizer.swift */,
 			);
@@ -1856,6 +1862,7 @@
 				53609CDF1E885B77005C26D0 /* EqualizerViewController.swift in Sources */,
 				531B33941E24CF8B00811187 /* CachedFolderLoader.swift in Sources */,
 				531B33F31E24D0B600811187 /* DraggableTableViewController.swift in Sources */,
+				539A69191F6ED5C0004C514D /* BassStreamController.swift in Sources */,
 				5358DBDB1E0B780E0024A0D4 /* JASidePanelController.m in Sources */,
 				530D5A141E2C047500C9ED43 /* Song.swift in Sources */,
 				534FACEF1E328D3200BF12D9 /* BassStream.swift in Sources */,
@@ -1895,7 +1902,7 @@
 				53FE312D1F07C594003AA6A7 /* JGSettingsTableController.swift in Sources */,
 				531B344F1E24D24600811187 /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				5358E1C91E0B789B0024A0D4 /* RXMLElement.m in Sources */,
-				537FB2F61E32A503001D3FBB /* BassGaplessPlayer.swift in Sources */,
+				537FB2F61E32A503001D3FBB /* GaplessPlayer.swift in Sources */,
 				531B34031E24D0B600811187 /* MiniPlayerViewController.swift in Sources */,
 				531B34471E24D24600811187 /* FMDatabasePool.m in Sources */,
 				539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */,
@@ -1998,6 +2005,7 @@
 				531B339A1E24CF8B00811187 /* CachedRootFoldersLoader.swift in Sources */,
 				53DC36381F07C62B00882611 /* SettingsViewController.swift in Sources */,
 				53609CDD1E885B11005C26D0 /* PlayerContainerViewController.swift in Sources */,
+				539A69171F6EC871004C514D /* Bass.swift in Sources */,
 				5355BFB71E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */,
 				531B338C1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
 				531B33721E24CF8B00811187 /* Playlist.swift in Sources */,

@@ -188,7 +188,7 @@ class VisualizerView: UIView {
             return
         }
         
-        BassGaplessPlayer.si.visualizer.readAudioData(visualizerType: visualizerType)
+        GaplessPlayer.si.visualizer.readAudioData(visualizerType: visualizerType)
         
         if visualizerType != .aphexFace {
             eraseBuffer()
@@ -198,7 +198,7 @@ class VisualizerView: UIView {
         var y1 = 0
         if visualizerType == .line {
             for x in 0 ..< specWidth {
-                var lineSpecData = Int(BassGaplessPlayer.si.visualizer.lineSpecData(index: x))
+                var lineSpecData = Int(GaplessPlayer.si.visualizer.lineSpecData(index: x))
                 lineValues[lineValuesIndex] = lineSpecData
                 lineValuesIndex += 1
                 if lineValuesIndex > lineValues.count - 1 {
@@ -226,7 +226,7 @@ class VisualizerView: UIView {
             }
         } else if visualizerType == .skinnyBar {
             for x in 0 ..< specWidth / 2 {
-                var fftData = BassGaplessPlayer.si.visualizer.fftData(index: x + 1)
+                var fftData = GaplessPlayer.si.visualizer.fftData(index: x + 1)
                 fftValues[fftValuesIndex] = fftData
                 fftValuesIndex += 1
                 if fftValuesIndex > fftValues.count - 1 {
@@ -279,7 +279,7 @@ class VisualizerView: UIView {
                 }
                 
                 while b0 < b1 {
-                    var fftData = BassGaplessPlayer.si.visualizer.fftData(index: b0 + 1)
+                    var fftData = GaplessPlayer.si.visualizer.fftData(index: b0 + 1)
                     fftValues[fftValuesIndex] = fftData
                     fftValuesIndex += 1
                     if fftValuesIndex > fftValues.count - 1 {
@@ -316,7 +316,7 @@ class VisualizerView: UIView {
             }
         } else if visualizerType == .aphexFace {
             for x in 0 ..< specHeight {
-                let fftData = BassGaplessPlayer.si.visualizer.fftData(index: x + 1)
+                let fftData = GaplessPlayer.si.visualizer.fftData(index: x + 1)
                 let fftSqrt = sqrt(fftData)
                 
                 // Scale it (sqrt to make low values more visible)

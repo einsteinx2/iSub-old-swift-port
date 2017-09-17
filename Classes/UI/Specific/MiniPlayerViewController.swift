@@ -87,9 +87,9 @@ class MiniPlayerViewController: UIViewController {
         updateCurrentSong()
         updateProgressView()
         
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackStarted), name: BassGaplessPlayer.Notifications.songStarted)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackPaused), name: BassGaplessPlayer.Notifications.songPaused)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackEnded), name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackStarted), name: GaplessPlayer.Notifications.songStarted)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackPaused), name: GaplessPlayer.Notifications.songPaused)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(playbackEnded), name: GaplessPlayer.Notifications.songEnded)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(indexChanged), name: PlayQueue.Notifications.indexChanged)
         
         tapRecognizer.addTarget(self, action: #selector(showPlayer))
@@ -101,14 +101,14 @@ class MiniPlayerViewController: UIViewController {
     }
     
     deinit {
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songPaused)
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songStarted)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songPaused)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songEnded)
         NotificationCenter.removeObserverOnMainThread(self, name: PlayQueue.Notifications.indexChanged)
     }
     
     @objc fileprivate func playPause() {
-        if !BassGaplessPlayer.si.isStarted {
+        if !GaplessPlayer.si.isStarted {
             spinner.startAnimating()
         }
         
@@ -135,7 +135,7 @@ class MiniPlayerViewController: UIViewController {
         updateCurrentSong()
     }
     
-    fileprivate func updatePlayButton(_ playing: Bool = BassGaplessPlayer.si.isPlaying) {
+    fileprivate func updatePlayButton(_ playing: Bool = GaplessPlayer.si.isPlaying) {
         if playing {
             playButton.setTitle("| |", for: UIControlState())
         } else {
@@ -155,7 +155,7 @@ class MiniPlayerViewController: UIViewController {
     }
     
     @objc fileprivate func updateProgressView() {
-        let progress = BassGaplessPlayer.si.progressPercent
+        let progress = GaplessPlayer.si.progressPercent
         let width = self.view.frame.width * CGFloat(progress)
         progressView.snp.updateConstraints { make in
             make.width.equalTo(width)

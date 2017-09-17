@@ -41,17 +41,17 @@ final class PlayQueue {
     fileprivate func registerForNotifications() {
         // Watch for changes to the play queue playlist
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(playlistChanged(_:)), name: Playlist.Notifications.playlistChanged)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songStarted), name: BassGaplessPlayer.Notifications.songStarted)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPaused), name: BassGaplessPlayer.Notifications.songPaused)
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songEnded), name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songStarted), name: GaplessPlayer.Notifications.songStarted)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songPaused), name: GaplessPlayer.Notifications.songPaused)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(songEnded), name: GaplessPlayer.Notifications.songEnded)
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(videoEnded(_:)), name: Notifications.videoEnded)
     }
     
     fileprivate func unregisterForNotifications() {
         NotificationCenter.removeObserverOnMainThread(self, name: Playlist.Notifications.playlistChanged)
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songStarted)
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songPaused)
-        NotificationCenter.removeObserverOnMainThread(self, name: BassGaplessPlayer.Notifications.songEnded)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songStarted)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songPaused)
+        NotificationCenter.removeObserverOnMainThread(self, name: GaplessPlayer.Notifications.songEnded)
         NotificationCenter.removeObserverOnMainThread(self, name: Notifications.videoEnded)
     }
     
@@ -119,7 +119,7 @@ final class PlayQueue {
         return playlist.songs
     }
     
-    fileprivate let player: BassGaplessPlayer = { return BassGaplessPlayer.si }()
+    fileprivate let player: GaplessPlayer = { return GaplessPlayer.si }()
     fileprivate var videoPlaybackManager: VideoPlaybackManager?
     
     init() {
