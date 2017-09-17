@@ -63,6 +63,10 @@ extension URLRequest {
                 baseUrl = redirectUrl
             }
             
+            if server.password == "" {
+                log.debug("creating request for serverId: \(server.serverId) password is empty")
+            }
+            
             self.init(subsonicAction: subsonicAction,
                       baseUrl: baseUrl,
                       username: server.username,

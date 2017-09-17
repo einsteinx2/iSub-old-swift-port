@@ -36,25 +36,16 @@ final class Server {
     var username: String
     var basicAuth: Bool
     
-    // Passwords stored in the keychain
+    fileprivate var passwordKey: String { return "\(serverId) - \(username)" }
     var password: String? {
         get {
-            do {
-                return try BCCKeychain.getPasswordString(forUsername: username, andServiceName: url)
-            } catch {
-                printError(error)
-                return nil
-            }
+            return KeychainWrapper.standard.string(forKey: passwordKey, withAccessibility: .afterFirstUnlock)
         }
         set {
-            do {
-                if let newValue = newValue {
-                    try BCCKeychain.storeUsername(username, andPasswordString: newValue, forServiceName: url, updateExisting: true)
-                } else {
-                    try BCCKeychain.deleteItem(forUsername: username, andServiceName: url)
-                }
-            } catch {
-                printError(error)
+            if let newValue = newValue {
+                KeychainWrapper.standard.set(newValue, forKey: passwordKey, withAccessibility: .afterFirstUnlock)
+            } else {
+                KeychainWrapper.standard.removeObject(forKey: passwordKey, withAccessibility: .afterFirstUnlock)
             }
         }
     }

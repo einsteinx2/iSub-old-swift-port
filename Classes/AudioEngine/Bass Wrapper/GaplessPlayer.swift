@@ -35,12 +35,16 @@ final class GaplessPlayer {
     init() {
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(routeChanged(_:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(mediaServicesWereLost(_:)), name: NSNotification.Name.AVAudioSessionMediaServicesWereLost, object: AVAudioSession.sharedInstance())
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(mediaServicesWereReset(_:)), name: NSNotification.Name.AVAudioSessionMediaServicesWereReset, object: AVAudioSession.sharedInstance())
         NotificationCenter.addObserverOnMainThread(self, selector: #selector(readyForPlayback(_:)), name: StreamHandler.Notifications.readyForPlayback)
     }
     
     deinit {
         NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
         NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionRouteChange, object: AVAudioSession.sharedInstance())
+        NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionMediaServicesWereLost, object: AVAudioSession.sharedInstance())
+        NotificationCenter.removeObserverOnMainThread(self, name: NSNotification.Name.AVAudioSessionMediaServicesWereReset, object: AVAudioSession.sharedInstance())
         NotificationCenter.removeObserverOnMainThread(self, name: StreamHandler.Notifications.readyForPlayback, object: nil)
     }
     
@@ -65,6 +69,14 @@ final class GaplessPlayer {
         if notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt == AVAudioSessionRouteChangeReason.oldDeviceUnavailable.rawValue {
             pause()
         }
+    }
+    
+    @objc fileprivate func mediaServicesWereLost(_ notification: Notification) {
+        log.debug("mediaServicesWereLost: \(notification.userInfo)")
+    }
+    
+    @objc fileprivate func mediaServicesWereReset(_ notification: Notification) {
+        log.debug("mediaServicesWereReset: \(notification.userInfo)")
     }
     
     @objc fileprivate func readyForPlayback(_ notification: Notification) {
@@ -659,7 +671,7 @@ final class GaplessPlayer {
     
     fileprivate var nextSongRetryTimer: DispatchSourceTimer?
     fileprivate func prepareNextStream() {
-        if let nextSong = PlayQueue.si.nextSong {
+        if controller.nextBassStream == nil, let nextSong = PlayQueue.si.nextSong {
             log.debug("prepareNextStream called for: \(nextSong.title)")
             DispatchQueue.utility.async {
                 if let nextStream = self.prepareStream(forSong: nextSong) {
@@ -798,9 +810,11 @@ final class GaplessPlayer {
                 self.controller.currentBassStream?.song.lastPlayed = Date()
             }
             
-            if bassStream.isNextSongStreamFailed {
-                nextSongStreamFailed()
-            }
+            prepareNextStream()
+            
+//            if bassStream.isNextSongStreamFailed {
+//                nextSongStreamFailed()
+//            }
         }
     }
 }
