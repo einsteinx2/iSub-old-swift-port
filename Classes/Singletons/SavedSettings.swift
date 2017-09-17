@@ -39,6 +39,7 @@ final class SavedSettings {
         static let rootAlbumSortOrder           = "rootAlbumSortOrder"
         
         static let seekTime                     = "seekTime"
+        static let isPlayerZoomed               = "isPlayerZoomed"
         static let byteOffset                   = "byteOffset"
         static let isEqualizerOn                = "isEqualizerOn"
         static let preampGain                   = "gainMultiplier"
@@ -244,6 +245,11 @@ final class SavedSettings {
     var byteOffset: Int64 {
         get { return lock.synchronizedResult { return self.storage.object(forKey: Keys.byteOffset) as? Int64 ?? 0 }}
         set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.byteOffset) }}
+    }
+    
+    var isPlayerZoomed: Bool {
+        get { return lock.synchronizedResult { return self.storage.bool(forKey: Keys.isPlayerZoomed) }}
+        set { lock.synchronized {              self.storage.set(newValue, forKey: Keys.isPlayerZoomed) }}
     }
     
     var isEqualizerOn: Bool {

@@ -29,7 +29,7 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
     let progressSlider = UISlider()
     var progressDisplayLink: CADisplayLink!
     
-    var isZoomed = false
+    var isZoomed = SavedSettings.si.isPlayerZoomed
     var allViews: [UIView] {
         return [coverArtView,
                 bitRateLabel, formatLabel,
@@ -217,6 +217,10 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
         
         tapRecognizer.addTarget(self, action: #selector(toggleZoom))
         coverArtView.addGestureRecognizer(tapRecognizer)
+        
+//        if isZoomed {
+//            zoom(animated: false)
+//        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -325,34 +329,16 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
         BassGaplessPlayer.si.seek(percent: Double(progressSlider.value), fadeDuration: 0.5)
     }
     
-    @objc fileprivate func toggleZoom() {
+    fileprivate func zoom(animated: Bool = true) {
         if isZoomed {
-            UIView.animate(withDuration: 0.3, animations: {
-                for hiddenView in self.hiddenViews {
-                    hiddenView.alpha = 1.0
-                }
-                for view in self.allViews {
-                    view.transform = .identity
-                }
-            }, completion: { _ in
-                let screenScale = UIScreen.main.scale
-                for view in self.allViews {
-                    if let button = view as? UIButton {
-                        button.titleLabel?.contentScaleFactor = screenScale
-                    } else {
-                        view.contentScaleFactor = screenScale
-                    }
-                }
-            })
-        } else {
-            UIView.animate(withDuration: 0.3) {
+            func animations() {
                 for view in self.hiddenViews {
                     view.alpha = 0.0
-                    view.transform = view.transform.scaledBy(x: 0.5, y: 0.5)
+                    view.transform = CGAffineTransform.identity.scaledBy(x: 0.5, y: 0.5)
                 }
                 
                 // Constants
- 
+                
                 //let viewHeight = self.view.frame.height
                 let coverWidth = self.coverArtView.frame.width
                 let coverScalePercent = self.view.frame.width / coverWidth
@@ -361,27 +347,27 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
                 let sliderTranslateY: CGFloat = 30
                 
                 // Cover
-
+                
                 let coverScaledFrame = self.coverArtView.scaledFrame(x: coverScalePercent, y: coverScalePercent)
-                var coverTransform = self.coverArtView.transform.scaledBy(x: coverScalePercent, y: coverScalePercent)
+                var coverTransform = CGAffineTransform.identity.scaledBy(x: coverScalePercent, y: coverScalePercent)
                 coverTransform = coverTransform.translatedBy(x: 0, y: 20 - coverScaledFrame.minY)
                 self.coverArtView.transform = coverTransform
                 self.coverArtView.contentScaleFactor *= coverScalePercent
                 
                 // Slider
                 
-                self.elapsedLabel.transform = self.elapsedLabel.transform.translatedBy(x: 0, y: sliderTranslateY)
-                self.progressSlider.transform = self.progressSlider.transform.translatedBy(x: 0, y: sliderTranslateY)
-                self.remainingLabel.transform = self.remainingLabel.transform.translatedBy(x: 0, y: sliderTranslateY)
+                self.elapsedLabel.transform = CGAffineTransform.identity.translatedBy(x: 0, y: sliderTranslateY)
+                self.progressSlider.transform = CGAffineTransform.identity.translatedBy(x: 0, y: sliderTranslateY)
+                self.remainingLabel.transform = CGAffineTransform.identity.translatedBy(x: 0, y: sliderTranslateY)
                 
                 // Labels
                 
-                var titleTransform = self.titleLabel.transform.scaledBy(x: labelScalePercent, y: labelScalePercent)
+                var titleTransform = CGAffineTransform.identity.scaledBy(x: labelScalePercent, y: labelScalePercent)
                 titleTransform = titleTransform.translatedBy(x: 0, y: 25)
                 self.titleLabel.transform = titleTransform
                 self.titleLabel.contentScaleFactor *= labelScalePercent
                 
-                var artistTransform = self.artistLabel.transform.scaledBy(x: labelScalePercent, y: labelScalePercent)
+                var artistTransform = CGAffineTransform.identity.scaledBy(x: labelScalePercent, y: labelScalePercent)
                 artistTransform = artistTransform.translatedBy(x: 0, y: 15)
                 self.artistLabel.transform = artistTransform
                 self.artistLabel.contentScaleFactor *= labelScalePercent
@@ -389,23 +375,61 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
                 // Buttons
                 
                 //let prevScaledFrame = self.prevButton.scaledFrame(x: buttonScalePercent, y: buttonScalePercent)
-                var prevTransform = self.prevButton.transform.scaledBy(x: buttonScalePercent, y: buttonScalePercent)
+                var prevTransform = CGAffineTransform.identity.scaledBy(x: buttonScalePercent, y: buttonScalePercent)
                 prevTransform = prevTransform.translatedBy(x: -40, y: 20)//(viewHeight - prevScaledFrame.maxY) / 2)
                 self.prevButton.transform = prevTransform
                 self.prevButton.titleLabel?.contentScaleFactor *= buttonScalePercent
                 
-                var playTransform = self.playButton.transform.scaledBy(x: buttonScalePercent, y: buttonScalePercent)
+                var playTransform = CGAffineTransform.identity.scaledBy(x: buttonScalePercent, y: buttonScalePercent)
                 playTransform = playTransform.translatedBy(x: 0, y: 20)
                 self.playButton.transform = playTransform
                 self.playButton.titleLabel?.contentScaleFactor *= buttonScalePercent
                 
-                var nextTransform = self.nextButton.transform.scaledBy(x: buttonScalePercent, y: buttonScalePercent)
+                var nextTransform = CGAffineTransform.identity.scaledBy(x: buttonScalePercent, y: buttonScalePercent)
                 nextTransform = nextTransform.translatedBy(x: 40, y: 20)
                 self.nextButton.transform = nextTransform
                 self.nextButton.titleLabel?.contentScaleFactor *= buttonScalePercent
             }
+            
+            if animated {
+                UIView.animate(withDuration: 0.3, animations: animations)
+            } else {
+                animations()
+            }
+        } else {
+            func animations() {
+                for hiddenView in self.hiddenViews {
+                    hiddenView.alpha = 1.0
+                }
+                for view in self.allViews {
+                    view.transform = .identity
+                }
+            }
+            
+            func completion(finished: Bool) {
+                let screenScale = UIScreen.main.scale
+                for view in self.allViews {
+                    if let button = view as? UIButton {
+                        button.titleLabel?.contentScaleFactor = screenScale
+                    } else {
+                        view.contentScaleFactor = screenScale
+                    }
+                }
+            }
+            
+            if animated {
+                UIView.animate(withDuration: 0.3, animations: animations, completion: completion)
+            } else {
+                animations()
+                completion(finished: true)
+            }
         }
+    }
+    
+    @objc fileprivate func toggleZoom() {
         isZoomed = !isZoomed
+        SavedSettings.si.isPlayerZoomed = isZoomed
+        zoom()
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
