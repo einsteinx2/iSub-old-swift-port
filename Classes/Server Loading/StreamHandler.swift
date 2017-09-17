@@ -82,6 +82,8 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             selfRef = self
         }
         
+        log.debug("StreamHandler: \(self) started for: \(song.title)")
+        
         speedLoggingDate = Date()
         contentLength = Int64.max
         totalBytesTransferred = 0
@@ -124,7 +126,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             maxBitRateSetting = SavedSettings.si.currentMaxBitRate
         }
         
-        var parameters = ["id": "\(song.songId)"]
+        var parameters: [String: Any] = ["id": "\(song.songId)"]
         if maxBitRateSetting > 0 {
             parameters["maxBitRate"] = "\(maxBitRateSetting)"
         }
@@ -145,7 +147,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             return
         }
         
-        log.debug("request canceled for \(self.song)")
+        log.debug("StreamHandler: \(self) canceled for: \(song)")
         
         isCanceled = true
         
@@ -231,14 +233,14 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             NotificationCenter.postOnMainThread(name: Notifications.failed, userInfo: userInfo)
         } else {
             if contentLength > 0 && song.localFileSize < contentLength {
-                log.debug("connection Failed because not enough bytes were download for \(self.song.title)")
+                log.debug("StreamHandler: \(self) failed because not enough bytes were download for: \(song.title)")
                 
                 // This is a failed download, it didn't download enough
                 let userInfo = [Notifications.Keys.song: song]
                 NotificationCenter.postOnMainThread(name: Notifications.failed, userInfo: userInfo)
                 delegate?.streamHandlerConnectionFailed(self, withError: nil)
             } else {
-                log.debug("connection was successful because the file size matches the content length header for \(self.song.title)")
+                log.debug("StreamHandler: \(self) was successful because size matches for: \(song.title)")
                 
                 if !isReadyForPlayback {
                     isReadyForPlayback = true
