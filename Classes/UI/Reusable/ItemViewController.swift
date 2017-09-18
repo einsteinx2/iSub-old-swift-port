@@ -145,13 +145,20 @@ class ItemViewController: DraggableTableViewController, UISearchBarDelegate {
         filterBar.showsCancelButton = true
         headerView.addSubview(filterBar)
         filterBar.snp.makeConstraints { make in
-            make.width.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
             if let itemHeaderView = itemHeaderView {
                 make.top.equalTo(itemHeaderView.snp.bottom)
             } else {
                 make.top.equalToSuperview()
             }
             make.bottom.equalToSuperview()
+        }
+        
+        let height = (itemHeaderView?.height ?? 0) + filterBar.intrinsicContentSize.height
+        headerView.snp.makeConstraints { make in
+            make.width.equalTo(width)
+            make.height.equalTo(height)
         }
         
         return headerView

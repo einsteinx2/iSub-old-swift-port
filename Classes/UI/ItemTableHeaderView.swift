@@ -12,12 +12,12 @@ import SnapKit
 class ItemTableHeaderView: UIView {
     let width: CGFloat
     var height: CGFloat { return coverArtId == nil ? labelContainerHeight : width }
+    override var intrinsicContentSize: CGSize { return CGSize(width: width, height: height) }
+    
     let titleLabelHeight: CGFloat = 30
     let subTitleLabelHeight: CGFloat = 20
     let labelContainerHeight: CGFloat = 100
-    fileprivate var gradientHeight: CGFloat {
-        return labelContainerHeight + 130
-    }
+    fileprivate var gradientHeight: CGFloat { return labelContainerHeight + 130 }
     
     var associatedItem: Item?
     
