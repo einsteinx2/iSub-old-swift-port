@@ -70,7 +70,7 @@ final class RootFoldersLoader: ApiLoader, RootItemLoader {
         // Save the new folders and songs
         folders.forEach({$0.replace()})
         songs.forEach({$0.replace()})
-        ignoredArticles.forEach({IgnoredArticleRepository.si.insert(serverId: serverId, name: $0)})
+        ignoredArticles.forEach({_ = IgnoredArticleRepository.si.insert(serverId: serverId, name: $0.lowercased())})
     }
     
     @discardableResult func loadModelsFromDatabase() -> Bool {
