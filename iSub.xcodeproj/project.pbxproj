@@ -2180,6 +2180,7 @@
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -2229,6 +2230,7 @@
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = AdHoc;
@@ -2276,6 +2278,7 @@
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
