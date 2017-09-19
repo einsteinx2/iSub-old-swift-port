@@ -273,6 +273,7 @@ class ItemViewModel {
     
     func sortAll(notify: Bool = true) {
         var sorted = false
+        sorted = sorted || sortFolders(createIndexes: false, notify: false)
         sorted = sorted || sortArtists(by: artistSortOrder, createIndexes: false, notify: false)
         sorted = sorted || sortAlbums(by: albumSortOrder, createIndexes: false, notify: false)
         sorted = sorted || sortSongs(by: songSortOrder, createIndexes: false, notify: false)
@@ -284,6 +285,26 @@ class ItemViewModel {
                 delegate?.itemsChanged(viewModel: self)
             }
         }
+    }
+    
+    @discardableResult func sortFolders(createIndexes: Bool = true, notify: Bool = true) -> Bool {
+        guard folders.count > 0 else {
+            return false
+        }
+        
+        folders.sort { lhs, rhs -> Bool in
+            return lhs.name.lowercased() < rhs.name.lowercased()
+        }
+        
+        if createIndexes {
+            createSectionIndexes()
+        }
+        
+        if notify {
+            delegate?.itemsChanged(viewModel: self)
+        }
+        
+        return true
     }
     
     @discardableResult func sortArtists(by sortOrder: ArtistSortOrder, createIndexes: Bool = true, notify: Bool = true) -> Bool {
