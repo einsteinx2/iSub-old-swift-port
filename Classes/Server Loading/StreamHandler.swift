@@ -135,7 +135,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
         log.debug("Creating request for song: \(song.title) serverId: \(song.serverId) parameters: \(parameters)")
         request = URLRequest(subsonicAction: .stream, serverId: song.serverId, parameters: parameters)
         if let request = request {
-            session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            session = URLSession(configuration: .background(withIdentifier: "Song: \(song.songId)"), delegate: self, delegateQueue: nil)
             task = session?.dataTask(with: request)
             task?.resume()
             
