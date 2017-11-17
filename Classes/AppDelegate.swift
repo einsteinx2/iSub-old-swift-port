@@ -70,7 +70,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
         
         // Setup network reachability notifications
         networkStatus.startMonitoring()
-        NotificationCenter.addObserverOnMainThread(self, selector: #selector(reachabilityChanged), name: ReachabilityChangedNotification)
+        NotificationCenter.addObserverOnMainThread(self, selector: #selector(reachabilityChanged), name: Notification.Name.reachabilityChanged)
         
         // Check battery state and register for notifications
         UIDevice.current.isBatteryMonitoringEnabled = true
@@ -119,8 +119,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
             log.debug("background task ending, going to sleep")
             
             // App is about to be put to sleep, stop the cache download queue
-            if CacheQueue.si.isDownloading {
-                CacheQueue.si.stop()
+            if DownloadQueue.si.isDownloading {
+                DownloadQueue.si.stop()
             }
             
             // Make sure to end the background so we don't get killed by the OS
@@ -133,7 +133,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
 //        DispatchQueue.utility.async {
 //            while application.backgroundTimeRemaining > 1.0 && self.isInBackground {
 //                // Sleep early is nothing is happening
-//                if application.backgroundTimeRemaining < 200.0 && !CacheQueue.si.isDownloading {
+//                if application.backgroundTimeRemaining < 200.0 && !DownloadQueue.si.isDownloading {
 //                    log.debug("sleeping early")
 //                    application.endBackgroundTask(self.backgroundTask)
 //                    self.backgroundTask = UIBackgroundTaskInvalid;
@@ -141,7 +141,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
 //                }
 //
 //                // Warn at 2 minute mark if cache queue is downloading
-//                if application.backgroundTimeRemaining < 120.0 && CacheQueue.si.isDownloading {
+//                if application.backgroundTimeRemaining < 120.0 && DownloadQueue.si.isDownloading {
 //                    log.debug("warning 2 minutes left before forced sleep")
 //                    let local = UILocalNotification()
 //                    local.alertBody = "Songs are still caching. Please return to iSub within 2 minutes, or it will be put to sleep and your song caching will be paused."
@@ -225,7 +225,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
                     // potentially resulting in a crash loop, do NOT start the download queue automatically if the app crashed on last launch.
                     if !BITHockeyManager.shared().crashManager.didCrashInLastSession {
                         // Start the queued downloads if Wifi is available
-                        CacheQueue.si.start()
+                        DownloadQueue.si.start()
                     }
                     
                     // Load media folders
@@ -302,7 +302,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
         SavedSettings.si.isOfflineMode = true
         PlayQueue.si.stop()
         StreamQueue.si.stop()
-        CacheQueue.si.stop()
+        DownloadQueue.si.stop()
         PlayQueue.si.updateLockScreenInfo()
     }
     
@@ -316,7 +316,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
         SavedSettings.si.isOfflineMode = false
         PlayQueue.si.stop()
         checkServer()
-        CacheQueue.si.start()
+        DownloadQueue.si.start()
         PlayQueue.si.updateLockScreenInfo()
     }
     
@@ -336,9 +336,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
                 enterOnlineMode()
             } else {
                 if networkStatus.isReachableWifi || SavedSettings.si.isManualCachingOnWWANEnabled {
-                    CacheQueue.si.start()
+                    DownloadQueue.si.start()
                 } else {
-                    CacheQueue.si.stop()
+                    DownloadQueue.si.stop()
                 }
             }
         }
@@ -365,7 +365,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, BITHockeyManagerDelega
         
         // Cancel any caching
         StreamQueue.si.stop()
-        CacheQueue.si.stop()
+        DownloadQueue.si.stop()
         
         // Reset UI
         menuController.resetMenuItems()

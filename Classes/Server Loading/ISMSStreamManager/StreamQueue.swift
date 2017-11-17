@@ -22,9 +22,9 @@ final class StreamQueue: StreamHandlerDelegate {
             return
         }
                 
-        if currentSong.basicType == .audio && !currentSong.isFullyCached && CacheQueue.si.currentSong != currentSong {
+        if currentSong.basicType == .audio && !currentSong.isFullyCached && DownloadQueue.si.currentSong != currentSong {
             song = currentSong
-        } else if let nextSong = PlayQueue.si.nextSong, nextSong.basicType == .audio && !nextSong.isFullyCached &&  CacheQueue.si.currentSong != nextSong {
+        } else if let nextSong = PlayQueue.si.nextSong, nextSong.basicType == .audio && !nextSong.isFullyCached &&  DownloadQueue.si.currentSong != nextSong {
             song = nextSong
         } else {
             return

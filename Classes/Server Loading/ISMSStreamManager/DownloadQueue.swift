@@ -1,5 +1,5 @@
 //
-//  CacheQueue.swift
+//  DownloadQueue.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 1/9/17.
@@ -10,14 +10,14 @@ import Foundation
 
 fileprivate let maxReconnects = 5
 
-final class CacheQueue: StreamHandlerDelegate {
+final class DownloadQueue: StreamHandlerDelegate {
     struct Notifications {
-        static let started        = Notification.Name("CacheQueue_started")
-        static let stopped        = Notification.Name("CacheQueue_stopped")
-        static let songFailed     = Notification.Name("CacheQueue_songFailed")
+        static let started        = Notification.Name("DownloadQueue_started")
+        static let stopped        = Notification.Name("DownloadQueue_stopped")
+        static let songFailed     = Notification.Name("DownloadQueue_songFailed")
     }
     
-    open static let si = CacheQueue()
+    open static let si = DownloadQueue()
     
     fileprivate(set) var isDownloading = false
     fileprivate(set) var currentSong: Song?

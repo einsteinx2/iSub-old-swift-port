@@ -11,8 +11,8 @@ import Foundation
 class BassStreamController {
     let deviceNumber: UInt32
     
-    var mixerStream: HSTREAM = 0
     var outStream: HSTREAM = 0
+    var mixerStream: HSTREAM = 0
     
     let bassStreamsLock = SpinLock()
     var bassStreams = [BassStream]()

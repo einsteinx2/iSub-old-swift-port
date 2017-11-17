@@ -158,7 +158,7 @@ final class CacheManager {
 //        }
         
         findCacheSize()
-        CacheQueue.si.start()
+        DownloadQueue.si.start()
     }
     
     func findCacheSize() {

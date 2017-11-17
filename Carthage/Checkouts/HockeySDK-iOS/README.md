@@ -3,7 +3,7 @@
 [![Version](http://cocoapod-badges.herokuapp.com/v/HockeySDK/badge.png)](http://cocoadocs.org/docsets/HockeySDK)
 [![Slack Status](https://slack.hockeyapp.net/badge.svg)](https://slack.hockeyapp.net)
 
-## Version 4.1.6
+## Version 5.0.0
 
 HockeySDK-iOS implements support for using HockeyApp in your iOS applications.
 
@@ -21,36 +21,36 @@ The following features are currently supported:
 
 6. **Authenticate:** Identify and authenticate users of Ad-Hoc or Enterprise builds
 
-## 2. Setup
+## 1. Setup
 
-It is super easy to use HockeyApp in your iOS app. Have a look at our [documentation](https://www.hockeyapp.net/help/sdk/ios/4.1.6/docs/docs/Guide-Installation-Setup.html) and onboard your app within minutes.
+It is super easy to use HockeyApp in your iOS app. Have a look at our [documentation](https://www.hockeyapp.net/help/sdk/ios/5.0.0/index.html) and onboard your app within minutes.
 
-## 3. Documentation
+## 2. Documentation
 
-Please visit [our landing page](https://www.hockeyapp.net/help/sdk/ios/4.1.6/index.html) as a starting point for all of our documentation.
+Please visit [our landing page](https://www.hockeyapp.net/help/sdk/ios/5.0.0/index.html) as a starting point for all of our documentation.
 
-Please check out our [getting started documentation](https://www.hockeyapp.net/help/sdk/ios/4.1.6/docs/docs/Guide-Installation-Setup.html), [changelog](http://www.hockeyapp.net/help/sdk/ios/4.1.6/docs/docs/Changelog.html), [header docs](https://www.hockeyapp.net/help/sdk/ios/4.1.6/index.html) as well as our [troubleshooting section](https://www.hockeyapp.net/help/sdk/ios/4.1.6/docs/docs/Guide-Installation-Setup.html#troubleshooting).
+Please check out our [changelog](http://www.hockeyapp.net/help/sdk/ios/5.0.0/changelog.html), as well as our [troubleshooting section](https://www.hockeyapp.net/help/sdk/ios/5.0.0/installation--setup.html#troubleshooting).
 
-## 4. Contributing
+## 3. Contributing
 
 We're looking forward to your contributions via pull requests.
 
-### 4.1 Development environment
+### 3.1 Development environment
 
 * A Mac running the latest version of OS X.
 * Get the latest Xcode from the Mac App Store.
-* [AppleDoc](https://github.com/tomaz/appledoc) 
-* [CocoaPods](https://cocoapods.org/)
-* [Carthage](https://github.com/Carthage/Carthage)
+* [Jazzy](https://github.com/realm/jazzy) to generate documentation.
+* [CocoaPods](https://cocoapods.org/) to test integration with CocoaPods.
+* [Carthage](https://github.com/Carthage/Carthage) to test integration with Carthage.
 
-### 4.2 Code of Conduct
+### 3.2 Code of Conduct
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-### 4.3 Contributor License
+### 3.3 Contributor License
 
 You must sign a [Contributor License Agreement](https://cla.microsoft.com/) before submitting your pull request. To complete the Contributor License Agreement (CLA), you will need to submit a request via the [form](https://cla.microsoft.com/) and then electronically sign the CLA when you receive the email containing the link to the document. You need to sign the CLA only once to cover submission to any Microsoft OSS project. 
 
-## 5. Contact
+## 4. Contact
 
-If you have further questions or are running into trouble that cannot be resolved by any of the steps [in our troubleshooting section](https://www.hockeyapp.net/help/sdk/ios/4.1.6/docs/docs/Guide-Installation-Setup.html#troubleshooting), feel free to open an issue here, contact us at [support@hockeyapp.net](mailto:support@hockeyapp.net) or join our [Slack](https://slack.hockeyapp.net).
+If you have further questions or are running into trouble that cannot be resolved by any of the steps [in our troubleshooting section](https://www.hockeyapp.net/help/sdk/ios/5.0.0/installation--setup.html#troubleshooting), feel free to open an issue here, contact us at [support@hockeyapp.net](mailto:support@hockeyapp.net) or join our [Slack](https://slack.hockeyapp.net).

@@ -2,7 +2,7 @@
   "commitish" : "45ec1ca1094293b4985934d8df57150fe2d417aa",
   "iOS" : [
     {
-      "hash" : "15369aaec4a93872dcfbd0dc3c8bc3391923d2c017ae6c1ce797b6bd111ff345",
+      "hash" : "418b063bf7935ff156fcca3a64dbf772b91487b59b8b40680c4fec52b0dd0175",
       "name" : "Pluralize"
     }
   ]

@@ -319,9 +319,9 @@ final class PlayQueue {
                     // The song is fully cached, start streaming from the local copy
                     player.start(song: currentSong, byteOffset: byteOffset)
                 } else {
-                    if let currentCachingSong = CacheQueue.si.currentSong, currentCachingSong == currentSong {
+                    if let currentCachingSong = DownloadQueue.si.currentSong, currentCachingSong == currentSong {
                         // If the Cache Queue is downloading it and it's ready for playback, start the player
-                        if CacheQueue.si.streamHandler?.isReadyForPlayback == true {
+                        if DownloadQueue.si.streamHandler?.isReadyForPlayback == true {
                             player.start(song: currentSong, byteOffset: byteOffset)
                         }
                     } else {

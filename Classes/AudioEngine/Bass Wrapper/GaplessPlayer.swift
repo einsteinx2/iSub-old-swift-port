@@ -441,7 +441,7 @@ final class GaplessPlayer {
                                         var recentDownloadSpeedInBytesPerSec = 0
                                         if StreamQueue.si.song == bassStream.song, let handler = StreamQueue.si.streamHandler {
                                             recentDownloadSpeedInBytesPerSec = handler.recentDownloadSpeedInBytesPerSec
-                                        } else if CacheQueue.si.currentSong == bassStream.song, let handler = CacheQueue.si.streamHandler {
+                                        } else if DownloadQueue.si.currentSong == bassStream.song, let handler = DownloadQueue.si.streamHandler {
                                             recentDownloadSpeedInBytesPerSec = handler.recentDownloadSpeedInBytesPerSec
                                         }
                                         

@@ -24,7 +24,7 @@ class ServerItemViewModel: ItemViewModel {
                 })
             } else {
                 actionSheet.addAction(UIAlertAction(title: "Download", style: .default) { action in
-                    CacheQueue.si.add(song: song)
+                    DownloadQueue.si.add(song: song)
                 })
             }
         } else {
@@ -33,7 +33,7 @@ class ServerItemViewModel: ItemViewModel {
                 loader.completionHandler = { success, _, _ in
                     if success {
                         for song in loader.songs {
-                            CacheQueue.si.add(song: song)
+                            DownloadQueue.si.add(song: song)
                         }
                     }
                 }

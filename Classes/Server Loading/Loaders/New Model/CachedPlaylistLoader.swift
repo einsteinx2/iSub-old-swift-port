@@ -1,5 +1,5 @@
 //
-//  CacheQueueLoader.swift
+//  DownloadQueueLoader.swift
 //  iSub
 //
 //  Created by Benjamin Baron on 3/2/17.

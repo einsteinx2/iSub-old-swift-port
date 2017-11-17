@@ -1,5 +1,5 @@
 github "bitstadium/HockeySDK-iOS"
-github "wolffan/SnapKit" "xcode-4-mac-compatible"
+github "SnapKit/SnapKit" ~> 4.0.0
 github "einsteinx2/Nuke" "master"
 github "aschuch/AwesomeCache"
 github "ashleymills/Reachability.swift" "master"

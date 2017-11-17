@@ -103,7 +103,7 @@ class ApiLoader: NSObject, URLSessionDataDelegate {
         
         request = createRequest()
         if let request = request {
-            session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            session = URLSession(configuration: .background(withIdentifier: "ApiLoader \(CFAbsoluteTimeGetCurrent())"), delegate: self, delegateQueue: nil)
             task = session!.dataTask(with: request)
             task!.resume()
             

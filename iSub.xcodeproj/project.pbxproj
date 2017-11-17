@@ -37,7 +37,7 @@
 		531B33741E24CF8B00811187 /* SectionIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FC1E24CF8A00811187 /* SectionIndex.swift */; };
 		531B33761E24CF8B00811187 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FD1E24CF8A00811187 /* Server.swift */; };
 		531B33781E24CF8B00811187 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B32FF1E24CF8A00811187 /* String.swift */; };
-		531B337E1E24CF8B00811187 /* CacheQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33061E24CF8A00811187 /* CacheQueue.swift */; };
+		531B337E1E24CF8B00811187 /* DownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33061E24CF8A00811187 /* DownloadQueue.swift */; };
 		531B33861E24CF8B00811187 /* ApiLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B330F1E24CF8A00811187 /* ApiLoader.swift */; };
 		531B33881E24CF8B00811187 /* ItemLoaderOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33111E24CF8A00811187 /* ItemLoaderOperation.swift */; };
 		531B338A1E24CF8B00811187 /* AlbumLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B33131E24CF8A00811187 /* AlbumLoader.swift */; };
@@ -385,7 +385,7 @@
 		531B32FC1E24CF8A00811187 /* SectionIndex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionIndex.swift; sourceTree = "<group>"; };
 		531B32FD1E24CF8A00811187 /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		531B32FF1E24CF8A00811187 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		531B33061E24CF8A00811187 /* CacheQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CacheQueue.swift; path = "../Server Loading/ISMSStreamManager/CacheQueue.swift"; sourceTree = "<group>"; };
+		531B33061E24CF8A00811187 /* DownloadQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadQueue.swift; path = "../Server Loading/ISMSStreamManager/DownloadQueue.swift"; sourceTree = "<group>"; };
 		531B330F1E24CF8A00811187 /* ApiLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiLoader.swift; sourceTree = "<group>"; };
 		531B33111E24CF8A00811187 /* ItemLoaderOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemLoaderOperation.swift; sourceTree = "<group>"; };
 		531B33131E24CF8A00811187 /* AlbumLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlbumLoader.swift; path = "New Model/AlbumLoader.swift"; sourceTree = "<group>"; };
@@ -1086,7 +1086,7 @@
 			isa = PBXGroup;
 			children = (
 				531B33391E24CF8B00811187 /* PlayQueue.swift */,
-				531B33061E24CF8A00811187 /* CacheQueue.swift */,
+				531B33061E24CF8A00811187 /* DownloadQueue.swift */,
 				5355BFA01E2D671C00C6D27F /* StreamQueue.swift */,
 				53FD71E71E36F95400460B44 /* CacheManager.swift */,
 				53D959131E2C7A7700A1667F /* Database.swift */,
@@ -1902,7 +1902,7 @@
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				53FE312E1F07C594003AA6A7 /* JGUserDefault.swift in Sources */,
 				53808D371E7DE9500063B6D9 /* CachedItemViewModel.swift in Sources */,
-				531B337E1E24CF8B00811187 /* CacheQueue.swift in Sources */,
+				531B337E1E24CF8B00811187 /* DownloadQueue.swift in Sources */,
 				5355BFA51E2D81D900C6D27F /* AppDelegate.swift in Sources */,
 				53FE312F1F07C594003AA6A7 /* JGSegmentedControlTableCell.swift in Sources */,
 				531B34051E24D0B600811187 /* PlayerViewController.swift in Sources */,

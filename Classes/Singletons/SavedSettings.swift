@@ -187,7 +187,7 @@ final class SavedSettings {
         set { lock.synchronized {
             self.storage.set(newValue, forKey: Keys.isManualCachingOnWWANEnabled) }
             if AppDelegate.si.networkStatus.isReachableWWAN {
-                newValue ? CacheQueue.si.start() : CacheQueue.si.stop()
+                newValue ? DownloadQueue.si.start() : DownloadQueue.si.stop()
             }
         }
     }

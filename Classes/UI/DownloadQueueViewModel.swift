@@ -17,13 +17,13 @@ final class DownloadQueueViewModel: ItemViewModel {
         
         if let song = item as? Song {
             actionSheet.addAction(UIAlertAction(title: "Remove", style: .destructive) { action in
-                CacheQueue.si.remove(song: song)
+                DownloadQueue.si.remove(song: song)
                 self.loadModelsFromDatabase()
                 self.delegate?.itemsChanged(viewModel: self)
             })
             actionSheet.addAction(UIAlertAction(title: "Remove All", style: .destructive) { action in
                 for songToRemove in self.songs {
-                    CacheQueue.si.remove(song: songToRemove)
+                    DownloadQueue.si.remove(song: songToRemove)
                 }
                 self.loadModelsFromDatabase()
                 self.delegate?.itemsChanged(viewModel: self)
