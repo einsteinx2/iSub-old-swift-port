@@ -228,23 +228,16 @@ class VisualizerView: UIView {
             for x in 0 ..< specWidth / 2 {
                 var fftData = GaplessPlayer.si.visualizer.fftData(index: x + 1)
                 fftValues[fftValuesIndex] = fftData
-                fftValuesIndex += 1
-                if fftValuesIndex > fftValues.count - 1 {
-                    fftValuesIndex = 0
-                }
+                fftValuesIndex = fftValuesIndex + 1 > fftValues.count - 1 ? 0 : fftValuesIndex + 1
+
                 fftData = Float(fftValues.reduce(0, +)) / Float(fftValues.count)
                 
                 // Scale it (sqrt to make low values more visible)
                 let fftSqrt = sqrt(fftData)
                 y = Int(fftSqrt * 3 * Float(specHeight) - 4)
-                
-                // Linear
-                //y = fftData * 10 * specHeight
-                
+            
                 // Cap it
-                if y > specHeight {
-                    y = specHeight - 1
-                }
+                y = min(specHeight - 1, y)
                 
                 // Interpolate from previous to make the display smoother
                 y1 = (y + y1) / 2 - 1
