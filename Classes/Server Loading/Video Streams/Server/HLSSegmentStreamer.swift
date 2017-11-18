@@ -24,7 +24,7 @@ final class HLSSegmentStreamer: SelfSignedCertDelegate, URLSessionDataDelegate {
     }
     
     func start() {
-        session = URLSession(configuration: .background(withIdentifier: "HLSSegmentStreamer"), delegate: self, delegateQueue: nil)
+        session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
         dataTask = session.dataTask(with: segment.url)
         if let dataTask = dataTask {
             dataTask.resume()

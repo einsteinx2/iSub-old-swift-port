@@ -49,7 +49,7 @@ final class HLSPlaylistDownloader: HLSPlaylistDownloaderDelegate {
         conf.timeoutIntervalForRequest = Config.requestTimeout
         conf.timeoutIntervalForResource = Config.resourceTimeout
         let delegate: URLSessionDelegate? = allowSelfSignedCerts ? SelfSignedCertDelegate.shared : nil
-        session = URLSession(configuration: .background(withIdentifier: "HLSPlaylistDownloader"), delegate: delegate, delegateQueue: nil)
+        session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
         
         playlistTask = session?.dataTask(with: playlistUrl) { data, response, error in
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
