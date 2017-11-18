@@ -29,6 +29,9 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
     let progressSlider = UISlider()
     var progressDisplayLink: CADisplayLink!
     
+    private var previousBitrates = [Int]()
+    let maxPreviousBitrates = 60
+    
     var isZoomed = SavedSettings.si.isPlayerZoomed
     var allViews: [UIView] {
         return [coverArtView,
@@ -296,6 +299,7 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
             coverArtView.setDefaultImage(forSize: .player)
         }
         
+        previousBitrates = [Int]()
         bitRateLabel.text = ""
         formatLabel.text = currentSong?.currentContentType?.fileExtension.uppercased()
         
@@ -314,7 +318,15 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
             remainingLabel.text = "-\(formattedTime)"
         }
         
-        bitRateLabel.text = "\(GaplessPlayer.si.bitRate) kbps"
+        if previousBitrates.count > maxPreviousBitrates {
+            previousBitrates.removeFirst()
+        }
+        previousBitrates.append(GaplessPlayer.si.bitRate)
+        let averageBitrate = previousBitrates.reduce(0, +) / previousBitrates.count
+        
+        if progress > 5.0 {
+            bitRateLabel.text = "\(averageBitrate) kbps"
+        }
     }
     
     @objc fileprivate func progressSliderTouchDown() {
