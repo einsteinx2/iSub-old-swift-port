@@ -186,7 +186,7 @@ class ItemViewModel {
     }
     
     func filterModels(filterString: String, notify: Bool = true) {
-        guard filterString.length > 0 else {
+        guard filterString.count > 0 else {
             clearFilter()
             return
         }

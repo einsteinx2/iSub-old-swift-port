@@ -237,7 +237,7 @@ class StreamHandler: NSObject, URLSessionDataDelegate {
             NotificationCenter.postOnMainThread(name: Notifications.failed, userInfo: userInfo)
         } else {
             if song.localFileSize == 209 {
-                log.debug("StreamHandler: \(self) file size is 209 for: \(song.title) request: \(request)")
+                log.debug("StreamHandler: \(self) file size is 209 for: \(song.title) request: \(String(describing: request))")
             }
             
             if contentLength > 0 && song.localFileSize < contentLength {

@@ -99,7 +99,6 @@ struct Bass {
         }
     }
     
-    // TODO: Double check this logic
     static func estimateBitRate(bassStream: BassStream) -> Int {
         // Default to the player bitRate
         let startFilePosition: UInt64 = 0

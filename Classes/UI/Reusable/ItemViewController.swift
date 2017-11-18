@@ -193,7 +193,7 @@ class ItemViewController: DraggableTableViewController, UISearchBarDelegate {
             break
         }
         
-        return subTitle.length > 0 ? subTitle : nil
+        return subTitle.count > 0 ? subTitle : nil
     }
     
     // MARK: - Notifications -
@@ -475,7 +475,7 @@ class ItemViewController: DraggableTableViewController, UISearchBarDelegate {
             subTitle += "(\(year))"
         }
         
-        return subTitle.length > 0 ? subTitle : nil
+        return subTitle.count > 0 ? subTitle : nil
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

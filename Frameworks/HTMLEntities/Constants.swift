@@ -55,8 +55,8 @@ let namedCharactersEncodeMap = namedCharactersDecodeMap.inverting() {
     existing, new in
     let isExistingLegacy = !existing.hasSuffix(";")
     let isNewLegacy = !new.hasSuffix(";")
-    let existingCount = existing.characters.count
-    let newCount = new.characters.count
+    let existingCount = existing.count
+    let newCount = new.count
 
     if isExistingLegacy && !isNewLegacy {
         // prefer non-legacy
@@ -101,7 +101,7 @@ let legacyNamedCharactersLengthRange: CountableClosedRange<Int> = { () -> Counta
     var min = Int.max, max = Int.min
 
     for (name, _) in legacyNamedCharactersDecodeMap {
-        let length = name.characters.count
+        let length = name.count
         min = length < min ? length : min
         max = length > max ? length : max
     }

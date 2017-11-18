@@ -72,11 +72,11 @@ final class GaplessPlayer {
     }
     
     @objc fileprivate func mediaServicesWereLost(_ notification: Notification) {
-        log.debug("mediaServicesWereLost: \(notification.userInfo)")
+        log.debug("mediaServicesWereLost: \(String(describing: notification.userInfo))")
     }
     
     @objc fileprivate func mediaServicesWereReset(_ notification: Notification) {
-        log.debug("mediaServicesWereReset: \(notification.userInfo)")
+        log.debug("mediaServicesWereReset: \(String(describing: notification.userInfo))")
     }
     
     @objc fileprivate func readyForPlayback(_ notification: Notification) {

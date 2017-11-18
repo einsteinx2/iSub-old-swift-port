@@ -114,7 +114,7 @@ final class HLSProxyServer {
             // Sub-playlist
             server["/playlist/:fileName"] = { [weak self] request in
                 if let fileName = request.params[":fileName"], fileName.hasSuffix(".m3u8") {
-                    let uuidString = fileName.substring(to: fileName.length - ".m3u8".length)
+                    let uuidString = fileName.substring(to: fileName.count - ".m3u8".count)
                     if let response = self?.generatePlaylistResponse(uuidString: uuidString) {
                        return playlistHandler(response: response)
                     }

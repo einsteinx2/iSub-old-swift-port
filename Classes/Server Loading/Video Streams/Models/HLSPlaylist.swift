@@ -77,18 +77,18 @@ final class HLSPlaylist {
         for (i, line) in lines.enumerated() {
             // Target Duration
             if line.hasPrefix(Schema.targetDuration) {
-                let value = line.substring(from: Schema.targetDuration.length + 1)
+                let value = line.substring(from: Schema.targetDuration.count + 1)
                 targetDuration = Int(value)
             }
             
             // Version
             else if line.hasPrefix(Schema.version) {
-                version = Int(line.substring(from: Schema.version.length + 1))
+                version = Int(line.substring(from: Schema.version.count + 1))
             }
             
             // Media Sequence
             else if line.hasPrefix(Schema.mediaSequence) {
-                let value = line.substring(from: Schema.mediaSequence.length + 1)
+                let value = line.substring(from: Schema.mediaSequence.count + 1)
                 mediaSequence = Int(value)
             }
                 
@@ -96,7 +96,7 @@ final class HLSPlaylist {
             else if line.hasPrefix(Schema.streamInf) {
                 if let url = processUrlString(lines[i + 1]) {
                     let playlist = HLSPlaylist(url: url)
-                    let value = line.substring(from: Schema.streamInf.length + 1)
+                    let value = line.substring(from: Schema.streamInf.count + 1)
                     let components = value.components(separatedBy: CharacterSet(charactersIn: ","))
                     for pair in components {
                         let split = pair.components(separatedBy: CharacterSet(charactersIn: "="))
@@ -119,7 +119,7 @@ final class HLSPlaylist {
             else if line.hasPrefix(Schema.inf) {
                 // Find the duration
                 let sequence = (mediaSequence ?? 0) + segments.count
-                var value = line.substring(from: Schema.inf.length + 1)
+                var value = line.substring(from: Schema.inf.count + 1)
                 
                 // Remove optional title data from duration
                 if let commaIndex = value.index(of: Character(",")) {
@@ -191,7 +191,7 @@ final class HLSPlaylist {
             if let codecs = playlist.codecs {
                 properties += ",\(Schema.codecs)=\(codecs)"
             }
-            if properties.length > 0 {
+            if properties.count > 0 {
                 // Remove the leading comma
                 properties = properties.substring(from: 1)
             }

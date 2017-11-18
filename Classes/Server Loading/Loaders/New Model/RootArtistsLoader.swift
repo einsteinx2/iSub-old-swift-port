@@ -59,7 +59,7 @@ final class RootArtistsLoader: ApiLoader, RootItemLoader {
         
         // Save the new artists
         artists.forEach({$0.replace()})
-        ignoredArticles.forEach({IgnoredArticleRepository.si.insert(serverId: serverId, name: $0)})
+        ignoredArticles.forEach({_ = IgnoredArticleRepository.si.insert(serverId: serverId, name: $0)})
     }
     
     @discardableResult func loadModelsFromDatabase() -> Bool {

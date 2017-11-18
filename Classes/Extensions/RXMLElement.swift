@@ -10,7 +10,7 @@ import Foundation
 
 extension RXMLElement {
     func attribute(asStringOptional attributeName: String) -> String? {
-        if let value = self.attribute(attributeName), value.length > 0 {
+        if let value = self.attribute(attributeName), value.count > 0 {
             return value
         }
         return nil

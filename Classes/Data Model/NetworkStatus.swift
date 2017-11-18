@@ -14,21 +14,21 @@ class NetworkStatus {
     
     var isReachable: Bool {
         if let reachability = reachability {
-            return reachability.isReachable
+            return reachability.connection != .none
         }
         return true
     }
     
     var isReachableWifi: Bool {
         if let reachability = reachability {
-            return reachability.isReachableViaWiFi
+            return reachability.connection == .wifi
         }
         return false
     }
     
     var isReachableWWAN: Bool {
         if let reachability = reachability {
-            return reachability.isReachableViaWWAN
+            return reachability.connection == .cellular
         }
         return false
     }

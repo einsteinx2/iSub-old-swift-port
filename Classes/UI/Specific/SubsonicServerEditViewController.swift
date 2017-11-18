@@ -74,7 +74,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
             return false
         }
         
-        let length = url.length
+        let length = url.count
         if length == 0 {
             return false
         }
@@ -105,11 +105,11 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
     }
     
     func checkUsername(username: String?) -> Bool {
-        return username != nil && username!.length > 0
+        return username != nil && username!.count > 0
     }
     
     func checkPassword(password: String?) -> Bool {
-        return password != nil && password!.length > 0
+        return password != nil && password!.count > 0
     }
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {

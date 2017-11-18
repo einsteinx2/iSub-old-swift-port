@@ -34,12 +34,12 @@ struct Sorting {
             // See if the string starts with this article, note the space after each article to reduce false positives
             if name.lowercased().hasPrefix("\(article) ") {
                 // Make sure we don't mess with it if there's nothing after the article
-                if name.length > article.length + 1 {
+                if name.count > article.count + 1 {
                     // Move the article to the end after a comma
                     //return "\(name.substring(from: article.length + 1)), \(name.substring(to: article.length))"
                     
                     // We don't need the above format right now, so saving cycles by just returning the name
-                    return name.substring(from: article.length + 1)
+                    return name.substring(from: article.count + 1)
                 }
             }
         }
