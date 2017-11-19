@@ -8,6 +8,10 @@
 
 import Foundation
 
+// Important note: Playlist table song indexes are 0 based to better interact with Swift/ObjC arrays.
+// Normally SQLite table primary key fields start at 1 rather than 0. We force it to start at 0
+// by inserting the first record with a manually chosen songIndex of 0.
+
 struct PlaylistRepository: ItemRepository {
     static let si = PlaylistRepository()
     fileprivate let gr = GenericItemRepository.si
@@ -364,6 +368,16 @@ extension Playlist {
 }
 
 extension Playlist: PersistedItem {
+    convenience init(result: FMResultSet, repository: ItemRepository = PlaylistRepository.si) {
+        let playlistId = result.longLongInt(forColumnIndex: 0)
+        let serverId   = result.longLongInt(forColumnIndex: 1)
+        let name       = result.string(forColumnIndex: 2) ?? ""
+        let coverArtId = result.string(forColumnIndex: 3)
+        let repository = repository as! PlaylistRepository
+        
+        self.init(playlistId: playlistId, serverId: serverId, name: name, coverArtId: coverArtId, repository: repository)
+    }
+    
     class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = AlbumRepository.si) -> Item? {
         return (repository as? AlbumRepository)?.album(albumId: itemId, serverId: serverId)
     }

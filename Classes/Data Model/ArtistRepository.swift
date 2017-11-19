@@ -65,6 +65,19 @@ struct ArtistRepository: ItemRepository {
 }
 
 extension Artist: PersistedItem {
+    convenience init(result: FMResultSet, repository: ItemRepository = ArtistRepository.si) {
+        let artistId       = result.longLongInt(forColumnIndex: 0)
+        let serverId       = result.longLongInt(forColumnIndex: 1)
+        let name           = result.string(forColumnIndex: 2) ?? ""
+        let coverArtId     = result.string(forColumnIndex: 3)
+        let albumCount     = result.object(forColumnIndex: 4) as? Int
+        let albumSortOrder = AlbumSortOrder(rawValue: result.long(forColumnIndex: 5)) ?? .year
+        let repository     = repository as! ArtistRepository
+        
+        self.init(artistId: artistId, serverId: serverId, name: name, coverArtId: coverArtId, albumCount: albumCount, repository: repository)
+        self.albumSortOrder = albumSortOrder
+    }
+    
     class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = ArtistRepository.si) -> Item? {
         return (repository as? ArtistRepository)?.artist(artistId: itemId, serverId: serverId)
     }

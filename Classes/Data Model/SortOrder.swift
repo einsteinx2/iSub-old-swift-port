@@ -28,4 +28,3 @@ enum AlbumSortOrder: Int {
     case songCount = 4
     case duration  = 5
 }
-

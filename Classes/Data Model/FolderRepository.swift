@@ -140,6 +140,20 @@ struct FolderRepository: ItemRepository {
 }
 
 extension Folder: PersistedItem {
+    convenience init(result: FMResultSet, repository: ItemRepository = FolderRepository.si) {
+        let folderId       = result.longLongInt(forColumnIndex: 0)
+        let serverId       = result.longLongInt(forColumnIndex: 1)
+        let parentFolderId = result.object(forColumnIndex: 2) as? Int64
+        let mediaFolderId  = result.object(forColumnIndex: 3) as? Int64
+        let coverArtId     = result.string(forColumnIndex: 4)
+        let name           = result.string(forColumnIndex: 5) ?? ""
+        let songSortOrder  = SongSortOrder(rawValue: result.long(forColumnIndex: 6)) ?? .track
+        let repository     = repository as! FolderRepository
+        
+        self.init(folderId: folderId, serverId: serverId, parentFolderId: parentFolderId, mediaFolderId: mediaFolderId, coverArtId: coverArtId, name: name, repository: repository)
+        self.songSortOrder = songSortOrder
+    }
+    
     class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = FolderRepository.si) -> Item? {
         return (repository as? FolderRepository)?.folder(folderId: itemId, serverId: serverId)
     }

@@ -37,66 +37,31 @@ final class Album {
     var artist: Artist?
     var genre: Genre?
         
-    var artistDisplayName: String? {
-        return artist?.name ?? artistName
-    }
-    
     var songs = [Song]()
     
-    init?(rxmlElement element: RXMLElement, serverId: Int64, repository: AlbumRepository = AlbumRepository.si) {
-        guard let albumId = element.attribute(asInt64Optional: "id"), let name = element.attribute(asStringOptional: "name") else {
-            return nil
-        }
-        
-        self.repository = repository
-        
+    init(albumId: Int64, serverId: Int64, artistId: Int64?, genreId: Int64?, coverArtId: String?, name: String, songCount: Int?, duration: Int?, year: Int?, created: Date?, artistName: String?, repository: AlbumRepository = AlbumRepository.si) {
         self.albumId = albumId
         self.serverId = serverId
-        self.artistId = element.attribute(asInt64Optional: "artistId")
-        self.coverArtId = element.attribute("coverArt")?.clean
+        
+        self.artistId = artistId
+        self.genreId = genreId
+        self.coverArtId = coverArtId
         
         self.name = name
-        self.songCount = element.attribute(asIntOptional: "songCount")
-        self.duration = element.attribute(asIntOptional: "duration")
-        self.year = element.attribute(asIntOptional: "year")
+        self.songCount = songCount
+        self.duration = duration
+        self.year = year
         
-        if let createdString = element.attribute(asStringOptional: "created") {
-            self.created = createdDateFormatter.date(from: createdString)
-        } else {
-            self.created = nil
-        }
+        self.created = created
+        self.artistName = artistName
         
-        self.artistName = element.attribute(asStringOptional: "artist")
-        
-        if let genreString = element.attribute(asStringOptional: "genre") {
-            genre = GenreRepository.si.genre(name: genreString)
-            // TODO: Figure out why this ever returns a nil genre, it should be impossible without a database error
-            // which should also be impossible
-            self.genreId = genre?.genreId
-        } else {
-            self.genreId = nil
-        }
-    }
-    
-    required init(result: FMResultSet, repository: ItemRepository = AlbumRepository.si) {
-        self.albumId     = result.longLongInt(forColumnIndex: 0)
-        self.serverId    = result.longLongInt(forColumnIndex: 1)
-        self.artistId    = result.object(forColumnIndex: 2) as? Int64
-        self.genreId     = result.object(forColumnIndex: 3) as? Int64
-        self.coverArtId  = result.string(forColumnIndex: 4)
-        self.name        = result.string(forColumnIndex: 5) ?? ""
-        self.songCount   = result.object(forColumnIndex: 6) as? Int
-        self.duration    = result.object(forColumnIndex: 7) as? Int
-        self.year        = result.object(forColumnIndex: 8) as? Int
-        self.created     = result.date(forColumnIndex: 9)
-        self.artistName  = result.string(forColumnIndex: 10)
-        self.songSortOrder  = SongSortOrder(rawValue: result.long(forColumnIndex: 11)) ?? .track
-        self.repository  = repository as! AlbumRepository
+        self.repository = repository
     }
 }
 
-fileprivate let createdDateFormatter: DateFormatter = {
-    let createdDateFormatter = DateFormatter()
-    createdDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssz"
-    return createdDateFormatter
-}()
+// Calculated properties
+extension Album {
+    var artistDisplayName: String? {
+        return artist?.name ?? artistName
+    }
+}

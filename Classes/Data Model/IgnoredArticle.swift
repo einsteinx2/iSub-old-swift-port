@@ -12,6 +12,10 @@ extension IgnoredArticle: Item, Equatable {
     var itemId: Int64 { return articleId }
     var itemName: String { return name }
     var coverArtId: String? { return nil }
+    
+    static func ==(lhs: IgnoredArticle, rhs: IgnoredArticle) -> Bool {
+        return lhs.name == rhs.name
+    }
 }
 
 final class IgnoredArticle {
@@ -21,15 +25,11 @@ final class IgnoredArticle {
     let serverId: Int64
     let name: String
     
-    // This must be marked required or we get a crash due to a Swift bug
-    required init(result: FMResultSet, repository: ItemRepository = IgnoredArticleRepository.si) {
-        self.articleId = result.longLongInt(forColumnIndex: 0)
-        self.serverId = result.longLongInt(forColumnIndex: 1)
-        self.name = result.string(forColumnIndex: 1) ?? ""
-        self.repository = repository as! IgnoredArticleRepository
-    }
-    
-    static func ==(lhs: IgnoredArticle, rhs: IgnoredArticle) -> Bool {
-        return lhs.name == rhs.name
+    init(articleId: Int64, serverId: Int64, name: String, repository: IgnoredArticleRepository = IgnoredArticleRepository.si) {
+        self.articleId = articleId
+        self.serverId = serverId
+        self.name = name
+        
+        self.repository = repository
     }
 }

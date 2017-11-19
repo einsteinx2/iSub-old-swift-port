@@ -91,6 +91,15 @@ struct IgnoredArticleRepository: ItemRepository {
 }
 
 extension IgnoredArticle: PersistedItem {
+    convenience init(result: FMResultSet, repository: ItemRepository = IgnoredArticleRepository.si) {
+        let articleId  = result.longLongInt(forColumnIndex: 0)
+        let serverId   = result.longLongInt(forColumnIndex: 1)
+        let name       = result.string(forColumnIndex: 1) ?? ""
+        let repository = repository as! IgnoredArticleRepository
+        
+        self.init(articleId: articleId, serverId: serverId, name: name, repository: repository)
+    }
+    
     class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = IgnoredArticleRepository.si) -> Item? {
         return (repository as? IgnoredArticleRepository)?.article(articleId: itemId, serverId: serverId)
     }

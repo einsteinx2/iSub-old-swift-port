@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5301F5CF1A4938F300EEB25D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5301F5CC1A4938F300EEB25D /* Images.xcassets */; };
+		5306B6ED1FC1F2D000369EEF /* SubsonicItemParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306B6EC1FC1F2D000369EEF /* SubsonicItemParsing.swift */; };
 		5307DE051F07AA1500EEC40A /* VisualizerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5307DE041F07AA1500EEC40A /* VisualizerViewController.swift */; };
 		5308D9301E243D270026E6BD /* Device.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5308D92E1E243D270026E6BD /* Device.framework */; };
 		530A5F871516703F0081A83A /* playing-cell-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 530A5F831516703F0081A83A /* playing-cell-icon.png */; };
@@ -341,6 +342,7 @@
 		5301F5CC1A4938F300EEB25D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Images/Images.xcassets; sourceTree = "<group>"; };
 		53030314116ADF8B00B0AF5D /* reload-table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reload-table.png"; path = "Images/Other/reload-table.png"; sourceTree = "<group>"; };
 		5305C2051157F4F800BC78F0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Images/Other/Default.png; sourceTree = "<group>"; };
+		5306B6EC1FC1F2D000369EEF /* SubsonicItemParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsonicItemParsing.swift; sourceTree = "<group>"; };
 		5307DE041F07AA1500EEC40A /* VisualizerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizerViewController.swift; sourceTree = "<group>"; };
 		5308D92E1E243D270026E6BD /* Device.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Device.framework; path = Carthage/Build/iOS/Device.framework; sourceTree = "<group>"; };
 		530A5F831516703F0081A83A /* playing-cell-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "playing-cell-icon.png"; path = "Images/Other/playing-cell-icon.png"; sourceTree = "<group>"; };
@@ -907,6 +909,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5306B6EB1FC1F2B000369EEF /* Item Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				5306B6EC1FC1F2D000369EEF /* SubsonicItemParsing.swift */,
+			);
+			path = "Item Parsing";
+			sourceTree = "<group>";
+		};
 		530EBB7A1E7DCE20002E3B11 /* Item View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1006,6 +1016,7 @@
 				5377D6451E3A8221003BFFB9 /* NetworkIndicator.swift */,
 				531B32D11E24CF8A00811187 /* Player */,
 				53CFBB611E2AE160005895F4 /* Item Models */,
+				5306B6EB1FC1F2B000369EEF /* Item Parsing */,
 				53F107A41E2ACDDC003B7D59 /* Repositories */,
 			);
 			path = "Data Model";
@@ -2004,6 +2015,7 @@
 				53808D341E7DE5F70063B6D9 /* AlbumViewController.swift in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				53808D311E7DE5DF0063B6D9 /* ArtistViewController.swift in Sources */,
+				5306B6ED1FC1F2D000369EEF /* SubsonicItemParsing.swift in Sources */,
 				53A179A51F65F0D300B46251 /* HLSProxyServer.swift in Sources */,
 				53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */,
 				531B34661E24D3D500811187 /* Defines.swift in Sources */,

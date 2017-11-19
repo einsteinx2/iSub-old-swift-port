@@ -68,6 +68,14 @@ struct GenreRepository: ItemRepository {
 }
 
 extension Genre: PersistedItem {
+    convenience init(result: FMResultSet, repository: ItemRepository) {
+        let genreId    = result.longLongInt(forColumnIndex: 0)
+        let name       = result.string(forColumnIndex: 1) ?? ""
+        let repository = repository as! GenreRepository
+        
+        self.init(genreId: genreId, name: name, repository: repository)
+    }
+    
     class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = GenreRepository.si) -> Item? {
         return (repository as? GenreRepository)?.genre(genreId: itemId)
     }

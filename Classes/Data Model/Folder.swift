@@ -30,34 +30,16 @@ final class Folder {
     var folders = [Folder]()
     var songs = [Song]()
     
-    init?(rxmlElement element: RXMLElement, serverId: Int64, mediaFolderId: Int64, repository: FolderRepository = FolderRepository.si) {
-        guard let folderId = element.attribute(asInt64Optional: "id") else {
-            return nil
-        }
-        
+    init(folderId: Int64, serverId: Int64, parentFolderId: Int64?, mediaFolderId: Int64?, coverArtId: String?, name: String, repository: FolderRepository = FolderRepository.si) {
         self.folderId = folderId
         self.serverId = serverId
-        self.parentFolderId = element.attribute(asInt64Optional: "parent")
+        
+        self.parentFolderId = parentFolderId
         self.mediaFolderId = mediaFolderId
-        self.coverArtId = element.attribute(asStringOptional: "coverArt")
-        if let name = element.attribute(asStringOptional: "title") {
-            self.name = name.clean
-        } else if let name = element.attribute(asStringOptional: "name") {
-            self.name = name.clean
-        } else {
-            self.name = ""
-        }
+        self.coverArtId = coverArtId
+        
+        self.name = name
+        
         self.repository = repository
-    }
-    
-    required init(result: FMResultSet, repository: ItemRepository = FolderRepository.si) {
-        self.folderId       = result.longLongInt(forColumnIndex: 0)
-        self.serverId       = result.longLongInt(forColumnIndex: 1)
-        self.parentFolderId = result.object(forColumnIndex: 2) as? Int64
-        self.mediaFolderId  = result.object(forColumnIndex: 3) as? Int64
-        self.coverArtId     = result.string(forColumnIndex: 4)
-        self.name           = result.string(forColumnIndex: 5) ?? ""
-        self.songSortOrder  = SongSortOrder(rawValue: result.long(forColumnIndex: 6)) ?? .track
-        self.repository     = repository as! FolderRepository
     }
 }

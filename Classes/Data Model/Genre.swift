@@ -26,10 +26,4 @@ final class Genre {
         self.name = name
         self.repository = repository
     }
-    
-    required init(result: FMResultSet, repository: ItemRepository) {
-        self.genreId    = result.longLongInt(forColumnIndex: 0)
-        self.name       = result.string(forColumnIndex: 1) ?? ""
-        self.repository = repository as! GenreRepository
-    }
 }

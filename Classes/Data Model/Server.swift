@@ -17,6 +17,10 @@ extension Server: Item, Equatable {
     var itemId: Int64 { return serverId }
     var itemName: String { return url }
     var coverArtId: String? { return nil }
+    
+    static func ==(lhs: Server, rhs: Server) -> Bool {
+        return lhs.url == rhs.url && lhs.username == rhs.username
+    }
 }
 
 final class Server {
@@ -57,26 +61,5 @@ final class Server {
         self.username = username
         self.basicAuth = basicAuth
         self.repository = repository
-    }
-    
-    // This must be marked required or we get a crash due to a Swift bug
-    required init(result: FMResultSet, repository: ItemRepository) {
-        self.serverId = result.longLongInt(forColumnIndex: 0)
-        self.type = ServerType(rawValue: result.long(forColumnIndex: 1)) ?? .subsonic
-        self.url = result.string(forColumnIndex: 2) ?? ""
-        self.username = result.string(forColumnIndex: 3) ?? ""
-        self.basicAuth = result.bool(forColumnIndex: 4)
-        self.repository = repository as! ServerRepository
-    }
-    
-    static func ==(lhs: Server, rhs: Server) -> Bool {
-        return lhs.url == rhs.url && lhs.username == rhs.username
-    }
-}
-
-// ObjC shim
-extension Server {
-    static func server(serverId: Int64) -> Server? {
-        return ServerRepository.si.server(serverId: serverId)
     }
 }

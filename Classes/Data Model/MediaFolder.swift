@@ -24,21 +24,11 @@ final class MediaFolder {
     var folders = [Folder]()
     var songs = [Song]()
     
-    init?(rxmlElement element: RXMLElement, serverId: Int64, repository: MediaFolderRepository = MediaFolderRepository.si) {
-        guard let mediaFolderId = element.attribute(asInt64Optional: "id"), let name = element.attribute(asStringOptional: "name") else {
-            return nil
-        }
-
+    init(mediaFolderId: Int64, serverId: Int64, name: String, repository: MediaFolderRepository = MediaFolderRepository.si) {
         self.mediaFolderId = mediaFolderId
         self.serverId = serverId
         self.name = name
+        
         self.repository = repository
-    }
-    
-    required init(result: FMResultSet, repository: ItemRepository = MediaFolderRepository.si) {
-        self.mediaFolderId = result.longLongInt(forColumnIndex: 0)
-        self.serverId      = result.longLongInt(forColumnIndex: 1)
-        self.name          = result.string(forColumnIndex: 2) ?? ""
-        self.repository    = repository as! MediaFolderRepository
     }
 }

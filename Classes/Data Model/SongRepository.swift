@@ -215,6 +215,46 @@ extension Song {
 }
 
 extension Song: PersistedItem {
+    convenience init(result: FMResultSet, repository: ItemRepository = SongRepository.si) {
+        let songId                  = result.longLongInt(forColumnIndex: 0)
+        let serverId                = result.longLongInt(forColumnIndex: 1)
+        let contentTypeId           = result.longLongInt(forColumnIndex: 2)
+        let transcodedContentTypeId = result.object(forColumnIndex: 3) as? Int64
+        let mediaFolderId           = result.object(forColumnIndex: 4) as? Int64
+        let folderId                = result.object(forColumnIndex: 5) as? Int64
+        let artistId                = result.object(forColumnIndex: 6) as? Int64
+        let albumId                 = result.object(forColumnIndex: 7) as? Int64
+        let genreId                 = result.object(forColumnIndex: 8) as? Int64
+        let coverArtId              = result.string(forColumnIndex: 9)
+        let title                   = result.string(forColumnIndex: 10) ?? ""
+        let duration                = result.object(forColumnIndex: 11) as? Int
+        let bitRate                 = result.object(forColumnIndex: 12) as? Int
+        let trackNumber             = result.object(forColumnIndex: 13) as? Int
+        let discNumber              = result.object(forColumnIndex: 14) as? Int
+        let year                    = result.object(forColumnIndex: 15) as? Int
+        let size                    = result.longLongInt(forColumnIndex: 16)
+        let path                    = result.string(forColumnIndex: 17) ?? ""
+        let lastPlayed              = result.date(forColumnIndex: 18)
+        let artistName              = result.string(forColumnIndex: 19)
+        let albumName               = result.string(forColumnIndex: 20)
+        let repository              = repository as! SongRepository
+        
+        // Preload genre object
+        var genre: Genre?
+        if let genreId = genreId, let maybeGenre = GenreRepository.si.genre(genreId: genreId) {
+            genre = maybeGenre
+        }
+
+        // Preload content type objects
+        let contentType = ContentTypeRepository.si.contentType(contentTypeId: contentTypeId)
+        var transcodedContentType: ContentType? = nil
+        if let transcodedContentTypeId = transcodedContentTypeId {
+            transcodedContentType = ContentTypeRepository.si.contentType(contentTypeId: transcodedContentTypeId)
+        }
+        
+        self.init(songId: songId, serverId: serverId, contentTypeId: contentTypeId, transcodedContentTypeId: transcodedContentTypeId, mediaFolderId: mediaFolderId, folderId: folderId, artistId: artistId, artistName: artistName, albumId: albumId, albumName: albumName, genreId: genreId, coverArtId: coverArtId, title: title, duration: duration, bitRate: bitRate, trackNumber: trackNumber, discNumber: discNumber, year: year, size: size, path: path, lastPlayed: lastPlayed, genre: genre, contentType: contentType, transcodedContentType: transcodedContentType, repository: repository)
+    }
+    
     class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = SongRepository.si) -> Item? {
         return (repository as? SongRepository)?.song(songId: itemId, serverId: serverId)
     }

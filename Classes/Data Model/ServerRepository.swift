@@ -75,6 +75,17 @@ struct ServerRepository: ItemRepository {
 }
 
 extension Server: PersistedItem {
+    convenience init(result: FMResultSet, repository: ItemRepository) {
+        let serverId   = result.longLongInt(forColumnIndex: 0)
+        let type       = ServerType(rawValue: result.long(forColumnIndex: 1)) ?? .subsonic
+        let url        = result.string(forColumnIndex: 2) ?? ""
+        let username   = result.string(forColumnIndex: 3) ?? ""
+        let basicAuth  = result.bool(forColumnIndex: 4)
+        let repository = repository as! ServerRepository
+        
+        self.init(serverId: serverId, type: type, url: url, username: username, basicAuth: basicAuth, repository: repository)
+    }
+    
     class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = ServerRepository.si) -> Item? {
         return (repository as? ServerRepository)?.server(serverId: itemId)
     }

@@ -27,26 +27,14 @@ final class Artist {
     
     var albums = [Album]()
     
-    init?(rxmlElement element: RXMLElement, serverId: Int64, repository: ArtistRepository = ArtistRepository.si) {
-        guard let artistId = element.attribute(asInt64Optional: "id"), let name = element.attribute(asStringOptional: "name") else {
-            return nil
-        }
-        
+    init(artistId: Int64, serverId: Int64, name: String, coverArtId: String?, albumCount: Int?, repository: ArtistRepository = ArtistRepository.si) {
         self.artistId = artistId
         self.serverId = serverId
+        
         self.name = name
-        self.coverArtId = element.attribute(asStringOptional: "coverArtId")
-        self.albumCount = element.attribute(asIntOptional: "albumCount")
+        self.coverArtId = coverArtId
+        self.albumCount = albumCount
+        
         self.repository = repository
-    }
-    
-    required init(result: FMResultSet, repository: ItemRepository = ArtistRepository.si) {
-        self.artistId    = result.longLongInt(forColumnIndex: 0)
-        self.serverId    = result.longLongInt(forColumnIndex: 1)
-        self.name        = result.string(forColumnIndex: 2) ?? ""
-        self.coverArtId  = result.string(forColumnIndex: 3)
-        self.albumCount  = result.object(forColumnIndex: 4) as? Int
-        self.albumSortOrder  = AlbumSortOrder(rawValue: result.long(forColumnIndex: 5)) ?? .year
-        self.repository  = repository as! ArtistRepository
     }
 }

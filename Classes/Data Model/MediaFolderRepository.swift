@@ -62,6 +62,15 @@ struct MediaFolderRepository: ItemRepository {
 }
 
 extension MediaFolder: PersistedItem {
+    convenience init(result: FMResultSet, repository: ItemRepository = MediaFolderRepository.si) {
+        let mediaFolderId = result.longLongInt(forColumnIndex: 0)
+        let serverId      = result.longLongInt(forColumnIndex: 1)
+        let name          = result.string(forColumnIndex: 2) ?? ""
+        let repository    = repository as! MediaFolderRepository
+        
+        self.init(mediaFolderId: mediaFolderId, serverId: serverId, name: name, repository: repository)
+    }
+    
     class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = MediaFolderRepository.si) -> Item? {
         return (repository as? MediaFolderRepository)?.mediaFolder(mediaFolderId: itemId, serverId: serverId)
     }
