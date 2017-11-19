@@ -14,7 +14,7 @@ enum BasicContentType: Int64 {
     case image = 3
 }
 
-class ContentType {
+final class ContentType {
     let contentTypeId: Int64
     let mimeType: String
     let fileExtension: String
@@ -22,49 +22,12 @@ class ContentType {
     
     let basicType: BasicContentType?
     
-    init(result: FMResultSet) {
-        self.contentTypeId = result.longLongInt(forColumnIndex: 0)
-        self.mimeType = result.string(forColumnIndex: 1) ?? ""
-        self.fileExtension = result.string(forColumnIndex: 2) ?? ""
-        self.basicTypeId = result.longLongInt(forColumnIndex: 3)
-        self.basicType = BasicContentType(rawValue: self.basicTypeId)
-    }
-}
-
-class ContentTypeRepository {
-    static let si = ContentTypeRepository()
-    
-    func contentType(contentTypeId: Int64) -> ContentType? {
-        var contentType: ContentType? = nil
-        Database.si.read.inDatabase { db in
-            let query = "SELECT * FROM contentTypes WHERE contentTypeId = ?"
-            do {
-                let result = try db.executeQuery(query, contentTypeId)
-                if result.next() {
-                    contentType = ContentType(result: result)
-                }
-                result.close()
-            } catch {
-                printError(error)
-            }
-        }
-        return contentType
-    }
-    
-    func contentType(mimeType: String) -> ContentType? {
-        var contentType: ContentType? = nil
-        Database.si.read.inDatabase { db in
-            let query = "SELECT * FROM contentTypes WHERE mimeType = ?"
-            do {
-                let result = try db.executeQuery(query, mimeType)
-                if result.next() {
-                    contentType = ContentType(result: result)
-                }
-                result.close()
-            } catch {
-                printError(error)
-            }
-        }
-        return contentType
+    init(contentTypeId: Int64, mimeType: String, fileExtension: String, basicTypeId: Int64) {
+        self.contentTypeId = contentTypeId
+        self.mimeType = mimeType
+        self.fileExtension = fileExtension
+        self.basicTypeId = basicTypeId
+        
+        self.basicType = BasicContentType(rawValue: basicTypeId)
     }
 }
