@@ -1,0 +1,4 @@
+framework module HTMLEntities {
+    header "HTMLEntities-Swift.h"
+    requires objc
+}

@@ -1,5 +1,6 @@
 github "CocoaLumberjack/CocoaLumberjack" "3.3.0"
 github "DaveWoodCom/XCGLogger" "5.0.5"
+github "IBM-Swift/swift-html-entities" "3.0.9"
 github "SnapKit/SnapKit" "4.0.0"
 github "aschuch/AwesomeCache" "5.0"
 github "ashleymills/Reachability.swift" "27407e0eedd5b5dab0a0da9d5a2696fb9821f19b"

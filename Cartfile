@@ -8,3 +8,4 @@ github "DaveWoodCom/XCGLogger" ~> 5.0.1
 github "joshualat/Pluralize.swift" "master"
 github "glock45/swifter" "stable"
 github "CocoaLumberjack/CocoaLumberjack"
+github "IBM-Swift/swift-html-entities"

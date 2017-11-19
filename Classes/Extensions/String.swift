@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreText
+import HTMLEntities
 
 // http://stackoverflow.com/a/26775912/299262
 extension String {

@@ -1,0 +1,9 @@
+{
+  "commitish" : "3.0.9",
+  "iOS" : [
+    {
+      "hash" : "c582bcb12fc314e45a0c94a7885cee8042fd6cdea5b89ca9ed2494d7cbf365bb",
+      "name" : "HTMLEntities"
+    }
+  ]
+}
