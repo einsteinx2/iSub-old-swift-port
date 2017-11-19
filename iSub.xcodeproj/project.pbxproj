@@ -2355,7 +2355,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				OTHER_SWIFT_FLAGS = "-D DebugBuild -Onone -Xfrontend -warn-long-function-bodies=100";
+				OTHER_SWIFT_FLAGS = "-D DebugBuild -Onone -Xfrontend -warn-long-function-bodies=100 -Xfrontend -warn-long-expression-type-checking=50";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_MODULE_NAME = iSub;
 				SDKROOT = iphoneos;
