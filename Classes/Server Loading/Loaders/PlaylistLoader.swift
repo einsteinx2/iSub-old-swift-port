@@ -17,6 +17,10 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
         return songs
     }
     
+    var associatedItem: Item? {
+        return PlaylistRepository.si.playlist(playlistId: playlistId, serverId: serverId)
+    }
+    
     init(playlistId: Int64, serverId: Int64) {
         self.playlistId = playlistId
         super.init(serverId: serverId)
@@ -105,8 +109,5 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
         }
         return false
     }
-    
-    var associatedItem: Item? {
-        return PlaylistRepository.si.playlist(playlistId: playlistId, serverId: serverId)
-    }
+
 }
