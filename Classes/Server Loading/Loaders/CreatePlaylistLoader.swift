@@ -1,53 +1,53 @@
 //
-//  PlaylistLoader.swift
-//  iSub
+//  CreatePlaylistLoader.swift
+//  iSub Beta
 //
-//  Created by Benjamin Baron on 1/16/17.
+//  Created by Felipe Rolvar on 26/11/17.
 //  Copyright © 2017 Ben Baron. All rights reserved.
 //
 
 import Foundation
 
-final class PlaylistLoader: ApiLoader, ItemLoader {
-    let playlistId: Int64
+class CreatePlaylistLoader: ApiLoader, ItemLoader {
     
-    var songs = [Song]()
+    private let playlistId: Int64?
+    private var songs = [Song]()
+    var playlistName: String
     
     var items: [Item] {
         return songs
     }
     
     var associatedItem: Item? {
-        return PlaylistRepository.si.playlist(playlistId: playlistId, serverId: serverId)
+        return PlaylistRepository.si.playlist(name: playlistName, serverId: serverId)
     }
     
-    init(playlistId: Int64, serverId: Int64) {
-        self.playlistId = playlistId
+    init(with name: String, and serverId: Int64) {
+        self.playlistName = name
         super.init(serverId: serverId)
     }
     
     override func createRequest() -> URLRequest? {
-        return URLRequest(subsonicAction: .getPlaylist, serverId: serverId, parameters: ["id": playlistId])
+        return URLRequest(subsonicAction: .createPlaylist,
+                          serverId: serverId,
+                          parameters: ["name": playlistName,
+                                       "songId" : items.map { $0.itemId }])
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
-        var songsTemp = [Song]()
-        
-        root.iterate("playlist.entry") { song in
-            if let aSong = Song(rxmlElement: song, serverId: self.serverId) {
-                songsTemp.append(aSong)
-            }
+        songs.removeAll()
+        root.iterate("playlist.entry") {
+            guard let song = Song(rxmlElement: $0, serverId: serverId) else { continue }
+            songs.append(song)
         }
-        songs = songsTemp
-        
         persistModels()
-        
         return true
     }
     
+    // TODO: Explanation of this snipet
     func persistModels() {
         // Save the new songs
-        songs.forEach({$0.replace()})
+        songs.forEach { $0.replace() }
         
         // Update the playlist table
         // TODO: This will need to be rewritten to handle two way syncing
@@ -102,12 +102,10 @@ final class PlaylistLoader: ApiLoader, ItemLoader {
     }
     
     @discardableResult func loadModelsFromDatabase() -> Bool {
-        if let playlist = associatedItem as? Playlist {
-            playlist.loadSubItems()
-            songs = playlist.songs
-            return songs.count > 0
-        }
-        return false
+        guard let playlist = associatedItem as? Playlist else { return false }
+        playlist.loadSubItems()
+        songs = playlist.songs
+        return songs.count > 0
     }
-
+    
 }
