@@ -25,6 +25,7 @@ enum SubsonicURLAction: String {
     case stream            = "stream"
     case hls               = "hls"
     case ping              = "ping"
+    case updatePlaylist    = "updatePlaylist"
     
     var urlExtension: String {
         return self == .hls ? "m3u8" : "view"
