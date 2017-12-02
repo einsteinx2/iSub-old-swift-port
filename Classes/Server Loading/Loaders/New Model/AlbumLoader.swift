@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class AlbumLoader: ApiLoader, ItemLoader {
+final class AlbumLoader: ApiLoader, PersistedItemLoader {
     let albumId: Int64
     
     var songs = [Song]()

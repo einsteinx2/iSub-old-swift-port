@@ -11,10 +11,14 @@ import Foundation
 class RandomSongsLoader: ApiLoader, ItemLoader {
     
     var associatedItem: Item?
-    var items: [Item]
-    private var size: Int?
+    var songs = [Song]()
     
-    override init(with size: Int, and serverId: Int64) {
+    var items: [Item] {
+        return songs as [Item]
+    }
+    private var size: Int
+    
+    override init(serverId: Int64, and size: Int = 10) {
         self.size = size
         super.init(serverId: serverId)
     }
@@ -22,12 +26,11 @@ class RandomSongsLoader: ApiLoader, ItemLoader {
     override func createRequest() -> URLRequest? {
         return URLRequest(subsonicAction: .getRandomSongs,
                           serverId: serverId,
-                          parameters: ["size" : size ?? 10])
+                          parameters: ["size" : size])
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
-        
-        var songs: [Song] = []
+
         let server = serverId
         root.iterate("randomSongs.song") {
             if let song = Song(rxmlElement: $0, serverId: server) {
@@ -40,11 +43,4 @@ class RandomSongsLoader: ApiLoader, ItemLoader {
         return items.count > 0
         
     }
-    
-    func persistModels() {}
-    
-    func loadModelsFromDatabase() -> Bool {
-        return true
-    }
-    
 }

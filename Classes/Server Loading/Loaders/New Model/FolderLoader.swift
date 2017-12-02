@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class FolderLoader: ApiLoader, ItemLoader {
+final class FolderLoader: ApiLoader, PersistedItemLoader {
     let folderId: Int64
     let mediaFolderId: Int64
     
