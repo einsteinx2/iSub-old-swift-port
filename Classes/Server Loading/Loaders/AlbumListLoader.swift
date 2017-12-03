@@ -23,6 +23,7 @@ class AlbumListLoader: ApiLoader, ItemLoader {
         case byGenre
     }
     
+    var sortedId: Bool
     var albumbs = [Album]()
     var type: albumType?
     var size: Int = 10
@@ -37,7 +38,8 @@ class AlbumListLoader: ApiLoader, ItemLoader {
         return albumbs as [Item]
     }
     
-    override init(serverId: Int64) {
+    init(serverId: Int64, sortedId3: Bool) {
+        self.sortedId = sortedId3
         super.init(serverId: serverId)
     }
     
@@ -48,7 +50,7 @@ class AlbumListLoader: ApiLoader, ItemLoader {
             return nil
         }
         
-        return URLRequest(subsonicAction: .getAlbumList,
+        return URLRequest(subsonicAction: sortedId ? .getAlbumList2 : .getAlbumList,
                           serverId: serverId,
                           parameters: parameters)
     }
