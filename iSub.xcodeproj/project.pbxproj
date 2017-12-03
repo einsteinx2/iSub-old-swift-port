@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		40F3F5081FD3CAA700B467BB /* SimilarSongsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */; };
 		5301F5CF1A4938F300EEB25D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5301F5CC1A4938F300EEB25D /* Images.xcassets */; };
 		5306B6ED1FC1F2D000369EEF /* SubsonicItemParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306B6EC1FC1F2D000369EEF /* SubsonicItemParsing.swift */; };
 		5306B6EF1FC2129C00369EEF /* HTMLEntities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306B6EE1FC2129B00369EEF /* HTMLEntities.framework */; };
@@ -338,6 +339,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarSongsLoader.swift; sourceTree = "<group>"; };
 		5301F5CC1A4938F300EEB25D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Images/Images.xcassets; sourceTree = "<group>"; };
 		53030314116ADF8B00B0AF5D /* reload-table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reload-table.png"; path = "Images/Other/reload-table.png"; sourceTree = "<group>"; };
 		5305C2051157F4F800BC78F0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Images/Other/Default.png; sourceTree = "<group>"; };
@@ -1205,6 +1207,7 @@
 				531B33131E24CF8A00811187 /* AlbumLoader.swift */,
 				5355BFB51E2DBC9B00C6D27F /* PlaylistLoader.swift */,
 				7D0032161FD2158E009EAAFE /* RandomSongsLoader.swift */,
+				40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */,
 			);
 			name = "Item Loaders";
 			sourceTree = "<group>";
@@ -2000,6 +2003,7 @@
 				53835CD61E0B7D6D0077B53D /* ZKCDTrailer.m in Sources */,
 				53835CC21E0B7D6D0077B53D /* NSString+ZKAdditions.m in Sources */,
 				53CFBB731E2B164F005895F4 /* Artist.swift in Sources */,
+				40F3F5081FD3CAA700B467BB /* SimilarSongsLoader.swift in Sources */,
 				53808D341E7DE5F70063B6D9 /* AlbumViewController.swift in Sources */,
 				53835CCC1E0B7D6D0077B53D /* ZKArchive.m in Sources */,
 				53808D311E7DE5DF0063B6D9 /* ArtistViewController.swift in Sources */,
