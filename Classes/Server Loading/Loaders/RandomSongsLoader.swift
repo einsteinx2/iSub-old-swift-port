@@ -18,7 +18,7 @@ class RandomSongsLoader: ApiLoader, ItemLoader {
     }
     private var size: Int
     
-    override init(serverId: Int64, and size: Int = 10) {
+    init(serverId: Int64, and size: Int = 10) {
         self.size = size
         super.init(serverId: serverId)
     }
@@ -32,13 +32,11 @@ class RandomSongsLoader: ApiLoader, ItemLoader {
     override func processResponse(root: RXMLElement) -> Bool {
 
         let server = serverId
-        root.iterate("randomSongs.song") {
+        root.iterate("randomSongs.song") { [weak self] in
             if let song = Song(rxmlElement: $0, serverId: server) {
-                songs.append(contentsOf: song)
+                self?.songs.append(song)
             }
         }
-        
-        items = songs
         
         return items.count > 0
         

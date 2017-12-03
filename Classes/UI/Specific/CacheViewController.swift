@@ -87,7 +87,7 @@ class CacheViewController: DraggableTableViewController {
         }
     }
     
-    fileprivate func pushItemController(loader: ItemLoader, title: String) {
+    fileprivate func pushItemController(loader: PersistedItemLoader, title: String) {
         let viewModel = ItemViewModel(loader: loader)
         viewModel.navigationTitle = title
         let viewController = ItemViewController(viewModel: viewModel)
