@@ -21,6 +21,7 @@ enum SubsonicURLAction: String {
     case getArtist         = "getArtist"
     case getAlbum          = "getAlbum"
     case getPlaylist       = "getPlaylist"
+    case createPlaylist    = "createPlaylist"
     case getCoverArt       = "getCoverArt"
     case stream            = "stream"
     case hls               = "hls"
