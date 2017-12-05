@@ -8,7 +8,7 @@
 
 import Foundation
 
-fileprivate func loader(forItem item: Item, isBrowsingCache: Bool) -> ItemLoader? {
+fileprivate func loader(forItem item: Item, isBrowsingCache: Bool) -> PersistedItemLoader? {
     if isBrowsingCache {
         switch item {
         case let item as Folder:
@@ -40,7 +40,7 @@ fileprivate func loader(forItem item: Item, isBrowsingCache: Bool) -> ItemLoader
     return nil
 }
 
-func itemViewController(forLoader loader: ItemLoader) -> ItemViewController? {
+func itemViewController(forLoader loader: PersistedItemLoader) -> ItemViewController? {
     let viewModel = loader is CachedDatabaseLoader ? CachedItemViewModel(loader: loader) : ServerItemViewModel(loader: loader)
     
     switch viewModel.rootItem {

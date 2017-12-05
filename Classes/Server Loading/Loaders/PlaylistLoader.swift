@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class PlaylistLoader: ApiLoader, ItemLoader {
+final class PlaylistLoader: ApiLoader, PersistedItemLoader {
     let playlistId: Int64
     
     var songs = [Song]()

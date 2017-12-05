@@ -94,14 +94,3 @@ class RecursiveSongLoader: ApiLoader, ItemLoader {
         }
     }
 }
-
-// Not implemented
-extension RecursiveSongLoader {
-    func persistModels() {
-        fatalError("Do not persist models from the RecursiveSongLoader, it's done by the sub-loaders")
-    }
-    
-    @discardableResult func loadModelsFromDatabase() -> Bool {
-        fatalError("Do not load models using the RecursiveSongLoader, use the appropriate repository class")
-    }
-}
