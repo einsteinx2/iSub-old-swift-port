@@ -22,7 +22,7 @@ class ItemViewModel {
     
     // MARK: - Properties -
     
-    fileprivate var loader: ItemLoader
+    fileprivate var loader: PersistedItemLoader
     
     var serverId: Int64 {
         return loader.serverId
@@ -100,7 +100,7 @@ class ItemViewModel {
     
     // MARK - Lifecycle -
     
-    init(loader: ItemLoader, title: String? = nil) {
+    init(loader: PersistedItemLoader, title: String? = nil) {
         self.loader = loader
         self.rootItem = loader.associatedItem
         self.navigationTitle = title //?? loader.associatedItem?.itemName
