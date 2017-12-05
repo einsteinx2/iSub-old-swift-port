@@ -19,13 +19,15 @@ protocol ItemLoader {
     
     var state: ApiLoaderState { get }
     
-    func persistModels()
-    func loadModelsFromDatabase() -> Bool
-    
     func start()
     func cancel()
 }
 
-protocol RootItemLoader: ItemLoader {
+protocol PersistedItemLoader: ItemLoader {
+    func persistModels()
+    func loadModelsFromDatabase() -> Bool
+}
+
+protocol RootItemLoader: PersistedItemLoader {
     var mediaFolderId: Int64? { get set }
 }
