@@ -76,11 +76,4 @@ class SearchLoader: ApiLoader, ItemLoader {
         
         return artists.count > 0 || albums.count > 0 || songs.count > 0
     }
-    
-    func persistModels() {}
-    
-    func loadModelsFromDatabase() -> Bool {
-        return true
-    }
-    
 }

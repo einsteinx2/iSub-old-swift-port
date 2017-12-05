@@ -39,10 +39,6 @@ class UpdatePlaylistLoader: ApiLoader, ItemLoader {
         playlist.loadSubItems()
         return playlist.songs.count > 0
     }
-    
-    // MARK: Nothing to implement
-    func persistModels() {}
-    
 }
 
 private extension UpdatePlaylistLoader {
