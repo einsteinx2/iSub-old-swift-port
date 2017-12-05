@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CachedDatabaseLoader: ItemLoader {
+class CachedDatabaseLoader: PersistedItemLoader {
     var completionHandler: ApiLoaderCompletionHandler?
     
     let serverId: Int64
