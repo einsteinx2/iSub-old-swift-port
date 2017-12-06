@@ -30,6 +30,8 @@ enum SubsonicURLAction: String {
     case search3           = "search3"
     case updatePlaylist    = "updatePlaylist"
     case getRandomSongs    = "getRandomSongs"
+    case getSimilarSongs   = "getSimilarSongs"
+    case getSimilarSongs2  = "getSimilarSongs2"
     case getAlbumList      = "getAlbumList"
     
     var urlExtension: String {
