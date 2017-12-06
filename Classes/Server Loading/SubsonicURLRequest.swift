@@ -21,13 +21,18 @@ enum SubsonicURLAction: String {
     case getArtist         = "getArtist"
     case getAlbum          = "getAlbum"
     case getPlaylist       = "getPlaylist"
+    case createPlaylist    = "createPlaylist"
     case getCoverArt       = "getCoverArt"
     case stream            = "stream"
     case hls               = "hls"
     case ping              = "ping"
+    case search2           = "search2"
+    case search3           = "search3"
+    case updatePlaylist    = "updatePlaylist"
     case getRandomSongs    = "getRandomSongs"
     case getSimilarSongs   = "getSimilarSongs"
     case getSimilarSongs2  = "getSimilarSongs2"
+    case getAlbumList      = "getAlbumList"
     
     var urlExtension: String {
         return self == .hls ? "m3u8" : "view"

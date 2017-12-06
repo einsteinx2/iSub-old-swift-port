@@ -16,6 +16,7 @@ class RandomSongsLoader: ApiLoader, ItemLoader {
     var items: [Item] {
         return songs as [Item]
     }
+    
     private var size: Int
     
     init(serverId: Int64, and size: Int = 10) {
@@ -24,13 +25,10 @@ class RandomSongsLoader: ApiLoader, ItemLoader {
     }
     
     override func createRequest() -> URLRequest? {
-        return URLRequest(subsonicAction: .getRandomSongs,
-                          serverId: serverId,
-                          parameters: ["size" : size])
+        return URLRequest(subsonicAction: .getRandomSongs, serverId: serverId, parameters: ["size" : size])
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
-
         let server = serverId
         root.iterate("randomSongs.song") { [weak self] in
             if let song = Song(rxmlElement: $0, serverId: server) {
@@ -39,6 +37,5 @@ class RandomSongsLoader: ApiLoader, ItemLoader {
         }
         
         return items.count > 0
-        
     }
 }
