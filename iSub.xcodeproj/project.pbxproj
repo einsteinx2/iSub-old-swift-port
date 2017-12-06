@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		40F3F5061FD3C03100B467BB /* AlbumListLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */; };
 		40B3FCC11FCBCE530085BEBA /* CreatePlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B3FCC01FCBCE530085BEBA /* CreatePlaylistLoader.swift */; };
 		5301F5CF1A4938F300EEB25D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5301F5CC1A4938F300EEB25D /* Images.xcassets */; };
 		5306B6ED1FC1F2D000369EEF /* SubsonicItemParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306B6EC1FC1F2D000369EEF /* SubsonicItemParsing.swift */; };
@@ -341,6 +342,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListLoader.swift; sourceTree = "<group>"; };
 		40B3FCC01FCBCE530085BEBA /* CreatePlaylistLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlaylistLoader.swift; sourceTree = "<group>"; };
 		5301F5CC1A4938F300EEB25D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Images/Images.xcassets; sourceTree = "<group>"; };
 		53030314116ADF8B00B0AF5D /* reload-table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reload-table.png"; path = "Images/Other/reload-table.png"; sourceTree = "<group>"; };
@@ -1214,6 +1216,7 @@
 				7D0032141FD1988A009EAAFE /* SearchLoader.swift */,
 				7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */,
 				7D0032161FD2158E009EAAFE /* RandomSongsLoader.swift */,
+				40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */,
 			);
 			name = "Item Loaders";
 			sourceTree = "<group>";
@@ -1931,6 +1934,7 @@
 				53808D3D1E7DEAD20063B6D9 /* ServerItemViewModel.swift in Sources */,
 				53FE31321F07C594003AA6A7 /* JGTextTableCell.swift in Sources */,
 				530D5A111E2C044700C9ED43 /* SongRepository.swift in Sources */,
+				40F3F5061FD3C03100B467BB /* AlbumListLoader.swift in Sources */,
 				531B33901E24CF8B00811187 /* CachedArtistLoader.swift in Sources */,
 				5355BFA81E2D955C00C6D27F /* Logging.swift in Sources */,
 				531B33F51E24D0B600811187 /* DroppableCell.swift in Sources */,

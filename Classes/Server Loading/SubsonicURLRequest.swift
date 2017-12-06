@@ -30,6 +30,7 @@ enum SubsonicURLAction: String {
     case search3           = "search3"
     case updatePlaylist    = "updatePlaylist"
     case getRandomSongs    = "getRandomSongs"
+    case getAlbumList      = "getAlbumList"
     
     var urlExtension: String {
         return self == .hls ? "m3u8" : "view"
