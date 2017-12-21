@@ -35,3 +35,7 @@ func tapticFeedback(style: TapticFeedbackStyle = .medium) {
     AudioServicesPlaySystemSound(1519)
 }
 
+enum PresentationMode {
+    case fullScreen
+    case modal
+}

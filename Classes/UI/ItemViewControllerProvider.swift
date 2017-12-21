@@ -50,8 +50,8 @@ func itemViewController(forLoader loader: PersistedItemLoader) -> ItemViewContro
         return ArtistViewController(viewModel: viewModel)
     case is Album:
         return AlbumViewController(viewModel: viewModel)
-    case is Playlist:
-        return PlaylistViewController(viewModel: viewModel)
+//    case is Playlist:
+//        return PlaylistViewController(with: viewModel)
     default:
         return nil
     }

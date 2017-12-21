@@ -10,12 +10,14 @@ import UIKit
 import MessageUI
 import SnapKit
 
+private typealias Function = (MenuViewController) -> (MenuItem) -> Void
+
 private class MenuItem {
     let name: String
-    let function: (MenuViewController) -> (MenuItem) -> Void
+    let function: Function
     var navController: UINavigationController?
     
-    init(name: String, function: @escaping (MenuViewController) -> (MenuItem) -> Void) {
+    init(name: String, function: @escaping Function) {
         self.name = name
         self.function = function
     }
@@ -156,7 +158,7 @@ class MenuViewController: UITableViewController, MFMailComposeViewControllerDele
     fileprivate func showPlaylists(_ menuItem: MenuItem) {
         if menuItem.navController == nil {
             let viewModel = RootServerItemViewModel(loader: RootPlaylistsLoader(), title: "Playlists")
-            menuItem.navController = navController(rootController: ItemViewController(viewModel: viewModel))
+            menuItem.navController = navController(rootController: PlaylistViewController(with: viewModel, mode: .modal))
         }
         
         centerController.contentController = menuItem.navController

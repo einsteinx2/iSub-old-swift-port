@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		40F3F5081FD3CAA700B467BB /* SimilarSongsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */; };
-		40F3F5061FD3C03100B467BB /* AlbumListLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */; };
 		40B3FCC11FCBCE530085BEBA /* CreatePlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B3FCC01FCBCE530085BEBA /* CreatePlaylistLoader.swift */; };
+		40F3F5061FD3C03100B467BB /* AlbumListLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */; };
+		40F3F5081FD3CAA700B467BB /* SimilarSongsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */; };
 		5301F5CF1A4938F300EEB25D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5301F5CC1A4938F300EEB25D /* Images.xcassets */; };
 		5306B6ED1FC1F2D000369EEF /* SubsonicItemParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306B6EC1FC1F2D000369EEF /* SubsonicItemParsing.swift */; };
 		5306B6EF1FC2129C00369EEF /* HTMLEntities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306B6EE1FC2129B00369EEF /* HTMLEntities.framework */; };
@@ -170,7 +170,6 @@
 		53808D371E7DE9500063B6D9 /* CachedItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53808D351E7DE9500063B6D9 /* CachedItemViewModel.swift */; };
 		53808D3A1E7DEA5B0063B6D9 /* DownloadQueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53808D381E7DEA5B0063B6D9 /* DownloadQueueViewModel.swift */; };
 		53808D3D1E7DEAD20063B6D9 /* ServerItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53808D3B1E7DEAD20063B6D9 /* ServerItemViewModel.swift */; };
-		53808D401E7DF23F0063B6D9 /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53808D3E1E7DF23F0063B6D9 /* PlaylistViewController.swift */; };
 		53808D431E7DF2D80063B6D9 /* RootServerItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53808D411E7DF2D80063B6D9 /* RootServerItemViewModel.swift */; };
 		53835C9A1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */; };
 		53835CA41E0B7D6D0077B53D /* GMAppleDouble.m in Sources */ = {isa = PBXBuildFile; fileRef = 53835C741E0B7D6D0077B53D /* GMAppleDouble.m */; };
@@ -332,8 +331,15 @@
 		53FE31311F07C594003AA6A7 /* JGSwitchTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE312B1F07C594003AA6A7 /* JGSwitchTableCell.swift */; };
 		53FE31321F07C594003AA6A7 /* JGTextTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE312C1F07C594003AA6A7 /* JGTextTableCell.swift */; };
 		7D0032151FD1988A009EAAFE /* SearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0032141FD1988A009EAAFE /* SearchLoader.swift */; };
-		7D6B0F561FCE2F0600BC4050 /* UpdatePlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */; };
 		7D0032171FD2158E009EAAFE /* RandomSongsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0032161FD2158E009EAAFE /* RandomSongsLoader.swift */; };
+		7D50FE0C1FE879E000DAD84E /* PlaylistSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D50FE0B1FE879E000DAD84E /* PlaylistSyncManager.swift */; };
+		7D50FE0F1FEB334700DAD84E /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D50FE0D1FEB334700DAD84E /* PlaylistViewController.swift */; };
+		7D50FE101FEB334700DAD84E /* PlaylistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D50FE0E1FEB334700DAD84E /* PlaylistViewController.xib */; };
+		7D5A8E621FEB3812004C1A18 /* PlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5A8E601FEB3812004C1A18 /* PlaylistCell.swift */; };
+		7D5A8E631FEB3812004C1A18 /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D5A8E611FEB3812004C1A18 /* PlaylistCell.xib */; };
+		7D5A8E651FEBF604004C1A18 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5A8E641FEBF604004C1A18 /* UICollectionView.swift */; };
+		7D5A8E671FEC5206004C1A18 /* Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5A8E661FEC5206004C1A18 /* Then.swift */; };
+		7D6B0F561FCE2F0600BC4050 /* UpdatePlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */; };
 		D09496D41C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D91C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496DE1C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -343,9 +349,9 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarSongsLoader.swift; sourceTree = "<group>"; };
-		40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListLoader.swift; sourceTree = "<group>"; };
 		40B3FCC01FCBCE530085BEBA /* CreatePlaylistLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlaylistLoader.swift; sourceTree = "<group>"; };
+		40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListLoader.swift; sourceTree = "<group>"; };
+		40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarSongsLoader.swift; sourceTree = "<group>"; };
 		5301F5CC1A4938F300EEB25D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Images/Images.xcassets; sourceTree = "<group>"; };
 		53030314116ADF8B00B0AF5D /* reload-table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reload-table.png"; path = "Images/Other/reload-table.png"; sourceTree = "<group>"; };
 		5305C2051157F4F800BC78F0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Images/Other/Default.png; sourceTree = "<group>"; };
@@ -570,7 +576,6 @@
 		53808D351E7DE9500063B6D9 /* CachedItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedItemViewModel.swift; sourceTree = "<group>"; };
 		53808D381E7DEA5B0063B6D9 /* DownloadQueueViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadQueueViewModel.swift; sourceTree = "<group>"; };
 		53808D3B1E7DEAD20063B6D9 /* ServerItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerItemViewModel.swift; sourceTree = "<group>"; };
-		53808D3E1E7DF23F0063B6D9 /* PlaylistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
 		53808D411E7DF2D80063B6D9 /* RootServerItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootServerItemViewModel.swift; sourceTree = "<group>"; };
 		53835C6F1E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GMAppleDouble+ZKAdditions.h"; sourceTree = "<group>"; };
 		53835C701E0B7D6D0077B53D /* GMAppleDouble+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GMAppleDouble+ZKAdditions.m"; sourceTree = "<group>"; };
@@ -733,8 +738,15 @@
 		53FE312B1F07C594003AA6A7 /* JGSwitchTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGSwitchTableCell.swift; sourceTree = "<group>"; };
 		53FE312C1F07C594003AA6A7 /* JGTextTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGTextTableCell.swift; sourceTree = "<group>"; };
 		7D0032141FD1988A009EAAFE /* SearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLoader.swift; sourceTree = "<group>"; };
-		7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlaylistLoader.swift; sourceTree = "<group>"; };
 		7D0032161FD2158E009EAAFE /* RandomSongsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomSongsLoader.swift; sourceTree = "<group>"; };
+		7D50FE0B1FE879E000DAD84E /* PlaylistSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSyncManager.swift; sourceTree = "<group>"; };
+		7D50FE0D1FEB334700DAD84E /* PlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
+		7D50FE0E1FEB334700DAD84E /* PlaylistViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistViewController.xib; sourceTree = "<group>"; };
+		7D5A8E601FEB3812004C1A18 /* PlaylistCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistCell.swift; sourceTree = "<group>"; };
+		7D5A8E611FEB3812004C1A18 /* PlaylistCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistCell.xib; sourceTree = "<group>"; };
+		7D5A8E641FEBF604004C1A18 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
+		7D5A8E661FEC5206004C1A18 /* Then.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Then.swift; sourceTree = "<group>"; };
+		7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlaylistLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1014,6 +1026,7 @@
 				53CFBB611E2AE160005895F4 /* Item Models */,
 				5306B6EB1FC1F2B000369EEF /* Item Parsing */,
 				53F107A41E2ACDDC003B7D59 /* Repositories */,
+				7D50FE0B1FE879E000DAD84E /* PlaylistSyncManager.swift */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -1034,6 +1047,7 @@
 				537FB2FB1E33E435001D3FBB /* NotificationCenter.swift */,
 				53E042881E36C49C0009DE79 /* DispatchQueue.swift */,
 				539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */,
+				7D5A8E641FEBF604004C1A18 /* UICollectionView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1113,6 +1127,7 @@
 				532B6FEB1E960A450010D81D /* NumberUtils.swift */,
 				532B6FE61E95D85C0010D81D /* Swizzling.swift */,
 				532B6FED1E960A750010D81D /* Sorting.swift */,
+				7D5A8E661FEC5206004C1A18 /* Then.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -1381,7 +1396,7 @@
 				53808D2B1E7DE50E0063B6D9 /* FolderViewController.swift */,
 				53808D2F1E7DE5DC0063B6D9 /* ArtistViewController.swift */,
 				53808D321E7DE5F70063B6D9 /* AlbumViewController.swift */,
-				53808D3E1E7DF23F0063B6D9 /* PlaylistViewController.swift */,
+				7D50FE121FEB33E200DAD84E /* Playlist */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -1640,6 +1655,17 @@
 			path = "Settings Cells";
 			sourceTree = "<group>";
 		};
+		7D50FE121FEB33E200DAD84E /* Playlist */ = {
+			isa = PBXGroup;
+			children = (
+				7D50FE0D1FEB334700DAD84E /* PlaylistViewController.swift */,
+				7D50FE0E1FEB334700DAD84E /* PlaylistViewController.xib */,
+				7D5A8E601FEB3812004C1A18 /* PlaylistCell.swift */,
+				7D5A8E611FEB3812004C1A18 /* PlaylistCell.xib */,
+			);
+			path = Playlist;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1676,7 +1702,7 @@
 				ORGANIZATIONNAME = "Ben Baron";
 				TargetAttributes = {
 					53BC269F139AF0DD00A825F1 = {
-						DevelopmentTeam = 7596YH3S97;
+						DevelopmentTeam = 3L9HU4RF7Y;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
@@ -1740,6 +1766,7 @@
 				D09496DE1C6058BC00781B51 /* (null) in Resources */,
 				53649DD4184DA99B00E600EC /* Icon-76.png in Resources */,
 				53BC2759139AF0DD00A825F1 /* back.png in Resources */,
+				7D5A8E631FEB3812004C1A18 /* PlaylistCell.xib in Resources */,
 				53BC275A139AF0DD00A825F1 /* back@2x.png in Resources */,
 				D09496D41C6058BC00781B51 /* (null) in Resources */,
 				53BC275B139AF0DD00A825F1 /* Default-Portrait.png in Resources */,
@@ -1776,6 +1803,7 @@
 				53BC2783139AF0DD00A825F1 /* intro-icon-ownserver.png in Resources */,
 				53BC2784139AF0DD00A825F1 /* intro-icon-ownserver@2x.png in Resources */,
 				53BC2785139AF0DD00A825F1 /* iTunesArtwork in Resources */,
+				7D50FE101FEB334700DAD84E /* PlaylistViewController.xib in Resources */,
 				53649DCF184DA90600E600EC /* Icon-120.png in Resources */,
 				5301F5CF1A4938F300EEB25D /* Images.xcassets in Resources */,
 				53C7FD74150EFF7A008DA51C /* Default-Landscape@2x.png in Resources */,
@@ -1877,8 +1905,10 @@
 				53609CD31E883F49005C26D0 /* VisualizerView.swift in Sources */,
 				53F107A71E2AD144003B7D59 /* Item.swift in Sources */,
 				530F04AA1E237EB700CBBB3E /* INTUAnimationEngine.m in Sources */,
+				7D5A8E621FEB3812004C1A18 /* PlaylistCell.swift in Sources */,
 				5388778B1F6EECF30069C85F /* IgnoredArticlesRepository.swift in Sources */,
 				532E76131F08C47600118AE3 /* JGSliderTableCell.swift in Sources */,
+				7D50FE0F1FEB334700DAD84E /* PlaylistViewController.swift in Sources */,
 				530F04AC1E237EB700CBBB3E /* INTUEasingFunctions.m in Sources */,
 				53A418021E2C1D8500671330 /* MediaFolder.swift in Sources */,
 				5355BFB41E2DB88200C6D27F /* Application.swift in Sources */,
@@ -1931,6 +1961,7 @@
 				531B34471E24D24600811187 /* FMDatabasePool.m in Sources */,
 				539133521E29D1F900B8A99E /* SubsonicURLRequest.swift in Sources */,
 				5377D6471E3A8226003BFFB9 /* NetworkIndicator.swift in Sources */,
+				7D5A8E671FEC5206004C1A18 /* Then.swift in Sources */,
 				531B33D71E24CFAF00811187 /* UITraitEnvironment.swift in Sources */,
 				531B33A41E24CF8B00811187 /* RootAlbumsLoader.swift in Sources */,
 				532E76151F08E02300118AE3 /* IntroViewController.swift in Sources */,
@@ -1969,7 +2000,6 @@
 				531B339C1E24CF8B00811187 /* CachedRootSongsLoader.swift in Sources */,
 				531B33F11E24D0B600811187 /* DraggableTableView.swift in Sources */,
 				532B6FEA1E960A240010D81D /* Bridging.swift in Sources */,
-				53808D401E7DF23F0063B6D9 /* PlaylistViewController.swift in Sources */,
 				5358DBE01E0B780E0024A0D4 /* UIViewController+JASidePanel.m in Sources */,
 				53200C971E7F777700426A48 /* ItemTableHeaderView.swift in Sources */,
 				531B341F1E24D12300811187 /* ServerListViewController.swift in Sources */,
@@ -2028,6 +2058,7 @@
 				53E042841E36AB4B0009DE79 /* Synchronized.swift in Sources */,
 				531B34661E24D3D500811187 /* Defines.swift in Sources */,
 				53808D431E7DF2D80063B6D9 /* RootServerItemViewModel.swift in Sources */,
+				7D50FE0C1FE879E000DAD84E /* PlaylistSyncManager.swift in Sources */,
 				53835CEF1E0B7D6D0077B53D /* ZKFileArchive.m in Sources */,
 				531B33861E24CF8B00811187 /* ApiLoader.swift in Sources */,
 				531B339A1E24CF8B00811187 /* CachedRootFoldersLoader.swift in Sources */,
@@ -2035,6 +2066,7 @@
 				53609CDD1E885B11005C26D0 /* PlayerContainerViewController.swift in Sources */,
 				538F73A21FC23BC900D79B00 /* ContentTypeRepository.swift in Sources */,
 				539A69171F6EC871004C514D /* Bass.swift in Sources */,
+				7D5A8E651FEBF604004C1A18 /* UICollectionView.swift in Sources */,
 				5355BFB71E2DBC9B00C6D27F /* PlaylistLoader.swift in Sources */,
 				531B338C1E24CF8B00811187 /* ArtistLoader.swift in Sources */,
 				531B33721E24CF8B00811187 /* Playlist.swift in Sources */,
@@ -2165,6 +2197,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				DEVELOPMENT_TEAM = 3L9HU4RF7Y;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2196,7 +2229,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rolvar.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
@@ -2215,6 +2248,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				DEVELOPMENT_TEAM = 3L9HU4RF7Y;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2246,7 +2280,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rolvar.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
@@ -2265,6 +2299,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				DEVELOPMENT_TEAM = 3L9HU4RF7Y;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2294,7 +2329,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rolvar.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;

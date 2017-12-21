@@ -325,12 +325,12 @@ class ItemViewController: DraggableTableViewController, UISearchBarDelegate {
     // MARK: - Table View -
     
     override func customizeTableView(_ tableView: UITableView) {
-        doubleTapRecognizer.addTarget(self, action: #selector(doubleTap(_:)))
+        doubleTapRecognizer.addTarget(self, action: #selector(doubleTap))
         doubleTapRecognizer.numberOfTapsRequired = 2
         doubleTapRecognizer.numberOfTouchesRequired = 1
         tableView.addGestureRecognizer(doubleTapRecognizer)
         
-        singleTapRecognizer.addTarget(self, action: #selector(singleTap(_:)))
+        singleTapRecognizer.addTarget(self, action: #selector(singleTap))
         singleTapRecognizer.numberOfTapsRequired = 1
         singleTapRecognizer.numberOfTouchesRequired = 1
         singleTapRecognizer.require(toFail: doubleTapRecognizer)

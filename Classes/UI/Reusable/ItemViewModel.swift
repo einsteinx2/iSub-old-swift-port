@@ -417,6 +417,14 @@ class ItemViewModel {
         return alertController
     }
     
+    func addToPlaylistAction(to actionSheet: UIAlertController, forItem item: Item, indexPath: IndexPath) {
+        actionSheet.addAction(UIAlertAction(title: "Add to a Playlist", style: .default) { action in
+            
+        })
+        
+        
+    }
+    
     func addPlayQueueActions(toActionSheet actionSheet: UIAlertController, forItem item: Item, indexPath: IndexPath) {
         actionSheet.addAction(UIAlertAction(title: "Play All", style: .default) { action in
             if item is Song {
