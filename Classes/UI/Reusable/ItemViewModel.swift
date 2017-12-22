@@ -419,10 +419,11 @@ class ItemViewModel {
     
     func addToPlaylistAction(to actionSheet: UIAlertController, forItem item: Item, indexPath: IndexPath) {
         actionSheet.addAction(UIAlertAction(title: "Add to a Playlist", style: .default) { action in
-            
+            let playlistView = PlaylistViewController(with: self, mode: .modal)
+            if let topViewController = UIViewController.topViewController() {
+                topViewController.present(playlistView, animated: true)
+            }
         })
-        
-        
     }
     
     func addPlayQueueActions(toActionSheet actionSheet: UIAlertController, forItem item: Item, indexPath: IndexPath) {

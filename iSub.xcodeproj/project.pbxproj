@@ -339,6 +339,7 @@
 		7D5A8E631FEB3812004C1A18 /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D5A8E611FEB3812004C1A18 /* PlaylistCell.xib */; };
 		7D5A8E651FEBF604004C1A18 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5A8E641FEBF604004C1A18 /* UICollectionView.swift */; };
 		7D5A8E671FEC5206004C1A18 /* Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5A8E661FEC5206004C1A18 /* Then.swift */; };
+		7D5A8E691FEC8386004C1A18 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5A8E681FEC8386004C1A18 /* UIViewController.swift */; };
 		7D6B0F561FCE2F0600BC4050 /* UpdatePlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */; };
 		D09496D41C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D91C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -746,6 +747,7 @@
 		7D5A8E611FEB3812004C1A18 /* PlaylistCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistCell.xib; sourceTree = "<group>"; };
 		7D5A8E641FEBF604004C1A18 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
 		7D5A8E661FEC5206004C1A18 /* Then.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Then.swift; sourceTree = "<group>"; };
+		7D5A8E681FEC8386004C1A18 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlaylistLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1048,6 +1050,7 @@
 				53E042881E36C49C0009DE79 /* DispatchQueue.swift */,
 				539D2BB71E5E0B1A0059D233 /* SafeNumberCasting.swift */,
 				7D5A8E641FEBF604004C1A18 /* UICollectionView.swift */,
+				7D5A8E681FEC8386004C1A18 /* UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1945,6 +1948,7 @@
 				53200C941E7F605900426A48 /* SortOrder.swift in Sources */,
 				531B33621E24CF8B00811187 /* CachedImage.swift in Sources */,
 				537FB2FD1E33E435001D3FBB /* NotificationCenter.swift in Sources */,
+				7D5A8E691FEC8386004C1A18 /* UIViewController.swift in Sources */,
 				533B69D91E206031001FF3BF /* CollectionViewStackFlowLayout.swift in Sources */,
 				53FE312E1F07C594003AA6A7 /* JGUserDefault.swift in Sources */,
 				53808D371E7DE9500063B6D9 /* CachedItemViewModel.swift in Sources */,

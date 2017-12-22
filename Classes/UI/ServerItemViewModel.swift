@@ -14,6 +14,7 @@ class ServerItemViewModel: ItemViewModel {
         
         self.addPlayQueueActions(toActionSheet: actionSheet, forItem: item, indexPath: indexPath)
         self.addGoToRelatedActions(toActionSheet: actionSheet, forItem: item, indexPath: indexPath)
+        self.addToPlaylistAction(to: actionSheet, forItem: item, indexPath: indexPath)
         
         if let song = item as? Song {
             if song.isFullyCached {

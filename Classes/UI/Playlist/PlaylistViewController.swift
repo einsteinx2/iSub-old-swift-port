@@ -10,7 +10,11 @@ import UIKit
 
 class PlaylistViewController: UIViewController {
 
-    private let viewModel: ItemViewModel
+    private var viewModel: ItemViewModel {
+        didSet {
+            viewModel.loadModelsFromWeb()
+        }
+    }
     private let viewStyle: PresentationMode
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet weak var contentView: UIView!
@@ -20,7 +24,8 @@ class PlaylistViewController: UIViewController {
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     
     init(with viewModel: ItemViewModel, mode: PresentationMode = .fullScreen) {
-        self.viewModel = viewModel
+        let viewModel2 = RootServerItemViewModel(loader: RootPlaylistsLoader(), title: "Playlists")
+        self.viewModel = viewModel2
         self.viewStyle = mode
         super.init(nibName: "PlaylistViewController", bundle: nil)
     }
@@ -50,7 +55,7 @@ private extension PlaylistViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.registerNibForCell(with: PlaylistCell.self)
-    
+
         viewModel.loadModelsFromWeb { _, _  in
             self.collectionView.reloadData()
         }
