@@ -1676,7 +1676,6 @@
 				ORGANIZATIONNAME = "Ben Baron";
 				TargetAttributes = {
 					53BC269F139AF0DD00A825F1 = {
-						DevelopmentTeam = 8Z527XYLA9;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
@@ -2165,7 +2164,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				DEVELOPMENT_TEAM = 8Z527XYLA9;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2197,7 +2196,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = net.lannysport.isub;
+				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
@@ -2216,7 +2215,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				DEVELOPMENT_TEAM = 8Z527XYLA9;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2248,7 +2247,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = net.lannysport.isub;
+				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
@@ -2267,7 +2266,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				DEVELOPMENT_TEAM = 8Z527XYLA9;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2297,7 +2296,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = net.lannysport.isub;
+				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
