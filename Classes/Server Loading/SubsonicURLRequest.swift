@@ -93,7 +93,7 @@ extension URLRequest {
         
         var urlString = "\(baseUrl)/rest/\(subsonicAction.rawValue).\(subsonicAction.urlExtension)"
         
-        var parametersString = "?c=iSub"//&v=\(version)//&u=\(username)&p=\(encpass)" //"&s=\(salt)"
+        var parametersString = "?c=iSub"
         if !legacyAuth {
             // Generate a 32 character random salt
             // Then use the Subsonic required md5(password + salt) function to generate the token.
@@ -102,7 +102,7 @@ extension URLRequest {
             
             // Supports Subsonic version 5.3 and later
             let version = "1.13.0"
-            parametersString += "&v=\(version)//&u=\(username)&t=\(token)&s=\(salt)"
+            parametersString += "&v=\(version)&u=\(username)&t=\(token)&s=\(salt)"
         } else {
             var encpass = "enc:"
             for scalar in password.unicodeScalars {
@@ -110,7 +110,7 @@ extension URLRequest {
             }
             // For Subsonic version prior to 5.3 or other vendors like Ampache
             let version = "1.11"
-            parametersString += "&v=\(version)//&u=\(username)&p=\(encpass)"
+            parametersString += "&v=\(version)&u=\(username)&p=\(encpass)"
         }
 
             
