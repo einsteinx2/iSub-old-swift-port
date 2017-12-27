@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		40F3F5081FD3CAA700B467BB /* SimilarSongsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */; };
-		40F3F5061FD3C03100B467BB /* AlbumListLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */; };
 		40B3FCC11FCBCE530085BEBA /* CreatePlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B3FCC01FCBCE530085BEBA /* CreatePlaylistLoader.swift */; };
+		40F3F5061FD3C03100B467BB /* AlbumListLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */; };
+		40F3F5081FD3CAA700B467BB /* SimilarSongsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */; };
 		5301F5CF1A4938F300EEB25D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5301F5CC1A4938F300EEB25D /* Images.xcassets */; };
 		5306B6ED1FC1F2D000369EEF /* SubsonicItemParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306B6EC1FC1F2D000369EEF /* SubsonicItemParsing.swift */; };
 		5306B6EF1FC2129C00369EEF /* HTMLEntities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306B6EE1FC2129B00369EEF /* HTMLEntities.framework */; };
@@ -332,8 +332,8 @@
 		53FE31311F07C594003AA6A7 /* JGSwitchTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE312B1F07C594003AA6A7 /* JGSwitchTableCell.swift */; };
 		53FE31321F07C594003AA6A7 /* JGTextTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FE312C1F07C594003AA6A7 /* JGTextTableCell.swift */; };
 		7D0032151FD1988A009EAAFE /* SearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0032141FD1988A009EAAFE /* SearchLoader.swift */; };
-		7D6B0F561FCE2F0600BC4050 /* UpdatePlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */; };
 		7D0032171FD2158E009EAAFE /* RandomSongsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0032161FD2158E009EAAFE /* RandomSongsLoader.swift */; };
+		7D6B0F561FCE2F0600BC4050 /* UpdatePlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */; };
 		D09496D41C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496D91C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D09496DE1C6058BC00781B51 /* (null) in Resources */ = {isa = PBXBuildFile; };
@@ -343,9 +343,9 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarSongsLoader.swift; sourceTree = "<group>"; };
-		40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListLoader.swift; sourceTree = "<group>"; };
 		40B3FCC01FCBCE530085BEBA /* CreatePlaylistLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlaylistLoader.swift; sourceTree = "<group>"; };
+		40F3F5051FD3C03100B467BB /* AlbumListLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListLoader.swift; sourceTree = "<group>"; };
+		40F3F5071FD3CAA700B467BB /* SimilarSongsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarSongsLoader.swift; sourceTree = "<group>"; };
 		5301F5CC1A4938F300EEB25D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Images/Images.xcassets; sourceTree = "<group>"; };
 		53030314116ADF8B00B0AF5D /* reload-table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reload-table.png"; path = "Images/Other/reload-table.png"; sourceTree = "<group>"; };
 		5305C2051157F4F800BC78F0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Images/Other/Default.png; sourceTree = "<group>"; };
@@ -733,8 +733,8 @@
 		53FE312B1F07C594003AA6A7 /* JGSwitchTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGSwitchTableCell.swift; sourceTree = "<group>"; };
 		53FE312C1F07C594003AA6A7 /* JGTextTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JGTextTableCell.swift; sourceTree = "<group>"; };
 		7D0032141FD1988A009EAAFE /* SearchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLoader.swift; sourceTree = "<group>"; };
-		7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlaylistLoader.swift; sourceTree = "<group>"; };
 		7D0032161FD2158E009EAAFE /* RandomSongsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomSongsLoader.swift; sourceTree = "<group>"; };
+		7D6B0F551FCE2F0600BC4050 /* UpdatePlaylistLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlaylistLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1676,7 +1676,7 @@
 				ORGANIZATIONNAME = "Ben Baron";
 				TargetAttributes = {
 					53BC269F139AF0DD00A825F1 = {
-						DevelopmentTeam = 7596YH3S97;
+						DevelopmentTeam = 8Z527XYLA9;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
@@ -2165,6 +2165,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				DEVELOPMENT_TEAM = 8Z527XYLA9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2196,7 +2197,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
+				PRODUCT_BUNDLE_IDENTIFIER = net.lannysport.isub;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
@@ -2215,6 +2216,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				DEVELOPMENT_TEAM = 8Z527XYLA9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2246,7 +2248,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
+				PRODUCT_BUNDLE_IDENTIFIER = net.lannysport.isub;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;
@@ -2265,6 +2267,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				DEVELOPMENT_TEAM = 8Z527XYLA9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2294,7 +2297,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "-D BetaTarget $(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.einsteinx2.isubbetarewrite;
+				PRODUCT_BUNDLE_IDENTIFIER = net.lannysport.isub;
 				PRODUCT_NAME = "iSub Beta";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.0;

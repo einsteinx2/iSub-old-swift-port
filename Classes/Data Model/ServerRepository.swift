@@ -51,13 +51,13 @@ struct ServerRepository: ItemRepository {
     }
     
     // Save new server
-    func server(type: ServerType, url: String, username: String, password: String, basicAuth: Bool) -> Server? {
+    func server(type: ServerType, url: String, username: String, password: String, basicAuth: Bool, legacyAuth: Bool) -> Server? {
         var success = true
         var serverId: Int64 = -1
         Database.si.write.inDatabase { db in
             do {
-                let query = "INSERT INTO servers VALUES (?, ?, ?, ?, ?)"
-                try db.executeUpdate(query, NSNull(), type.rawValue, url, username, basicAuth)
+                let query = "INSERT INTO servers VALUES (?, ?, ?, ?, ?, ?)"
+                try db.executeUpdate(query, NSNull(), type.rawValue, url, username, basicAuth, legacyAuth)
                 serverId = db.lastInsertRowId()
             } catch {
                 printError(error)
@@ -66,7 +66,7 @@ struct ServerRepository: ItemRepository {
         }
         
         if success && serverId >= 0 {
-            let server = Server(serverId: serverId, type: type, url: url, username: username, basicAuth: basicAuth)
+            let server = Server(serverId: serverId, type: type, url: url, username: username, basicAuth: basicAuth, legacyAuth: legacyAuth)
             server.password = password
             return server
         }
@@ -81,9 +81,10 @@ extension Server: PersistedItem {
         let url        = result.string(forColumnIndex: 2) ?? ""
         let username   = result.string(forColumnIndex: 3) ?? ""
         let basicAuth  = result.bool(forColumnIndex: 4)
+        let legacyAuth = result.bool(forColumnIndex: 5)
         let repository = repository as! ServerRepository
         
-        self.init(serverId: serverId, type: type, url: url, username: username, basicAuth: basicAuth, repository: repository)
+        self.init(serverId: serverId, type: type, url: url, username: username, basicAuth: basicAuth, legacyAuth: legacyAuth, repository: repository)
     }
     
     class func item(itemId: Int64, serverId: Int64, repository: ItemRepository = ServerRepository.si) -> Item? {

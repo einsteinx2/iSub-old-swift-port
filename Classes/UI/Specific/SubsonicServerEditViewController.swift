@@ -27,6 +27,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var urlField: UITextField!
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    @IBOutlet weak var legacyAuthField: UISwitch!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     
@@ -148,7 +149,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
         }
         
         LoadingScreen.show(withMessage: "Checking Server")
-        statusLoader = StatusLoader(url: urlField.text!, username: usernameField.text!, password: passwordField.text!)
+        statusLoader = StatusLoader(url: urlField.text!, username: usernameField.text!, password: passwordField.text!, legacyAuth: legacyAuthField.isOn)
         statusLoader!.completionHandler = loadingCompletionHandler
         statusLoader!.start()
     }
@@ -169,7 +170,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
                 server.replace()
             } else {
                 // Create new server
-                server = ServerRepository.si.server(type: .subsonic, url: statusLoader.url, username: statusLoader.username, password: statusLoader.password, basicAuth: statusLoader.basicAuth)
+                server = ServerRepository.si.server(type: .subsonic, url: statusLoader.url, username: statusLoader.username, password: statusLoader.password, basicAuth: statusLoader.basicAuth, legacyAuth: statusLoader.legacyAuth)
             }
             
             delegate?.serverEdited(server!)
@@ -183,7 +184,7 @@ class SubsonicServerEditViewController: UIViewController, UITextFieldDelegate {
                 }
                 
                 // Try again with basic auth (or without if the server already had it)
-                self.statusLoader = StatusLoader(url: urlField.text!, username: usernameField.text!, password: passwordField.text!, basicAuth: basicAuth)
+                self.statusLoader = StatusLoader(url: urlField.text!, username: usernameField.text!, password: passwordField.text!, legacyAuth: false, basicAuth: basicAuth)
                 self.statusLoader!.completionHandler = loadingCompletionHandler
                 self.statusLoader!.start()
                 retriedStatusLoader = true

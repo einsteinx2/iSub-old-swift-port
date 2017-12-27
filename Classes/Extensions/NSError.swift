@@ -19,6 +19,7 @@ enum iSubErrorCode: Int {
     case subsonicTrialExpired = 6
     case requiresBasicAuth = 7
     case serverNotInDb = 8
+    case tokenAuthNotSupported = 9
     
     var description: String {
         switch self {
@@ -30,6 +31,7 @@ enum iSubErrorCode: Int {
         case .subsonicTrialExpired: return "Subsonic API Trial Expired"
         case .requiresBasicAuth: return "Requires HTTP Basic Authentication"
         case .serverNotInDb: return "The server does not exist in the database"
+        case .tokenAuthNotSupported: return "Server does not support token authentication"
         }
     }
 }

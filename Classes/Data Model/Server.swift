@@ -27,7 +27,7 @@ final class Server {
     static let testServerId = Int64.max
     static var testServer: Server {
         // Return model directly rather than storing in the database
-        let testServer = Server(serverId: self.testServerId, type: .subsonic, url: "https://isubapp.com:9002", username: "isub-guest", basicAuth: false)
+        let testServer = Server(serverId: self.testServerId, type: .subsonic, url: "https://isubapp.com:9002", username: "isub-guest", basicAuth: false, legacyAuth: false)
         testServer.password = "1sub1snumb3r0n3"
         return testServer
     }
@@ -39,6 +39,7 @@ final class Server {
     var url: String
     var username: String
     var basicAuth: Bool
+    var legacyAuth: Bool
     
     fileprivate var passwordKey: String { return "\(serverId) - \(username)" }
     var password: String? {
@@ -54,12 +55,13 @@ final class Server {
         }
     }
     
-    init(serverId: Int64, type: ServerType, url: String, username: String, basicAuth: Bool, repository: ServerRepository = ServerRepository.si) {
+    init(serverId: Int64, type: ServerType, url: String, username: String, basicAuth: Bool, legacyAuth: Bool, repository: ServerRepository = ServerRepository.si) {
         self.serverId = serverId
         self.type = type
         self.url = url
         self.username = username
         self.basicAuth = basicAuth
         self.repository = repository
+        self.legacyAuth = legacyAuth
     }
 }
