@@ -103,11 +103,11 @@ To install Reachability.swift with Carthage:
 
 3. Run `carthage update`.
 
-4. Drag `ReachabilitySwift.framework` from the `Carthage/Build/iOS/` directory to the `Linked Frameworks and Libraries` section of your Xcode project’s `General` settings.
+4. Drag `Reachability.framework` from the `Carthage/Build/iOS/` directory to the `Linked Frameworks and Libraries` section of your Xcode project’s `General` settings.
 
-5. Add `$(SRCROOT)/Carthage/Build/iOS/ReachabilitySwiift.framework` to `Input Files` of Run Script Phase for Carthage.
+5. Add `$(SRCROOT)/Carthage/Build/iOS/Reachability.framework` to `Input Files` of Run Script Phase for Carthage.
 
-6. In your code import Reachability likse so:
+6. In your code import Reachability like so:
 `import Reachability`
 
 
@@ -149,7 +149,7 @@ reachability.stopNotifier()
 
 ## Example - notifications
 
-NOTE: All notifications are delviered on the **main queue**.
+NOTE: All notifications are delivered on the **main queue**.
 
 ```swift
 //declare this property where it won't go out of scope relative to your listener
@@ -157,7 +157,7 @@ let reachability = Reachability()!
 
 //declare this inside of viewWillAppear
 
-     NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(_:)), name: .reachabilityChanged, object: reachability)
+     NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: .reachabilityChanged, object: reachability)
     do{
       try reachability.startNotifier()
     }catch{
@@ -168,7 +168,7 @@ let reachability = Reachability()!
 and
 
 ```swift
-func reachabilityChanged(note: Notification) {
+@objc func reachabilityChanged(note: Notification) {
 
   let reachability = note.object as! Reachability
 
@@ -187,7 +187,7 @@ and for stopping notifications
 
 ```swift
 reachability.stopNotifier()
-NotificationCenter.default.removeObserver(self, name: .eachabilityChanged, object: reachability)
+NotificationCenter.default.removeObserver(self, name: .reachabilityChanged, object: reachability)
 ```
 
 ## Want to help?

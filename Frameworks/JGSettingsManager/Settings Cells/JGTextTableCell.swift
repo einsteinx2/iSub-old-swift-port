@@ -46,7 +46,7 @@ final class JGTextTableCell: JGSettingsTableCell, UITextFieldDelegate {
         textField.text = data.value()
     }
     
-    open func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
         save()
         return false
@@ -54,7 +54,7 @@ final class JGTextTableCell: JGSettingsTableCell, UITextFieldDelegate {
     
     // MARK: Save
     
-    open func save() {
+    public func save() {
         data.save(textField.text ?? "")
     }
 }

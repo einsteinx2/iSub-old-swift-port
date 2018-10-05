@@ -10,7 +10,8 @@ import Foundation
 
 public func websocket(
       _ text: ((WebSocketSession, String) -> Void)?,
-    _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> ((HttpRequest) -> HttpResponse) {
+    _ binary: ((WebSocketSession, [UInt8]) -> Void)?,
+      _ pong: ((WebSocketSession, [UInt8]) -> Void)?) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard r.hasTokenForHeader("upgrade", token: "websocket") else {
             return .badRequest(.text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"] ?? "unknown")"))
@@ -90,15 +91,22 @@ public func websocket(
                         session.writeFrame(ArraySlice(frame.payload), .pong)
                     }
                 case .pong:
+                    if let handlePong = pong {
+                       handlePong(session, frame.payload)
+                    }
                     break
                 }
             }
             
-            do {
+            func read() throws {
                 while true {
                     let frame = try session.readFrame()
                     try handleOperationCode(frame)
                 }
+            }
+            
+            do {
+                try read()
             } catch let error {
                 switch error {
                 case WebSocketSession.Control.close:
@@ -242,19 +250,19 @@ public class WebSocketSession: Hashable, Equatable  {
         }
         var len = UInt64(sec & 0x7F)
         if len == 0x7E {
-            let b0 = UInt64(try socket.read())
+            let b0 = UInt64(try socket.read() << 8)
             let b1 = UInt64(try socket.read())
-            len = UInt64(littleEndian: b0 << 8 | b1)
+            len = UInt64(littleEndian: b0 | b1)
         } else if len == 0x7F {
-            let b0 = UInt64(try socket.read())
-            let b1 = UInt64(try socket.read())
-            let b2 = UInt64(try socket.read())
-            let b3 = UInt64(try socket.read())
-            let b4 = UInt64(try socket.read())
-            let b5 = UInt64(try socket.read())
-            let b6 = UInt64(try socket.read())
+            let b0 = UInt64(try socket.read() << 54)
+            let b1 = UInt64(try socket.read() << 48)
+            let b2 = UInt64(try socket.read() << 40)
+            let b3 = UInt64(try socket.read() << 32)
+            let b4 = UInt64(try socket.read() << 24)
+            let b5 = UInt64(try socket.read() << 16)
+            let b6 = UInt64(try socket.read() << 8)
             let b7 = UInt64(try socket.read())
-            len = UInt64(littleEndian: b0 << 54 | b1 << 48 | b2 << 40 | b3 << 32 | b4 << 24 | b5 << 16 | b6 << 8 | b7)
+            len = UInt64(littleEndian: b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7)
         }
         let mask = [try socket.read(), try socket.read(), try socket.read(), try socket.read()]
         for i in 0..<len {

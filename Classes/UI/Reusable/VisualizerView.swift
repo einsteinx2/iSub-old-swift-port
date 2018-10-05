@@ -79,7 +79,7 @@ class VisualizerView: UIView {
     }
     
     fileprivate func commonInit() {
-        palette.initialize(to: PixelRGBA(), count: specHeight + 128)
+        palette.initialize(repeating: PixelRGBA(), count: specHeight + 128)
         
         // TODO: Use actual screen scale
         let scale = 2
@@ -150,11 +150,11 @@ class VisualizerView: UIView {
     deinit {
         stopDrawing()
         
-        palette.deinitialize()
-        palette.deallocate(capacity: specHeight + 128)
+        palette.deinitialize(count: specHeight + 128)
+        palette.deallocate()
         
-        buffer.deinitialize()
-        buffer.deallocate(capacity: specWidth * specHeight)
+        buffer.deinitialize(count: specWidth * specHeight)
+        buffer.deallocate()
         
         if imageTexture != 0 {
             glDeleteTextures(1, &imageTexture)
@@ -406,7 +406,7 @@ class VisualizerView: UIView {
     }
     
     fileprivate func eraseBuffer() {
-        buffer.initialize(to: PixelRGBA(), count: specWidth * specHeight)
+        buffer.initialize(repeating: PixelRGBA(), count: specWidth * specHeight)
     }
     
     @discardableResult fileprivate func createFrameBuffer() -> Bool {

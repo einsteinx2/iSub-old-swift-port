@@ -36,6 +36,7 @@
 
 #import "HockeySDKPrivate.h"
 #import "BITHockeyHelper.h"
+#import "BITHockeyHelper+Application.h"
 
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITUpdateManagerPrivate.h"
@@ -109,11 +110,8 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   // Important: The iOS dialog offers the user to deny installation, we can't find out which button
   // was tapped, so we assume the user agreed
   if (self.didStartUpdateProcess) {
-    self.didStartUpdateProcess = NO;
-    
-    // we only care about iOS 8 or later
-    if (bit_isPreiOS8Environment()) return;
-    id strongDelegate = self.delegate;
+    self.didStartUpdateProcess = NO;    
+    id<BITUpdateManagerDelegate> strongDelegate = self.delegate;
     if ([strongDelegate respondsToSelector:@selector(updateManagerWillExitApp:)]) {
       [strongDelegate updateManagerWillExitApp:self];
     }
@@ -144,7 +142,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 - (void)didEnterBackgroundActions {
   self.didEnterBackgroundState = NO;
   
-  if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
+  if ([BITHockeyHelper applicationState] == BITApplicationStateBackground) {
     self.didEnterBackgroundState = YES;
   }
 }
@@ -219,7 +217,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   if (![self expiryDateReached]) return;
   
   BOOL shouldShowDefaultAlert = YES;
-  id strongDelegate = self.delegate;
+  id<BITUpdateManagerDelegate> strongDelegate = self.delegate;
   if ([strongDelegate respondsToSelector:@selector(shouldDisplayExpiryAlertForUpdateManager:)]) {
     shouldShowDefaultAlert = [strongDelegate shouldDisplayExpiryAlertForUpdateManager:self];
   }
@@ -355,7 +353,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
         [self saveAppCache];
       } else {
         [self.appVersions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-          if (idx > 0 && [obj isKindOfClass:[BITAppVersionMetaInfo class]]) {
+          if (idx > 0 && [(NSObject *)obj isKindOfClass:[BITAppVersionMetaInfo class]]) {
             NSComparisonResult compareVersions = bit_versionCompare([(BITAppVersionMetaInfo *)obj version], self.currentAppVersion);
             BOOL uuidFound = [(BITAppVersionMetaInfo *)obj hasUUID:self.uuid];
 
@@ -428,45 +426,45 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     _expiryDate = nil;
     _checkInProgress = NO;
     _dataFound = NO;
-    self.updateAvailable = NO;
+    _updateAvailable = NO;
     _lastCheckFailed = NO;
-    self.currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    _currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     _blockingView = nil;
     _lastCheck = nil;
     _uuid = [[self executableUUID] copy];
     _versionUUID = nil;
     _versionID = nil;
-    self.sendUsageData = YES;
+    _sendUsageData = YES;
     _disableUpdateManager = NO;
     _firstStartAfterInstall = NO;
     _companyName = nil;
-    self.currentAppVersionUsageTime = @0;
+    _currentAppVersionUsageTime = @0;
     
     // set defaults
-    self.showDirectInstallOption = NO;
-    self.alwaysShowUpdateReminder = YES;
-    self.checkForUpdateOnLaunch = YES;
-    self.updateSetting = BITUpdateCheckStartup;
+    _showDirectInstallOption = NO;
+    _alwaysShowUpdateReminder = YES;
+    _checkForUpdateOnLaunch = YES;
+    _updateSetting = BITUpdateCheckStartup;
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kBITUpdateDateOfLastCheck]) {
       // we did write something else in the past, so for compatibility reasons do this
       id tempLastCheck = [[NSUserDefaults standardUserDefaults] objectForKey:kBITUpdateDateOfLastCheck];
-      if ([tempLastCheck isKindOfClass:[NSDate class]]) {
-        self.lastCheck = tempLastCheck;
+      if ([(NSObject *)tempLastCheck isKindOfClass:[NSDate class]]) {
+        _lastCheck = tempLastCheck;
       }
     }
     
     if (!_lastCheck) {
-      self.lastCheck = [NSDate distantPast];
+      _lastCheck = [NSDate distantPast];
     }
     
     if (!BITHockeyBundle()) {
       BITHockeyLogWarning(@"[HockeySDK] WARNING: %@ is missing, make sure it is added!", BITHOCKEYSDK_BUNDLE);
     }
     
-    self.fileManager = [[NSFileManager alloc] init];
+    _fileManager = [[NSFileManager alloc] init];
     
-    self.usageDataFile = [bit_settingsDir() stringByAppendingPathComponent:BITHOCKEY_USAGE_DATA];
+    _usageDataFile = [bit_settingsDir() stringByAppendingPathComponent:BITHOCKEY_USAGE_DATA];
     
     [self loadAppCache];
     
@@ -525,7 +523,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 - (void)showCheckForUpdateAlert {
   if (self.appEnvironment != BITEnvironmentOther) return;
   if ([self isUpdateManagerDisabled]) return;
-  id strongDelegate = self.delegate;
+  id<BITUpdateManagerDelegate> strongDelegate = self.delegate;
   if ([strongDelegate respondsToSelector:@selector(shouldDisplayUpdateAlertForUpdateManager:forShortVersion:forVersion:)] &&
       ![strongDelegate shouldDisplayUpdateAlertForUpdateManager:self forShortVersion:[self.newestAppVersion shortVersion] forVersion:[self.newestAppVersion version]]) {
     return;
@@ -839,7 +837,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   NSString *iOSUpdateURL = [NSString stringWithFormat:@"itms-services://?action=download-manifest&url=%@", bit_URLEncodedString(hockeyAPIURL)];
 
   // Notify delegate of update intent before placing the call
-  id stronDelegate = self.delegate;
+  id<BITUpdateManagerDelegate> stronDelegate = self.delegate;
   if ([stronDelegate respondsToSelector:@selector(willStartDownloadAndUpdate:)]) {
     [stronDelegate willStartDownloadAndUpdate:self];
   }
@@ -862,7 +860,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     if ([self isUpdateManagerDisabled]) return;
     
     BITHockeyLogDebug(@"INFO: Starting UpdateManager");
-    id strongDelegate = self.delegate;
+    id<BITUpdateManagerDelegate> strongDelegate = self.delegate;
     if ([strongDelegate respondsToSelector:@selector(updateManagerShouldSendUsageData:)]) {
       self.sendUsageData = [strongDelegate updateManagerShouldSendUsageData:self];
     }
@@ -870,7 +868,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     [self checkExpiryDateReached];
     if (![self expiryDateReached]) {
       if ([self isCheckForUpdateOnLaunch] && [self shouldCheckForUpdates]) {
-        if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) return;
+        if ([BITHockeyHelper applicationState] != BITApplicationStateActive) return;
         
         [self performSelector:@selector(checkForUpdate) withObject:nil afterDelay:1.0];
       }
@@ -909,7 +907,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
       NSError *error = nil;
       NSDictionary *json = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:(NSData *)[responseString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
       
-      self.companyName = (([[json valueForKey:@"company"] isKindOfClass:[NSString class]]) ? [json valueForKey:@"company"] : nil);
+      self.companyName = (([(NSObject *)[json valueForKey:@"company"] isKindOfClass:[NSString class]]) ? [json valueForKey:@"company"] : nil);
       
       if (self.appEnvironment == BITEnvironmentOther) {
         NSArray *feedArray = (NSArray *)[json valueForKey:@"versions"];

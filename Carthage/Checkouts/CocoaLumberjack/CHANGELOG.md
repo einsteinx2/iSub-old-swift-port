@@ -1,3 +1,25 @@
+## [3.4.2 - Xcode 9.3 on Apr 17th, 2018](https://github.com/CocoaLumberjack/CocoaLumberjack/releases/tag/3.4.2)
+- Update README.md #912
+- Fixed typo in pull request template #913
+- Fix `-Wimplicit-retain-self` warnings #915
+- Update memory management in dynamic logging #916
+- Xcode 9.3 support #921 #923 #926 #927
+- Add extern "C" for Objective-C++ #922
+- Add `flush` method to the `DDFileLogger` #928
+
+## [3.4.1 - Xcode 9.1 on Jan 26th, 2018](https://github.com/CocoaLumberjack/CocoaLumberjack/releases/tag/3.4.1)
+- Fix `DDLogFileManagerDefault` `-isLogFile` #909
+- Fix locking the main thread #911
+
+## [3.4.0 - Xcode 9.1 on Jan 3rd, 2018](https://github.com/CocoaLumberjack/CocoaLumberjack/releases/tag/3.4.0)
+- Fix Travis CI #895
+- Fix typos #896
+- Fix schemes and link errors #897 #899 #903 #907
+
+## [3.3.0 - Xcode 9 on Oct 3rd, 2017](https://github.com/CocoaLumberjack/CocoaLumberjack/releases/tag/3.3.0)
+- Xcode 9 support and Swift 4 support #890 #893
+- Replace `OSSpinLock` with `pthread_mutex` #889
+
 ## [3.2.1 - Xcode 9 beta on Aug 21st, 2017](https://github.com/CocoaLumberjack/CocoaLumberjack/releases/tag/3.2.1)
 - Xcode 9 beta support #874 #873 #884 #883 #882
 - Fixed some issues around deleting log files #868 #879

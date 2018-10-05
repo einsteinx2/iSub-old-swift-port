@@ -2,8 +2,8 @@
   "commitish" : "fd734f77a4c152fc8305de0372a7d1e7478a6257",
   "iOS" : [
     {
-      "hash" : "183f5fee29d7d846789ed61329bd541fd8ee7ad6f576f6225a722cda0cec2241",
-      "name" : "Nuke"
+      "name" : "Nuke",
+      "hash" : "dd596676e5aee4f7268df4d63efa8da1efe9093a90056973d51c0852eca86e1d"
     }
   ]
 }

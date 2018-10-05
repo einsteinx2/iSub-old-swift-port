@@ -102,8 +102,8 @@ final class RingBuffer {
         let dataBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: length)
         let readLength = drain(into: dataBuffer, length: length)
         let data = Data(bytes: dataBuffer, count: readLength)
-        dataBuffer.deinitialize()
-        dataBuffer.deallocate(capacity: length)
+        dataBuffer.deinitialize(count: length)
+        dataBuffer.deallocate()
         return data
     }
     

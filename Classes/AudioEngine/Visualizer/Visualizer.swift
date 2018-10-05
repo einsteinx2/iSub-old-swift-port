@@ -60,11 +60,11 @@ class Visualizer {
     }
     
     deinit {
-        fftBuffer.deinitialize()
-        fftBuffer.deallocate(capacity: 1024)
+        fftBuffer.deinitialize(count: 1024)
+        fftBuffer.deallocate()
         
-        lineBuffer.deinitialize()
-        lineBuffer.deallocate(capacity: 1024)
+        lineBuffer.deinitialize(count: 1024)
+        lineBuffer.deallocate()
     }
     
     func fftData(index: Int) -> Float {

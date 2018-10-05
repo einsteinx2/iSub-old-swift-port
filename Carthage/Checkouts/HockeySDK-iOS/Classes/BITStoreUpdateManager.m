@@ -34,6 +34,7 @@
 
 #import "HockeySDKPrivate.h"
 #import "BITHockeyHelper.h"
+#import "BITHockeyHelper+Application.h"
 
 #import "BITHockeyBaseManagerPrivate.h"
 #import "BITStoreUpdateManagerPrivate.h"
@@ -167,11 +168,6 @@
         [self.userDefaults removeObjectForKey:kBITStoreUpdateLastStoreVersion];
         versionString = nil;
       }
-      
-      if(bit_isPreiOS8Environment()) {
-        // calling synchronize in pre-iOS 8 takes longer to sync than in iOS 8+, calling synchronize explicitly.
-        [self.userDefaults synchronize];
-      }
     }
   }
   
@@ -183,7 +179,7 @@
   
   NSString *lastStoreVersion = [self lastStoreVersion];
   
-  if ([[dictionary objectForKey:@"results"] isKindOfClass:[NSArray class]] &&
+  if ([(NSObject *)[dictionary objectForKey:@"results"] isKindOfClass:[NSArray class]] &&
       [(NSArray *)[dictionary objectForKey:@"results"] count] > 0 ) {
     self.lastCheckFailed = NO;
 
@@ -304,7 +300,7 @@
   }
   
   if ([self isUpdateAvailable]) {
-    id strongDelegate = self.delegate;
+    id<BITStoreUpdateManagerDelegate> strongDelegate = self.delegate;
     if ([strongDelegate respondsToSelector:@selector(detectedUpdateFromStoreUpdateManager:newVersion:storeURL:)]) {
       [strongDelegate detectedUpdateFromStoreUpdateManager:self newVersion:self.latestStoreVersion storeURL:[NSURL URLWithString:self.appStoreURLString]];
     }
@@ -421,12 +417,13 @@
   [self registerObservers];
   
   // we are already delayed, so the notification already came in and this won't invoked twice
-  switch ([[UIApplication sharedApplication] applicationState]) {
-    case UIApplicationStateActive:
+  switch ([BITHockeyHelper applicationState]) {
+    case BITApplicationStateActive:
       [self didBecomeActiveActions];
       break;
-    case UIApplicationStateBackground:
-    case UIApplicationStateInactive:
+    case BITApplicationStateBackground:
+    case BITApplicationStateInactive:
+    case BITApplicationStateUnknown:
       // do nothing, wait for active state
       break;
   }

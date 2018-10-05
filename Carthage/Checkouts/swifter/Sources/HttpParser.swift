@@ -33,46 +33,31 @@ public class HttpParser {
     }
     
     private func extractQueryParams(_ url: String) -> [(String, String)] {
-        guard let questionMark = url.characters.index(of: "?") else {
+        guard let questionMark = url.index(of: "?") else {
             return []
         }
-        let queryStart = url.characters.index(after: questionMark)
+        let queryStart = url.index(after: questionMark)
         guard url.endIndex > queryStart else {
             return []
         }
-        let query = String(url.characters[queryStart..<url.endIndex])
+        let query = String(url[queryStart..<url.endIndex])
         return query.components(separatedBy: "&")
             .reduce([(String, String)]()) { (c, s) -> [(String, String)] in
-                guard let nameEndIndex = s.characters.index(of: "=") else {
+                guard let nameEndIndex = s.index(of: "=") else {
                     return c
                 }
-                guard let name = String(s.characters[s.startIndex..<nameEndIndex]).removingPercentEncoding else {
+                guard let name = String(s[s.startIndex..<nameEndIndex]).removingPercentEncoding else {
                     return c
                 }
                 let valueStartIndex = s.index(nameEndIndex, offsetBy: 1)
                 guard valueStartIndex < s.endIndex else {
                     return c + [(name, "")]
                 }
-                guard let value = String(s.characters[valueStartIndex..<s.endIndex]).removingPercentEncoding else {
+                guard let value = String(s[valueStartIndex..<s.endIndex]).removingPercentEncoding else {
                     return c + [(name, "")]
                 }
                 return c + [(name, value)]
         }
-        
-        
-//        let tokens = url.components(separatedBy: "?")
-//        guard let query = tokens.last, tokens.count >= 2 else {
-//            return []
-//        }
-//        return query.components(separatedBy: "&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
-//            let tokens = s.components(separatedBy: "=")
-//            let name = tokens.first?.removingPercentEncoding
-//            let value = tokens.count > 1 ? (tokens.last?.removingPercentEncoding ?? "") : ""
-//            if let nameFound = name {
-//                return c + [(nameFound, value)]
-//            }
-//            return c
-//        }
     }
     
     private func readBody(_ socket: Socket, size: Int) throws -> [UInt8] {
@@ -84,7 +69,7 @@ public class HttpParser {
     private func readHeaders(_ socket: Socket) throws -> [String: String] {
         var headers = [String: String]()
         while case let headerLine = try socket.readLine() , !headerLine.isEmpty {
-            let headerTokens = headerLine.components(separatedBy: ":")
+            let headerTokens = headerLine.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: true).map(String.init)
             if let name = headerTokens.first, let value = headerTokens.last {
                 headers[name.lowercased()] = value.trimmingCharacters(in: .whitespaces)
             }

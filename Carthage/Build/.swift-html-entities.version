@@ -1,9 +1,9 @@
 {
-  "commitish" : "3.0.9",
+  "commitish" : "3.0.10",
   "iOS" : [
     {
-      "hash" : "c582bcb12fc314e45a0c94a7885cee8042fd6cdea5b89ca9ed2494d7cbf365bb",
-      "name" : "HTMLEntities"
+      "name" : "HTMLEntities",
+      "hash" : "201c0ac9a9f419111ff0b88dc4fa6b0a871edd9cec2fb8158527e48a51205494"
     }
   ]
 }

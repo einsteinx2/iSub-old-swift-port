@@ -403,7 +403,7 @@ final class GaplessPlayer {
                                     printError("Overran ring buffer and it was unable to expand")
                                 }
                             }
-                            tempBuffer.deallocate(capacity: readSize)
+                            tempBuffer.deallocate()
                             
                             /*
                              * Handle pausing to wait for more data

@@ -1,3 +1,36 @@
+## 5.1.4
+
+- [FIX] Fix a regression that was introduced in 5.1.3 that prevented integration because of a missing header file. [#532](https://github.com/bitstadium/HockeySDK-iOS/pull/532)
+
+## 5.1.3
+
+- [FIX] Support new arm64e architecture in crash reports. [#527](https://github.com/bitstadium/HockeySDK-iOS/pull/526)
+- [FIX] Fix bug in app termination heuristic. [#523](https://github.com/bitstadium/HockeySDK-iOS/pull/523)
+- [FIX] Fix Feedback UI on iPhone X. [#513](https://github.com/bitstadium/HockeySDK-iOS/pull/513)[#508](https://github.com/bitstadium/HockeySDK-iOS/pull/508)
+- [IMPROVEMENT] Make it possible to use own logging handler. [#516](https://github.com/bitstadium/HockeySDK-iOS/pull/516)
+
+## 5.1.2
+
+- [IMPROVEMENT] This release uses Xcode 9.2 to compile the SDK. [#502](https://github.com/bitstadium/HockeySDK-iOS/pull/503)
+- [BUGFIX] Fix warnings when integrating the SDK as source in Xcode 9. [#501](https://github.com/bitstadium/HockeySDK-iOS/pull/501)
+- [BUGFIX] Fix a potential memory leak in `BITChannel`. [#500](https://github.com/bitstadium/HockeySDK-iOS/pull/500)
+- [BUGFIX] Version 5.1.X broke support for app extension. We're sorry about this and we've updated our test matrix to make sure this does not happen again. [#499](https://github.com/bitstadium/HockeySDK-iOS/pull/499)
+- [BUGFIX] Fix a bug in the Feedback UI when Feedback was shown in landscape. [#498](https://github.com/bitstadium/HockeySDK-iOS/pull/498)
+
+## 5.1.1
+
+- [BUGFIX] Fixes a critical bug that would cause apps to freeze when calling `trackEvent` in UIApplicationDelegate callbacks. [#492](https://github.com/bitstadium/HockeySDK-iOS/pull/493)
+- [BUGFIX] Fix a critical bug in the crashonly variant of the SDK. [#49](https://github.com/bitstadium/HockeySDK-iOS/pull/494)
+
+## 5.1.0
+
+- [FEATURE] Add Turkish localization thanks to [Ozgur](https://github.com/ozgur).[#478](https://github.com/bitstadium/HockeySDK-iOS/pull/478) 
+- [FEATURE] Add support to detect low memory and OS kill heuristics for extensions. Thx to [Dave Weston](https://github.com/dtweston) for this! [#470](https://github.com/bitstadium/HockeySDK-iOS/pull/470) 
+- [IMPROVEMENT] Support tracking events in the background. [#475](https://github.com/bitstadium/HockeySDK-iOS/pull/475)
+- [FIX] Improvements around thread-safety and concurrency for Metrics. [#471](https://github.com/bitstadium/HockeySDK-iOS/pull/471) [#479](https://github.com/bitstadium/HockeySDK-iOS/pull/479)
+- [FIX] Fix runtime warnings of Xcode 9's main thread checker tool. [#484](https://github.com/bitstadium/HockeySDK-iOS/pull/484)
+- [FIX] Fix caching of previews for attachments to Feedback. [#487](https://github.com/bitstadium/HockeySDK-iOS/pull/487)
+
 ## 5.0.0
 
 - [IMPROVEMENT] Use `UIAlertController` in Feedback instead of `UIAlertView`. [#460](https://github.com/bitstadium/HockeySDK-iOS/pull/460)

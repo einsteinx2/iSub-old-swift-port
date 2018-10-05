@@ -13,23 +13,43 @@ import HTMLEntities
 // http://stackoverflow.com/a/26775912/299262
 extension String {
     subscript (i: Int) -> String {
-        return self[Range(i ..< i + 1)]
+        return String(self[index(startIndex, offsetBy: i)])
     }
     
     func substring(from: Int) -> String {
-        return self[Range(min(from, count) ..< count)]
+        return self[from ..< count]
     }
     
     func substring(to: Int) -> String {
-        return self[Range(0 ..< max(0, to))]
+        return self[0 ..< max(0, to)]
     }
     
-    subscript (r: Range<Int>) -> String {
-        let range = Range(uncheckedBounds: (lower: max(0, min(count, r.lowerBound)),
-                                            upper: min(count, max(0, r.upperBound))))
-        let start = index(startIndex, offsetBy: range.lowerBound)
-        let end = index(start, offsetBy: range.upperBound - range.lowerBound)
-        return String(self[Range(start ..< end)])
+    subscript (bounds: CountableRange<Int>) -> String {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return String(self[start ..< end])
+    }
+    
+    subscript (bounds: CountableClosedRange<Int>) -> String {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return String(self[start ... end])
+    }
+    
+    subscript (bounds: CountablePartialRangeFrom<Int>) -> String {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(endIndex, offsetBy: -1)
+        return String(self[start ... end])
+    }
+    
+    subscript (bounds: PartialRangeThrough<Int>) -> String {
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return String(self[startIndex ... end])
+    }
+    
+    subscript (bounds: PartialRangeUpTo<Int>) -> String {
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return String(self[startIndex ..< end])
     }
 }
 

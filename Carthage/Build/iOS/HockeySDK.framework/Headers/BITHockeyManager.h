@@ -212,6 +212,8 @@ NS_ASSUME_NONNULL_BEGIN
  @see BITCrashManagerDelegate
  @see BITUpdateManagerDelegate
  @see BITFeedbackManagerDelegate
+ @see BITAuthenticatorDelegate
+ @see BITStoreUpdateManagerDelegate
  */
 @property (nonatomic, weak, nullable) id<BITHockeyManagerDelegate> delegate;
 
@@ -433,7 +435,7 @@ NS_ASSUME_NONNULL_BEGIN
  This is not identical to the `[ASIdentifierManager advertisingIdentifier]` or
  the `[UIDevice identifierForVendor]`!
  */
-@property (nonatomic, readonly) NSString *installString;
+@property (nonatomic, readonly, copy) NSString *installString;
 
 
 /**

@@ -42,6 +42,7 @@
 
 #import "HockeySDKNullability.h"
 #import "BITHockeyHelper.h"
+#import "BITHockeyHelper+Application.h"
 #import "BITHockeyAppClient.h"
 
 #define kBITFeedbackUserDataAsked   @"HockeyFeedbackUserDataAsked"
@@ -131,7 +132,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
 - (void)didEnterBackgroundActions {
   self.didEnterBackgroundState = NO;
 
-  if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
+  if ([BITHockeyHelper applicationState] == BITApplicationStateBackground) {
     self.didEnterBackgroundState = YES;
   }
 }
@@ -226,7 +227,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
   BITFeedbackComposeViewController *composeViewController = [[BITFeedbackComposeViewController alloc] init];
 
   NSArray *preparedItems = [NSArray array];
-  id strongDelegate = self.delegate;
+  id<BITFeedbackManagerDelegate> strongDelegate = self.delegate;
   if ([strongDelegate respondsToSelector:@selector(preparedItemsForFeedbackManager:)]) {
     preparedItems = [preparedItems arrayByAddingObjectsFromArray:(NSArray *)[strongDelegate preparedItemsForFeedbackManager:self]];
   }
@@ -270,15 +271,16 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
   [self isiOS10PhotoPolicySet];
 
   // we are already delayed, so the notification already came in and this won't invoked twice
-  switch ([[UIApplication sharedApplication] applicationState]) {
-    case UIApplicationStateActive:
+  switch ([BITHockeyHelper applicationState]) {
+    case BITApplicationStateActive:
       // we did startup, so yes we are coming from background
       self.didEnterBackgroundState = YES;
 
       [self didBecomeActiveActions];
       break;
-    case UIApplicationStateBackground:
-    case UIApplicationStateInactive:
+    case BITApplicationStateBackground:
+    case BITApplicationStateInactive:
+    case BITApplicationStateUnknown:
       // do nothing, wait for active state
       break;
   }
@@ -286,7 +288,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
 
 - (BOOL)allowFetchingNewMessages {
   BOOL fetchNewMessages = YES;
-  id strongDelegate = [BITHockeyManager sharedHockeyManager].delegate;
+  id<BITHockeyManagerDelegate> strongDelegate = [BITHockeyManager sharedHockeyManager].delegate;
   if ([strongDelegate respondsToSelector:@selector(allowAutomaticFetchingForNewFeedbackForManager:)]) {
     fetchNewMessages = [strongDelegate allowAutomaticFetchingForNewFeedbackForManager:self];
   }
@@ -315,7 +317,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
   BOOL availableViaDelegate = NO;
 
   NSString *userID = [self stringValueFromKeychainForKey:kBITHockeyMetaUserID];
-  id strongDelegate = [BITHockeyManager sharedHockeyManager].delegate;
+  id<BITHockeyManagerDelegate> strongDelegate = [BITHockeyManager sharedHockeyManager].delegate;
   if ([strongDelegate respondsToSelector:@selector(userIDForHockeyManager:componentManager:)]) {
     userID = [strongDelegate userIDForHockeyManager:[BITHockeyManager sharedHockeyManager] componentManager:self];
   }
@@ -332,7 +334,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
   BOOL availableViaDelegate = NO;
 
   NSString *userName = [self stringValueFromKeychainForKey:kBITHockeyMetaUserName];
-  id strongDelegate = [BITHockeyManager sharedHockeyManager].delegate;
+  id<BITHockeyManagerDelegate> strongDelegate = [BITHockeyManager sharedHockeyManager].delegate;
   if ([strongDelegate respondsToSelector:@selector(userNameForHockeyManager:componentManager:)]) {
     userName = [strongDelegate userNameForHockeyManager:[BITHockeyManager sharedHockeyManager] componentManager:self];
   }
@@ -350,7 +352,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
   BOOL availableViaDelegate = NO;
 
   NSString *userEmail = [self stringValueFromKeychainForKey:kBITHockeyMetaUserEmail];
-  id strongDelegate = [BITHockeyManager sharedHockeyManager].delegate;
+  id<BITHockeyManagerDelegate> strongDelegate = [BITHockeyManager sharedHockeyManager].delegate;
   if ([strongDelegate respondsToSelector:@selector(userEmailForHockeyManager:componentManager:)]) {
     userEmail = [strongDelegate userEmailForHockeyManager:[BITHockeyManager sharedHockeyManager] componentManager:self];
   }
@@ -647,7 +649,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
 }
 
 - (BOOL)shouldForceNewThread {
-  id strongDelegate = self.delegate;
+  id<BITFeedbackManagerDelegate> strongDelegate = self.delegate;
   if (strongDelegate && [strongDelegate respondsToSelector:@selector(forceNewFeedbackThreadForFeedbackManager:)]) {
     return [strongDelegate forceNewFeedbackThreadForFeedbackManager:self];
   } else {
@@ -760,7 +762,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
             // TODO: match messages in state conflict
 
             [messagesSendInProgress enumerateObjectsUsingBlock:^(id objSendInProgressMessage, NSUInteger __unused messagesSendInProgressIdx, BOOL *stop2) {
-                if ([[(NSDictionary *) objMessage objectForKey:@"token"] isEqualToString:[(BITFeedbackMessage *) objSendInProgressMessage token]]) {
+                if ([(NSString *)[(NSDictionary *) objMessage objectForKey:@"token"] isEqualToString:[(BITFeedbackMessage *) objSendInProgressMessage token]]) {
                   matchingSendInProgressOrInConflictMessage = objSendInProgressMessage;
                   *stop2 = YES;
                 }
@@ -824,7 +826,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
       BITFeedbackMessage *latestMessage = [self lastMessageHavingID];
       if (self.userEmail && latestMessage.email && [self.userEmail compare:latestMessage.email] == NSOrderedSame)
         latestMessageFromUser = YES;
-      id strongDelegate = self.delegate;
+      id<BITFeedbackManagerDelegate> strongDelegate = self.delegate;
       if (!latestMessageFromUser) {
         if ([strongDelegate respondsToSelector:@selector(feedbackManagerDidReceiveNewFeedback:)]) {
           [strongDelegate feedbackManagerDidReceiveNewFeedback:self];

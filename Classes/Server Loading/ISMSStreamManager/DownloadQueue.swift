@@ -17,7 +17,7 @@ final class DownloadQueue: StreamHandlerDelegate {
         static let songFailed     = Notification.Name("DownloadQueue_songFailed")
     }
     
-    open static let si = DownloadQueue()
+    public static let si = DownloadQueue()
     
     fileprivate(set) var isDownloading = false
     fileprivate(set) var currentSong: Song?

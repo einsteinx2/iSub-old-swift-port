@@ -9,7 +9,7 @@
 import Foundation
 
 final class StreamQueue: StreamHandlerDelegate {
-    open static let si = StreamQueue()
+    public static let si = StreamQueue()
     
     fileprivate let maxReconnects = 5
     
