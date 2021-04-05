@@ -1,5 +1,6 @@
-## Unfortunately iSub is no longer under active development. This repo is the unfinished Swift port and modernization (iSub was originally developed on iOS 3!). 
-## The currently released App Store version can be found here: https://github.com/einsteinx2/isub3. If you would like to submit and bug fix or add a feature to the release version, fork that repo and submit a PR. I'm happy to review and merge any PRs there and get them out in the next update. I'll only be ensuring that it continues to run on new iOS releases, otherwise unfortunately I'm no longer working on this project. 
+## April 2021 Update: iSub is once again under development! It has been modernized and ported to Swift 5 in the main iSub repo here: https://github.com/einsteinx2/iSubMusicStreamer. This repo is a much older, unfinished Swift port and modernization effort that was never completed. I've left this repo here for preservation sake, but all current and future development is happening in the above linked repo.
+
+## The currently released App Store version can be found here: https://github.com/einsteinx2/iSubMusicStreamer. If you would like to submit a bug fix or add a feature to the release version, fork that repo and submit a PR. I'm happy to review and merge any reasonable PRs and get them out in the next update.
 
 ### How to build
 1. Clone the repository
