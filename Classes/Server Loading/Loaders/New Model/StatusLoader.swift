@@ -16,6 +16,7 @@ final class StatusLoader: ApiLoader {
     fileprivate(set) var username: String
     fileprivate(set) var password: String
     fileprivate(set) var basicAuth: Bool
+    fileprivate(set) var legacyAuth: Bool
 
     fileprivate(set) var versionString: String?
     fileprivate(set) var majorVersion: Int?
@@ -23,15 +24,16 @@ final class StatusLoader: ApiLoader {
     
     convenience init(server: Server) {
         let password = server.password ?? ""
-        self.init(url: server.url, username: server.username, password: password, basicAuth: server.basicAuth)
+        self.init(url: server.url, username: server.username, password: password, legacyAuth: server.legacyAuth, basicAuth: server.basicAuth)
         self.server = server
     }
     
-    init(url: String, username: String, password: String, basicAuth: Bool = false, serverId: Int64? = nil) {
+    init(url: String, username: String, password: String, legacyAuth: Bool, basicAuth: Bool = false, serverId: Int64? = nil) {
         self.url = url
         self.username = username
         self.password = password
         self.basicAuth = basicAuth
+        self.legacyAuth = legacyAuth
         if let serverId = serverId {
             super.init(serverId: serverId)
         } else {
@@ -40,7 +42,7 @@ final class StatusLoader: ApiLoader {
     }
     
     override func createRequest() -> URLRequest? {
-        return URLRequest(subsonicAction: .ping, baseUrl: url, username: username, password: password, basicAuth: basicAuth)
+        return URLRequest(subsonicAction: .ping, baseUrl: url, username: username, password: password, basicAuth: basicAuth, legacyAuth: legacyAuth)
     }
     
     override func processResponse(root: RXMLElement) -> Bool {
@@ -75,6 +77,10 @@ final class StatusLoader: ApiLoader {
             } else if error.code == 60 {
                 // Subsonic trial ended
                 super.failed(error: NSError(iSubCode: .subsonicTrialExpired))
+                return
+            } else if error.code == 41 && !self.legacyAuth {
+                // Token auth not supported, we should probably try legacy
+                super.failed(error: NSError(iSubCode: .tokenAuthNotSupported))
                 return
             }
         }

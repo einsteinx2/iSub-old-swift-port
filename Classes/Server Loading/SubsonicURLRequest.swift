@@ -82,26 +82,39 @@ extension URLRequest {
                       parameters: parameters,
                       fragment: fragment,
                       byteOffset: byteOffset,
-                      basicAuth: server.basicAuth)
+                      basicAuth: server.basicAuth,
+                      legacyAuth: server.legacyAuth)
         } else {
              return nil
         }
     }
     
-    init(subsonicAction: SubsonicURLAction, baseUrl: String, username: String, password: String, parameters: [String: Any]? = nil, fragment: String? = nil, byteOffset: Int = 0, basicAuth: Bool = false) {
+    init(subsonicAction: SubsonicURLAction, baseUrl: String, username: String, password: String, parameters: [String: Any]? = nil, fragment: String? = nil, byteOffset: Int = 0, basicAuth: Bool = false, legacyAuth: Bool = false) {
         
         var urlString = "\(baseUrl)/rest/\(subsonicAction.rawValue).\(subsonicAction.urlExtension)"
         
-        // Generate a 32 character random salt
-        // Then use the Subsonic required md5(password + salt) function to generate the token.
-        let salt = String.random(32)
-        let token = (password + salt).md5.lowercased()
-        
-        // Only support Subsonic version 5.3 and later
-        let version = "1.13.0"
-        
+        var parametersString = "?c=iSub"
+        if !legacyAuth {
+            // Generate a 32 character random salt
+            // Then use the Subsonic required md5(password + salt) function to generate the token.
+            let salt = String.random(32)
+            let token = (password + salt).md5.lowercased()
+            
+            // Supports Subsonic version 5.3 and later
+            let version = "1.13.0"
+            parametersString += "&v=\(version)&u=\(username)&t=\(token)&s=\(salt)"
+        } else {
+            var encpass = "enc:"
+            for scalar in password.unicodeScalars {
+                encpass += String(scalar.value, radix: 16)
+            }
+            // For Subsonic version prior to 5.3 or other vendors like Ampache
+            let version = "1.11"
+            parametersString += "&v=\(version)&u=\(username)&p=\(encpass)"
+        }
+
+            
         // Setup the parameters
-        var parametersString = "?c=iSub&v=\(version)&u=\(username)&t=\(token)&s=\(salt)"
         if let parameters = parameters {
             for (key, value) in parameters {
                 if let value = value as? [Any] {

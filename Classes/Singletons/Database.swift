@@ -169,6 +169,9 @@ final class Database {
             if !db.columnExists("basicAuth", inTableWithName: "servers") {
                 try? db.executeUpdate("ALTER TABLE servers ADD COLUMN basicAuth INTEGER")
             }
+            if !db.columnExists("legacyAuth", inTableWithName: "servers") {
+                try? db.executeUpdate("ALTER TABLE servers ADD COLUMN legacyAuth INTEGER")
+            }
         }
         
         // Create the default playlist tables
